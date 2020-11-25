@@ -3,8 +3,8 @@
 
 #include <nds.h>
 
-#include "console.hxx"
-#include "sound.hxx"
+#include "Console.hxx"
+#include "Sound.hxx"
 
 #define STELLADS_MENUINIT 0x01
 #define STELLADS_MENUSHOW 0x02
@@ -46,7 +46,7 @@ extern void dsInitPalette(void);
 extern void dsShowScreenEmu(void);
 extern void dsShowScreenMain(void);
 extern void dsFreeEmu(void);
-extern void dsLoadGame(char *filename);
+extern bool dsLoadGame(char *filename);
 
 extern bool dsWaitOnQuit(void);
 extern unsigned int dsWaitForRom(void);

@@ -72,8 +72,8 @@ void M6532::systemCyclesReset()
 {
   // System cycles are being reset to zero so we need to adjust
   // the cycle count we remembered when the timer was last set
-  myCyclesWhenTimerSet -= mySystem->cycles();
-  myCyclesWhenInterruptReset -= mySystem->cycles();
+  myCyclesWhenTimerSet -= gSystemCycles;
+  myCyclesWhenInterruptReset -= gSystemCycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -118,7 +118,54 @@ uInt8 M6532::peek(uInt16 addr)
 {
   switch(addr & 0x07)
   {
-    case 0x00:    // Port A I/O Register (Joystick)
+    case 0x04:    // Timer Read
+    case 0x06:
+    {
+      uInt32 delta = (gSystemCycles-1) - myCyclesWhenTimerSet;
+      uInt32 delta_shift = delta >> myIntervalShift;        
+      Int32 timer = (Int32)myTimer - (Int32)delta_shift - 1;
+
+      // See if the timer has expired yet?
+      if(timer >= 0)
+      {
+        return (uInt8)timer; 
+      }
+      else
+      {
+        timer = (Int32)(myTimer << myIntervalShift) - (Int32)delta - 1;
+
+        if((timer <= -2) && !myTimerReadAfterInterrupt)
+        {
+          // Indicate that timer has been read after interrupt occured
+          myTimerReadAfterInterrupt = true;
+          myCyclesWhenInterruptReset = gSystemCycles;
+        }
+
+        if(myTimerReadAfterInterrupt)
+        {
+          Int32 offset = myCyclesWhenInterruptReset - 
+              (myCyclesWhenTimerSet + (myTimer << myIntervalShift));
+
+          timer = (Int32)myTimer - (Int32)(delta_shift) - offset;
+        }
+      }
+      return (uInt8)timer;    
+    }
+
+    case 0x05:    // Interrupt Flag
+    case 0x07:
+    {
+      uInt32 cycles = gSystemCycles - 1;
+      uInt32 delta = cycles - myCyclesWhenTimerSet;
+      Int32 timer = (Int32)myTimer - (Int32)(delta >> myIntervalShift) - 1;
+
+      if((timer >= 0) || myTimerReadAfterInterrupt)
+        return 0x00;
+      else
+        return 0x80;
+    }
+	  
+	case 0x00:    // Port A I/O Register (Joystick)
     {
       uInt8 value = 0x00;
 
@@ -139,7 +186,6 @@ uInt8 M6532::peek(uInt16 addr)
         value |= 0x04;
       if(myConsole.controller(Controller::Right).read(Controller::Four))
         value |= 0x08;
-
       return value;
     }
 
@@ -156,54 +202,6 @@ uInt8 M6532::peek(uInt16 addr)
     case 0x03:    // Port B Data Direction Register
     {
       return myDDRB;
-    }
-
-    case 0x04:    // Timer Output
-    case 0x06:
-    {
-      uInt32 cycles = mySystem->cycles() - 1;
-      uInt32 delta = cycles - myCyclesWhenTimerSet;
-      Int32 timer = (Int32)myTimer - (Int32)(delta >> myIntervalShift) - 1;
-
-      // See if the timer has expired yet?
-      if(timer >= 0)
-      {
-        return (uInt8)timer; 
-      }
-      else
-      {
-        timer = (Int32)(myTimer << myIntervalShift) - (Int32)delta - 1;
-
-        if((timer <= -2) && !myTimerReadAfterInterrupt)
-        {
-          // Indicate that timer has been read after interrupt occured
-          myTimerReadAfterInterrupt = true;
-          myCyclesWhenInterruptReset = mySystem->cycles();
-        }
-
-        if(myTimerReadAfterInterrupt)
-        {
-          Int32 offset = myCyclesWhenInterruptReset - 
-              (myCyclesWhenTimerSet + (myTimer << myIntervalShift));
-
-          timer = (Int32)myTimer - (Int32)(delta >> myIntervalShift) - offset;
-        }
-
-        return (uInt8)timer;
-      }
-    }
-
-    case 0x05:    // Interrupt Flag
-    case 0x07:
-    {
-      uInt32 cycles = mySystem->cycles() - 1;
-      uInt32 delta = cycles - myCyclesWhenTimerSet;
-      Int32 timer = (Int32)myTimer - (Int32)(delta >> myIntervalShift) - 1;
-
-      if((timer >= 0) || myTimerReadAfterInterrupt)
-        return 0x00;
-      else
-        return 0x80;
     }
 
     default:
@@ -250,28 +248,28 @@ void M6532::poke(uInt16 addr, uInt8 value)
   {
     myTimer = value;
     myIntervalShift = 0;
-    myCyclesWhenTimerSet = mySystem->cycles();
+    myCyclesWhenTimerSet = gSystemCycles;
     myTimerReadAfterInterrupt = false;
   }
   else if((addr & 0x17) == 0x15)    // Write timer divide by 8
   {
     myTimer = value;
     myIntervalShift = 3;
-    myCyclesWhenTimerSet = mySystem->cycles();
+    myCyclesWhenTimerSet = gSystemCycles;
     myTimerReadAfterInterrupt = false;
   }
   else if((addr & 0x17) == 0x16)    // Write timer divide by 64
   {
     myTimer = value;
     myIntervalShift = 6;
-    myCyclesWhenTimerSet = mySystem->cycles();
+    myCyclesWhenTimerSet = gSystemCycles;
     myTimerReadAfterInterrupt = false;
   }
   else if((addr & 0x17) == 0x17)    // Write timer divide by 1024
   {
     myTimer = value;
     myIntervalShift = 10;
-    myCyclesWhenTimerSet = mySystem->cycles();
+    myCyclesWhenTimerSet = gSystemCycles;
     myTimerReadAfterInterrupt = false;
   }
   else if((addr & 0x14) == 0x04)    // Write Edge Detect Control

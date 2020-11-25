@@ -1,3 +1,7 @@
+// =====================================================================================================
+// Stella DSi - Improved
+// See readme.txt for a list of everything that has changed in the baseline 1.0 code.
+// =====================================================================================================
 #include <nds.h>
 #include <nds/fifomessages.h>
 
@@ -17,7 +21,7 @@
 #include "clickQuit_wav.h"
 
 #include "Console.hxx"
-#include "Mediasrc.hxx"
+#include "MediaSrc.hxx"
 #include "Sound.hxx"
 #include "SoundSDL.hxx"
 #include "Event.hxx"
@@ -44,6 +48,15 @@ bool fpsDisplay = false;
 #define SOUND_SIZE (2048)
 static uInt8 sound_buffer[SOUND_SIZE];
 uInt8* psound_buffer;
+
+// To aid in getting more of the one-off carts working... 
+// This is called when any ROM file is selected - we can print 
+// out the cart type (2k, 4k, F4, F6, F8, etc) as well as the MD5.
+void OutputCartInfo(string type, string md5)
+{
+    //dsPrintValue(0,5,0, (char*)type.c_str()); 
+    //dsPrintValue(0,6,0, (char*)md5.c_str()); 
+}
 
 // --------------------------------------------------------------------------------------
 // Color fading effect
@@ -137,7 +150,7 @@ void dsShowScreenEmu(void) {
 
   REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ; 
   REG_BG3PB = 0; REG_BG3PC = 0;
-	REG_BG3PD = ((A26_VID_HEIGHT / 192) << 8) | ((A26_VID_HEIGHT % 192) ) ;  
+	REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;  
   REG_BG3X = A26_VID_XOFS<<8;
   REG_BG3Y = A26_VID_YOFS<<8;
 }
@@ -186,40 +199,45 @@ void VsoundHandler(void) {
   theSDLSnd->callback(psound_buffer, 1);
 }
 
-void dsLoadGame(char *filename) {
+bool dsLoadGame(char *filename) {
   unsigned int buffer_size=0;
   
-  // Free buffer if needed
-  TIMER2_CR=0; irqDisable(IRQ_TIMER2); 
-	if (filebuffer != 0)
-		free(filebuffer);
-
-  if (theConsole) 
-    delete theConsole;
-  if (theSDLSnd) 
-    delete theSDLSnd;
-  
-  theSDLSnd = new SoundSDL(512);
-  theSDLSnd->setVolume(100);
-
   // Load the file
   FILE *romfile = fopen(filename, "r");
-  fseek(romfile, 0, SEEK_END);
-  buffer_size = ftell(romfile);
-  rewind(romfile);
-  filebuffer = (unsigned char *) malloc(buffer_size);
-  fread(filebuffer, buffer_size, 1, romfile);
-  fclose(romfile);
+  if (romfile != NULL)
+  {
+    // Free buffer if needed
+    TIMER2_CR=0; irqDisable(IRQ_TIMER2); 
+    if (filebuffer != 0)
+      free(filebuffer);
 
-  // Init the emulation
-  theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
- 	dsInitPalette();
+    if (theConsole) 
+      delete theConsole;
+    if (theSDLSnd) 
+      delete theSDLSnd;
 
-  psound_buffer=sound_buffer;
-  TIMER2_DATA = TIMER_FREQ(22050);                        
-	TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;	     
-	irqSet(IRQ_TIMER2, VsoundHandler);                           
-	irqEnable(IRQ_TIMER2);  
+    theSDLSnd = new SoundSDL(512);
+    theSDLSnd->setVolume(100);
+
+    fseek(romfile, 0, SEEK_END);
+    buffer_size = ftell(romfile);
+    rewind(romfile);
+    filebuffer = (unsigned char *) malloc(buffer_size);
+    fread(filebuffer, buffer_size, 1, romfile);
+    fclose(romfile);
+
+    // Init the emulation
+    theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
+    dsInitPalette();
+
+    psound_buffer=sound_buffer;
+    TIMER2_DATA = TIMER_FREQ(22050);                        
+    TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;	     
+    irqSet(IRQ_TIMER2, VsoundHandler);                           
+    irqEnable(IRQ_TIMER2);  
+    return true;
+  }
+  return false;
 }
 
 unsigned int dsReadPad(void) {
@@ -282,20 +300,20 @@ bool dsWaitOnQuit(void) {
   decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
   dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
   dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);  
-
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+  
   return bRet;
 }
 
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel) {
   unsigned int ucBcl,ucGame;
-  u8 maxLen;
   char szName[256];
+  char szName2[256];
   
   // Display all games if possible
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) (bgGetMapPtr(bg1b)),32*24*2);
-  sprintf(szName,"%04d/%04d GAMES",1+ucSel+NoDebGame,countvcs);
+  sprintf(szName,"%04d/%04d GAMES",(int)(1+ucSel+NoDebGame),countvcs);
   dsPrintValue(16-strlen(szName)/2,2,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
@@ -303,17 +321,18 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel) {
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
   for (ucBcl=0;ucBcl<17; ucBcl++) {
     ucGame= ucBcl+NoDebGame;
-    if (ucGame < countvcs) {
-      maxLen=strlen(vcsromlist[ucGame].filename);
+    if (ucGame < countvcs) 
+    {
       strcpy(szName,vcsromlist[ucGame].filename);
-      if (maxLen>29) szName[29]='\0';
-      if (vcsromlist[ucGame].directory) {
+      szName[29]='\0';
+      if (vcsromlist[ucGame].directory) 
+      {
         sprintf(szName,"[%s]",vcsromlist[ucGame].filename);
-        sprintf(szName,"%-29s",szName);
-        dsPrintValue(0,5+ucBcl,(ucSel == ucBcl ? 1 :  0),szName);
+        sprintf(szName2,"%-29s",szName);
+        dsPrintValue(0,5+ucBcl,(ucSel == ucBcl ? 1 :  0),szName2);
       }
-      else {
-        sprintf(szName,"%-29s",strupr(szName));
+      else 
+      {
         dsPrintValue(1,5+ucBcl,(ucSel == ucBcl ? 1 : 0),szName);
       }
     }
@@ -328,14 +347,14 @@ void dsDisplayButton(unsigned char button) {
   switch (button) {
     case 0: // ON/OFF
       for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+5) = *(ptrBg1+(0+i)*32+0);
-        *(ptrBg0+(4+i)*32+6) = *(ptrBg1+(0+i)*32+1);
+        *(ptrBg0+(4+i)*32+4) = *(ptrBg1+(0+i)*32+0);
+        *(ptrBg0+(4+i)*32+5) = *(ptrBg1+(0+i)*32+1);
       } 
       break;
     case 1: // ON/OFF
       for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+5) = *(ptrBg1+(0+i)*32+2);
-        *(ptrBg0+(4+i)*32+6) = *(ptrBg1+(0+i)*32+3);
+        *(ptrBg0+(4+i)*32+4) = *(ptrBg1+(0+i)*32+2);
+        *(ptrBg0+(4+i)*32+5) = *(ptrBg1+(0+i)*32+3);
       } 
       break;
     case 2: // BW/Color
@@ -350,16 +369,44 @@ void dsDisplayButton(unsigned char button) {
         *(ptrBg0+(4+i)*32+10) = *(ptrBg1+(0+i)*32+7);
       } 
       break;
+
+    case 10: // Left Difficulty - B
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+4);
+        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+5);
+      } 
+      break;
+    case 11: // Left Difficulty - A
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+6);
+        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+7);
+      } 
+      break;
+      
+    case 12: // Right Difficulty - B
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+8);
+        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+9);
+      } 
+      break;
+    case 13: // Right Difficulty - A
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+10);
+        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+11);
+      } 
+      break;
+      
+      
     case 4: // Select
       for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+21) = *(ptrBg1+(0+i)*32+8);
-        *(ptrBg0+(4+i)*32+22) = *(ptrBg1+(0+i)*32+9);
+        *(ptrBg0+(4+i)*32+22) = *(ptrBg1+(0+i)*32+8);
+        *(ptrBg0+(4+i)*32+23) = *(ptrBg1+(0+i)*32+9);
       } 
       break;
     case 5: // Select
       for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+21) = *(ptrBg1+(0+i)*32+10);
-        *(ptrBg0+(4+i)*32+22) = *(ptrBg1+(0+i)*32+11);
+        *(ptrBg0+(4+i)*32+22) = *(ptrBg1+(0+i)*32+10);
+        *(ptrBg0+(4+i)*32+23) = *(ptrBg1+(0+i)*32+11);
       } 
       break;
     case 6: // Reset
@@ -391,8 +438,7 @@ void dsDisplayButton(unsigned char button) {
 
 unsigned int dsWaitForRom(void) {
   bool bDone=false, bRet=false;
-  u32 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage, uLenFic=0,ucFlip=0, ucFlop=0;
-  char szName[64];
+  u32 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -524,26 +570,6 @@ unsigned int dsWaitForRom(void) {
         while (keysCurrent() & KEY_A);
       }
     }
-    // Scroll la selection courante
-    if (strlen(vcsromlist[ucFicAct].filename) > 29) {
-      ucFlip++;
-      if (ucFlip >= 8) {
-        ucFlip = 0;
-        uLenFic++;
-        if ((uLenFic+29)>strlen(vcsromlist[ucFicAct].filename)) {
-          ucFlop++;
-          if (ucFlop >= 8) {
-            uLenFic=0;
-            ucFlop = 0;
-          }
-          else
-            uLenFic--;
-        }
-        strncpy(szName,vcsromlist[ucFicAct].filename+uLenFic,29);
-        szName[29] = '\0';
-        dsPrintValue(1,5+romSelected,1,szName);
-      }
-    }
     swiWaitForVBlank();
   }
   
@@ -572,17 +598,20 @@ unsigned int dsWaitOnMenu(unsigned int actState) {
       iTy = touch.py;
       if ((iTx>23) && (iTx<39) && (iTy>35) && (iTy<65)) { // 24,36  -> 38,64   quit
         dsDisplayButton(1);
-        soundPlaySample(clickQuit_wav, SoundFormat_8Bit, clickQuit_wav_size, 22050, 127, 64, false, 0);
+        //soundPlaySample(clickQuit_wav, SoundFormat_8Bit, clickQuit_wav_size, 22050, 127, 64, false, 0);
         bDone=dsWaitOnQuit();
         if (bDone) uState=STELLADS_QUITSTDS;
-        else dsDisplayButton(0);
       }
       if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133)) {     // 48,100 -> 208,132 cartridge slot
         bDone=true; 
         // Find files in current directory and show it 
         vcsFindFiles();
         romSel=dsWaitForRom();
-        if (romSel) { uState=STELLADS_PLAYINIT; dsLoadGame(vcsromlist[ucFicAct].filename); }
+        if (romSel) 
+        { 
+          uState=STELLADS_PLAYINIT; 
+          bDone = dsLoadGame(vcsromlist[ucFicAct].filename);
+        }
         else { uState=actState; }
       }
     }
@@ -595,28 +624,31 @@ unsigned int dsWaitOnMenu(unsigned int actState) {
 void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr) {
   u16 *pusEcran,*pusMap;
   u16 usCharac;
-  char szTexte[128],*pTrTxt=szTexte;
-  
-  strcpy(szTexte,pchStr);
-  strupr(szTexte);
+  char *pTrTxt=pchStr;
+  char ch;
+
   pusEcran=(u16*) (bgGetMapPtr(bg1b))+x+(y<<5);
   pusMap=(u16*) (bgGetMapPtr(bg0b)+(2*isSelect+24)*32);
-  //keybBAS_map[29]
-  while((*pTrTxt)!='\0' ) {
+  
+  while((*pTrTxt)!='\0' ) 
+  {
+    ch = *pTrTxt; 
+    if (ch >= 'a' && ch <= 'z') ch -= 32; // Faster than strcpy/strtoupper
     usCharac=0x0000;
-    if ((*pTrTxt) == '|')
+    if ((ch) == '|')
       usCharac=*(pusMap);
-    else if (((*pTrTxt)<' ') || ((*pTrTxt)>'_'))
+    else if (((ch)<' ') || ((ch)>'_'))
       usCharac=*(pusMap);
-    else if((*pTrTxt)<'@')
-      usCharac=*(pusMap+(*pTrTxt)-' ');
+    else if((ch)<'@')
+      usCharac=*(pusMap+(ch)-' ');
     else
-      usCharac=*(pusMap+32+(*pTrTxt)-'@');
+      usCharac=*(pusMap+32+(ch)-'@');
     *pusEcran++=usCharac;
     pTrTxt++;
   }
 }
 
+int gTotalAtariFrames=0;
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void) {
 	FifoMessage msg;
@@ -633,12 +665,13 @@ void dsInstallSoundEmuFIFO(void) {
 }
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
-
+static int full_speed=0;
 ITCM_CODE void dsMainLoop(void) {
   u32 CurrentTimeInMs=0,PreviousTimeInMs=0,TimeElapsed;
   char fpsbuf[32];
-  unsigned int keys_pressed,keys_touch=0, console_color=1,console_palette=1, romSel;
+  unsigned int keys_pressed,keys_touch=0, console_color=1,console_palette=1, left_difficulty=0, right_difficulty=0,romSel;
   int iTx,iTy;
+  static int dampen=0;
   
   while(etatEmu != STELLADS_QUITSTDS) {
     switch (etatEmu) {
@@ -658,62 +691,140 @@ ITCM_CODE void dsMainLoop(void) {
         
       case STELLADS_PLAYGAME:
         // 65535 = 1 frame
-        // 1 frame = 1/50 ou 1/60 (0.02 ou 0.016 
-        // 656 -> 50 fps et 546 -> 60 fps
-        CurrentTimeInMs=ds_GetTicks();
-        TimeElapsed=(CurrentTimeInMs-PreviousTimeInMs);
-        while(TimeElapsed<546) {
+        // 1 frame = 1/50 or 1/60 (0.02 or 0.016)
+        // 656 -> 50 fps and 546 -> 60 fps
+        do
+        {
           CurrentTimeInMs = ds_GetTicks();
           TimeElapsed=(CurrentTimeInMs-PreviousTimeInMs);
-        }
+          if (full_speed) break;
+        } while(TimeElapsed<546);
         PreviousTimeInMs=CurrentTimeInMs;
 				
         // Wait for keys
-		scanKeys();
+        scanKeys();
         keys_pressed = keysCurrent();
        	theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,    keys_pressed & (KEY_SELECT));
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, 0);
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F3, 0);
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F4, 0);
+        if (dampen==0)
+        {
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2,  keys_pressed & (KEY_START));
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F3, 0);
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F4, 0);
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F5, 0);
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F6, 0);
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F7, 0);
+          theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F8, 0);
+          dampen=7;
+        }
+        else
+        {
+          dampen--;
+        }
+        
+        if (keys_pressed & KEY_L)   // Left Trigger - full speed
+           full_speed = 1;
+        else 
+           full_speed = 0;
 
-        if (fpsDisplay) { siprintf(fpsbuf,"%03d",(int)emuFps); dsPrintValue(0,0,0, fpsbuf); }
-		else { siprintf(fpsbuf,"   "); dsPrintValue(0,0,0, fpsbuf); }
-
-        if (keysDown() & KEY_START) { fpsDisplay = !fpsDisplay; }
-        if (keys_pressed & KEY_TOUCH) {
-          if (!keys_touch) {
+        // ------------------------------------------------
+        // Stuff to do once/second such as FPS display
+        // ------------------------------------------------
+        static uInt32 oldTime = 0;
+        static int fps_dampen=0;
+        uInt32 nowTime = ds_GetTicks();
+        if ((nowTime - oldTime) >= 2184) // 1/15th of a second...
+        {
+            oldTime = nowTime;
+            if (++fps_dampen >= 15)
+            {
+              fps_dampen=0;
+              if (keys_pressed & KEY_R) 
+              { 
+                  fpsDisplay = !fpsDisplay; 
+                  if (!fpsDisplay)
+                  {
+                    fpsbuf[0] = ' ';
+                    fpsbuf[1] = ' ';
+                    fpsbuf[2] = ' ';
+                    fpsbuf[3] = 0;
+                    dsPrintValue(0,0,0, fpsbuf); 
+                  }
+                  else gTotalAtariFrames=0;
+              }
+              
+              if (fpsDisplay) 
+              {
+                  int x = gTotalAtariFrames;
+                  fpsbuf[0] = '0' + (int)x/100;
+                  x = x % 100;
+                  fpsbuf[1] = '0' + (int)x/10;
+                  fpsbuf[2] = '0' + (int)x%10;
+                  fpsbuf[3] = 0;
+                  dsPrintValue(0,0,0, fpsbuf); 
+                  gTotalAtariFrames = 0;
+              }
+            }
+        }
+        
+        if (keys_pressed & KEY_TOUCH) 
+        {
+          if (!keys_touch) 
+          {
             touchPosition touch;
             keys_touch=1;
             touchRead(&touch);
             iTx = touch.px;
             iTy = touch.py;
-            if ((iTx>23) && (iTx<39) && (iTy>35) && (iTy<65)) { // 24,36  -> 38,64   quit
+           
+            if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) { // quit
               dsDisplayButton(1);
-              soundPlaySample(clickQuit_wav, SoundFormat_8Bit, clickQuit_wav_size, 22050, 127, 64, false, 0);
               if (dsWaitOnQuit()) etatEmu=STELLADS_QUITSTDS;
-              else dsDisplayButton(0);
+              else
+              {
+                WAITVBL;
+                dsDisplayButton(3-console_color);  
+                dsDisplayButton(10+left_difficulty);
+                dsDisplayButton(12+right_difficulty);
+              }
             }
-            else if ((iTx>71) && (iTx<87) && (iTy>35) && (iTy<65)) { // 72,36  ->86,64   tv type
+            else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) { // tv type
               soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
               console_color=1-console_color;
               theConsole->eventHandler().sendKeyEvent(console_color ? StellaEvent::KCODE_F3 : StellaEvent::KCODE_F4, 1);
+              dampen=5;
               dsDisplayButton(3-console_color);
             }
-            else if ((iTx>170) && (iTx<186) && (iTy>35) && (iTy<65)) { // 171,36  ->185,64   game select
+            else if ((iTx>100) && (iTx<125) && (iTy>26) && (iTy<65)) { // Left Difficulty Switch
+              soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
+              left_difficulty=1-left_difficulty;
+              theConsole->eventHandler().sendKeyEvent(left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
+              dampen=5;
+              dsDisplayButton(10+left_difficulty);
+            }
+            else if ((iTx>135) && (iTx<160) && (iTy>26) && (iTy<65)) { // Right Difficulty Switch
+              soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
+              right_difficulty=1-right_difficulty;
+              theConsole->eventHandler().sendKeyEvent(right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
+              dampen=5;
+              dsDisplayButton(12+right_difficulty);
+            }
+            else if ((iTx>170) && (iTx<203) && (iTy>26) && (iTy<70)) { // game select
               dsDisplayButton(5);
               soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
               theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1, 1);
+              dampen=10;
               WAITVBL; dsDisplayButton(4);
             }
-            else if ((iTx>218) && (iTx<234) && (iTy>35) && (iTy<65)) { // 219,36  ->233,64   game reset
+            else if ((iTx>215) && (iTx<253) && (iTy>26) && (iTy<70)) { // game reset
               dsDisplayButton(7);
               soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
               theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, 1);
+              dampen=10;
               WAITVBL; dsDisplayButton(6);
             }
             else if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133)) {     // 48,100 -> 208,132 cartridge slot
@@ -721,7 +832,10 @@ ITCM_CODE void dsMainLoop(void) {
               irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
               vcsFindFiles();
               romSel=dsWaitForRom();
-              if (romSel) { etatEmu=STELLADS_PLAYINIT; dsLoadGame(vcsromlist[ucFicAct].filename); }
+              if (romSel) { 
+                etatEmu=STELLADS_PLAYINIT; 
+                dsLoadGame(vcsromlist[ucFicAct].filename); 
+              }
               else { irqEnable(IRQ_TIMER2); }
               fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
             }
@@ -751,7 +865,7 @@ ITCM_CODE void dsMainLoop(void) {
 int a26Filescmp (const void *c1, const void *c2) {
   FICA2600 *p1 = (FICA2600 *) c1;
   FICA2600 *p2 = (FICA2600 *) c2;
-  
+
   return strcmp (p1->filename, p2->filename);
 }
 

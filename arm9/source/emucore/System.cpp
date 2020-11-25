@@ -23,6 +23,8 @@
 #include "M6502.hxx"
 #include "System.hxx"
 
+int gSystemCycles = 0;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)
     : myAddressMask((1 << n) - 1),
@@ -31,7 +33,6 @@ System::System(uInt16 n, uInt16 m)
       myNumberOfPages(1 << (n - m)),
       myNumberOfDevices(0),
       myM6502(0),
-      myCycles(0),
       myDataBusState(0)
 {
   // Make sure the arguments are reasonable
@@ -116,9 +117,9 @@ void System::resetCycles()
   {
     myDevices[i]->systemCyclesReset();
   }
-
+  
   // Now, we reset cycle count to zero
-  myCycles = 0;
+  gSystemCycles = 0;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

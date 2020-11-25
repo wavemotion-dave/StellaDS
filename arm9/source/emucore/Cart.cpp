@@ -113,6 +113,7 @@ Cartridge::~Cartridge()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 string Cartridge::autodetectType(const uInt8* image, uInt32 size)
 {
+  extern void OutputCartInfo(string type, string md5);
   // The following is a simple table mapping games to type's using MD5 values
   struct MD5ToType
   {
@@ -146,6 +147,10 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     {(char*)0,                           (char*)0}
   };
 
+  string zz="HI";
+  string zz2="THERE";
+  OutputCartInfo(zz,zz2);
+    
   // Get the MD5 message-digest for the ROM image
   string md5 = MD5(image, size);
 
@@ -292,6 +297,9 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
 #endif    
   }
+  
+  
+  OutputCartInfo(type, md5);
 
   return type;
 }

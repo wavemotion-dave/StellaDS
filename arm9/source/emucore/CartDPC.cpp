@@ -142,8 +142,8 @@ inline void CartridgeDPC::clockRandomNumberGenerator()
 inline void CartridgeDPC::updateMusicModeDataFetchers()
 {
   // Calculate the number of cycles since the last update
-  Int32 cycles = mySystem->cycles() - mySystemCycles;
-  mySystemCycles = mySystem->cycles();
+  Int32 cycles = gSystemCycles - mySystemCycles;
+  mySystemCycles = gSystemCycles;
 
   // Calculate the number of DPC OSC clocks since the last update
   double clocks = ((15750.0 * cycles) / 1193191.66666667) + myFractionalClocks;

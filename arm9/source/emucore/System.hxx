@@ -27,6 +27,8 @@ class NullDevice;
 #include "Device.hxx"
 #include "NullDev.hxx"
 
+extern int gSystemCycles; // Number of system cycles executed since the last reset
+
 /**
   This class represents a system consisting of a 6502 microprocessor
   and a set of devices.  The devices are mapped into an addressing
@@ -126,7 +128,7 @@ class System
 
       @return The amount to right shift an address by to get its page
     */
-    uInt16 pageShift() const
+    inline uInt16 pageShift() const
     {
       return myPageShift;
     }
@@ -136,7 +138,7 @@ class System
 
       @return The mask to apply to an address to obtain its page offset
     */
-    uInt16 pageMask() const
+    inline uInt16 pageMask() const
     {
       return myPageMask;
     }
@@ -148,20 +150,11 @@ class System
 
       @return The number of system cycles which have passed
     */
-    uInt32 cycles() const 
+    inline Int32 cycles() const 
     { 
-      return myCycles; 
+      return gSystemCycles; 
     }
 
-    /**
-      Increment the system cycles by the specified number of cycles.
-
-      @param amount The amount to add to the system cycles counter
-    */
-    void incrementCycles(uInt32 amount) 
-    { 
-      myCycles += amount; 
-    }
 
     /**
       Reset the system cycle count to zero.  The first thing that
@@ -269,9 +262,6 @@ class System
     // 6502 processor attached to the system or the null pointer
     M6502* myM6502;
 
-    // Number of system cycles executed since the last reset
-    uInt32 myCycles;
-
     // Null device to use for page which are not installed
     NullDevice myNullDevice; 
 
@@ -297,21 +287,17 @@ inline uInt8 System::peek(uInt16 addr)
 {
   PageAccess& access = myPageAccessTable[(addr & myAddressMask) >> myPageShift];
 
-  uInt8 result;
- 
   // See if this page uses direct accessing or not 
   if(access.directPeekBase != 0)
   {
-    result = *(access.directPeekBase + (addr & myPageMask));
+    myDataBusState = *(access.directPeekBase + (addr & myPageMask));
   }
   else
   {
-    result = access.device->peek(addr);
+    myDataBusState = access.device->peek(addr);
   }
 
-  myDataBusState = result;
-
-  return result;
+  return myDataBusState;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

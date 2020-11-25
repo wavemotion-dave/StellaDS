@@ -16,108 +16,6 @@
 // $Id: M6502Low.ins,v 1.1 2004/06/28 01:24:09 stephena Exp $
 //============================================================================
 
-/**
-  Code to handle addressing modes and branch instructions for
-  low compatibility emulation
-
-  @author  Bradford W. Mott
-  @version $Id: M6502Low.ins,v 1.1 2004/06/28 01:24:09 stephena Exp $
-*/
-
-#ifndef NOTSAMEPAGE
-  #define NOTSAMEPAGE(_addr1, _addr2) (((_addr1) ^ (_addr2)) & 0xff00)
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//============================================================================
-//
-// MM     MM  6666  555555  0000   2222
-// MMMM MMMM 66  66 55     00  00 22  22
-// MM MMM MM 66     55     00  00     22
-// MM  M  MM 66666  55555  00  00  22222  --  "A 6502 Microprocessor Emulator"
-// MM     MM 66  66     55 00  00 22
-// MM     MM 66  66 55  55 00  00 22
-// MM     MM  6666   5555   0000  222222
-//
-// Copyright (c) 1995-1998 by Bradford W. Mott
-//
-// See the file "license" for information on usage and redistribution of
-// this file, and for a DISCLAIMER OF ALL WARRANTIES.
-//
-// $Id: M6502Low.ins,v 1.1 2004/06/28 01:24:09 stephena Exp $
-//============================================================================
-
 /** 
   Code and cases to emulate each of the 6502 instruction 
 
@@ -410,7 +308,7 @@ case 0x7d:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -451,7 +349,7 @@ case 0x79:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -524,7 +422,7 @@ case 0x71:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -649,7 +547,7 @@ case 0x3d:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -670,7 +568,7 @@ case 0x39:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -703,7 +601,7 @@ case 0x31:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -876,8 +774,8 @@ case 0x90:
   if(!C)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -893,8 +791,8 @@ case 0xb0:
   if(C)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -910,8 +808,8 @@ case 0xf0:
   if(!notZ)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -953,8 +851,8 @@ case 0x30:
   if(N)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -970,8 +868,8 @@ case 0xD0:
   if(notZ)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -987,8 +885,8 @@ case 0x10:
   if(!N)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -1022,8 +920,8 @@ case 0x50:
   if(!V)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -1039,8 +937,8 @@ case 0x70:
   if(V)
   {
     uInt16 address = PC + (Int8)operand;
-    mySystem->incrementCycles(NOTSAMEPAGE(PC, address) ?
-        mySystemCyclesPerProcessorCycle << 1 : mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
+    if (NOTSAMEPAGE(PC, address)) gSystemCycles++;
     PC = address;
   }
 }
@@ -1148,7 +1046,7 @@ case 0xdd:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -1171,7 +1069,7 @@ case 0xd9:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -1208,7 +1106,7 @@ case 0xd1:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -1574,7 +1472,7 @@ case 0x5d:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -1595,7 +1493,7 @@ case 0x59:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -1628,7 +1526,7 @@ case 0x51:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2057,7 +1955,8 @@ case 0x20:
   poke(0x0100 + SP--, PC >> 8);
   poke(0x0100 + SP--, PC & 0xff);
 
-  PC = low | ((uInt16)peek(PC++) << 8); 
+  uInt16 tmp = peek(PC++);
+  PC = low | (tmp << 8); 
 }
 break;
 
@@ -2070,7 +1969,7 @@ case 0xbb:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2106,7 +2005,7 @@ case 0xbf:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2167,7 +2066,7 @@ case 0xb3:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2239,7 +2138,7 @@ case 0xbd:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -2260,7 +2159,7 @@ case 0xb9:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2293,7 +2192,7 @@ case 0xb1:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2364,7 +2263,7 @@ case 0xbe:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2435,7 +2334,7 @@ case 0xbc:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -2626,7 +2525,7 @@ case 0xfc:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -2694,7 +2593,7 @@ case 0x1d:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -2715,7 +2614,7 @@ case 0x19:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -2748,7 +2647,7 @@ case 0x11:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -3623,7 +3522,7 @@ case 0xfd:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + X))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += X;
@@ -3670,7 +3569,7 @@ case 0xf9:
   // See if we need to add one cycle for indexing across a page boundary
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;
@@ -3755,7 +3654,7 @@ case 0xf1:
 
   if(NOTSAMEPAGE(operandAddress, operandAddress + Y))
   {
-    mySystem->incrementCycles(mySystemCyclesPerProcessorCycle);
+    gSystemCycles++;
   }
 
   operandAddress += Y;

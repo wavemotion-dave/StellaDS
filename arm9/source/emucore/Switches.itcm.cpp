@@ -22,11 +22,9 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 Switches::Switches(const Event& event)
     : myEvent(event),
-      mySwitches(0xFF)
+      mySwitches(0x0F)
 {
-    mySwitches |= 0x80; // Right  Difficult A
-    mySwitches |= 0x40; // Left Difficult A
-    mySwitches |= 0x08; // Color More
+    mySwitches |= 0x08; // Color Mode
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -37,33 +35,32 @@ Switches::~Switches()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 uInt8 Switches::read()
 {
-  if(myEvent.get(Event::ConsoleColor) != 0)
-  {
-    mySwitches |= 0x08;
-  }
-  else if(myEvent.get(Event::ConsoleBlackWhite) != 0)
-  {
-    mySwitches &= ~0x08;
-  }
-  
-  if(myEvent.get(Event::ConsoleRightDifficultyA) != 0)
-  {
-    mySwitches |= 0x80;
-  }
-  else if(myEvent.get(Event::ConsoleRightDifficultyB) != 0) 
-  {
-    mySwitches &= ~0x80;
-  }
+	if(myEvent.get(Event::ConsoleColor) != 0)
+	{
+		mySwitches |= 0x08;
+	}
+	else if(myEvent.get(Event::ConsoleBlackWhite) != 0)
+	{
+	 	mySwitches &= ~0x08;
+	}
+	if(myEvent.get(Event::ConsoleRightDifficultyA) != 0)
+	{
+		mySwitches |= 0x80;
+	}
+	else if(myEvent.get(Event::ConsoleRightDifficultyB) != 0) 
+	{
+		mySwitches &= ~0x80;
+	}
 
-  if(myEvent.get(Event::ConsoleLeftDifficultyA) != 0)
-  {
-    mySwitches |= 0x40;
-  }
-  else if(myEvent.get(Event::ConsoleLeftDifficultyB) != 0)
-  {
-    mySwitches &= ~0x40;
-  }
-  
+	if(myEvent.get(Event::ConsoleLeftDifficultyA) != 0)
+	{
+		mySwitches |= 0x40;
+	}
+	else if(myEvent.get(Event::ConsoleLeftDifficultyB) != 0)
+	{
+		mySwitches &= ~0x40;
+	}
+
 	if(myEvent.get(Event::ConsoleSelect) != 0)
 		mySwitches &= ~0x02;
 	else 

@@ -54,13 +54,13 @@ bool M6502Low::execute(uInt32 number)
   {
     for(; !myExecutionStatus && (number != 0); --number)
     {
-      uInt16 operandAddress = 0;
-      uInt8 operand = 0;
+      uInt16 operandAddress=0;
+      uInt8 operand=0;
 		
       IR = peek(PC++);
 
       // Update system cycles
-      mySystem->incrementCycles(myInstructionSystemCycleTable[IR]); 
+      gSystemCycles += myInstructionSystemCycleTable[IR]; 
 
       // Call code to execute the instruction
       switch(IR)
@@ -112,7 +112,7 @@ void M6502Low::interruptHandler()
   // Handle the interrupt
   if((myExecutionStatus & MaskableInterruptBit) && !I)
   {
-    mySystem->incrementCycles(7 * mySystemCyclesPerProcessorCycle);	// 7 cycle operation
+    gSystemCycles += 7; // 7 cycle operation
     mySystem->poke(0x0100 + SP--, (PC - 1) >> 8);		// The high byte of the return address
     mySystem->poke(0x0100 + SP--, (PC - 1) & 0x00ff);	// The low byte of the return address
     mySystem->poke(0x0100 + SP--, PS() & (~0x10));	// The status byte from the processor status register
@@ -122,7 +122,7 @@ void M6502Low::interruptHandler()
   }
   else if(myExecutionStatus & NonmaskableInterruptBit)
   {
-    mySystem->incrementCycles(7 * mySystemCyclesPerProcessorCycle);
+    gSystemCycles += 7; // 7 cycle operation
     mySystem->poke(0x0100 + SP--, (PC - 1) >> 8);
     mySystem->poke(0x0100 + SP--, (PC - 1) & 0x00ff);
     mySystem->poke(0x0100 + SP--, PS() & (~0x10));

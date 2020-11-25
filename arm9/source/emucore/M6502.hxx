@@ -202,9 +202,10 @@ class M6502
 
     /// Indicates the number of system cycles per processor cycle 
     const uInt32 mySystemCyclesPerProcessorCycle;
+	  const uInt32 my2xSystemCyclesPerProcessorCycle;
 
     /// Table of system cycles for each instruction
-    uInt32 myInstructionSystemCycleTable[256]; 
+    int myInstructionSystemCycleTable[256]; 
 
   protected:
     /// Addressing mode for each of the 256 opcodes

@@ -208,7 +208,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 
 void Update_tia_sound (uint16 addr, uint8 val)
 {
-    uint16 new_val = 0;
+    uint16 new_val;
     uint8 chan;
 
     /* determine which address was changed */

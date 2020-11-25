@@ -20,8 +20,29 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V1.0a : 24-Nov-2020
-  * Getting ready to fork and upload new code...
+V1.1c : 25-Nov-2020 by Dave Bernazzani (wavemotion)
+  * Starting with RocketRobz 2-Apr-2020 baseline Stella DS codebase... 
+  * Added graphical difficulty switches for both Left and Right players.
+  * Used  a bit more of the DSi screen resolution so that the occasional missing graphic doesn't get 
+    compressed away (e.g. if you fire the laser in Chopper Command you can see it sometimes disappears at 
+    certain vertical positions of the Chopper... this is no longer an issue). Generally this results in a
+    few missing rows of pixels at the very bottom of the screen which is a better trade-off for 95% of 
+    games where almost no action takes place at the extremes.
+  * Fixed all the on-screen touch button handling such that it's not so glitchy... press SELECT switch or
+    START switch and it actually works every time (it's amazing what a little debounce code will do!). 
+    I increased the hot-spots where you can press for each switch so that you can cleanly operate it with
+    a finger or thumb... I hated getting out the Stylus for the small hit-boxes that were originally used.
+  * Improved the emulator core to reorder a few operations, streamline a few others and one semi-major hack 
+    that I'm not proud of to use a global integer for CPU cycles to avoid any structure/class overhead which
+    yields a 5-15% speedup (depending on the game).  More games now run full speed and other games are elevated
+    to "playable" with these speed improvements. 
+  * Start and Select buttons now map to RESET (often used to start a game) and SELECT switches. That only seems logical. 
+  * Remapped the FPS display to the right shoulder switch. I also only output the FPS once per second instead of 
+    the wasteful 60x per second which means you can run with the FPS enabled with very little (but not zero!) impact on emulation.
+  * Press (and hold) the left shoulder switch to run the game at max speed... some games run at 120FPS max and others can't even get to 60... but it's improving!
+  * The Power Off button no longer makes that hideous screeching noise. And if you decide not to quit, it renders the screen back properly.
+  * Fixed the ROM loading problems when the filenames were > 29 characters long.
+  * Other minor improvements as time allowed...
 
 --------------------------------------------------------------------------------
 History :
@@ -38,7 +59,7 @@ V1.0 : 20/05/2011
   * Add support for PAL/NTSC palette
   
 --------------------------------------------------------------------------------
-How tu use StellaDS :
+How to use StellaDS :
 --------------------------------------------------------------------------------
 YOU NEED PERHAPS TO PATCH THE NDS FILE WITH THE DLDI PATCH BEFORE USING IT. 
 Unzip StellaDS.nds from the StellaDS.zip archive in a directory of your flash / (micro) SD 
@@ -51,9 +72,12 @@ When the emulator starts, click on the cartridge slot to choose a file. you are 
 to select a file, then use A to load it.
 
 Controls :
- * Direction pad : the joystick ...
+ * D-Pad   : the Joystick
  * A       : Fire button
- * SELECT  : SELECT Trigger
+ * SELECT  : SELECT switch
+ * START   : START switch
+ * R-Trig  : FPS Display
+ * L-Trig  : Press and Hold for MAX Speed
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------

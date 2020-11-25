@@ -240,6 +240,7 @@ class TIA : public Device , public MediaSource
   private:
     // Indicates color clocks when the current frame began
     Int32 myClockWhenFrameStarted;
+    Int32 myCyclesWhenFrameStarted;   
 
     // Indicates color clocks when frame should begin to be drawn
     Int32 myClockStartDisplay;
