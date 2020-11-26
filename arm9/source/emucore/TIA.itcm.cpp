@@ -1576,64 +1576,54 @@ void TIA::waitHorizontalSync()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 TIA::peek(uInt16 addr)
 {
+    uInt8 retVal = 0x02; //Should be: mySystem->getDataBusState() & 0x3F;  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
   // Update frame to current color clock before we look at anything!
     updateFrame((gSystemCycles+gSystemCycles+gSystemCycles));
-    uInt8 noise = 0x02; //mySystem->getDataBusState() & 0x3F; 
         
   switch(addr & 0x000f)
   {
-#if 0
     case 0x00:    // CXM0P
-      return ((myCollision & 0x0001) ? 0x80 : 0x00) |  ((myCollision & 0x0002) ? 0x40 : 0x00) ;
+      if (myCollision & 0x0001) retVal |= 0x80;
+      if (myCollision & 0x0002) retVal |= 0x40;
+      return retVal;
     case 0x01:    // CXM1P
-      return ((myCollision & 0x0004) ? 0x80 : 0x00) |  ((myCollision & 0x0008) ? 0x40 : 0x00) ;
+      if (myCollision & 0x0004) retVal |= 0x80;
+      if (myCollision & 0x0008) retVal |= 0x40;
+      return retVal;
     case 0x02:    // CXP0FB
-      return ((myCollision & 0x0010) ? 0x80 : 0x00) |  ((myCollision & 0x0020) ? 0x40 : 0x00) ;
+      if (myCollision & 0x0010) retVal |= 0x80;
+      if (myCollision & 0x0020) retVal |= 0x40;
+      return retVal;
     case 0x03:    // CXP1FB
-      return ((myCollision & 0x0040) ? 0x80 : 0x00) |  ((myCollision & 0x0080) ? 0x40 : 0x00) ;
+      if (myCollision & 0x0040) retVal |= 0x80;
+      if (myCollision & 0x0080) retVal |= 0x40;
+      return retVal;
     case 0x04:    // CXM0FB
-      return ((myCollision & 0x0100) ? 0x80 : 0x00) |  ((myCollision & 0x0200) ? 0x40 : 0x00) ;
+      if (myCollision & 0x0100) retVal |= 0x80;
+      if (myCollision & 0x0200) retVal |= 0x40;
+      return retVal;
     case 0x05:    // CXM1FB
-      return ((myCollision & 0x0400) ? 0x80 : 0x00) |  ((myCollision & 0x0800) ? 0x40 : 0x00);
+      if (myCollision & 0x0400) retVal |= 0x80;
+      if (myCollision & 0x0800) retVal |= 0x40;
+      return retVal;
     case 0x06:    // CXBLPF
-      return ((myCollision & 0x1000) ? 0x80 : 0x00);
+      if (myCollision & 0x1000) retVal |= 0x80;
+      return retVal;
     case 0x07:    // CXPPMM
-      return ((myCollision & 0x2000) ? 0x80 : 0x00) |  ((myCollision & 0x4000) ? 0x40 : 0x00);
-#else
-    case 0x00:    // CXM0P
-      if ((myCollision & 0x0003) == 0) return noise;
-      return ((myCollision & 0x0001) ? 0x80 : 0x00) |  ((myCollision & 0x0002) ? 0x40 : 0x00)  | noise;
-    case 0x01:    // CXM1P
-      if ((myCollision & 0x000C) == 0) return noise;
-      return ((myCollision & 0x0004) ? 0x80 : 0x00) |  ((myCollision & 0x0008) ? 0x40 : 0x00)  | noise;
-    case 0x02:    // CXP0FB
-      if ((myCollision & 0x0030) == 0) return noise;
-      return ((myCollision & 0x0010) ? 0x80 : 0x00) |  ((myCollision & 0x0020) ? 0x40 : 0x00)  | noise;
-    case 0x03:    // CXP1FB
-      if ((myCollision & 0x00C0) == 0) return noise;
-      return ((myCollision & 0x0040) ? 0x80 : 0x00) |  ((myCollision & 0x0080) ? 0x40 : 0x00)  | noise;
-    case 0x04:    // CXM0FB
-      if ((myCollision & 0x0300) == 0) return noise;
-      return ((myCollision & 0x0100) ? 0x80 : 0x00) |  ((myCollision & 0x0200) ? 0x40 : 0x00)  | noise;
-    case 0x05:    // CXM1FB
-      if ((myCollision & 0x0C00) == 0) return noise;
-      return ((myCollision & 0x0400) ? 0x80 : 0x00) |  ((myCollision & 0x0800) ? 0x40 : 0x00) | noise;
-    case 0x06:    // CXBLPF
-      return ((myCollision & 0x1000) ? 0x80 : 0x00) | noise;
-    case 0x07:    // CXPPMM
-      if ((myCollision & 0x6000) == 0) return noise;
-      return ((myCollision & 0x2000) ? 0x80 : 0x00) |  ((myCollision & 0x4000) ? 0x40 : 0x00)  | noise;
-#endif
+      if (myCollision & 0x2000) retVal |= 0x80;
+      if (myCollision & 0x4000) retVal |= 0x40;
+      return retVal;
+
     case 0x08:    // INPT0
     {
       Int32 r = myConsole.controller(Controller::Left).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
-        return 0x80 | noise;
+        return 0x80 | retVal;
       }
       else if((r == Controller::maximumResistance) || myDumpEnabled)
       {
-        return noise;
+        return retVal;
       }
       else
       {
@@ -1641,11 +1631,11 @@ uInt8 TIA::peek(uInt16 addr)
         Int32 needed = (Int32)(t * 1.19E6);
         if(gSystemCycles > (myDumpDisabledCycle + needed))
         {
-          return 0x80 | noise;
+          return 0x80 | retVal;
         }
         else
         {
-          return noise;
+          return retVal;
         }
       }
     }
@@ -1655,11 +1645,11 @@ uInt8 TIA::peek(uInt16 addr)
       Int32 r = myConsole.controller(Controller::Left).read(Controller::Five);
       if(r == Controller::minimumResistance)
       {
-        return 0x80 | noise;
+        return 0x80 | retVal;
       }
       else if((r == Controller::maximumResistance) || myDumpEnabled)
       {
-        return noise;
+        return retVal;
       }
       else
       {
@@ -1667,11 +1657,11 @@ uInt8 TIA::peek(uInt16 addr)
         Int32 needed = (Int32)(t * 1.19E6);
         if(gSystemCycles > (myDumpDisabledCycle + needed))
         {
-          return 0x80 | noise;
+          return 0x80 | retVal;
         }
         else
         {
-          return noise;
+          return retVal;
         }
       }
     }
@@ -1681,11 +1671,11 @@ uInt8 TIA::peek(uInt16 addr)
       Int32 r = myConsole.controller(Controller::Right).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
-        return 0x80 | noise;
+        return 0x80 | retVal;
       }
       else if((r == Controller::maximumResistance) || myDumpEnabled)
       {
-        return noise;
+        return retVal;
       }
       else
       {
@@ -1693,11 +1683,11 @@ uInt8 TIA::peek(uInt16 addr)
         Int32 needed = (Int32)(t * 1.19E6);
         if(gSystemCycles > (myDumpDisabledCycle + needed))
         {
-          return 0x80 | noise;
+          return 0x80 | retVal;
         }
         else
         {
-          return noise;
+          return retVal;
         }
       }
     }
@@ -1707,11 +1697,11 @@ uInt8 TIA::peek(uInt16 addr)
       Int32 r = myConsole.controller(Controller::Right).read(Controller::Five);
       if(r == Controller::minimumResistance)
       {
-        return 0x80 | noise;
+        return 0x80 | retVal;
       }
       else if((r == Controller::maximumResistance) || myDumpEnabled)
       {
-        return noise;
+        return retVal;
       }
       else
       {
@@ -1719,28 +1709,28 @@ uInt8 TIA::peek(uInt16 addr)
         Int32 needed = (Int32)(t * 1.19E6);
         if(gSystemCycles > (myDumpDisabledCycle + needed))
         {
-          return 0x80 | noise;
+          return 0x80 | retVal;
         }
         else
         {
-          return noise;
+          return retVal;
         }
       }
     }
 
     case 0x0C:    // INPT4
       return myConsole.controller(Controller::Left).read(Controller::Six) ?
-          (0x80 | noise) : noise;
+          (0x80 | retVal) : retVal;
 
     case 0x0D:    // INPT5
       return myConsole.controller(Controller::Right).read(Controller::Six) ?
-          (0x80 | noise) : noise;
+          (0x80 | retVal) : retVal;
 
     case 0x0e:
-      return noise;
+      return retVal;
 
     default:
-      return noise;
+      return retVal;
   }
 }
 

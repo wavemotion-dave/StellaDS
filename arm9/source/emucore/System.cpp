@@ -23,6 +23,12 @@
 #include "M6502.hxx"
 #include "System.hxx"
 
+// ---------------------------------------------------------------------------
+// Global speedup hack which gives 10% or better speedup in core emulation.
+// I'm not proud of this... Stella is beautiful code and as such deserves
+// better than some global variable hack but the speedup is needed to bring
+// even more games up to 60 FPS. Sometimes the ends justify the means.
+// ---------------------------------------------------------------------------
 int gSystemCycles = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
