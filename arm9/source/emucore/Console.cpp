@@ -58,11 +58,11 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   // Get the MD5 message-digest for the ROM image
   string md5 = MD5(image, size);
 
-    myControllers[0] = new Joystick(Controller::Left, *myEvent);
-    myControllers[1] = new Joystick(Controller::Right, *myEvent);
+  myControllers[0] = new Joystick(Controller::Left, *myEvent);
+  myControllers[1] = new Joystick(Controller::Right, *myEvent);
 
   mySwitches = new Switches(*myEvent);
-  mySystem = new System(13, 6);
+  mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT); // 128 byte pages... was 6=64 but bank switching improved with larger page sizes as there are fewer "areas" to copy to direct memory acces
 
   M6502* m6502 = new M6502Low(1);
 

@@ -28,6 +28,7 @@
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"
 
+#define VERSION "1.1d"
 
 #define A26_VID_WIDTH  160  
 #define A26_VID_HEIGHT 210
@@ -44,6 +45,10 @@ uInt8* filebuffer = 0;
 int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
+
+#define MAX_DEBUG 10
+uInt32 debug[MAX_DEBUG]={0};
+//#define DEBUG_DUMP 
   
 #define SOUND_SIZE (2048)
 static uInt8 sound_buffer[SOUND_SIZE];
@@ -54,8 +59,10 @@ uInt8* psound_buffer;
 // out the cart type (2k, 4k, F4, F6, F8, etc) as well as the MD5.
 void OutputCartInfo(string type, string md5)
 {
-    //dsPrintValue(0,5,0, (char*)type.c_str()); 
-    //dsPrintValue(0,6,0, (char*)md5.c_str()); 
+#ifdef DEBUG_DUMP    
+    dsPrintValue(0,16,0, (char*)type.c_str()); 
+    dsPrintValue(0,17,0, (char*)md5.c_str()); 
+#endif    
 }
 
 // --------------------------------------------------------------------------------------
@@ -150,7 +157,7 @@ void dsShowScreenEmu(void) {
 
   REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ; 
   REG_BG3PB = 0; REG_BG3PC = 0;
-	REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;  
+  REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;  
   REG_BG3X = A26_VID_XOFS<<8;
   REG_BG3Y = A26_VID_YOFS<<8;
 }
@@ -317,7 +324,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel) {
   dsPrintValue(16-strlen(szName)/2,2,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
-  sprintf(szName,"%s","A TO SELECT A GAME, B TO GO BACK");
+  sprintf(szName,"%s [%s]","A TO SELECT, B TO GO BACK", VERSION);
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
   for (ucBcl=0;ucBcl<17; ucBcl++) {
     ucGame= ucBcl+NoDebGame;
@@ -596,9 +603,8 @@ unsigned int dsWaitOnMenu(unsigned int actState) {
       touchRead(&touch);
       iTx = touch.px;
       iTy = touch.py;
-      if ((iTx>23) && (iTx<39) && (iTy>35) && (iTy<65)) { // 24,36  -> 38,64   quit
+      if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) { // 24,36  -> 38,64   quit
         dsDisplayButton(1);
-        //soundPlaySample(clickQuit_wav, SoundFormat_8Bit, clickQuit_wav_size, 22050, 127, 64, false, 0);
         bDone=dsWaitOnQuit();
         if (bDone) uState=STELLADS_QUITSTDS;
       }
@@ -648,6 +654,32 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr) {
   }
 }
 
+static void DumpDebugData(void)
+{
+#ifdef DEBUG_DUMP
+    char fpsbuf[32];
+    for (int i=0; i<MAX_DEBUG; i++)
+    {
+      int val = debug[i];
+      debug[i]=0;
+      fpsbuf[0] = '0' + (int)val/1000000;
+      val = val % 1000000;
+      fpsbuf[1] = '0' + (int)val/100000;
+      val = val % 100000;
+      fpsbuf[2] = '0' + (int)val/10000;
+      val = val % 10000;
+      fpsbuf[3] = '0' + (int)val/1000;
+      val= val % 1000;
+      fpsbuf[4] = '0' + (int)val/100;
+      val = val % 100;
+      fpsbuf[5] = '0' + (int)val/10;
+      fpsbuf[6] = '0' + (int)val%10;
+      fpsbuf[7] = 0;
+      dsPrintValue(0,3+i,0, fpsbuf); 
+    }
+#endif
+}
+
 int gTotalAtariFrames=0;
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void) {
@@ -663,6 +695,7 @@ void dsInstallSoundEmuFIFO(void) {
   msg.type = EMUARM7_PLAY_SND;
   fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }
+
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 static int full_speed=0;
@@ -709,7 +742,7 @@ ITCM_CODE void dsMainLoop(void) {
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
 	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
-        if (dampen==0)
+        if (dampen==0) // These don't need to be sent up as fast... dampen it down to save cycles...
         {
           theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
           theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2,  keys_pressed & (KEY_START));
@@ -740,7 +773,7 @@ ITCM_CODE void dsMainLoop(void) {
         if ((nowTime - oldTime) >= 2184) // 1/15th of a second...
         {
             oldTime = nowTime;
-            if (++fps_dampen >= 15)
+            if (++fps_dampen >= 15) // one second...
             {
               fps_dampen=0;
               if (keys_pressed & KEY_R) 
@@ -768,6 +801,8 @@ ITCM_CODE void dsMainLoop(void) {
                   dsPrintValue(0,0,0, fpsbuf); 
                   gTotalAtariFrames = 0;
               }
+                
+              DumpDebugData();
             }
         }
         

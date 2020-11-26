@@ -28,6 +28,13 @@ class NullDevice;
 #include "NullDev.hxx"
 
 extern int gSystemCycles; // Number of system cycles executed since the last reset
+extern uInt32 debug[];
+
+#define MY_PAGE_SHIFT   7
+#define MY_PAGE_MASK    0x7F
+#define MY_ADDR_SHIFT   13
+#define MY_ADDR_MASK    0x1FFF
+
 
 /**
   This class represents a system consisting of a 6502 microprocessor
@@ -285,12 +292,12 @@ inline uInt8 System::getDataBusState() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 System::peek(uInt16 addr)
 {
-  PageAccess& access = myPageAccessTable[(addr & myAddressMask) >> myPageShift];
+  PageAccess& access = myPageAccessTable[(addr & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
 
   // See if this page uses direct accessing or not 
   if(access.directPeekBase != 0)
   {
-    myDataBusState = *(access.directPeekBase + (addr & myPageMask));
+    myDataBusState = *(access.directPeekBase + (addr & MY_PAGE_MASK));
   }
   else
   {
@@ -303,12 +310,12 @@ inline uInt8 System::peek(uInt16 addr)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void System::poke(uInt16 addr, uInt8 value)
 {
-  PageAccess& access = myPageAccessTable[(addr & myAddressMask) >> myPageShift];
+  PageAccess& access = myPageAccessTable[(addr & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
   
   // See if this page uses direct accessing or not 
   if(access.directPokeBase != 0)
   {
-    *(access.directPokeBase + (addr & myPageMask)) = value;
+    *(access.directPokeBase + (addr & MY_PAGE_MASK)) = value;
   }
   else
   {

@@ -20,6 +20,12 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1d : 26-Nov-2020 by Dave Bernazzani (wavemotion)
+  * Improved bank switching algorithm to speed it up. Makes F6/F8 games faster.
+  * Improved speed in Pitfall II. Up to about 45 FPS - almost (but not quite) playable.
+  * Faster display of ROMs list.
+  * Emulator Version number now on ROM selection list.
+
 V1.1c : 25-Nov-2020 by Dave Bernazzani (wavemotion)
   * Starting with RocketRobz 2-Apr-2020 baseline Stella DS codebase... 
   * Added graphical difficulty switches for both Left and Right players.
@@ -44,9 +50,7 @@ V1.1c : 25-Nov-2020 by Dave Bernazzani (wavemotion)
   * Fixed the ROM loading problems when the filenames were > 29 characters long.
   * Other minor improvements as time allowed...
 
---------------------------------------------------------------------------------
-History :
---------------------------------------------------------------------------------
+
 V1.0 : 20/05/2011
   * Initial release based on Stella 1.4.2 
   * Compiled with last version of Devkitpro/libnds, so DSi compatible \o/

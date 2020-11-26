@@ -323,10 +323,10 @@ void CartridgeDPC::poke(uInt16 address, uInt8 value)
   // Clock the random number generator.  This should be done for every
   // cartridge access, however, we're only doing it for the DPC and 
   // hot-spot accesses to save time.
-  clockRandomNumberGenerator();
 
   if((address >= 0x0040) && (address < 0x0080))
   {
+    clockRandomNumberGenerator();
     // Get the index of the data fetcher that's being accessed
     uInt32 index = address & 0x07;    
     uInt32 function = (address >> 3) & 0x07;
@@ -426,8 +426,8 @@ void CartridgeDPC::bank(uInt16 bank)
   // Remember what bank we're in
   myCurrentBank = bank;
   uInt16 offset = myCurrentBank * 4096;
-  uInt16 shift = mySystem->pageShift();
-  uInt16 mask = mySystem->pageMask();
+  uInt32 shiftAdrAdd = (1 << MY_PAGE_SHIFT);
+  uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
 
   // Setup the page access methods for the current bank
   System::PageAccess access;
@@ -435,10 +435,9 @@ void CartridgeDPC::bank(uInt16 bank)
   access.directPokeBase = 0;
 
   // Map Program ROM image into the system
-  for(uInt32 address = 0x1080; address < (0x1FF8U & ~mask);
-      address += (1 << shift))
+  for(uInt32 address = 0x1080; address < (0x1FF8U & ~MY_PAGE_MASK); address += shiftAdrAdd)
   {
     access.directPeekBase = &myProgramImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    mySystem->setPageAccess(access_num++, access);
   }
 }
