@@ -106,20 +106,18 @@ void CartridgeF4::bank(uInt16 bank)
   // Remember what bank we're in
   myCurrentBank = bank;
   uInt16 offset = myCurrentBank * 4096;
-  uInt16 shift = mySystem->pageShift();
-  uInt16 mask = mySystem->pageMask();
 
   // Setup the page access methods for the current bank
   System::PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
+  uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x1000; address < (0x1FF4U & ~mask);
-      address += (1 << shift))
+  for(uInt32 address = 0x1000; address < (0x1FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
     access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    mySystem->setPageAccess(access_num++, access);
   }
 }
 

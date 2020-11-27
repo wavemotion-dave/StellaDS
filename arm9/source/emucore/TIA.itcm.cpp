@@ -277,12 +277,6 @@ void TIA::install(System& system)
 void TIA::update()
 {
     extern int gTotalAtariFrames;
-#if 0 // ALEK
-  uInt8* tmp = myCurrentFrameBuffer;
-  myCurrentFrameBuffer = myPreviousFrameBuffer;
-  myPreviousFrameBuffer = tmp;
-#endif
-
   // We have processed another frame... used for true FPS indication
   gTotalAtariFrames++;
     
@@ -868,7 +862,6 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       case myPFBit | PriorityBit:
       {
         uInt32* mask = &myCurrentPFMask[hpos];
-
         // Update a uInt8 at a time until reaching a uInt32 boundary
         for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending);
             ++myFramePointer, ++mask)
@@ -1396,28 +1389,81 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       // Handle all of the other cases
       default:
       {
-        for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+        uInt32*mPF = &myCurrentPFMask[hpos];
+        uInt8* mBL = &myCurrentBLMask[hpos];
+        uInt8* mP1 = &myCurrentP1Mask[hpos];
+        uInt8* mP0 = &myCurrentP0Mask[hpos];
+        uInt8* mM1 = &myCurrentM1Mask[hpos];
+        uInt8* mM0 = &myCurrentM0Mask[hpos];
+        uInt8 meo_all = myEnabledObjects & (myBLBit | myM1Bit | myM0Bit);
+        
+        // -------------------------------------------------------------------
+        // For small boost in performance, check to see if we can run
+        // through a smaller loop if we only hae one of the objects enabled.
+        // -------------------------------------------------------------------
+        if (meo_all == 0)
         {
-          uInt8 enabled = (myPF & myCurrentPFMask[hpos]) ? myPFBit : 0;
-
-          if((myEnabledObjects & myBLBit) && myCurrentBLMask[hpos])
-            enabled |= myBLBit;
-
-          if(myCurrentGRP1 & myCurrentP1Mask[hpos])
-            enabled |= myP1Bit;
-
-          if((myEnabledObjects & myM1Bit) && myCurrentM1Mask[hpos])
-            enabled |= myM1Bit;
-
-          if(myCurrentGRP0 & myCurrentP0Mask[hpos])
-            enabled |= myP0Bit;
-
-          if((myEnabledObjects & myM0Bit) && myCurrentM0Mask[hpos])
-            enabled |= myM0Bit;
-
-          myCollision |= ourCollisionTable[enabled];
-          *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1]
-              [enabled | myPlayfieldPriorityAndScore]];
+            for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+            {
+              uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
+              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+              myCollision |= ourCollisionTable[enabled];
+              *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1][enabled | myPlayfieldPriorityAndScore]];
+            }
+        }
+        else if (meo_all == myBLBit)
+        {
+            for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+            {
+              uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
+              if(*mBL++)                        enabled |= myBLBit;
+              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+              myCollision |= ourCollisionTable[enabled];
+              *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1][enabled | myPlayfieldPriorityAndScore]];
+            }
+        }
+        else if (meo_all == myM1Bit)
+        {
+            for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+            {
+              uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
+              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+              if(*mM1++)                        enabled |= myM1Bit;
+              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+              myCollision |= ourCollisionTable[enabled];
+              *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1][enabled | myPlayfieldPriorityAndScore]];
+            }
+        }
+        else if (meo_all == myM0Bit)
+        {
+            for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+            {
+              uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
+              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+              if(*mM0++)                        enabled |= myM0Bit;
+              myCollision |= ourCollisionTable[enabled];
+              *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1][enabled | myPlayfieldPriorityAndScore]];
+            }
+        }
+        else
+        {
+            uInt8 meo1 = (myEnabledObjects & myBLBit);
+            uInt8 meo2 = (myEnabledObjects & myM1Bit);
+            uInt8 meo3 = (myEnabledObjects & myM0Bit);
+            for(; myFramePointer < ending; ++myFramePointer, ++hpos)
+            {
+              uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
+              if(meo1 && *mBL++)                enabled |= myBLBit;
+              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+              if(meo2 && *mM1++)                enabled |= myM1Bit;
+              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+              if(meo3 && *mM0++)                enabled |= myM0Bit;
+              myCollision |= ourCollisionTable[enabled];
+              *myFramePointer = myColor[myPriorityEncoder[hpos < 80 ? 0 : 1][enabled | myPlayfieldPriorityAndScore]];
+            }
         }
         break;  
       }
@@ -1448,7 +1494,7 @@ void TIA::updateFrame(Int32 clock)
   do
   {
     // Compute the number of clocks we're going to update
-    Int32 clocksToUpdate = 0;
+    Int32 clocksToUpdate = clock - myClockAtLastUpdate;
 
     // Remember how many clocks we are from the left side of the screen
     Int32 clocksFromStartOfScanLine = 228 - myClocksToEndOfScanLine;
@@ -1464,7 +1510,6 @@ void TIA::updateFrame(Int32 clock)
     else
     {
       // No, so do as much of the current scanline as possible
-      clocksToUpdate = clock - myClockAtLastUpdate;
       myClocksToEndOfScanLine -= clocksToUpdate;
       myClockAtLastUpdate = clock;
     }

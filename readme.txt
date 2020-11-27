@@ -20,6 +20,13 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1e : 27-Nov-2020 by Dave Bernazzani (wavemotion)
+  * Slight improvement on TIA speed (1-2% speed improvement on many games).
+  * Correctly identify games that use the right joystick (Home Run, Surround, Air-Sea Battle, 
+    Wizard of Wor, Basketball, Star Ship and Slot Racers) and switch the DS controls
+    to compensate (those games were unplayable before this).
+  * Added Compatibility.txt for a list of games and their framerates.
+
 V1.1d : 26-Nov-2020 by Dave Bernazzani (wavemotion)
   * Improved bank switching algorithm to speed it up. Makes F6/F8 games faster.
   * Improved speed in Pitfall II. Up to about 45 FPS - almost (but not quite) playable.

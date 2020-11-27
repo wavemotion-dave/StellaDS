@@ -111,9 +111,7 @@ class EventHandler
 
   private:
     void setKeymap();
-    void setJoymap();
     void setDefaultKeymap();
-    void setDefaultJoymap();
 
     bool isValidList(string list, uInt32 length);
 

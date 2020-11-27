@@ -135,20 +135,20 @@ inline void CartridgeDPC::clockRandomNumberGenerator()
       ((myRandomNumber & 0x80) ? 0x08 : 0x00)];
 
   // Update the shift register 
+  
   myRandomNumber = (myRandomNumber << 1) | bit;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPC::updateMusicModeDataFetchers()
-{
+{  
   // Calculate the number of cycles since the last update
   Int32 cycles = gSystemCycles - mySystemCycles;
   mySystemCycles = gSystemCycles;
 
   // Calculate the number of DPC OSC clocks since the last update
-  double clocks = ((15750.0 * cycles) / 1193191.66666667) + myFractionalClocks;
-  Int32 wholeClocks = (Int32)clocks;
-  myFractionalClocks = clocks - (double)wholeClocks;
+  //double clocks = ((15750.0 * cycles) / 1193191.66666667) + myFractionalClocks;
+  Int32 wholeClocks = ((15750 * cycles * 1000) / 1193191667);   // Close enough... need speed!
 
   if(wholeClocks <= 0)
   {
@@ -200,12 +200,13 @@ uInt8 CartridgeDPC::peek(uInt16 address)
   // Clock the random number generator.  This should be done for every
   // cartridge access, however, we're only doing it for the DPC and 
   // hot-spot accesses to save time.
-  clockRandomNumberGenerator();
 
   if(address < 0x0040)
   {
     uInt8 result = 0;
 
+    clockRandomNumberGenerator();
+    
     // Get the index of the data fetcher that's being accessed
     uInt32 index = address & 0x07;
     uInt32 function = (address >> 3) & 0x07;

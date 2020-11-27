@@ -42,6 +42,7 @@
 #include "CartUA.hxx"
 #include "MD5.hxx"
 
+bool bUseRightJoy = false;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
@@ -119,37 +120,51 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
     const char* md5;
     const char* type;
+    bool  useRightJoy;
   };
 
   static MD5ToType table[] = {
-    {"5336f86f6b982cc925532f2e80aa1e17", "E0"},    // Death Star
-    {"b311ab95e85bc0162308390728a7361d", "E0"},    // Gyruss
-    {"c29f8db680990cb45ef7fef6ab57a2c2", "E0"},    // Super Cobra
-    {"085322bae40d904f53bdcc56df0593fc", "E0"},    // Tutankamn
-    {"c7f13ef38f61ee2367ada94fdcc6d206", "E0"},    // Popeye
-    {"6339d28c9a7f92054e70029eb0375837", "E0"},    // Star Wars, Arcade
-    {"27c6a2ca16ad7d814626ceea62fa8fb4", "E0"},    // Frogger II
-    {"3347a6dd59049b15a38394aa2dafa585", "E0"},    // Montezuma's Revenge
-    {"6dda84fb8e442ecf34241ac0d1d91d69", "F6SC"},  // Dig Dug
-    {"57fa2d09c9e361de7bd2aa3a9575a760", "F8SC"},  // Stargate
-    {"3a771876e4b61d42e3a3892ad885d889", "F8SC"},  // Defender ][
-    {"efefc02bbc5258815457f7a5b8d8750a", "FASC"},  // Tunnel runner
-    {"7e51a58de2c0db7d33715f518893b0db", "FASC"},  // Mountain King
-    {"9947f1ebabb56fd075a96c6d37351efa", "FASC"},  // Omega Race
-    {"0443cfa9872cdb49069186413275fa21", "E7"},    // Burger Timer
-    {"76f53abbbf39a0063f24036d6ee0968a", "E7"},    // Bump-N-Jump
-    {"3b76242691730b2dd22ec0ceab351bc6", "E7"},    // He-Man
-    {"ac7c2260378975614192ca2bc3d20e0b", "FE"},    // Decathlon
-    {"4f618c2429138e0280969193ed6c107e", "FE"},    // Robot Tank
-    {"6d842c96d5a01967be9680080dd5be54", "DPC"},   // Pitfall II
-    {"d3bb42228a6cd452c111c1932503cc03", "UA"},    // Funky Fish
-    {"8bbfd951c89cc09c148bfabdefa08bec", "UA"},    // Pleiades
+    {"5336f86f6b982cc925532f2e80aa1e17", "E0",    false},    // Death Star
+    {"b311ab95e85bc0162308390728a7361d", "E0",    false},    // Gyruss
+    {"c29f8db680990cb45ef7fef6ab57a2c2", "E0",    false},    // Super Cobra
+    {"085322bae40d904f53bdcc56df0593fc", "E0",    false},    // Tutankamn
+    {"c7f13ef38f61ee2367ada94fdcc6d206", "E0",    false},    // Popeye
+    {"6339d28c9a7f92054e70029eb0375837", "E0",    false},    // Star Wars, Arcade
+    {"27c6a2ca16ad7d814626ceea62fa8fb4", "E0",    false},    // Frogger II
+    {"3347a6dd59049b15a38394aa2dafa585", "E0",    false},    // Montezuma's Revenge
+    {"6dda84fb8e442ecf34241ac0d1d91d69", "F6SC",  false},    // Dig Dug
+    {"57fa2d09c9e361de7bd2aa3a9575a760", "F8SC",  false},    // Stargate
+    {"3a771876e4b61d42e3a3892ad885d889", "F8SC",  false},    // Defender ][
+    {"efefc02bbc5258815457f7a5b8d8750a", "FASC",  false},    // Tunnel runner
+    {"7e51a58de2c0db7d33715f518893b0db", "FASC",  false},    // Mountain King
+    {"9947f1ebabb56fd075a96c6d37351efa", "FASC",  false},    // Omega Race
+    {"0443cfa9872cdb49069186413275fa21", "E7",    false},    // Burger Timer
+    {"76f53abbbf39a0063f24036d6ee0968a", "E7",    false},    // Bump-N-Jump
+    {"3b76242691730b2dd22ec0ceab351bc6", "E7",    false},    // He-Man
+    {"ac7c2260378975614192ca2bc3d20e0b", "FE",    false},    // Decathlon
+    {"4f618c2429138e0280969193ed6c107e", "FE",    false},    // Robot Tank
+    {"6d842c96d5a01967be9680080dd5be54", "DPC",   false},    // Pitfall II
+    {"d3bb42228a6cd452c111c1932503cc03", "UA",    false},    // Funky Fish
+    {"8bbfd951c89cc09c148bfabdefa08bec", "UA",    false},    // Pleiades
+    {"ab4ac994865fb16ebb85738316309457", "2K",    true},     // Basketball (1978).bin
+    {"7e8aa18bc9502eb57daaf5e7c1e94da7", "4K",    true},     // Wizard of Wor
+    {"663ef22eb399504d5204c543b8a86bcd", "4K",    true},     // Wizard of Wor
+    {"0c7926d660f903a2d6910c254660c32c", "2K",    true},     // Air-Sea Battle (pal)
+    {"1d1d2603ec139867c1d1f5ddf83093f1", "2K",    true},     // Air-Sea Battle (sears)
+    {"16cb43492987d2f32b423817cdaaf7c4", "2K",    true},     // Air-Sea Battle
+    {"4d7517ae69f95cfbc053be01312b7dba", "2K",    true},     // Surround
+    {"31d08cb465965f80d3541a57ec82c625", "4K",    true},     // Surround (4k)    
+    {"c370c3268ad95b3266d6e36ff23d1f0c", "2K",    true},     // Surround (pal)
+    {"7b938c7ddf18e8362949b62c7eaa660a", "4K",    true},     // Starship (4k)
+    {"e363e467f605537f3777ad33e74e113a", "2K",    true},     // Starship (2k)
+    {"0bfabf1e98bdb180643f35f2165995d0", "2K",    true},     // HomeRun
+    {"9f901509f0474bf9760e6ebd80e629cd", "4K",    true},     // HomeRun(sears 4k)
+    {"705fe719179e65b0af328644f3a04900", "4K",    true},     // Slot Machine (4k)
+    {"81254ebce88fa46c4ff5a2f4d2bad538", "4K",    true},     // Slot Machine (4k)
+    {"f90b5da189f24d7e1a2117d8c8abc952", "4K",    true},     // Slot Machine (2k)
+    {"fc6052438f339aea373bbc999433388a", "4K",    true},     // Slot Machine (pal)    
     {(char*)0,                           (char*)0}
   };
-
-  string zz="HI";
-  string zz2="THERE";
-  OutputCartInfo(zz,zz2);
     
   // Get the MD5 message-digest for the ROM image
   string md5 = MD5(image, size);
@@ -157,12 +172,14 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // Take a closer look at the ROM image and try to figure out its type
   const char* type = 0;
 
+  bUseRightJoy = false;
   // First we'll see if it's type is listed in the table above
   for(MD5ToType* entry = table; (entry->md5 != 0); ++entry)
   {
     if(entry->md5 == md5)
     {
       type = entry->type;
+      bUseRightJoy = entry->useRightJoy;
       break;
     }
   }

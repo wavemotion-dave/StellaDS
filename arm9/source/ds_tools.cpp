@@ -28,12 +28,16 @@
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"
 
-#define VERSION "1.1d"
+#define VERSION "1.1e"
 
 #define A26_VID_WIDTH  160  
 #define A26_VID_HEIGHT 210
 #define A26_VID_XOFS   0
 #define A26_VID_YOFS   0
+
+#define MAX_DEBUG 10
+uInt32 debug[MAX_DEBUG]={0};
+//#define DEBUG_DUMP 
 
 FICA2600 vcsromlist[1024];  
 unsigned int countvcs=0, ucFicAct=0;
@@ -46,13 +50,11 @@ int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
 
-#define MAX_DEBUG 10
-uInt32 debug[MAX_DEBUG]={0};
-//#define DEBUG_DUMP 
-  
 #define SOUND_SIZE (2048)
 static uInt8 sound_buffer[SOUND_SIZE];
 uInt8* psound_buffer;
+
+extern bool bUseRightJoy;
 
 // To aid in getting more of the one-off carts working... 
 // This is called when any ROM file is selected - we can print 
@@ -60,10 +62,37 @@ uInt8* psound_buffer;
 void OutputCartInfo(string type, string md5)
 {
 #ifdef DEBUG_DUMP    
-    dsPrintValue(0,16,0, (char*)type.c_str()); 
-    dsPrintValue(0,17,0, (char*)md5.c_str()); 
+    dsPrintValue(0,22,0, (char*)type.c_str()); 
+    dsPrintValue(0,23,0, (char*)md5.c_str()); 
 #endif    
 }
+
+static void DumpDebugData(void)
+{
+#ifdef DEBUG_DUMP
+    char fpsbuf[32];
+    for (int i=0; i<MAX_DEBUG; i++)
+    {
+      int val = debug[i];
+      debug[i]=0;
+      fpsbuf[0] = '0' + (int)val/1000000;
+      val = val % 1000000;
+      fpsbuf[1] = '0' + (int)val/100000;
+      val = val % 100000;
+      fpsbuf[2] = '0' + (int)val/10000;
+      val = val % 10000;
+      fpsbuf[3] = '0' + (int)val/1000;
+      val= val % 1000;
+      fpsbuf[4] = '0' + (int)val/100;
+      val = val % 100;
+      fpsbuf[5] = '0' + (int)val/10;
+      fpsbuf[6] = '0' + (int)val%10;
+      fpsbuf[7] = 0;
+      dsPrintValue(0,3+i,0, fpsbuf); 
+    }
+#endif
+}
+
 
 // --------------------------------------------------------------------------------------
 // Color fading effect
@@ -95,39 +124,9 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
 }
 
 // --------------------------------------------------------------------------------------
-volatile u32 emuFps;
-volatile u32 emuActFrames;
-volatile u16 g_framePending = 0;
-
-void vblankIntr() {
-	if (g_framePending == 2) {
-		g_framePending = 0;
-		emuActFrames++;
-	}
-
-	//antialias tile layer
-	static u16 sTime = 0;
-
-	sTime++;
-	if(sTime >= 60) {
-		sTime = 0;
-		emuFps = emuActFrames;
-		emuActFrames = 0;
-	}
-}
-
-static void vcountIntr() {
-	if (g_framePending == 1 && REG_VCOUNT < 192) {
-		g_framePending = 2;
-	}
-}
-
-void dsInitScreenMain(void) {
-  // Init vbl and hbl func
-	SetYtrigger(190); //trigger 2 lines before vsync
-	irqSet(IRQ_VBLANK, vblankIntr);
-	irqSet(IRQ_VCOUNT, vcountIntr);
-  irqEnable(IRQ_VBLANK | IRQ_VCOUNT);
+void dsInitScreenMain(void) 
+{
+    // Removed vBlank and vCount interrupts... not used 
 }
 
 void dsInitTimer(void) {
@@ -150,7 +149,8 @@ void dsInitPalette(void) {
 	}
 }
 
-void dsShowScreenEmu(void) {
+void dsShowScreenEmu(void) 
+{
 	videoSetMode(MODE_5_2D);
   vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
@@ -589,7 +589,8 @@ unsigned int dsWaitForRom(void) {
   return bRet;
 }
 
-unsigned int dsWaitOnMenu(unsigned int actState) {
+unsigned int dsWaitOnMenu(unsigned int actState) 
+{
   unsigned int uState=STELLADS_PLAYINIT;
   unsigned int keys_pressed;
   bool bDone=false, romSel;
@@ -654,32 +655,6 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr) {
   }
 }
 
-static void DumpDebugData(void)
-{
-#ifdef DEBUG_DUMP
-    char fpsbuf[32];
-    for (int i=0; i<MAX_DEBUG; i++)
-    {
-      int val = debug[i];
-      debug[i]=0;
-      fpsbuf[0] = '0' + (int)val/1000000;
-      val = val % 1000000;
-      fpsbuf[1] = '0' + (int)val/100000;
-      val = val % 100000;
-      fpsbuf[2] = '0' + (int)val/10000;
-      val = val % 10000;
-      fpsbuf[3] = '0' + (int)val/1000;
-      val= val % 1000;
-      fpsbuf[4] = '0' + (int)val/100;
-      val = val % 100;
-      fpsbuf[5] = '0' + (int)val/10;
-      fpsbuf[6] = '0' + (int)val%10;
-      fpsbuf[7] = 0;
-      dsPrintValue(0,3+i,0, fpsbuf); 
-    }
-#endif
-}
-
 int gTotalAtariFrames=0;
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void) {
@@ -737,11 +712,24 @@ ITCM_CODE void dsMainLoop(void) {
         // Wait for keys
         scanKeys();
         keys_pressed = keysCurrent();
-       	theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-	      theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+            
+        if (bUseRightJoy)   // A handfull of games use the right joystick... but the DS only has the ability for one joystick so we remap here... see Cart.cpp
+        {
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_A));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    keys_pressed & (KEY_UP));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h,  keys_pressed & (KEY_DOWN));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g,  keys_pressed & (KEY_LEFT));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
+        }
+        else
+        {
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+        }
+            
         if (dampen==0) // These don't need to be sent up as fast... dampen it down to save cycles...
         {
           theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
@@ -758,7 +746,6 @@ ITCM_CODE void dsMainLoop(void) {
         {
           dampen--;
         }
-        
         if (keys_pressed & KEY_L)   // Left Trigger - full speed
            full_speed = 1;
         else 
@@ -888,8 +875,7 @@ ITCM_CODE void dsMainLoop(void) {
           keys_touch=0;
   
         // Update frame
-		    theConsole->update();
-        g_framePending = 1;  
+        theConsole->update();
         break;
     }
 	}

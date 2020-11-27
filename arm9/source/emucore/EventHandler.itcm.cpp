@@ -60,7 +60,6 @@ EventHandler::EventHandler(Console* console)
   ourMessageTable[Event::ConsoleRightDifficultyB] = "Right Difficulty B";
 
   setKeymap();
-  setJoymap();
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -175,30 +174,6 @@ void EventHandler::setKeymap()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::setJoymap()
-{
-  // Since istringstream swallows whitespace, we have to make the
-  // delimiters be spaces
-  string list = "";
-  replace(list.begin(), list.end(), ':', ' ');
-
-  if(isValidList(list, StellaEvent::LastJSTICK*StellaEvent::LastJCODE))
-  {
-    istringstream buf(list);
-    string key;
-
-    // Fill the joymap table with events
-    for(Int32 i = 0; i < StellaEvent::LastJSTICK*StellaEvent::LastJCODE; ++i)
-    {
-      buf >> key;
-      myJoyTable[i] = (Event::Type) atoi(key.c_str());
-    }
-  }
-  else
-    setDefaultJoymap();
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void EventHandler::getKeymapArray(Event::Type** array, uInt32* size)
 {
   *array = myKeyTable;
@@ -279,26 +254,6 @@ void EventHandler::setDefaultKeymap()
   myKeyTable[StellaEvent::KCODE_F12]       = Event::TakeSnapshot;
 
   myKeyTable[StellaEvent::KCODE_PAUSE]     = Event::Pause;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::setDefaultJoymap()
-{
-  // Left joystick
-  uInt32 i = StellaEvent::JSTICK_0 * StellaEvent::LastJCODE;
-  myJoyTable[i + StellaEvent::JAXIS_UP]    = Event::JoystickZeroUp;
-  myJoyTable[i + StellaEvent::JAXIS_DOWN]  = Event::JoystickZeroDown;
-  myJoyTable[i + StellaEvent::JAXIS_LEFT]  = Event::JoystickZeroLeft;
-  myJoyTable[i + StellaEvent::JAXIS_RIGHT] = Event::JoystickZeroRight;
-  myJoyTable[i + StellaEvent::JBUTTON_0]   = Event::JoystickZeroFire;
-
-  // Right joystick
-  i = StellaEvent::JSTICK_1 * StellaEvent::LastJCODE;
-  myJoyTable[i + StellaEvent::JAXIS_UP]    = Event::JoystickOneUp;
-  myJoyTable[i + StellaEvent::JAXIS_DOWN]  = Event::JoystickOneDown;
-  myJoyTable[i + StellaEvent::JAXIS_LEFT]  = Event::JoystickOneLeft;
-  myJoyTable[i + StellaEvent::JAXIS_RIGHT] = Event::JoystickOneRight;
-  myJoyTable[i + StellaEvent::JBUTTON_0]   = Event::JoystickOneFire;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
