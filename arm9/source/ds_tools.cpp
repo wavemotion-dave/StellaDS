@@ -33,7 +33,7 @@
 #define A26_VID_WIDTH  160  
 #define A26_VID_HEIGHT 210
 #define A26_VID_XOFS   0
-#define A26_VID_YOFS   0
+#define A26_VID_YOFS   1
 
 #define MAX_DEBUG 10
 uInt32 debug[MAX_DEBUG]={0};
@@ -74,7 +74,6 @@ static void DumpDebugData(void)
     for (int i=0; i<MAX_DEBUG; i++)
     {
       int val = debug[i];
-      debug[i]=0;
       fpsbuf[0] = '0' + (int)val/1000000;
       val = val % 1000000;
       fpsbuf[1] = '0' + (int)val/100000;

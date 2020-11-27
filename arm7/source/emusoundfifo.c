@@ -9,7 +9,8 @@ typedef enum {
 } FifoMesType;
 
 //---------------------------------------------------------------------------------
-void soundEmuDataHandler(int bytes, void *user_data) {
+void soundEmuDataHandler(int bytes, void *user_data) 
+{
 	int channel = -1;
 
 	FifoMessage msg;
@@ -40,7 +41,8 @@ void soundEmuCommandHandler(u32 command, void* userdata) {
 	int data = command & 0xFFFF;
 	int channel = (command >> 16) & 0xF;
 	
-	switch(cmd) {
+	switch(cmd) 
+  {
 
 	case SOUND_SET_VOLUME:
 		SCHANNEL_CR(channel) &= ~0xFF;
