@@ -17,7 +17,7 @@ Fishing Derby       2k      2K                                      45      45  
 Freeway             2k      2K                                      45      45      Very playable despite lower framerate.
 H.E.R.O             8k      F8                                      57      57      Very playable despite lower framerate. On some screens gets to 60FPS.
 Lady Bug            16k     F8                                      60      85
-Laser Gates         8k      F8                                      45      45      Slowdown noticable but still playable.
+Laser Gates         8k      F8                                      60      90      
 Megamania           4k      4K                                      60      75
 Man Goes Down       16k     F6                                      60      72      My faovirte homebew. Never finished from 2006 but you won't want to miss playing this.
 Missile Command     4k      4K                                      60      90  
@@ -30,7 +30,7 @@ Pheonix             8k      F8                                      60      91
 Pitfall             4k      4K                                      60      65     
 Pitfall II          10k     DSC                                     45      45      Sound not right. Too slow to be playable.
 Raiders of the Lost 8k      F8                                      60      80      X,Y move item left/right and B drops item... yes, this game is fully playable!
-River Raid          4k      4K                                      60      63      Occasional dips down to 58 FPS as action gets frantic but not noticible during gameplay.
+River Raid          4k      4K                                      60      72      Occasional dips down to 58 FPS as action gets frantic but not noticible during gameplay.
 Seaquest            4k      4K                                      60      75
 Sky Diver           2k      2K                                      60      115     
 Space Invaders      4k      4K                                      60      89
@@ -42,6 +42,4 @@ Stellar Track       4k      4K                                      60      75
 Video Pinball       4k      4K                                      60      60
 Yars Revenge        4k      4K                                      60      88      Big shield around enemy sometimes flickers away - this is not due to emulation but actual cart does this except with TV the frame will linger long enough for your eye to be fooled.
 
-Dev Notes:
-export DEVKITARM=/opt/devkitpro/devkitARM
-export DEVKITPRO=/opt/devkitpro
+
