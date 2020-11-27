@@ -1,0 +1,46 @@
+StellaDSi 1.1e Compatibility List [partial list - to give a sense of what can be expected]
+
+Game                Size    Type    MD5sum                          FPS     MAX     NOTES      
+=================   ====    ====    =============================== ====    ====    ==========================================================================================
+Adventure           2k      2K      [soon]                          60      121     
+Adventures of Tron  4k      4K                                      60      60
+Asteroids           8k      F8                                      60      90      
+Atlantis            4k      4K                                      60      74
+Berzerk             4k      4K                                      60      82
+Centipede           4k      4K                                      60      89
+Chopper Command     4k      4K                                      60      63      Occasional dips down to 58 FPS as action gets frantic but not noticible during gameplay.
+Conquest of Mars    16k     F6                                      60      72
+Cosmic Arc          4k      4K                                      60      71
+Defender            4k      4K                                      60      82
+Demon Attack        4k      4K                                      60      98
+Fishing Derby       2k      2K                                      45      45      Very playable despite lower framerate.
+Freeway             2k      2K                                      45      45      Very playable despite lower framerate.
+H.E.R.O             8k      F8                                      57      57      Very playable despite lower framerate. On some screens gets to 60FPS.
+Lady Bug            16k     F8                                      60      85
+Laser Gates         8k      F8                                      45      45      Slowdown noticable but still playable.
+Megamania           4k      4K                                      60      75
+Man Goes Down       16k     F6                                      60      72      My faovirte homebew. Never finished from 2006 but you won't want to miss playing this.
+Missile Command     4k      4K                                      60      90  
+Moon Patrol         8k      F8                                      60      75
+Mouse Trap          4k      4K                                      60      90
+Mountain King       4k      4K                                      60      105
+PacMan              4k      4K                                      60      90
+PacMan (8K)         8k      F8                                      60      71      Improved over original PacMan in every way.
+Pheonix             8k      F8                                      60      91
+Pitfall             4k      4K                                      60      65     
+Pitfall II          10k     DSC                                     45      45      Sound not right. Too slow to be playable.
+River Raid          4k      4K                                      60      63      Occasional dips down to 58 FPS as action gets frantic but not noticible during gameplay.
+Seaquest            4k      4K                                      60      75
+Sky Diver           2k      2K                                      60      115     
+Space Invaders      4k      4K                                      60      89
+Space Treat         4k      4K                                      60      101
+Spacemaster X-7     4k      4K                                      60      73
+Spider Fighter      4k      4K                                      60      88
+Starmaster          4k      4K                                      60      90
+Stellar Track       4k      4K                                      60      75
+Video Pinball       4k      4K                                      60      60
+Yars Revenge        4k      4K                                      60      88      Big shield around enemy sometimes flickers away - this is not due to emulation but actual cart does this except with TV the frame will linger long enough for your eye to be fooled.
+
+Dev Notes:
+export DEVKITARM=/opt/devkitpro/devkitARM
+export DEVKITPRO=/opt/devkitpro
