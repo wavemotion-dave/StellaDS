@@ -163,6 +163,8 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     {"81254ebce88fa46c4ff5a2f4d2bad538", "4K",    true},     // Slot Machine (4k)
     {"f90b5da189f24d7e1a2117d8c8abc952", "4K",    true},     // Slot Machine (2k)
     {"fc6052438f339aea373bbc999433388a", "4K",    true},     // Slot Machine (pal)    
+    {"f724d3dd2471ed4cf5f191dbb724b69f", "F8",    true},     // Raiders of the Lost Ark
+    {"1cafa9f3f9a2fce4af6e4b85a2bbd254", "F8",    true},     // Raiders of the Lost Ark (pal)
     {(char*)0,                           (char*)0}
   };
     

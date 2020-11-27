@@ -29,6 +29,7 @@ PacMan (8K)         8k      F8                                      60      71  
 Pheonix             8k      F8                                      60      91
 Pitfall             4k      4K                                      60      65     
 Pitfall II          10k     DSC                                     45      45      Sound not right. Too slow to be playable.
+Raiders of the Lost 8k      F8                                      60      80      X,Y move item left/right and B drops item... yes, this game is fully playable!
 River Raid          4k      4K                                      60      63      Occasional dips down to 58 FPS as action gets frantic but not noticible during gameplay.
 Seaquest            4k      4K                                      60      75
 Sky Diver           2k      2K                                      60      115     

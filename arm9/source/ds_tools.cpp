@@ -720,6 +720,11 @@ ITCM_CODE void dsMainLoop(void) {
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h,  keys_pressed & (KEY_DOWN));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g,  keys_pressed & (KEY_LEFT));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
+            
+            // For Raiders of the Lost Ark!
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_B));
         }
         else
         {
