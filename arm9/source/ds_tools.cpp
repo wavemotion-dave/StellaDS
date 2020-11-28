@@ -28,14 +28,17 @@
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"
 
-#define VERSION "1.1e"
+#define VERSION "1.1f"
 
 #define A26_VID_WIDTH  160  
 #define A26_VID_HEIGHT 210
 #define A26_VID_XOFS   0
 #define A26_VID_YOFS   1
 
-#define MAX_DEBUG 10
+bool bFlickerFreeMode = false;
+uInt32 myYOffset = A26_VID_YOFS;
+
+#define MAX_DEBUG 5
 uInt32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP 
 
@@ -55,6 +58,8 @@ static uInt8 sound_buffer[SOUND_SIZE];
 uInt8* psound_buffer;
 
 extern bool bUseRightJoy;
+static int full_speed=0;
+
 
 // To aid in getting more of the one-off carts working... 
 // This is called when any ROM file is selected - we can print 
@@ -62,8 +67,8 @@ extern bool bUseRightJoy;
 void OutputCartInfo(string type, string md5)
 {
 #ifdef DEBUG_DUMP    
-    dsPrintValue(0,22,0, (char*)type.c_str()); 
-    dsPrintValue(0,23,0, (char*)md5.c_str()); 
+    dsPrintValue(0,20,0, (char*)type.c_str()); 
+    dsPrintValue(0,21,0, (char*)md5.c_str()); 
 #endif    
 }
 
@@ -122,6 +127,14 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
   }
 }
 
+void ShowStatusLine(void)
+{
+    if (full_speed)
+     dsPrintValue(30,0,0, (char *)"FS"); 
+    else
+     dsPrintValue(30,0,0, (char *)"  "); 
+}
+
 // --------------------------------------------------------------------------------------
 void dsInitScreenMain(void) 
 {
@@ -150,7 +163,7 @@ void dsInitPalette(void) {
 
 void dsShowScreenEmu(void) 
 {
-	videoSetMode(MODE_5_2D);
+  videoSetMode(MODE_5_2D);
   vramSetBankA(VRAM_A_MAIN_BG_0x06000000);
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
 
@@ -158,7 +171,7 @@ void dsShowScreenEmu(void)
   REG_BG3PB = 0; REG_BG3PC = 0;
   REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;  
   REG_BG3X = A26_VID_XOFS<<8;
-  REG_BG3Y = A26_VID_YOFS<<8;
+  REG_BG3Y = myYOffset<<8;
 }
 
 void dsShowScreenMain(void) {
@@ -376,33 +389,6 @@ void dsDisplayButton(unsigned char button) {
       } 
       break;
 
-    case 10: // Left Difficulty - B
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+4);
-        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+5);
-      } 
-      break;
-    case 11: // Left Difficulty - A
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+6);
-        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+7);
-      } 
-      break;
-      
-    case 12: // Right Difficulty - B
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+8);
-        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+9);
-      } 
-      break;
-    case 13: // Right Difficulty - A
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+10);
-        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+11);
-      } 
-      break;
-      
-      
     case 4: // Select
       for (i=0;i<4;i++) {
         *(ptrBg0+(4+i)*32+22) = *(ptrBg1+(0+i)*32+8);
@@ -437,6 +423,45 @@ void dsDisplayButton(unsigned char button) {
       for (i=0;i<4;i++) {
         *(ptrBg0+(22)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
         *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
+      } 
+      break;
+
+    case 10: // Left Difficulty - B
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+4);
+        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+5);
+      } 
+      break;
+    case 11: // Left Difficulty - A
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+14) = *(ptrBg1+(0+i)*32+6);
+        *(ptrBg0+(4+i)*32+15) = *(ptrBg1+(0+i)*32+7);
+      } 
+      break;
+      
+    case 12: // Right Difficulty - B
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+8);
+        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+9);
+      } 
+      break;
+    case 13: // Right Difficulty - A
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(4+i)*32+17) = *(ptrBg1+(0+i)*32+10);
+        *(ptrBg0+(4+i)*32+18) = *(ptrBg1+(0+i)*32+11);
+      } 
+      break;
+      
+    case 14: // Phosphor Mode - ON
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
+        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
+      } 
+      break;
+    case 15: // Phosphor Mode - OFF
+      for (i=0;i<4;i++) {
+        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
+        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
       } 
       break;
   }
@@ -672,13 +697,16 @@ void dsInstallSoundEmuFIFO(void) {
 
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
-static int full_speed=0;
 ITCM_CODE void dsMainLoop(void) {
   u32 CurrentTimeInMs=0,PreviousTimeInMs=0,TimeElapsed;
   char fpsbuf[32];
-  unsigned int keys_pressed,keys_touch=0, console_color=1,console_palette=1, left_difficulty=0, right_difficulty=0,romSel;
+  unsigned int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1,console_palette=1, left_difficulty=0, right_difficulty=0,romSel;
   int iTx,iTy;
   static int dampen=0;
+    
+  last_keys_pressed = -1;
+  full_speed = 0;
+  fpsDisplay = 0;
   
   while(etatEmu != STELLADS_QUITSTDS) {
     switch (etatEmu) {
@@ -715,19 +743,25 @@ ITCM_CODE void dsMainLoop(void) {
         if (bUseRightJoy)   // A handfull of games use the right joystick... but the DS only has the ability for one joystick so we remap here... see Cart.cpp
         {
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_A));
-            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    keys_pressed & (KEY_UP));
-            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h,  keys_pressed & (KEY_DOWN));
-            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g,  keys_pressed & (KEY_LEFT));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_UP));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_DOWN));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, keys_pressed & (KEY_LEFT));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
             
             // For Raiders of the Lost Ark!
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_B));
+            
+            // Unfortunately for Raiders, we can't use these keys for UI handling below... 
+            if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
+            {
+                keys_pressed = 0;
+            }
         }
         else
         {
-            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
+            theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
             theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
@@ -750,11 +784,7 @@ ITCM_CODE void dsMainLoop(void) {
         {
           dampen--;
         }
-        if (keys_pressed & KEY_L)   // Left Trigger - full speed
-           full_speed = 1;
-        else 
-           full_speed = 0;
-
+        
         // ------------------------------------------------
         // Stuff to do once/second such as FPS display
         // ------------------------------------------------
@@ -764,11 +794,16 @@ ITCM_CODE void dsMainLoop(void) {
         if ((nowTime - oldTime) >= 2184) // 1/15th of a second...
         {
             oldTime = nowTime;
-            if (++fps_dampen >= 15) // one second...
+            if (keys_pressed != last_keys_pressed)
             {
-              fps_dampen=0;
-              if (keys_pressed & KEY_R) 
-              { 
+                if (keys_pressed & KEY_Y)   // full speed
+                {
+                   full_speed = !full_speed;
+                   ShowStatusLine();
+                }
+
+                if (keys_pressed & KEY_X) 
+                { 
                   fpsDisplay = !fpsDisplay; 
                   if (!fpsDisplay)
                   {
@@ -779,8 +814,26 @@ ITCM_CODE void dsMainLoop(void) {
                     dsPrintValue(0,0,0, fpsbuf); 
                   }
                   else gTotalAtariFrames=0;
-              }
-              
+                }
+
+                if(keys_pressed & (KEY_R))
+                {
+                    myYOffset++;
+                    REG_BG3Y = myYOffset<<8;
+                }
+                if(keys_pressed & (KEY_L))
+                {
+                    myYOffset--;
+                    REG_BG3Y = myYOffset<<8;
+                }
+                last_keys_pressed = keys_pressed;
+            }
+            
+            
+            if (++fps_dampen >= 15) // one second...
+            {
+              fps_dampen=0;
+             
               if (fpsDisplay) 
               {
                   int x = gTotalAtariFrames;
@@ -806,6 +859,9 @@ ITCM_CODE void dsMainLoop(void) {
             touchRead(&touch);
             iTx = touch.px;
             iTy = touch.py;
+              
+            debug[0] = iTx;
+            debug[1] = iTy;
            
             if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) { // quit
               dsDisplayButton(1);
@@ -816,6 +872,8 @@ ITCM_CODE void dsMainLoop(void) {
                 dsDisplayButton(3-console_color);  
                 dsDisplayButton(10+left_difficulty);
                 dsDisplayButton(12+right_difficulty);
+                dsDisplayButton(15-bFlickerFreeMode);
+                ShowStatusLine();
               }
             }
             else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) { // tv type
@@ -861,11 +919,16 @@ ITCM_CODE void dsMainLoop(void) {
               if (romSel) { 
                 etatEmu=STELLADS_PLAYINIT; 
                 dsLoadGame(vcsromlist[ucFicAct].filename); 
+                dsDisplayButton(3-console_color);  
+                dsDisplayButton(10+left_difficulty);
+                dsDisplayButton(12+right_difficulty);
+                dsDisplayButton(15-bFlickerFreeMode);
+                ShowStatusLine();
               }
               else { irqEnable(IRQ_TIMER2); }
               fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
             }
-            else if ((iTx>215) && (iTx<249) && (iTy>175) && (iTy<192)) {     // 48,100 -> 208,132 palette PAL <> NTSC
+            else if ((iTx>210) && (iTx<250) && (iTy>170) && (iTy<200)) {     // 48,100 -> 208,132 palette PAL <> NTSC
               // Toggle palette
               soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
               console_palette=1-console_palette;
@@ -873,6 +936,11 @@ ITCM_CODE void dsMainLoop(void) {
               dsInitPalette();
               dsDisplayButton(9-console_palette);
             }
+            else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<170)) { // Fast vs Flicker-Free
+              soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
+              bFlickerFreeMode=1-bFlickerFreeMode;
+              dsDisplayButton(15-bFlickerFreeMode);
+            }              
           }
         }
         else

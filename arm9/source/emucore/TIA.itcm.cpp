@@ -31,6 +31,9 @@
 #include "Sound.hxx"
 #define HBLANK 68
 
+uInt8 myCurrentFrame = 0;
+int dma_channel = 0;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console, Sound& sound)
     : myConsole(console),
@@ -43,8 +46,8 @@ TIA::TIA(const Console& console, Sound& sound)
       myCOLUP1(myColor[3])
 {
   // Allocate buffers for two frame buffers
-  myCurrentFrameBuffer = new uInt8[160 * 300];
-  myPreviousFrameBuffer = new uInt8[160 * 300];
+  myCurrentFrameBuffer[0] = new uInt8[160 * 300];
+  myCurrentFrameBuffer[1] = new uInt8[160 * 300];          
 
   ourActualPalette = 0;
 
@@ -103,8 +106,8 @@ TIA::TIA(const Console& console, Sound& sound)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::~TIA()
 {
-  delete[] myCurrentFrameBuffer;
-  delete[] myPreviousFrameBuffer;
+  delete[] myCurrentFrameBuffer[0];
+  delete[] myCurrentFrameBuffer[1];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -122,11 +125,12 @@ void TIA::reset()
   // Clear frame buffers
   for(uInt32 i = 0; i < 160 * 300; ++i)
   {
-    myCurrentFrameBuffer[i] = myPreviousFrameBuffer[i] = 0;
+    myCurrentFrameBuffer[0][i] = 0;
+    myCurrentFrameBuffer[1][i] = 0;
   }
 
   // Reset pixel pointer and drawing flag
-  myFramePointer = myCurrentFrameBuffer;
+  myFramePointer = myCurrentFrameBuffer[0];
   myDSFramePointer = BG_GFX;
 
   // Calculate color clock offsets for starting and stoping frame drawing
@@ -298,7 +302,8 @@ void TIA::update()
   myClocksToEndOfScanLine = 228;
 
   // Reset frame buffer pointer
-  myFramePointer = myCurrentFrameBuffer;
+  myCurrentFrame = (myCurrentFrame + 1) % 2;
+  myFramePointer = myCurrentFrameBuffer[myCurrentFrame];
   myDSFramePointer = BG_GFX;
 
   // Execute instructions until frame is finished
@@ -312,21 +317,7 @@ void TIA::update()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const uInt32* TIA::palette() const
 {
-/*
-  // See which palette we should be using
-  const string& type   = mySettings.getString("palette");
-  const string& format = myConsole.properties().get(Display_Format);
-	
-  if(type == "standard")
-    return (format == "PAL") ? ourPALPalette : ourNTSCPalette;
-  else if(type == "original")
-    return (format == "PAL") ? ourPALPalette11 : ourNTSCPalette11;
-  else if(type == "z26")
-    return (format == "PAL") ? ourPALPaletteZ26 : ourNTSCPaletteZ26;
-  else  // return normal palette by default
-    return (format == "PAL") ? ourPALPalette : ourNTSCPalette;
-    */
-  return (ourActualPalette ? ourPALPalette11 : ourNTSCPalette11);
+    return (ourActualPalette ? ourPALPalette11 : ourNTSCPalette11);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -800,29 +791,41 @@ void TIA::computePlayfieldMaskTable()
   for(x = 0; x < 160; ++x)
   {
     if(x < 16)
-      ourPlayfieldTable[0][x] = 0x00001 << (x / 4);
+    {
+      int tmp = 0x00001 << (x / 4);
+      ourPlayfieldTable[0][x] = tmp;
+      ourPlayfieldTable[1][x] = tmp;
+    }
     else if(x < 48)
-      ourPlayfieldTable[0][x] = 0x00800 >> ((x - 16) / 4);
+    {
+      int tmp = 0x00800 >> ((x - 16) / 4);
+      ourPlayfieldTable[0][x] = tmp;
+      ourPlayfieldTable[1][x] = tmp;
+    }
     else if(x < 80) 
-      ourPlayfieldTable[0][x] = 0x01000 << ((x - 48) / 4);
+    {
+      int tmp = 0x01000 << ((x - 48) / 4);
+      ourPlayfieldTable[0][x] = tmp;
+      ourPlayfieldTable[1][x] = tmp;
+    }
     else if(x < 96) 
+    {
       ourPlayfieldTable[0][x] = 0x00001 << ((x - 80) / 4);
+    }
     else if(x < 128)
+    {
       ourPlayfieldTable[0][x] = 0x00800 >> ((x - 96) / 4);
+    }
     else if(x < 160) 
+    {
       ourPlayfieldTable[0][x] = 0x01000 << ((x - 128) / 4);
+    }
   }
 
   // Compute playfield mask table for reflected mode
-  for(x = 0; x < 160; ++x)
+  for(x = 80; x < 160; ++x)
   {
-    if(x < 16)
-      ourPlayfieldTable[1][x] = 0x00001 << (x / 4);
-    else if(x < 48)
-      ourPlayfieldTable[1][x] = 0x00800 >> ((x - 16) / 4);
-    else if(x < 80) 
-      ourPlayfieldTable[1][x] = 0x01000 << ((x - 48) / 4);
-    else if(x < 112) 
+     if(x < 112) 
       ourPlayfieldTable[1][x] = 0x80000 >> ((x - 80) / 4);
     else if(x < 144) 
       ourPlayfieldTable[1][x] = 0x00010 << ((x - 112) / 4);
@@ -1555,7 +1558,7 @@ void TIA::updateFrame(Int32 clock)
     // See if we're at the end of a scanline
     if(myClocksToEndOfScanLine == 228)
     {
-      myFramePointer -= (160 - myFrameWidth - myFrameXStart);
+      //myFramePointer -= (160 - myFrameWidth - myFrameXStart); // Removed as myFrameWidth is always 160 and myFrameXStart is always 0
 
       // Yes, so set PF mask based on current CTRLPF reflection state 
       myCurrentPFMask = ourPlayfieldTable[myCTRLPF & 0x01];
@@ -1600,8 +1603,27 @@ void TIA::updateFrame(Int32 clock)
               [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
         }
       }
-      dmaCopy(myFramePointer+160, myDSFramePointer, 160);
-      myDSFramePointer += 128;
+
+      if (bFlickerFreeMode)
+      {
+          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
+          uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[0][addr]);
+          uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1][addr]);
+          dma_channel=(dma_channel+1) & 0x01;
+          // "steal" a bit of VRAM which has no cache write... 
+          uInt32 *fp_blend = (uInt32 *)0x0601E000;
+          for (int i=0; i<40; i++)
+          {
+            *fp_blend++ = *fp1++ | *fp2++;
+          }
+          dmaCopyWordsAsynch(dma_channel, (uInt32 *)0x0601E000, myDSFramePointer, 160);
+      }
+      else
+      {
+          dma_channel=(dma_channel+1) & 0x01;
+          dmaCopyWordsAsynch(dma_channel, myFramePointer, myDSFramePointer, 160);
+      }
+      myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
     }
   } 
   while(myClockAtLastUpdate < clock);

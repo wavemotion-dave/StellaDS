@@ -29,6 +29,7 @@ class NullDevice;
 
 extern int gSystemCycles; // Number of system cycles executed since the last reset
 extern uInt32 debug[];
+extern bool bFlickerFreeMode;
 
 #define MY_PAGE_SHIFT   7
 #define MY_PAGE_MASK    0x7F

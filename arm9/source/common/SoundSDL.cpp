@@ -115,8 +115,8 @@ void SoundSDL::set(uInt16 addr, uInt8 value, Int32 cycle)
 //	info.delta = 0;
 //	myRegWriteQueue.enqueue(info);
 	Update_tia_sound(addr, value);
-    debug[2]++;
-  //JGD myTIASound.set(addr, value);
+
+//JGD myTIASound.set(addr, value);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -181,10 +181,8 @@ void SoundSDL::RegWriteQueue::enqueue(const RegWrite& info)
   // we'll enlarge the queue's capacity.
   if(mySize == myCapacity)
   {
-    debug[0]++;
     grow();
   }
-  debug[1]++;
 
   myBuffer[myTail] = info;
   myTail = (myTail + 1) % myCapacity;

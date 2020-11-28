@@ -59,20 +59,6 @@ class MediaSource
     */
     virtual void togglePalette() = 0;
     
-    /**
-      Answers the current frame buffer
-
-      @return Pointer to the current frame buffer
-    */
-    virtual uInt8* currentFrameBuffer() const = 0;
-
-    /**
-      Answers the previous frame buffer
-
-      @return Pointer to the previous frame buffer
-    */
-    virtual uInt8* previousFrameBuffer() const = 0;
-
   public:
     /**
       Get the palette which maps frame data to RGB values.

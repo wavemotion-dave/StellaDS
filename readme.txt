@@ -20,6 +20,14 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1f : 28-Nov-2020 by Dave Bernazzani (wavemotion)
+  * Switched to dual-channel DMA memory copy for frame buffer. Slight speed improvement.
+  * New button handling. See button map below the history section.
+  * Added Flicker-Free switch... please use with caution as this takes significant CPU 
+    power to make work as it ORs the previous two frames to help with 30Hz flicker that
+    some games produce (Stellar Track, Yars Revenge, Asteroids, etc). 
+  * Added ability to shift the screen up and down by 1 pixel per press of the shoulder buttons.
+
 V1.1e : 27-Nov-2020 by Dave Bernazzani (wavemotion)
   * Slight improvement on TIA speed (1-2% speed improvement on many games).
   * Correctly identify games that use the right joystick (Home Run, Surround, Air-Sea Battle, 
@@ -84,11 +92,13 @@ to select a file, then use A to load it.
 
 Controls :
  * D-Pad   : the Joystick
- * A       : Fire button
+ * A or B  : Fire button
  * SELECT  : SELECT switch
  * START   : START switch
- * R-Trig  : FPS Display
- * L-Trig  : Press and Hold for MAX Speed
+ * X       : Show FPS (Frames per Second)
+ * Y       : Toggle Full Speed (no trottle to 60FPS)
+ * R-Trig  : Shift Display Up 1 Pixel
+ * L-Trig  : Shift Display Dn 1 Pixel
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------

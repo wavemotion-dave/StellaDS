@@ -121,20 +121,6 @@ class TIA : public Device , public MediaSource
     virtual void update();
 
     /**
-      Answers the current frame buffer
-
-      @return Pointer to the current frame buffer
-    */
-    uInt8* currentFrameBuffer() const { return myCurrentFrameBuffer; }
-
-    /**
-      Answers the previous frame buffer
-
-      @return Pointer to the previous frame buffer
-    */
-    uInt8* previousFrameBuffer() const { return myPreviousFrameBuffer; }
-
-    /**
       Get the palette which maps frame data to RGB values.
 
       @return Array of integers which represent the palette (RGB)
@@ -219,10 +205,7 @@ class TIA : public Device , public MediaSource
 
   private:
     // Pointer to the current frame buffer
-    uInt8* myCurrentFrameBuffer;
-
-    // Pointer to the previous frame buffer
-    uInt8* myPreviousFrameBuffer;
+    uInt8* myCurrentFrameBuffer[2];
 
     // Pointer to the next pixel that will be drawn in the current frame buffer
     uInt8* myFramePointer;
