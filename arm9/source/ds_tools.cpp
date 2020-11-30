@@ -848,6 +848,10 @@ ITCM_CODE void dsMainLoop(void)
                 debug[2] = fake_paddles;
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
                                                                                   (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
+                if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)))
+                {
+                    keys_pressed = 0;   // If these were pressed... don't handle them below...
+                }
             }
             else    // Must be CTR_LJOY which most games are..
             {
