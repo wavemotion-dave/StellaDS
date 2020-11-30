@@ -157,7 +157,7 @@ static CartTable table[] =
     {"1f21666b8f78b65051b7a609f1d48608",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Condor Attack (1982).bin
     {"f965cc981cbb0822f955641f8d84e774",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Confrontation (1983).bin
     {"00b7b4cbec81570642283e7fc1ef17af",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Congo Bongo (1983).bin
-    {"0f604cd4c9d2795cf5746e8af7948064",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    7},    // Conquest of Mars.bin
+    {"0f604cd4c9d2795cf5746e8af7948064",  "F6",   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    7},    // Conquest of Mars.bin
     {"57c5b351d4de021785cf8ed8191a195c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Cookie Monster Munch (1983).bin
     {"ab5bf1ef5e463ad1cbb11b6a33797228",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Cosmic Ark (1982).bin
     {"133b56de011d562cbab665968bde352b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    0},    // Cosmic Commuter (1984).bin
