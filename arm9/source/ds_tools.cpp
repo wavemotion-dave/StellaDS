@@ -821,12 +821,12 @@ ITCM_CODE void dsMainLoop(void)
             else if (gSelectedCart.controllerType == CTR_PADDLES)
             {
                 extern Int32 fake_paddles;
-                if(keys_pressed & (KEY_L))
+                if(keys_pressed & (KEY_LEFT))
                 {
                     fake_paddles += 12000;
                     keys_pressed = 0;
                 }
-                if(keys_pressed & (KEY_R))
+                if(keys_pressed & (KEY_RIGHT))
                 {
                     fake_paddles -= 12000;
                     keys_pressed = 0;
@@ -846,7 +846,8 @@ ITCM_CODE void dsMainLoop(void)
                 }
                     
                 debug[2] = fake_paddles;
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
+                                                                                  (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
             }
             else    // Must be CTR_LJOY which most games are..
             {
