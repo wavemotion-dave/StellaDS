@@ -20,6 +20,14 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1g : 29-Nov-2020 by Dave Bernazzani (wavemotion)
+  * Added paddle support - use the stylus on the bottom of screen.
+  * New ROM mapping table for most acurate position of screen and will
+  * automatically enable the right controller and Flicker Free mode.
+  * Better and more accurate timing (helps FPS measurement)
+  * Switched to using unused VRAM to help with DMA copies.
+  * Left/Right trigger to position screen now happens during Vertical Blank (cleaner).
+
 V1.1f : 28-Nov-2020 by Dave Bernazzani (wavemotion)
   * Switched to dual-channel DMA memory copy for frame buffer. Slight speed improvement.
   * New button handling. See button map below the history section.

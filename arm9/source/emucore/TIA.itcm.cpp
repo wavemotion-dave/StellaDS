@@ -29,10 +29,12 @@
 #include "System.hxx"
 #include "TIA.hxx"
 #include "Sound.hxx"
+#include "Cart.hxx"
 #define HBLANK 68
 
 uInt8 myCurrentFrame = 0;
 int dma_channel = 0;
+Int32 fake_paddles = 500000;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console, Sound& sound)
@@ -45,9 +47,10 @@ TIA::TIA(const Console& console, Sound& sound)
       myCOLUP0(myColor[2]),
       myCOLUP1(myColor[3])
 {
-  // Allocate buffers for two frame buffers
-  myCurrentFrameBuffer[0] = new uInt8[160 * 300];
-  myCurrentFrameBuffer[1] = new uInt8[160 * 300];          
+  // Allocate buffers for two frame buffers - we are placing
+  // these out in Video Ram so that we can better DMA copy...
+  myCurrentFrameBuffer[0] = (uInt8 *)0x06060000;  //new uInt8[160 * 300];
+  myCurrentFrameBuffer[1] = (uInt8 *)0x06070000;  //new uInt8[160 * 300];          
 
   ourActualPalette = 0;
 
@@ -106,8 +109,7 @@ TIA::TIA(const Console& console, Sound& sound)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::~TIA()
 {
-  delete[] myCurrentFrameBuffer[0];
-  delete[] myCurrentFrameBuffer[1];
+    // Frame Buffers are static now... nothing to delete...
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -145,7 +147,6 @@ void TIA::reset()
   myClockAtLastUpdate = myClockWhenFrameStarted;
   myClocksToEndOfScanLine = 228;
   myVSYNCFinishClock = 0x7FFFFFFF;
-  myScanlineCountForLastFrame = 0;
 
   // Currently no objects are enabled
   myEnabledObjects = 0;
@@ -308,10 +309,6 @@ void TIA::update()
 
   // Execute instructions until frame is finished
   mySystem->m6502().execute(25000);
-
-  // Compute the number of scanlines in the frame
-  uInt32 totalClocks = (gSystemCycles * 3) - myClockWhenFrameStarted;
-  myScanlineCountForLastFrame = totalClocks / 228;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -330,12 +327,6 @@ uInt32 TIA::width() const
 uInt32 TIA::height() const 
 {
   return myFrameHeight; 
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 TIA::scanlines() const
-{
-  return (uInt32)myScanlineCountForLastFrame;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -843,7 +834,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
   // See if we're in the vertical blank region
   if(myVBLANK & 0x02)
   {
-    memset(myFramePointer, 0, clocksToUpdate);
+      memset(myFramePointer, 0, clocksToUpdate);
   }
   // Handle all other possible combinations
   else
@@ -866,8 +857,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       {
         uInt32* mask = &myCurrentPFMask[hpos];
         // Update a uInt8 at a time until reaching a uInt32 boundary
-        for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending);
-            ++myFramePointer, ++mask)
+        for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending); ++myFramePointer, ++mask)
         {
           *myFramePointer = (myPF & *mask) ? myCOLUPF : myCOLUBK;
         }
@@ -1393,11 +1383,8 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       default:
       {
         uInt32*mPF = &myCurrentPFMask[hpos];
-        uInt8* mBL = &myCurrentBLMask[hpos];
         uInt8* mP1 = &myCurrentP1Mask[hpos];
         uInt8* mP0 = &myCurrentP0Mask[hpos];
-        uInt8* mM1 = &myCurrentM1Mask[hpos];
-        uInt8* mM0 = &myCurrentM0Mask[hpos];
         uInt8 meo_all = myEnabledObjects & (myBLBit | myM1Bit | myM0Bit);
         
         // -------------------------------------------------------------------
@@ -1417,6 +1404,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         }
         else if (meo_all == myBLBit)
         {
+            uInt8* mBL = &myCurrentBLMask[hpos];
             for(; myFramePointer < ending; ++myFramePointer, ++hpos)
             {
               uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
@@ -1429,6 +1417,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         }
         else if (meo_all == myM1Bit)
         {
+            uInt8* mM1 = &myCurrentM1Mask[hpos];
             for(; myFramePointer < ending; ++myFramePointer, ++hpos)
             {
               uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
@@ -1441,6 +1430,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         }
         else if (meo_all == myM0Bit)
         {
+            uInt8* mM0 = &myCurrentM0Mask[hpos];
             for(; myFramePointer < ending; ++myFramePointer, ++hpos)
             {
               uInt8 enabled = (myPF & *mPF++) ? myPFBit : 0;
@@ -1453,6 +1443,9 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         }
         else
         {
+            uInt8* mM0 = &myCurrentM0Mask[hpos];
+            uInt8* mM1 = &myCurrentM1Mask[hpos];
+            uInt8* mBL = &myCurrentBLMask[hpos];
             uInt8 meo1 = (myEnabledObjects & myBLBit);
             uInt8 meo2 = (myEnabledObjects & myM1Bit);
             uInt8 meo3 = (myEnabledObjects & myM0Bit);
@@ -1546,6 +1539,11 @@ void TIA::updateFrame(Int32 clock)
     if(myHMOVEBlankEnabled && (startOfScanLine < HBLANK + 8) &&
         (clocksFromStartOfScanLine < (HBLANK + 8)))
     {
+        // --------------------------------------------------------------------
+        // TBD: This is a major bottleneck in many games... is there any 
+        // way to clear memory faster than memset()?  I tried the DMA
+        // fills but doing that to main memory has drawbacks...
+        // --------------------------------------------------------------------
       Int32 blanks = (HBLANK + 8) - clocksFromStartOfScanLine;
       memset(oldFramePointer, 0, blanks);
 
@@ -1604,9 +1602,10 @@ void TIA::updateFrame(Int32 clock)
         }
       }
 
-      if (bFlickerFreeMode)
+      if (gSelectedCart.mode == MODE_FF)
       {
           int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
+          addr += 160;
           uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[0][addr]);
           uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1][addr]);
           dma_channel=(dma_channel+1) & 0x01;
@@ -1620,8 +1619,13 @@ void TIA::updateFrame(Int32 clock)
       }
       else
       {
+          // ------------------------------------------------------------------------------------------------------------------------
+          // To help with caching issues and DMA transfers, we are actually copying the 160 pixel scanline of the previous frame.
+          // By using slightly "stale" data, we ensure that we are outputting the right data and not something previously cached.
+          // DMA and ARM9 is tricky stuff... I'll admit I don't fully understand it and there is some voodoo... but this works.
+          // ------------------------------------------------------------------------------------------------------------------------
           dma_channel=(dma_channel+1) & 0x01;
-          dmaCopyWordsAsynch(dma_channel, myFramePointer, myDSFramePointer, 160);
+          dmaCopyWordsAsynch(dma_channel, myFramePointer+160, myDSFramePointer, 160);   
       }
       myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
     }
@@ -1682,34 +1686,9 @@ uInt8 TIA::peek(uInt16 addr)
       return retVal;
 
     case 0x08:    // INPT0
-    {
-      Int32 r = myConsole.controller(Controller::Left).read(Controller::Nine);
-      if(r == Controller::minimumResistance)
-      {
-        return 0x80 | retVal;
-      }
-      else if((r == Controller::maximumResistance) || myDumpEnabled)
-      {
-        return retVal;
-      }
-      else
-      {
-        double t = (1.6 * r * 0.01E-6);
-        Int32 needed = (Int32)(t * 1.19E6);
-        if(gSystemCycles > (myDumpDisabledCycle + needed))
-        {
-          return 0x80 | retVal;
-        }
-        else
-        {
-          return retVal;
-        }
-      }
-    }
-
     case 0x09:    // INPT1
     {
-      Int32 r = myConsole.controller(Controller::Left).read(Controller::Five);
+      Int32 r = fake_paddles; // myConsole.controller(Controller::Right).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
         return 0x80 | retVal;
@@ -1733,57 +1712,6 @@ uInt8 TIA::peek(uInt16 addr)
       }
     }
 
-    case 0x0A:    // INPT2
-    {
-      Int32 r = myConsole.controller(Controller::Right).read(Controller::Nine);
-      if(r == Controller::minimumResistance)
-      {
-        return 0x80 | retVal;
-      }
-      else if((r == Controller::maximumResistance) || myDumpEnabled)
-      {
-        return retVal;
-      }
-      else
-      {
-        double t = (1.6 * r * 0.01E-6);
-        Int32 needed = (Int32)(t * 1.19E6);
-        if(gSystemCycles > (myDumpDisabledCycle + needed))
-        {
-          return 0x80 | retVal;
-        }
-        else
-        {
-          return retVal;
-        }
-      }
-    }
-
-    case 0x0B:    // INPT3
-    {
-      Int32 r = myConsole.controller(Controller::Right).read(Controller::Five);
-      if(r == Controller::minimumResistance)
-      {
-        return 0x80 | retVal;
-      }
-      else if((r == Controller::maximumResistance) || myDumpEnabled)
-      {
-        return retVal;
-      }
-      else
-      {
-        double t = (1.6 * r * 0.01E-6);
-        Int32 needed = (Int32)(t * 1.19E6);
-        if(gSystemCycles > (myDumpDisabledCycle + needed))
-        {
-          return 0x80 | retVal;
-        }
-        else
-        {
-          return retVal;
-        }
-      }
-    }
 
     case 0x0C:    // INPT4
       return myConsole.controller(Controller::Left).read(Controller::Six) ?

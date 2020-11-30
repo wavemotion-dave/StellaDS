@@ -78,17 +78,6 @@ Event* EventHandler::event()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
 {
-  // First check if we are changing menu mode, and only change when not paused
-  // Sound is paused when entering menu mode, but the framebuffer is kept active
-#if 0
-  if(myRemapEnabledFlag && key == StellaEvent::KCODE_TAB && state == 1 && !myPauseStatus)
-  {
-    myMenuStatus = !myMenuStatus;
-    myConsole->sound().mute(myMenuStatus);
-    return;
-  }
-#endif
-
   // Determine where the event should be sent
     sendEvent(myKeyTable[key], state);
 }

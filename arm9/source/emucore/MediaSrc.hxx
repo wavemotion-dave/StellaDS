@@ -82,13 +82,7 @@ class MediaSource
     virtual uInt32 width() const = 0;
 
   public:
-    /**
-      Answers the total number of scanlines the media source generated
-      in producing the current frame buffer.
 
-      @return The total number of scanlines generated
-    */
-    virtual uInt32 scanlines() const = 0;
 
   private:
     // Copy constructor isn't supported by this class so make it private
