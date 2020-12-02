@@ -48,8 +48,20 @@ TIA::TIA(const Console& console, Sound& sound)
 {
   // Allocate buffers for two frame buffers - we are placing
   // these out in Video Ram so that we can better DMA copy...
-  myCurrentFrameBuffer[0] = (uInt8 *)0x06060000;  //new uInt8[160 * 300];
-  myCurrentFrameBuffer[1] = (uInt8 *)0x06070000;  //new uInt8[160 * 300];          
+  if (isDSiMode())
+  {
+      debug[0] = 134;
+      // VRAM to VRAM copy faster for consoles running in DSi faster CPU mode
+      myCurrentFrameBuffer[0] = (uInt8 *)0x06060000;  
+      myCurrentFrameBuffer[1] = (uInt8 *)0x06070000;  
+  }
+  else
+  {
+      debug[0] = 67;
+      // For older consoles running in slower CPU mode
+      myCurrentFrameBuffer[0] = new uInt8[160 * 300]; 
+      myCurrentFrameBuffer[1] = new uInt8[160 * 300]; 
+  }
 
   ourActualPalette = 0;
 

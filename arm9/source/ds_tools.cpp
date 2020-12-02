@@ -32,7 +32,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.1h"
+#define VERSION "1.1i"
 
 #define A26_VID_WIDTH  160
 #define A26_VID_HEIGHT 210

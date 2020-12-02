@@ -11,7 +11,7 @@ include $(DEVKITARM)/ds_rules
 
 export TARGET		:=	$(shell basename $(CURDIR))
 export TOPDIR		:=	$(CURDIR)
-export VERSION 		:=      1.1h
+export VERSION 		:=      1.1i
 
 ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);AlekMaul;http://www.portabledev.com"
 
