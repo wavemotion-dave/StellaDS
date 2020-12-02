@@ -20,10 +20,16 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1h : 01-Dec-2020 by Dave Bernazzani (wavemotion)
+  * Added full paddle emulation via new Paddle Icon
+  * Added Keyboard / Keypad emulation via new Keypad Icon
+  * Added Driver Controller emulation (for Indy500 only for now)
+  * More core cleanups and minor timing improvements
+
 V1.1g : 29-Nov-2020 by Dave Bernazzani (wavemotion)
   * Added paddle support - use the stylus on the bottom of screen.
   * New ROM mapping table for most acurate position of screen and will
-  * automatically enable the right controller and Flicker Free mode.
+    automatically enable the right controller and Flicker Free mode.
   * Better and more accurate timing (helps FPS measurement)
   * Switched to using unused VRAM to help with DMA copies.
   * Left/Right trigger to position screen now happens during Vertical Blank (cleaner).

@@ -228,7 +228,7 @@ class System
       */
       Device* device;
     };
-
+    
     /**
       Set the page accessing method for the specified page.
 

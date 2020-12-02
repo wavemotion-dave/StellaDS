@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
   intro_logo();
   dsInitScreenMain();
   if (argc > 1) {
-    dsShowScreenMain();
+    dsShowScreenMain(true);
     etatEmu = STELLADS_PLAYINIT;
     dsLoadGame(argv[1]);
   } else {

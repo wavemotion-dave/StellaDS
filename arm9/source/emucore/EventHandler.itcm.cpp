@@ -95,45 +95,7 @@ void EventHandler::sendEvent(Event::Type event, Int32 state)
   // Ignore unmapped events
   if(event == Event::NoType)
     return;
-#if 0
-  // Take care of special events that aren't technically part of
-  // the emulation core
-  if(state == 1)
-  {
-    if(event == Event::SaveState)
-    {
-      saveState();
-      return;
-    }
-    else if(event == Event::ChangeState)
-    {
-      changeState();
-      return;
-    }
-    else if(event == Event::LoadState)
-    {
-      loadState();
-      return;
-    }
-    else if(event == Event::TakeSnapshot)
-    {
-      takeSnapshot();
-      return;
-    }
-    else if(event == Event::Pause)
-    {
-      myPauseStatus = !myPauseStatus;
-     
-      myConsole->sound().mute(myPauseStatus);
-      return;
-    }
-    else if(event == Event::Quit)
-    {
-      myQuitStatus = !myQuitStatus;
-      return;
-    }
-  }
-#endif
+
   // Otherwise, pass it to the emulation core
   myEvent->set(event, state);
 }
@@ -225,10 +187,12 @@ void EventHandler::setDefaultKeymap()
   myKeyTable[StellaEvent::KCODE_PAGEUP]    = Event::DrivingZeroClockwise;
   myKeyTable[StellaEvent::KCODE_HOME]      = Event::DrivingZeroFire;
 
-  myKeyTable[StellaEvent::KCODE_DELETE]    = Event::DrivingOneCounterClockwise;
-  myKeyTable[StellaEvent::KCODE_PAGEDOWN]  = Event::DrivingOneClockwise;
-  myKeyTable[StellaEvent::KCODE_END]       = Event::DrivingOneFire;
+  myKeyTable[StellaEvent::KCODE_DELETE]    = Event::PaddleZeroResistance;
+  myKeyTable[StellaEvent::KCODE_END]       = Event::PaddleZeroFire;
 
+  myKeyTable[StellaEvent::KCODE_F11]       = Event::PaddleOneResistance;
+  myKeyTable[StellaEvent::KCODE_F12]       = Event::PaddleOneFire;
+    
   myKeyTable[StellaEvent::KCODE_F1]        = Event::ConsoleSelect;
   myKeyTable[StellaEvent::KCODE_F2]        = Event::ConsoleReset;
   myKeyTable[StellaEvent::KCODE_F3]        = Event::ConsoleColor;
@@ -239,8 +203,6 @@ void EventHandler::setDefaultKeymap()
   myKeyTable[StellaEvent::KCODE_F8]        = Event::ConsoleRightDifficultyB;
   myKeyTable[StellaEvent::KCODE_F9]        = Event::SaveState;
   myKeyTable[StellaEvent::KCODE_F10]       = Event::ChangeState;
-  myKeyTable[StellaEvent::KCODE_F11]       = Event::LoadState;
-  myKeyTable[StellaEvent::KCODE_F12]       = Event::TakeSnapshot;
 
   myKeyTable[StellaEvent::KCODE_PAUSE]     = Event::Pause;
 }

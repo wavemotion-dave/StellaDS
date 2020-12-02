@@ -26,7 +26,7 @@ class System;
 #include "Device.hxx"
 
 // The following is a simple table mapping games to type's using MD5 values
-struct CartTable
+struct CartInfo
 {
   const char* md5;
   const char* type;
@@ -36,10 +36,14 @@ struct CartTable
   int   yOffset;
 };
 
+extern CartInfo myCartInfo;
+
+
 #define CTR_LJOY      0     // Left Joystick is used for player 1 (default)
 #define CTR_RJOY      1     // Right Joystick is used for player 1
 #define CTR_RAIDERS   2     // Special 2 joystick setup for Raiders of the Lost Ark
-#define CTR_PADDLES   3     // For Paddle Games like Breakout and Kaboom
+#define CTR_PADDLE0   3     // For Paddle Games like Breakout and Kaboom
+#define CTR_PADDLE1   4     // A few odd games use the OTHER paddle...sigh...
 #define CTR_DRIVING   4     // For Driving Controller games like Indy500
 #define CTR_KEYBOARD  5     // For keyboard games like Codebreaker
 
@@ -49,8 +53,6 @@ struct CartTable
 
 #define MODE_NO       0     // Normal Mode
 #define MODE_FF       1     // Flicker Free Mode
-
-extern CartTable gSelectedCart;
 
 /**
   A cartridge is a device which contains the machine code for a 
@@ -83,7 +85,7 @@ class Cartridge : public Device
       Destructor
     */
     virtual ~Cartridge();
-
+    
   private:
     /**
       Try to auto-detect the bankswitching type of the cartridge

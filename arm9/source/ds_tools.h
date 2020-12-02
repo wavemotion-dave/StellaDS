@@ -44,7 +44,7 @@ extern void dsInitTimer(void);
 extern void dsInitPalette(void);
 
 extern void dsShowScreenEmu(void);
-extern void dsShowScreenMain(void);
+extern void dsShowScreenMain(bool bFull);
 extern void dsFreeEmu(void);
 extern bool dsLoadGame(char *filename);
 

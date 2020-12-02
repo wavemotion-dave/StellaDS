@@ -146,6 +146,9 @@ class CartridgeAR : public Cartridge
 
     // Indicates if a write is pending or not
     bool myWritePending;
+    
+    // The bank of flash we are utilizing...
+    uInt8 myCurrentBank;
 };
 #endif
 

@@ -30,6 +30,7 @@ class System;
 
 #include "bspf.hxx"
 #include "Control.hxx"
+#include "Cart.hxx"
 
 
 /**
@@ -134,6 +135,8 @@ class Console
       @return Myself after assignment has taken place
     */
     Console& operator = (const Console& console);
+    
+    uInt32 fakePaddleResistance;
 
   public:
 
@@ -160,6 +163,8 @@ class Console
 
     // Pointer to the media source object 
    MediaSource* myMediaSource;
+  
+   Cartridge* myCartridge;
 
   private:
     // Pointers to the left and right controllers

@@ -17,6 +17,8 @@
 #include "bgBottom.h"
 #include "bgTop.h"
 #include "bgFileSel.h"
+#include "bgPaddles.h"
+#include "bgKeypad.h"
 
 #include "clickNoQuit_wav.h"
 #include "clickQuit_wav.h"
@@ -30,19 +32,22 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.1g"
+#define VERSION "1.1h"
 
 #define A26_VID_WIDTH  160
 #define A26_VID_HEIGHT 210
 #define A26_VID_XOFS   0
 #define A26_VID_YOFS   0
 
-#define MAX_DEBUG 5
+#define MAX_DEBUG 10 
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 
 FICA2600 vcsromlist[1024];
 unsigned int countvcs=0, ucFicAct=0;
+
+static int bShowKeyboard = false;
+static int bShowPaddles = false;
 
 Console* theConsole = (Console*) NULL;
 Sound* theSDLSnd = (Sound*) NULL;
@@ -136,10 +141,10 @@ void ShowStatusLine(void)
 void vblankIntr() 
 {
     static uInt8 last_myYOffset = -99;
-    if (last_myYOffset != gSelectedCart.yOffset)
+    if (last_myYOffset != myCartInfo.yOffset)
     {
-        REG_BG3Y = gSelectedCart.yOffset<<8;
-        last_myYOffset = gSelectedCart.yOffset;
+        REG_BG3Y = myCartInfo.yOffset<<8;
+        last_myYOffset = myCartInfo.yOffset;
     }
 }
 
@@ -183,22 +188,46 @@ void dsShowScreenEmu(void)
   REG_BG3PB = 0; REG_BG3PC = 0;
   REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;
   REG_BG3X = A26_VID_XOFS<<8;
-  REG_BG3Y = gSelectedCart.yOffset<<8;
+  REG_BG3Y = myCartInfo.yOffset<<8;
 }
 
-void dsShowScreenMain(void) {
-  // Init BG mode for 16 bits colors
-  videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE );
-  videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE);
-  vramSetBankA(VRAM_A_MAIN_BG); vramSetBankC(VRAM_C_SUB_BG);
-  bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
-  bg0b = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
-  bg1b = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 30,0);
-  bgSetPriority(bg0b,1);bgSetPriority(bg1b,0);
+void dsShowScreenPaddles(void) 
+{
+  decompress(bgPaddlesTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+  decompress(bgPaddlesMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+  dmaCopy((void *) bgPaddlesPal,(u16*) BG_PALETTE_SUB,256*2);
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+  swiWaitForVBlank();
+}
 
-  decompress(bgTopTiles, bgGetGfxPtr(bg0), LZ77Vram);
-  decompress(bgTopMap, (void*) bgGetMapPtr(bg0), LZ77Vram);
-  dmaCopy((void *) bgTopPal,(u16*) BG_PALETTE,256*2);
+void dsShowScreenKeypad(void) 
+{
+  decompress(bgKeypadTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+  decompress(bgKeypadMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+  dmaCopy((void *) bgKeypadPal,(u16*) BG_PALETTE_SUB,256*2);
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+  swiWaitForVBlank();
+}
+
+void dsShowScreenMain(bool bFull) 
+{
+  // Init BG mode for 16 bits colors
+  if (bFull)
+  {
+      videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE );
+      videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE);
+      vramSetBankA(VRAM_A_MAIN_BG); vramSetBankC(VRAM_C_SUB_BG);
+      bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
+      bg0b = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
+      bg1b = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 30,0);
+      bgSetPriority(bg0b,1);bgSetPriority(bg1b,0);
+
+      decompress(bgTopTiles, bgGetGfxPtr(bg0), LZ77Vram);
+      decompress(bgTopMap, (void*) bgGetMapPtr(bg0), LZ77Vram);
+      dmaCopy((void *) bgTopPal,(u16*) BG_PALETTE,256*2);
+  }
 
   decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -210,6 +239,7 @@ void dsShowScreenMain(void) {
 
   swiWaitForVBlank();
 }
+
 
 void dsFreeEmu(void) 
 {
@@ -235,7 +265,7 @@ void VsoundHandler(void)
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
-
+    
   // Load the file
   FILE *romfile = fopen(filename, "r");
   if (romfile != NULL)
@@ -738,7 +768,15 @@ void dsInstallSoundEmuFIFO(void)
     msg.type = EMUARM7_PLAY_SND;
     fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }
+int getMemUsed() { // returns the amount of used memory in bytes 
+   struct mallinfo mi = mallinfo(); 
+   return mi.uordblks; 
+} 
 
+int getMemFree() { // returns the amount of free memory in bytes 
+   struct mallinfo mi = mallinfo(); 
+   return mi.fordblks + (getHeapLimit() - getHeapEnd()); 
+}
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 ITCM_CODE void dsMainLoop(void)
@@ -759,14 +797,14 @@ ITCM_CODE void dsMainLoop(void)
     TIMER1_DATA=0;
     TIMER1_CR=TIMER_ENABLE | TIMER_DIV_1024;
     
-    dsDisplayButton(15-(gSelectedCart.mode == MODE_NO ? 0:1));
+    dsDisplayButton(15-(myCartInfo.mode == MODE_NO ? 0:1));
 
     while(etatEmu != STELLADS_QUITSTDS)
     {
         switch (etatEmu)
         {
         case STELLADS_MENUINIT:
-            dsShowScreenMain();
+            dsShowScreenMain(true);
             etatEmu = STELLADS_MENUSHOW;
             break;
 
@@ -791,12 +829,12 @@ ITCM_CODE void dsMainLoop(void)
             TIMER0_CR=0;
             TIMER0_DATA=0;
             TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
-
+                
             // Wait for keys
             scanKeys();
             keys_pressed = keysCurrent();
 
-            if ((gSelectedCart.controllerType == CTR_RJOY) || (gSelectedCart.controllerType == CTR_RAIDERS))   // A handfull of games use the right joystick... but the DS only has the ability for one joystick so we remap here... see Cart.cpp
+            if ((myCartInfo.controllerType == CTR_RJOY) || (myCartInfo.controllerType == CTR_RAIDERS))   // A handfull of games use the right joystick... but the DS only has the ability for one joystick so we remap here... see Cart.cpp
             {
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_A));
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_UP));
@@ -805,7 +843,7 @@ ITCM_CODE void dsMainLoop(void)
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
 
                 // For Raiders of the Lost Ark!
-                if (gSelectedCart.controllerType == CTR_RAIDERS)
+                if (myCartInfo.controllerType == CTR_RAIDERS)
                 {
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
@@ -818,39 +856,120 @@ ITCM_CODE void dsMainLoop(void)
                     }
                 }
             }
-            else if (gSelectedCart.controllerType == CTR_PADDLES)
+            else if (myCartInfo.controllerType == CTR_PADDLE0)
             {
-                extern Int32 fake_paddles;
                 if(keys_pressed & (KEY_LEFT))
                 {
-                    fake_paddles += 12000;
-                    keys_pressed = 0;
+                    theConsole->fakePaddleResistance += 10000;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
                 }
                 if(keys_pressed & (KEY_RIGHT))
                 {
-                    fake_paddles -= 12000;
-                    keys_pressed = 0;
+                    theConsole->fakePaddleResistance -= 10000;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
                 }
-                
-                if (keys_pressed & KEY_TOUCH)
+
+                if (bShowPaddles  && (keys_pressed & KEY_TOUCH))
                 {
                     touchPosition touch;
                     touchRead(&touch);
                     debug[0] = touch.px;
                     debug[1] = touch.py;
-                    if (touch.py > 133) // Are we at the bottom of the screen? That's the virtual paddle area...
-                    {
-                        fake_paddles = 900000 - ((800000 / 255) * touch.px);
-                        keys_touch = 1;
-                    }
+                    theConsole->fakePaddleResistance = (900000 - ((800000 / 255) * touch.px));
+                    keys_touch = 1;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
                 }
                     
-                debug[2] = fake_paddles;
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
+                debug[2] = theConsole->fakePaddleResistance;
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_END,   (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
                                                                                   (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
-                if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)))
+                if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
                 {
                     keys_pressed = 0;   // If these were pressed... don't handle them below...
+                }
+            }
+            else if (myCartInfo.controllerType == CTR_PADDLE1)
+            {
+                if(keys_pressed & (KEY_LEFT))
+                {
+                    theConsole->fakePaddleResistance += 10000;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11, theConsole->fakePaddleResistance);
+                }
+                if(keys_pressed & (KEY_RIGHT))
+                {
+                    theConsole->fakePaddleResistance -= 10000;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11, theConsole->fakePaddleResistance);
+                }
+                
+                if (bShowPaddles  && (keys_pressed & KEY_TOUCH))
+                {
+                    touchPosition touch;
+                    touchRead(&touch);
+                    debug[0] = touch.px;
+                    debug[1] = touch.py;
+                    theConsole->fakePaddleResistance = (900000 - ((800000 / 255) * touch.px));
+                    keys_touch = 1;
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11, theConsole->fakePaddleResistance);
+                }
+                    
+                debug[2] = theConsole->fakePaddleResistance;
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F12,   (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
+                                                                                  (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
+                if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
+                {
+                    keys_pressed = 0;   // If these were pressed... don't handle them below...
+                }
+            }                
+            else if (myCartInfo.controllerType == CTR_DRIVING)
+            {
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_INSERT, keys_pressed & (KEY_LEFT));
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PAGEUP, keys_pressed & (KEY_RIGHT));
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_HOME, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)));
+                if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
+                {
+                    keys_pressed = 0;   // If these were pressed... don't handle them below...
+                }
+            }
+            else if (myCartInfo.controllerType == CTR_KEYBOARD)
+            {
+                if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
+                {
+                    touchPosition touch;
+                    touchRead(&touch);
+                    debug[0] = touch.px;
+                    debug[1] = touch.py;
+                    keys_touch = 1;
+
+                    if (touch.px > 75  && touch.px < 100 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 1);
+                    if (touch.px >115  && touch.px < 140 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 1);
+                    if (touch.px >160  && touch.px < 195 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 1);
+                    
+                    if (touch.px > 75  && touch.px < 100 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 1);
+                    if (touch.px >115  && touch.px < 140 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 1);
+                    if (touch.px >160  && touch.px < 195 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 1);
+
+                    if (touch.px > 75  && touch.px < 100 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 1);
+                    if (touch.px >115  && touch.px < 140 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 1);
+                    if (touch.px >160  && touch.px < 195 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 1);
+
+                    if (touch.px > 75  && touch.px < 100 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 1);
+                    if (touch.px >115  && touch.px < 140 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 1);
+                    if (touch.px >160  && touch.px < 195 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 1);
+                }
+                else
+                {
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 0);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 0);
                 }
             }
             else    // Must be CTR_LJOY which most games are..
@@ -864,7 +983,19 @@ ITCM_CODE void dsMainLoop(void)
 
             if (dampen==0) // These don't need to be sent up as fast... dampen it down to save cycles...
             {
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
+                if (bShowPaddles || bShowKeyboard)
+                {
+                    if (keys_pressed & (KEY_SELECT))
+                    {
+                        bShowPaddles = false;
+                        bShowKeyboard = false;
+                        dsShowScreenMain(false);
+                    }
+                }
+                else
+                {
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
+                }
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2,  keys_pressed & (KEY_START));
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F3, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F4, 0);
@@ -901,13 +1032,13 @@ ITCM_CODE void dsMainLoop(void)
 
                     if(keys_pressed & (KEY_R))
                     {
-                        gSelectedCart.yOffset++;
-                        debug[4] = gSelectedCart.yOffset;
+                        myCartInfo.yOffset++;
+                        debug[4] = myCartInfo.yOffset;
                     }
                     if(keys_pressed & (KEY_L))
                     {
-                        gSelectedCart.yOffset--;
-                        debug[4] = gSelectedCart.yOffset;
+                        myCartInfo.yOffset--;
+                        debug[4] = myCartInfo.yOffset;
                     }
                     last_keys_pressed = keys_pressed;
                 }
@@ -940,7 +1071,7 @@ ITCM_CODE void dsMainLoop(void)
                 DumpDebugData();
             }
 
-            if (keys_pressed & KEY_TOUCH)
+            if ((keys_pressed & KEY_TOUCH) &&  !bShowPaddles && !bShowKeyboard)
             {
                 if (!keys_touch)
                 {
@@ -949,6 +1080,8 @@ ITCM_CODE void dsMainLoop(void)
                     touchRead(&touch);
                     iTx = touch.px;
                     iTy = touch.py;
+                    debug[0] = iTx;
+                    debug[1] = iTy;
 
                     if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) 
                     { // quit
@@ -960,7 +1093,7 @@ ITCM_CODE void dsMainLoop(void)
                             dsDisplayButton(3-console_color);
                             dsDisplayButton(10+left_difficulty);
                             dsDisplayButton(12+right_difficulty);
-                            dsDisplayButton(15-(gSelectedCart.mode == MODE_NO ? 0:1));
+                            dsDisplayButton(15-(myCartInfo.mode == MODE_NO ? 0:1));
                             ShowStatusLine();
                         }
                     }
@@ -1017,7 +1150,7 @@ ITCM_CODE void dsMainLoop(void)
                             dsDisplayButton(3-console_color);
                             dsDisplayButton(10+left_difficulty);
                             dsDisplayButton(12+right_difficulty);
-                            dsDisplayButton(15-(gSelectedCart.mode == MODE_NO ? 0:1));
+                            dsDisplayButton(15-(myCartInfo.mode == MODE_NO ? 0:1));
                             ShowStatusLine();
                         }
                         else 
@@ -1038,15 +1171,41 @@ ITCM_CODE void dsMainLoop(void)
                     else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<170)) 
                     { // Fast vs Flicker-Free
                         soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                        if (gSelectedCart.mode == MODE_NO)
+                        if (myCartInfo.mode == MODE_NO)
                         {
-                            gSelectedCart.mode = MODE_FF;
+                            myCartInfo.mode = MODE_FF;
                         }
                         else
                         {
-                            gSelectedCart.mode = MODE_NO;
+                            myCartInfo.mode = MODE_NO;
                         }
-                        dsDisplayButton(15-(gSelectedCart.mode == MODE_NO ? 0:1));
+                        dsDisplayButton(15-(myCartInfo.mode == MODE_NO ? 0:1));
+                    }
+                    else if ((iTx>1) && (iTx<40) && (iTy>150) && (iTy<200)) 
+                    { // Paddle Mode!
+                        if (bShowPaddles == false)
+                        {
+                            bShowPaddles = true;
+                            dsShowScreenPaddles();
+                        }
+                        else
+                        {
+                            bShowPaddles = false;
+                            dsShowScreenMain(false);
+                        }
+                    }
+                    else if ((iTx>45) && (iTx<80) && (iTy>150) && (iTy<200)) 
+                    { // Paddle Mode!
+                        if (bShowKeyboard == false)
+                        {
+                            bShowKeyboard = true;
+                            dsShowScreenKeypad();
+                        }
+                        else
+                        {
+                            bShowKeyboard = false;
+                            dsShowScreenMain(false);
+                        }
                     }
                 }
             }

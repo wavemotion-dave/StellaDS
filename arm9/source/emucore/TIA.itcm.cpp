@@ -34,7 +34,6 @@
 
 uInt8 myCurrentFrame = 0;
 int dma_channel = 0;
-Int32 fake_paddles = 500000;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console, Sound& sound)
@@ -1602,7 +1601,7 @@ void TIA::updateFrame(Int32 clock)
         }
       }
 
-      if (gSelectedCart.mode == MODE_FF)
+      if (myCartInfo.mode == MODE_FF)
       {
           int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
           addr += 160;
@@ -1647,87 +1646,111 @@ void TIA::waitHorizontalSync()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 TIA::peek(uInt16 addr)
 {
-    uInt8 retVal; 
-    if (gSelectedCart.special == SPEC_CONMARS) retVal = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
-    else retVal = mySystem->getDataBusState() & 0x3F; 
+    uInt8 noise; 
+    if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
+    else noise = mySystem->getDataBusState() & 0x3F; 
   // Update frame to current color clock before we look at anything!
     updateFrame((gSystemCycles+gSystemCycles+gSystemCycles));
         
   switch(addr & 0x000f)
   {
     case 0x00:    // CXM0P
-      if (myCollision & 0x0001) retVal |= 0x80;
-      if (myCollision & 0x0002) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0001) noise |= 0x80;
+      if (myCollision & 0x0002) noise |= 0x40;
+      return noise;
     case 0x01:    // CXM1P
-      if (myCollision & 0x0004) retVal |= 0x80;
-      if (myCollision & 0x0008) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0004) noise |= 0x80;
+      if (myCollision & 0x0008) noise |= 0x40;
+      return noise;
     case 0x02:    // CXP0FB
-      if (myCollision & 0x0010) retVal |= 0x80;
-      if (myCollision & 0x0020) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0010) noise |= 0x80;
+      if (myCollision & 0x0020) noise |= 0x40;
+      return noise;
     case 0x03:    // CXP1FB
-      if (myCollision & 0x0040) retVal |= 0x80;
-      if (myCollision & 0x0080) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0040) noise |= 0x80;
+      if (myCollision & 0x0080) noise |= 0x40;
+      return noise;
     case 0x04:    // CXM0FB
-      if (myCollision & 0x0100) retVal |= 0x80;
-      if (myCollision & 0x0200) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0100) noise |= 0x80;
+      if (myCollision & 0x0200) noise |= 0x40;
+      return noise;
     case 0x05:    // CXM1FB
-      if (myCollision & 0x0400) retVal |= 0x80;
-      if (myCollision & 0x0800) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x0400) noise |= 0x80;
+      if (myCollision & 0x0800) noise |= 0x40;
+      return noise;
     case 0x06:    // CXBLPF
-      if (myCollision & 0x1000) retVal |= 0x80;
-      return retVal;
+      if (myCollision & 0x1000) noise |= 0x80;
+      return noise;
     case 0x07:    // CXPPMM
-      if (myCollision & 0x2000) retVal |= 0x80;
-      if (myCollision & 0x4000) retVal |= 0x40;
-      return retVal;
+      if (myCollision & 0x2000) noise |= 0x80;
+      if (myCollision & 0x4000) noise |= 0x40;
+      return noise;
 
     case 0x08:    // INPT0
-    case 0x09:    // INPT1
     {
-      Int32 r = fake_paddles; // myConsole.controller(Controller::Right).read(Controller::Nine);
+      Int32 r = myConsole.controller(Controller::Left).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
-        return 0x80 | retVal;
+        return 0x80 | noise;
       }
       else if((r == Controller::maximumResistance) || myDumpEnabled)
       {
-        return retVal;
+        return noise;
       }
       else
       {
         double t = (1.6 * r * 0.01E-6);
-        Int32 needed = (Int32)(t * 1.19E6);
-        if(gSystemCycles > (myDumpDisabledCycle + needed))
+        uInt32 needed = (uInt32)(t * 1.19E6);
+        if((uInt32)gSystemCycles > (myDumpDisabledCycle + needed))
         {
-          return 0x80 | retVal;
+          return 0x80 | noise;
         }
         else
         {
-          return retVal;
+          return noise;
         }
       }
     }
 
+    case 0x09:    // INPT1
+    {
+      Int32 r = myConsole.controller(Controller::Left).read(Controller::Five);
+      if(r == Controller::minimumResistance)
+      {
+        return 0x80 | noise;
+      }
+      else if((r == Controller::maximumResistance) || myDumpEnabled)
+      {
+        return noise;
+      }
+      else
+      {
+        double t = (1.6 * r * 0.01E-6);
+        uInt32 needed = (uInt32)(t * 1.19E6);
+        if((uInt32)gSystemCycles > (myDumpDisabledCycle + needed))
+        {
+          return 0x80 | noise;
+        }
+        else
+        {
+          return noise;
+        }
+      }
+    }
 
     case 0x0C:    // INPT4
       return myConsole.controller(Controller::Left).read(Controller::Six) ?
-          (0x80 | retVal) : retVal;
+          (0x80 | noise) : noise;
 
     case 0x0D:    // INPT5
       return myConsole.controller(Controller::Right).read(Controller::Six) ?
-          (0x80 | retVal) : retVal;
+          (0x80 | noise) : noise;
 
     case 0x0e:
-      return retVal;
+      return noise;
 
     default:
-      return retVal;
+      return noise;
   }
 }
 

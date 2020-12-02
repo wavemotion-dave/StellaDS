@@ -58,28 +58,49 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   // Get the MD5 message-digest for the ROM image
   string md5 = MD5(image, size);
 
-  myControllers[0] = new Joystick(Controller::Left, *myEvent);
-  myControllers[1] = new Joystick(Controller::Right, *myEvent);
-
   mySwitches = new Switches(*myEvent);
   mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT); // 128 byte pages... was 6=64 but bank switching improved with larger page sizes as there are fewer "areas" to copy to direct memory acces
 
   M6502* m6502 = new M6502Low(1);
-
   M6532* m6532 = new M6532(*this);
   TIA* tia = new TIA(*this, mySound);
-  Cartridge* cartridge = Cartridge::create(image, size);
+  myCartridge = Cartridge::create(image, size);
 
+  // -------------------------------------------------------------------------------------------
+  // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers
+  // -------------------------------------------------------------------------------------------
+  if ((myCartInfo.controllerType == CTR_PADDLE0) || (myCartInfo.controllerType == CTR_PADDLE1))
+  {
+      myControllers[0] = new Paddles(Controller::Left, *myEvent);
+      myControllers[1] = new Paddles(Controller::Right, *myEvent);
+  }
+  else if (myCartInfo.controllerType == CTR_DRIVING)
+  {
+      myControllers[0] = new Driving(Controller::Left, *myEvent);
+      myControllers[1] = new Driving(Controller::Right, *myEvent);
+  }
+  else if (myCartInfo.controllerType == CTR_KEYBOARD)
+  {
+      myControllers[0] = new Keyboard(Controller::Left, *myEvent);
+      myControllers[1] = new Keyboard(Controller::Right, *myEvent);
+  }
+  else  // Most games fall into this category... the venerable Joystick with one red button!
+  {
+      myControllers[0] = new Joystick(Controller::Left, *myEvent);
+      myControllers[1] = new Joystick(Controller::Right, *myEvent);
+  }
+        
   mySystem->attach(m6502);
   mySystem->attach(m6532);
   mySystem->attach(tia);
-  mySystem->attach(cartridge);
+  mySystem->attach(myCartridge);
 
   myMediaSource = tia;
 
   mySystem->reset();
 
   myFrameRate = 60;
+  fakePaddleResistance = 500000;
 
   uInt32 soundFrameRate = 60;
   mySound.init(this, myMediaSource, mySystem, soundFrameRate);
