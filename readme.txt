@@ -25,6 +25,7 @@ V1.1h : 01-Dec-2020 by Dave Bernazzani (wavemotion)
   * Added Keyboard / Keypad emulation via new Keypad Icon
   * Added Driver Controller emulation (for Indy500 only for now)
   * More core cleanups and minor timing improvements
+  * Rebranding PHEONIX EDITION
 
 V1.1g : 29-Nov-2020 by Dave Bernazzani (wavemotion)
   * Added paddle support - use the stylus on the bottom of screen.
