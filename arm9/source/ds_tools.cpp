@@ -1089,15 +1089,16 @@ ITCM_CODE void dsMainLoop(void)
                 DumpDebugData();
             }
 
-            if ((keys_pressed & KEY_TOUCH) && bShowInfo)
+            if (info_dampen == 0)
             {
-                if (info_dampen == 0)
+                if ((keys_pressed & KEY_TOUCH) && bShowInfo)
                 {
                     bShowInfo = false;
                     dsShowScreenMain(false);
-                } else info_dampen--;
-            }
-            else if ((keys_pressed & KEY_TOUCH) &&  !bShowPaddles && !bShowKeyboard && !bShowInfo)
+                }
+            } else info_dampen--;
+        
+            if ((keys_pressed & KEY_TOUCH) &&  !bShowPaddles && !bShowKeyboard && !bShowInfo)
             {
                 if (!keys_touch)
                 {
