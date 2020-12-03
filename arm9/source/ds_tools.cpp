@@ -1213,7 +1213,7 @@ ITCM_CODE void dsMainLoop(void)
                         if (bShowInfo == false)
                         {
                             bShowInfo = true;
-                            info_dampen = 1;
+                            info_dampen = 7;
                             dsShowScreenInfo();
                         }
                         else
