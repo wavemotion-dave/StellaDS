@@ -1000,6 +1000,7 @@ ITCM_CODE void dsMainLoop(void)
 
             if (dampen==0) // These don't need to be sent up as fast... dampen it down to save cycles...
             {
+                dampen=10;      // Every 10 frames is good enough...
                 if (bShowPaddles || bShowKeyboard || bShowInfo)
                 {
                     if (keys_pressed & (KEY_SELECT))
@@ -1021,7 +1022,6 @@ ITCM_CODE void dsMainLoop(void)
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F6, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F7, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F8, 0);
-                dampen=6;
 
                 // -----------------------------------------------------------------
                 // Check the UI keys... full speed, FSP display, offset shift, etc.

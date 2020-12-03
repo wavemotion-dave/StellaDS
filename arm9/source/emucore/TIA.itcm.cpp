@@ -36,6 +36,8 @@ int currentScanline = 0;
 int myCurrentFrame = 0;
 int dma_channel = 0;
 
+uInt8 slowBuf0[160 * 300];
+uInt8 slowBuf1[160 * 300];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console, Sound& sound)
@@ -52,17 +54,15 @@ TIA::TIA(const Console& console, Sound& sound)
   // these out in Video Ram so that we can better DMA copy...
   if (isDSiMode())
   {
-      debug[0] = 134;
       // VRAM to VRAM copy faster for consoles running in DSi faster CPU mode
       myCurrentFrameBuffer[0] = (uInt8 *)0x06060000;  
       myCurrentFrameBuffer[1] = (uInt8 *)0x06070000;  
   }
   else
   {
-      debug[0] = 67;
       // For older consoles running in slower CPU mode
-      myCurrentFrameBuffer[0] = new uInt8[160 * 300]; 
-      myCurrentFrameBuffer[1] = new uInt8[160 * 300]; 
+      myCurrentFrameBuffer[0] = slowBuf0; 
+      myCurrentFrameBuffer[1] = slowBuf1; 
   }
 
   ourActualPalette = 0;

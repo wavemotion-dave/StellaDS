@@ -20,6 +20,14 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.1j : 03-Dec-2020 by Dave Bernazzani (wavemotion)
+  * Added info icon.
+  * Better handling of touch screen.
+  * Skip drawing frames that are off-screen.
+  * Fixed sound gliches long present in the emulator.
+  * Fixed color for Barnstorming bars (more red, less purple).
+  * Other optimizations as time allowed.
+
 V1.1h : 01-Dec-2020 by Dave Bernazzani (wavemotion)
   * Added full paddle emulation via new Paddle Icon
   * Added Keyboard / Keypad emulation via new Keypad Icon
