@@ -30,14 +30,14 @@ struct CartInfo
 {
   const char* md5;
   const char* type;
-  int   controllerType;
-  int   special;
-  int   mode;
-  int   yOffset;
+  Int8  controllerType;
+  Int8  special;
+  Int8  mode;
+  Int8  analogSensitivity;      // 10=1.0
+  Int8  yOffset;
 };
 
 extern CartInfo myCartInfo;
-
 
 #define CTR_LJOY      0     // Left Joystick is used for player 1 (default)
 #define CTR_RJOY      1     // Right Joystick is used for player 1

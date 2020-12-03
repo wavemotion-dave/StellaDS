@@ -860,12 +860,14 @@ ITCM_CODE void dsMainLoop(void)
             {
                 if(keys_pressed & (KEY_LEFT))
                 {
-                    theConsole->fakePaddleResistance += 10000;
+                    theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
+                    if (theConsole->fakePaddleResistance > 800000) theConsole->fakePaddleResistance = 800000;
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
                 }
                 if(keys_pressed & (KEY_RIGHT))
                 {
-                    theConsole->fakePaddleResistance -= 10000;
+                    theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
+                    if (theConsole->fakePaddleResistance < 100000) theConsole->fakePaddleResistance = 100000;
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
                 }
 
@@ -892,12 +894,14 @@ ITCM_CODE void dsMainLoop(void)
             {
                 if(keys_pressed & (KEY_LEFT))
                 {
-                    theConsole->fakePaddleResistance += 10000;
+                    theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
+                    if (theConsole->fakePaddleResistance > 800000) theConsole->fakePaddleResistance = 800000;
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11, theConsole->fakePaddleResistance);
                 }
                 if(keys_pressed & (KEY_RIGHT))
                 {
-                    theConsole->fakePaddleResistance -= 10000;
+                    theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
+                    if (theConsole->fakePaddleResistance < 100000) theConsole->fakePaddleResistance = 100000;
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11, theConsole->fakePaddleResistance);
                 }
                 
