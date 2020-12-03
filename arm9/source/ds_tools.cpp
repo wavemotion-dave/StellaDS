@@ -19,6 +19,7 @@
 #include "bgFileSel.h"
 #include "bgPaddles.h"
 #include "bgKeypad.h"
+#include "bgInfo.h"
 
 #include "clickNoQuit_wav.h"
 #include "clickQuit_wav.h"
@@ -32,7 +33,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.1i"
+#define VERSION "1.1j"
 
 #define A26_VID_WIDTH  160
 #define A26_VID_HEIGHT 210
@@ -48,6 +49,7 @@ unsigned int countvcs=0, ucFicAct=0;
 
 static int bShowKeyboard = false;
 static int bShowPaddles = false;
+static int bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 Sound* theSDLSnd = (Sound*) NULL;
@@ -189,6 +191,16 @@ void dsShowScreenEmu(void)
   REG_BG3PD = ((A26_VID_HEIGHT / 210) << 8) | ((A26_VID_HEIGHT % 210) ) ;
   REG_BG3X = A26_VID_XOFS<<8;
   REG_BG3Y = myCartInfo.yOffset<<8;
+}
+
+void dsShowScreenInfo(void) 
+{
+  decompress(bgInfoTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+  decompress(bgInfoMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+  dmaCopy((void *) bgInfoPal,(u16*) BG_PALETTE_SUB,256*2);
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+  swiWaitForVBlank();
 }
 
 void dsShowScreenPaddles(void) 
@@ -785,6 +797,7 @@ ITCM_CODE void dsMainLoop(void)
     unsigned int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1,console_palette=1, left_difficulty=0, right_difficulty=0,romSel;
     int iTx,iTy;
     static int dampen=0;
+    static int info_dampen=0;
 
     last_keys_pressed = -1;
     full_speed = 0;
@@ -987,12 +1000,13 @@ ITCM_CODE void dsMainLoop(void)
 
             if (dampen==0) // These don't need to be sent up as fast... dampen it down to save cycles...
             {
-                if (bShowPaddles || bShowKeyboard)
+                if (bShowPaddles || bShowKeyboard || bShowInfo)
                 {
                     if (keys_pressed & (KEY_SELECT))
                     {
                         bShowPaddles = false;
                         bShowKeyboard = false;
+                        bShowInfo = false;
                         dsShowScreenMain(false);
                     }
                 }
@@ -1075,7 +1089,15 @@ ITCM_CODE void dsMainLoop(void)
                 DumpDebugData();
             }
 
-            if ((keys_pressed & KEY_TOUCH) &&  !bShowPaddles && !bShowKeyboard)
+            if ((keys_pressed & KEY_TOUCH) && bShowInfo)
+            {
+                if (info_dampen == 0)
+                {
+                    bShowInfo = false;
+                    dsShowScreenMain(false);
+                } else info_dampen--;
+            }
+            else if ((keys_pressed & KEY_TOUCH) &&  !bShowPaddles && !bShowKeyboard && !bShowInfo)
             {
                 if (!keys_touch)
                 {
@@ -1185,7 +1207,21 @@ ITCM_CODE void dsMainLoop(void)
                         }
                         dsDisplayButton(15-(myCartInfo.mode == MODE_NO ? 0:1));
                     }
-                    else if ((iTx>1) && (iTx<40) && (iTy>150) && (iTy<200)) 
+                    else if ((iTx>5) && (iTx<35) && (iTy>150) && (iTy<200)) 
+                    { // Sow Info Mode!
+                        if (bShowInfo == false)
+                        {
+                            bShowInfo = true;
+                            info_dampen = 1;
+                            dsShowScreenInfo();
+                        }
+                        else
+                        {
+                            bShowInfo = false;
+                            dsShowScreenMain(false);
+                        }
+                    }
+                    else if ((iTx>50) && (iTx<90) && (iTy>150) && (iTy<200)) 
                     { // Paddle Mode!
                         if (bShowPaddles == false)
                         {
@@ -1198,8 +1234,8 @@ ITCM_CODE void dsMainLoop(void)
                             dsShowScreenMain(false);
                         }
                     }
-                    else if ((iTx>45) && (iTx<80) && (iTy>150) && (iTy<200)) 
-                    { // Paddle Mode!
+                    else if ((iTx>100) && (iTx<130) && (iTy>150) && (iTy<200)) 
+                    { // Keyboard Mode!
                         if (bShowKeyboard == false)
                         {
                             bShowKeyboard = true;
