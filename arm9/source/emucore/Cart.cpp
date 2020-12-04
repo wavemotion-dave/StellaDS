@@ -388,7 +388,7 @@ static CartInfo table[] =
     {"09a03e0c85e667695bcd6c6394e47e5f",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // MC_ntsc_7_26_3.bin
     {"f7fac15cf54b55c5597718b6742dbec2",  "F4",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Medieval Mayhem.bin
     {"daeb54957875c50198a7e616f9cc8144",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mega Force (1982).bin
-    {"318a9d6dda791268df92d72679914ac3",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // MegaMania (1982).bin
+    {"318a9d6dda791268df92d72679914ac3",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // MegaMania (1982).bin
     {"96e798995af6ed9d8601166d4350f276",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Meltdown (1983).bin
     {"5f791d93ac95bdd8a691a65d665fb436",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Meltdown.bin
     {"712924a2c7b692f6e7b009285c2169a7",  "AR",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Meteoroids (1982).bin
@@ -399,7 +399,7 @@ static CartInfo table[] =
     {"fa0570561aa80896f0ead05c46351389",  "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Miner 2049er (1982).bin
     {"2a1b454a5c3832b0240111e7fd73de8a",  "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Miner 2049er Vol II (1983).bin
     {"4543b7691914dfd69c3755a5287a95e1",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mines of Minos (1982).bin
-    {"df62a658496ac98a3aa4a6ee5719c251",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Miniature Golf (1979).bin
+    {"df62a658496ac98a3aa4a6ee5719c251",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Miniature Golf (1979).bin
     {"3a2e2d0c6892aa14544083dfb7762782",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Missile Command (1981).bin
     {"4c6afb8a44adf8e28f49164c84144bfe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mission 3000 A.D. (1983).bin
     {"4181087389a79c7f59611fb51c263137",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Miss Piggy's Wedding (1983).bin

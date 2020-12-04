@@ -1182,9 +1182,12 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     else 
                     { 
-                        irqEnable(IRQ_TIMER2);
+                        if (bSoundEnabled)
+                        {
+                            irqEnable(IRQ_TIMER2);
+                            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+                        }
                     }
-                    fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                 }
                 else if ((iTx>210) && (iTx<250) && (iTy>170) && (iTy<200)) 
                 {     // 48,100 -> 208,132 palette PAL <> NTSC
