@@ -189,7 +189,7 @@ void dsShowScreenEmu(void)
 
   REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ;
   REG_BG3PB = 0; REG_BG3PC = 0;
-  REG_BG3PD = ((A26_VID_HEIGHT / 198) << 8) | ((A26_VID_HEIGHT % 198) ) ;
+  REG_BG3PD = ((A26_VID_HEIGHT / A26_VID_HEIGHT) << 8) | ((A26_VID_HEIGHT % A26_VID_HEIGHT) ) ;
   REG_BG3X = A26_VID_XOFS<<8;
   REG_BG3Y = myCartInfo.yOffset<<8;
 }

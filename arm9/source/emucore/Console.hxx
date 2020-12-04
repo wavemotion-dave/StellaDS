@@ -33,7 +33,7 @@ class System;
 #include "Cart.hxx"
 
 #define A26_VID_WIDTH  160      // We are showing 160 pixels wide
-#define A26_VID_HEIGHT 198      // Technically only need 192 but many games use the overscan area... 
+#define A26_VID_HEIGHT 200      // Technically only need 192 but many games use the overscan area... 
 #define A26_VID_XOFS   0
 #define A26_VID_YOFS   0
 
