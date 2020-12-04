@@ -67,8 +67,7 @@ class Sound
       @param system    The system
       @param framerate The base framerate depending on NTSC or PAL ROM
     */
-    virtual void init(Console* console, MediaSource* mediasrc, System* system,
-                      double displayframerate);
+    virtual void init(Console* console, MediaSource* mediasrc, System* system);
 
     /**
       Return true iff the sound device was successfully initialized.
@@ -127,9 +126,6 @@ class Sound
 
     // Indicates the cycle when a sound register was last set
     Int32 myLastRegisterSetCycle;
-
-    // Indicates the base framerate depending on whether the ROM is NTSC or PAL
-    double myDisplayFrameRate;
 };
 
 #endif

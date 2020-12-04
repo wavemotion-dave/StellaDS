@@ -97,7 +97,7 @@ class CartridgeDPC : public Cartridge
 
       @param bank The bank that should be installed in the system
     */
-    void bank(uInt16 bank);
+    inline void bank(uInt16 bank);
 
     /** 
       Clocks the random number generator to move it to its next state

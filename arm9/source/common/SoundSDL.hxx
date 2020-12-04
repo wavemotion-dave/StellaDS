@@ -53,7 +53,7 @@ class SoundSDL : public Sound
     */
     virtual bool isSuccessfullyInitialized() const;
 
-virtual void callback(uInt8* stream, int len);
+    virtual void callback(uInt8* stream, int len);
 
     /**
       Set the mute state of the sound object.  While muted no sound is played.
@@ -108,7 +108,6 @@ virtual void callback(uInt8* stream, int len);
     {
       uInt16 addr;
       uInt8 value;
-      double delta;
     };
 
     /**
@@ -141,10 +140,6 @@ virtual void callback(uInt8* stream, int len);
         */
         void dequeue();
 
-        /**
-          Return the duration of all the items in the queue.
-        */
-        double duration();
 
         /**
           Enqueue the specified object.
@@ -178,14 +173,9 @@ virtual void callback(uInt8* stream, int len);
     };
 
   private:
-//JGD    // TIASound emulation object
-//JGD    TIASound myTIASound;
-    
     // Indicates if the sound device was successfully initialized
     bool myIsInitializedFlag;
 
-    // Log base 2 of the selected fragment size
-    double myFragmentSizeLogBase2;
 
     // Indicates if the sound is currently muted
     bool myIsMuted;
@@ -195,8 +185,6 @@ virtual void callback(uInt8* stream, int len);
 
     // Queue of TIA register writes
     RegWriteQueue myRegWriteQueue;
-
-
 };
 
 #endif

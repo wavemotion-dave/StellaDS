@@ -22,7 +22,6 @@
 #include <stdio.h>
 
 #include "TIASound.hxx"
-//JGD #include "TIASnd.hxx"
 #include "Console.hxx"
 #include "System.hxx"
 #include "SoundSDL.hxx"
@@ -31,22 +30,12 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 SoundSDL::SoundSDL(uInt32 fragsize)
     : myIsInitializedFlag(false),
-      myFragmentSizeLogBase2(0),
       myIsMuted(false),
       myVolume(100)
 {
     myIsMuted = false;
- //   myFragmentSizeLogBase2 = log((double)fragsize) / log(2.0);
-
-  Tia_sound_init(31400, 22050);
-
-  /*
-  myTIASound.reset();
-  myTIASound.outputFrequency(22050);
-  myTIASound.tiaFrequency(22050);
-  myTIASound.channels(1);
-*/
-	myIsInitializedFlag = true;
+    Tia_sound_init(31400, 22050);
+    myIsInitializedFlag = true;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -109,14 +98,7 @@ void SoundSDL::adjustVolume(Int8 direction)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::set(uInt16 addr, uInt8 value, Int32 cycle)
 {
-//	RegWrite info;
-//	info.addr = addr;
-//	info.value = value;
-//	info.delta = 0;
-//	myRegWriteQueue.enqueue(info);
 	Update_tia_sound(addr, value);
-
-//JGD myTIASound.set(addr, value);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -124,10 +106,7 @@ void SoundSDL::processFragment(uInt8* stream, Int32 length)
 {
 	if(!myIsInitializedFlag) { return; }
 
-//	RegWrite& info = myRegWriteQueue.front();
 	Tia_process(stream, length);
-  //JGD myTIASound.process(stream, length);
-//	myRegWriteQueue.dequeue();
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -161,17 +140,6 @@ void SoundSDL::RegWriteQueue::dequeue()
     myHead = (myHead + 1) % myCapacity;
     --mySize;
   }
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-double SoundSDL::RegWriteQueue::duration()
-{
-  double duration = 0.0;
-  for(uInt32 i = 0; i < mySize; ++i)
-  {
-    duration += myBuffer[(myHead + i) % myCapacity].delta;
-  }
-  return duration;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

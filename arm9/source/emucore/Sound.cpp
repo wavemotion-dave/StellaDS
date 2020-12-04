@@ -41,14 +41,12 @@ void Sound::mute(bool state)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Sound::init(Console* console, MediaSource* mediasrc, System* system,
-                 double displayframerate)
+void Sound::init(Console* console, MediaSource* mediasrc, System* system)
 {
   myConsole = console;
   myMediaSource = mediasrc;
   mySystem = system;
   myLastRegisterSetCycle = 0;
-  myDisplayFrameRate = displayframerate;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

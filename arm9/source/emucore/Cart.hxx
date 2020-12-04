@@ -44,8 +44,8 @@ extern CartInfo myCartInfo;
 #define CTR_RAIDERS   2     // Special 2 joystick setup for Raiders of the Lost Ark
 #define CTR_PADDLE0   3     // For Paddle Games like Breakout and Kaboom
 #define CTR_PADDLE1   4     // A few odd games use the OTHER paddle...sigh...
-#define CTR_DRIVING   4     // For Driving Controller games like Indy500
-#define CTR_KEYBOARD  5     // For keyboard games like Codebreaker
+#define CTR_DRIVING   5     // For Driving Controller games like Indy500
+#define CTR_KEYBOARD  6     // For keyboard games like Codebreaker
 
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9

@@ -469,7 +469,7 @@ static CartInfo table[] =
     {"9b54c77b530582d013f0fa4334d785b7",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Pirate_se.bin
     {"3e90cf23106f2e08b2781e41299de556",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall! (1982).bin
     {"f73d2d0eff548e8fc66996f27acf2b4b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall (1983) (CCE) (C-813).bin
-    {"6d842c96d5a01967be9680080dd5be54",  "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Pitfall II - Lost Caverns (1983).bin
+    {"6d842c96d5a01967be9680080dd5be54",  "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall II - Lost Caverns (1983).bin
     {"d9fbf1113114fb3a3c97550a0689f10f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Pizza Chef (1983).bin
     {"9efb4e1a15a6cdd286e4bcd7cd94b7b8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Planet of the Apes (1983).bin
     {"043f165f384fbea3ea89393597951512",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Planet Patrol (1982).bin
@@ -491,6 +491,7 @@ static CartInfo table[] =
     {"ac53b83e1b57a601eeae9d3ce1b4a458",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // qb (2.15) (ntsc).bin
     {"34e37eaffc0d34e05e40ed883f848b40",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // qb (2.15) (stella).bin
     {"484b0076816a104875e00467d431c2d2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  10},   // Q-bert (1983).bin
+    {"dcb406b54f1b69017227cfbe4052005e",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  10},   // Q-bert Arcade Hack.bin
     {"517592e6e0c71731019c0cebc2ce044f",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Q-bert's Qubes (1984).bin
     {"024365007a87f213cbe8ef5f2e8e1333",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Quadrun (1983).bin
     {"a0675883f9b09a3595ddd66a6f5d3498",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Quest for Quintana Roo (1984).bin
@@ -670,7 +671,7 @@ static CartInfo table[] =
     {"85e564dae5687e431955056fbda10978",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Survival Run (1983).bin
     {"59e53894b3899ee164c91cfa7842da66",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Survival Run (Data Age).bin
     {"e51c23389e43ab328ccfb05be7d451da",  "AR",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sweat! - The Decathlon (1983).bin
-    {"278f14887d601b5e5b620f1870bc09f6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Swoops! (v0.96).bin
+    {"278f14887d601b5e5b620f1870bc09f6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Swoops! (v0.96).bin
     {"87662815bc4f3c3c86071dc994e3f30e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Swordfight (1983).bin
     {"528400fad9a77fd5ad7fc5fdc2b7d69d",  "AR",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sword of Saros (1983).bin
     {"5aea9974b975a6a844e6df10d2b861c4",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // SwordQuest - EarthWorld (1982).bin
