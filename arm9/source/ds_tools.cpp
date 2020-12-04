@@ -26,6 +26,7 @@
 
 #include "Console.hxx"
 #include "MediaSrc.hxx"
+#include "TIASound.hxx"
 #include "Sound.hxx"
 #include "SoundSDL.hxx"
 #include "Event.hxx"
@@ -268,7 +269,8 @@ void VsoundHandler(void)
 {
   psound_buffer++;
   if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-  theSDLSnd->callback(psound_buffer, 1);
+  //theSDLSnd->callback(psound_buffer, 1);
+  Tia_process(psound_buffer, 1);
 }
 
 bool dsLoadGame(char *filename) 
@@ -309,6 +311,12 @@ bool dsLoadGame(char *filename)
         if (bSoundEnabled)
         {
             irqEnable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+        }
+        else
+        {
+            irqDisable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
         }
 
         return true;
@@ -1207,10 +1215,12 @@ ITCM_CODE void dsMainLoop(void)
                     if (bSoundEnabled)
                     {
                         irqEnable(IRQ_TIMER2);
+                        fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                     else
                     {
                         irqDisable(IRQ_TIMER2);
+                        fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     }
                     dsDisplayButton(16+bSoundEnabled);
                 }

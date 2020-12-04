@@ -30,10 +30,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 SoundSDL::SoundSDL(uInt32 fragsize)
     : myIsInitializedFlag(false),
-      myIsMuted(false),
       myVolume(100)
 {
-    myIsMuted = false;
     Tia_sound_init(31400, 22050);
     myIsInitializedFlag = true;
 }
@@ -57,27 +55,10 @@ bool SoundSDL::isSuccessfullyInitialized() const
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void SoundSDL::mute(bool state)
-{
-  if(myIsInitializedFlag)
-  {
-    if(myIsMuted == state)
-    {
-      return;
-    }
-
-    myIsMuted = state;
-
-    myRegWriteQueue.clear();
-  }
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::reset()
 {
 	if(myIsInitializedFlag)
 	{
-		myIsMuted = false;
 		myLastRegisterSetCycle = 0;
 		myRegWriteQueue.clear();
 	}

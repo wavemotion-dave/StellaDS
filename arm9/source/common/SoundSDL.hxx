@@ -56,13 +56,6 @@ class SoundSDL : public Sound
     virtual void callback(uInt8* stream, int len);
 
     /**
-      Set the mute state of the sound object.  While muted no sound is played.
-
-      @param state Mutes sound if true, unmute if false
-    */
-    virtual void mute(bool state);
-
-    /**
       Resets the sound device.
     */
     virtual void reset();
@@ -175,10 +168,6 @@ class SoundSDL : public Sound
   private:
     // Indicates if the sound device was successfully initialized
     bool myIsInitializedFlag;
-
-
-    // Indicates if the sound is currently muted
-    bool myIsMuted;
 
     // Current volume as a percentage (0 - 100)
     uInt32 myVolume;
