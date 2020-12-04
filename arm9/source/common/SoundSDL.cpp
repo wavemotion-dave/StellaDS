@@ -104,8 +104,6 @@ void SoundSDL::set(uInt16 addr, uInt8 value, Int32 cycle)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::processFragment(uInt8* stream, Int32 length)
 {
-	if(!myIsInitializedFlag) { return; }
-
 	Tia_process(stream, length);
 }
 
