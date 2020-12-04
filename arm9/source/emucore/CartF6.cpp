@@ -21,6 +21,8 @@
 #include "System.hxx"
 #include <iostream>
 
+static  System::PageAccess access;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF6::CartridgeF6(const uInt8* image)
 {
@@ -60,12 +62,11 @@ void CartridgeF6::install(System& system)
   assert((0x1000 & mask) == 0);
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
+  access.directPeekBase = 0;
+  access.directPokeBase = 0;
+  access.device = this;
   for(uInt32 i = (0x1FF6 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
     mySystem->setPageAccess(i >> shift, access);
   }
 
@@ -100,12 +101,9 @@ uInt8 CartridgeF6::peek(uInt16 address)
       // Set the current bank to the forth 4k bank
       bank(3);
       break;
-
-    default:
-      break;
   }
 
-  return myImage[myCurrentBank * 4096 + address];
+  return myImage[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -135,9 +133,6 @@ void CartridgeF6::poke(uInt16 address, uInt8)
       // Set the current bank to the forth 4k bank
       bank(3);
       break;
-
-    default:
-      break;
   }
 }
 
@@ -145,19 +140,15 @@ void CartridgeF6::poke(uInt16 address, uInt8)
 void CartridgeF6::bank(uInt16 bank)
 { 
   // Remember what bank we're in
-  myCurrentBank = bank;
-  uInt16 offset = myCurrentBank * 4096;
+  myCurrentOffset = bank * 4096;
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < (0x1FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
+    access.directPeekBase = &myImage[myCurrentOffset + (address & 0x0FFF)];
     mySystem->setPageAccess(access_num++, access);
   }
 }

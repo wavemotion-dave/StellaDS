@@ -32,7 +32,6 @@
 #include "Cart.hxx"
 #define HBLANK 68
 
-int currentScanline = 0;
 int myCurrentFrame = 0;
 int dma_channel = 0;
 
@@ -155,8 +154,8 @@ void TIA::reset()
   myDSFramePointer = BG_GFX;
 
   // Calculate color clock offsets for starting and stoping frame drawing
-  myStartDisplayOffset = 228 * 34;
-  myStopDisplayOffset = myStartDisplayOffset + 228 * 210;
+  myStartDisplayOffset = 228 * 32;                                              // Allow for 2 underscan lines...
+  myStopDisplayOffset = myStartDisplayOffset + 228 * 204;                       // And 10 overscan lines... (192 plus 12... minus the 2 underscan lines above)
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;
@@ -303,9 +302,6 @@ void TIA::update()
     extern int gTotalAtariFrames;
   // We have processed another frame... used for true FPS indication
   gTotalAtariFrames++;
-    
-  // And start back at first scanline for the new frame...
-  currentScanline=0;
     
   // Remember the number of clocks which have passed on the current scanline
   // so that we can adjust the frame's starting clock by this amount.  This
@@ -1493,11 +1489,6 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void TIA::updateFrame(Int32 clock)
 {
-  if (currentScanline > A26_VID_HEIGHT)    // Normally 192... allow for a little bit of overscan...
-  {
-    return;
-  }
-    
   // See if we're in the nondisplayable portion of the screen or if
   // we've already updated this portion of the screen
   if((clock < myClockStartDisplay) || 
@@ -1655,7 +1646,6 @@ void TIA::updateFrame(Int32 clock)
           dmaCopyWordsAsynch(dma_channel, myFramePointer+160, myDSFramePointer, 160);   
       }
       myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
-      currentScanline++;
     }
   } 
   while(myClockAtLastUpdate < clock);

@@ -148,7 +148,7 @@ static CartInfo table[] =
     {"a7b96a8150600b3e800a4689c3ec60a2",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    7,  0},    // Circus Atari (1980).bin
     {"13a11a95c9a9fb0465e419e4e2dbd50a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Climber5.bin
     {"1e587ca91518a47753a28217cd4fd586",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Coco Nuts (1982).bin
-    {"5846b1d34c296bf7afc2fa05bbc16e98",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Codebreaker (1978).bin
+    {"5846b1d34c296bf7afc2fa05bbc16e98",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10, -2},    // Codebreaker (1978).bin
     {"e3aa9681fab887a5cb964a55b4edd5d7",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Colony 7.bin
     {"4c8832ed387bbafc055320c05205bc08",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Combat (1977).bin
     {"5d2cc33ca798783dee435eb29debf6d6",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Commando (1988).bin
@@ -328,7 +328,7 @@ static CartInfo table[] =
     {"58a82e1da64a692fd727c25faef2ecc9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jawbreaker (1982).bin
     {"718ae62c70af4e5fd8e932fee216948a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Journey Escape (1982).bin
     {"3276c777cbe97cdd2b4a63ffc16b7151",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joust (1983).bin
-    {"ec40d4b995a795650cf5979726da67df",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Joust Pong.bin
+    {"ec40d4b995a795650cf5979726da67df",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joust Pong.bin
     {"89a923f6f6bec64f9b6fa6ff8ea37510",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joyride.bin
     {"36c29ceee2c151b23a1ad7aa04bd529d",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jr. Pac-Man (1984).bin
     {"4364680de59e650a02348b901ca7202f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jump.bin
@@ -375,7 +375,7 @@ static CartInfo table[] =
     {"ccb5fa954fb76f09caae9a8c66462190",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Malagai (1983).bin
     {"54a1c1255ed45eb8f71414dadb1cf669",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mangia' (1983).bin
     {"402d876ec4a73f9e3133f8f7f7992a1e",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Man Goes Down.bin
-    {"9104ffc48c5eebd2164ec8aeb0927b91",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mappy.bin
+    {"9104ffc48c5eebd2164ec8aeb0927b91",  "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mappy.bin
     {"13895ef15610af0d0f89d588f376b3fe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Marauder (1982).bin
     {"b00e8217633e870bf39d948662a52aac",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Marine Wars (1983).bin
     {"e908611d99890733be31733a979c62d8",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mario Bros. (1983).bin

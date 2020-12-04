@@ -145,7 +145,7 @@ void vblankIntr()
     static uInt8 last_myYOffset = -99;
     if (last_myYOffset != myCartInfo.yOffset)
     {
-        REG_BG3Y = myCartInfo.yOffset<<8;
+        REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
         last_myYOffset = myCartInfo.yOffset;
     }
 }
@@ -191,7 +191,7 @@ void dsShowScreenEmu(void)
   REG_BG3PB = 0; REG_BG3PC = 0;
   REG_BG3PD = ((A26_VID_HEIGHT / A26_VID_HEIGHT) << 8) | ((A26_VID_HEIGHT % A26_VID_HEIGHT) ) ;
   REG_BG3X = A26_VID_XOFS<<8;
-  REG_BG3Y = myCartInfo.yOffset<<8;
+  REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
 }
 
 void dsShowScreenInfo(void) 
@@ -319,6 +319,9 @@ bool dsLoadGame(char *filename)
             fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
         }
 
+        theConsole->fakePaddleResistance = 450000;
+        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+        
         return true;
     }
     else return false;
@@ -824,8 +827,6 @@ ITCM_CODE void dsMainLoop(void)
     TIMER1_DATA=0;
     TIMER1_CR=TIMER_ENABLE | TIMER_DIV_1024;
     
-    dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
-
     while(etatEmu != STELLADS_QUITSTDS)
     {
         switch (etatEmu)
@@ -841,6 +842,7 @@ ITCM_CODE void dsMainLoop(void)
 
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
+            dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
             etatEmu = STELLADS_PLAYGAME;
             break;
 
@@ -918,10 +920,10 @@ ITCM_CODE void dsMainLoop(void)
                         debug[1] = touch.py;
                         theConsole->fakePaddleResistance = (900000 - ((800000 / 255) * touch.px));
                         keys_touch = 1;
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
+                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
                     }
 
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_END,   (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
+                    theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_END:StellaEvent::KCODE_F12), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
                                                                                       (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
                     if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
                     {
@@ -1041,12 +1043,10 @@ ITCM_CODE void dsMainLoop(void)
                     if(keys_pressed & (KEY_R))
                     {
                         myCartInfo.yOffset++;
-                        debug[4] = myCartInfo.yOffset;
                     }
                     if(keys_pressed & (KEY_L))
                     {
                         myCartInfo.yOffset--;
-                        debug[4] = myCartInfo.yOffset;
                     }
                     last_keys_pressed = keys_pressed;
                 }

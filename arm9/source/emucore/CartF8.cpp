@@ -21,6 +21,8 @@
 #include "System.hxx"
 #include <iostream>
 
+static  System::PageAccess access;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
 {
@@ -59,13 +61,13 @@ void CartridgeF8::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1000 & mask) == 0);
 
+  access.directPeekBase = 0;
+  access.directPokeBase = 0;
+  access.device = this;
+    
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
   for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
     mySystem->setPageAccess(i >> shift, access);
   }
 
@@ -90,12 +92,9 @@ uInt8 CartridgeF8::peek(uInt16 address)
       // Set the current bank to the upper 4k bank
       bank(1);
       break;
-
-    default:
-      break;
   }
 
-  return myImage[myCurrentBank * 4096 + address];
+  return myImage[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -115,9 +114,6 @@ void CartridgeF8::poke(uInt16 address, uInt8)
       // Set the current bank to the upper 4k bank
       bank(1);
       break;
-
-    default:
-      break;
   }
 }
 
@@ -125,19 +121,15 @@ void CartridgeF8::poke(uInt16 address, uInt8)
 void CartridgeF8::bank(uInt16 bank)
 { 
   // Remember what bank we're in
-  myCurrentBank = bank;
-  uInt16 offset = myCurrentBank * 4096;
+  myCurrentOffset = bank * 4096;
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
+    access.directPeekBase = &myImage[myCurrentOffset + (address & 0x0FFF)];
     mySystem->setPageAccess(access_num++, access);
   }
 }

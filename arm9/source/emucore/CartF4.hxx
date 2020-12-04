@@ -93,7 +93,7 @@ class CartridgeF4 : public Cartridge
 
   private:
     // Indicates which bank is currently active
-    uInt16 myCurrentBank;
+    uInt16 myCurrentOffset;
 
     // The 16K ROM image of the cartridge
     uInt8 myImage[32768];
