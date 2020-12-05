@@ -22,6 +22,8 @@
 #include "System.hxx"
 #include <iostream>
 
+static  System::PageAccess access;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF4SC::CartridgeF4SC(const uInt8* image)
 {
@@ -68,7 +70,6 @@ void CartridgeF4SC::install(System& system)
   assert(((0x1080 & mask) == 0) && ((0x1100 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
   for(uInt32 i = (0x1FF4 & ~mask); i < 0x2000; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -95,6 +96,10 @@ void CartridgeF4SC::install(System& system)
     mySystem->setPageAccess(k >> shift, access);
   }
 
+  // Leave these at zero for faster bank switch
+  access.directPeekBase = 0;
+  access.directPokeBase = 0;
+    
   // Install pages for bank 7
   bank(7);
 }
@@ -113,7 +118,7 @@ uInt8 CartridgeF4SC::peek(uInt16 address)
   // NOTE: This does not handle accessing RAM, however, this function 
   // should never be called for RAM because of the way page accessing 
   // has been setup
-  return myImage[myCurrentBank * 4096 + address];
+  return myImage[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -134,21 +139,12 @@ void CartridgeF4SC::poke(uInt16 address, uInt8)
 void CartridgeF4SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
-  myCurrentBank = bank;
-  uInt16 offset = myCurrentBank * 4096;
-  uInt16 shift = mySystem->pageShift();
-  uInt16 mask = mySystem->pageMask();
-
-  // Setup the page access methods for the current bank
-  System::PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
+  myCurrentOffset = bank * 4096;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x1100; address < (0x1FF4U & ~mask);
-      address += (1 << shift))
+  for(uInt32 address = 0x1100; address < (0x1FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    access.directPeekBase = &myImage[myCurrentOffset + (address & 0x0FFF)];
+    mySystem->setPageAccess(address >> MY_PAGE_SHIFT, access);
   }
 }

@@ -50,7 +50,7 @@ static int bShowInfo = false;
 Console* theConsole = (Console*) NULL;
 Sound* theSDLSnd = (Sound*) NULL;
 
-#define MAX_FILE_SIZE   (1024 * 32)
+#define MAX_FILE_SIZE   (1024 * 64)
 uInt8  filebuffer[MAX_FILE_SIZE];
 
 int bg0, bg0b,bg1b;
