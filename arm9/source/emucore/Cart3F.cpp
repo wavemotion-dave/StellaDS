@@ -19,6 +19,7 @@
 #include <assert.h>
 #include "Cart3F.hxx"
 #include "System.hxx"
+#include "TIA.hxx"
 #include <iostream>
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -68,10 +69,8 @@ void Cartridge3F::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1800 & mask) == 0);
 
-  // Set the page accessing methods for the hot spots (for 100% emulation
-  // I would need to chain any accesses below 0x40 to the TIA but for
-  // now I'll just forget about them)
-  for(uInt32 i = 0x00; i < 0x40; i += (1 << shift))
+  // We're going to map the first 80 hex bytes here... we will chain call into TIA as needed
+  for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
     access.directPeekBase = 0;
     access.directPokeBase = 0;
@@ -96,9 +95,15 @@ void Cartridge3F::install(System& system)
   bank(0);
 }
 
+extern TIA* theTIA; // 3F games are weird... they take over 40h bytes of the lower 80h so we need to chain to the real peek addresses...
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3F::peek(uInt16 address)
 {
+  if ((address&0xFFF) < 0x80)
+  {
+      return theTIA->peek(address);
+  }
+  
   if((address&0x0FFF) < 0x0800)
   {
     return myImage[(address & 0x07FF) + myCurrentBank * 2048];
@@ -119,6 +124,7 @@ void Cartridge3F::poke(uInt16 address, uInt8 value)
   {
     bank(value);
   }
+  else theTIA->poke(address, value);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

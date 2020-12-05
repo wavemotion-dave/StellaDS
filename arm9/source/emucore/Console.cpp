@@ -40,6 +40,8 @@
 #include "System.hxx"
 #include "TIA.hxx"
 
+TIA *theTIA = 0;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& sound)
     : mySound(sound)
@@ -65,6 +67,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   M6532* m6532 = new M6532(*this);
   TIA* tia = new TIA(*this, mySound);
   myCartridge = Cartridge::create(image, size);
+  theTIA = tia;
 
   // -------------------------------------------------------------------------------------------
   // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers
