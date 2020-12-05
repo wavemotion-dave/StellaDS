@@ -120,288 +120,82 @@ Keystone Kapers (1983).a26                    be929419902e21bd7830a7a7d746195d  
 Lady Bug.a26                                  adfbd2e8a38f96e03751717f7422851d    F6    60  60  B   Damn fine game. Uses a lot of under/overscan so you can't get score plus SPECIAL at the top but very playable.
 Laser Blast (1981).a26                        931b91a8ea2d39fe4dca1a23832b591a    2K    60  52  A
 Laser Gates (1983).a26                        1fa58679d4a39052bd9db059e8cda4ad    4K    60  60  A   An actual fast-paced shooter on the Atari!
-Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    45  30  B   Playable despite lower framerate
-Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    45  30  B   Playable despite lower framerate
+Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    40  30  B   Playable despite lower framerate
+Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    40  30  B   Playable despite lower framerate
 Lock 'n' Chase (1982).a26                     71464c54da46adae9447926fdbfc1abe    4K    60  59  A
 Man Goes Down.a26                             402d876ec4a73f9e3133f8f7f7992a1e    F6    60  52  A   My favorite homebew despite being not finished. 
-Marauder (1982).a26                           13895ef15610af0d0f89d588f376b3fe    4K  
-Marine Wars (1983).a26                        b00e8217633e870bf39d948662a52aac    4K  
-Mario Bros. (1983).a26                        e908611d99890733be31733a979c62d8    F8  
-M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237    4K  
-Master Builder (1983).a26                     ae4be3a36b285c1a1dff202157e2155d    4K  
-Masters of the Universe (1983).a26            3b76242691730b2dd22ec0ceab351bc6    E7  
-Math Gran Prix (1982).a26                     470878b9917ea0348d64b5750af149aa    4K  
-Maze Craze (1980).a26                         f825c538481f9a7a46d1e9bc06200aaf    4K  
-McDonald's - Golden Arches (1983).a26         35b43b54e83403bb3d71f519739a9549    4K  
-mc_ntsc_7_26_3.a26                            09a03e0c85e667695bcd6c6394e47e5f    F4  
-Medieval Mayhem.a26                           f7fac15cf54b55c5597718b6742dbec2    F4  
-Mega Force (1982).a26                         daeb54957875c50198a7e616f9cc8144    4K  
+M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237    4K    60  58  A
+Medieval Mayhem.a26                           f7fac15cf54b55c5597718b6742dbec2    F4    60  60  A
+Mega Force (1982).a26                         daeb54957875c50198a7e616f9cc8144    4K    60  56  A
 MegaMania (1982).a26                          318a9d6dda791268df92d72679914ac3    4K    60  58  A
-Meltdown (1983).a26                           96e798995af6ed9d8601166d4350f276    4K  
-Meltdown.a26                                  5f791d93ac95bdd8a691a65d665fb436    4K  
-Meteoroids (1982).a26                         712924a2c7b692f6e7b009285c2169a7    AR  
-Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6  
-Millipede (1984).a26                          3c57748c8286cf9e821ecd064f21aaa9    F6SC
-Mind Maze (1984).a26                          0e224ea74310da4e7e2103400eb1b4bf    F8  
-MindMaze.a26                                  0e224ea74310da4e7e2103400eb1b4bf    F8  
-Miner 2049er (1982).a26                       fa0570561aa80896f0ead05c46351389    3F  
-Miner 2049er Vol II (1983).a26                2a1b454a5c3832b0240111e7fd73de8a    3F  
-Mines of Minos (1982).a26                     4543b7691914dfd69c3755a5287a95e1    4K  
-Miniature Golf (1979).a26                     df62a658496ac98a3aa4a6ee5719c251    2K  
+Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    39  35  D   Just too slow to be playable
+Millipede (1984).a26                          3c57748c8286cf9e821ecd064f21aaa9    F6SC  60  51  A   Flicker Flee is a little blury unfortunately - stay to Normal Mode
+Miniature Golf (1979).a26                     df62a658496ac98a3aa4a6ee5719c251    2K    60  60  A
 Missile Command (1981).a26                    3a2e2d0c6892aa14544083dfb7762782    4K    60  60  A
-Mission 3000 A.D. (1983).a26                  4c6afb8a44adf8e28f49164c84144bfe    4K  
-Miss Piggy's Wedding (1983).a26               4181087389a79c7f59611fb51c263137    F8  
-Miss Piggy's Wedding [!].a26                  4181087389a79c7f59611fb51c263137    F8  
-Misterious Thief (1983).a26                   e13818a5c0cb2f84dd84368070e9f099    4K  
-Mogul Maniac (1983).a26                       7af40c1485ce9f29b1a7b069a2eb04a7    4K  
-Monster Cise (1984).a26                       6913c90002636c1487538d4004f7cac2    F8  
-Monstercise.a26                               6913c90002636c1487538d4004f7cac2    F8  
-Montezuma's Revenge (1984).a26                3347a6dd59049b15a38394aa2dafa585    E0  
-Moon Patrol (1983).a26                        515046e3061b7b18aa3a551c3ae12673    F8    60  51  A
-Moonsweeper (1983).a26                        203abb713c00b0884206dcc656caa48f    F8  
-Motocross Racer (1983).a26                    de0173ed6be9de6fd049803811e5f1a8    F8  
-MotoRodeo (1990).a26                          378a62af6e9c12a760795ff4fc939656    F6  
-Mountain King (1983).a26                      db4eb44bc5d652d9192451383d3249fc    FASC
+Moon Patrol (1983).a26                        515046e3061b7b18aa3a551c3ae12673    F8    60  51  A 
+Moonsweeper (1983).a26                        203abb713c00b0884206dcc656caa48f    F8    60  60  A
+Mountain King (1983).a26                      db4eb44bc5d652d9192451383d3249fc    FASC  60  60  A
 Mouse Trap (1982).a26                         5678ebaa09ca3b699516dba4671643ed    4K    60  60  A
-Mr. Do! (1983).a26                            0164f26f6b38a34208cd4a2d0212afc3    F8  
-Mr. Do!'s Castle (1984).a26                   b7a7e34e304e4b7bc565ec01ba33ea27    E0  
-Mr. Postman (1983).a26                        8644352b806985efde499ae6fc7b0fec    4K  
-Mr. Postman.a26                               f0daaa966199ef2b49403e9a29d12c50    4K  
-Ms. Pac-Man (1982).a26                        87e79cd41ce136fd4f72cc6e2c161bee    F8  
-Muncher.a26                                   ddf72763f88afa541f6b52f366c90e3a    2K  
-Music Machine (1983).a26                      65b106eba3e45f3dab72ea907f39f8b4    4K  
-Mysterious Thief (1983).a26                   fcbbd0a407d3ff7bf857b8a399280ea1    4K  
-Name This Game (1982).a26                     36306070f0c90a72461551a7a4f3a209    4K  
-Night Driver (1980).a26                       392f00fd1a074a3c15bc96b0a57d52a1    2K    60  60  E   Driving Controller not yet emulated
-Nightmare.a26                                 ed0ab909cf7b30aff6fc28c3a4660b8e    4K  
-Nightmare (CCE).a26                           27f9e2e1b92af9dc17c6155605c38e49    4K  
-No Escape! (1982).a26                         b6d52a0cf53ad4216feb04147301f87d    4K  
-Nuts (Unknown).a26                            de7a64108074098ba333cc0c70eef18a    4K  
-Obelix (1983).a26                             133a4234512e8c4e9e8c5651469d4a09    F8  
-Odin.a26                                      e20fc6ba44176e9149ef6d3f99221ac5    4K  
-Odin-joystick.a26                             67afbf02142c66861a1d682e4c0ea46e    4K  
-Official Frogger (1983).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR  
-Off the Wall (1989).a26                       98f63949e656ff309cefa672146dc1b8    F6SC
-Off Your Rocker (1983).a26                    b6166f15720fdf192932f1f76df5b65d    4K  
-Oink! (1982).a26                              c9c25fc536de9a7cdc5b9a916c459110    4K  
-Okie dokie (pd).a26                           cca33ae30a58f39e3fc5d80f94dc0362    2K  
-Omega Race (1983).a26                         9947f1ebabb56fd075a96c6d37351efa    FASC
-Omicron 16k.a26                               bc593f2284c67b7d8716d110f541953f    F6  
-Omicron 2k.a26                                2148917316ca5ce1672f6c49c0f89d0b    2K  
-Open, Sesame! (1983).a26                      52385334ac9e9b713e13ffa4cc5cb940    4K  
-Oscar's Trash Race (1983).a26                 fa1b060fd8e0bca0c2a097dcffce93d3    F8  
-Othello (1981).a26                            55949cb7884f9db0f8dfcf8707c7e5cb    2K  
-Outlaw (1978).a26                             890c13590e0d8d5d6149737d930e4d95    2K  
-Out of Control (1983).a26                     f97dee1aa2629911f30f225ca31789d4    4K  
-Oystron (V2.9) (PD).a26                       91f0a708eeb93c133e9672ad2c8e0429    4K  
-P2P_ntsc_final.a26                            e959b5a2c882ccaacb43c32790957c2d    F6  
+Ms. Pac-Man (1982).a26                        87e79cd41ce136fd4f72cc6e2c161bee    F8    60  60  B   Sound is a little wonky but very playable.
+Night Driver (1980).a26                       392f00fd1a074a3c15bc96b0a57d52a1    2K    60  60  C   Just a bit too difficult to control.
+Odin.a26                                      e20fc6ba44176e9149ef6d3f99221ac5    4K    60  60  A
+Odin-joystick.a26                             67afbf02142c66861a1d682e4c0ea46e    4K    60  60  A
+Omicron 16k.a26                               bc593f2284c67b7d8716d110f541953f    F6    60  60  A
+Omicron 2k.a26                                2148917316ca5ce1672f6c49c0f89d0b    2K    60  60  A
+Oystron (V2.9) (PD).a26                       91f0a708eeb93c133e9672ad2c8e0429    4K    60  58  A
 Pac-Man (1982).a26                            6e372f076fb9586aff416144f5cfe1cb    4K    60  60  A   Recommend Flicker Free Mode
-Pac-Man 4k.a26                                880e45b99c785e9910450b88e69c49eb    4K     
-Pac-Man_4k (debro).a26                        6e88da2b704916eb04a998fed9e23a3e    4K  
-Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced    F8  
-Panky the Panda.a26                           bf9a2045952d40e08711aa232a92eb78    F6  
-Party Mix (1983).a26                          012b8e6ef3b5fd5aabc94075c527709d    AR  
-Peek-A-Boo (1984).a26                         e40a818dac4dd851f3b4aafbe2f1e0c1    4K  
-Peek-A-Boo.a26                                e40a818dac4dd851f3b4aafbe2f1e0c1    4K  
-Pengo (1984).a26                              04014d563b094e79ac8974366f616308    F8  
-Pepsi Invaders (1983).a26                     212d0b200ed8b45d8795ad899734d7d7    4K  
-Pete Rose Baseball (1988).a26                 09388bf390cd9a86dc0849697b96c7dc    F6  
-Phanton Tank (Digivision).a26                 e9034b41741dcee64ab6605aba9de455    4K  
-Pharaoh's Curse.a26                           62f74a2736841191135514422b20382d    4K  
-Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR  
+Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced    F8    60  60  A   Amazing improvement on the original
 Phoenix (1982).a26                            7e52a95074a66640fcfde124fffd491a    F8    60  60  A
-Pick Up (1983).a26                            1d4e0a034ad1275bc4d75165ae236105    4K  
-Picnic (1982).a26                             17c0a63f9a680e7a61beba81692d9297    4K  
-Piece o' Cake (1982).a26                      d3423d7600879174c038f53e5ebbf9d3    4K  
-Pigs in Space (1983).a26                      8e4fa8c6ad8d8dce0db8c991c166cdaa    F8  
-Pirate_se.a26                                 9b54c77b530582d013f0fa4334d785b7    F6  
 Pitfall! (1982).a26                           3e90cf23106f2e08b2781e41299de556    4K    60  45  A   Classic!
-Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   45  30  D   Music wrong. Too slow to be playable.
-Pizza Chef (1983).a26                         d9fbf1113114fb3a3c97550a0689f10f    4K  
-Planet of the Apes (1983).a26                 9efb4e1a15a6cdd286e4bcd7cd94b7b8    4K  
-Planet Patrol (1982).a26                      043f165f384fbea3ea89393597951512    4K  
-Plaque Attack (1983).a26                      da4e3396aa2db3bd667f83a1cb9e4a36    4K    60  60  A
-Pleiades (1983).a26                           8bbfd951c89cc09c148bfabdefa08bec    UA  
-Pleiades.a26                                  8bbfd951c89cc09c148bfabdefa08bec    UA  
-Poker_squares.a26                             8c136e97c0a4af66da4a249561ed17db    4K  
-Polaris (1983).a26                            44f71e70b89dcc7cf39dfd622cfb9a27    3F  
-Polaris_ntsc.a26                              44f71e70b89dcc7cf39dfd622cfb9a27    3F  
+Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   45  30  D   Too slow to be playable even with sound off (and the sounds are not right anyway)
+Plaque Attack (1983).a26                      da4e3396aa2db3bd667f83a1cb9e4a36    4K    60  60  A   
 Pole Position (1983).a26                      5f39353f7c6925779b0169a87ff86f1e    F8    60  60  A
-Polo (1978).a26                               ee28424af389a7f3672182009472500c    2K  
-Pompeii (1983).a26                            a83b070b485cf1fb4d5a48da153fdf1a    4K  
-Pooyan (1983).a26                             4799a40b6e889370b7ee55c17ba65141    4K  
-Popeye (1983).a26                             c7f13ef38f61ee2367ada94fdcc6d206    E0  
-Porky's (1983).a26                            f93d7fee92717e161e6763a88a293ffa    F8  
-Pressure Cooker (1983).a26                    97d079315c09796ff6d95a06e4b70171    F8  
-Pressure gauge.a26                            de1a636d098349be11bbc2d090f4e9cf    4K  
-Private Eye (1983).a26                        ef3a4f64b6494ba770862768caf04b86    F8  
-qb (2.15) (ntsc).a26                          ac53b83e1b57a601eeae9d3ce1b4a458    4K  
-qb (2.15) (stella).a26                        34e37eaffc0d34e05e40ed883f848b40    4K  
-Q-bert (1983).a26                             484b0076816a104875e00467d431c2d2    4K  
-Q-bert's Qubes (1984).a26                     517592e6e0c71731019c0cebc2ce044f    E0  
-Quadrun (1983).a26                            024365007a87f213cbe8ef5f2e8e1333    F8  
-Quest for Quintana Roo (1984).a26             a0675883f9b09a3595ddd66a6f5d3498    F8  
-Quick Step! (1983).a26                        7eba20c2291a982214cc7cbe8d0b47cd    4K  
-Rabbit Transit (1983).a26                     fb4ca865abc02d66e39651bd9ade140a    AR  
-Racing Car (Unknown).a26                      4df9d7352a56a458abb7961bf10aba4e    4K  
-Racquetball (1981).a26                        a20d931a8fddcd6f6116ed21ff5c4832    4K  
-Radar (1983).a26                              247fa1a29ad90e64069ee13d96fea6d6    4K  
-Radar Lock (1989).a26                         baf4ce885aa281fd31711da9b9795485    F6SC
-Raft Rider (1982).a26                         92a1a605b7ad56d863a56373a866761b    4K  
+Pressure Cooker (1983).a26                    97d079315c09796ff6d95a06e4b70171    F8    52  43  B
+Qb (2.15) (ntsc).a26                          ac53b83e1b57a601eeae9d3ce1b4a458    4K    60  50  A
+Qb (2.15) (stella).a26                        34e37eaffc0d34e05e40ed883f848b40    4K    60  50  A
+Q-bert (1983).a26                             484b0076816a104875e00467d431c2d2    4K    60  60  A
+Q-bert's Qubes (1984).a26                     517592e6e0c71731019c0cebc2ce044f    E0    60  50  A
+Quadrun (1983).a26                            024365007a87f213cbe8ef5f2e8e1333    F8    60  60  B   Sound issues. Recommend playing with sound off.
+Quick Step! (1983).a26                        7eba20c2291a982214cc7cbe8d0b47cd    4K    60  60  A
 Raiders of the Lost Ark (1982).a26            f724d3dd2471ed4cf5f191dbb724b69f    F8    60  55  A   Uses BOTH controllers so X,Y,B buttons employed.
-Rainbow Invaders NTSC.a26                     cb96b0cf90ab7777a2f6f05e8ad3f694    4K  
-Ram It (1982).a26                             7096a198531d3f16a99d518ac0d7519a    4K  
-Rampage! (1989).a26                           5e1b4629426f4992cf3b2905a696e1a7    F6  
-RC021.a26                                     97cd63c483fe3c68b7ce939ab8f7a318    4K  
-Reactor (1982).a26                            9f8fad4badcd7be61bbd2bcaeef3c58f    4K  
-RealSports Baseball (1982).a26                eb634650c3912132092b7aee540bbce3    F8  
-RealSports Boxing (1987).a26                  3177cc5c04c1a4080a927dfa4099482b    F6  
-RealSports Football (1982).a26                7ad257833190bc60277c1ca475057051    F8  
-RealSports Soccer (1983).a26                  08f853e8e01e711919e734d85349220d    F8  
-RealSports Tennis (1983).a26                  dac5c0fe74531f077c105b396874a9f1    F8  
-RealSports Volleyball (1982).a26              aed0b7bd64cc384f85fdea33e28daf3b    4K  
-Rescue Terra I (1982).a26                     60a61da9b2f43dd7e13a5093ec41a53d    4K  
-Resgate Espacial.a26                          42249ec8043a9a0203dde0b5bb46d8c4    F8  
-RevengeOfTheApes.a26                          0b01909ba84512fdaf224d3c3fd0cf8d    F8  
-Revenge of the Beefsteak Tomatoes (1982).a26  4f64d6d0694d9b7a1ed7b0cb0b83e759    4K  
-Riddle of the Sphinx (1982).a26               a995b6cbdb1f0433abc74050808590e6    4K  
-River Patrol (1984).a26                       31512cdfadfd82bfb6f196e3b0fd83cd    3F  
+Reactor (1982).a26                            9f8fad4badcd7be61bbd2bcaeef3c58f    4K    60  58  A
+Revenge of the Beefsteak Tomatoes (1982).a26  4f64d6d0694d9b7a1ed7b0cb0b83e759    4K    60  60  A
+Riddle of the Sphinx (1982).a26               a995b6cbdb1f0433abc74050808590e6    4K    60  60  A
 River Raid (1982).a26                         393948436d1f4cc3192410bb918f9724    4K    60  52  A
-River Raid II (1988).a26                      ab56f1b2542a05bebc4fbccfc4803a38    F6  
-Road Runner (1989).a26                        2bd00beefdb424fa39931a75e890695d    F6  
-Robin Hood (1983).a26                         72a46e0c21f825518b7261c267ab886e    F8  
-Robot Tank (1983).a26                         4f618c2429138e0280969193ed6c107e    FE  
-Rocky & Bullwinkle (1983).a26                 d97fd5e6e1daacd909559a71f189f14b    4K  
-Roc 'n Rope (1984).a26                        65bd29e8ab1b847309775b0de6b2e4fe    F8  
-Room of Doom (1982).a26                       67931b0d37dc99af250dd06f1c095e8d    4K  
-Rubik's Cube (1984).a26                       1f2ae0c70a04c980c838c2cdc412cf45    4K  
-RubiksCube3D.a26                              40b1832177c63ebf81e6c5b61aaffd3a    4K  
-Rush Hour (1983).a26                          f3cd0f886201d1376f3abab2df53b1b9    4K  
-Saboteur (1983).a26                           a4ecb54f877cd94515527b11e698608c    F8  
-Saboteur.a26                                  1ec57bbd27bdbd08b60c391c4895c1cf    F8  
-Save Mary! (1989).a26                         4d502d6fb5b992ee0591569144128f99    F6SC
-SaveMary_NTSC.a26                             4d502d6fb5b992ee0591569144128f99    F6SC
-Save Our Ship.a26                             ed1a784875538c7871d035b7a98c2433    4K  
-Save Our Ship (Unknown).a26                   49571b26f46620a85f93448359324c28    4K  
-Save the Whales (1983).a26                    e377c3af4f54a51b85efe37d4b7029e6    4K  
-Scramble 0106.a26                             a3fe5e6a744cd34a3c1466874a3e9d5f    F4  
-SCSI200_NTSC.a26                              137373599e9b7bf2cf162a102eb5927f    4K  
-Scuba Diver (1983).a26                        19e761e53e5ec8e9f2fceea62715ca06    4K  
-Sea Battle (1983).a26                         1bc2427ac9b032a52fe527c7b26ce22c    4K  
-Sea Hawk (1983).a26                           624e0a77f9ec67d628211aaf24d8aea6    4K  
-Sea Hunt (1987).a26                           5dccf215fdb9bbf5d4a6d0139e5e8bcb    4K  
-Seamonster (1982).a26                         a8c48b4e0bf35fe97cc84fdd2c507f78    4K  
-seantsc.a26                                   dde55d9868911407fe8b3fefef396f00    4K  
+River Raid II (1988).a26                      ab56f1b2542a05bebc4fbccfc4803a38    F6    60  53  A
+Robot Tank (1983).a26                         4f618c2429138e0280969193ed6c107e    FE    60  60  A
+Saboteur (1983).a26                           a4ecb54f877cd94515527b11e698608c    F8    60  60  A
+Sea Hawk (1983).a26                           624e0a77f9ec67d628211aaf24d8aea6    4K    60  60  A
+Sea Hunt (1987).a26                           5dccf215fdb9bbf5d4a6d0139e5e8bcb    4K    60  60  A
 Seaquest (1983).a26                           240bfbac5163af4df5ae713985386f92    4K    60  60  A
-Seaweed Assault.a26                           3034532daf80997f752aee680d2e7fc3    F4SC
-Sea Wolf.a26                                  dde55d9868911407fe8b3fefef396f00    4K  
-Secret Agent (1983).a26                       605fd59bfef88901c8c4794193a4cbad    4K  
-Secret Quest (1989).a26                       fc24a94d4371c69bc58f5245ada43c44    F6SC
-Sentinel (1990).a26                           8da51e0c4b6b46f7619425119c7d018e    F6  
-Shark Attack (1982).a26                       54f7efa6428f14b9f610ad0ca757e26c    4K  
-Shootin' Gallery (1982).a26                   b5a1a189601a785bdb2f02a424080412    4K  
-Shooting Arcade (1989).a26                    15c11ab6e4502b2010b18366133fc322    F6SC
-Shuttle Orbiter (1983).a26                    25b6dc012cdba63704ea9535c6987beb    4K  
-Sinistar (1984).a26                           1e85f8bccb4b866d4daa9fcf89306474    F8  
-Sir Lancelot (1983).a26                       4c8970f6c294a0a54c9c45e5e8445f93    F8  
-Skate Boardin' (1987).a26                     f847fb8dba6c6d66d13724dbe5d95c4d    F8  
-Skeet Shoot (1981).a26                        39c78d682516d79130b379fa9deb8d1c    2K  
-SkelPlus.a26                                  eafe8b40313a65792e88ff9f2fe2655c    4K  
-Ski Hunt.a26                                  8654d7f0fb351960016e06646f639b02    4K  
-Skiing (1980).a26                             b76fbadc8ffb1f83e2ca08b6fb4d6c9f    2K  
+Sentinel (1990).a26                           8da51e0c4b6b46f7619425119c7d018e    F6    56  50  E   No lightgun support
+Shuttle Orbiter (1983).a26                    25b6dc012cdba63704ea9535c6987beb    4K    60  60  A
+Sinistar (1984).a26                           1e85f8bccb4b866d4daa9fcf89306474    F8    60  60  A
+Skiing (1980).a26                             b76fbadc8ffb1f83e2ca08b6fb4d6c9f    2K    60  60  A
 Sky Diver (1979).a26                          46c021a3e9e2fd00919ca3dd1a6b76d8    2K    60  60  A
-Sky Jinks (1982).a26                          2a0ba55e56e7a596146fa729acf0e109    2K  
-Sky Patrol (1982).a26                         4c9307de724c36fd487af6c99ca078f2    F8  
-Sky Skipper (1983).a26                        3b91c347d8e6427edbe942a7a405290d    4K  
-Slot Machine (1979).a26                       f90b5da189f24d7e1a2117d8c8abc952    4K  
-Slot Racers (1978).a26                        aed82052f7589df05a3f417bb4e45f0c    2K  
-Smurf - Rescue in Gargamel Castle (1982).a26  3d1e83afdb4265fa2fb84819c9cfd39c    F8  
-Smurfs Save the Day (1983).a26                a204cd4fb1944c86e800120706512a64    F8  
-Sneak 'n Peek (1982).a26                      9c6faa4ff7f2ae549bbcb14f582b70e4    4K  
-Snoopy and the Red Baron (1983).a26           57939b326df86b74ca6404f64f89fce9    F8  
-Snow White (1982).a26                         75ee371ccfc4f43e7d9b8f24e1266b55    F8  
-Snow White.a26                                75ee371ccfc4f43e7d9b8f24e1266b55    F8  
-Soccer (1989).a26                             3f6dbf448f25e2bd06dea44248eb122d    4K  
-Solar Fox (1983).a26                          947317a89af38a49c4864d6bdd6a91fb    F8  
-Solaris (1986).a26                            e72eb8d4410152bdcb69e7fba327b420    F6  
-Solar Plexus.a26                              b5be87b87fd38c61b1628e8e2d469cb5    4K  
-Solar Storm (1983).a26                        97842fe847e8eb71263d6f92f7e122bd    4K  
-Sorcerer (1983).a26                           d2c4f8a4a98a905a9deef3ba7380ed64    4K  
-Sorcerer's Apprentice (1983).a26              5f7ae9a7f8d79a3b37e8fc841f65643a    F8  
-Space Attack (1982).a26                       17badbb3f54d1fc01ee68726882f26a6    4K  
-SpaceBattleFinal4N.a26                        1d566002bbc51e5eee73de4c595fd545    4K  
-Space Cavern (1981).a26                       df6a28a89600affe36d94394ef597214    4K  
-Spacechase (1981) .a26                        ec5c861b487a5075876ab01155e74c6c    4K  
-SpaceGame-Prerelease-NTSC-5.a26               26a4c3e0b7a2501e3a9605493b7c41c3    F4  
+Sky Patrol (1982).a26                         4c9307de724c36fd487af6c99ca078f2    F8    60  58  A
+Sky Skipper (1983).a26                        3b91c347d8e6427edbe942a7a405290d    4K    60  60  A
+Solar Fox (1983).a26                          947317a89af38a49c4864d6bdd6a91fb    F8    60  60  A
+Solaris (1986).a26                            e72eb8d4410152bdcb69e7fba327b420    F6    50+ 30+ B   Frame rate is a bit all over the map as you go through different aspects of the game but it's very playable.
+Space Cavern (1981).a26                       df6a28a89600affe36d94394ef597214    4K    60  60  A
 Space Invaders (1980).a26                     72ffbef6504b75e69ee1045af9075f66    4K    60  60  A
-Space Jockey (1982).a26                       6f2aaffaaf53d23a28bf6677b86ac0e3    2K  
-SpaceMaster X-7 (1983).a26                    45040679d72b101189c298a864a5b5ba    4K  
-Space Raid.a26                                cb3a9b32a01746621f5c268db48833b2    F8  
-Space Robot (Dimax - Sinmax).a26              3dfb7c1803f937fadc652a3e95ff7dc6    4K  
-Space Rocks.a26                               fe395b292e802ea16b3b5782b21ee686    DSCP  --  --  E   Does not play. Needs cart mapper for DSC+
-Space Shuttle (1983).a26                      5894c9c0c1e7e29f3ab86c6d3f673361    F8  
+SpaceMaster X-7 (1983).a26                    45040679d72b101189c298a864a5b5ba    4K    60  60  A
+Space Shuttle (1983).a26                      5894c9c0c1e7e29f3ab86c6d3f673361    F8    53  46  B   Some slowdown but playable - it uses all the switches on the VCS!
 Space Treat.a26                               6c9a32ad83bcfde3774536e52be1cce7    4K    60  60  A   My second favorite homebrew game!
 Space Treat Deluxe.a26                        9e135f5dce61e3435314f5cddb33752f    4K    60  60  A   My second favorite homebrew game!
-Space Tunnel (1982).a26                       be3f0e827e2f748819dac2a22d6ac823    4K  
-Space War (1978).a26                          a7ef44ccb5b9000caf02df3e6da71a92    2K  
-Sp+.a26                                       25c97848ae6499e569b832b686a84bb2    4K  
-Spiderdroid (1987).a26                        8454ed9787c9d8211748ccddb673e920    4K  
-Spider Fighter (1982).a26                     24d018c4a6de7e5bd19a36f2b879b335    4K  
-Spider-Man (1982).a26                         199eb0b8dce1408f3f7d46411b715ca9    4K  
-Spider Maze (1982).a26                        21299c8c3ac1d54f8289d88702a738fd    4K  
-Spike's Peak (1983).a26                       a4e885726af9d97b12bb5a36792eab63    F8  
-Spinning Fireball (1983).a26                  d3171407c3a8bb401a3a62eb578f48fb    4K  
-Spitfire Attack (1983).a26                    cef2287d5fd80216b2200fb2ef1adfa8    4K  
-Splatform 2600 (v1.01).a26                    6216bef66edceb8a24841e6065bf233e    2K  
-Springer (1982).a26                           4cd796b5911ed3f1062e805a3df33d98    3F  
-Sprint Master (1988).a26                      5a8afe5422abbfb0a342fb15afd7415f    F6SC
-Spy Hunter (1984).a26                         3105967f7222cc36a5ac6e5f6e89a0b4    F8  
-Squeeze Box (1982).a26                        ba257438f8a78862a9e014d831143690    4K  
-Squirrel (1983).a26                           68878250e106eb6c7754bc2519d780a0    4K  
-Squish-Em.a26                                 aa8c75d6f99548309949916ad6cf33bc    4K  
-Squoosh (1983).a26                            34c808ad6577dbfa46169b73171585a3    4K  
-Sssnake (1982).a26                            21a96301bb0df27fde2e7eefa49e0397    4K  
+Spider Fighter (1982).a26                     24d018c4a6de7e5bd19a36f2b879b335    4K    60  60  A   Damn fine game.
+Spy Hunter (1984).a26                         3105967f7222cc36a5ac6e5f6e89a0b4    F8    60  60  A   Found the controls a little touchy but that might be in the real game.
 Stampede (1981).a26                           21d7334e406c2407e69dbddd7cec3583    2K    60  50  A
-Star Castle.a26                               d9c9cece2e769c7985494b1403a25721    F8  
-Star Fox (1983).a26                           f526d0c519f5001adb1fc7948bfbb3ce    4K  
 Stargate (1984).a26                           0c48e820301251fbb6bcdc89bd3555d9    F8SC  60  51  A
-Stargunner (1982).a26                         a3c1c70024d7aabb41381adbfb6d3b25    4K  
 StarMaster (1982).a26                         d69559f9c9dc6ef528d841bf9d91b275    4K    60  58  A
-Star Raiders (1982).a26                       cbd981a23c592fb9ab979223bb368cd5    F8  
-Star Ship (1977).a26                          e363e467f605537f3777ad33e74e113a    2K  
-Star Ship (1977).a26                          7b938c7ddf18e8362949b62c7eaa660a    4K  
-Star Strike (1983).a26                        79e5338dbfa6b64008bb0d72a3179d3c    4K  
-Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729    F8  
-Star Voyager (1982).a26                       813985a940aa739cc28df19e0edd4722    4K  
-Star Wars - Death Star Battle (1983).a26      5336f86f6b982cc925532f2e80aa1e17    E0  
-Star Wars - Ewok Adventure (1983).a26         d44d90e7c389165f5034b5844077777f    E0  
-Star Wars - Jedi Arena (1983).a26             c9f6e521a49a2d15dac56b6ddb3fb4c7    4K  
-Star Wars - The Arcade Game (1984).a26        6339d28c9a7f92054e70029eb0375837    E0  
-Star Wars - The Empire Strikes Back (1982).bi 3c8e57a246742fa5d59e517134c0b4e6    4K  
-StayFrosty.a26                                c5bab953ac13dbb2cba03cd0684fb125    F6  
-StayFrosty2.a26                               541cac55ebcf7891d9d51c415922303f    F4  
-Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K  
-Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  56  A   Recommend Flicker Free mode.
-Stone Age (1983).a26                          23fad5a125bcd4463701c8ad8a0043a9    4K  
-Strategy X (1983).a26                         9333172e3c4992ecf548d3ac1f2553eb    4K  
-StratOGemsDeluxe.a26                          807a8ff6216b00d52aba2dfea5d8d860    F4  
-Strawberry Shortcake (1983).a26               e10d2c785aadb42c06390fae0d92f282    4K  
-Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K  
-Stronghold (1983).a26                         7b3cf0256e1fa0fdc538caf3d5d86337    4K  
-Stunt Cycle (1980).a26                        c3bbc673acf2701b5275e85d9372facf    2K  
-Submarine Commander (1982).a26                f3f5f72bfdd67f3d0e45d097e11b8091    4K  
-Sub-Scan (1982).a26                           5af9cd346266a1f2515e1fbc86f5186a    4K  
-Subterranea (1983).a26                        93c52141d3c4e1b5574d072f1afde6cd    F8  
-Suicide Adventure.a26                         cff578e5c60de8caecbee7f2c9bbb57b    4K  
-Suicide Mission (1982).a26                    e4c666ca0c36928b95b13d33474dbb44    AR  
-Summer Games (1987).a26                       45027dde2be5bdd0cab522b80632717d    F6  
-Super Baseball (1988).a26                     7adbcf78399b19596671edbffc3d34aa    F6  
-Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K  
-Super Challenge Baseball (1982).a26           9d37a1be4a6e898026414b8fee2fc826    4K  
-Super Challenge Football (1982).a26           e275cbe7d4e11e62c3bfcfb38fca3d49    4K  
-Supercharger BIOS (1982).a26                  4565c1a7abce773e53c75b35414adefd    2K  
+Star Raiders (1982).a26                       cbd981a23c592fb9ab979223bb368cd5    F8                Not functional yet.. soon
+Star Ship (1977).a26                          e363e467f605537f3777ad33e74e113a    2K    60  60  A
+Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729    F8    60  51  A
+Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
+Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  57  A   Recommend Flicker Free mode.
+Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
+Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    47  35  C   Too slow to be playable... even without sound.
 Super Cobra (1982).a26                        c29f8db680990cb45ef7fef6ab57a2c2    E0  
-SuperCobra.a26                                841057f83ce3731e6bbfda1707cbca58    F4  
 Super Ferrari (Quelle).a26                    724613effaf7743cbcd695fab469c2a8    4K  
 Super Football (1988).a26                     09abfe9a312ce7c9f661582fdf12eab6    F6SC
 Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K  

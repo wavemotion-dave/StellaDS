@@ -518,14 +518,14 @@ static CartInfo table[] =
     {"60a61da9b2f43dd7e13a5093ec41a53d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Rescue Terra I (1982).bin
     {"42249ec8043a9a0203dde0b5bb46d8c4",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Resgate Espacial.bin
     {"0b01909ba84512fdaf224d3c3fd0cf8d",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // RevengeOfTheApes.bin
-    {"4f64d6d0694d9b7a1ed7b0cb0b83e759",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Revenge of the Beefsteak Tomatoes (1982).bin
+    {"4f64d6d0694d9b7a1ed7b0cb0b83e759",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Revenge of the Beefsteak Tomatoes (1982).bin
     {"a995b6cbdb1f0433abc74050808590e6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Riddle of the Sphinx (1982).bin
     {"31512cdfadfd82bfb6f196e3b0fd83cd",  "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // River Patrol (1984).bin
     {"393948436d1f4cc3192410bb918f9724",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -3},    // River Raid (1982).bin
     {"ab56f1b2542a05bebc4fbccfc4803a38",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // River Raid II (1988).bin
     {"2bd00beefdb424fa39931a75e890695d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Road Runner (1989).bin
     {"72a46e0c21f825518b7261c267ab886e",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Robin Hood (1983).bin
-    {"4f618c2429138e0280969193ed6c107e",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Robot Tank (1983).bin
+    {"4f618c2429138e0280969193ed6c107e",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Robot Tank (1983).bin
     {"d97fd5e6e1daacd909559a71f189f14b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Rocky & Bullwinkle (1983).bin
     {"65bd29e8ab1b847309775b0de6b2e4fe",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Roc 'n Rope (1984).bin
     {"67931b0d37dc99af250dd06f1c095e8d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Room of Doom (1982).bin
@@ -552,7 +552,7 @@ static CartInfo table[] =
     {"dde55d9868911407fe8b3fefef396f00",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sea Wolf.bin
     {"605fd59bfef88901c8c4794193a4cbad",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Secret Agent (1983).bin
     {"fc24a94d4371c69bc58f5245ada43c44",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Secret Quest (1989).bin
-    {"8da51e0c4b6b46f7619425119c7d018e",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sentinel (1990).bin
+    {"8da51e0c4b6b46f7619425119c7d018e",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Sentinel (1990).bin
     {"54f7efa6428f14b9f610ad0ca757e26c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Shark Attack (1982).bin
     {"b5a1a189601a785bdb2f02a424080412",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Shootin' Gallery (1982).bin
     {"15c11ab6e4502b2010b18366133fc322",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Shooting Arcade (1989).bin
