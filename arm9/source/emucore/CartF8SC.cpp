@@ -22,6 +22,8 @@
 #include "System.hxx"
 #include <iostream>
 
+static System::PageAccess access;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8SC::CartridgeF8SC(const uInt8* image)
 {
@@ -68,7 +70,7 @@ void CartridgeF8SC::install(System& system)
   assert(((0x1080 & mask) == 0) && ((0x1100 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
+  
   for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -95,6 +97,9 @@ void CartridgeF8SC::install(System& system)
     mySystem->setPageAccess(k >> shift, access);
   }
 
+  // Leave these as direct access of 0 for use in bank switching...
+  access.directPeekBase = 0;
+  access.directPokeBase = 0;
   // Install pages for bank 1
   bank(1);
 }
@@ -115,9 +120,6 @@ uInt8 CartridgeF8SC::peek(uInt16 address)
     case 0x0FF9:
       // Set the current bank to the upper 4k bank
       bank(1);
-      break;
-
-    default:
       break;
   }
 
@@ -144,9 +146,6 @@ void CartridgeF8SC::poke(uInt16 address, uInt8)
       // Set the current bank to the upper 4k bank
       bank(1);
       break;
-
-    default:
-      break;
   }
 
   // NOTE: This does not handle accessing RAM, however, this function
@@ -160,19 +159,11 @@ void CartridgeF8SC::bank(uInt16 bank)
   // Remember what bank we're in
   myCurrentBank = bank;
   uInt16 offset = myCurrentBank << 12;
-  uInt16 shift = mySystem->pageShift();
-  uInt16 mask = mySystem->pageMask();
-
-  // Setup the page access methods for the current bank
-  System::PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x1100; address < (0x1FF8U & ~mask);
-      address += (1 << shift))
+  for(uInt32 address = 0x1100; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
     access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    mySystem->setPageAccess(address >> MY_PAGE_SHIFT, access);
   }
 }
