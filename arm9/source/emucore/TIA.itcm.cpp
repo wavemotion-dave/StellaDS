@@ -1754,6 +1754,56 @@ uInt8 TIA::peek(uInt16 addr)
         }
       }
     }
+          
+    case 0x0A:    // INPT2
+    {
+      Int32 r = myConsole.controller(Controller::Right).read(Controller::Nine);
+      if(r == Controller::minimumResistance)
+      {
+        return 0x80 | noise;
+      }
+      else if((r == Controller::maximumResistance) || myDumpEnabled)
+      {
+        return noise;
+      }
+      else
+      {
+        uInt32 needed = (r*10) / 525; //52.52 actually
+        if((uInt32)gSystemCycles > (myDumpDisabledCycle + needed))
+        {
+          return 0x80 | noise;
+        }
+        else
+        {
+          return noise;
+        }
+      }
+    }
+
+    case 0x0B:    // INPT3
+    {
+      Int32 r = myConsole.controller(Controller::Right).read(Controller::Five);
+      if(r == Controller::minimumResistance)
+      {
+        return 0x80 | noise;
+      }
+      else if((r == Controller::maximumResistance) || myDumpEnabled)
+      {
+        return noise;
+      }
+      else
+      {
+        uInt32 needed = (r*10) / 525; //52.52 actually
+        if((uInt32)gSystemCycles > (myDumpDisabledCycle + needed))
+        {
+          return 0x80 | noise;
+        }
+        else
+        {
+          return noise;
+        }
+      }
+    }          
 
     case 0x0C:    // INPT4
       return myConsole.controller(Controller::Left).read(Controller::Six) ? (0x80 | noise) : noise;

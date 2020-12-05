@@ -625,7 +625,7 @@ static CartInfo table[] =
     {"0c48e820301251fbb6bcdc89bd3555d9",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stargate (1984).bin
     {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stargunner (1982).bin
     {"d69559f9c9dc6ef528d841bf9d91b275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StarMaster (1982).bin
-    {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Star Raiders (1982).bin
+    {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   10,  0},    // Star Raiders (1982).bin
     {"e363e467f605537f3777ad33e74e113a",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Ship (1977).bin
     {"7b938c7ddf18e8362949b62c7eaa660a",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Ship (1977).bin
     {"79e5338dbfa6b64008bb0d72a3179d3c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Strike (1983).bin

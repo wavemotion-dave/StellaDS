@@ -84,6 +84,11 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
       myControllers[0] = new Keyboard(Controller::Left, *myEvent);
       myControllers[1] = new Keyboard(Controller::Right, *myEvent);
   }
+  else if (myCartInfo.controllerType == CTR_STARRAID)
+  {
+      myControllers[0] = new Joystick(Controller::Left, *myEvent);
+      myControllers[1] = new Keyboard(Controller::Right, *myEvent);
+  }
   else  // Most games fall into this category... the venerable Joystick with one red button!
   {
       myControllers[0] = new Joystick(Controller::Left, *myEvent);
