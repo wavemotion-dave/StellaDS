@@ -20,6 +20,9 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.5 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
+  * General cleanup. Ready for wider distribution.
+
 V1.1k : 04-Dec-2020 by Dave Bernazzani (wavemotion)
   * Added Sound Toggle. Off gets you 10% speed boost.
   

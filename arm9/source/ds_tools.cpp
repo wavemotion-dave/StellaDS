@@ -34,7 +34,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.1k"
+#define VERSION "1.5"
 
 #define MAX_DEBUG 10 
 Int32 debug[MAX_DEBUG]={0};
