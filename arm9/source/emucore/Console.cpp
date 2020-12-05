@@ -59,7 +59,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   string md5 = MD5(image, size);
 
   mySwitches = new Switches(*myEvent);
-  mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT); // 128 byte pages... was 6=64 but bank switching improved with larger page sizes as there are fewer "areas" to copy to direct memory acces
+  mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT);
 
   M6502* m6502 = new M6502Low(1);
   M6532* m6532 = new M6532(*this);

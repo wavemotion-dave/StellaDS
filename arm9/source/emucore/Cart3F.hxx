@@ -107,6 +107,8 @@ class Cartridge3F : public Cartridge
 
     // Size of the ROM image
     uInt32 mySize;
+    
+    uInt32 myBankMod;
 };
 #endif
 

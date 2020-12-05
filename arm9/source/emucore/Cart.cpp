@@ -844,7 +844,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   string md5 = MD5(image, size);
 
   // Take a closer look at the ROM image and try to figure out its type
-  const char* type = 0;
+  myCartInfo.type = 0;
 
   // Defaults for the selected cart... this may change up below...
   myCartInfo.md5 = "NA";
@@ -860,7 +860,6 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
     if(entry->md5 == md5)
     {
-      type = entry->type;
       myCartInfo.md5 = entry->md5;
       myCartInfo.type = entry->type;
       myCartInfo.controllerType = entry->controllerType;
@@ -881,22 +880,22 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
 
   // If we didn't find the type in the table then guess it based on size
-  if(type == 0)
+  if(myCartInfo.type == 0)
   {
     if((size % 8448) == 0)
     {
-      type = "AR";
+      myCartInfo.type = "AR";
     }
     //ALEK else if((size == 2048) || (memcmp(image, image + 2048, 2048) == 0))
     else if((size == 2048) ||
           (size == 4096 && memcmp(image, image + 2048, 2048) == 0))
     {
-      type = "2K";
+      myCartInfo.type = "2K";
     }
     //ALEK else if((size == 4096) || (memcmp(image, image + 4096, 4096) == 0))
     else if(size == 4096)
     {
-      type = "4K";
+      myCartInfo.type = "4K";
     }
     //ALEK else if((size == 8192) || (memcmp(image, image + 8192, 8192) == 0))
     // ALEK {
@@ -906,20 +905,20 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     {
       // TODO - autodetect FE and UA, probably not possible
       if(isProbablySC(image, size))
-        type = "F8SC";
+        myCartInfo.type = "F8SC";
       else if(memcmp(image, image + 4096, 4096) == 0)
-        type = "4K";
+        myCartInfo.type = "4K";
       else if(isProbablyE0(image, size))
-        type = "E0";
+        myCartInfo.type = "E0";
       else if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "F8";
+        myCartInfo.type = "F8";
     }
     //ALEK else if((size == 10495) || (size == 10240))
     else if((size == 10495) || (size == 10496) || (size == 10240))  // 10K - Pitfall2
     {
-      type = "DPC";
+      myCartInfo.type = "DPC";
     }
     else if(size == 12288)
     {
@@ -927,25 +926,25 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // 512 bytes of ROM and finds if either the lower 256 bytes or
       // higher 256 bytes are all the same.  For now, we assume that
       // all carts of 12K are CBS RAM Plus/FASC.
-      type = "FASC";
+      myCartInfo.type = "FASC";
     }
     else if(size == 16384)  // 16K ALEK
     {    
       if(isProbablySC(image, size))
-        type = "F6SC";
+        myCartInfo.type = "F6SC";
       else if(isProbablyE7(image, size))
-        type = "E7";
+        myCartInfo.type = "E7";
       else if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "F6";
+        myCartInfo.type = "F6";
     }
     else if(size == 32768)
     {
       // Assume this is a 32K super-cart then check to see if it is
 #if 0 
 // ALEK
-      type = "F4SC";
+      myCartInfo.type = "F4SC";
 
       uInt8 first = image[0];
       for(uInt32 i = 0; i < 256; ++i)
@@ -953,66 +952,46 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
         if(image[i] != first)
         {
           // It's not a super cart (probably)
-          type = isProbably3F(image, size) ? "3F" : "F4";
+          myCartInfo.type = isProbably3F(image, size) ? "3F" : "F4";
           break;
         }
       }
 #endif
       if(isProbablySC(image, size))
-        type = "F4SC";
+        myCartInfo.type = "F4SC";
       else if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "F4";
+        myCartInfo.type = "F4";
     }
     else if(size == 65536)
     {
       //ALEK type = isProbably3F(image, size) ? "3F" : "MB";
       // TODO - autodetect 4A50
       if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "MB";
+        myCartInfo.type = "MB";
     }
     else if(size == 131072)
     {
       //ALEK type = isProbably3F(image, size) ? "3F" : "MC";
       // TODO - autodetect 4A50
       if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "MC";
+        myCartInfo.type = "MC";
     }
     else  // what else can we do?
     {
       if(isProbably3F(image, size))
-        type = isProbably3E(image, size) ? "3E" : "3F";
+        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        type = "4K";  // Most common bankswitching type
+        myCartInfo.type = "4K";  // Most common bankswitching type
     }  
-#if 0 
-//ALEK
-    else
-    {
-      // Assume this is a 16K super-cart then check to see if it is
-      type = "F6SC";
-
-      uInt8 first = image[0];
-      for(uInt32 i = 0; i < 256; ++i)
-      {
-        if(image[i] != first)
-        {
-          // It's not a super cart (probably)
-          type = isProbably3F(image, size) ? "3F" : "F6";
-          break;
-        }
-      }
-    }
-#endif    
   }
   
-  myCartInfo.type = type;
-  return type;
+  return myCartInfo.type;
 }
 
 //ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

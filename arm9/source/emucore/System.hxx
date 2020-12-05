@@ -30,8 +30,8 @@ class NullDevice;
 extern int gSystemCycles;   // Number of system cycles executed since the last reset
 extern uInt32 debug[];      // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
 
-#define MY_PAGE_SHIFT   7
-#define MY_PAGE_MASK    0x7F
+#define MY_PAGE_SHIFT   6
+#define MY_PAGE_MASK    0x3F
 #define MY_ADDR_SHIFT   13
 #define MY_ADDR_MASK    0x1FFF
 

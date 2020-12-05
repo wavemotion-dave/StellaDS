@@ -33,6 +33,8 @@ Cartridge3F::Cartridge3F(const uInt8* image, uInt32 size)
   {
     myImage[addr] = image[addr];
   }
+        
+  myBankMod = mySize / 2048;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -54,6 +56,8 @@ void Cartridge3F::reset()
   bank(0);
 }
 
+static  System::PageAccess access;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3F::install(System& system)
 {
@@ -67,7 +71,6 @@ void Cartridge3F::install(System& system)
   // Set the page accessing methods for the hot spots (for 100% emulation
   // I would need to chain any accesses below 0x40 to the TIA but for
   // now I'll just forget about them)
-  System::PageAccess access;
   for(uInt32 i = 0x00; i < 0x40; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -84,6 +87,10 @@ void Cartridge3F::install(System& system)
     access.directPokeBase = 0;
     mySystem->setPageAccess(j >> shift, access);
   }
+    
+  // Leave these zero for faster bank switch
+  access.directPeekBase = 0;
+  access.directPokeBase = 0;
 
   // Install pages for bank 0 into the first segment
   bank(0);
@@ -92,9 +99,7 @@ void Cartridge3F::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3F::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
-
-  if(address < 0x0800)
+  if((address&0x0FFF) < 0x0800)
   {
     return myImage[(address & 0x07FF) + myCurrentBank * 2048];
   }
@@ -119,25 +124,9 @@ void Cartridge3F::poke(uInt16 address, uInt8 value)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3F::bank(uInt16 bank)
 { 
-  // Make sure the bank they're asking for is reasonable
-  if((uInt32)bank * 2048 < mySize)
-  {
-    myCurrentBank = bank;
-  }
-  else
-  {
-    // Oops, the bank they're asking for isn't valid so let's wrap it
-    // around to a valid bank number
-    myCurrentBank = bank % (mySize / 2048);
-  }
-
+  myCurrentBank = bank % myBankMod;
   uInt32 offset = myCurrentBank * 2048;
   uInt16 shift = mySystem->pageShift();
-
-  // Setup the page access methods for the current bank
-  System::PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
