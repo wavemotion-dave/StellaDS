@@ -77,7 +77,7 @@ void Cartridge3E::install(System& system)
   // I would need to chain any accesses below 0x40 to the TIA but for
   // now I'll just forget about them)
   System::PageAccess access;
-  for(uInt32 i = 0x00; i < 0x40; i += (1 << shift))
+  for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
     access.directPeekBase = 0;
     access.directPokeBase = 0;
@@ -98,11 +98,16 @@ void Cartridge3E::install(System& system)
   bank(0);
 }
 
+extern TIA* theTIA; // 3F/3E games are weird... they take over 40h bytes of the lower 80h so we need to chain to the real peek addresses...
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3E::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
+  if ((address&0xFFF) < 0x80)
+  {
+      return theTIA->peek(address);
+  }
   if(address < 0x0800)
   {
     if(myCurrentBank < 256)
@@ -131,12 +136,7 @@ void Cartridge3E::poke(uInt16 address, uInt8 value)
   {
     bank(value + 256);
   }
-
-  // Pass the poke through to the TIA. In a real Atari, both the cart and the
-  // TIA see the address lines, and both react accordingly. In Stella, each
-  // 64-byte chunk of address space is "owned" by only one device. If we
-  // don't chain the poke to the TIA, then the TIA can't see it...
-  //mySystem->tia().poke(address, value);
+  else theTIA->poke(address, value);    // Pass through to "real" TIA
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

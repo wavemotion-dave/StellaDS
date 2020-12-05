@@ -111,6 +111,7 @@ static CartInfo table[] =
     {"c59633dbebd926c150fb6d30b0576405",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bogey Blaster (1989).bin
     {"a5855d73d304d83ef07dde03e379619f",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boggle (1978).bin
     {"14c2548712099c220964d7f044c59fd9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boing! (1983).bin
+    {"ab48c4af46c8b34c3613d210e1206132",  "3E",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boulder Dash Demo V2.bin
     {"c9b7afad3bfd922e006a6bfc1d4f3fe7",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bowling (1979).bin
     {"25f2e760cd7f56b88aac88d63757d41b",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, 10},    // Boxing (1980).bin
     {"1cca2197d95c5a41f2add49a13738055",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Brain Games (1978).bin
