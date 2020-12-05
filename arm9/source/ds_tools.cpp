@@ -910,21 +910,21 @@ ITCM_CODE void dsMainLoop(void)
                         debug[1] = touch.py;
                         keys_touch = 1;
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 1);
                     }
                     else
                     {
@@ -1001,21 +1001,21 @@ ITCM_CODE void dsMainLoop(void)
                         debug[1] = touch.py;
                         keys_touch = 1;
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 10 && touch.py < 40) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 60 && touch.py < 90) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 105 && touch.py < 135) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 1);
 
-                        if (touch.px > 75  && touch.px < 100 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 1);
-                        if (touch.px >115  && touch.px < 140 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 1);
-                        if (touch.px >160  && touch.px < 195 && touch.py > 145 && touch.py < 170) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 1);
                     }
                     else
                     {

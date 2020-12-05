@@ -192,7 +192,7 @@ static CartInfo table[] =
     {"9222b25a0875022b412e8da37e7f6887",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dice Puzzle (1983).bin
     {"6dda84fb8e442ecf34241ac0d1d91d69",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dig Dug (1983).bin
     {"939ce554f5c0e74cc6e4e62810ec2111",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dishaster (1983).bin
-    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // DK_VCS.bin
+    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // DK_VCS.bin
     {"c3472fa98c3b452fa2fd37d1c219fb6f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dodge 'Em (1980).bin
     {"ca09fa7406b7d2aea10d969b6fc90195",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dolphin (1983).bin
     {"937736d899337036de818391a87271e0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Donald Duck's Speedboat (1983).bin
