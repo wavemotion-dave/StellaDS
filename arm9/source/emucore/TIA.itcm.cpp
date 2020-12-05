@@ -155,7 +155,7 @@ void TIA::reset()
 
   // Calculate color clock offsets for starting and stoping frame drawing
   myStartDisplayOffset = 228 * 32;                                              // Allow for 2 underscan lines...
-  myStopDisplayOffset = myStartDisplayOffset + 228 * 204;                       // And 10 overscan lines... (192 plus 12... minus the 2 underscan lines above)
+  myStopDisplayOffset = myStartDisplayOffset + 228 * A26_VID_HEIGHT;            // And 10+ overscan lines... 
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;

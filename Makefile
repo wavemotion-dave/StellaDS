@@ -11,9 +11,9 @@ include $(DEVKITARM)/ds_rules
 
 export TARGET		:=	$(shell basename $(CURDIR))
 export TOPDIR		:=	$(CURDIR)
-export VERSION 		:=      1.5
+export VERSION		:=  1.5
 
-ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);AlekMaul;http://www.portabledev.com"
+ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);wavemotion-dave;https://github.com/wavemotion-dave/StellaDS"
 
 .PHONY: arm7/$(TARGET).elf arm9/$(TARGET).elf
 

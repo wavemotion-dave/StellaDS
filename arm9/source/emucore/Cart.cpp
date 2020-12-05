@@ -112,14 +112,13 @@ static CartInfo table[] =
     {"a5855d73d304d83ef07dde03e379619f",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boggle (1978).bin
     {"14c2548712099c220964d7f044c59fd9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boing! (1983).bin
     {"c9b7afad3bfd922e006a6bfc1d4f3fe7",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bowling (1979).bin
-    {"25f2e760cd7f56b88aac88d63757d41b",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Boxing (1980).bin
+    {"25f2e760cd7f56b88aac88d63757d41b",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, 10},    // Boxing (1980).bin
     {"1cca2197d95c5a41f2add49a13738055",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Brain Games (1978).bin
     {"f34f08e5eb96e500e851a80be3277a56",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin
     {"413c925c5fdcea62842a63a4c671a5f2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bridge (1980).bin
-    {"1cf59fc7b11cdbcefe931e41641772f6",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Buck Rogers (1983).bin
+    {"1cf59fc7b11cdbcefe931e41641772f6",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Buck Rogers (1983).bin
     {"68597264c8e57ada93be3a5be4565096",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Bugs (1982).bin
-    {"fa4404fabc094e3a31fcd7b559cdd029",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bugs Bunny (1983).bin
-    {"fa4404fabc094e3a31fcd7b559cdd029",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bugs Bunny.bin
+    {"fa4404fabc094e3a31fcd7b559cdd029",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Bugs Bunny (1983).bin
     {"aa1c41f86ec44c0a44eb64c332ce08af",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Bumper Bash (1983).bin
     {"76f53abbbf39a0063f24036d6ee0968a",  "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bump 'n' Jump (1983).bin
     {"0443cfa9872cdb49069186413275fa21",  "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // BurgerTime (1983).bin
@@ -198,12 +197,12 @@ static CartInfo table[] =
     {"ca09fa7406b7d2aea10d969b6fc90195",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dolphin (1983).bin
     {"937736d899337036de818391a87271e0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Donald Duck's Speedboat (1983).bin
     {"36b20c427975760cb9cf4a47e41369e4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Donkey Kong (1982).bin
-    {"c8fa5d69d9e555eb16068ef87b1c9c45",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Donkey Kong Junior (1983).bin
+    {"c8fa5d69d9e555eb16068ef87b1c9c45",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  2},    // Donkey Kong Junior (1983).bin
     {"7386004f9a5a7daf7e50ac8547088337",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // DOT.bin
     {"7e2fe40a788e56765fe56a3576019968",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Double Dragon (1989).bin
     {"368d88a6c071caba60b4f778615aae94",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Double Dunk (Super Basketball) (1989).bin
     {"05215b73ec33b502449ee726ac6b201f",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Draconian.bin
-    {"41810dd94bd0de1110bedc5092bef5b0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dragonfire (1982).bin
+    {"41810dd94bd0de1110bedc5092bef5b0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  2},    // Dragonfire (1982).bin
     {"90ccf4f30a5ad8c801090b388ddd5613",  "AR",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dragonstomper (Excalibur) (1982).bin
     {"77057d9d14b99e465ea9e29783af0ae3",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dragster (1980).bin
     {"51de328e79d919d7234cf19c1cd77fbc",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dukes of Hazzard (1983).bin
@@ -256,7 +255,7 @@ static CartInfo table[] =
     {"16c909c16ce47e2429fe6e005551178d",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frantic.bin
     {"8e0ab801b1705a740b476b7f588c6d16",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  2},    // Freeway (1981).bin
     {"e80a4026d29777c3c7993fbfaee8920f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frisco (Unknown).bin
-    {"081e2c114c9c20b61acf25fc95c71bf4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frogger (1982).bin
+    {"081e2c114c9c20b61acf25fc95c71bf4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10, -3},    // Frogger (1982).bin
     {"27c6a2ca16ad7d814626ceea62fa8fb4",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frogger II - Threeedeep! (1984).bin
     {"f67181b3a01b9c9159840b15449b87b0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frog Pond (1982).bin
     {"dcc2956c7a39fdbf1e861fc5c595da0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Frogs and Flies (1982).bin
@@ -286,7 +285,7 @@ static CartInfo table[] =
     {"2e663eaa0d6b723b645e643750b942fd",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Golf (1980).bin
     {"c16c79aad6272baffb8aae9a7fff0864",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gopher (1982).bin
     {"81b3bf17cf01039d311b4cd738ae608e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gorf (1982).bin
-    {"2903896d88a341511586d69fcfc20f7d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Grand Prix (1982).bin
+    {"2903896d88a341511586d69fcfc20f7d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Grand Prix (1982).bin
     {"7146dd477e019f81eac654a79be96cb5",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gravitar (1983).bin
     {"9245a84e9851565d565cb6c9fac5802b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Great Escape (1983).bin
     {"01cb3e8dfab7203a9c62ba3b94b4e59f",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gremlins (1984).bin
@@ -331,7 +330,7 @@ static CartInfo table[] =
     {"3276c777cbe97cdd2b4a63ffc16b7151",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joust (1983).bin
     {"ec40d4b995a795650cf5979726da67df",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joust Pong.bin
     {"89a923f6f6bec64f9b6fa6ff8ea37510",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Joyride.bin
-    {"36c29ceee2c151b23a1ad7aa04bd529d",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jr. Pac-Man (1984).bin
+    {"36c29ceee2c151b23a1ad7aa04bd529d",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -6},    // Jr. Pac-Man (1984).bin
     {"4364680de59e650a02348b901ca7202f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jump.bin
     {"2cccc079c15e9af94246f867ffc7e9bf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Jungle Fever (1982).bin
     {"2bb9f4686f7e08c5fcc69ec1a1c66fe7",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // Jungle Hunt (1983).bin
@@ -355,7 +354,7 @@ static CartInfo table[] =
     {"3f58f972276d1e4e0e09582521ed7a5b",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kung Fu Superkicks (1989).bin
     {"7ad782952e5147b88b65a25cadcdf9e0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kwibble (1983).bin
     {"b86552198f52cfce721bafb496363099",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kyphus (1982).bin
-    {"adfbd2e8a38f96e03751717f7422851d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Lady Bug.bin
+    {"adfbd2e8a38f96e03751717f7422851d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10, 10},    // Lady Bug.bin
     {"95a89d1bf767d7cc9d0d5093d579ba61",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Lady in Wading (1982).bin
     {"931b91a8ea2d39fe4dca1a23832b591a",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Laser Blast (1981).bin
     {"1fab68fd67fe5a86b2c0a9227a59bb95",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Lasercade (1983).bin
@@ -414,7 +413,7 @@ static CartInfo table[] =
     {"203abb713c00b0884206dcc656caa48f",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Moonsweeper (1983).bin
     {"de0173ed6be9de6fd049803811e5f1a8",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Motocross Racer (1983).bin
     {"378a62af6e9c12a760795ff4fc939656",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // MotoRodeo (1990).bin
-    {"db4eb44bc5d652d9192451383d3249fc",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mountain King (1983).bin
+    {"db4eb44bc5d652d9192451383d3249fc",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Mountain King (1983).bin
     {"5678ebaa09ca3b699516dba4671643ed",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mouse Trap (1982).bin
     {"0164f26f6b38a34208cd4a2d0212afc3",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mr. Do! (1983).bin
     {"b7a7e34e304e4b7bc565ec01ba33ea27",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Mr. Do!'s Castle (1984).bin
@@ -747,8 +746,8 @@ static CartInfo table[] =
     {"cbe5a166550a8129a5e6d374901dffad",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    8,  0},    // Warlords (1981).bin
     {"679e910b27406c6a2072f9569ae35fc8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Warplock (1982).bin
     {"7e7c4c59d55494e66eef5e04ec1c6157",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Warring Worms.bin
-    {"827a22b9dffee24e93ed0df09ff8414a",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Wings_10-10-83.bin
-    {"8e48ea6ea53709b98e6f4bd8aa018908",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Wings (1983).bin
+    {"827a22b9dffee24e93ed0df09ff8414a",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  9},    // Wings_10-10-83.bin
+    {"8e48ea6ea53709b98e6f4bd8aa018908",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  9},    // Wings (1983).bin
     {"83fafd7bd12e3335166c6314b3bde528",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Winter Games (1987).bin
     {"7b24bfe1b61864e758ada1fe9adaa098",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Wizard (1980).bin
     {"7e8aa18bc9502eb57daaf5e7c1e94da7",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Wizard of Wor (1982).bin
