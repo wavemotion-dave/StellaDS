@@ -220,7 +220,7 @@ static CartInfo table[] =
     {"683dc64ef7316c13ba04ee4398e2b93a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Edtris (1995).bin
     {"42b2c3b4545f1499a083cfbc4a3b7640",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Eggomania (1982).bin
     {"71f8bacfbdca019113f3f0801849057e",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Elevator Action (1983).bin
-    {"7657b6373fcc9ad69850a687bee48aa1",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Elevators Amiss.bin
+    {"7657b6373fcc9ad69850a687bee48aa1",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // Elevators Amiss.bin
     {"b6812eaf87127f043e78f91f2028f9f4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Eli's Ladder (1982).bin
     {"7eafc9827e8d5b1336905939e097aae7",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Elk Attack (1987).bin
     {"dbc8829ef6f12db8f463e30f60af209f",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Encounter at L-5 (1982).bin
@@ -304,7 +304,7 @@ static CartInfo table[] =
     {"4afa7f377eae1cafb4265c68f73f2718",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Halo2600_Final.bin
     {"f16c709df0a6c52f47ff52b9d95b7d8d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Hangman (1978).bin
     {"a34560841e0878c7b14cc65f79f6967d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Harem (1982).bin
-    {"f0a6e99f5875891246c3dbecbf2d2cea",  "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_NO,   10,  2},    // Haunted House (1982).bin
+    {"f0a6e99f5875891246c3dbecbf2d2cea",  "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,   10,  2},    // Haunted House (1982).bin
     {"2cc640f904e1034bf438075a139548d3",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Heartbreak.bin
     {"fca4a5be1251927027f2c24774a02160",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  8},    // H.E.R.O. (1984).bin
     {"3d48b8b586a09bdbf49f1a016bf4d29a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Hole Hunter (AKA Topy).bin
