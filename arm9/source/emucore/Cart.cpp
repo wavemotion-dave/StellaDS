@@ -116,6 +116,10 @@ static CartInfo table[] =
     {"25f2e760cd7f56b88aac88d63757d41b",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, 10},    // Boxing (1980).bin
     {"1cca2197d95c5a41f2add49a13738055",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Brain Games (1978).bin
     {"f34f08e5eb96e500e851a80be3277a56",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin
+    {"6c76fe09aa8b39ee52035e0da6d0808b",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin
+    {"4df6124093ccb4f0b6c26a719f4b7706",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin
+    {"9a25b3cfe2bbb847b66a97282200cca2",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin    
+    {"c5fe45f2734afd47e27ca3b04a90213c",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   11,  0},    // Breakout (1978).bin        
     {"413c925c5fdcea62842a63a4c671a5f2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Bridge (1980).bin
     {"1cf59fc7b11cdbcefe931e41641772f6",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Buck Rogers (1983).bin
     {"68597264c8e57ada93be3a5be4565096",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Bugs (1982).bin
@@ -193,7 +197,8 @@ static CartInfo table[] =
     {"9222b25a0875022b412e8da37e7f6887",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dice Puzzle (1983).bin
     {"6dda84fb8e442ecf34241ac0d1d91d69",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dig Dug (1983).bin
     {"939ce554f5c0e74cc6e4e62810ec2111",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dishaster (1983).bin
-    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // DK_VCS.bin
+    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Donkey Kong VCS.bin
+    {"494cda91cc640551b4898c82be058dd9",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Donkey Kong VCS (pal).bin    
     {"c3472fa98c3b452fa2fd37d1c219fb6f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dodge 'Em (1980).bin
     {"ca09fa7406b7d2aea10d969b6fc90195",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dolphin (1983).bin
     {"937736d899337036de818391a87271e0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Donald Duck's Speedboat (1983).bin
@@ -269,6 +274,7 @@ static CartInfo table[] =
     {"476d8d236085f8b1a6892dad3a898a62",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Galaga.bin
     {"211774f4c5739042618be8ff67351177",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Galaxian (1983).bin
     {"102672bbd7e25cd79f4384dd7214c32b",  "2K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Game of Concentration (1980).bin
+    {"31f4692ee2ca07a7ce1f7a6a1dab4ac9",  "4K",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   10,  0},    // Game of Concentration (1980).bin       
     {"db971b6afc9d243f614ebf380af0ac60",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gamma-Attack (1983).bin
     {"20edcc3aa6c189259fa7e2f044a99c49",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Gangster Alley (1982).bin
     {"dc13df8420ec69841a7c51e41b9fbba5",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Garfield (1984).bin
@@ -339,6 +345,7 @@ static CartInfo table[] =
     {"b9d1e3be30b131324482345959aed5e5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kabobber (1983).bin
     {"b9d1e3be30b131324482345959aed5e5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kabobber (Activision).bin
     {"5428cdfada281c569c74c7308c7f2c26",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  4},    // Kaboom! (1981).bin
+    {"af6ab88d3d7c7417db2b3b3c70b0da0a",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  4},    // Kaboom! (1981).bin
     {"7b43c32e3d4ff5932f39afcb4c551627",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kamikaze Saucers (1983).bin
     {"7b43c32e3d4ff5932f39afcb4c551627",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kamikaze Saucers.bin
     {"4326edb70ff20d0ee5ba58fa5cb09d60",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kangaroo (1983).bin
@@ -356,6 +363,7 @@ static CartInfo table[] =
     {"7ad782952e5147b88b65a25cadcdf9e0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kwibble (1983).bin
     {"b86552198f52cfce721bafb496363099",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Kyphus (1982).bin
     {"adfbd2e8a38f96e03751717f7422851d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10, 10},    // Lady Bug.bin
+    {"f1489e27a4539a0c6c8529262f9f7e18",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10, 10},    // Lady Bug PAL.bin    
     {"95a89d1bf767d7cc9d0d5093d579ba61",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Lady in Wading (1982).bin
     {"931b91a8ea2d39fe4dca1a23832b591a",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Laser Blast (1981).bin
     {"1fab68fd67fe5a86b2c0a9227a59bb95",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Lasercade (1983).bin
@@ -593,6 +601,7 @@ static CartInfo table[] =
     {"ec5c861b487a5075876ab01155e74c6c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Spacechase (1981) .bin
     {"26a4c3e0b7a2501e3a9605493b7c41c3",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // SpaceGame-Prerelease-NTSC-5.bin
     {"72ffbef6504b75e69ee1045af9075f66",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Space Invaders (1980).bin
+    {"e074af84dcd5bd21fb48ca7f36845e61",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Space Invaders Deluxe.a26    
     {"6f2aaffaaf53d23a28bf6677b86ac0e3",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Space Jockey (1982).bin
     {"45040679d72b101189c298a864a5b5ba",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // SpaceMaster X-7 (1983).bin
     {"cb3a9b32a01746621f5c268db48833b2",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Space Raid.bin
@@ -627,6 +636,7 @@ static CartInfo table[] =
     {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, 10},    // Stargunner (1982).bin
     {"d69559f9c9dc6ef528d841bf9d91b275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StarMaster (1982).bin
     {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   10,  0},    // Star Raiders (1982).bin
+    {"c1a83f44137ea914b495fc6ac036c493",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   10,  0},    // Star Raiders (PAL 1982).bin
     {"e363e467f605537f3777ad33e74e113a",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Ship (1977).bin
     {"7b938c7ddf18e8362949b62c7eaa660a",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Ship (1977).bin
     {"79e5338dbfa6b64008bb0d72a3179d3c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Strike (1983).bin
@@ -849,7 +859,6 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
 
   // Defaults for the selected cart... this may change up below...
   myCartInfo.md5 = "NA";
-  myCartInfo.type = "NA";
   myCartInfo.controllerType = CTR_LJOY;
   myCartInfo.special = SPEC_NONE;
   myCartInfo.mode = MODE_NO;

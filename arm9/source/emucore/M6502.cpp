@@ -37,8 +37,7 @@ M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
   // Compute the System Cycle table
   for(t = 0; t < 256; ++t)
   {
-    myInstructionSystemCycleTable[t] = ourInstructionProcessorCycleTable[t] *
-        mySystemCyclesPerProcessorCycle;
+    myInstructionSystemCycleTable[t] = ourInstructionProcessorCycleTable[t] * mySystemCyclesPerProcessorCycle;
   }
 }
 

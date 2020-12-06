@@ -1,21 +1,28 @@
-StellaDS
+StellaDS - PHOENIX EDITION 
 --------------------------------------------------------------------------------
-StellaDS is an Atari 2600 console emulator.
+StellaDS is an Atari 2600 console emulator for your DS/DSi.
 To use this emulator, you must use compatibles rom with a26/bin format. 
-Do not ask me about such files, I don't have them. A search with Google will certainly 
+Twilight Menu++ wants to see the file extension be .a26 (you can just rename .bin)
 help you. 
 
 Features :
 ----------
- Most things you should expect from an emulator.
+ High level of compability to make games playable. Most games you remember fondly
+ run nearly full speed on a DSi in native 133MHz mode. 
+ Paddle and Keypad emulation is included.
 
 Missing :
 ---------
- All that is not yet emulated ;)
- Need to improve speed
+ DPC+ games can't be emulated - that requires a coprocessor running at 70MHz (more 
+ than the speed of an original DS!). AR games (Starpath Supercharger) do not work.
 
-Check updates on my web site : 
-http://www.portabledev.com
+Check updates here: https://github.com/wavemotion-dave/StellaDS
+
+Thanks :
+---------
+To Bradford W. Mott for Stella.
+To Alekmaul for porting Stella to the DS.
+To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 
 --------------------------------------------------------------------------------
 History :
@@ -24,7 +31,8 @@ V1.6 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
   * Star Raiders working now.
   * All Tigervision (3F) games working.
   * Boulder Dash Demo V2 (3E game) works!
-  * Minor cleanups and better keypad touch input support.
+  * Minor graphical cleanups and better keypad touch input support.
+  * Compatibility.txt list updated.
 
 V1.5 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
   * General cleanup. Ready for wider distribution.

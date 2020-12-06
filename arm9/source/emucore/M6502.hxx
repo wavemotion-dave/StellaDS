@@ -119,7 +119,7 @@ class M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual bool execute(uInt32 number) = 0;
+    virtual bool execute(uInt16 number) = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 
@@ -202,10 +202,10 @@ class M6502
 
     /// Indicates the number of system cycles per processor cycle 
     const uInt32 mySystemCyclesPerProcessorCycle;
-	  const uInt32 my2xSystemCyclesPerProcessorCycle;
+	const uInt32 my2xSystemCyclesPerProcessorCycle;
 
     /// Table of system cycles for each instruction
-    int myInstructionSystemCycleTable[256]; 
+    uInt8 myInstructionSystemCycleTable[256]; 
 
   protected:
     /// Addressing mode for each of the 256 opcodes

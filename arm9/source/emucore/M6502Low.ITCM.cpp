@@ -44,7 +44,7 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-bool M6502Low::execute(uInt32 number)
+bool M6502Low::execute(uInt16 number)
 {
   // Clear all of the execution status bits except for the fatal error bit
   myExecutionStatus &= FatalErrorBit;
@@ -52,7 +52,8 @@ bool M6502Low::execute(uInt32 number)
   // Loop until execution is stopped or a fatal error occurs
   for(;;)
   {
-    for(; !myExecutionStatus && (number != 0); --number)
+    uInt16 fast_loop = number;
+    for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
     {
       uInt16 operandAddress=0;
       uInt8 operand=0;
@@ -98,7 +99,7 @@ bool M6502Low::execute(uInt32 number)
     }
 
     // See if we've executed the specified number of instructions
-    if(number == 0)
+    if(fast_loop == 0)
     {
       // Yes, so answer that everything finished fine
       return true;
