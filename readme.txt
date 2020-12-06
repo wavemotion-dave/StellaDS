@@ -20,6 +20,12 @@ http://www.portabledev.com
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.6 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
+  * Star Raiders working now.
+  * All Tigervision (3F) games working.
+  * Boulder Dash Demo V2 (3E game) works!
+  * Minor cleanups and better keypad touch input support.
+
 V1.5 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
   * General cleanup. Ready for wider distribution.
 

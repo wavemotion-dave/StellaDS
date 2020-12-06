@@ -566,14 +566,14 @@ static CartInfo table[] =
     {"8654d7f0fb351960016e06646f639b02",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Ski Hunt.bin
     {"b76fbadc8ffb1f83e2ca08b6fb4d6c9f",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Skiing (1980).bin
     {"46c021a3e9e2fd00919ca3dd1a6b76d8",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Sky Diver (1979).bin
-    {"2a0ba55e56e7a596146fa729acf0e109",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sky Jinks (1982).bin
-    {"4c9307de724c36fd487af6c99ca078f2",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sky Patrol (1982).bin
+    {"2a0ba55e56e7a596146fa729acf0e109",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // Sky Jinks (1982).bin
+    {"4c9307de724c36fd487af6c99ca078f2",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // Sky Patrol (1982).bin
     {"3b91c347d8e6427edbe942a7a405290d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sky Skipper (1983).bin
     {"f90b5da189f24d7e1a2117d8c8abc952",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Slot Machine (1979).bin
     {"705fe719179e65b0af328644f3a04900",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Slot Machine (1979).bin
     {"81254ebce88fa46c4ff5a2f4d2bad538",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Slot Machine (1979).bin
     {"fc6052438f339aea373bbc999433388a",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Slot Machine (pal).bin
-    {"aed82052f7589df05a3f417bb4e45f0c",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Slot Racers (1978).bin
+    {"aed82052f7589df05a3f417bb4e45f0c",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // Slot Racers (1978).bin
     {"3d1e83afdb4265fa2fb84819c9cfd39c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Smurf - Rescue in Gargamel's Castle (1982).bin
     {"a204cd4fb1944c86e800120706512a64",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Smurfs Save the Day (1983).bin
     {"9c6faa4ff7f2ae549bbcb14f582b70e4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sneak 'n Peek (1982).bin
@@ -582,7 +582,7 @@ static CartInfo table[] =
     {"75ee371ccfc4f43e7d9b8f24e1266b55",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Snow White.bin
     {"3f6dbf448f25e2bd06dea44248eb122d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Soccer (1989).bin
     {"947317a89af38a49c4864d6bdd6a91fb",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Solar Fox (1983).bin
-    {"e72eb8d4410152bdcb69e7fba327b420",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Solaris (1986).bin
+    {"e72eb8d4410152bdcb69e7fba327b420",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // Solaris (1986).bin
     {"b5be87b87fd38c61b1628e8e2d469cb5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Solar Plexus.bin
     {"97842fe847e8eb71263d6f92f7e122bd",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  5},    // Solar Storm (1983).bin
     {"d2c4f8a4a98a905a9deef3ba7380ed64",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sorcerer (1983).bin
@@ -624,7 +624,7 @@ static CartInfo table[] =
     {"d9c9cece2e769c7985494b1403a25721",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Castle.bin
     {"f526d0c519f5001adb1fc7948bfbb3ce",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Fox (1983).bin
     {"0c48e820301251fbb6bcdc89bd3555d9",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stargate (1984).bin
-    {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stargunner (1982).bin
+    {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, 10},    // Stargunner (1982).bin
     {"d69559f9c9dc6ef528d841bf9d91b275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StarMaster (1982).bin
     {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   10,  0},    // Star Raiders (1982).bin
     {"e363e467f605537f3777ad33e74e113a",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Ship (1977).bin
@@ -634,19 +634,19 @@ static CartInfo table[] =
     {"813985a940aa739cc28df19e0edd4722",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Voyager (1982).bin
     {"5336f86f6b982cc925532f2e80aa1e17",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - Death Star Battle (1983).bin
     {"d44d90e7c389165f5034b5844077777f",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - Ewok Adventure (1983).bin
-    {"c9f6e521a49a2d15dac56b6ddb3fb4c7",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - Jedi Arena (1983).bin
+    {"c9f6e521a49a2d15dac56b6ddb3fb4c7",  "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - Jedi Arena (1983).bin
     {"6339d28c9a7f92054e70029eb0375837",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - The Arcade Game (1984).bin
     {"3c8e57a246742fa5d59e517134c0b4e6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Star Wars - The Empire Strikes Back (1982).bin
     {"541cac55ebcf7891d9d51c415922303f",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StayFrosty2.bin
     {"c5bab953ac13dbb2cba03cd0684fb125",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StayFrosty.bin
-    {"656dc247db2871766dffd978c71da80c",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   25,  0},    // Steeplechase (1980).bin
+    {"656dc247db2871766dffd978c71da80c",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   25,  4},    // Steeplechase (1980).bin
     {"0b8d3002d8f744a753ba434a4d39249a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Stellar Track (1980).bin
-    {"23fad5a125bcd4463701c8ad8a0043a9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stone Age (1983).bin
-    {"9333172e3c4992ecf548d3ac1f2553eb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Strategy X (1983).bin
+    {"23fad5a125bcd4463701c8ad8a0043a9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -2},    // Stone Age (1983).bin
+    {"9333172e3c4992ecf548d3ac1f2553eb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -2},    // Strategy X (1983).bin
     {"807a8ff6216b00d52aba2dfea5d8d860",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // StratOGemsDeluxe.bin
     {"e10d2c785aadb42c06390fae0d92f282",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Strawberry Shortcake (1983).bin
-    {"396f7bc90ab4fa4975f8c74abe4e81f0",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Street Racer (1977).bin
-    {"7b3cf0256e1fa0fdc538caf3d5d86337",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stronghold (1983).bin
+    {"396f7bc90ab4fa4975f8c74abe4e81f0",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Street Racer (1977).bin
+    {"7b3cf0256e1fa0fdc538caf3d5d86337",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -2},    // Stronghold (1983).bin
     {"c3bbc673acf2701b5275e85d9372facf",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Stunt Cycle (1980).bin
     {"f3f5f72bfdd67f3d0e45d097e11b8091",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Submarine Commander (1982).bin
     {"5af9cd346266a1f2515e1fbc86f5186a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Sub-Scan (1982).bin
@@ -663,9 +663,9 @@ static CartInfo table[] =
     {"841057f83ce3731e6bbfda1707cbca58",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // SuperCobra.bin
     {"724613effaf7743cbcd695fab469c2a8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Super Ferrari (Quelle).bin
     {"09abfe9a312ce7c9f661582fdf12eab6",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Super Football (1988).bin
-    {"5de8803a59c36725888346fdc6e7429d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Superman (1979).bin
+    {"5de8803a59c36725888346fdc6e7429d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // Superman (1979).bin
     {"aec9b885d0e8b24e871925630884095c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Surf's Up (1983).bin
-    {"4d7517ae69f95cfbc053be01312b7dba",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Surround (1977).bin
+    {"4d7517ae69f95cfbc053be01312b7dba",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Surround (1977).bin
     {"31d08cb465965f80d3541a57ec82c625",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Surround (4k).bin   
     {"c370c3268ad95b3266d6e36ff23d1f0c",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Surround (pal).bin  
     {"045035f995272eb2deb8820111745a07",  "AR",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Survival Island (1983).bin
@@ -679,11 +679,11 @@ static CartInfo table[] =
     {"f9d51a4e5f8b48f68770c89ffd495ed1",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // SwordQuest - FireWorld (1982).bin
     {"bc5389839857612cfabeb810ba7effdc",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // SwordQuest - WaterWorld (1983).bin
     {"2c2aea31b01c6126c1a43e10cacbfd58",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Synth Cart.bin
-    {"d45ebf130ed9070ea8ebd56176e48a38",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Tac-Scan (1982).bin
+    {"d45ebf130ed9070ea8ebd56176e48a38",  "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   10,  0},    // Tac-Scan (1982).bin
     {"c77d3b47f2293e69419b92522c6f6647",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tank Brigade (1983).bin
     {"fa6fe97a10efb9e74c0b5a816e6e1958",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tanks But No Tanks (1983).bin
     {"de3d0e37729d85afcb25a8d052a6e236",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tapeworm (1982).bin
-    {"c0d2434348de72fa6edcc6d8e40f28d7",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tapper (1984).bin
+    {"c0d2434348de72fa6edcc6d8e40f28d7",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -2},    // Tapper (1984).bin
     {"2d6741cda3000230f6bbdd5e31941c01",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Targ (1983).bin
     {"2d6741cda3000230f6bbdd5e31941c01",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Targ (CBS).bin
     {"6cab04277e7cd552a3e40b3c0e6e1e3d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Targ (Universal Chaos Beta).bin
@@ -692,13 +692,13 @@ static CartInfo table[] =
     {"7574480ae2ab0d282c887e9015fdb54c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Taz (1983).bin
     {"3d7aad37c55692814211c8b590a0334c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Telepathy (1983).bin
     {"c830f6ae7ee58bcc2a6712fb33e92d55",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tempest (1984).bin
-    {"42cdd6a9e42a3639e190722b8ea3fc51",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tennis (1981).bin
+    {"42cdd6a9e42a3639e190722b8ea3fc51",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -1},    // Tennis (1981).bin
     {"5eeb81292992e057b290a5cd196f155d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Texas Chainsaw Massacre (1983).bin
     {"5fb71cc60e293fe10a5023f11c734e55",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // This Planet Sucks.bin
     {"e63a87c231ee9a506f9599aa4ef7dfb9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Threshold (1982).bin
     {"de7bca4e569ad9d3fd08ff1395e53d2d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Thrust (V1.22) (Thomas Jentzsch) (Booster Grip).bin
     {"7ded20e88b17c8149b4de0d55c795d37",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Thrust v1.26 (PD).bin
-    {"cf507910d6e74568a68ac949537bccf9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Thunderground (1983).bin
+    {"cf507910d6e74568a68ac949537bccf9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  2},    // Thunderground (1983).bin
     {"c032c2bd7017fdfbba9a105ec50f800e",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Thwocker (1984).bin
     {"fc2104dd2dadf9a6176c1c1c8f87ced9",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Time Pilot (1983).bin
     {"b879e13fd99382e09bcaf1d87ad84add",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Time Warp (1982).bin
@@ -708,13 +708,13 @@ static CartInfo table[] =
     {"3ac6c50a8e62d4ce71595134cbd8035e",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tomcat - F-14 Fighter (1988).bin
     {"fa2be8125c3c60ab83e1c0fe56922fcb",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tooth Protectors (1983).bin
     {"01abcc1d2d3cba87a3aa0eb97a9d7b9c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Topy (unknown).bin
-    {"0aa208060d7c140f20571e3341f5a3f8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Towering Inferno (1982).bin
+    {"0aa208060d7c140f20571e3341f5a3f8",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   10, -1},    // Towering Inferno (1982).bin
     {"f39e4bc99845edd8621b0f3c7b8c4fd9",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // ToyshopTrouble.bin
     {"6ae4dc6d7351dacd1012749ca82f9a56",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Track and Field (1984).bin
     {"24df052902aa9de21c2b2525eb84a255",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Trick Shot (1982).bin
     {"fb27afe896e7c928089307b32e5642ee",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // TRON - Deadly Discs (1982).bin
     {"b2737034f974535f5c0c6431ab8caf73",  "FASC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tunnel Runner (1983).bin
-    {"7a5463545dfb2dcfdafa6074b2f2c15e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Turmoil (1982).bin
+    {"7a5463545dfb2dcfdafa6074b2f2c15e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Turmoil (1982).bin
     {"085322bae40d904f53bdcc56df0593fc",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Tutankham (1983).bin
     {"137373599e9b7bf2cf162a102eb5927f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Ultra SCSICide.bin
     {"81a010abdba1a640f7adf7f84e13d307",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Universal Chaos (1989).bin
@@ -734,7 +734,7 @@ static CartInfo table[] =
     {"ed1492d4cafd7ebf064f0c933249f5b0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Video Cube (CCE).bin
     {"4191b671bcd8237fc8e297b4947f2990",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Video Jogger (1983).bin
     {"4209e9dcdf05614e290167a1c033cfd2",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Video Life (1981).bin
-    {"60e0ea3cbe0913d39803477945e9e5ec",  "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   10,  0},    // Video Olympics (1977).bin
+    {"60e0ea3cbe0913d39803477945e9e5ec",  "2K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   10,  0},    // Video Olympics (1977).bin
     {"107cc025334211e6d29da0b6be46aec7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Video Pinball (1981).bin
     {"ee659ae50e9df886ac4f8d7ad10d046a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Video Reflex (1983).bin
     {"6c128bc950fcbdbcaf0d99935da70156",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Volleyball (1983).bin

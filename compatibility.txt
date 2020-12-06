@@ -188,7 +188,7 @@ Spy Hunter (1984).a26                         3105967f7222cc36a5ac6e5f6e89a0b4  
 Stampede (1981).a26                           21d7334e406c2407e69dbddd7cec3583    2K    60  50  A
 Stargate (1984).a26                           0c48e820301251fbb6bcdc89bd3555d9    F8SC  60  51  A
 StarMaster (1982).a26                         d69559f9c9dc6ef528d841bf9d91b275    4K    60  58  A
-Star Raiders (1982).a26                       cbd981a23c592fb9ab979223bb368cd5    F8                Not functional yet.. soon
+Star Raiders (1982).a26                       cbd981a23c592fb9ab979223bb368cd5    F8    60  51	A    Uses both the Joystick and the Keypad!
 Star Ship (1977).a26                          e363e467f605537f3777ad33e74e113a    2K    60  60  A
 Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729    F8    60  51  A
 Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
@@ -196,18 +196,14 @@ Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a  
 Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
 Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    47  35  C   Too slow to be playable... even without sound.
 Super Cobra (1982).a26                        c29f8db680990cb45ef7fef6ab57a2c2    E0  
-Super Ferrari (Quelle).a26                    724613effaf7743cbcd695fab469c2a8    4K  
-Super Football (1988).a26                     09abfe9a312ce7c9f661582fdf12eab6    F6SC
-Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K  
+Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K   60  58  A
 Surf's Up (1983).a26                          aec9b885d0e8b24e871925630884095c    F8  
-Surround (1977).a26                           4d7517ae69f95cfbc053be01312b7dba    2K  
-Surround (4k).a26                             31d08cb465965f80d3541a57ec82c625    4K  
-Surround (pal).a26                            c370c3268ad95b3266d6e36ff23d1f0c    2K  
+Surround (1977).a26                           4d7517ae69f95cfbc053be01312b7dba    2K   60  60  A
 Survival Island (1983).a26                    045035f995272eb2deb8820111745a07    AR  
 Survival Run (1983).a26                       85e564dae5687e431955056fbda10978    4K  
 Survival Run (Data Age).a26                   59e53894b3899ee164c91cfa7842da66    4K  
 Sweat! - The Decathlon (1983).a26             e51c23389e43ab328ccfb05be7d451da    AR  
-Swoops! (v0.96).a26                           278f14887d601b5e5b620f1870bc09f6    4K  
+Swoops! (v0.96).a26                           278f14887d601b5e5b620f1870bc09f6    4K   60  60  A
 Swordfight (1983).a26                         87662815bc4f3c3c86071dc994e3f30e    4K  
 Sword of Saros (1983).a26                     528400fad9a77fd5ad7fc5fdc2b7d69d    AR  
 SwordQuest - EarthWorld (1982).a26            5aea9974b975a6a844e6df10d2b861c4    F8  
@@ -219,55 +215,40 @@ Tank Brigade (1983).a26                       c77d3b47f2293e69419b92522c6f6647  
 Tanks But No Tanks (1983).a26                 fa6fe97a10efb9e74c0b5a816e6e1958    4K  
 Tapeworm (1982).a26                           de3d0e37729d85afcb25a8d052a6e236    4K  
 Tapper (1984).a26                             c0d2434348de72fa6edcc6d8e40f28d7    F8  
-Targ (1983).a26                               2d6741cda3000230f6bbdd5e31941c01    4K  
-Targ (CBS).a26                                2d6741cda3000230f6bbdd5e31941c01    4K  
+Targ (CBS).a26                                2d6741cda3000230f6bbdd5e31941c01    4K  	60  60  A
 Task Force (1987).a26                         0c35806ff0019a270a7acae68de89d28    4K  
 Tax Avoiders (1982).a26                       a1ead9c181d67859aa93c44e40f1709c    F8  
 Taz (1983).a26                                7574480ae2ab0d282c887e9015fdb54c    F8  
 Telepathy (1983).a26                          3d7aad37c55692814211c8b590a0334c    F8  
 Tempest (1984).a26                            c830f6ae7ee58bcc2a6712fb33e92d55    F8  
-Tennis (1981).a26                             42cdd6a9e42a3639e190722b8ea3fc51    2K  
+Tennis (1981).a26                             42cdd6a9e42a3639e190722b8ea3fc51    2K    58  49  A
 Texas Chainsaw Massacre (1983).a26            5eeb81292992e057b290a5cd196f155d    4K  
-This Planet Sucks.a26                         5fb71cc60e293fe10a5023f11c734e55    4K  
+This Planet Sucks.a26                         5fb71cc60e293fe10a5023f11c734e55    4K    60  60  A
 Threshold (1982).a26                          e63a87c231ee9a506f9599aa4ef7dfb9    4K  
-Thrust (V1.22)(Booster Grip).a26              de7bca4e569ad9d3fd08ff1395e53d2d    F6  
-Thrust v1.26 (PD).a26                         7ded20e88b17c8149b4de0d55c795d37    F6  
+Thrust v1.26 (PD).a26                         7ded20e88b17c8149b4de0d55c795d37    F6    60  60  A
 Thunderground (1983).a26                      cf507910d6e74568a68ac949537bccf9    4K  
-Thwocker (1984).a26                           c032c2bd7017fdfbba9a105ec50f800e    F8  
+Thwocker (1984).a26                           c032c2bd7017fdfbba9a105ec50f800e    F8    60  60	A
 Time Pilot (1983).a26                         fc2104dd2dadf9a6176c1c1c8f87ced9    F8  
 Time Warp (1982).a26                          b879e13fd99382e09bcaf1d87ad84add    4K  
-TitanAxe.a26                                  953c45c3dd128a4bd5b78db956c455bb    F4  
-Title Match Pro Wrestling (1987).a26          12123b534bdee79ed7563b9ad74f1cbd    F8  
-Tomarc the Barbarian (1983).a26               8bc0d2052b4f259e7a50a7c771b45241    F8  
-Tomcat - F-14 Fighter (1988).a26              3ac6c50a8e62d4ce71595134cbd8035e    F6  
 Tooth Protectors (1983).a26                   fa2be8125c3c60ab83e1c0fe56922fcb    E0  
-Topy (unknown).a26                            01abcc1d2d3cba87a3aa0eb97a9d7b9c    4K  
-Towering Inferno (1982).a26                   0aa208060d7c140f20571e3341f5a3f8    4K  
+Towering Inferno (1982).a26                   0aa208060d7c140f20571e3341f5a3f8    4K    60  60  A
 ToyshopTrouble.a26                            f39e4bc99845edd8621b0f3c7b8c4fd9    F8  
 Track and Field (1984).a26                    6ae4dc6d7351dacd1012749ca82f9a56    F6  
 Trick Shot (1982).a26                         24df052902aa9de21c2b2525eb84a255    4K  
 TRON - Deadly Discs (1982).a26                fb27afe896e7c928089307b32e5642ee    4K  
-Tunnel Runner (1983).a26                      b2737034f974535f5c0c6431ab8caf73    FASC
-Turmoil (1982).a26                            7a5463545dfb2dcfdafa6074b2f2c15e    4K  
-Tutankham (1983).a26                          085322bae40d904f53bdcc56df0593fc    E0  
+Tunnel Runner (1983).a26                      b2737034f974535f5c0c6431ab8caf73    FASC 	60  60  A
+Turmoil (1982).a26                            7a5463545dfb2dcfdafa6074b2f2c15e    4K    60  60  A
+Tutankham (1983).a26                          085322bae40d904f53bdcc56df0593fc    E0    60  60  A
 Ultra SCSICide.a26                            137373599e9b7bf2cf162a102eb5927f    4K  
-Universal Chaos (1989).a26                    81a010abdba1a640f7adf7f84e13d307    4K  
-UnknownActivision1_NTSC.a26                   ee681f566aad6c07c61bbbfc66d74a27    4K  
-UnknownActivision2_NTSC.a26                   700a786471c8a91ec09e2f8e47f14a04    4K  
-Unknown Datatech Game.a26                     73e66e82ac22b305eb4d9578e866236e    4K  
-Unknown Universal Game (1983).a26             5f950a2d1eb331a1276819520705df94    F8  
+Universal Chaos (1989).a26                    81a010abdba1a640f7adf7f84e13d307    4K    60  58  A
 Up 'n Down (1984).a26                         a499d720e7ee35c62424de882a3351b6    F8  
 Vanguard (1982).a26                           c6556e082aac04260596b4045bc122de    F8    60  60  A
 Vault Assault.a26                             787ebc2609a31eb5c57c4a18837d1aee    4K    60  60  A
-Vault (TE).a26                                bf7389cbfee666b33b8a88cc6c830edd    4K    60  60  A
-Venetian Blinds Demo (1982).a26               d08fccfbebaa531c4a4fa7359393a0a9    2K  
 Venture (1982).a26                            3e899eba0ca8cd2972da1ae5479b4f0d    4K  
 Viagem Espacial.a26                           0956285e24a18efa10c68a33846ca84d    4K  
 Video Checkers (1980).a26                     539d26b6e9df0da8e7465f0f5ad863b7    4K  
 Video Chess (1979).a26                        f0b7db930ca0e548c41a97160b9f6275    4K  
 Video Cube (CCE).a26                          ed1492d4cafd7ebf064f0c933249f5b0    4K  
-Video Jogger (1983).a26                       4191b671bcd8237fc8e297b4947f2990    4K  
-Video Life (1981).a26                         4209e9dcdf05614e290167a1c033cfd2    2K  
 Video Olympics (1977).a26                     60e0ea3cbe0913d39803477945e9e5ec    2K  
 Video Pinball (1981).a26                      107cc025334211e6d29da0b6be46aec7    4K  
 Video Reflex (1983).a26                       ee659ae50e9df886ac4f8d7ad10d046a    4K  
@@ -278,10 +259,9 @@ Walker.a26                                    d175258b2973b917a05b46df4e1cf15d  
 Wall Ball (1983).a26                          d3456b4cf1bd1a7b8fb907af1a80ee15    4K  
 Wall-Defender (1983).a26                      c16fbfdbfdf5590cc8179e4b0f5f5aeb    4K  
 Wall Jump Ninja v1_1.a26                      5da448a2e1a785d56bf4f04709678156    4K  
-Warlords (1981).a26                           cbe5a166550a8129a5e6d374901dffad    4K  
+Warlords (1981).a26                           cbe5a166550a8129a5e6d374901dffad    4K    60  60  A
 Warplock (1982).a26                           679e910b27406c6a2072f9569ae35fc8    4K  
 Warring Worms.a26                             7e7c4c59d55494e66eef5e04ec1c6157    4K  
-Wings_10-10-83.a26                            827a22b9dffee24e93ed0df09ff8414a    FASC
 Wings (1983).a26                              8e48ea6ea53709b98e6f4bd8aa018908    FASC
 Winter Games (1987).a26                       83fafd7bd12e3335166c6314b3bde528    F6  
 Wizard (1980).a26                             7b24bfe1b61864e758ada1fe9adaa098    2K  
