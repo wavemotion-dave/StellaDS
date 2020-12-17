@@ -1,3 +1,6 @@
+#export DEVKITPRO=/opt/devkitpro
+#export DEVKITARM=/opt/devkitpro/devkitARM
+#
 #---------------------------------------------------------------------------------
 .SUFFIXES:
 #---------------------------------------------------------------------------------
@@ -11,7 +14,7 @@ include $(DEVKITARM)/ds_rules
 
 export TARGET		:=	$(shell basename $(CURDIR))
 export TOPDIR		:=	$(CURDIR)
-export VERSION		:=  1.6
+export VERSION		:=  1.6a
 
 ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);wavemotion-dave;https://github.com/wavemotion-dave/StellaDS"
 

@@ -171,13 +171,13 @@ class M6502
 	uInt8 IR;   // Instruction register
 	uInt16 PC;  // Program Counter
 
-    bool N;     // N flag for processor status register
-    bool V;     // V flag for processor status register
-    bool B;     // B flag for processor status register
-    bool D;     // D flag for processor status register
-    bool I;     // I flag for processor status register
-    bool notZ;  // Z flag complement for processor status register
-    bool C;     // C flag for processor status register
+  bool N;     // N flag for processor status register
+  bool V;     // V flag for processor status register
+  bool B;     // B flag for processor status register
+  bool D;     // D flag for processor status register
+  bool I;     // I flag for processor status register
+  bool notZ;  // Z flag complement for processor status register
+  bool C;     // C flag for processor status register
 
     /** 
       Bit fields used to indicate that certain conditions need to be 
@@ -202,7 +202,6 @@ class M6502
 
     /// Indicates the number of system cycles per processor cycle 
     const uInt32 mySystemCyclesPerProcessorCycle;
-	const uInt32 my2xSystemCyclesPerProcessorCycle;
 
     /// Table of system cycles for each instruction
     uInt8 myInstructionSystemCycleTable[256]; 

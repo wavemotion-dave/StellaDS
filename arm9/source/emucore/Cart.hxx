@@ -51,6 +51,7 @@ extern CartInfo myCartInfo;
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
 #define SPEC_CONMARS  2     // Conquest of Mars - fix bug for collision detections
+#define SPEC_PITFALL2 3     // For Pitfall 2 we are employing a few other tricks to get speed...
 
 #define MODE_NO       0     // Normal Mode
 #define MODE_FF       1     // Flicker Free Mode

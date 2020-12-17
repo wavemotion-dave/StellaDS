@@ -22,8 +22,7 @@
 M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
     : myExecutionStatus(0),
       mySystem(0),
-      mySystemCyclesPerProcessorCycle(systemCyclesPerProcessorCycle),
-      my2xSystemCyclesPerProcessorCycle(systemCyclesPerProcessorCycle<<1)
+      mySystemCyclesPerProcessorCycle(systemCyclesPerProcessorCycle)
 {
   uInt16 t;
 

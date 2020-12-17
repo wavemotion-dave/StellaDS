@@ -478,7 +478,7 @@ static CartInfo table[] =
     {"9b54c77b530582d013f0fa4334d785b7",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Pirate_se.bin
     {"3e90cf23106f2e08b2781e41299de556",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall! (1982).bin
     {"f73d2d0eff548e8fc66996f27acf2b4b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall (1983) (CCE) (C-813).bin
-    {"6d842c96d5a01967be9680080dd5be54",  "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // Pitfall II - Lost Caverns (1983).bin
+    {"6d842c96d5a01967be9680080dd5be54",  "DPC",  CTR_LJOY,      SPEC_PITFALL2,  MODE_NO,   10,  2},    // Pitfall II - Lost Caverns (1983).bin
     {"d9fbf1113114fb3a3c97550a0689f10f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Pizza Chef (1983).bin
     {"9efb4e1a15a6cdd286e4bcd7cd94b7b8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Planet of the Apes (1983).bin
     {"043f165f384fbea3ea89393597951512",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Planet Patrol (1982).bin

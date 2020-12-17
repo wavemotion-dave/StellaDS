@@ -304,6 +304,12 @@ bool dsLoadGame(char *filename)
         theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
         dsInitPalette();
 
+        // The sound in Pitfall2 doesn't work right anyway - get the speed by turning it off...
+        if (myCartInfo.special == SPEC_PITFALL2)
+        {
+            bSoundEnabled = false;
+        }
+
         psound_buffer=sound_buffer;
         TIMER2_DATA = TIMER_FREQ(22050);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;

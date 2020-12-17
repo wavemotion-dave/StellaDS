@@ -154,8 +154,16 @@ void TIA::reset()
   myDSFramePointer = BG_GFX;
 
   // Calculate color clock offsets for starting and stoping frame drawing
-  myStartDisplayOffset = 228 * 32;                                              // Allow for 2 underscan lines...
-  myStopDisplayOffset = myStartDisplayOffset + 228 * A26_VID_HEIGHT;            // And 10+ overscan lines... 
+  if (myCartInfo.special == SPEC_PITFALL2)    
+  {
+    myStartDisplayOffset = 228 * (32+5);                                          // Pitfall2 we reduce as much
+    myStopDisplayOffset = myStartDisplayOffset + 228 * (A26_VID_HEIGHT-30);       // as possible to gain speed...
+  }
+  else
+  {
+    myStartDisplayOffset = 228 * 32;                                              // Allow for 2 underscan lines...
+    myStopDisplayOffset = myStartDisplayOffset + 228 * A26_VID_HEIGHT;            // And 10+ overscan lines... 
+  }
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;
