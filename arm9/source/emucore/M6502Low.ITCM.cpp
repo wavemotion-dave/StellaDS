@@ -49,6 +49,7 @@ uInt8 operand;
 bool M6502Low::execute(uInt16 number)
 {
   uInt16 fast_loop = number;
+  uInt8 IR;   // Instruction register
     
   // Clear all of the execution status bits except for the fatal error bit
   myExecutionStatus &= FatalErrorBit;
