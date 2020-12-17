@@ -58,6 +58,9 @@ bool M6502Low::execute(uInt16 number)
   {
     for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
     {
+      uInt16 operandAddress=0;
+      uInt8 operand=0;
+        
       // Get the next 6502 instruction
       IR = peek(PC++);
 
