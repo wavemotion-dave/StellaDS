@@ -28,6 +28,7 @@
 #include "M6502.hxx"
 #include "System.hxx"
 #include "TIA.hxx"
+#include "TIASound.hxx"
 #include "Sound.hxx"
 #include "Cart.hxx"
 #define HBLANK 68
@@ -2248,40 +2249,16 @@ void TIA::poke(uInt16 addr, uInt8 value)
     }
 
     case 0x15:    // Audio control 0
-    {
-      mySound.set(addr, value, gSystemCycles);
-      break;
-    }
-  
     case 0x16:    // Audio control 1
-    {
-      mySound.set(addr, value, gSystemCycles);
-      break;
-    }
-  
     case 0x17:    // Audio frequency 0
-    {
-      mySound.set(addr, value, gSystemCycles);
-      break;
-    }
-  
     case 0x18:    // Audio frequency 1
-    {
-      mySound.set(addr, value, gSystemCycles);
-      break;
-    }
-  
     case 0x19:    // Audio volume 0
-    {
-      mySound.set(addr, value, gSystemCycles);
-      break;
-    }
-  
     case 0x1A:    // Audio volume 1
     {
-      mySound.set(addr, value, gSystemCycles);
+      Update_tia_sound (addr, value);
       break;
     }
+  
     case 0x1B: // Graphics Player 0
     {
       // Set player 0 graphics

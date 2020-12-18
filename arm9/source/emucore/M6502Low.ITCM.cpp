@@ -44,10 +44,11 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 bool M6502Low::execute(uInt16 number)
 {
+  uInt8  IR;
   uInt16 fast_loop = number;
-  uInt8 IR;   // Instruction register
     
   // Clear all of the execution status bits except for the fatal error bit
   myExecutionStatus &= FatalErrorBit;

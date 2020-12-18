@@ -32,14 +32,13 @@ SoundSDL::SoundSDL(uInt32 fragsize)
     : myIsInitializedFlag(false),
       myVolume(100)
 {
-    Tia_sound_init(31400, 22050);
-    myIsInitializedFlag = true;
+  ;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::callback(uInt8* stream, int len)
 {
-	processFragment(stream, (Int32)len);
+  ;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -79,13 +78,13 @@ void SoundSDL::adjustVolume(Int8 direction)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::set(uInt16 addr, uInt8 value, Int32 cycle)
 {
-	Update_tia_sound(addr, value);
+	;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::processFragment(uInt8* stream, Int32 length)
 {
-	Tia_process(stream, length);
+	;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -108,32 +107,19 @@ SoundSDL::RegWriteQueue::~RegWriteQueue()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::RegWriteQueue::clear()
 {
-  myHead = myTail = mySize = 0;
+    ;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::RegWriteQueue::dequeue()
 {
-  if(mySize > 0)
-  {
-    myHead = (myHead + 1) % myCapacity;
-    --mySize;
-  }
+    ;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::RegWriteQueue::enqueue(const RegWrite& info)
 {
-  // If an attempt is made to enqueue more than the queue can hold then
-  // we'll enlarge the queue's capacity.
-  if(mySize == myCapacity)
-  {
-    grow();
-  }
-
-  myBuffer[myTail] = info;
-  myTail = (myTail + 1) % myCapacity;
-  ++mySize;
+    ;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -152,14 +138,5 @@ uInt32 SoundSDL::RegWriteQueue::size() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void SoundSDL::RegWriteQueue::grow()
 {
-  RegWrite* buffer = new RegWrite[myCapacity * 2];
-  for(uInt32 i = 0; i < mySize; ++i)
-  {
-    buffer[i] = myBuffer[(myHead + i) % myCapacity];
-  }
-  myHead = 0;
-  myTail = mySize;
-  myCapacity = myCapacity * 2;
-  delete[] myBuffer;
-  myBuffer = buffer;
+  ;
 }

@@ -39,6 +39,7 @@
 #include "Switches.hxx"
 #include "System.hxx"
 #include "TIA.hxx"
+#include "TIASound.hxx"
 
 TIA *theTIA = 0;
 
@@ -68,6 +69,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   TIA* tia = new TIA(*this, mySound);
   myCartridge = Cartridge::create(image, size);
   theTIA = tia;
+  Tia_sound_init(31400, 22050);
 
   // -------------------------------------------------------------------------------------------
   // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers
