@@ -164,19 +164,19 @@ class M6502
     void PS(uInt8 ps);
 
   protected:
-	uInt8 A;    // Accumulator
-	uInt8 X;    // X index register
-	uInt8 Y;    // Y index register
-	uInt8 SP;   // Stack Pointer
-	uInt16 PC;  // Program Counter
+    uInt8 A;    // Accumulator
+    uInt8 X;    // X index register
+    uInt8 Y;    // Y index register
+    uInt8 SP;   // Stack Pointer
+    uInt16 PC;  // Program Counter
 
-  uInt8 N;     // N flag for processor status register
-  uInt8 V;     // V flag for processor status register
-  uInt8 B;     // B flag for processor status register
-  uInt8 D;     // D flag for processor status register
-  uInt8 I;     // I flag for processor status register
-  uInt8 notZ;  // Z flag complement for processor status register
-  uInt8 C;     // C flag for processor status register
+    uInt8 N;     // N flag for processor status register
+    uInt8 V;     // V flag for processor status register
+    uInt8 B;     // B flag for processor status register
+    uInt8 D;     // D flag for processor status register
+    uInt8 I;     // I flag for processor status register
+    uInt8 notZ;  // Z flag complement for processor status register
+    uInt8 C;     // C flag for processor status register
 
     /** 
       Bit fields used to indicate that certain conditions need to be 
@@ -216,10 +216,7 @@ class M6502
       Table of instruction processor cycle times.  In some cases additional 
       cycles will be added during the execution of an instruction.
     */
-    static uInt32 ourInstructionProcessorCycleTable[256];
-
-    /// Table of instruction mnemonics
-    static const char* ourInstructionMnemonicTable[256];
+    static uInt8 ourInstructionProcessorCycleTable[256];
 };
 #endif
 

@@ -44,8 +44,6 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt16 operandAddress;
-uInt8 operand;
 bool M6502Low::execute(uInt16 number)
 {
   uInt16 fast_loop = number;
