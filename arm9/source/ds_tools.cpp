@@ -269,7 +269,6 @@ void VsoundHandler(void)
 {
   psound_buffer++;
   if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-  //theSDLSnd->callback(psound_buffer, 1);
   Tia_process(psound_buffer, 1);
 }
 

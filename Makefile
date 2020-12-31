@@ -14,7 +14,7 @@ include $(DEVKITARM)/ds_rules
 
 export TARGET		:=	$(shell basename $(CURDIR))
 export TOPDIR		:=	$(CURDIR)
-export VERSION		:=  1.6a
+export VERSION		:=  1.7
 
 ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);wavemotion-dave;https://github.com/wavemotion-dave/StellaDS"
 
@@ -27,8 +27,8 @@ all: $(TARGET).nds
 
 #---------------------------------------------------------------------------------
 $(TARGET).nds	:	arm7/$(TARGET).elf arm9/$(TARGET).elf
-	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf $(ICON) \
-			-g ESTA 00 "STELLA-DS" -z 80040000 -u 00030004 -a 00000138 -p 00000001
+	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf $(ICON) 
+#-g ESTA 00 "STELLA-DS" -z 80040000 -u 00030004 -a 00000138 -p 00000001
   
 #---------------------------------------------------------------------------------
 arm7/$(TARGET).elf:
