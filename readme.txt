@@ -11,6 +11,10 @@ Features :
  run nearly full speed on a DSi in native 133MHz mode. 
  Paddle and Keypad emulation is included.
 
+ See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
+ going to be NTSC No-Intro roms (the good ones!). PAL roms may cut off at the bottom
+ of the screen.
+
 Missing :
 ---------
  DPC+ games can't be emulated - that requires a coprocessor running at 70MHz (more 
