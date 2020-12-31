@@ -27,6 +27,9 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.7 : 31-Dec-2020 by Dave Bernazzani (wavemotion)
+  * Very minor cleanup and polish.
+
 V1.6 : 05-Dec-2020 by Dave Bernazzani (wavemotion)
   * Star Raiders working now.
   * All Tigervision (3F) games working.
