@@ -26,6 +26,7 @@ static  System::PageAccess access;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
 {
+  myImage = fast_cart_buffer;    
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 8192; ++addr)
   {

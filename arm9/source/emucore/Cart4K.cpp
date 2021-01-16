@@ -24,6 +24,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge4K::Cartridge4K(const uInt8* image)
 {
+  myImage = fast_cart_buffer;
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 4096; ++addr)
   {

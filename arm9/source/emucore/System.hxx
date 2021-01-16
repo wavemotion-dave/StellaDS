@@ -27,8 +27,11 @@ class NullDevice;
 #include "Device.hxx"
 #include "NullDev.hxx"
 
-extern int gSystemCycles;   // Number of system cycles executed since the last reset
-extern uInt32 debug[];      // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
+extern int gSystemCycles;    // Number of system cycles executed since the last reset
+extern uInt32 debug[];       // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
+extern uInt8 myDataBusState; // The current state of the Data Bus
+
+
 
 #define MY_PAGE_SHIFT   7
 #define MY_PAGE_MASK    0x7F
@@ -271,9 +274,6 @@ class System
 
     // Null device to use for page which are not installed
     NullDevice myNullDevice; 
-
-    // The current state of the Data Bus
-    uInt8 myDataBusState;
 
   private:
     // Copy constructor isn't supported by this class so make it private

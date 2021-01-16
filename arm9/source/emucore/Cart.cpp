@@ -43,6 +43,8 @@
 #include "CartUA.hxx"
 #include "MD5.hxx"
 
+// We can store up to 12k in the fast DTCM memory to give a speed boost...
+uInt8 fast_cart_buffer[12*1024] __attribute__((section(".dtcm")));
 CartInfo myCartInfo = {"","",0,0,0,0};
 
 static CartInfo table[] = 
@@ -139,7 +141,7 @@ static CartInfo table[] =
     {"9e192601829f5f5c2d3b51f8ae25dbe5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Cathouse Blues (1982).bin
     {"d071d2ec86b9d52b585cc0382480b351",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Cat Tracks.bin
     {"76f66ce3b83d7a104a899b4b3354a2f2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Cat Trax (1983).bin
-    {"1cedebe83d781cc22e396383e028241a",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Cave In.bin
+    {"1cedebe83d781cc22e396383e028241a",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Cave In.bin
     {"91c2098e88a6b13f977af8c003e0bca5",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Centipede (1982).bin
     {"5d799bfa9e1e7b6224877162accada0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Challenge of.... Nexar (1982).bin
     {"73158ea51d77bf521e1369311d26c27b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Challenge (Zellers).bin
@@ -197,7 +199,7 @@ static CartInfo table[] =
     {"9222b25a0875022b412e8da37e7f6887",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dice Puzzle (1983).bin
     {"6dda84fb8e442ecf34241ac0d1d91d69",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dig Dug (1983).bin
     {"939ce554f5c0e74cc6e4e62810ec2111",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dishaster (1983).bin
-    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Donkey Kong VCS.bin
+    {"f1ae6305fa33a948e36deb0ef12af852",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  2},    // Donkey Kong VCS.bin
     {"494cda91cc640551b4898c82be058dd9",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   10,  0},    // Donkey Kong VCS (pal).bin    
     {"c3472fa98c3b452fa2fd37d1c219fb6f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dodge 'Em (1980).bin
     {"ca09fa7406b7d2aea10d969b6fc90195",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Dolphin (1983).bin
@@ -535,6 +537,7 @@ static CartInfo table[] =
     {"2bd00beefdb424fa39931a75e890695d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Road Runner (1989).bin
     {"72a46e0c21f825518b7261c267ab886e",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Robin Hood (1983).bin
     {"4f618c2429138e0280969193ed6c107e",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  6},    // Robot Tank (1983).bin
+    {"ec44dcf2ddb4319962fc43b725a902e8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10, -1},    // Robot City (RC8).bin
     {"d97fd5e6e1daacd909559a71f189f14b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Rocky & Bullwinkle (1983).bin
     {"65bd29e8ab1b847309775b0de6b2e4fe",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Roc 'n Rope (1984).bin
     {"67931b0d37dc99af250dd06f1c095e8d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Room of Doom (1982).bin
@@ -599,7 +602,8 @@ static CartInfo table[] =
     {"1d566002bbc51e5eee73de4c595fd545",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // SpaceBattleFinal4N.bin
     {"df6a28a89600affe36d94394ef597214",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Space Cavern (1981).bin
     {"ec5c861b487a5075876ab01155e74c6c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Spacechase (1981) .bin
-    {"26a4c3e0b7a2501e3a9605493b7c41c3",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // SpaceGame-Prerelease-NTSC-5.bin
+    {"44ca1a88274ff55787ed1763296b8456",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  4},    // SpaceGame-Final.bin
+    {"94255d5c05601723a58df61726bc2615",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  1},    // SpaceGame 2K.bin
     {"72ffbef6504b75e69ee1045af9075f66",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Space Invaders (1980).bin
     {"e074af84dcd5bd21fb48ca7f36845e61",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  5},    // Space Invaders Deluxe.a26    
     {"6f2aaffaaf53d23a28bf6677b86ac0e3",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Space Jockey (1982).bin
@@ -774,6 +778,13 @@ static CartInfo table[] =
     {"eea0da9b987d661264cce69a7c13c3bd",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Zaxxon (1982).bin
     {"a336beac1f0a835614200ecd9c41fd70",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // Zoo Keeper Sounds (1984).bin
 
+    {"b848efdb75dddb0ef89ca78c1696b254",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // frantic_20200819.bin
+    {"f7ebf3dfbd6a3ff5ebc2709c4139a53a",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  0},    // The End NTSC - RC6.bin
+    {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   10,  3},    // Venture Reloaded (RC3).bin
+    
+//258f8f1a6d9af8fc1980b22361738678  /media/dsb/TWIMENU/roms/new/shadow_reflex BETA 26_10_2020_NTSC.bin
+//31929bbed3dc3d75c1ef753dabc8b711  /media/dsb/TWIMENU/roms/new/whale.bin
+    
     {(char*)0,                        (char*)0,   0,0,0,0}
 };
 

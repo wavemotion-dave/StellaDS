@@ -29,7 +29,8 @@
 // better than some global variable hack but the speedup is needed to bring
 // even more games up to 60 FPS. Sometimes the ends justify the means.
 // ---------------------------------------------------------------------------
-int gSystemCycles = 0;
+int gSystemCycles    __attribute__((section(".dtcm"))) = 0;
+uInt8 myDataBusState __attribute__((section(".dtcm"))) = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)
@@ -38,9 +39,10 @@ System::System(uInt16 n, uInt16 m)
       myPageMask((1 << m) - 1),
       myNumberOfPages(1 << (n - m)),
       myNumberOfDevices(0),
-      myM6502(0),
-      myDataBusState(0)
+      myM6502(0)
 {
+  myDataBusState = 0;
+          
   // Make sure the arguments are reasonable
   assert((1 <= m) && (m <= n) && (n <= 16));
 

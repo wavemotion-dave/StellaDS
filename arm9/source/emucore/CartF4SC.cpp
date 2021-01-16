@@ -55,8 +55,8 @@ const char* CartridgeF4SC::name() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeF4SC::reset()
 {
-  // Upon reset we switch to bank 7
-  bank(7);
+  // Upon reset we switch to bank 0
+  bank(0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -100,8 +100,8 @@ void CartridgeF4SC::install(System& system)
   access.directPeekBase = 0;
   access.directPokeBase = 0;
     
-  // Install pages for bank 7
-  bank(7);
+  // Install pages for bank 0
+  bank(0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -124,6 +124,8 @@ uInt8 CartridgeF4SC::peek(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeF4SC::poke(uInt16 address, uInt8)
 {
+  address = address & 0x0FFF;
+
   // Switch banks if necessary
   if((address >= 0x0FF4) && (address <= 0x0FFB))
   {

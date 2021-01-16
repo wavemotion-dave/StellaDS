@@ -281,3 +281,4 @@ uInt8 M6502::ourInstructionProcessorCycleTable[256] = {
     2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7   // f
   };
 
+    

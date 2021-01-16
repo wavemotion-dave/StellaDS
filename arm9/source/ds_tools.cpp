@@ -38,7 +38,7 @@
 
 #define MAX_DEBUG 10 
 Int32 debug[MAX_DEBUG]={0};
-//#define DEBUG_DUMP
+#define DEBUG_DUMP
 
 FICA2600 vcsromlist[1024];
 unsigned int countvcs=0, ucFicAct=0;

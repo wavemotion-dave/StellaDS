@@ -86,7 +86,7 @@ class Cartridge4K : public Cartridge
 
   private:
     // The 4K ROM image for the cartridge
-    uInt8 myImage[4096];
+    uInt8 *myImage;
 };
 #endif
 

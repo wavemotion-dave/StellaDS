@@ -87,7 +87,7 @@ class Cartridge2K : public Cartridge
 
   private:
     // The 2k ROM image for the cartridge
-    uInt8 myImage[2048];
+    uInt8 *myImage;
 };
 #endif
 
