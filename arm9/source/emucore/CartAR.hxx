@@ -20,7 +20,7 @@
 #define CARTRIDGEAR_HXX
 
 class CartridgeAR;
-class M6502High;
+class M6502Low;
 
 #include "bspf.hxx"
 #include "Cart.hxx"
@@ -108,17 +108,14 @@ class CartridgeAR : public Cartridge
     void loadIntoRAM(uInt8 load);
 
     // Sets up a "dummy" BIOS ROM in the ROM bank of the cartridge
-    void initializeROM();
+    void initializeROM(bool fastbios);
 
   private:
-    // Pointer to the 6502 processor in the system
-    M6502High* my6502;
-
     // Indicates the offest within the image for the corresponding bank
     uInt32 myImageOffset[2];
 
     // The 6K of RAM and 2K of ROM contained in the Supercharger
-    uInt8 myImage[8192];
+    uInt8 *myImage; //[8192];
 
     // The 256 byte header for the current 8448 byte load
     uInt8 myHeader[256];

@@ -15,29 +15,37 @@
 //
 // $Id: CartAR.cxx,v 1.6 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
-
+#include <nds.h>
 #include <assert.h>
 #include <string.h>
 #include "CartAR.hxx"
-#include "M6502Hi.hxx"
+#include "M6502Low.hxx"
 #include "Random.hxx"
 #include "System.hxx"
 #include <iostream>
 
+uInt8 * myImage0 __attribute__((section(".dtcm")));
+uInt8 * myImage1 __attribute__((section(".dtcm")));
+uInt8 bPossibleLoad __attribute__((section(".dtcm")));
+
+extern uInt32 NumberOfDistinctAccesses;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
-    : my6502(0)
 {
   // Create a load image buffer and copy the given image
-  myLoadImages = new uInt8[size*2];
+  myLoadImages = new uInt8[size];
   myNumberOfLoadImages = size / 8448;
   memcpy(myLoadImages, image, size);
 
-  // Initialize RAM with random values
-  memset(myImage, 0, 6 * 1024);
-
+  myImage = (uInt8*)image; // Set this to the fast internal RAM... that buffer is otherwise unused at this point...
+  myImage0 = myImage;
+  myImage1 = myImage;
+  bPossibleLoad=1;
+        
   // Initialize SC BIOS ROM
-  initializeROM();
+  initializeROM(0);
+  reset();
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,14 +63,14 @@ const char* CartridgeAR::name() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::reset()
 {
+  // Initialize RAM to Zeros
+  memset(myImage, 0x00, 6*1024);
+
   myPower = true;
-  myPowerRomCycle = mySystem->cycles();
   myWriteEnabled = false;
-    
-  memset(myImage, 0, 6 * 1024);
 
   myDataHoldRegister = 0;
-  myNumberOfDistinctAccesses = 0;
+  myNumberOfDistinctAccesses = 5;
   myWritePending = false;
 
   // Set bank configuration upon reset so ROM is selected and powered up
@@ -72,11 +80,6 @@ void CartridgeAR::reset()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::systemCyclesReset()
 {
-  // Get the current system cycle
-  uInt32 cycles = mySystem->cycles();
-
-  // Adjust cycle values
-  myPowerRomCycle -= cycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,8 +88,6 @@ void CartridgeAR::install(System& system)
   mySystem = &system;
   uInt16 shift = mySystem->pageShift();
   uInt16 mask = mySystem->pageMask();
-
-  my6502 = &(M6502High&)mySystem->m6502();
 
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1000 & mask) == 0);
@@ -106,22 +107,23 @@ void CartridgeAR::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeAR::peek(uInt16 addr)
 {
-  // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
-  if(((addr & 0x1FFF) == 0x1850) && (myImageOffset[1] == (3 * 2048)))
+  if (bPossibleLoad)
   {
-    // Get load that's being accessed (BIOS places load number at 0x80)
-    uInt8 load = mySystem->peek(0x0080);
+      // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
+      if((addr & 0x1FFF) == 0x1850)
+      {
+        // Get load that's being accessed (BIOS places load number at 0x80)
+        uInt8 load = mySystem->peek(0x0080);
 
-    // Read the specified load into RAM
-    loadIntoRAM(load);
+        // Read the specified load into RAM
+        loadIntoRAM(load);
 
-    return myImage[(addr & 0x07FF) + myImageOffset[1]];
+        return myImage[(addr & 0x07FF) + myImageOffset[1]];
+      }
   }
 
   // Cancel any pending write if more than 5 distinct accesses have occurred
-  // TODO: Modify to handle when the distinct counter wraps around...
-  if(myWritePending && 
-      (my6502->distinctAccesses() > myNumberOfDistinctAccesses + 5))
+  if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
   {
     myWritePending = false;
   }
@@ -130,7 +132,7 @@ uInt8 CartridgeAR::peek(uInt16 addr)
   if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
   {
     myDataHoldRegister = addr;
-    myNumberOfDistinctAccesses = my6502->distinctAccesses();
+    myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
     myWritePending = true;
   }
   // Is the bank configuration hotspot being accessed?
@@ -141,8 +143,7 @@ uInt8 CartridgeAR::peek(uInt16 addr)
     bankConfiguration(myDataHoldRegister);
   }
   // Handle poke if writing enabled
-  else if(myWriteEnabled && myWritePending && 
-      (my6502->distinctAccesses() == (myNumberOfDistinctAccesses + 5)))
+  else if(myWriteEnabled && myWritePending && (NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
   {
     if((addr & 0x0800) == 0)
       myImage[(addr & 0x07FF) + myImageOffset[0]] = myDataHoldRegister;
@@ -151,16 +152,17 @@ uInt8 CartridgeAR::peek(uInt16 addr)
     myWritePending = false;
   }
 
-  return myImage[(addr & 0x07FF) + myImageOffset[(addr & 0x0800) ? 1 : 0]];
+  if (addr & 0x0800)
+    return myImage1[(addr & 0x07FF)];
+  else
+    return myImage0[(addr & 0x07FF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::poke(uInt16 addr, uInt8)
 {
   // Cancel any pending write if more than 5 distinct accesses have occurred
-  // TODO: Modify to handle when the distinct counter wraps around...
-  if(myWritePending && 
-      (my6502->distinctAccesses() > myNumberOfDistinctAccesses + 5))
+  if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
   {
     myWritePending = false;
   }
@@ -169,7 +171,7 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
   if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
   {
     myDataHoldRegister = addr;
-    myNumberOfDistinctAccesses = my6502->distinctAccesses();
+    myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
     myWritePending = true;
   }
   // Is the bank configuration hotspot being accessed?
@@ -180,13 +182,12 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
     bankConfiguration(myDataHoldRegister);
   }
   // Handle poke if writing enabled
-  else if(myWriteEnabled && myWritePending && 
-      (my6502->distinctAccesses() == (myNumberOfDistinctAccesses + 5)))
+  else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
   {
     if((addr & 0x0800) == 0)
-      myImage[(addr & 0x07FF) + myImageOffset[0]] = myDataHoldRegister;
-    else if(myImageOffset[1] != 3 * 2048)    // Can't poke to ROM :-)
-      myImage[(addr & 0x07FF) + myImageOffset[1]] = myDataHoldRegister;
+        myImage0[addr & 0x07FF] = myDataHoldRegister;
+    else if(!bPossibleLoad)    // Can't poke to ROM :-)
+      myImage1[addr & 0x07FF] = myDataHoldRegister;
     myWritePending = false;
   }
 }
@@ -212,13 +213,7 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
   //  p = ROM Power (0 = enabled, 1 = off.)  Only power the ROM if you're
   //    wanting to access the ROM for multiloads.  Otherwise set to 1.
 
-  // Handle ROM power configuration
-  myPower = !(configuration & 0x01);
-
-  if(myPower)
-  {
-    myPowerRomCycle = mySystem->cycles();
-  }
+  myCurrentBank = configuration & 0x1f; // remember for the bank() method
 
   myWriteEnabled = configuration & 0x02;
 
@@ -226,130 +221,152 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
   {
     case 0:
     {
+      bPossibleLoad = 1;
       myImageOffset[0] = 2 * 2048;
       myImageOffset[1] = 3 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 1:
     {
+      bPossibleLoad = 1;
       myImageOffset[0] = 0 * 2048;
       myImageOffset[1] = 3 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 2:
     {
+      bPossibleLoad = 0;
       myImageOffset[0] = 2 * 2048;
       myImageOffset[1] = 0 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 3:
     {
+      bPossibleLoad = 0;
       myImageOffset[0] = 0 * 2048;
       myImageOffset[1] = 2 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 4:
     {
+      bPossibleLoad = 1;
       myImageOffset[0] = 2 * 2048;
       myImageOffset[1] = 3 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 5:
     {
+      bPossibleLoad = 1;
       myImageOffset[0] = 1 * 2048;
       myImageOffset[1] = 3 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 6:
     {
+      bPossibleLoad = 0;
       myImageOffset[0] = 2 * 2048;
       myImageOffset[1] = 1 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
 
     case 7:
     {
+      bPossibleLoad = 0;
       myImageOffset[0] = 1 * 2048;
       myImageOffset[1] = 2 * 2048;
+      myImage0 = myImage + myImageOffset[0];
+      myImage1 = myImage + myImageOffset[1];        
       break;
     }
   }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeAR::initializeROM()
+void CartridgeAR::initializeROM(bool fastbios)
 {
-static uInt8 ourDummyROMCode[] = {
-  0xa5, 0xfa, 0x85, 0x80, 0x4c, 0x18, 0xf8, 0xff,
-  0xff, 0xff, 0x78, 0xd8, 0xa0, 0x00, 0xa2, 0x00,
-  0x94, 0x00, 0xe8, 0xd0, 0xfb, 0x4c, 0x50, 0xf8,
-  0xa2, 0x00, 0xbd, 0x06, 0xf0, 0xad, 0xf8, 0xff,
-  0xa2, 0x00, 0xad, 0x00, 0xf0, 0xea, 0xbd, 0x00,
-  0xf7, 0xca, 0xd0, 0xf6, 0x4c, 0x50, 0xf8, 0xff,
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-  0xa2, 0x03, 0xbc, 0x22, 0xf9, 0x94, 0xfa, 0xca,
-  0x10, 0xf8, 0xa0, 0x00, 0xa2, 0x28, 0x94, 0x04,
-  0xca, 0x10, 0xfb, 0xa2, 0x1c, 0x94, 0x81, 0xca,
-  0x10, 0xfb, 0xa9, 0xff, 0xc9, 0x00, 0xd0, 0x03,
-  0x4c, 0x13, 0xf9, 0xa9, 0x00, 0x85, 0x1b, 0x85,
-  0x1c, 0x85, 0x1d, 0x85, 0x1e, 0x85, 0x1f, 0x85,
-  0x19, 0x85, 0x1a, 0x85, 0x08, 0x85, 0x01, 0xa9,
-  0x10, 0x85, 0x21, 0x85, 0x02, 0xa2, 0x07, 0xca,
-  0xca, 0xd0, 0xfd, 0xa9, 0x00, 0x85, 0x20, 0x85,
-  0x10, 0x85, 0x11, 0x85, 0x02, 0x85, 0x2a, 0xa9,
-  0x05, 0x85, 0x0a, 0xa9, 0xff, 0x85, 0x0d, 0x85,
-  0x0e, 0x85, 0x0f, 0x85, 0x84, 0x85, 0x85, 0xa9,
-  0xf0, 0x85, 0x83, 0xa9, 0x74, 0x85, 0x09, 0xa9,
-  0x0c, 0x85, 0x15, 0xa9, 0x1f, 0x85, 0x17, 0x85,
-  0x82, 0xa9, 0x07, 0x85, 0x19, 0xa2, 0x08, 0xa0,
-  0x00, 0x85, 0x02, 0x88, 0xd0, 0xfb, 0x85, 0x02,
-  0x85, 0x02, 0xa9, 0x02, 0x85, 0x02, 0x85, 0x00,
-  0x85, 0x02, 0x85, 0x02, 0x85, 0x02, 0xa9, 0x00,
-  0x85, 0x00, 0xca, 0x10, 0xe4, 0x06, 0x83, 0x66,
-  0x84, 0x26, 0x85, 0xa5, 0x83, 0x85, 0x0d, 0xa5,
-  0x84, 0x85, 0x0e, 0xa5, 0x85, 0x85, 0x0f, 0xa6,
-  0x82, 0xca, 0x86, 0x82, 0x86, 0x17, 0xe0, 0x0a,
-  0xd0, 0xc3, 0xa9, 0x02, 0x85, 0x01, 0xa2, 0x1c,
-  0xa0, 0x00, 0x84, 0x19, 0x84, 0x09, 0x94, 0x81,
-  0xca, 0x10, 0xfb, 0xa6, 0x80, 0xdd, 0x00, 0xf0,
-  0xa9, 0x9a, 0xa2, 0xff, 0xa0, 0x00, 0x9a, 0x4c,
-  0xfa, 0x00, 0xcd, 0xf8, 0xff, 0x4c
-};
-    
-  // Note that the following offsets depend on the 'scrom.asm' file
-  // in src/emucore/misc.  If that file is ever recompiled (and its
-  // contents placed in the ourDummyROMCode array), the offsets will
-  // almost definitely change
+  static uInt8 dummyROMCode[] = {
+    0xa5, 0xfa, 0x85, 0x80, 0x4c, 0x18, 0xf8, 0xff, 
+    0xff, 0xff, 0x78, 0xd8, 0xa0, 0x00, 0xa2, 0x00, 
+    0x94, 0x00, 0xe8, 0xd0, 0xfb, 0x4c, 0x50, 0xf8, 
+    0xa2, 0x00, 0xbd, 0x06, 0xf0, 0xad, 0xf8, 0xff, 
+    0xa2, 0x00, 0xad, 0x00, 0xf0, 0xea, 0xbd, 0x00, 
+    0xf7, 0xca, 0xd0, 0xf6, 0x4c, 0x50, 0xf8, 0xff, 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+    0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
+    0xa2, 0x03, 0xbc, 0x1d, 0xf9, 0x94, 0xfa, 0xca, 
+    0x10, 0xf8, 0xa0, 0x00, 0xa2, 0x28, 0x94, 0x04, 
+    0xca, 0x10, 0xfb, 0xa2, 0x1c, 0x94, 0x81, 0xca, 
+    0x10, 0xfb, 0xa9, 0x00, 0x85, 0x1b, 0x85, 0x1c, 
+    0x85, 0x1d, 0x85, 0x1e, 0x85, 0x1f, 0x85, 0x19, 
+    0x85, 0x1a, 0x85, 0x08, 0x85, 0x01, 0xa9, 0x10, 
+    0x85, 0x21, 0x85, 0x02, 0xa2, 0x07, 0xca, 0xca, 
+    0xd0, 0xfd, 0xa9, 0x00, 0x85, 0x20, 0x85, 0x10, 
+    0x85, 0x11, 0x85, 0x02, 0x85, 0x2a, 0xa9, 0x05, 
+    0x85, 0x0a, 0xa9, 0xff, 0x85, 0x0d, 0x85, 0x0e, 
+    0x85, 0x0f, 0x85, 0x84, 0x85, 0x85, 0xa9, 0xf0, 
+    0x85, 0x83, 0xa9, 0x74, 0x85, 0x09, 0xa9, 0x0c, 
+    0x85, 0x15, 0xa9, 0x1f, 0x85, 0x17, 0x85, 0x82, 
+    0xa9, 0x07, 0x85, 0x19, 0xa2, 0x08, 0xa0, 0x00, 
+    0x85, 0x02, 0x88, 0xd0, 0xfb, 0x85, 0x02, 0x85, 
+    0x02, 0xa9, 0x02, 0x85, 0x02, 0x85, 0x00, 0x85, 
+    0x02, 0x85, 0x02, 0x85, 0x02, 0xa9, 0x00, 0x85, 
+    0x00, 0xca, 0x10, 0xe4, 0x06, 0x83, 0x66, 0x84, 
+    0x26, 0x85, 0xa5, 0x83, 0x85, 0x0d, 0xa5, 0x84, 
+    0x85, 0x0e, 0xa5, 0x85, 0x85, 0x0f, 0xa6, 0x82, 
+    0xca, 0x86, 0x82, 0x86, 0x17, 0xe0, 0x0a, 0xd0, 
+    0xc3, 0xa9, 0x02, 0x85, 0x01, 0xa2, 0x1c, 0xa0, 
+    0x00, 0x84, 0x19, 0x84, 0x09, 0x94, 0x81, 0xca, 
+    0x10, 0xfb, 0xa6, 0x80, 0xdd, 0x00, 0xf0, 0xa5, 
+    0x80, 0x45, 0xfe, 0x45, 0xff, 0xa2, 0xff, 0xa0, 
+    0x00, 0x9a, 0x4c, 0xfa, 0x00, 0xcd, 0xf8, 0xff, 0x4c
+  };
 
-  // The scrom.asm code checks a value at offset 109 as follows:
-  //   0xFF -> do a complete jump over the SC BIOS progress bars code
-  //   0x00 -> show SC BIOS progress bars as normal
-  ourDummyROMCode[109] = 0x00;
+  // If fastbios is enabled, set the wait time between vertical bars
+  // to 0 (default is 8), which is stored at address 189 of the bios
+  if(fastbios)
+    dummyROMCode[189] = 0x0;
 
-  // The accumulator should contain a random value after exiting the
-  // SC BIOS code - a value placed in offset 281 will be stored in A
-  ourDummyROMCode[281] = 0;
+  uInt32 size = sizeof(dummyROMCode);
 
   // Initialize ROM with illegal 6502 opcode that causes a real 6502 to jam
-  memset(myImage + (3<<11), 0x02, 2048);
+  for(uInt32 i = 0; i < 2048; ++i)
+  {
+    myImage[3 * 2048 + i] = 0x02; 
+  }
 
   // Copy the "dummy" Supercharger BIOS code into the ROM area
-  memcpy(myImage + (3<<11), ourDummyROMCode, sizeof(ourDummyROMCode));
+  for(uInt32 j = 0; j < size; ++j)
+  {
+    myImage[3 * 2048 + j] = dummyROMCode[j];
+  }
 
   // Finally set 6502 vectors to point to initial load code at 0xF80A of BIOS
-  myImage[(3<<11) + 2044] = 0x0A;
-  myImage[(3<<11) + 2045] = 0xF8;
-  myImage[(3<<11) + 2046] = 0x0A;
-  myImage[(3<<11) + 2047] = 0xF8;
+  myImage[3 * 2048 + 2044] = 0x0A;
+  myImage[3 * 2048 + 2045] = 0xF8;
+  myImage[3 * 2048 + 2046] = 0x0A;
+  myImage[3 * 2048 + 2047] = 0xF8;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -377,34 +394,28 @@ void CartridgeAR::loadIntoRAM(uInt8 load)
     if(myLoadImages[(image * 8448) + 8192 + 5] == load)
     {
       // Copy the load's header
-      memcpy(myHeader, myLoadImages + (image * 8448) + 8192, 256);
-
-      // Verify the load's header 
-      if(checksum(myHeader, 8) != 0x55)
-      {
-        cerr << "WARNING: The Supercharger header checksum is invalid...\n";
-      }
+        uInt32 *dest = (uInt32 *) (myHeader);
+        uInt32 *src2 = (uInt32 *) (myLoadImages + (image * 8448) + 8192);
+        for (int i=0; i<64; i++)
+        {
+           *dest++ = *src2++;   
+        }     
 
       // Load all of the pages from the load
-      bool invalidPageChecksumSeen = false;
       for(uInt32 j = 0; j < myHeader[3]; ++j)
       {
         uInt32 bank = myHeader[16 + j] & 0x03;
         uInt32 page = (myHeader[16 + j] >> 2) & 0x07;
         uInt8* src = myLoadImages + (image * 8448) + (j * 256);
-        uInt8 sum = checksum(src, 256) + myHeader[16 + j] + myHeader[64 + j];
-
-        if(!invalidPageChecksumSeen && (sum != 0x55))
-        {
-          cerr << "WARNING: Some Supercharger page checksums are invalid...\n";
-          invalidPageChecksumSeen = true;
-
-        }
-
         // Copy page to Supercharger RAM (don't allow a copy into ROM area)
         if(bank < 3)
         {
-          memcpy(myImage + (bank * 2048) + (page * 256), src, 256);
+            uInt32 *dest = (uInt32 *) (myImage + (bank * 2048) + (page * 256));
+            uInt32 *src2 = (uInt32 *) src;
+            for (int i=0; i<64; i++)
+            {
+               *dest++ = *src2++;   
+            }
         }
       }
 
@@ -417,8 +428,7 @@ void CartridgeAR::loadIntoRAM(uInt8 load)
       return;
     }
   }
-
-  // TODO: Should probably switch to an internal ROM routine to display
-  // this message to the user...
-  cerr << "ERROR: Supercharger load is missing from ROM image...\n";
 }
+
+
+

@@ -74,12 +74,13 @@ class M6502Low : public M6502
       @return The name of the device
     */
     virtual const char* name() const;
-
+    
   protected:
     /**
       Called after an interrupt has be requested using irq() or nmi()
     */
     void interruptHandler();
+    bool execute_distinct(uInt16 number);
 
   protected:
     /*
@@ -88,6 +89,8 @@ class M6502Low : public M6502
       @return The byte at the specified address
     */
     inline uInt8 peek(uInt16 address);
+    inline uInt8 peek_distinct(uInt16 address);
+    inline uInt8 fake_peek(void);
 
     /**
       Change the byte at the specified address to the given value
@@ -96,6 +99,8 @@ class M6502Low : public M6502
       @param value The value to be stored at the address
     */
     inline void poke(uInt16 address, uInt8 value);
+    inline void poke_distinct(uInt16 address, uInt8 value);
+
 };
 #endif
 
