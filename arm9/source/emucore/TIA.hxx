@@ -38,6 +38,96 @@ class System;
 #define      ScoreBit      0x40         // Bit for Playfield score mode
 #define      PriorityBit   0x080        // Bit for Playfield priority
 
+// Used to set the collision register to the correct value
+extern uInt16 ourCollisionTable[64];
+extern uInt8 myPriorityEncoder[2][256];
+
+extern    uInt16 myCollision;    // Collision register
+
+    // Note that these position registers contain the color clock 
+    // on which the object's serial output should begin (0 to 159)
+extern    Int16 myPOSP0;         // Player 0 position register
+extern    Int16 myPOSP1;         // Player 1 position register
+extern    Int16 myPOSM0;         // Missle 0 position register
+extern    Int16 myPOSM1;         // Missle 1 position register
+extern    Int16 myPOSBL;         // Ball position register
+
+extern uInt8 myPlayfieldPriorityAndScore;
+extern uInt32 myColor[4];
+
+extern    uInt8 myCTRLPF;       // Playfield control register
+extern    bool myREFP0;         // Indicates if player 0 is being reflected
+extern    bool myREFP1;         // Indicates if player 1 is being reflected
+extern    uInt32 myPF;           // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
+extern    uInt8 myGRP0;         // Player 0 graphics register
+extern    uInt8 myGRP1;         // Player 1 graphics register
+extern    uInt8 myDGRP0;        // Player 0 delayed graphics register
+extern    uInt8 myDGRP1;        // Player 1 delayed graphics register
+extern    bool myENAM0;         // Indicates if missle 0 is enabled
+extern    bool myENAM1;         // Indicates if missle 0 is enabled
+extern    bool myENABL;         // Indicates if the ball is enabled
+extern    bool myDENABL;        // Indicates if the virtically delayed ball is enabled
+extern    Int8 myHMP0;          // Player 0 horizontal motion register
+extern    Int8 myHMP1;          // Player 1 horizontal motion register
+extern    Int8 myHMM0;          // Missle 0 horizontal motion register
+extern    Int8 myHMM1;          // Missle 1 horizontal motion register
+extern    Int8 myHMBL;          // Ball horizontal motion register
+extern    bool myVDELP0;        // Indicates if player 0 is being virtically delayed
+extern    bool myVDELP1;        // Indicates if player 1 is being virtically delayed
+extern    bool myVDELBL;        // Indicates if the ball is being virtically delayed
+extern    bool myRESMP0;        // Indicates if missle 0 is reset to player 0
+extern    bool myRESMP1;        // Indicates if missle 1 is reset to player 1
+extern    uInt8* myCurrentFrameBuffer[2]; // Pointer to the current frame buffer
+extern    uInt8* myFramePointer;          // Pointer to the next pixel that will be drawn in the current frame buffer
+extern    uInt16* myDSFramePointer;
+extern    uInt32 myFrameXStart;
+extern    uInt32 myFrameWidth;
+extern    uInt32 myFrameYStart;
+extern    uInt32 myFrameHeight;
+extern    uInt32 myStartDisplayOffset;
+extern    uInt32 myStopDisplayOffset;
+extern    Int32 myVSYNCFinishClock; 
+extern    uInt8 myEnabledObjects;
+extern    Int32 myClockWhenFrameStarted;
+extern    Int32 myCyclesWhenFrameStarted;   
+extern    Int32 myClockStartDisplay;
+extern    Int32 myClockStopDisplay;
+extern    Int32 myClockAtLastUpdate;
+extern    Int32 myClocksToEndOfScanLine;
+extern    Int32 myMaximumNumberOfScanlines;
+
+
+    // Graphics for Player 0 that should be displayed.  This will be
+    // reflected if the player is being reflected.
+extern    uInt8 myCurrentGRP0;
+
+    // Graphics for Player 1 that should be displayed.  This will be
+    // reflected if the player is being reflected.
+extern    uInt8 myCurrentGRP1;
+
+    // It's VERY important that the BL, M0, M1, P0 and P1 current
+    // mask pointers are always on a uInt32 boundary.  Otherwise,
+    // the TIA code will fail on a good number of CPUs.
+
+    // Pointer to the currently active mask array for the ball
+extern    uInt8* myCurrentBLMask;
+
+    // Pointer to the currently active mask array for missle 0
+extern    uInt8* myCurrentM0Mask;
+
+    // Pointer to the currently active mask array for missle 1
+extern    uInt8* myCurrentM1Mask;
+
+    // Pointer to the currently active mask array for player 0
+extern    uInt8* myCurrentP0Mask;
+
+    // Pointer to the currently active mask array for player 1
+extern    uInt8* myCurrentP1Mask;
+
+    // Pointer to the currently active mask array for the playfield
+extern  uInt32* myCurrentPFMask;
+
+
 
 /**
   This class is a device that emulates the Television Interface Adapator 
@@ -197,151 +287,11 @@ class TIA : public Device , public MediaSource
     bool myColorLossEnabled;
 
   private:
-    // Pointer to the current frame buffer
-    uInt8* myCurrentFrameBuffer[2];
-
-    // Pointer to the next pixel that will be drawn in the current frame buffer
-    uInt8* myFramePointer;
-    uInt16* myDSFramePointer;
-
-    // Indicates where the scanline should start being displayed
-    uInt32 myFrameXStart;
-
-    // Indicates the width of the scanline 
-    uInt32 myFrameWidth;
-
-    // Indicated what scanline the frame should start being drawn at
-    uInt32 myFrameYStart;
-
-    // Indicates the height of the frame in scanlines
-    uInt32 myFrameHeight;
-
-  private:
-    // Indicates offset in color clocks when display should begin
-    uInt32 myStartDisplayOffset;
-
-    // Indicates offset in color clocks when display should stop
-    uInt32 myStopDisplayOffset;
-
-  private:
-    // Indicates color clocks when the current frame began
-    Int32 myClockWhenFrameStarted;
-    Int32 myCyclesWhenFrameStarted;   
-
-    // Indicates color clocks when frame should begin to be drawn
-    Int32 myClockStartDisplay;
-
-    // Indicates color clocks when frame should stop being drawn
-    Int32 myClockStopDisplay;
-
-    // Indicates color clocks when the frame was last updated
-    Int32 myClockAtLastUpdate;
-
-    // Indicates how many color clocks remain until the end of 
-    // current scanline.  This value is valid during the 
-    // displayed portion of the frame.
-    Int32 myClocksToEndOfScanLine;
-
-    // Indicates the maximum number of scanlines to be generated for a frame
-    Int32 myMaximumNumberOfScanlines;
-
-  private:
-    // Color clock when VSYNC ending causes a new frame to be started
-    Int32 myVSYNCFinishClock; 
-
-  private:
-
-    // Bitmap of the objects that should be considered while drawing
-    uInt8 myEnabledObjects;
-
-  private:
     uInt8 myVSYNC;        // Holds the VSYNC register value
     uInt8 myVBLANK;       // Holds the VBLANK register value
 
     uInt8 myNUSIZ0;       // Number and size of player 0 and missle 0
     uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
-
-    uInt8 myPlayfieldPriorityAndScore;
-    uInt32 myColor[4];
-    uInt8 myPriorityEncoder[2][256];
-
-    uInt32& myCOLUBK;       // Background color register (replicated 4 times)
-    uInt32& myCOLUPF;       // Playfield color register (replicated 4 times)
-    uInt32& myCOLUP0;       // Player 0 color register (replicated 4 times)
-    uInt32& myCOLUP1;       // Player 1 color register (replicated 4 times)
-
-    uInt8 myCTRLPF;       // Playfield control register
-
-    bool myREFP0;         // Indicates if player 0 is being reflected
-    bool myREFP1;         // Indicates if player 1 is being reflected
-
-    uInt32 myPF;           // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
-
-    uInt8 myGRP0;         // Player 0 graphics register
-    uInt8 myGRP1;         // Player 1 graphics register
-    
-    uInt8 myDGRP0;        // Player 0 delayed graphics register
-    uInt8 myDGRP1;        // Player 1 delayed graphics register
-
-    bool myENAM0;         // Indicates if missle 0 is enabled
-    bool myENAM1;         // Indicates if missle 0 is enabled
-
-    bool myENABL;         // Indicates if the ball is enabled
-    bool myDENABL;        // Indicates if the virtically delayed ball is enabled
-
-    Int8 myHMP0;          // Player 0 horizontal motion register
-    Int8 myHMP1;          // Player 1 horizontal motion register
-    Int8 myHMM0;          // Missle 0 horizontal motion register
-    Int8 myHMM1;          // Missle 1 horizontal motion register
-    Int8 myHMBL;          // Ball horizontal motion register
-
-    bool myVDELP0;        // Indicates if player 0 is being virtically delayed
-    bool myVDELP1;        // Indicates if player 1 is being virtically delayed
-    bool myVDELBL;        // Indicates if the ball is being virtically delayed
-
-    bool myRESMP0;        // Indicates if missle 0 is reset to player 0
-    bool myRESMP1;        // Indicates if missle 1 is reset to player 1
-
-    uInt16 myCollision;    // Collision register
-
-    // Note that these position registers contain the color clock 
-    // on which the object's serial output should begin (0 to 159)
-    Int16 myPOSP0;         // Player 0 position register
-    Int16 myPOSP1;         // Player 1 position register
-    Int16 myPOSM0;         // Missle 0 position register
-    Int16 myPOSM1;         // Missle 1 position register
-    Int16 myPOSBL;         // Ball position register
-
-  private:
-    // Graphics for Player 0 that should be displayed.  This will be
-    // reflected if the player is being reflected.
-    uInt8 myCurrentGRP0;
-
-    // Graphics for Player 1 that should be displayed.  This will be
-    // reflected if the player is being reflected.
-    uInt8 myCurrentGRP1;
-
-    // It's VERY important that the BL, M0, M1, P0 and P1 current
-    // mask pointers are always on a uInt32 boundary.  Otherwise,
-    // the TIA code will fail on a good number of CPUs.
-
-    // Pointer to the currently active mask array for the ball
-    uInt8* myCurrentBLMask;
-
-    // Pointer to the currently active mask array for missle 0
-    uInt8* myCurrentM0Mask;
-
-    // Pointer to the currently active mask array for missle 1
-    uInt8* myCurrentM1Mask;
-
-    // Pointer to the currently active mask array for player 0
-    uInt8* myCurrentP0Mask;
-
-    // Pointer to the currently active mask array for player 1
-    uInt8* myCurrentP1Mask;
-
-    // Pointer to the currently active mask array for the playfield
-    uInt32* myCurrentPFMask;
 
   private:
     // Indicates when the dump for paddles was last set
@@ -370,14 +320,8 @@ class TIA : public Device , public MediaSource
     // Ball mask table (entries are true or false)
     static uInt8 ourBallMaskTable[4][4][320];
 
-    // Used to set the collision register to the correct value
-    static uInt16 ourCollisionTable[64];
-
     // A mask table which can be used when an object is disabled
     static uInt8 ourDisabledMaskTable[640];
-
-    // Indicates the update delay associated with poking at a TIA address
-    static const Int16 ourPokeDelayTable[64];
 
     // Missle mask table (entries are true or false)
     static uInt8 ourMissleMaskTable[4][8][4][320];

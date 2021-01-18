@@ -94,13 +94,13 @@
 /* LOCAL GLOBAL VARIABLE DEFINITIONS */
 
 /* structures to hold the 6 tia sound control bytes */
-static uint8 AUDC[2];    /* AUDCx (15, 16) */
-static uint8 AUDF[2];    /* AUDFx (17, 18) */
-static uint8 AUDV[2];    /* AUDVx (19, 1A) */
+static uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
+static uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
+static uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
-static uint8 Outvol[2];  /* last output volume for each channel */
+static uint8 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
 
-static uint32 volume;    /* output sample volume percentage */
+static uint32 volume __attribute__((section(".dtcm")));    /* output sample volume percentage */
 
 /* Initialze the bit patterns for the polynomials. */
 
@@ -109,10 +109,10 @@ static uint32 volume;    /* output sample volume percentage */
 /* single bit per byte keeps the math simple, which is important for */
 /* efficient processing. */
 
-static uint8 Bit4[POLY4_SIZE] =
+static uint8 Bit4[POLY4_SIZE] __attribute__((section(".dtcm"))) =
       { 1,1,0,1,1,1,0,0,0,0,1,0,1,0,0 };
 
-static uint8 Bit5[POLY5_SIZE] =
+static uint8 Bit5[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
       { 0,0,1,0,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,1,1,1,0,1,0,1,0,0,0,0,1 };
 
 /* I've treated the 'Div by 31' counter as another polynomial because of */
@@ -120,27 +120,27 @@ static uint8 Bit5[POLY5_SIZE] =
 /* has a 13:18 ratio (of course, 13+18 = 31).  This could also be */
 /* implemented by using counters. */
 
-static uint8 Div31[POLY5_SIZE] =
+static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
 /* Rather than have a table with 511 entries, I use a random number */
 /* generator. */
 
-static uint8 Bit9[POLY9_SIZE];
+static uint8 Bit9[POLY9_SIZE] __attribute__((section(".dtcm")));
 
-static uint8  P4[2]; /* Position pointer for the 4-bit POLY array */
-static uint8  P5[2]; /* Position pointer for the 5-bit POLY array */
-static uint16 P9[2]; /* Position pointer for the 9-bit POLY array */
+static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
+static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
+static uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
 
-static uint8 Div_n_cnt[2];  /* Divide by n counter. one for each channel */
-static uint8 Div_n_max[2];  /* Divide by n maximum, one for each channel */
+static uint8 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
+static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
 
 /* In my routines, I treat the sample output as another divide by N counter. */
 /* For better accuracy, the Samp_n_cnt has a fixed binary decimal point */
 /* which has 8 binary digits to the right of the decimal point. */
 
-static uint16 Samp_n_max; /* Sample max, multiplied by 256 */
-static signed short Samp_n_cnt; /* Sample cnt. */
+static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
+static signed short Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 /*****************************************************************************/
 /* Module:  Tia_sound_init()                                                 */

@@ -25,6 +25,20 @@ class M6502;
 #include "bspf.hxx"
 #include "System.hxx"
 
+extern uInt8 A; 
+extern uInt8 X; 
+extern uInt8 Y; 
+extern uInt8 SP;
+extern uInt16 PC;
+extern uInt8 N; 
+extern uInt8 V; 
+extern uInt8 B; 
+extern uInt8 D; 
+extern uInt8 I; 
+extern uInt8 notZ;
+extern uInt8 C;
+
+
 /**
   This is an abstract base class for classes that emulate the
   6502 microprocessor.  The 6502 is an 8-bit microprocessor that
@@ -103,15 +117,6 @@ class M6502
 
   public:
     /**
-      Get the addressing mode of the specified instruction
-
-      @param opcode The opcode of the instruction
-      @return The addressing mode of the instruction
-    */
-    AddressingMode addressingMode(uInt8 opcode) const;
-
-  public:
-    /**
       Execute instructions until the specified number of instructions
       is executed, someone stops execution, or an error occurs.  Answers
       true iff execution stops normally.
@@ -164,19 +169,6 @@ class M6502
     void PS(uInt8 ps);
 
   protected:
-    uInt8 A;    // Accumulator
-    uInt8 X;    // X index register
-    uInt8 Y;    // Y index register
-    uInt8 SP;   // Stack Pointer
-    uInt16 PC;  // Program Counter
-
-    uInt8 N;     // N flag for processor status register
-    uInt8 V;     // V flag for processor status register
-    uInt8 B;     // B flag for processor status register
-    uInt8 D;     // D flag for processor status register
-    uInt8 I;     // I flag for processor status register
-    uInt8 notZ;  // Z flag complement for processor status register
-    uInt8 C;     // C flag for processor status register
 
     /** 
       Bit fields used to indicate that certain conditions need to be 
@@ -202,21 +194,9 @@ class M6502
     /// Indicates the number of system cycles per processor cycle 
     const uInt32 mySystemCyclesPerProcessorCycle;
 
-    /// Table of system cycles for each instruction
-    uInt8 myInstructionSystemCycleTable[256]; 
-
   protected:
-    /// Addressing mode for each of the 256 opcodes
-    static AddressingMode ourAddressingModeTable[256];
-
     /// Lookup table used for binary-code-decimal math
     static uInt8 ourBCDTable[2][256];
-
-    /**
-      Table of instruction processor cycle times.  In some cases additional 
-      cycles will be added during the execution of an instruction.
-    */
-    static uInt8 ourInstructionProcessorCycleTable[256];
 };
 #endif
 

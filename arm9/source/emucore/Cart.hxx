@@ -35,6 +35,8 @@ struct CartInfo
   Int8  special;
   Int8  mode;
   Int8  analogSensitivity;      // 10=1.0
+  uInt8 screenScale;
+  Int8  xOffset;
   Int8  yOffset;
 };
 
@@ -104,6 +106,7 @@ class Cartridge : public Device
       Utility method used by isProbably3F and isProbably3E
     */
     static int searchForBytes(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2);
+    static int searchForBytes4(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3, uInt8 byte4);
 
     /**
       Returns true if the image is probably a SuperChip (256 bytes RAM)
@@ -119,6 +122,11 @@ class Cartridge : public Device
       Returns true if the image is probably a 3E bankswitching cartridge
     */
     static bool isProbably3E(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a DPC+ bankswitching cartridge
+    */
+    static bool isProbablyDPCplus(const uInt8* image, uInt32 size);
 
     /**
       Returns true if the image is probably a E0 bankswitching cartridge

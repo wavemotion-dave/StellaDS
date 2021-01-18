@@ -36,7 +36,7 @@
 
 #define VERSION "1.6"
 
-#define MAX_DEBUG 10 
+#define MAX_DEBUG 5 
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 
@@ -57,7 +57,7 @@ int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
 
-#define SOUND_SIZE (2048*4)
+#define SOUND_SIZE (8192)
 static uInt8 sound_buffer[SOUND_SIZE];
 uInt8* psound_buffer;
 
@@ -140,13 +140,15 @@ void ShowStatusLine(void)
 }
 
 
+int bScreenRefresh = 0;
 void vblankIntr() 
 {
-    static uInt8 last_myYOffset = -99;
-    if (last_myYOffset != myCartInfo.yOffset)
+    if (bScreenRefresh)
     {
+        REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
         REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
-        last_myYOffset = myCartInfo.yOffset;
+        REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
+        bScreenRefresh = 0;
     }
 }
 
@@ -167,7 +169,7 @@ void dsInitTimer(void)
 
 void dsInitPalette(void) 
 {
-  // Init DS Specifica palette
+  // Init DS Specific palette
   const uInt32* gamePalette = theConsole->myMediaSource->palette();
   for(uInt32 i = 0; i < 256; i++)   {
         uInt8 r, g, b;
@@ -180,18 +182,28 @@ void dsInitPalette(void)
     }
 }
 
+void dsWarnIncompatibileCart(void)
+{
+    dsPrintValue(5,0,0, (char*)"DPC+ CART NOT SUPPORTED");
+}
+
 void dsShowScreenEmu(void)
 {
   videoSetMode(MODE_5_2D);
   vramSetBankA(VRAM_A_MAIN_BG_0x06000000);  // The main emulated (top screen) display.
   vramSetBankB(VRAM_B_MAIN_BG_0x06060000);  // This is where we will put our frame buffers to aid DMA Copy routines...
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
+  memset((void*)0x06000000, 0x00, 128*1024);
 
   REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ;
   REG_BG3PB = 0; REG_BG3PC = 0;
-  REG_BG3PD = ((A26_VID_HEIGHT / A26_VID_HEIGHT) << 8) | ((A26_VID_HEIGHT % A26_VID_HEIGHT) ) ;
-  REG_BG3X = A26_VID_XOFS<<8;
+  REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
+  REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
   REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
+    
+  debug[0] = myCartInfo.xOffset;
+  debug[1] = myCartInfo.yOffset;
+  debug[2] = myCartInfo.screenScale;
 }
 
 void dsShowScreenInfo(void) 
@@ -911,8 +923,6 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         touchPosition touch;
                         touchRead(&touch);
-                        debug[0] = touch.px;
-                        debug[1] = touch.py;
                         keys_touch = 1;
 
                         if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
@@ -968,8 +978,6 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         touchPosition touch;
                         touchRead(&touch);
-                        debug[0] = touch.px;
-                        debug[1] = touch.py;
                         theConsole->fakePaddleResistance = (900000 - ((800000 / 255) * touch.px));
                         keys_touch = 1;
                         theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
@@ -1002,8 +1010,6 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         touchPosition touch;
                         touchRead(&touch);
-                        debug[0] = touch.px;
-                        debug[1] = touch.py;
                         keys_touch = 1;
 
                         if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 1);
@@ -1072,13 +1078,37 @@ ITCM_CODE void dsMainLoop(void)
                 // -----------------------------------------------------------------
                 if (keys_pressed != last_keys_pressed)
                 {
-                    if (keys_pressed & KEY_Y)   // full speed
+                    if(keys_pressed & (KEY_R))
                     {
-                        full_speed = !full_speed;
-                        ShowStatusLine();
+                        if (keys_pressed & KEY_UP)
+                            myCartInfo.yOffset++;
+                        else if (keys_pressed & KEY_DOWN)
+                            myCartInfo.yOffset--;
+                        else if (keys_pressed & KEY_RIGHT)
+                            myCartInfo.xOffset--;
+                        else if (keys_pressed & KEY_LEFT)
+                            myCartInfo.xOffset++;
+                        bScreenRefresh = 1;
+                        debug[0] = myCartInfo.xOffset;
+                        debug[1] = myCartInfo.yOffset;
+                        debug[2] = myCartInfo.screenScale;
                     }
-
-                    if (keys_pressed & KEY_X)
+                    else if(keys_pressed & (KEY_L))
+                    {
+                        if (keys_pressed & KEY_UP)
+                            myCartInfo.screenScale++;
+                        else if (keys_pressed & KEY_DOWN)
+                            myCartInfo.screenScale--;
+                        else if (keys_pressed & KEY_RIGHT)
+                            myCartInfo.screenScale++;
+                        else if (keys_pressed & KEY_LEFT)
+                            myCartInfo.screenScale--;
+                        bScreenRefresh = 1;
+                        debug[0] = myCartInfo.xOffset;
+                        debug[1] = myCartInfo.yOffset;
+                        debug[2] = myCartInfo.screenScale;
+                    }
+                    else if (keys_pressed & KEY_X)
                     {
                         fpsDisplay = !fpsDisplay;
                         if (!fpsDisplay)
@@ -1091,15 +1121,7 @@ ITCM_CODE void dsMainLoop(void)
                         }
                         else gTotalAtariFrames=0;
                     }
-
-                    if(keys_pressed & (KEY_R))
-                    {
-                        myCartInfo.yOffset++;
-                    }
-                    if(keys_pressed & (KEY_L))
-                    {
-                        myCartInfo.yOffset--;
-                    }
+                    
                     last_keys_pressed = keys_pressed;
                 }
             }
@@ -1157,8 +1179,6 @@ ITCM_CODE void dsMainLoop(void)
                 touchRead(&touch);
                 iTx = touch.px;
                 iTy = touch.py;
-                debug[0] = iTx;
-                debug[1] = iTy;
 
                 if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) 
                 { // quit
@@ -1175,6 +1195,11 @@ ITCM_CODE void dsMainLoop(void)
                         ShowStatusLine();
                     }
                 }
+                else if ((iTx>240) && (iTx<256) && (iTy>0) && (iTy<20))  
+                { // Full Speed Toggle ... upper corner...
+                    full_speed = 1-full_speed; 
+                    ShowStatusLine();
+                }                
                 else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) 
                 { // tv type
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);

@@ -21,6 +21,22 @@
 #define debugStream cout
 uInt32 NumberOfDistinctAccesses __attribute__((section(".dtcm")));
 
+uInt8 A __attribute__((section(".dtcm")));    // Accumulator
+uInt8 X __attribute__((section(".dtcm")));    // X index register
+uInt8 Y __attribute__((section(".dtcm")));    // Y index register
+uInt8 SP __attribute__((section(".dtcm")));   // Stack Pointer
+uInt16 PC __attribute__((section(".dtcm")));  // Program Counter
+
+uInt8 N __attribute__((section(".dtcm")));     // N flag for processor status register
+uInt8 V __attribute__((section(".dtcm")));     // V flag for processor status register
+uInt8 B __attribute__((section(".dtcm")));     // B flag for processor status register
+uInt8 D __attribute__((section(".dtcm")));     // D flag for processor status register
+uInt8 I __attribute__((section(".dtcm")));     // I flag for processor status register
+uInt8 notZ __attribute__((section(".dtcm")));  // Z flag complement for processor status register
+uInt8 C __attribute__((section(".dtcm")));     // C flag for processor status register
+
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)

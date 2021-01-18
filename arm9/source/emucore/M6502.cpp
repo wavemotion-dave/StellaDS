@@ -32,12 +32,6 @@ M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
     ourBCDTable[0][t] = ((t >> 4) * 10) + (t & 0x0f);
     ourBCDTable[1][t] = (((t % 100) / 10) << 4) | (t % 10);
   }
-
-  // Compute the System Cycle table
-  for(t = 0; t < 256; ++t)
-  {
-    myInstructionSystemCycleTable[t] = ourInstructionProcessorCycleTable[t] * mySystemCyclesPerProcessorCycle;
-  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -86,12 +80,6 @@ void M6502::stop()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-M6502::AddressingMode M6502::addressingMode(uInt8 opcode) const
-{
-  return ourAddressingModeTable[opcode];
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 M6502::PS() const
 {
   uInt8 ps = 0x20;
@@ -127,156 +115,5 @@ void M6502::PS(uInt8 ps)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ostream& operator<<(ostream& out, const M6502::AddressingMode& mode)
-{
-  switch(mode)
-  {
-    case M6502::Absolute:
-      out << "$nnnn  ";
-      break;
-    case M6502::AbsoluteX:
-      out << "$nnnn,X";
-      break;
-    case M6502::AbsoluteY:
-      out << "$nnnn,Y";
-      break;
-    case M6502::Implied:
-      out << "implied";
-      break;
-    case M6502::Immediate:
-      out << "#$nn   ";
-      break;
-    case M6502::Indirect:
-      out << "($nnnn)";
-      break;
-    case M6502::IndirectX:
-      out << "($nn,X)";
-      break;
-    case M6502::IndirectY:
-      out << "($nn),Y";
-      break;
-    case M6502::Invalid:
-      out << "invalid";
-      break;
-    case M6502::Relative:
-      out << "$nn    ";
-      break;
-    case M6502::Zero:
-      out << "$nn    ";
-      break;
-    case M6502::ZeroX:
-      out << "$nn,X  ";
-      break;
-    case M6502::ZeroY:
-      out << "$nn,Y  ";
-      break;
-  }
-  return out;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 M6502::ourBCDTable[2][256];
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-M6502::AddressingMode M6502::ourAddressingModeTable[256] = {
-    Implied,    IndirectX, Invalid,   IndirectX,    // 0x0?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0x1?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX,
-
-    Absolute,   IndirectX, Invalid,   IndirectX,    // 0x2?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0x3?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX,
-
-    Implied,    IndirectX, Invalid,   IndirectX,    // 0x4?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0x5?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX,
-
-    Implied,    IndirectX, Invalid,   IndirectX,    // 0x6?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Indirect,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0x7?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX,
-
-    Immediate,  IndirectX, Immediate, IndirectX,    // 0x8?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0x9?
-    ZeroX,      ZeroX,     ZeroY,     ZeroY,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteY, AbsoluteY,
-
-    Immediate,  IndirectX, Immediate, IndirectX,    // 0xA?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0xB?
-    ZeroX,      ZeroX,     ZeroY,     ZeroY,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteY, AbsoluteY,
-
-    Immediate,  IndirectX, Immediate, IndirectX,    // 0xC?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0xD?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX,
-
-    Immediate,  IndirectX, Immediate, IndirectX,    // 0xE?
-    Zero,       Zero,      Zero,      Zero,
-    Implied,    Immediate, Implied,   Immediate,
-    Absolute,   Absolute,  Absolute,  Absolute,
-
-    Relative,   IndirectY, Invalid,   IndirectY,    // 0xF?
-    ZeroX,      ZeroX,     ZeroX,     ZeroX,
-    Implied,    AbsoluteY, Implied,   AbsoluteY,
-    AbsoluteX,  AbsoluteX, AbsoluteX, AbsoluteX
-  };
-
-uInt8 M6502::ourInstructionProcessorCycleTable[256] = {
-//  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-    7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,  // 0
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,  // 1
-    6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,  // 2
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,  // 3
-    6, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 3, 4, 6, 6,  // 4
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,  // 5
-    6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 5, 4, 6, 6,  // 6
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,  // 7
-    2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,  // 8
-    2, 6, 2, 6, 4, 4, 4, 4, 2, 5, 2, 5, 5, 5, 5, 5,  // 9
-    2, 6, 2, 6, 3, 3, 3, 4, 2, 2, 2, 2, 4, 4, 4, 4,  // a
-    2, 5, 2, 5, 4, 4, 4, 4, 2, 4, 2, 4, 4, 4, 4, 4,  // b
-    2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,  // c
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,  // d
-    2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,  // e
-    2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7   // f
-  };
-    

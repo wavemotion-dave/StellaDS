@@ -33,8 +33,125 @@
 #include "Cart.hxx"
 #define HBLANK 68
 
-int myCurrentFrame = 0;
-int dma_channel = 0;
+uInt8 myCurrentFrame __attribute__((section(".dtcm"))) = 0;
+uInt8 dma_channel __attribute__((section(".dtcm"))) = 0;
+uInt16 ourCollisionTable[64] __attribute__((section(".dtcm")));
+uInt16 myCollision __attribute__((section(".dtcm")));    
+Int16 myPOSP0 __attribute__((section(".dtcm")));         
+Int16 myPOSP1 __attribute__((section(".dtcm")));         
+Int16 myPOSM0 __attribute__((section(".dtcm")));         
+Int16 myPOSM1 __attribute__((section(".dtcm")));         
+Int16 myPOSBL __attribute__((section(".dtcm")));       
+uInt8 myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
+uInt32 myColor[4] __attribute__((section(".dtcm")));
+uInt8 myPriorityEncoder[2][256] __attribute__((section(".dtcm")));
+
+uInt8 myCTRLPF __attribute__((section(".dtcm")));
+bool myREFP0 __attribute__((section(".dtcm")));
+bool myREFP1 __attribute__((section(".dtcm")));
+uInt32 myPF __attribute__((section(".dtcm")));
+uInt8 myGRP0 __attribute__((section(".dtcm")));
+uInt8 myGRP1 __attribute__((section(".dtcm")));
+uInt8 myDGRP0 __attribute__((section(".dtcm")));
+uInt8 myDGRP1 __attribute__((section(".dtcm")));
+bool myENAM0 __attribute__((section(".dtcm")));
+bool myENAM1 __attribute__((section(".dtcm")));
+bool myENABL __attribute__((section(".dtcm")));
+bool myDENABL __attribute__((section(".dtcm")));
+Int8 myHMP0 __attribute__((section(".dtcm")));
+Int8 myHMP1 __attribute__((section(".dtcm")));
+Int8 myHMM0 __attribute__((section(".dtcm")));
+Int8 myHMM1 __attribute__((section(".dtcm")));
+Int8 myHMBL __attribute__((section(".dtcm")));
+bool myVDELP0 __attribute__((section(".dtcm")));
+bool myVDELP1 __attribute__((section(".dtcm")));
+bool myVDELBL __attribute__((section(".dtcm")));
+bool myRESMP0 __attribute__((section(".dtcm")));
+bool myRESMP1 __attribute__((section(".dtcm")));
+
+uInt32 myFrameXStart __attribute__((section(".dtcm")));
+uInt32 myFrameWidth __attribute__((section(".dtcm")));
+uInt32 myFrameYStart __attribute__((section(".dtcm")));
+uInt32 myFrameHeight __attribute__((section(".dtcm")));
+uInt32 myStartDisplayOffset __attribute__((section(".dtcm")));
+uInt32 myStopDisplayOffset __attribute__((section(".dtcm")));
+Int32 myVSYNCFinishClock __attribute__((section(".dtcm")));
+uInt8 myEnabledObjects __attribute__((section(".dtcm")));
+
+
+uInt8* myCurrentFrameBuffer[2] __attribute__((section(".dtcm")));
+uInt8* myFramePointer __attribute__((section(".dtcm")));
+uInt16* myDSFramePointer __attribute__((section(".dtcm")));
+
+Int32 myClockWhenFrameStarted __attribute__((section(".dtcm")));
+Int32 myCyclesWhenFrameStarted __attribute__((section(".dtcm")));
+Int32 myClockStartDisplay __attribute__((section(".dtcm")));
+Int32 myClockStopDisplay __attribute__((section(".dtcm")));
+Int32 myClockAtLastUpdate __attribute__((section(".dtcm")));
+Int32 myClocksToEndOfScanLine __attribute__((section(".dtcm")));
+Int32 myMaximumNumberOfScanlines __attribute__((section(".dtcm")));
+
+uInt8 myCurrentGRP0 __attribute__((section(".dtcm")));
+uInt8 myCurrentGRP1 __attribute__((section(".dtcm")));
+uInt8* myCurrentBLMask __attribute__((section(".dtcm")));
+uInt8* myCurrentM0Mask __attribute__((section(".dtcm")));
+uInt8* myCurrentM1Mask __attribute__((section(".dtcm")));
+uInt8* myCurrentP0Mask __attribute__((section(".dtcm")));
+uInt8* myCurrentP1Mask __attribute__((section(".dtcm")));
+uInt32* myCurrentPFMask __attribute__((section(".dtcm")));
+
+
+Int16 ourPokeDelayTable[64] __attribute__((section(".dtcm"))) = {
+   0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
+   0,  0,  8,  8,  8,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+uInt32 delay_tab[] __attribute__((section(".dtcm"))) = 
+{
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
+};
+    
+uInt32 color_repeat_table[] __attribute__((section(".dtcm"))) = {
+        0x00000000,  0x00000000,  0x02020202,  0x02020202,  0x04040404,  0x04040404,  0x06060606,  0x06060606,  
+        0x08080808,  0x08080808,  0x0A0A0A0A,  0x0A0A0A0A,  0x0C0C0C0C,  0x0C0C0C0C,  0x0E0E0E0E,  0x0E0E0E0E,  
+        0x10101010,  0x10101010,  0x12121212,  0x12121212,  0x14141414,  0x14141414,  0x16161616,  0x16161616,  
+        0x18181818,  0x18181818,  0x1A1A1A1A,  0x1A1A1A1A,  0x1C1C1C1C,  0x1C1C1C1C,  0x1E1E1E1E,  0x1E1E1E1E,  
+        0x20202020,  0x20202020,  0x22222222,  0x22222222,  0x24242424,  0x24242424,  0x26262626,  0x26262626,  
+        0x28282828,  0x28282828,  0x2A2A2A2A,  0x2A2A2A2A,  0x2C2C2C2C,  0x2C2C2C2C,  0x2E2E2E2E,  0x2E2E2E2E,  
+        0x30303030,  0x30303030,  0x32323232,  0x32323232,  0x34343434,  0x34343434,  0x36363636,  0x36363636,  
+        0x38383838,  0x38383838,  0x3A3A3A3A,  0x3A3A3A3A,  0x3C3C3C3C,  0x3C3C3C3C,  0x3E3E3E3E,  0x3E3E3E3E,  
+        0x40404040,  0x40404040,  0x42424242,  0x42424242,  0x44444444,  0x44444444,  0x46464646,  0x46464646,  
+        0x48484848,  0x48484848,  0x4A4A4A4A,  0x4A4A4A4A,  0x4C4C4C4C,  0x4C4C4C4C,  0x4E4E4E4E,  0x4E4E4E4E,  
+        0x50505050,  0x50505050,  0x52525252,  0x52525252,  0x54545454,  0x54545454,  0x56565656,  0x56565656,  
+        0x58585858,  0x58585858,  0x5A5A5A5A,  0x5A5A5A5A,  0x5C5C5C5C,  0x5C5C5C5C,  0x5E5E5E5E,  0x5E5E5E5E,  
+        0x60606060,  0x60606060,  0x62626262,  0x62626262,  0x64646464,  0x64646464,  0x66666666,  0x66666666,  
+        0x68686868,  0x68686868,  0x6A6A6A6A,  0x6A6A6A6A,  0x6C6C6C6C,  0x6C6C6C6C,  0x6E6E6E6E,  0x6E6E6E6E,  
+        0x70707070,  0x70707070,  0x72727272,  0x72727272,  0x74747474,  0x74747474,  0x76767676,  0x76767676,  
+        0x78787878,  0x78787878,  0x7A7A7A7A,  0x7A7A7A7A,  0x7C7C7C7C,  0x7C7C7C7C,  0x7E7E7E7E,  0x7E7E7E7E,  
+        0x80808080,  0x80808080,  0x82828282,  0x82828282,  0x84848484,  0x84848484,  0x86868686,  0x86868686,  
+        0x88888888,  0x88888888,  0x8A8A8A8A,  0x8A8A8A8A,  0x8C8C8C8C,  0x8C8C8C8C,  0x8E8E8E8E,  0x8E8E8E8E,  
+        0x90909090,  0x90909090,  0x92929292,  0x92929292,  0x94949494,  0x94949494,  0x96969696,  0x96969696,  
+        0x98989898,  0x98989898,  0x9A9A9A9A,  0x9A9A9A9A,  0x9C9C9C9C,  0x9C9C9C9C,  0x9E9E9E9E,  0x9E9E9E9E,  
+        0xA0A0A0A0,  0xA0A0A0A0,  0xA2A2A2A2,  0xA2A2A2A2,  0xA4A4A4A4,  0xA4A4A4A4,  0xA6A6A6A6,  0xA6A6A6A6,  
+        0xA8A8A8A8,  0xA8A8A8A8,  0xAAAAAAAA,  0xAAAAAAAA,  0xACACACAC,  0xACACACAC,  0xAEAEAEAE,  0xAEAEAEAE,  
+        0xB0B0B0B0,  0xB0B0B0B0,  0xB2B2B2B2,  0xB2B2B2B2,  0xB4B4B4B4,  0xB4B4B4B4,  0xB6B6B6B6,  0xB6B6B6B6,  
+        0xB8B8B8B8,  0xB8B8B8B8,  0xBABABABA,  0xBABABABA,  0xBCBCBCBC,  0xBCBCBCBC,  0xBEBEBEBE,  0xBEBEBEBE,  
+        0xC0C0C0C0,  0xC0C0C0C0,  0xC2C2C2C2,  0xC2C2C2C2,  0xC4C4C4C4,  0xC4C4C4C4,  0xC6C6C6C6,  0xC6C6C6C6,  
+        0xC8C8C8C8,  0xC8C8C8C8,  0xCACACACA,  0xCACACACA,  0xCCCCCCCC,  0xCCCCCCCC,  0xCECECECE,  0xCECECECE,  
+        0xD0D0D0D0,  0xD0D0D0D0,  0xD2D2D2D2,  0xD2D2D2D2,  0xD4D4D4D4,  0xD4D4D4D4,  0xD6D6D6D6,  0xD6D6D6D6,  
+        0xD8D8D8D8,  0xD8D8D8D8,  0xDADADADA,  0xDADADADA,  0xDCDCDCDC,  0xDCDCDCDC,  0xDEDEDEDE,  0xDEDEDEDE,  
+        0xE0E0E0E0,  0xE0E0E0E0,  0xE2E2E2E2,  0xE2E2E2E2,  0xE4E4E4E4,  0xE4E4E4E4,  0xE6E6E6E6,  0xE6E6E6E6,  
+        0xE8E8E8E8,  0xE8E8E8E8,  0xEAEAEAEA,  0xEAEAEAEA,  0xECECECEC,  0xECECECEC,  0xEEEEEEEE,  0xEEEEEEEE,  
+        0xF0F0F0F0,  0xF0F0F0F0,  0xF2F2F2F2,  0xF2F2F2F2,  0xF4F4F4F4,  0xF4F4F4F4,  0xF6F6F6F6,  0xF6F6F6F6,  
+        0xF8F8F8F8,  0xF8F8F8F8,  0xFAFAFAFA,  0xFAFAFAFA,  0xFCFCFCFC,  0xFCFCFCFC,  0xFEFEFEFE,  0xFEFEFEFE  
+};
 
 // -----------------------------------------------------------
 // These two slower buffers are for non VRAM to VRAM copy
@@ -44,18 +161,18 @@ int dma_channel = 0;
 // -----------------------------------------------------------
 uInt8 slowBuf0[160 * 300];
 uInt8 slowBuf1[160 * 300];
+#define MYCOLUBK  0
+#define MYCOLUPF  1
+#define MYCOLUP0  2
+#define MYCOLUP1  3
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console, Sound& sound)
     : myConsole(console),
       mySound(sound),
-      myColorLossEnabled(false),
-      myMaximumNumberOfScanlines(262),
-      myCOLUBK(myColor[0]),
-      myCOLUPF(myColor[1]),
-      myCOLUP0(myColor[2]),
-      myCOLUP1(myColor[3])
+      myColorLossEnabled(false)
 {
+  myMaximumNumberOfScanlines = 262; 
   // Allocate buffers for two frame buffers - we are placing
   // these out in Video Ram so that we can better DMA copy...
   if (isDSiMode())
@@ -183,11 +300,11 @@ void TIA::reset()
   myVBLANK = 0;
   myNUSIZ0 = 0;
   myNUSIZ1 = 0;
-  myCOLUP0 = 0;
-  myCOLUP1 = 0;
-  myCOLUPF = 0;
   myPlayfieldPriorityAndScore = 0;
-  myCOLUBK = 0;
+  myColor[MYCOLUP0] = 0;  
+  myColor[MYCOLUP1] = 0;  
+  myColor[MYCOLUPF] = 0;  
+  myColor[MYCOLUBK] = 0;  
   myCTRLPF = 0;
   myREFP0 = false;
   myREFP1 = false;
@@ -874,7 +991,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       case 0x00 | PriorityBit:
       case 0x00 | PriorityBit | ScoreBit:
       {
-        memset(myFramePointer, myCOLUBK, clocksToUpdate);
+        memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
         break;
       }
 
@@ -886,13 +1003,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         // Update a uInt8 at a time until reaching a uInt32 boundary
         for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending); ++myFramePointer, ++mask)
         {
-          *myFramePointer = (myPF & *mask) ? myCOLUPF : myCOLUBK;
+          *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
         }
 
         // Now, update a uInt32 at a time
         for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
         {
-          *((uInt32*)myFramePointer) = (myPF & *mask) ? myCOLUPF : myCOLUBK;
+          *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
         }
         break;
       }
@@ -908,7 +1025,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             ++myFramePointer, ++mask, ++hpos)
         {
           *myFramePointer = (myPF & *mask) ? 
-              (hpos < 80 ? myCOLUP0 : myCOLUP1) : myCOLUBK;
+              (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
         }
 
         // Now, update a uInt32 at a time
@@ -916,7 +1033,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             myFramePointer += 4, mask += 4, hpos += 4)
         {
           *((uInt32*)myFramePointer) = (myPF & *mask) ?
-              (hpos < 80 ? myCOLUP0 : myCOLUP1) : myCOLUBK;
+              (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
         }
         break;
       }
@@ -933,12 +1050,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mP0 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (myCurrentGRP0 & *mP0) ? myCOLUP0 : myCOLUBK;
+            *myFramePointer = (myCurrentGRP0 & *mP0) ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
             ++mP0; ++myFramePointer;
           }
         }
@@ -957,12 +1074,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mP1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (myCurrentGRP1 & *mP1) ? myCOLUP1 : myCOLUBK;
+            *myFramePointer = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
             ++mP1; ++myFramePointer;
           }
         }
@@ -983,13 +1100,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0 &&
               !*(uInt32*)mP1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mP0 += 4; mP1 += 4; myFramePointer += 4;
           }
           else
           {
             *myFramePointer = (myCurrentGRP0 & *mP0) ? 
-                myCOLUP0 : ((myCurrentGRP1 & *mP1) ? myCOLUP1 : myCOLUBK);
+                myColor[MYCOLUP0] : ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 
             if((myCurrentGRP0 & *mP0) && (myCurrentGRP1 & *mP1))
               myCollision |= ourCollisionTable[myP0Bit | myP1Bit];
@@ -1012,12 +1129,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM0)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mM0 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = *mM0 ? myCOLUP0 : myCOLUBK;
+            *myFramePointer = *mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
             ++mM0; ++myFramePointer;
           }
         }
@@ -1036,12 +1153,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mM1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = *mM1 ? myCOLUP1 : myCOLUBK;
+            *myFramePointer = *mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
             ++mM1; ++myFramePointer;
           }
         }
@@ -1060,12 +1177,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = *mBL ? myCOLUPF : myCOLUBK;
+            *myFramePointer = *mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             ++mBL; ++myFramePointer;
           }
         }
@@ -1085,12 +1202,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM0 && !*(uInt32*)mM1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mM0 += 4; mM1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = *mM0 ? myCOLUP0 : (*mM1 ? myCOLUP1 : myCOLUBK);
+            *myFramePointer = *mM0 ? myColor[MYCOLUP0] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 
             if(*mM0 && *mM1)
               myCollision |= ourCollisionTable[myM0Bit | myM1Bit];
@@ -1112,12 +1229,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mM0 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (*mM0 ? myCOLUP0 : (*mBL ? myCOLUPF : myCOLUBK));
+            *myFramePointer = (*mM0 ? myColor[MYCOLUP0] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
 
             if(*mBL && *mM0)
               myCollision |= ourCollisionTable[myBLBit | myM0Bit];
@@ -1139,12 +1256,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mM0 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (*mBL ? myCOLUPF : (*mM0 ? myCOLUP0 : myCOLUBK));
+            *myFramePointer = (*mBL ? myColor[MYCOLUPF] : (*mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK]));
 
             if(*mBL && *mM0)
               myCollision |= ourCollisionTable[myBLBit | myM0Bit];
@@ -1167,12 +1284,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && 
               !*(uInt32*)mM1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mM1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (*mM1 ? myCOLUP1 : (*mBL ? myCOLUPF : myCOLUBK));
+            *myFramePointer = (*mM1 ? myColor[MYCOLUP1] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
 
             if(*mBL && *mM1)
               myCollision |= ourCollisionTable[myBLBit | myM1Bit];
@@ -1195,12 +1312,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && 
               !*(uInt32*)mM1)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mM1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (*mBL ? myCOLUPF : (*mM1 ? myCOLUP1 : myCOLUBK));
+            *myFramePointer = (*mBL ? myColor[MYCOLUPF] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]));
 
             if(*mBL && *mM1)
               myCollision |= ourCollisionTable[myBLBit | myM1Bit];
@@ -1222,13 +1339,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mP1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (myCurrentGRP1 & *mP1) ? myCOLUP1 : 
-                (*mBL ? myCOLUPF : myCOLUBK);
+            *myFramePointer = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : 
+                (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 
             if(*mBL && (myCurrentGRP1 & *mP1))
               myCollision |= ourCollisionTable[myBLBit | myP1Bit];
@@ -1250,13 +1367,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
           {
-            *(uInt32*)myFramePointer = myCOLUBK;
+            *(uInt32*)myFramePointer = myColor[MYCOLUBK];
             mBL += 4; mP1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = *mBL ? myCOLUPF : 
-                ((myCurrentGRP1 & *mP1) ? myCOLUP1 : myCOLUBK);
+            *myFramePointer = *mBL ? myColor[MYCOLUPF] : 
+                ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 
             if(*mBL && (myCurrentGRP1 & *mP1))
               myCollision |= ourCollisionTable[myBLBit | myP1Bit];
@@ -1277,13 +1394,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
           {
-            *(uInt32*)myFramePointer = (myPF & *mPF) ? myCOLUPF : myCOLUBK;
+            *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             mPF += 4; mP0 += 4; myFramePointer += 4;
           }
           else
           {
             *myFramePointer = (myCurrentGRP0 & *mP0) ? 
-                  myCOLUP0 : ((myPF & *mPF) ? myCOLUPF : myCOLUBK);
+                  myColor[MYCOLUP0] : ((myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 
             if((myPF & *mPF) && (myCurrentGRP0 & *mP0))
               myCollision |= ourCollisionTable[myPFBit | myP0Bit];
@@ -1305,13 +1422,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
           {
-            *(uInt32*)myFramePointer = (myPF & *mPF) ? myCOLUPF : myCOLUBK;
+            *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             mPF += 4; mP0 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (myPF & *mPF) ? myCOLUPF : 
-                ((myCurrentGRP0 & *mP0) ? myCOLUP0 : myCOLUBK);
+            *myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : 
+                ((myCurrentGRP0 & *mP0) ? myColor[MYCOLUP0] : myColor[MYCOLUBK]);
 
             if((myPF & *mPF) && (myCurrentGRP0 & *mP0))
               myCollision |= ourCollisionTable[myPFBit | myP0Bit];
@@ -1333,13 +1450,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
           {
-            *(uInt32*)myFramePointer = (myPF & *mPF) ? myCOLUPF : myCOLUBK;
+            *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             mPF += 4; mP1 += 4; myFramePointer += 4;
           }
           else
           {
             *myFramePointer = (myCurrentGRP1 & *mP1) ? 
-                  myCOLUP1 : ((myPF & *mPF) ? myCOLUPF : myCOLUBK);
+                  myColor[MYCOLUP1] : ((myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 
             if((myPF & *mPF) && (myCurrentGRP1 & *mP1))
               myCollision |= ourCollisionTable[myPFBit | myP1Bit];
@@ -1361,13 +1478,13 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
           {
-            *(uInt32*)myFramePointer = (myPF & *mPF) ? myCOLUPF : myCOLUBK;
+            *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             mPF += 4; mP1 += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = (myPF & *mPF) ? myCOLUPF : 
-                ((myCurrentGRP1 & *mP1) ? myCOLUP1 : myCOLUBK);
+            *myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : 
+                ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 
             if((myPF & *mPF) && (myCurrentGRP1 & *mP1))
               myCollision |= ourCollisionTable[myPFBit | myP1Bit];
@@ -1390,12 +1507,12 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
         {
           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
           {
-            *(uInt32*)myFramePointer = (myPF & *mPF) ? myCOLUPF : myCOLUBK;
+            *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
             mPF += 4; mBL += 4; myFramePointer += 4;
           }
           else
           {
-            *myFramePointer = ((myPF & *mPF) || *mBL) ? myCOLUPF : myCOLUBK;
+            *myFramePointer = ((myPF & *mPF) || *mBL) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
 
             if((myPF & *mPF) && *mBL)
               myCollision |= ourCollisionTable[myPFBit | myBLBit];
@@ -1825,49 +1942,6 @@ uInt8 TIA::peek(uInt16 addr)
   }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-static uInt32 delay_tab[] = {
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
-};
-    
-static uInt32 color_repeat_table[] = {
-        0x00000000,  0x00000000,  0x02020202,  0x02020202,  0x04040404,  0x04040404,  0x06060606,  0x06060606,  
-        0x08080808,  0x08080808,  0x0A0A0A0A,  0x0A0A0A0A,  0x0C0C0C0C,  0x0C0C0C0C,  0x0E0E0E0E,  0x0E0E0E0E,  
-        0x10101010,  0x10101010,  0x12121212,  0x12121212,  0x14141414,  0x14141414,  0x16161616,  0x16161616,  
-        0x18181818,  0x18181818,  0x1A1A1A1A,  0x1A1A1A1A,  0x1C1C1C1C,  0x1C1C1C1C,  0x1E1E1E1E,  0x1E1E1E1E,  
-        0x20202020,  0x20202020,  0x22222222,  0x22222222,  0x24242424,  0x24242424,  0x26262626,  0x26262626,  
-        0x28282828,  0x28282828,  0x2A2A2A2A,  0x2A2A2A2A,  0x2C2C2C2C,  0x2C2C2C2C,  0x2E2E2E2E,  0x2E2E2E2E,  
-        0x30303030,  0x30303030,  0x32323232,  0x32323232,  0x34343434,  0x34343434,  0x36363636,  0x36363636,  
-        0x38383838,  0x38383838,  0x3A3A3A3A,  0x3A3A3A3A,  0x3C3C3C3C,  0x3C3C3C3C,  0x3E3E3E3E,  0x3E3E3E3E,  
-        0x40404040,  0x40404040,  0x42424242,  0x42424242,  0x44444444,  0x44444444,  0x46464646,  0x46464646,  
-        0x48484848,  0x48484848,  0x4A4A4A4A,  0x4A4A4A4A,  0x4C4C4C4C,  0x4C4C4C4C,  0x4E4E4E4E,  0x4E4E4E4E,  
-        0x50505050,  0x50505050,  0x52525252,  0x52525252,  0x54545454,  0x54545454,  0x56565656,  0x56565656,  
-        0x58585858,  0x58585858,  0x5A5A5A5A,  0x5A5A5A5A,  0x5C5C5C5C,  0x5C5C5C5C,  0x5E5E5E5E,  0x5E5E5E5E,  
-        0x60606060,  0x60606060,  0x62626262,  0x62626262,  0x64646464,  0x64646464,  0x66666666,  0x66666666,  
-        0x68686868,  0x68686868,  0x6A6A6A6A,  0x6A6A6A6A,  0x6C6C6C6C,  0x6C6C6C6C,  0x6E6E6E6E,  0x6E6E6E6E,  
-        0x70707070,  0x70707070,  0x72727272,  0x72727272,  0x74747474,  0x74747474,  0x76767676,  0x76767676,  
-        0x78787878,  0x78787878,  0x7A7A7A7A,  0x7A7A7A7A,  0x7C7C7C7C,  0x7C7C7C7C,  0x7E7E7E7E,  0x7E7E7E7E,  
-        0x80808080,  0x80808080,  0x82828282,  0x82828282,  0x84848484,  0x84848484,  0x86868686,  0x86868686,  
-        0x88888888,  0x88888888,  0x8A8A8A8A,  0x8A8A8A8A,  0x8C8C8C8C,  0x8C8C8C8C,  0x8E8E8E8E,  0x8E8E8E8E,  
-        0x90909090,  0x90909090,  0x92929292,  0x92929292,  0x94949494,  0x94949494,  0x96969696,  0x96969696,  
-        0x98989898,  0x98989898,  0x9A9A9A9A,  0x9A9A9A9A,  0x9C9C9C9C,  0x9C9C9C9C,  0x9E9E9E9E,  0x9E9E9E9E,  
-        0xA0A0A0A0,  0xA0A0A0A0,  0xA2A2A2A2,  0xA2A2A2A2,  0xA4A4A4A4,  0xA4A4A4A4,  0xA6A6A6A6,  0xA6A6A6A6,  
-        0xA8A8A8A8,  0xA8A8A8A8,  0xAAAAAAAA,  0xAAAAAAAA,  0xACACACAC,  0xACACACAC,  0xAEAEAEAE,  0xAEAEAEAE,  
-        0xB0B0B0B0,  0xB0B0B0B0,  0xB2B2B2B2,  0xB2B2B2B2,  0xB4B4B4B4,  0xB4B4B4B4,  0xB6B6B6B6,  0xB6B6B6B6,  
-        0xB8B8B8B8,  0xB8B8B8B8,  0xBABABABA,  0xBABABABA,  0xBCBCBCBC,  0xBCBCBCBC,  0xBEBEBEBE,  0xBEBEBEBE,  
-        0xC0C0C0C0,  0xC0C0C0C0,  0xC2C2C2C2,  0xC2C2C2C2,  0xC4C4C4C4,  0xC4C4C4C4,  0xC6C6C6C6,  0xC6C6C6C6,  
-        0xC8C8C8C8,  0xC8C8C8C8,  0xCACACACA,  0xCACACACA,  0xCCCCCCCC,  0xCCCCCCCC,  0xCECECECE,  0xCECECECE,  
-        0xD0D0D0D0,  0xD0D0D0D0,  0xD2D2D2D2,  0xD2D2D2D2,  0xD4D4D4D4,  0xD4D4D4D4,  0xD6D6D6D6,  0xD6D6D6D6,  
-        0xD8D8D8D8,  0xD8D8D8D8,  0xDADADADA,  0xDADADADA,  0xDCDCDCDC,  0xDCDCDCDC,  0xDEDEDEDE,  0xDEDEDEDE,  
-        0xE0E0E0E0,  0xE0E0E0E0,  0xE2E2E2E2,  0xE2E2E2E2,  0xE4E4E4E4,  0xE4E4E4E4,  0xE6E6E6E6,  0xE6E6E6E6,  
-        0xE8E8E8E8,  0xE8E8E8E8,  0xEAEAEAEA,  0xEAEAEAEA,  0xECECECEC,  0xECECECEC,  0xEEEEEEEE,  0xEEEEEEEE,  
-        0xF0F0F0F0,  0xF0F0F0F0,  0xF2F2F2F2,  0xF2F2F2F2,  0xF4F4F4F4,  0xF4F4F4F4,  0xF6F6F6F6,  0xF6F6F6F6,  
-        0xF8F8F8F8,  0xF8F8F8F8,  0xFAFAFAFA,  0xFAFAFAFA,  0xFCFCFCFC,  0xFCFCFCFC,  0xFEFEFEFE,  0xFEFEFEFE  
-};
 
 void TIA::poke(uInt16 addr, uInt8 value)
 {
@@ -1982,25 +2056,25 @@ void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x06:    // Color-Luminance Player 0
     {
-      myCOLUP0 = color_repeat_table[value];
+      myColor[MYCOLUP0] = color_repeat_table[value];
       break;
     }
 
     case 0x07:    // Color-Luminance Player 1
     {
-      myCOLUP1 = color_repeat_table[value];
+      myColor[MYCOLUP1] = color_repeat_table[value];
       break;
     }
 
     case 0x08:    // Color-Luminance Playfield
     {
-      myCOLUPF = color_repeat_table[value];
+      myColor[MYCOLUPF] = color_repeat_table[value];
       break;
     }
 
     case 0x09:    // Color-Luminance Background
     {
-      myCOLUBK = color_repeat_table[value];
+      myColor[MYCOLUBK] = color_repeat_table[value];
       break;
     }
 
@@ -2591,18 +2665,7 @@ void TIA::togglePalette()
 uInt8 TIA::ourBallMaskTable[4][4][320];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt16 TIA::ourCollisionTable[64];
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 TIA::ourDisabledMaskTable[640];
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const Int16 TIA::ourPokeDelayTable[64] = {
-   0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
-   0,  0,  8,  8,  8,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
-   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 TIA::ourMissleMaskTable[4][8][4][320];
@@ -2867,11 +2930,7 @@ const uInt32 TIA::ourPALPalette[256] =
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const TIA& c)
     : myConsole(c.myConsole),
-      mySound(c.mySound),
-      myCOLUBK(myColor[0]),
-      myCOLUPF(myColor[1]),
-      myCOLUP0(myColor[2]),
-      myCOLUP1(myColor[3])
+      mySound(c.mySound)
 {
   assert(false);
 }
