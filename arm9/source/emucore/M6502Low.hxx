@@ -90,7 +90,7 @@ class M6502Low : public M6502
     */
     inline uInt8 peek(uInt16 address);
     inline uInt8 peek_distinct(uInt16 address);
-    inline uInt8 fake_peek(void);
+    inline void  fake_peek(void);
 
     /**
       Change the byte at the specified address to the given value

@@ -25,6 +25,9 @@ class System;
 #include "bspf.hxx"
 #include "Device.hxx"
 
+// An amazing 128 bytes of RAM
+extern uInt8 myRAM[128];
+
 /**
   RIOT
 
@@ -93,9 +96,6 @@ class M6532 : public Device
   private:
     // Reference to the console
     const Console& myConsole;
-
-    // An amazing 128 bytes of RAM
-    uInt8 myRAM[128];
 
     // Current value of my Timer
     uInt32 myTimer;

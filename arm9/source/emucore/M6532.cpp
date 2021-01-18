@@ -24,6 +24,9 @@
 #include "System.hxx"
 #include <iostream>
 
+// An amazing 128 bytes of RAM
+uInt8 myRAM[128] __attribute__((section(".dtcm")));
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6532::M6532(const Console& console)
     : myConsole(console)

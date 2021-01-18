@@ -133,21 +133,12 @@ void System::resetCycles()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void System::setPageAccess(uInt16 page, const PageAccess& access)
 {
-  // Make sure the page is within range
-  assert(page <= myNumberOfPages);
-
-  // Make sure the access methods make sense
-  assert(access.device != 0);
-
   myPageAccessTable[page] = access;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const System::PageAccess& System::getPageAccess(uInt16 page)
 {
-  // Make sure the page is within range
-  assert(page <= myNumberOfPages);
-
   return myPageAccessTable[page];
 }
 

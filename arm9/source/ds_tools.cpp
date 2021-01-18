@@ -58,8 +58,8 @@ unsigned int etatEmu;
 bool fpsDisplay = false;
 
 #define SOUND_SIZE (8192)
-static uInt8 sound_buffer[SOUND_SIZE];
-uInt8* psound_buffer;
+static uInt8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
+uInt8* psound_buffer __attribute__((section(".dtcm")));
 
 static int bSoundEnabled = 1;
 static int full_speed=0;
@@ -76,6 +76,7 @@ static void DumpDebugData(void)
         if (val < 0)
         {
             dbgbuf[idx++] = '-';
+            val = -val;
         }
         else
         {
@@ -159,6 +160,7 @@ void dsInitScreenMain(void)
     SetYtrigger(190); //trigger 2 lines before vsync
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
+    vramSetBankE(VRAM_E_LCD );                // Not using this for video but 64K of faster RAM always useful! Mapped at 0x06880000
 }
 
 void dsInitTimer(void)
@@ -187,11 +189,18 @@ void dsWarnIncompatibileCart(void)
     dsPrintValue(5,0,0, (char*)"DPC+ CART NOT SUPPORTED");
 }
 
+void dsPrintCartType(char * type)
+{
+    dsPrintValue(14,0,0, (char*)type);
+}
+
+
 void dsShowScreenEmu(void)
 {
   videoSetMode(MODE_5_2D);
   vramSetBankA(VRAM_A_MAIN_BG_0x06000000);  // The main emulated (top screen) display.
   vramSetBankB(VRAM_B_MAIN_BG_0x06060000);  // This is where we will put our frame buffers to aid DMA Copy routines...
+    
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
   memset((void*)0x06000000, 0x00, 128*1024);
 
@@ -281,7 +290,7 @@ void VsoundHandler(void)
 {
   psound_buffer++;
   if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-  Tia_process(psound_buffer, 1);
+  Tia_process();
 }
 
 bool dsLoadGame(char *filename) 

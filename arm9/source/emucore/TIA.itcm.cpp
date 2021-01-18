@@ -1791,9 +1791,8 @@ void TIA::waitHorizontalSync()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 TIA::peek(uInt16 addr)
 {
-    uInt8 noise; 
+    uInt8 noise = myDataBusState & 0x3F; 
     if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
-    else noise = mySystem->getDataBusState() & 0x3F; 
   // Update frame to current color clock before we look at anything!
     updateFrame((gSystemCycles+gSystemCycles+gSystemCycles));
         

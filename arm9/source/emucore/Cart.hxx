@@ -26,6 +26,7 @@ class System;
 #include "Device.hxx"
 
 extern uInt8 fast_cart_buffer[];
+
 // The following is a simple table mapping games to type's using MD5 values
 struct CartInfo
 {
@@ -59,6 +60,20 @@ extern CartInfo myCartInfo;
 
 #define MODE_NO       0     // Normal Mode
 #define MODE_FF       1     // Flicker Free Mode
+
+
+// Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
+#define ANA0_7        7
+#define ANA0_8        8
+#define ANA0_9        9
+#define ANA1_0       10
+#define ANA1_1       11
+#define ANA1_2       12
+#define ANA1_3       13
+#define ANA1_4       14
+#define ANA1_5       15
+#define ANA2_0       20
+#define ANA2_5       25
 
 /**
   A cartridge is a device which contains the machine code for a 

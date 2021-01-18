@@ -38,8 +38,7 @@
 
 void Tia_sound_init (unsigned int sample_freq, unsigned int playback_freq);
 void Update_tia_sound (unsigned int addr, unsigned char val);
-void Tia_process (register unsigned char *buffer,
-                  register unsigned int n);
+void Tia_process (void);
 
 void Tia_get_registers (unsigned char *reg1, unsigned char *reg2, unsigned char *reg3,
                         unsigned char *reg4, unsigned char *reg5, unsigned char *reg6);

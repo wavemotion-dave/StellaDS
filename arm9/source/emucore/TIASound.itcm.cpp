@@ -305,8 +305,9 @@ void Update_tia_sound (uint16 addr, uint8 val)
 /*                                                                           */
 /*****************************************************************************/
 
-void Tia_process (register unsigned char *buffer, register uint16 n)
+void Tia_process (void)
 {
+    register uint8 n=1;
 	register uint8 audc0,audv0,audc1,audv1;
     register uint8 div_n_cnt0,div_n_cnt1;
     register uint8 p5_0, p5_1,outvol_0,outvol_1;
@@ -467,10 +468,8 @@ void Tia_process (register unsigned char *buffer, register uint16 n)
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-//          *(buffer++) = ((uint8) ((((uint32)outvol_0 + (uint32)outvol_1) * volume) / 100))/2 + 128;
-          *(buffer++) = ((uint8) ( (uint32)outvol_0 + (uint32) outvol_1))/2 +128;
-          /* *(buffer++) = ((((uint32)outvol_0 + (uint32)outvol_1) * volume) / 100); */
-
+           extern uint8* psound_buffer;
+          *(psound_buffer) = ((uint8) ( (uint32)outvol_0 + (uint32) outvol_1))/2 +128;
           /* and indicate one less byte to process */
           n--;
        }
