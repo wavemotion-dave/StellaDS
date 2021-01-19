@@ -84,6 +84,11 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
       myControllers[0] = new Driving(Controller::Left, *myEvent);
       myControllers[1] = new Driving(Controller::Right, *myEvent);
   }
+  else if (myCartInfo.controllerType == CTR_BOOSTER)
+  {
+      myControllers[0] = new BoosterGrip(Controller::Left, *myEvent);
+      myControllers[1] = new BoosterGrip(Controller::Right, *myEvent);
+  }
   else if (myCartInfo.controllerType == CTR_KEYBOARD)
   {
       myControllers[0] = new Keyboard(Controller::Left, *myEvent);

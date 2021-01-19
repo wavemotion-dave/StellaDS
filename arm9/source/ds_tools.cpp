@@ -191,7 +191,7 @@ void dsWarnIncompatibileCart(void)
 
 void dsPrintCartType(char * type)
 {
-    dsPrintValue(14,0,0, (char*)type);
+    dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
 }
 
 
@@ -922,6 +922,15 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     break;
                     
+                case CTR_BOOSTER:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_4, (keys_pressed & (KEY_A)));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_5, (keys_pressed & (KEY_B)));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    break;
+                    
                 case CTR_STARRAID:
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
@@ -1112,6 +1121,10 @@ ITCM_CODE void dsMainLoop(void)
                             myCartInfo.screenScale++;
                         else if (keys_pressed & KEY_LEFT)
                             myCartInfo.screenScale--;
+                        if (myCartInfo.screenScale > A26_VID_HEIGHT)
+                        {
+                            myCartInfo.screenScale = A26_VID_HEIGHT;
+                        }
                         bScreenRefresh = 1;
                         debug[0] = myCartInfo.xOffset;
                         debug[1] = myCartInfo.yOffset;

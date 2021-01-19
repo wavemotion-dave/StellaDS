@@ -29,6 +29,7 @@ uInt8 * myImage1 __attribute__((section(".dtcm")));
 uInt8 bPossibleLoad __attribute__((section(".dtcm")));
 
 extern uInt32 NumberOfDistinctAccesses;
+extern uInt8 fast_cart_buffer[];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
@@ -38,7 +39,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
   myNumberOfLoadImages = size / 8448;
   memcpy(myLoadImages, image, size);
 
-  myImage = (uInt8*)image; // Set this to the fast internal RAM... that buffer is otherwise unused at this point...
+  myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point...
   myImage0 = myImage;
   myImage1 = myImage;
   bPossibleLoad=1;
@@ -143,13 +144,19 @@ uInt8 CartridgeAR::peek(uInt16 addr)
     bankConfiguration(myDataHoldRegister);
   }
   // Handle poke if writing enabled
-  else if(myWriteEnabled && myWritePending && (NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
+  else if (myWritePending)
   {
-    if((addr & 0x0800) == 0)
-      myImage[(addr & 0x07FF) + myImageOffset[0]] = myDataHoldRegister;
-    else if(myImageOffset[1] != 3 * 2048)    // Can't poke to ROM :-)
-      myImage[(addr & 0x07FF) + myImageOffset[1]] = myDataHoldRegister;
-    myWritePending = false;
+    if (myWriteEnabled)
+    {
+        if ((NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
+        {
+            if((addr & 0x0800) == 0)
+              myImage[(addr & 0x07FF) + myImageOffset[0]] = myDataHoldRegister;
+            else if(!bPossibleLoad)    // Can't poke to ROM :-)
+              myImage[(addr & 0x07FF) + myImageOffset[1]] = myDataHoldRegister;
+            myWritePending = false;
+        }
+    }
   }
 
   if (addr & 0x0800)

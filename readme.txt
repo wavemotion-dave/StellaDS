@@ -31,6 +31,12 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.8 : 19-Jan-2021 by Dave Bernazzani (wavemotion)
+  * Booster Grip Implemented (Omega Race and Thrust+ working)
+  * Improved timing accuracy so games like Venture Reloaded work.
+  * Implemented "AR" handling so Supercharger carts work.
+  * Improved timing across the board... about 5% faster than 1.7
+
 V1.7 : 31-Dec-2020 by Dave Bernazzani (wavemotion)
   * Very minor cleanup and polish.
 
@@ -147,8 +153,9 @@ Controls :
  * START   : START switch
  * X       : Show FPS (Frames per Second)
  * Y       : Toggle Full Speed (no trottle to 60FPS)
- * R-Trig  : Shift Display Up 1 Pixel
- * L-Trig  : Shift Display Dn 1 Pixel
+
+ * R-Trig + D-Pad  : Shift display offset by 1 pixel in the D-PAD direction
+ * L-Trig + D-Pad  : Change Scaling of the Y-Screen
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------

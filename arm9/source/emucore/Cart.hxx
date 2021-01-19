@@ -51,6 +51,7 @@ extern CartInfo myCartInfo;
 #define CTR_DRIVING   5     // For Driving Controller games like Indy500
 #define CTR_KEYBOARD  6     // For keyboard games like Codebreaker
 #define CTR_STARRAID  7     // Star raiders has Left Joystick and Right Keypad
+#define CTR_BOOSTER   8     // Omega Race and Thrust+
 
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
