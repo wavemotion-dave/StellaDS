@@ -34,7 +34,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.6"
+#define VERSION "1.8"
 
 #define MAX_DEBUG 5 
 Int32 debug[MAX_DEBUG]={0};
@@ -191,7 +191,7 @@ void dsWarnIncompatibileCart(void)
 
 void dsPrintCartType(char * type)
 {
-#if DEBUG_DUMP    
+#ifdef DEBUG_DUMP    
     dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
 #endif    
 }
