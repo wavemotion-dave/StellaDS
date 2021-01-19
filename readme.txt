@@ -18,7 +18,7 @@ Features :
 Missing :
 ---------
  DPC+ games can't be emulated - that requires a coprocessor running at 70MHz (more 
- than the speed of an original DS!). AR games (Starpath Supercharger) do not work.
+ than the speed of an original DS!).
 
 Check updates here: https://github.com/wavemotion-dave/StellaDS
 
