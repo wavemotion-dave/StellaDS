@@ -191,7 +191,9 @@ void dsWarnIncompatibileCart(void)
 
 void dsPrintCartType(char * type)
 {
+#if DEBUG_DUMP    
     dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
+#endif    
 }
 
 

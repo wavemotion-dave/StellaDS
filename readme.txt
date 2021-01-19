@@ -36,6 +36,8 @@ V1.8 : 19-Jan-2021 by Dave Bernazzani (wavemotion)
   * Improved timing accuracy so games like Venture Reloaded work.
   * Implemented "AR" handling so Supercharger carts work.
   * Improved timing across the board... about 5% faster than 1.7
+  * DPC+ Carts now recognized... and message will come up stating they are not supported.
+  * L-TRIG+DPAD bumps screen offsets.   R-TRIG+DPAD changes Y-Scaling  
 
 V1.7 : 31-Dec-2020 by Dave Bernazzani (wavemotion)
   * Very minor cleanup and polish.
