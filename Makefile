@@ -27,7 +27,7 @@ all: $(TARGET).nds
 
 #---------------------------------------------------------------------------------
 $(TARGET).nds	:	arm7/$(TARGET).elf arm9/$(TARGET).elf
-	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf $(ICON) 
+	ndstool	-c $(TARGET).nds -7 arm7/$(TARGET).elf -9 arm9/$(TARGET).elf $(ICON)
 #-g ESTA 00 "STELLA-DS" -z 80040000 -u 00030004 -a 00000138 -p 00000001
   
 #---------------------------------------------------------------------------------
