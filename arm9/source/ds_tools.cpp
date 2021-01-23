@@ -39,6 +39,7 @@
 #define MAX_DEBUG 5 
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
+char my_filename[128];
 
 FICA2600 vcsromlist[1024];
 unsigned int countvcs=0, ucFicAct=0;
@@ -64,6 +65,8 @@ uInt8* psound_buffer __attribute__((section(".dtcm")));
 static int bSoundEnabled = 1;
 static int full_speed=0;
 int gTotalAtariFrames=0;
+
+#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
 static void DumpDebugData(void)
 {
@@ -196,6 +199,21 @@ void dsPrintCartType(char * type)
 #endif    
 }
 
+void dsWriteTweaks(void)
+{
+    FILE *fp;
+    dsPrintValue(22,0,0, (char*)"SNAP");
+    fp = fopen("StellaDS.txt", "a+");
+    if (fp != NULL)
+    {
+        fprintf(fp, "%-50s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.type, (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
+        fflush(fp);
+        fclose(fp);
+    }
+    WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
+    dsPrintValue(22,0,0, (char*)"    ");
+}
+
 
 void dsShowScreenEmu(void)
 {
@@ -298,6 +316,7 @@ void VsoundHandler(void)
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
+  strcpy(my_filename, filename);
     
   // Load the file
   FILE *romfile = fopen(filename, "r");
@@ -835,7 +854,6 @@ void dsInstallSoundEmuFIFO(void)
 }
 
 
-#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 ITCM_CODE void dsMainLoop(void)
 {
     char fpsbuf[32];
@@ -1100,7 +1118,9 @@ ITCM_CODE void dsMainLoop(void)
                 {
                     if(keys_pressed & (KEY_R))
                     {
-                        if (keys_pressed & KEY_UP)
+                        if (keys_pressed & KEY_L)
+                            dsWriteTweaks();    
+                        else if (keys_pressed & KEY_UP)
                             myCartInfo.yOffset++;
                         else if (keys_pressed & KEY_DOWN)
                             myCartInfo.yOffset--;

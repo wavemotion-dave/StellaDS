@@ -58,7 +58,7 @@ extern uInt32 myColor[4];
 extern    uInt8 myCTRLPF;       // Playfield control register
 extern    bool myREFP0;         // Indicates if player 0 is being reflected
 extern    bool myREFP1;         // Indicates if player 1 is being reflected
-extern    uInt32 myPF;           // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
+extern    uInt32 myPF;          // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
 extern    uInt8 myGRP0;         // Player 0 graphics register
 extern    uInt8 myGRP1;         // Player 1 graphics register
 extern    uInt8 myDGRP0;        // Player 0 delayed graphics register
@@ -79,11 +79,11 @@ extern    bool myRESMP0;        // Indicates if missle 0 is reset to player 0
 extern    bool myRESMP1;        // Indicates if missle 1 is reset to player 1
 extern    uInt8* myCurrentFrameBuffer[2]; // Pointer to the current frame buffer
 extern    uInt8* myFramePointer;          // Pointer to the next pixel that will be drawn in the current frame buffer
-extern    uInt16* myDSFramePointer;
-extern    uInt32 myFrameXStart;
-extern    uInt32 myFrameWidth;
-extern    uInt32 myFrameYStart;
-extern    uInt32 myFrameHeight;
+extern    uInt16* myDSFramePointer;       // Pointer to start of the DS video frame
+extern    uInt32 myFrameXStart;           // Where do we start drawing X Pos?
+extern    uInt32 myFrameYStart;           // Where do we start drawing Y Pos?
+extern    uInt32 myFrameWidth;            // The width of the frame
+extern    uInt32 myFrameHeight;           // The height of the frame
 extern    uInt32 myStartDisplayOffset;
 extern    uInt32 myStopDisplayOffset;
 extern    Int32 myVSYNCFinishClock; 
@@ -95,38 +95,25 @@ extern    Int32 myClockStopDisplay;
 extern    Int32 myClockAtLastUpdate;
 extern    Int32 myClocksToEndOfScanLine;
 extern    Int32 myMaximumNumberOfScanlines;
+extern    uInt8 myVSYNC;                        // Holds the VSYNC register value
+extern    uInt8 myVBLANK;                       // Holds the VBLANK register value
+extern    Int32 myLastHMOVEClock;
+extern    bool myHMOVEBlankEnabled;
+extern    bool myAllowHMOVEBlanks;
+extern    bool myM0CosmicArkMotionEnabled;
+extern    uInt32 myM0CosmicArkCounter;
+extern    uInt8 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.
+extern    uInt8 myCurrentGRP1;                  // Graphics for Player 1 that should be displayed.  This will be reflected if the player is being reflected.
 
-
-    // Graphics for Player 0 that should be displayed.  This will be
-    // reflected if the player is being reflected.
-extern    uInt8 myCurrentGRP0;
-
-    // Graphics for Player 1 that should be displayed.  This will be
-    // reflected if the player is being reflected.
-extern    uInt8 myCurrentGRP1;
-
-    // It's VERY important that the BL, M0, M1, P0 and P1 current
-    // mask pointers are always on a uInt32 boundary.  Otherwise,
-    // the TIA code will fail on a good number of CPUs.
-
-    // Pointer to the currently active mask array for the ball
-extern    uInt8* myCurrentBLMask;
-
-    // Pointer to the currently active mask array for missle 0
-extern    uInt8* myCurrentM0Mask;
-
-    // Pointer to the currently active mask array for missle 1
-extern    uInt8* myCurrentM1Mask;
-
-    // Pointer to the currently active mask array for player 0
-extern    uInt8* myCurrentP0Mask;
-
-    // Pointer to the currently active mask array for player 1
-extern    uInt8* myCurrentP1Mask;
-
-    // Pointer to the currently active mask array for the playfield
-extern  uInt32* myCurrentPFMask;
-
+// It's VERY important that the BL, M0, M1, P0 and P1 current mask pointers are always on a uInt32 boundary.  Otherwise, the TIA code will fail on a good number of CPUs.
+extern    uInt8* myCurrentBLMask;               // Pointer to the currently active mask array for the ball
+extern    uInt8* myCurrentM0Mask;               // Pointer to the currently active mask array for missle 0
+extern    uInt8* myCurrentM1Mask;               // Pointer to the currently active mask array for missle 1
+extern    uInt8* myCurrentP0Mask;               // Pointer to the currently active mask array for player 0
+extern    uInt8* myCurrentP1Mask;               // Pointer to the currently active mask array for player 1
+extern  uInt32* myCurrentPFMask;                // Pointer to the currently active mask array for the playfield
+extern uInt8 ourPlayerReflectTable[256];        // Used to reflect a players graphics
+extern uInt32 ourPlayfieldTable[2][160];        // Playfield mask table for reflected and non-reflected playfields
 
 
 /**
@@ -263,7 +250,6 @@ class TIA : public Device , public MediaSource
     // Compute playfield mask table
     void computePlayfieldMaskTable();
 
-  private:
     // Update the current frame buffer up to one scanline
     void updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos);
 
@@ -287,9 +273,6 @@ class TIA : public Device , public MediaSource
     bool myColorLossEnabled;
 
   private:
-    uInt8 myVSYNC;        // Holds the VSYNC register value
-    uInt8 myVBLANK;       // Holds the VBLANK register value
-
     uInt8 myNUSIZ0;       // Number and size of player 0 and missle 0
     uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
 
@@ -299,22 +282,6 @@ class TIA : public Device , public MediaSource
 
     // Indicates if the dump is current enabled for the paddles
     bool myDumpEnabled;
-
-  private:
-    // Color clock when last HMOVE occured
-    Int32 myLastHMOVEClock;
-
-    // Indicates if HMOVE blanks are currently enabled
-    bool myHMOVEBlankEnabled;
-
-    // Indicates if we're allowing HMOVE blanks to be enabled
-    bool myAllowHMOVEBlanks;
-
-    // TIA M0 "bug" used for stars in Cosmic Ark flag
-    bool myM0CosmicArkMotionEnabled;
-
-    // Counter used for TIA M0 "bug" 
-    uInt32 myM0CosmicArkCounter;
 
   private:
     // Ball mask table (entries are true or false)
@@ -339,12 +306,6 @@ class TIA : public Device , public MediaSource
     // Indicates if player is being reset during delay, display or other times
     static Int8 ourPlayerPositionResetWhenTable[8][160][160];
 
-    // Used to reflect a players graphics
-    static uInt8 ourPlayerReflectTable[256];
-
-    // Playfield mask table for reflected and non-reflected playfields
-    static uInt32 ourPlayfieldTable[2][160];
-
     // Table of RGB values for NTSC
     static const uInt32 ourNTSCPalette[256];
 
@@ -352,18 +313,6 @@ class TIA : public Device , public MediaSource
     // this array are always shades of grey.  This is used to implement
     // the PAL color loss effect.
     static const uInt32 ourPALPalette[256];
-
-    // Table of RGB values for NTSC - Stella 1.1 version
-    static const uInt32 ourNTSCPalette11[256];
-
-    // Table of RGB values for PAL - Stella 1.1 version
-    static const uInt32 ourPALPalette11[256];
-
-    // Table of RGB values for NTSC - Z26 version
-    static const uInt32 ourNTSCPaletteZ26[256];
-
-    // Table of RGB values for PAL - Z26 version
-    static const uInt32 ourPALPaletteZ26[256];
 
   private:
     // Copy constructor isn't supported by this class so make it private

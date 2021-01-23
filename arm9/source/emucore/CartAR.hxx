@@ -111,9 +111,6 @@ class CartridgeAR : public Cartridge
     void initializeROM(bool fastbios);
 
   private:
-    // Indicates the offest within the image for the corresponding bank
-    uInt32 myImageOffset[2];
-
     // The 6K of RAM and 2K of ROM contained in the Supercharger
     uInt8 *myImage; //[8192];
 
@@ -126,26 +123,17 @@ class CartridgeAR : public Cartridge
     // Indicates how many 8448 loads there are
     uInt8 myNumberOfLoadImages;
 
-    // Indicates if the RAM is write enabled
-    bool myWriteEnabled;
-
     // Indicates if the ROM's power is on or off
-    bool myPower;
+    uInt8 myPower;
 
     // Indicates when the power was last turned on
     Int32 myPowerRomCycle;
 
-    // Data hold register used for writing
-    uInt8 myDataHoldRegister;
-
-    // Indicates number of distinct accesses when data hold register was set
-    uInt32 myNumberOfDistinctAccesses;
-
-    // Indicates if a write is pending or not
-    bool myWritePending;
-    
     // The bank of flash we are utilizing...
     uInt8 myCurrentBank;
+    
+    uInt8 * myImage0;
+    uInt8 * myImage1;
 };
 #endif
 

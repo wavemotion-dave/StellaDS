@@ -96,7 +96,7 @@ class CartridgeF8SC : public Cartridge
     uInt16 myCurrentBank;
 
     // The 8K ROM image of the cartridge
-    uInt8 myImage[8192];
+    uInt8 *myImage;
 
     // The 128 bytes of RAM
     uInt8 myRAM[128];

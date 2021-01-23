@@ -27,11 +27,9 @@ class NullDevice;
 #include "Device.hxx"
 #include "NullDev.hxx"
 
-extern int gSystemCycles;    // Number of system cycles executed since the last reset
-extern uInt32 debug[];       // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
-extern uInt8 myDataBusState; // The current state of the Data Bus
-
-
+extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
+extern uInt32 debug[];         // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
+extern uInt8  myDataBusState;  // The current state of the Data Bus
 
 #define MY_PAGE_SHIFT   7
 #define MY_PAGE_MASK    0x7F

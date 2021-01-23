@@ -24,12 +24,15 @@
 #include "System.hxx"
 #include <iostream>
 
-uInt8 * myImage0 __attribute__((section(".dtcm")));
-uInt8 * myImage1 __attribute__((section(".dtcm")));
-uInt8 bPossibleLoad __attribute__((section(".dtcm")));
-
 extern uInt32 NumberOfDistinctAccesses;
 extern uInt8 fast_cart_buffer[];
+
+
+uInt8 myWriteEnabled __attribute__((section(".dtcm")));
+uInt8 myDataHoldRegister __attribute__((section(".dtcm")));
+uInt32 myNumberOfDistinctAccesses __attribute__((section(".dtcm")));
+uInt8 myWritePending __attribute__((section(".dtcm")));
+uInt8 bPossibleLoad __attribute__((section(".dtcm")));    
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
@@ -41,7 +44,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 
   myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point...
   myImage0 = myImage;
-  myImage1 = myImage;
+  myImage1 = myImage - 2048;
   bPossibleLoad=1;
         
   // Initialize SC BIOS ROM
@@ -108,66 +111,91 @@ void CartridgeAR::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeAR::peek(uInt16 addr)
 {
-  if (bPossibleLoad)
+  addr &= 0x0FFF;     // Map down to 4k...
+  if (addr & 0x0800)  // If we are in the upper bank...
   {
-      // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
-      if((addr & 0x1FFF) == 0x1850)
+      if (bPossibleLoad)
       {
-        // Get load that's being accessed (BIOS places load number at 0x80)
-        uInt8 load = mySystem->peek(0x0080);
+          // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
+          if(addr == 0x0850)
+          {
+            // Get load that's being accessed (BIOS places load number at 0x80)
+            uInt8 load = mySystem->peek(0x0080);
 
-        // Read the specified load into RAM
-        loadIntoRAM(load);
+            // Read the specified load into RAM
+            loadIntoRAM(load);
 
-        return myImage[(addr & 0x07FF) + myImageOffset[1]];
+            return myImage1[addr];
+          }
       }
-  }
 
-  // Cancel any pending write if more than 5 distinct accesses have occurred
-  if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
-  {
-    myWritePending = false;
-  }
+      // Cancel any pending write if more than 5 distinct accesses have occurred
+      if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
+      {
+        myWritePending = false;
+      }
 
-  // Is the data hold register being set?
-  if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
-  {
-    myDataHoldRegister = addr;
-    myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
-    myWritePending = true;
-  }
-  // Is the bank configuration hotspot being accessed?
-  else if((addr & 0x1FFF) == 0x1FF8)
-  {
-    // Yes, so handle bank configuration
-    myWritePending = false;
-    bankConfiguration(myDataHoldRegister);
-  }
-  // Handle poke if writing enabled
-  else if (myWritePending)
-  {
-    if (myWriteEnabled)
-    {
-        if ((NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
+      // Is the bank configuration hotspot being accessed?
+      if((addr) == 0x0FF8)
+      {
+        // Yes, so handle bank configuration
+        myWritePending = false;
+        bankConfiguration(myDataHoldRegister);
+      }
+      // Handle poke if writing enabled
+      else if (myWritePending)
+      {
+        if (myWriteEnabled)
         {
-            if((addr & 0x0800) == 0)
-              myImage[(addr & 0x07FF) + myImageOffset[0]] = myDataHoldRegister;
-            else if(!bPossibleLoad)    // Can't poke to ROM :-)
-              myImage[(addr & 0x07FF) + myImageOffset[1]] = myDataHoldRegister;
-            myWritePending = false;
+            if ((NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
+            {
+                if(!bPossibleLoad)    // Can't poke to ROM :-)
+                   myImage1[addr] = myDataHoldRegister;
+                myWritePending = false;
+            }
         }
-    }
+      }
+
+      return myImage1[addr];
+  }
+  else // In lower bank
+  {
+      // Cancel any pending write if more than 5 distinct accesses have occurred
+      if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
+      {
+        myWritePending = false;
+      }
+
+      // Is the data hold register being set?
+      if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
+      {
+        myDataHoldRegister = addr;
+        myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
+        myWritePending = true;
+      }
+      // Handle poke if writing enabled
+      else if (myWritePending)
+      {
+        if (myWriteEnabled)
+        {
+            if (NumberOfDistinctAccesses == myNumberOfDistinctAccesses)
+            {
+                myImage0[addr] = myDataHoldRegister;
+                myWritePending = false;
+            }
+        }
+      }
+
+     return myImage0[addr];
   }
 
-  if (addr & 0x0800)
-    return myImage1[(addr & 0x07FF)];
-  else
-    return myImage0[(addr & 0x07FF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::poke(uInt16 addr, uInt8)
 {
+  addr &= 0x0FFF; // Map down to 4k...
+  
   // Cancel any pending write if more than 5 distinct accesses have occurred
   if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
   {
@@ -182,7 +210,7 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
     myWritePending = true;
   }
   // Is the bank configuration hotspot being accessed?
-  else if((addr & 0x1FFF) == 0x1FF8)
+  else if (addr == 0x0FF8)
   {
     // Yes, so handle bank configuration
     myWritePending = false;
@@ -192,9 +220,9 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
   else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
   {
     if((addr & 0x0800) == 0)
-        myImage0[addr & 0x07FF] = myDataHoldRegister;
+        myImage0[addr] = myDataHoldRegister;
     else if(!bPossibleLoad)    // Can't poke to ROM :-)
-      myImage1[addr & 0x07FF] = myDataHoldRegister;
+      myImage1[addr] = myDataHoldRegister;
     myWritePending = false;
   }
 }
@@ -229,80 +257,72 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 0:
     {
       bPossibleLoad = 1;
-      myImageOffset[0] = 2 * 2048;
-      myImageOffset[1] = 3 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (2 * 2048);
+      myImage1 = myImage + (3 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 1:
     {
       bPossibleLoad = 1;
-      myImageOffset[0] = 0 * 2048;
-      myImageOffset[1] = 3 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (0 * 2048);
+      myImage1 = myImage + (3 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 2:
     {
       bPossibleLoad = 0;
-      myImageOffset[0] = 2 * 2048;
-      myImageOffset[1] = 0 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (2 * 2048);
+      myImage1 = myImage + (0 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 3:
     {
       bPossibleLoad = 0;
-      myImageOffset[0] = 0 * 2048;
-      myImageOffset[1] = 2 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (0 * 2048);
+      myImage1 = myImage + (2 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 4:
     {
       bPossibleLoad = 1;
-      myImageOffset[0] = 2 * 2048;
-      myImageOffset[1] = 3 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (2 * 2048);
+      myImage1 = myImage + (3 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 5:
     {
       bPossibleLoad = 1;
-      myImageOffset[0] = 1 * 2048;
-      myImageOffset[1] = 3 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (1 * 2048);
+      myImage1 = myImage + (3 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 6:
     {
       bPossibleLoad = 0;
-      myImageOffset[0] = 2 * 2048;
-      myImageOffset[1] = 1 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (2 * 2048);
+      myImage1 = myImage + (1 * 2048);
+      myImage1 -= 2048;
       break;
     }
 
     case 7:
     {
       bPossibleLoad = 0;
-      myImageOffset[0] = 1 * 2048;
-      myImageOffset[1] = 2 * 2048;
-      myImage0 = myImage + myImageOffset[0];
-      myImage1 = myImage + myImageOffset[1];        
+      myImage0 = myImage + (1 * 2048);
+      myImage1 = myImage + (2 * 2048);
+      myImage1 -= 2048;
       break;
     }
   }
