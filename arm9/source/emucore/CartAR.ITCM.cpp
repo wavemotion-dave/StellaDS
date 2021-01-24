@@ -34,6 +34,8 @@ uInt32 myNumberOfDistinctAccesses __attribute__((section(".dtcm")));
 uInt8 myWritePending __attribute__((section(".dtcm")));
 uInt8 bPossibleLoad __attribute__((section(".dtcm")));    
 
+CartridgeAR *myAR;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 {
@@ -104,8 +106,9 @@ void CartridgeAR::install(System& system)
     access.device = this;
     mySystem->setPageAccess(i >> shift, access);
   }
-
+    
   bankConfiguration(0);
+  myAR = this;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

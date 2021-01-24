@@ -31,6 +31,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V1.9 : 24-Jan-2021 by Dave Bernazzani (wavemotion)
+  * Screen tweaks to more than 400 games to make them look as good as possible.
+  * More games added to the compatibility table - many homebrews.
+  * Faster AR (Starpath Supercharger) processing so more of those games are playable.
+
 V1.8 : 19-Jan-2021 by Dave Bernazzani (wavemotion)
   * Booster Grip Implemented (Omega Race and Thrust+ working)
   * Improved timing accuracy so games like Venture Reloaded work.
