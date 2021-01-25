@@ -1,5 +1,6 @@
 //============================================================================
 //============================================================================
+//============================================================================
 //
 //   SSSS    tt          lll  lll       
 //  SS  SS   tt           ll   ll        
@@ -173,8 +174,8 @@ uInt32 color_repeat_table[] __attribute__((section(".dtcm"))) = {
 // which run at a slower CPU speed - othrewise we get 
 // graphical glitches... 
 // -----------------------------------------------------------
-uInt8 slowBuf0[160 * 300];
-uInt8 slowBuf1[160 * 300];
+uInt8 videoBuf0[160 * 300];
+uInt8 videoBuf1[160 * 300];
 #define MYCOLUBK  0
 #define MYCOLUPF  1
 #define MYCOLUP0  2
@@ -187,20 +188,14 @@ TIA::TIA(const Console& console, Sound& sound)
       myColorLossEnabled(false)
 {
   myMaximumNumberOfScanlines = 262; 
-  // Allocate buffers for two frame buffers - we are placing
-  // these out in Video Ram so that we can better DMA copy...
-  if (isDSiMode())
-  {
-      // VRAM to VRAM copy faster for consoles running in DSi faster CPU mode
-      myCurrentFrameBuffer[0] = (uInt8 *)0x06060000;  
-      myCurrentFrameBuffer[1] = (uInt8 *)0x06070000;  
-  }
-  else
-  {
-      // For older consoles running in slower CPU mode
-      myCurrentFrameBuffer[0] = slowBuf0; 
-      myCurrentFrameBuffer[1] = slowBuf1; 
-  }
+  // --------------------------------------------------------------------------------------
+  // Allocate buffers for two frame buffers - Turns out Video Memory is actually slower
+  // since we do a lot of 8-bit reads and the video memory is 16-bits wide. So we handle
+  // our buffers in "slower" memory but it turns out to be a little faster to do it in 
+  // main memory and then DMA copy into VRAM.
+  // --------------------------------------------------------------------------------------
+  myCurrentFrameBuffer[0] = videoBuf0; 
+  myCurrentFrameBuffer[1] = videoBuf1; 
 
   ourActualPalette = 0;
 

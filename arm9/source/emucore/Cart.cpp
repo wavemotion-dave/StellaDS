@@ -496,7 +496,7 @@ static const CartInfo table[] =
     {"b36040a2f9ecafa73d835d804a572dbf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   1, -2},    // Pac Man (1983) (Digitel).bin
     {"880e45b99c785e9910450b88e69c49eb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  1},    // Pac-Man 4k.bin
     {"6e88da2b704916eb04a998fed9e23a3e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  3},    // Pac-Man_4k (debro).bin
-    {"98d41ef327c58812ecc75bf1611ddced",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  202,   0,  1},    // Pac-Man 8k.bin
+    {"98d41ef327c58812ecc75bf1611ddced",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  202,   0,  0},    // Pac-Man 8k.bin
     {"bf9a2045952d40e08711aa232a92eb78",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Panky the Panda [alt].bin
     {"25f69569b1defffcb64cb431edf3e093",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Panky the Panda.bin    
     {"012b8e6ef3b5fd5aabc94075c527709d",  "AR",   CTR_PADDLE0,   SPEC_AR,        MODE_NO,   ANA1_0,  205,   0,  0},    // Party Mix (1983).bin

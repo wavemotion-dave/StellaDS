@@ -207,7 +207,7 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
                 return myImage1[addr];
               }
           }
-          else
+          
           // Is the bank configuration hotspot being accessed?
           if(addr == 0x0FF8)
           {
