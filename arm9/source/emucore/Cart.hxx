@@ -57,7 +57,7 @@ extern CartInfo myCartInfo;
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
 #define SPEC_CONMARS  2     // Conquest of Mars - fix bug for collision detections
 #define SPEC_PITFALL2 3     // For Pitfall 2 we are employing a few other tricks to get speed...
-#define SPEC_DISTADDR 4     // AR Carts we must track distinct memory access
+#define SPEC_AR       4     // AR Carts we must track distinct memory access
 
 #define MODE_NO       0     // Normal Mode
 #define MODE_FF       1     // Flicker Free Mode

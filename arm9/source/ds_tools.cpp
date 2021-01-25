@@ -34,9 +34,9 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "1.9"
+#define VERSION "2.0"
 
-#define MAX_DEBUG 5 
+#define MAX_DEBUG 5
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];

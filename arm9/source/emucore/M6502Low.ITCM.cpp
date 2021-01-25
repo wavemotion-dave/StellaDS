@@ -19,9 +19,6 @@
 #include "CartAR.hxx"
 #include "M6502Low.hxx"
 
-#define debugStream cout
-uInt32 NumberOfDistinctAccesses __attribute__((section(".dtcm")));
-
 uInt8 A     __attribute__((section(".dtcm")));   // Accumulator
 uInt8 X     __attribute__((section(".dtcm")));   // X index register
 uInt8 Y     __attribute__((section(".dtcm")));   // Y index register
@@ -35,6 +32,8 @@ uInt8 D     __attribute__((section(".dtcm")));   // D flag for processor status 
 uInt8 I     __attribute__((section(".dtcm")));   // I flag for processor status register
 uInt8 notZ  __attribute__((section(".dtcm")));   // Z flag complement for processor status register
 uInt8 C     __attribute__((section(".dtcm")));   // C flag for processor status register
+
+uInt8 NumberOfDistinctAccesses __attribute__((section(".dtcm")));
 
 extern CartridgeAR *myAR;
 
@@ -56,24 +55,6 @@ inline void M6502Low::fake_peek()
 {
   gSystemCycles++;
 }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 M6502Low::peek_distinct(uInt16 address)
-{
-  NumberOfDistinctAccesses++;
-  gSystemCycles++;
-  if (address & 0xF000) return myAR->peek(address);
-  return mySystem->peek(address);
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void M6502Low::poke_distinct(uInt16 address, uInt8 value)
-{
-  NumberOfDistinctAccesses++;
-  gSystemCycles++;  
-  mySystem->poke(address, value);
-}
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 M6502Low::peek(uInt16 address)
@@ -99,9 +80,9 @@ bool M6502Low::execute(uInt16 number)
   // For Starpath Supercharger games, we must track distinct memory
   // access. This takes time so we don't do it for other game types...
   // ----------------------------------------------------------------
-  if (myCartInfo.special == SPEC_DISTADDR)
+  if (myCartInfo.special == SPEC_AR)
   {
-    return execute_distinct(number);   
+    return execute_AR(number);   
   }
       
   // Clear all of the execution status bits except for the fatal error bit
@@ -190,7 +171,126 @@ const char* M6502Low::name() const
   return "M6502Low";
 }
 
-bool M6502Low::execute_distinct(uInt16 number)
+
+// ==============================================================================
+// Special AR Cart Handling below... this requries us to track distinct
+// memory fetches (so we can emulate the 5-fetch write cycle of the Starpath
+// Supercharger) as well as more complicated bank switching / RAM loading...
+// This uses significant DS memory space but we have plenty of RAM and the 
+// Starpath Supercharger "AR" games are some of the better games on the system 
+// so we'll go the extra mile here...
+// ==============================================================================
+
+#define DISTINCT_THRESHOLD  5
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+inline uInt8 M6502Low::peek_AR(uInt16 address)
+{
+  NumberOfDistinctAccesses++;
+  gSystemCycles++;
+    
+  if (address & 0xF000)
+  {
+      uInt16 addr = address & 0x0FFF;     // Map down to 4k...
+      if (addr & 0x0800)  // If we are in the upper bank...
+      {
+          // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
+          if(addr == 0x0850)
+          {
+              if (bPossibleLoad)  // True only if our last AR configuration says we are "ROM" in the upper bank...
+              {
+                // Get load that's being accessed (BIOS places load number at 0x80)
+                uInt8 load = mySystem->peek(0x0080);
+
+                // Read the specified load into RAM
+                myAR->loadIntoRAM(load);
+
+                return myImage1[addr];
+              }
+          }
+          else
+          // Is the bank configuration hotspot being accessed?
+          if(addr == 0x0FF8)
+          {
+            // Yes, so handle bank configuration
+            myWritePending = false;
+            myAR->bankConfiguration(myDataHoldRegister);
+          }
+          // Handle poke if writing enabled
+          else if (myWriteEnabled && myWritePending)
+          {
+              if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
+              {
+                  if(!bPossibleLoad)    // Can't poke to ROM :-)
+                     myImage1[addr] = myDataHoldRegister;
+                  myWritePending = false;
+              }
+          }
+
+          return myImage1[addr];
+      }
+      else // WE are in the lower bank
+      {
+          // Is the data hold register being set?
+          if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
+          {
+            myDataHoldRegister = addr;
+            NumberOfDistinctAccesses = 0;
+            myWritePending = true;
+          }
+          // Handle poke if writing enabled
+          else if (myWriteEnabled && myWritePending)
+          {
+              if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
+              {
+                  myImage0[addr] = myDataHoldRegister;
+                  myWritePending = false;
+              }
+          }
+
+         return myImage0[addr];
+      }
+  }
+  else return mySystem->peek(address);
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
+{
+  NumberOfDistinctAccesses++;
+  gSystemCycles++;  
+  if (address & 0xF000)
+  {
+      uInt16 addr = address & 0x0FFF; // Map down to 4k...
+
+      // Is the data hold register being set?
+      if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
+      {
+        myDataHoldRegister = addr;
+        NumberOfDistinctAccesses = 0;
+        myWritePending = true;
+      }
+      // Is the bank configuration hotspot being accessed?
+      else if (addr == 0x0FF8)
+      {
+        // Yes, so handle bank configuration
+        myWritePending = false;
+        myAR->bankConfiguration(myDataHoldRegister);
+      }
+      // Handle poke if writing enabled
+      else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == DISTINCT_THRESHOLD))
+      {
+        if((addr & 0x0800) == 0)
+            myImage0[addr] = myDataHoldRegister;
+        else if(!bPossibleLoad)    // Can't poke to ROM :-)
+          myImage1[addr] = myDataHoldRegister;
+        myWritePending = false;
+      }
+  }
+  else mySystem->poke(address, value);
+}
+
+
+bool M6502Low::execute_AR(uInt16 number)
 {
   uInt8  IR;
   uInt16 fast_loop = number;
@@ -207,15 +307,14 @@ bool M6502Low::execute_distinct(uInt16 number)
       uInt8 operand=0;
         
       // Get the next 6502 instruction
-      // This is not clean - but is faster...
-      IR = peek_distinct(PC++);
+      IR = peek_AR(PC++);
 
       // 6502 instruction emulation is generated by an M4 macro file
       switch (IR)
       {
-        // A trick of the light... here we map peek/poke to the distinct versions. Slower but needed for some games...
-        #define peek peek_distinct
-        #define poke poke_distinct
+        // A trick of the light... here we map peek/poke to the "AR" cart versions. Slower but needed for some games...
+        #define peek peek_AR
+        #define poke poke_AR
         #include "M6502Low.ins"        
       }
     }

@@ -56,27 +56,27 @@ extern uInt8 myPlayfieldPriorityAndScore;
 extern uInt32 myColor[4];
 
 extern    uInt8 myCTRLPF;       // Playfield control register
-extern    bool myREFP0;         // Indicates if player 0 is being reflected
-extern    bool myREFP1;         // Indicates if player 1 is being reflected
+extern    uInt8 myREFP0;         // Indicates if player 0 is being reflected
+extern    uInt8 myREFP1;         // Indicates if player 1 is being reflected
 extern    uInt32 myPF;          // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
 extern    uInt8 myGRP0;         // Player 0 graphics register
 extern    uInt8 myGRP1;         // Player 1 graphics register
 extern    uInt8 myDGRP0;        // Player 0 delayed graphics register
 extern    uInt8 myDGRP1;        // Player 1 delayed graphics register
-extern    bool myENAM0;         // Indicates if missle 0 is enabled
-extern    bool myENAM1;         // Indicates if missle 0 is enabled
-extern    bool myENABL;         // Indicates if the ball is enabled
-extern    bool myDENABL;        // Indicates if the virtically delayed ball is enabled
+extern    uInt8 myENAM0;         // Indicates if missle 0 is enabled
+extern    uInt8 myENAM1;         // Indicates if missle 0 is enabled
+extern    uInt8 myENABL;         // Indicates if the ball is enabled
+extern    uInt8 myDENABL;        // Indicates if the virtically delayed ball is enabled
 extern    Int8 myHMP0;          // Player 0 horizontal motion register
 extern    Int8 myHMP1;          // Player 1 horizontal motion register
 extern    Int8 myHMM0;          // Missle 0 horizontal motion register
 extern    Int8 myHMM1;          // Missle 1 horizontal motion register
 extern    Int8 myHMBL;          // Ball horizontal motion register
-extern    bool myVDELP0;        // Indicates if player 0 is being virtically delayed
-extern    bool myVDELP1;        // Indicates if player 1 is being virtically delayed
-extern    bool myVDELBL;        // Indicates if the ball is being virtically delayed
-extern    bool myRESMP0;        // Indicates if missle 0 is reset to player 0
-extern    bool myRESMP1;        // Indicates if missle 1 is reset to player 1
+extern    uInt8 myVDELP0;        // Indicates if player 0 is being virtically delayed
+extern    uInt8 myVDELP1;        // Indicates if player 1 is being virtically delayed
+extern    uInt8 myVDELBL;        // Indicates if the ball is being virtically delayed
+extern    uInt8 myRESMP0;        // Indicates if missle 0 is reset to player 0
+extern    uInt8 myRESMP1;        // Indicates if missle 1 is reset to player 1
 extern    uInt8* myCurrentFrameBuffer[2]; // Pointer to the current frame buffer
 extern    uInt8* myFramePointer;          // Pointer to the next pixel that will be drawn in the current frame buffer
 extern    uInt16* myDSFramePointer;       // Pointer to start of the DS video frame
@@ -98,9 +98,9 @@ extern    Int32 myMaximumNumberOfScanlines;
 extern    uInt8 myVSYNC;                        // Holds the VSYNC register value
 extern    uInt8 myVBLANK;                       // Holds the VBLANK register value
 extern    Int32 myLastHMOVEClock;
-extern    bool myHMOVEBlankEnabled;
-extern    bool myAllowHMOVEBlanks;
-extern    bool myM0CosmicArkMotionEnabled;
+extern    uInt8 myHMOVEBlankEnabled;
+extern    uInt8 myAllowHMOVEBlanks;
+extern    uInt8 myM0CosmicArkMotionEnabled;
 extern    uInt32 myM0CosmicArkCounter;
 extern    uInt8 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.
 extern    uInt8 myCurrentGRP1;                  // Graphics for Player 1 that should be displayed.  This will be reflected if the player is being reflected.
@@ -111,9 +111,11 @@ extern    uInt8* myCurrentM0Mask;               // Pointer to the currently acti
 extern    uInt8* myCurrentM1Mask;               // Pointer to the currently active mask array for missle 1
 extern    uInt8* myCurrentP0Mask;               // Pointer to the currently active mask array for player 0
 extern    uInt8* myCurrentP1Mask;               // Pointer to the currently active mask array for player 1
-extern  uInt32* myCurrentPFMask;                // Pointer to the currently active mask array for the playfield
-extern uInt8 ourPlayerReflectTable[256];        // Used to reflect a players graphics
-extern uInt32 ourPlayfieldTable[2][160];        // Playfield mask table for reflected and non-reflected playfields
+extern    uInt32* myCurrentPFMask;                // Pointer to the currently active mask array for the playfield
+extern    uInt8 ourPlayerReflectTable[256];        // Used to reflect a players graphics
+extern    uInt32 ourPlayfieldTable[2][160];        // Playfield mask table for reflected and non-reflected playfields
+extern    uInt8 myNUSIZ0;       // Number and size of player 0 and missle 0
+extern    uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
 
 
 /**
@@ -271,10 +273,6 @@ class TIA : public Device , public MediaSource
     // occurs on PAL (and maybe SECAM) systems when the previous frame
     // contains an odd number of scanlines.
     bool myColorLossEnabled;
-
-  private:
-    uInt8 myNUSIZ0;       // Number and size of player 0 and missle 0
-    uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
 
   private:
     // Indicates when the dump for paddles was last set

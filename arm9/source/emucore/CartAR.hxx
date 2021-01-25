@@ -25,6 +25,16 @@ class M6502Low;
 #include "bspf.hxx"
 #include "Cart.hxx"
 
+
+extern uInt8 myWriteEnabled;
+extern uInt8 myDataHoldRegister;
+extern uInt8 myWritePending;
+extern uInt8 bPossibleLoad;
+extern uInt8 *myImage;
+extern uInt8 *myImage0;
+extern uInt8 *myImage1;
+
+
 /**
   This is the cartridge class for Arcadia (aka Starpath) Supercharger 
   games.  Christopher Salomon provided most of the technical details 
@@ -97,7 +107,7 @@ class CartridgeAR : public Cartridge
     */
     virtual void poke(uInt16 address, uInt8 value);
 
-  private:
+  public:
     // Handle a change to the bank configuration
     void bankConfiguration(uInt8 configuration);
 
@@ -111,9 +121,6 @@ class CartridgeAR : public Cartridge
     void initializeROM(bool fastbios);
 
   private:
-    // The 6K of RAM and 2K of ROM contained in the Supercharger
-    uInt8 *myImage; //[8192];
-
     // The 256 byte header for the current 8448 byte load
     uInt8 myHeader[256];
 
@@ -131,9 +138,6 @@ class CartridgeAR : public Cartridge
 
     // The bank of flash we are utilizing...
     uInt8 myCurrentBank;
-    
-    uInt8 * myImage0;
-    uInt8 * myImage1;
 };
 #endif
 

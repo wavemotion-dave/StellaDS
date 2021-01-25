@@ -80,7 +80,6 @@ class M6502Low : public M6502
       Called after an interrupt has be requested using irq() or nmi()
     */
     void interruptHandler();
-    bool execute_distinct(uInt16 number);
 
   protected:
     /*
@@ -88,8 +87,9 @@ class M6502Low : public M6502
 
       @return The byte at the specified address
     */
+    bool execute_AR(uInt16 number);
     inline uInt8 peek(uInt16 address);
-    inline uInt8 peek_distinct(uInt16 address);
+    inline uInt8 peek_AR(uInt16 address);
     inline void  fake_peek(void);
 
     /**
@@ -99,7 +99,7 @@ class M6502Low : public M6502
       @param value The value to be stored at the address
     */
     inline void poke(uInt16 address, uInt8 value);
-    inline void poke_distinct(uInt16 address, uInt8 value);
+    inline void poke_AR(uInt16 address, uInt8 value);
 
 };
 #endif

@@ -24,17 +24,22 @@
 #include "System.hxx"
 #include <iostream>
 
-extern uInt32 NumberOfDistinctAccesses;
+extern uInt8 NumberOfDistinctAccesses;
 extern uInt8 fast_cart_buffer[];
 
 
 uInt8 myWriteEnabled __attribute__((section(".dtcm")));
 uInt8 myDataHoldRegister __attribute__((section(".dtcm")));
-uInt32 myNumberOfDistinctAccesses __attribute__((section(".dtcm")));
 uInt8 myWritePending __attribute__((section(".dtcm")));
 uInt8 bPossibleLoad __attribute__((section(".dtcm")));    
 
-CartridgeAR *myAR;
+// The 6K of RAM and 2K of ROM contained in the Supercharger
+uInt8 *myImage __attribute__((section(".dtcm")));    
+uInt8 *myImage0 __attribute__((section(".dtcm")));    
+uInt8 *myImage1 __attribute__((section(".dtcm")));    
+CartridgeAR *myAR __attribute__((section(".dtcm")));    
+
+#define DISTINCT_THRESHOLD  5
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
@@ -44,7 +49,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
   myNumberOfLoadImages = size / 8448;
   memcpy(myLoadImages, image, size);
 
-  myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point...
+  myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point... Enough to handle 6k of Supercharger RAM
   myImage0 = myImage;
   myImage1 = myImage - 2048;
   bPossibleLoad=1;
@@ -76,8 +81,9 @@ void CartridgeAR::reset()
   myWriteEnabled = false;
 
   myDataHoldRegister = 0;
-  myNumberOfDistinctAccesses = 5;
   myWritePending = false;
+  bPossibleLoad = 1;
+  NumberOfDistinctAccesses=0;
 
   // Set bank configuration upon reset so ROM is selected and powered up
   bankConfiguration(0);
@@ -117,7 +123,7 @@ uInt8 CartridgeAR::peek(uInt16 addr)
   addr &= 0x0FFF;     // Map down to 4k...
   if (addr & 0x0800)  // If we are in the upper bank...
   {
-      if (bPossibleLoad)
+      if (bPossibleLoad)  // True only if our last AR configuration says we are "ROM" in the upper bank...
       {
           // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
           if(addr == 0x0850)
@@ -132,12 +138,6 @@ uInt8 CartridgeAR::peek(uInt16 addr)
           }
       }
 
-      // Cancel any pending write if more than 5 distinct accesses have occurred
-      if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
-      {
-        myWritePending = false;
-      }
-
       // Is the bank configuration hotspot being accessed?
       if((addr) == 0x0FF8)
       {
@@ -146,70 +146,51 @@ uInt8 CartridgeAR::peek(uInt16 addr)
         bankConfiguration(myDataHoldRegister);
       }
       // Handle poke if writing enabled
-      else if (myWritePending)
+      else if (myWritePending && myWriteEnabled)
       {
-        if (myWriteEnabled)
-        {
-            if ((NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
-            {
-                if(!bPossibleLoad)    // Can't poke to ROM :-)
-                   myImage1[addr] = myDataHoldRegister;
-                myWritePending = false;
-            }
-        }
+          if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
+          {
+              if(!bPossibleLoad)    // Can't poke to ROM :-)
+                 myImage1[addr] = myDataHoldRegister;
+              myWritePending = false;
+          }
       }
 
       return myImage1[addr];
   }
-  else // In lower bank
+  else // WE are in the lower bank
   {
-      // Cancel any pending write if more than 5 distinct accesses have occurred
-      if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
-      {
-        myWritePending = false;
-      }
-
       // Is the data hold register being set?
-      if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
+      if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
       {
         myDataHoldRegister = addr;
-        myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
+        NumberOfDistinctAccesses = 0;
         myWritePending = true;
       }
       // Handle poke if writing enabled
-      else if (myWritePending)
+      else if (myWritePending && myWriteEnabled)
       {
-        if (myWriteEnabled)
-        {
-            if (NumberOfDistinctAccesses == myNumberOfDistinctAccesses)
-            {
-                myImage0[addr] = myDataHoldRegister;
-                myWritePending = false;
-            }
-        }
+          if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
+          {
+              myImage0[addr] = myDataHoldRegister;
+              myWritePending = false;
+          }
       }
 
      return myImage0[addr];
   }
-
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::poke(uInt16 addr, uInt8)
 {
   addr &= 0x0FFF; // Map down to 4k...
-  
-  // Cancel any pending write if more than 5 distinct accesses have occurred
-  if(myWritePending &&  (NumberOfDistinctAccesses > myNumberOfDistinctAccesses))
-  {
-    myWritePending = false;
-  }
 
   // Is the data hold register being set?
-  if(!(addr & 0x0F00) && (!myWriteEnabled || !myWritePending))
+  if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
   {
     myDataHoldRegister = addr;
-    myNumberOfDistinctAccesses = NumberOfDistinctAccesses+5;
+    NumberOfDistinctAccesses = 0;
     myWritePending = true;
   }
   // Is the bank configuration hotspot being accessed?
@@ -220,7 +201,7 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
     bankConfiguration(myDataHoldRegister);
   }
   // Handle poke if writing enabled
-  else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == (myNumberOfDistinctAccesses)))
+  else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == DISTINCT_THRESHOLD))
   {
     if((addr & 0x0800) == 0)
         myImage0[addr] = myDataHoldRegister;

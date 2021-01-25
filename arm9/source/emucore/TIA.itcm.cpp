@@ -33,13 +33,14 @@
 #include "Cart.hxx"
 #define HBLANK 68
 
-
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
 
 uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
 uInt8   dma_channel                 __attribute__((section(".dtcm")));
+uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
+uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
 uInt16  ourCollisionTable[64]       __attribute__((section(".dtcm")));
 uInt16  myCollision                 __attribute__((section(".dtcm")));    
 Int16   myPOSP0                     __attribute__((section(".dtcm")));         
@@ -51,27 +52,27 @@ uInt8   myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
 uInt32  myColor[4]                  __attribute__((section(".dtcm")));
 uInt8   myPriorityEncoder[2][256]   __attribute__((section(".dtcm")));
 uInt8   myCTRLPF                    __attribute__((section(".dtcm")));
-bool    myREFP0                     __attribute__((section(".dtcm")));
-bool    myREFP1                     __attribute__((section(".dtcm")));
+uInt8   myREFP0                     __attribute__((section(".dtcm")));
+uInt8   myREFP1                     __attribute__((section(".dtcm")));
 uInt32  myPF                        __attribute__((section(".dtcm")));
 uInt8   myGRP0                      __attribute__((section(".dtcm")));
 uInt8   myGRP1                      __attribute__((section(".dtcm")));
 uInt8   myDGRP0                     __attribute__((section(".dtcm")));
 uInt8   myDGRP1                     __attribute__((section(".dtcm")));
-bool    myENAM0                     __attribute__((section(".dtcm")));
-bool    myENAM1                     __attribute__((section(".dtcm")));
-bool    myENABL                     __attribute__((section(".dtcm")));
-bool    myDENABL                    __attribute__((section(".dtcm")));
+uInt8   myENAM0                     __attribute__((section(".dtcm")));
+uInt8   myENAM1                     __attribute__((section(".dtcm")));
+uInt8   myENABL                     __attribute__((section(".dtcm")));
+uInt8   myDENABL                    __attribute__((section(".dtcm")));
 Int8    myHMP0                      __attribute__((section(".dtcm")));
 Int8    myHMP1                      __attribute__((section(".dtcm")));
 Int8    myHMM0                      __attribute__((section(".dtcm")));
 Int8    myHMM1                      __attribute__((section(".dtcm")));
 Int8    myHMBL                      __attribute__((section(".dtcm")));
-bool    myVDELP0                    __attribute__((section(".dtcm")));
-bool    myVDELP1                    __attribute__((section(".dtcm")));
-bool    myVDELBL                    __attribute__((section(".dtcm")));
-bool    myRESMP0                    __attribute__((section(".dtcm")));
-bool    myRESMP1                    __attribute__((section(".dtcm")));
+uInt8   myVDELP0                    __attribute__((section(".dtcm")));
+uInt8   myVDELP1                    __attribute__((section(".dtcm")));
+uInt8   myVDELBL                    __attribute__((section(".dtcm")));
+uInt8   myRESMP0                    __attribute__((section(".dtcm")));
+uInt8   myRESMP1                    __attribute__((section(".dtcm")));
 uInt32  myFrameXStart               __attribute__((section(".dtcm")));
 uInt32  myFrameWidth                __attribute__((section(".dtcm")));
 uInt32  myFrameYStart               __attribute__((section(".dtcm")));
@@ -105,9 +106,9 @@ uInt8   myVSYNC                     __attribute__((section(".dtcm")));
 uInt8   myVBLANK                    __attribute__((section(".dtcm")));
 
 Int32   myLastHMOVEClock            __attribute__((section(".dtcm")));
-bool    myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
-bool    myAllowHMOVEBlanks          __attribute__((section(".dtcm")));
-bool    myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
+uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
+uInt8   myAllowHMOVEBlanks          __attribute__((section(".dtcm")));
+uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt32  myM0CosmicArkCounter        __attribute__((section(".dtcm")));
 
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
