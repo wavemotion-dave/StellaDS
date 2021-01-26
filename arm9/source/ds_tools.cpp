@@ -201,19 +201,20 @@ void dsPrintCartType(char * type)
 
 void dsWriteTweaks(void)
 {
+#ifdef DEBUG_DUMP    
     FILE *fp;
     dsPrintValue(22,0,0, (char*)"SNAP");
     fp = fopen("StellaDS.txt", "a+");
     if (fp != NULL)
     {
-        fprintf(fp, "%-50s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.type, (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
+        fprintf(fp, "%-60s -%32s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.md5, myCartInfo.type, (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
         fflush(fp);
         fclose(fp);
     }
     WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
     dsPrintValue(22,0,0, (char*)"    ");
+#endif   
 }
-
 
 void dsShowScreenEmu(void)
 {

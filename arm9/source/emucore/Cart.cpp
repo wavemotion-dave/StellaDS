@@ -161,7 +161,7 @@ static const CartInfo table[] =
     {"3002e64a33a744487272be26d6069b3a",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  5},    // Cave 1K (2004) (Thomas Jentzsch).bin    
     {"1cedebe83d781cc22e396383e028241a",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  5},    // Cave In.bin
     {"049b33b03e7928af596c9d683f587475",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Caverns.bin
-    {"91c2098e88a6b13f977af8c003e0bca5",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Centipede (1982).bin
+    {"91c2098e88a6b13f977af8c003e0bca5",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Centipede (1982).bin
     {"5d799bfa9e1e7b6224877162accada0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Challenge of.... Nexar (1982).bin
     {"73158ea51d77bf521e1369311d26c27b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  200,   0,  3},    // Challenge (Zellers).bin
     {"ce09df4f125e49a8239c954e22fe8adb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Chakdust - NTSC Cart.bin    
@@ -445,7 +445,7 @@ static const CartInfo table[] =
     {"bb6fc47aed82b3f65c4938bf668de767",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0, -3},    // Minotaur (2006) (Michael Biggs).bin
     {"3a2e2d0c6892aa14544083dfb7762782",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  5},    // Missile Command (1981).bin
     {"1a8204a2bcd793f539168773d9ad6230",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  5},    // Missile Command (1981) [no initials].bin
-    {"4c6afb8a44adf8e28f49164c84144bfe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Mission 3000 A.D. (1983).bin
+    {"4c6afb8a44adf8e28f49164c84144bfe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  1},    // Mission 3000 A.D. (1983).bin
     {"4181087389a79c7f59611fb51c263137",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -2},    // Miss Piggy's Wedding (1983).bin
     {"e13818a5c0cb2f84dd84368070e9f099",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   2,  1},    // Misterious Thief (1983).bin
     {"7af40c1485ce9f29b1a7b069a2eb04a7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   4, -1},    // Mogul Maniac (1983).bin
@@ -509,6 +509,7 @@ static const CartInfo table[] =
     {"212d0b200ed8b45d8795ad899734d7d7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  196,   0,  0},    // Pepsi Invaders (1983).bin
     {"09388bf390cd9a86dc0849697b96c7dc",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Pete Rose Baseball (1988).bin
     {"e9034b41741dcee64ab6605aba9de455",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  198,   0, -1},    // Phantom Tank (Digivision).bin
+    {"6a222c26bcece3a510ddda21398f72c6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  198,   0, -1},    // Phantom Tank (Digivision) [alt].bin        
     {"e959b5a2c882ccaacb43c32790957c2d",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Phantom II, Pirate (2006) (David Weavil).bin
     {"62f74a2736841191135514422b20382d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Pharaoh's Curse.bin
     {"7dcbfd2acc013e817f011309c7504daa",  "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   ANA1_0,  205,   0,  0},    // Phaser Patrol (1982).bin
@@ -618,6 +619,7 @@ static const CartInfo table[] =
     {"39c78d682516d79130b379fa9deb8d1c",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Skeet Shoot (1981).bin
     {"eafe8b40313a65792e88ff9f2fe2655c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  195,   0,  0},    // SkelPlus.bin
     {"8654d7f0fb351960016e06646f639b02",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Ski Hunt.bin
+    {"5305f69fbf772fac4760cdcf87f1ab1f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Ski Run (2600 Screen Search Console).bin
     {"b76fbadc8ffb1f83e2ca08b6fb4d6c9f",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   1,  1},    // Skiing (1980).bin
     {"46c021a3e9e2fd00919ca3dd1a6b76d8",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Sky Diver (1979).bin
     {"2a0ba55e56e7a596146fa729acf0e109",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   4,  3},    // Sky Jinks (1982).bin
@@ -809,6 +811,7 @@ static const CartInfo table[] =
     {"d175258b2973b917a05b46df4e1cf15d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Walker.bin
     {"d3456b4cf1bd1a7b8fb907af1a80ee15",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -1},    // Wall Ball (1983).bin
     {"c16fbfdbfdf5590cc8179e4b0f5f5aeb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983).bin
+    {"03ff9e8a7af437f16447fe88cea3226c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983)[alt].bin
     {"5da448a2e1a785d56bf4f04709678156",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall Jump Ninja.bin
     {"cbe5a166550a8129a5e6d374901dffad",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   ANA0_8,  205,   0,  0},    // Warlords (1981).bin
     {"679e910b27406c6a2072f9569ae35fc8",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Warplock (1982) [alt].bin
@@ -829,6 +832,7 @@ static const CartInfo table[] =
     {"c5930d0e8cdae3e037349bfa08e871be",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Yars' Revenge (1982).bin
     {"eea0da9b987d661264cce69a7c13c3bd",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  202,   0,  8},    // Zaxxon (1982).bin
     {"a336beac1f0a835614200ecd9c41fd70",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Zoo Keeper Sounds (1984).bin
+    {"c1e6e4e7ef5f146388a090f1c469a2fa",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  197,   0, -2},    // Z-Tack (AKA Base Attack) (1983) (Bomb - Onbase).bin
 
     // Some Work in Progress Carts (these MD5s will change when released BIN is available)
     {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  200,   0,  4},    // Venture Reloaded (RC3).bin
