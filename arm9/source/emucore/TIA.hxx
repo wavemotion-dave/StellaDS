@@ -291,13 +291,6 @@ class TIA : public Device , public MediaSource
     // Missle mask table (entries are true or false)
     static uInt8 ourMissleMaskTable[4][8][4][320];
 
-    // Used to convert value written in a motion register into 
-    // its internal representation
-    static const Int32 ourCompleteMotionTable[76][16];
-
-    // Indicates if HMOVE blanks should occur for the corresponding cycle
-    static const bool ourHMOVEBlankEnableCycles[76];
-
     // Player mask table
     static uInt8 ourPlayerMaskTable[4][2][8][320];
 

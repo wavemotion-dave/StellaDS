@@ -30,8 +30,8 @@ extern uInt8 fast_cart_buffer[];
 // The following is a simple table mapping games to type's using MD5 values
 struct CartInfo
 {
-  const char* md5;
-  const char* type;
+  string md5;
+  string type;
   Int8  controllerType;
   Int8  special;
   Int8  mode;

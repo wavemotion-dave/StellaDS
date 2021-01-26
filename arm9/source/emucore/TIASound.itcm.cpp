@@ -35,6 +35,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define SOUND_SIZE (8192)
+
 /* define some data types to keep it platform independent */
 #define int8   char
 #define int16  int
@@ -297,6 +299,8 @@ void Update_tia_sound (uint16 addr, uint8 val)
 /* Outputs: the buffer will be filled with n bytes of audio - no return val  */
 /*                                                                           */
 /*****************************************************************************/
+uint8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
+uint8* psound_buffer __attribute__((section(".dtcm")));
 
 void Tia_process (void)
 {
@@ -304,6 +308,10 @@ void Tia_process (void)
 	register uint8 audc0,audv0,audc1,audv1;
     register uint8 div_n_cnt0,div_n_cnt1;
     register uint8 p5_0, p5_1,outvol_0,outvol_1;
+    
+  psound_buffer++;
+  if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
+    
 
     audc0 = AUDC[0];
     audv0 = AUDV[0];

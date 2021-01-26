@@ -1,3 +1,4 @@
+
 // =====================================================================================================
 // Stella DSi - Improved Version by Dave Bernazzani (wavemotion)
 //
@@ -36,6 +37,10 @@
 
 #define VERSION "2.0"
 
+#define SOUND_SIZE (8192)
+extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
+extern uInt8 *psound_buffer;
+
 #define MAX_DEBUG 7
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
@@ -57,10 +62,6 @@ uInt8  filebuffer[MAX_FILE_SIZE];
 int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
-
-#define SOUND_SIZE (8192)
-static uInt8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
-uInt8* psound_buffer __attribute__((section(".dtcm")));
 
 static int bSoundEnabled = 1;
 static int full_speed=0;
@@ -207,7 +208,7 @@ void dsWriteTweaks(void)
     fp = fopen("StellaDS.txt", "a+");
     if (fp != NULL)
     {
-        fprintf(fp, "%-60s -%32s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.md5, myCartInfo.type, (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
+        fprintf(fp, "%-70s %-32s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.md5.c_str(), myCartInfo.type.c_str(), (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
         fflush(fp);
         fclose(fp);
     }
@@ -307,13 +308,6 @@ void dsFreeEmu(void)
     delete theSDLSnd;
 }
 
-void VsoundHandler(void) 
-{
-  psound_buffer++;
-  if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-  Tia_process();
-}
-
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
@@ -355,7 +349,7 @@ bool dsLoadGame(char *filename)
         psound_buffer=sound_buffer;
         TIMER2_DATA = TIMER_FREQ(22050);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
-        irqSet(IRQ_TIMER2, VsoundHandler);
+        irqSet(IRQ_TIMER2, Tia_process);
         if (bSoundEnabled)
         {
             irqEnable(IRQ_TIMER2);

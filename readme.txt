@@ -8,12 +8,13 @@ help you.
 Features :
 ----------
  High level of compability to make games playable. Most games you remember fondly
- run nearly full speed on a DSi in native 133MHz mode. 
+ run nearly full speed on a DSi in native 133MHz mode. For the older DS-LITE and
+ DS-PHAT, only the more simple games are going to run close to full speed.
  Paddle and Keypad emulation is included.
 
  See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
  going to be NTSC No-Intro roms (the good ones!). PAL roms may cut off at the bottom
- of the screen.
+ of the screen and may not run at the right speed.
 
 Missing :
 ---------
@@ -31,6 +32,14 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.0 : 26-Jan-2021 by Dave Bernazzani (wavemotion)
+  * Faster AR processing rendering some of the more stubborn games playable.
+  * Faster screen rendering for more complicated games. Simple games take a small
+    performance hit (think: games with solid backgrounds) but those were already 
+    running plenty fast enough - to we took the trade off to make some of the 
+    more complicated games faster - this is an overall win for most games!
+  * General cleanup - more games rendering properly (screen offset/scaling tweaks).
+
 V1.9 : 24-Jan-2021 by Dave Bernazzani (wavemotion)
   * Screen tweaks to more than 400 games to make them look as good as possible.
   * More games added to the compatibility table - many homebrews.

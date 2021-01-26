@@ -146,14 +146,14 @@ static const CartInfo table[] =
     {"0443cfa9872cdb49069186413275fa21",  "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -2},    // BurgerTime (1983).bin
     {"19d6956ff17a959c48fcd8f4706a848d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  3},    // Burning Desire (1982).bin
     {"466c9d4a93668ab6a052c268856cf4a5",  "F4SC", CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Circus Atari Age PRGE Demo.bin
-    {"66fcf7643d554f5e15d4d06bab59fe70",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Cabbage Patch Kids (1984).bin
+    {"66fcf7643d554f5e15d4d06bab59fe70",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  6},    // Cabbage Patch Kids (1984).bin
     {"7f6533386644c7d6358f871666c86e79",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -1},    // Cakewalk (1983).bin
     {"9ab72d3fd2cc1a0c9adb504502579037",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   4,  4},    // California Games (1988).bin
     {"9d652c50a0f101d8ea071753bddb8f53",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Candy Catcher (2011) (Grant Thienemann).bin
     {"79e151d8ca4fb96d46dfbc685323c0fe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  1},    // Cannonhead Clash.bin
     {"feedcc20bc3ca34851cd5d9e38aa2ca6",  "2K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Canyon Bomber (1979).bin
     {"151c33a71b99e6bcffb34b43c6f0ec23",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Care Bears (1983).bin
-    {"028024fb8e5e5f18ea586652f9799c96",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  194,   0,  1},    // Carnival (1982).bin
+    {"028024fb8e5e5f18ea586652f9799c96",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  194,   0,  1},    // Carnival (1982).bin
     {"b816296311019ab69a21cb9e9e235d12",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Casino (1979).bin
     {"9e192601829f5f5c2d3b51f8ae25dbe5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  9},    // Cathouse Blues (1982).bin
     {"d071d2ec86b9d52b585cc0382480b351",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Cat Tracks.bin
@@ -227,6 +227,7 @@ static const CartInfo table[] =
     {"494cda91cc640551b4898c82be058dd9",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Donkey Kong VCS (pal).bin    
     {"c3472fa98c3b452fa2fd37d1c219fb6f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  8},    // Dodge 'Em (1980).bin
     {"83bdc819980db99bf89a7f2ed6a2de59",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  8},    // Dodge 'Em (1980) [fixed].bin
+    {"c6124a6c82c5b965f6afcf01f2790697",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  196,   0,  8},    // Doggone_It!.bin
     {"ca09fa7406b7d2aea10d969b6fc90195",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   4,  5},    // Dolphin (1983).bin
     {"937736d899337036de818391a87271e0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   4,  2},    // Donald Duck's Speedboat (1983).bin
     {"36b20c427975760cb9cf4a47e41369e4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Donkey Kong (1982).bin
@@ -591,8 +592,8 @@ static const CartInfo table[] =
     {"a4ecb54f877cd94515527b11e698608c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  4},    // Saboteur (1983).bin
     {"1ec57bbd27bdbd08b60c391c4895c1cf",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Saboteur.bin
     {"4d502d6fb5b992ee0591569144128f99",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Save Mary! (1989).bin
-    {"ed1a784875538c7871d035b7a98c2433",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  5},    // Save Our Ship.bin
-    {"49571b26f46620a85f93448359324c28",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Save Our Ship (Unknown).bin
+    {"ed1a784875538c7871d035b7a98c2433",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Save Our Ship.bin
+    {"49571b26f46620a85f93448359324c28",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Save Our Ship (Unknown).bin
     {"e377c3af4f54a51b85efe37d4b7029e6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  197,   0,  2},    // Save the Whales (1983).bin
     {"a3fe5e6a744cd34a3c1466874a3e9d5f",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Scramble 0106.bin
     {"19e761e53e5ec8e9f2fceea62715ca06",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Scuba Diver (1983).bin
@@ -600,6 +601,7 @@ static const CartInfo table[] =
     {"624e0a77f9ec67d628211aaf24d8aea6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   2,  2},    // Sea Hawk (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  9},    // Sea Hunt (1987).bin
     {"a8c48b4e0bf35fe97cc84fdd2c507f78",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  193,   0, -2},    // Seamonster (1982).bin
+    {"dd45e370aceff765f1e72c619efd4399",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  193,   0, -2},    // Sea Monster (1982) (Bit Corporation) (PG201).bin
     {"240bfbac5163af4df5ae713985386f92",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Seaquest (1983).bin
     {"3034532daf80997f752aee680d2e7fc3",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Seaweed Assault.bin
     {"dde55d9868911407fe8b3fefef396f00",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Sea Wolf.bin
@@ -658,15 +660,16 @@ static const CartInfo table[] =
     {"3dfb7c1803f937fadc652a3e95ff7dc6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"fe395b292e802ea16b3b5782b21ee686",  "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Space Rocks.bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  200,   0,  1},    // Space Shuttle (1983).bin
-    {"5894c9c0c1e7e29f3ab86c6d3f673361",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  200,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
+    {"898143773824663efe88d0a3a0bb1ba4",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  200,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"6c9a32ad83bcfde3774536e52be1cce7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Space Treat.bin
     {"9e135f5dce61e3435314f5cddb33752f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  4},    // Space Treat Deluxe.bin
     {"be3f0e827e2f748819dac2a22d6ac823",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Space Tunnel (1982).bin
+    {"df2745d585238780101df812d00b49f4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Space Tunnel (1982) (Bit Corporation) (PG202).bin
     {"a7ef44ccb5b9000caf02df3e6da71a92",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Space War (1978).bin
     {"25c97848ae6499e569b832b686a84bb2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  199,   0,  2},    // Sp+.bin
     {"8454ed9787c9d8211748ccddb673e920",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spiderdroid (1987).bin
     {"24d018c4a6de7e5bd19a36f2b879b335",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -1},    // Spider Fighter (1982).bin
-    {"199eb0b8dce1408f3f7d46411b715ca9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spider-Man (1982).bin
+    {"199eb0b8dce1408f3f7d46411b715ca9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -1},    // Spider-Man (1982).bin
     {"21299c8c3ac1d54f8289d88702a738fd",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spider Maze (1982).bin
     {"a4e885726af9d97b12bb5a36792eab63",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spike's Peak (1983).bin
     {"d3171407c3a8bb401a3a62eb578f48fb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spinning Fireball (1983).bin
@@ -675,7 +678,7 @@ static const CartInfo table[] =
     {"4cd796b5911ed3f1062e805a3df33d98",  "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Springer (1982).bin
     {"5a8afe5422abbfb0a342fb15afd7415f",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Sprint Master (1988).bin
     {"3105967f7222cc36a5ac6e5f6e89a0b4",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spy Hunter (1984).bin
-    {"ba257438f8a78862a9e014d831143690",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Squeeze Box (1982).bin
+    {"ba257438f8a78862a9e014d831143690",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Squeeze Box (1982).bin
     {"68878250e106eb6c7754bc2519d780a0",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Squirrel (1983).bin
     {"aa8c75d6f99548309949916ad6cf33bc",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Squish-Em.bin
     {"34c808ad6577dbfa46169b73171585a3",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Squoosh (1983).bin
@@ -686,7 +689,7 @@ static const CartInfo table[] =
     {"0c48e820301251fbb6bcdc89bd3555d9",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Stargate (1984).bin
     {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0, 12},    // Stargunner (1982).bin
     {"d69559f9c9dc6ef528d841bf9d91b275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // StarMaster (1982).bin
-    {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Star Raiders (1982).bin
+    {"cbd981a23c592fb9ab979223bb368cd5",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Star Raiders (1982).bin
     {"c1a83f44137ea914b495fc6ac036c493",  "F8",   CTR_STARRAID,  SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Star Raiders (PAL 1982).bin
     {"e363e467f605537f3777ad33e74e113a",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Star Ship (1977).bin
     {"7b938c7ddf18e8362949b62c7eaa660a",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Star Ship (1977).bin
@@ -810,8 +813,8 @@ static const CartInfo table[] =
     {"6041f400b45511aa3a69fab4b8fc8f41",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wabbit (1982).bin
     {"d175258b2973b917a05b46df4e1cf15d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Walker.bin
     {"d3456b4cf1bd1a7b8fb907af1a80ee15",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0, -1},    // Wall Ball (1983).bin
-    {"c16fbfdbfdf5590cc8179e4b0f5f5aeb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983).bin
-    {"03ff9e8a7af437f16447fe88cea3226c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983)[alt].bin
+    {"c16fbfdbfdf5590cc8179e4b0f5f5aeb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983).bin
+    {"03ff9e8a7af437f16447fe88cea3226c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Wall-Defender (1983)[alt].bin
     {"5da448a2e1a785d56bf4f04709678156",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Wall Jump Ninja.bin
     {"cbe5a166550a8129a5e6d374901dffad",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   ANA0_8,  205,   0,  0},    // Warlords (1981).bin
     {"679e910b27406c6a2072f9569ae35fc8",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Warplock (1982) [alt].bin
@@ -827,8 +830,9 @@ static const CartInfo table[] =
     {"e62e60a3e6cb5563f72982fcd83de25a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // World End (unknown).bin
     {"87f020daa98d0132e98e43db7d8fea7e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Worm War I (1982).bin
     {"eaf744185d5e8def899950ba7c6e7bb5",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Xenophobe (1990).bin
-    {"c6688781f4ab844852f4e3352772289b",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Xevious (1983).bin
-    {"5961d259115e99c30b64fe7058256bcf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // X-Man (1983).bin
+    {"c6688781f4ab844852f4e3352772289b",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Xevious (1983).bin
+    {"af6f3e9718bccfcd8afb421f96561a34",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // Xevious [alt] (1983).bin
+    {"5961d259115e99c30b64fe7058256bcf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  198,   0,  0},    // X-Man (1983).bin
     {"c5930d0e8cdae3e037349bfa08e871be",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Yars' Revenge (1982).bin
     {"eea0da9b987d661264cce69a7c13c3bd",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  202,   0,  8},    // Zaxxon (1982).bin
     {"a336beac1f0a835614200ecd9c41fd70",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Zoo Keeper Sounds (1984).bin
@@ -837,7 +841,8 @@ static const CartInfo table[] =
     // Some Work in Progress Carts (these MD5s will change when released BIN is available)
     {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  200,   0,  4},    // Venture Reloaded (RC3).bin
     {"2df8ea51bcc9f1b3b4c61a141b5a1405",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  2},    // NinjishGuy_prerelease.bin
-    {(char*)0,                        (char*)0,   0,0,0,0}
+
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   ANA1_0,  205,   0,  2},    // NinjishGuy_prerelease.bin
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -915,28 +920,31 @@ Cartridge::~Cartridge()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 string Cartridge::autodetectType(const uInt8* image, uInt32 size)
 {
+  bool bFound = false;
   extern void OutputCartInfo(string type, string md5);
     
   // Get the MD5 message-digest for the ROM image
   string md5 = MD5(image, size);
 
   // Defaults for the selected cart... this may change up below...
-  memcpy(&myCartInfo, &table[0], sizeof(myCartInfo));
+  myCartInfo = table[0];
 
+  // -----------------------------------------------------------------------
   // Take a closer look at the ROM image and try to figure out its type
-  myCartInfo.type = 0;
+  // -----------------------------------------------------------------------
 
   // First we'll see if it's type is listed in the table above
-  for(const CartInfo* entry = table; (entry->md5 != 0); ++entry)
+  for(const CartInfo* entry = table; (entry->special != 99); ++entry)
   {
-    if(entry->md5 == md5)
+    if(entry->md5 == md5)   // String compare...
     {
-      memcpy(&myCartInfo, entry, sizeof(myCartInfo));
-      break;
+        myCartInfo = *entry;
+        bFound = true;
+        break;
     }
   }
     
-  if (!isDSiMode()) // For older DS/DS-LITE, we sturn off Flicker Free
+  if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default...
   {
       myCartInfo.mode = MODE_NO;    
   }
@@ -950,8 +958,9 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
 
   // If we didn't find the type in the table then guess it based on size
-  if(myCartInfo.type == 0)
+  if(!bFound)
   {
+    myCartInfo.md5 = md5;
     if((size % 8448) == 0)
     {
       myCartInfo.type = "AR";
@@ -1040,7 +1049,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }  
   }
     
-  dsPrintCartType((char *)myCartInfo.type);
+  dsPrintCartType((char*)myCartInfo.type.c_str());
   
   return myCartInfo.type;
 }
