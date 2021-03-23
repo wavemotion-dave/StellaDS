@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.0"
+#define VERSION "2.1"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -45,7 +45,7 @@ int atari_frames=0;
 
 #define MAX_DEBUG 7
 Int32 debug[MAX_DEBUG]={0};
-#define DEBUG_DUMP
+//#define DEBUG_DUMP
 char my_filename[128];
 
 FICA2600 vcsromlist[1024];
@@ -920,7 +920,7 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B)) | (keys_pressed & (KEY_Y))));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
@@ -1129,8 +1129,12 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 256) myCartInfo.screenScale++;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < A26_VID_HEIGHT) myCartInfo.screenScale++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 192) myCartInfo.screenScale--;
+                    
+                    debug[0] = myCartInfo.xOffset;
+                    debug[1] = myCartInfo.yOffset;
+                    debug[2] = myCartInfo.screenScale;
                     bScreenRefresh = 1;
                 }
 

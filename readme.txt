@@ -32,6 +32,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.1 : 23-Mar-2021 by Dave Bernazzani (wavemotion)
+  * Improved Screen Scaling (using Left/Right shoulder buttons + Arrow Keys)
+  * Fix for file selection bug
+  * Minor cleanup and improvements to squeeze out the last bit of juice from the emulation!
+
 V2.0 : 26-Jan-2021 by Dave Bernazzani (wavemotion)
   * Faster AR processing rendering some of the more stubborn games playable.
   * Faster screen rendering for more complicated games. Simple games take a small
@@ -170,8 +175,8 @@ Controls :
  * X       : Show FPS (Frames per Second)
  * Y       : Toggle Full Speed (no trottle to 60FPS)
 
- * R-Trig + D-Pad  : Shift display offset by 1 pixel in the D-PAD direction
- * L-Trig + D-Pad  : Change Scaling of the Y-Screen
+ * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
+ * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------
