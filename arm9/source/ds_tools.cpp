@@ -41,9 +41,11 @@
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
 extern uInt8 *psound_buffer;
 
+int atari_frames=0;
+
 #define MAX_DEBUG 7
 Int32 debug[MAX_DEBUG]={0};
-//#define DEBUG_DUMP
+#define DEBUG_DUMP
 char my_filename[128];
 
 FICA2600 vcsromlist[1024];
@@ -205,7 +207,7 @@ void dsWriteTweaks(void)
 #ifdef DEBUG_DUMP    
     FILE *fp;
     dsPrintValue(22,0,0, (char*)"SNAP");
-    fp = fopen("StellaDS.txt", "a+");
+    fp = fopen("../StellaDS.txt", "a+");
     if (fp != NULL)
     {
         fprintf(fp, "%-70s %-32s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.md5.c_str(), myCartInfo.type.c_str(), (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
@@ -363,6 +365,11 @@ bool dsLoadGame(char *filename)
 
         theConsole->fakePaddleResistance = 450000;
         theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+        
+        TIMER0_CR=0;
+        TIMER0_DATA=0;
+        TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
+        atari_frames=0;
         
         return true;
     }
@@ -707,6 +714,7 @@ unsigned int dsWaitForRom(void)
         if (firstRomDisplay>nbRomPerPage) { firstRomDisplay -= nbRomPerPage; }
         else { firstRomDisplay = 0; }
         if (ucFicAct == 0) romSelected = 0;
+        if (romSelected > ucFicAct) romSelected = ucFicAct;          
         ucSHaut=0x01;
         dsDisplayFiles(firstRomDisplay,romSelected);
       }
@@ -893,12 +901,17 @@ ITCM_CODE void dsMainLoop(void)
             // 655 -> 50 fps and 546 -> 60 fps
             if (!full_speed)
             {
-                while(TIMER0_DATA < 546)
+                while(TIMER0_DATA < (546*atari_frames))
                     ;
             }
-            TIMER0_CR=0;
-            TIMER0_DATA=0;
-            TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
+
+            if (++atari_frames == 60)
+            {
+                TIMER0_CR=0;
+                TIMER0_DATA=0;
+                TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
+                atari_frames=0;
+            }            
                 
             // Wait for keys
             scanKeys();
@@ -1106,46 +1119,27 @@ ITCM_CODE void dsMainLoop(void)
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F7, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F8, 0);
 
-                // -----------------------------------------------------------------
-                // Check the UI keys... full speed, FSP display, offset shift, etc.
-                // -----------------------------------------------------------------
+                // -----------------------------------------------------------------------
+                // Check the UI keys... full speed, FSP display, offset/scale shift, etc.
+                // -----------------------------------------------------------------------
+                if ((keys_pressed & KEY_R) || (keys_pressed & KEY_L))
+                {
+                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_UP))   myCartInfo.yOffset++;
+                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_DOWN)) myCartInfo.yOffset--;
+                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
+                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
+
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 256) myCartInfo.screenScale++;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 192) myCartInfo.screenScale--;
+                    bScreenRefresh = 1;
+                }
+
+                
                 if (keys_pressed != last_keys_pressed)
                 {
-                    if(keys_pressed & (KEY_R))
+                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_L))
                     {
-                        if (keys_pressed & KEY_L)
-                            dsWriteTweaks();    
-                        else if (keys_pressed & KEY_UP)
-                            myCartInfo.yOffset++;
-                        else if (keys_pressed & KEY_DOWN)
-                            myCartInfo.yOffset--;
-                        else if (keys_pressed & KEY_RIGHT)
-                            myCartInfo.xOffset--;
-                        else if (keys_pressed & KEY_LEFT)
-                            myCartInfo.xOffset++;
-                        bScreenRefresh = 1;
-                        debug[0] = myCartInfo.xOffset;
-                        debug[1] = myCartInfo.yOffset;
-                        debug[2] = myCartInfo.screenScale;
-                    }
-                    else if(keys_pressed & (KEY_L))
-                    {
-                        if (keys_pressed & KEY_UP)
-                            myCartInfo.screenScale++;
-                        else if (keys_pressed & KEY_DOWN)
-                            myCartInfo.screenScale--;
-                        else if (keys_pressed & KEY_RIGHT)
-                            myCartInfo.screenScale++;
-                        else if (keys_pressed & KEY_LEFT)
-                            myCartInfo.screenScale--;
-                        if (myCartInfo.screenScale > A26_VID_HEIGHT)
-                        {
-                            myCartInfo.screenScale = A26_VID_HEIGHT;
-                        }
-                        bScreenRefresh = 1;
-                        debug[0] = myCartInfo.xOffset;
-                        debug[1] = myCartInfo.yOffset;
-                        debug[2] = myCartInfo.screenScale;
+                        dsWriteTweaks();
                     }
                     else if (keys_pressed & KEY_X)
                     {
@@ -1160,7 +1154,6 @@ ITCM_CODE void dsMainLoop(void)
                         }
                         else gTotalAtariFrames=0;
                     }
-                    
                     last_keys_pressed = keys_pressed;
                 }
             }
@@ -1182,6 +1175,7 @@ ITCM_CODE void dsMainLoop(void)
             {
                 int x = gTotalAtariFrames;
                 gTotalAtariFrames = 0;
+                if (x == 61) x=60;
                 fpsbuf[0] = '0' + (int)x/100;
                 x = x % 100;
                 fpsbuf[1] = '0' + (int)x/10;
@@ -1406,12 +1400,11 @@ int a26Filescmp (const void *c1, const void *c2)
   FICA2600 *p1 = (FICA2600 *) c1;
   FICA2600 *p2 = (FICA2600 *) c2;
 
-  return strcmp (p1->filename, p2->filename);
+  return strcasecmp (p1->filename, p2->filename);
 }
 
 void vcsFindFiles(void) 
 {
-  struct stat statbuf;
   DIR *pdir;
   struct dirent *pent;
   char filenametmp[255];
@@ -1422,11 +1415,11 @@ void vcsFindFiles(void)
 
   if (pdir) {
 
-    while (((pent=readdir(pdir))!=NULL)) {
-      stat(pent->d_name,&statbuf);
-
+    while (((pent=readdir(pdir))!=NULL)) 
+    {
       strcpy(filenametmp,pent->d_name);
-      if(S_ISDIR(statbuf.st_mode)) {
+      if (pent->d_type == DT_DIR)
+      {
         if (!( (filenametmp[0] == '.') && (strlen(filenametmp) == 1))) {
           vcsromlist[countvcs].directory = true;
           strcpy(vcsromlist[countvcs].filename,filenametmp);

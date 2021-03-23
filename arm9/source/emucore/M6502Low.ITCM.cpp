@@ -91,11 +91,10 @@ bool M6502Low::execute(uInt16 number)
   // Loop until execution is stopped or a fatal error occurs
   for(;;)
   {
+    uInt16 operandAddress=0;
+    uInt8 operand=0;
     for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
     {
-      uInt16 operandAddress=0;
-      uInt8 operand=0;
-        
       // Get the next 6502 instruction
       IR = peek(PC++);
 
@@ -105,34 +104,31 @@ bool M6502Low::execute(uInt16 number)
         #include "M6502Low.ins"        
       }
     }
-
-    // See if we need to handle an interrupt
-    if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
+      
+    if (myExecutionStatus)
     {
-      // Yes, so handle the interrupt
-      interruptHandler();
-    }
+        // See if we need to handle an interrupt
+        if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
+        {
+          // Yes, so handle the interrupt
+          interruptHandler();
+        }
 
-    // See if execution has been stopped
-    if(myExecutionStatus & StopExecutionBit)
-    {
-      // Yes, so answer that everything finished fine
-      return true;
+        // See if execution has been stopped
+        if(myExecutionStatus & StopExecutionBit)
+        {
+          // Yes, so answer that everything finished fine
+          return true;
+        }
+        else
+        // See if a fatal error has occured
+        if(myExecutionStatus & FatalErrorBit)
+        {
+          // Yes, so answer that something when wrong
+          return false;
+        }
     }
-
-    // See if a fatal error has occured
-    if(myExecutionStatus & FatalErrorBit)
-    {
-      // Yes, so answer that something when wrong
-      return false;
-    }
-
-    // See if we've executed the specified number of instructions
-    if(fast_loop == 0)
-    {
-      // Yes, so answer that everything finished fine
-      return true;
-    }
+    else return true;  // we've executed the specified number of instructions
   }
 }
 
@@ -301,11 +297,11 @@ bool M6502Low::execute_AR(uInt16 number)
   // Loop until execution is stopped or a fatal error occurs
   for(;;)
   {
+    uInt16 operandAddress=0;
+    uInt8 operand=0;
+      
     for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
     {
-      uInt16 operandAddress=0;
-      uInt8 operand=0;
-        
       // Get the next 6502 instruction
       IR = peek_AR(PC++);
 
@@ -319,32 +315,29 @@ bool M6502Low::execute_AR(uInt16 number)
       }
     }
 
-    // See if we need to handle an interrupt
-    if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
+    if (myExecutionStatus)
     {
-      // Yes, so handle the interrupt
-      interruptHandler();
-    }
+        // See if we need to handle an interrupt
+        if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
+        {
+          // Yes, so handle the interrupt
+          interruptHandler();
+        }
 
-    // See if execution has been stopped
-    if(myExecutionStatus & StopExecutionBit)
-    {
-      // Yes, so answer that everything finished fine
-      return true;
-    }
-
-    // See if a fatal error has occured
-    if(myExecutionStatus & FatalErrorBit)
-    {
-      // Yes, so answer that something when wrong
-      return false;
-    }
-
-    // See if we've executed the specified number of instructions
-    if(fast_loop == 0)
-    {
-      // Yes, so answer that everything finished fine
-      return true;
-    }
+        // See if execution has been stopped
+        if(myExecutionStatus & StopExecutionBit)
+        {
+          // Yes, so answer that everything finished fine
+          return true;
+        }
+        else
+        // See if a fatal error has occured
+        if(myExecutionStatus & FatalErrorBit)
+        {
+          // Yes, so answer that something when wrong
+          return false;
+        }
+    } 
+    else return true;  // we've executed the specified number of instructions
   }
 }
