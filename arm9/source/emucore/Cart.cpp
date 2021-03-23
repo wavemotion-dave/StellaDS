@@ -657,7 +657,7 @@ static const CartInfo table[] =
     {"5f7ae9a7f8d79a3b37e8fc841f65643a",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Sorcerer's Apprentice (1983).bin
     {"17badbb3f54d1fc01ee68726882f26a6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Space Attack (1982).bin
     {"1d566002bbc51e5eee73de4c595fd545",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // SpaceBattleFinal4N.bin
-    {"df6a28a89600affe36d94394ef597214",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  0},    // Space Cavern (1981).bin
+    {"df6a28a89600affe36d94394ef597214",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Space Cavern (1981).bin
     {"ec5c861b487a5075876ab01155e74c6c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   ANA1_0,  205,   0,  0},    // Spacechase (1981) .bin
     {"44ca1a88274ff55787ed1763296b8456",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  4},    // SpaceGame-Final.bin
     {"94255d5c05601723a58df61726bc2615",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   ANA1_0,  205,   0,  1},    // SpaceGame 2K.bin
