@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.2"
+#define VERSION "2.3"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...

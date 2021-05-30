@@ -32,6 +32,9 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.3a : 30-May-2021 by Dave Bernazzani (wavemotion)
+  * Fixed crash if you try to load game then use 'B' button to cancel. Sorry!
+
 V2.3 : 30-May-2021 by Dave Bernazzani (wavemotion)
   * And more improvement/stramline of TIA rendering to give a 10% boost
     for most games 0 this brings Elevators Amiss up to 51FPS and Phaser

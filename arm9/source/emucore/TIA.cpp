@@ -1098,7 +1098,10 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       {
           memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
       }
-      else if ((myEnabledObjects & (myPFBit | myBLBit)) == (myPFBit | myBLBit)) // Ball and Playfield (very common) this is all stuff that starts with 0x30..0x3F
+      // --------------------------------------------------------------------------------
+      // Ball and Playfield (very common) this is all stuff that starts with 0x30..0x3F
+      // --------------------------------------------------------------------------------
+      else if ((myEnabledObjects & (myPFBit | myBLBit)) == (myPFBit | myBLBit)) 
       {
           if (myEnabledObjects == (myPFBit | myBLBit)) // Playfield and Ball only are enabled
           {
@@ -1107,20 +1110,17 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
 
                 while(myFramePointer < ending)
                 {
-                  if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
-                  {
-                    *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                    mPF += 4; mBL += 4; myFramePointer += 4;
-                  }
-                  else
-                  {
-                    *myFramePointer = ((myPF & *mPF) || *mBL) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-
-                    if((myPF & *mPF) && *mBL)
-                      myCollision |= ourCollisionTable[myPFBit | myBLBit];
-
-                    ++mPF; ++mBL; ++myFramePointer;
-                  }
+                    if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
+                    {
+                        *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                        mPF += 4; mBL += 4; myFramePointer += 4;
+                    }
+                    else
+                    {
+                        *myFramePointer = ((myPF & *mPF) || *mBL) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                        if((myPF & *mPF) && *mBL) myCollision |= ourCollisionTable[myPFBit | myBLBit];
+                        ++mPF; ++mBL; ++myFramePointer;
+                    }
                 }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myP0Bit)) // Playfield and Ball plus Player 0 enabled...
@@ -1287,7 +1287,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
               }
             }
           }
-          else if (myEnabledObjects == 0x3E) //todo
+          else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP1Bit | myM0Bit)) 
           {
             uInt32*mPF = &myCurrentPFMask[hpos];
             uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1313,7 +1313,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
               }
             }
           }       
-          else if (myEnabledObjects == 0x37) //todo
+          else if (myEnabledObjects == (myPFBit | myBLBit | myP1Bit | myM0Bit | myP0Bit)) // Playfield and Ball plus P1, M0 and P0
           {
             uInt32*mPF = &myCurrentPFMask[hpos];
             uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1433,7 +1433,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
               }
             }
           }
-          else if (myEnabledObjects == 0x3F) //todo
+          else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP1Bit | myM0Bit | myP0Bit)) // Everything is enbaled...
           {
             uInt32*mPF = &myCurrentPFMask[hpos];
             uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1461,7 +1461,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
               }
             }
           }       
-          else  // it's a mess... do it all...
+          else  // Unsure... need to check them all... this is slow.
           {
             uInt32*mPF = &myCurrentPFMask[hpos];
             uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1493,7 +1493,10 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             }
           }  
       }
-      else if ((myEnabledObjects & (myP0Bit | myP1Bit)) == (myP0Bit | myP1Bit)) // If player 0 and 1 are both set (fairly common) - do some short-circuit evals here...
+      // -------------------------------------------------------------------------
+      // Player 1 and Player 0 are both set (fairly common)
+      // -------------------------------------------------------------------------
+      else if ((myEnabledObjects & (myP0Bit | myP1Bit)) == (myP0Bit | myP1Bit)) 
       {
           if (myEnabledObjects == (myP0Bit | myP1Bit)) // Player 0 and 1 is enabled only...
           {
@@ -1739,34 +1742,6 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
                   }
                 }
           }
-          else if (myEnabledObjects == 0x3F) //todo
-          {
-            uInt32*mPF = &myCurrentPFMask[hpos];
-            uInt8* mP1 = &myCurrentP1Mask[hpos];
-            uInt8* mP0 = &myCurrentP0Mask[hpos];
-            uInt8* mM0 = &myCurrentM0Mask[hpos];
-            uInt8* mM1 = &myCurrentM1Mask[hpos];
-            uInt8* mBL = &myCurrentBLMask[hpos];
-            for(; myFramePointer < ending; ++myFramePointer)
-            {
-              uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
-              if(*mBL++)                        enabled |= myBLBit;
-              if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
-              if(*mM1++)                        enabled |= myM1Bit;
-              if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              if(*mM0++)                        enabled |= myM0Bit;
-              myCollision |= ourCollisionTable[enabled];
-              if (hpos < 80)
-              {
-                  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];
-                  hpos++;
-              }
-              else
-              {
-                  *myFramePointer = myColor[myPriorityEncoder[1][enabled]];
-              }
-            }
-          }
           else if (myEnabledObjects == (myP0Bit | myM0Bit | myP1Bit)) // Player 0 and Missile 0 and Missile 1 are enabled
           {
             uInt8* mP0 = &myCurrentP0Mask[hpos];
@@ -1790,7 +1765,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
               }
             }
           }          
-          else // It's a mess... Need to check them all... this is slow...
+          else // Unsure... need to check them all... this is slow.
           {
             uInt32*mPF = &myCurrentPFMask[hpos];
             uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1822,6 +1797,9 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             }
           }
       }
+      // -------------------------------------------------------------------------
+      // Playfield Bit is set... (fairly common)
+      // -------------------------------------------------------------------------
       else if ((myEnabledObjects & (myPFBit)) == myPFBit) // Playfield is Set (fairly common)
       {
           if (myEnabledObjects == myPFBit) // Playfield bit set... with or without score
@@ -2167,6 +2145,9 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             }
           } 
       }
+      // -------------------------------------------------------------------------
+      // Ball is set (fairly common) - but not playfield
+      // -------------------------------------------------------------------------
       else if ((myEnabledObjects & (myBLBit)) == myBLBit) // Ball is set (fairly common)
       {
           if (myEnabledObjects == (myBLBit | myP0Bit)) // Ball + Player 0 (freeway)
@@ -2460,6 +2441,9 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
             }
           } 
       }
+      // -------------------------------------------------------------------------
+      // Otherwise we do the rest of the simple compares below... 
+      // -------------------------------------------------------------------------
       else if (myEnabledObjects == myP0Bit) // Player 0 is enabled
       {
             uInt8* mP0 = &myCurrentP0Mask[hpos];
@@ -2597,7 +2581,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           }
         }
       }
-      else // Catch-all...
+      else // Catch-all... this is a bit slow so do this only if no matches above...
       {
         uInt32*mPF = &myCurrentPFMask[hpos];
         uInt8* mP1 = &myCurrentP1Mask[hpos];
