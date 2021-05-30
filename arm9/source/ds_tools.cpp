@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 13
+#define MAX_DEBUG 64
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -79,6 +79,9 @@ static void DumpDebugData(void)
     {
         int idx=0;
         int val = debug[i];
+        dbgbuf[idx++] = '0' + (i / 10);
+        dbgbuf[idx++] = '0' + (i % 10);
+        dbgbuf[idx++] = ':';
         if (val < 0)
         {
             dbgbuf[idx++] = '-';
@@ -86,10 +89,8 @@ static void DumpDebugData(void)
         }
         else
         {
-            dbgbuf[idx++] = '0' + (int)val/10000000;
+            dbgbuf[idx++] = '0' + (int)val/1000000;
         }
-        val = val % 10000000;
-        dbgbuf[idx++] = '0' + (int)val/1000000;
         val = val % 1000000;
         dbgbuf[idx++] = '0' + (int)val/100000;
         val = val % 100000;
@@ -102,7 +103,12 @@ static void DumpDebugData(void)
         dbgbuf[idx++] = '0' + (int)val/10;
         dbgbuf[idx++] = '0' + (int)val%10;
         dbgbuf[idx++] = 0;
-        dsPrintValue(0,3+i,0, dbgbuf);
+        
+        if (i > 42)
+            dsPrintValue(22,2+(i-43),0, dbgbuf);
+        else if (i > 21)
+            dsPrintValue(11,2+(i-22),0, dbgbuf);
+        else dsPrintValue(0,2+i,0, dbgbuf);
     }
 #endif
 }
@@ -233,10 +239,6 @@ void dsShowScreenEmu(void)
   REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
   REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
   REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
-    
-  debug[0] = myCartInfo.xOffset;
-  debug[1] = myCartInfo.yOffset;
-  debug[2] = myCartInfo.screenScale;
 }
 
 void dsShowScreenInfo(void) 
@@ -370,6 +372,7 @@ bool dsLoadGame(char *filename)
         TIMER0_DATA=0;
         TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
         atari_frames=0;
+        memset(debug, 0x00, sizeof(debug));
         
         return true;
     }
@@ -1132,9 +1135,6 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < A26_VID_HEIGHT) myCartInfo.screenScale++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 192) myCartInfo.screenScale--;
                     
-                    debug[0] = myCartInfo.xOffset;
-                    debug[1] = myCartInfo.yOffset;
-                    debug[2] = myCartInfo.screenScale;
                     bScreenRefresh = 1;
                 }
 

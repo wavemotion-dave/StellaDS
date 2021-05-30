@@ -39,7 +39,7 @@ class System;
 #define      PriorityBit   0x80         // Bit for Playfield priority
 
 // Used to set the collision register to the correct value
-extern uInt16 ourCollisionTable[64];
+extern uInt16 ourCollisionTable[256];
 extern uInt8 myPriorityEncoder[2][256];
 
 extern    uInt16 myCollision;    // Collision register

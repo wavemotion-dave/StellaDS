@@ -32,6 +32,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.3 : 30-May-2021 by Dave Bernazzani (wavemotion)
+  * And more improvement/stramline of TIA rendering to give a 10% boost
+    for most games 0 this brings Elevators Amiss up to 51FPS and Phaser
+    Patrol to 55 with gusts up to 59FPS!
+  
 V2.2 : 29-May-2021 by Dave Bernazzani (wavemotion)
   * Improved handling of TIA to trade off a little bit of speed on the fast
     games to gain 10-15% speed boost on the hard-to-render games. This makes
