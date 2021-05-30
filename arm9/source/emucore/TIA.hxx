@@ -36,7 +36,7 @@ class System;
 #define      myBLBit       0x10         // Bit for Ball
 #define      myPFBit       0x20         // Bit for Playfield
 #define      ScoreBit      0x40         // Bit for Playfield score mode
-#define      PriorityBit   0x080        // Bit for Playfield priority
+#define      PriorityBit   0x80         // Bit for Playfield priority
 
 // Used to set the collision register to the correct value
 extern uInt16 ourCollisionTable[64];

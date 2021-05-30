@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.1"
+#define VERSION "2.2"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 7
+#define MAX_DEBUG 13
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];

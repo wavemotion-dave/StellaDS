@@ -32,6 +32,12 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.2 : 29-May-2021 by Dave Bernazzani (wavemotion)
+  * Improved handling of TIA to trade off a little bit of speed on the fast
+    games to gain 10-15% speed boost on the hard-to-render games. This makes
+    games like Fantastic Voyage, Super Breakout, Elevators Amiss and many 
+    other games run much closer to full speed!
+
 V2.1 : 23-Mar-2021 by Dave Bernazzani (wavemotion)
   * Improved Screen Scaling (using Left/Right shoulder buttons + Arrow Keys)
   * Fix for file selection bug
@@ -180,7 +186,7 @@ Controls :
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------
-Credits:
+Older Credits:
 --------------------------------------------------------------------------------
 Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).
 Thanks TheChucksters to understand how Stella emulator works with the release of

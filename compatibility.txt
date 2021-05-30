@@ -1,4 +1,4 @@
-StellaDSi 2.0 Compatibility List [partial list - to give a sense of what can be expected]
+StellaDSi 2.3 Compatibility List [partial list - to give a sense of what can be expected]
 
 Grade is not an indication of how good the game is - it's an indication as to how well the game plays under emulation on a DSi (running at 133MHz).
 If you run the emulator on a DS (running at 67MHz) - it's just too little CPU power to get the job done for most games but some playable ones: 
@@ -15,7 +15,7 @@ Note: FF-FPS is the Flicker Free mode which uses almost 25% more CPU power to el
 
 Game                                          MD5sum                              TYPE  FPS FF  GRA NOTES      
 =================                             ===============================     ====  === ==  === =====================================================================================
-3-D Tic-Tac-Toe (1980).a26                    0db4f4150fecf77e4ce72ca4d04c052f    2K    51  45  B
+3-D Tic-Tac-Toe (1980).a26                    0db4f4150fecf77e4ce72ca4d04c052f    2K    59  48  A
 Aardvark.a26                                  b6d13da9e641b95352f090090e440ce4    F8    60  50  A   
 Activision Decathlon (1983).a26               ac7c2260378975614192ca2bc3d20e0b    FE    60  60  A   Plays fine but difficult to play well with D-Pad vs Joystick
 Adventure (1980).a26                          157bddb7192754a45372be196797f284    4K    60  60  A   Just the way you remember it! Such fond memories...
@@ -38,10 +38,10 @@ Battlezone (1983).a26                         41f252a66c6301f1e8ab3612c19bc5d4  
 Beamrider (1984).a26                          79ab4123a83dc11d468fb2108ea09e2e    F8    60  59  A   Flicker Free recommended. 
 Berzerk (1982).a26                            136f75c4dd02c29283752b7e5799f978    4K    60  60  B   Very minor sound glitches but not enough to be a problem.
 BiFrost (RC).a26                              1badbf0d3cb5abf7cf29233120dc14cc    4K    60  60  A
-BMX Air Master (1990).a26                     968efc79d500dce52a906870a97358ab    F6    51  44  C   A bit too slow to be really playable. But close.
+BMX Air Master (1990).a26                     968efc79d500dce52a906870a97358ab    F6    57  48  B   Slight slowdown but playable
 Bobby Is Going Home (1983).a26                521f4dd1eb84a09b2b19959a41839aad    4K    60  60  A
 Bowling (1979).a26                            c9b7afad3bfd922e006a6bfc1d4f3fe7    2K    60  60  A   
-Boxing (1980).a26                             25f2e760cd7f56b88aac88d63757d41b    2K    59  52  B   Slight slowdown hardly noticable.
+Boxing (1980).a26                             25f2e760cd7f56b88aac88d63757d41b    2K    58  52  B   Slight slowdown hardly noticable.
 Brain Games (1978).a26                        1cca2197d95c5a41f2add49a13738055    2K    60  60  A
 Breakout (1978).a26                           f34f08e5eb96e500e851a80be3277a56    2K    60  60  B   Paddle game - recommend using stylus on bottom screen.
 Buck Rogers (1983).a26                        1cf59fc7b11cdbcefe931e41641772f6    F8    60  60  A
@@ -81,7 +81,7 @@ Dodge 'Em (1980).a26                          c3472fa98c3b452fa2fd37d1c219fb6f  
 Dolphin (1983).a26                            ca09fa7406b7d2aea10d969b6fc90195    4K    60  58  A
 Donkey Kong (1982).a26                        36b20c427975760cb9cf4a47e41369e4    4K    60  60  A
 Donkey Kong Junior (1983).a26                 c8fa5d69d9e555eb16068ef87b1c9c45    F8    60  60  A
-DOT.a26                                       7386004f9a5a7daf7e50ac8547088337    F6    59  51  B
+DOT.a26                                       7386004f9a5a7daf7e50ac8547088337    F6    60  53  B
 Dragonfire (1982).a26                         41810dd94bd0de1110bedc5092bef5b0    4K    60  60  A
 Dragster (1980).a26                           77057d9d14b99e465ea9e29783af0ae3    2K    60  60  A
 Elevator Action (1983).a26                    71f8bacfbdca019113f3f0801849057e    F8SC  60  60  B   No sound... not sure if that's normal.
@@ -91,9 +91,9 @@ E.T. - The Extra-Terrestrial (1982).a26       615a3bf251a38eb6638cdc7ffbde5480  
 Escape from the Mindmaster (1982).a26         81f4f0285f651399a12ff2e2f35bab77    AR    40+ 40+ B   A bit of slowdown but gameplay is still enjoyable.
 Ewok Adventure.a26                            d44d90e7c389165f5034b5844077777f    E0    60  55  A
 Fall Down.a26                                 76181e047c0507b2779b4bcbf032c9d5    F8    60  60  A
-Fantastic Voyage (1982).a26                   b80d50ecee73919a507498d0a4d922ae    4K    47  43  C   Just a bit too slow to be fully enjoyable.
+Fantastic Voyage (1982).a26                   b80d50ecee73919a507498d0a4d922ae    4K    59  50  B   Nearly perfect with tiny slowdown
 Fast Food (1982).a26                          665b8f8ead0eef220ed53886fbd61ec9    4K    60  60  A
-Fatal Run (1989).a26                          85470dcb7989e5e856f36b962d815537    F4SC  55  47  B   One of the really late Atari 2600 games from Atari itself... Playable with slight slowdown.
+Fatal Run (1989).a26                          85470dcb7989e5e856f36b962d815537    F4SC  60  50  A   One of the really late Atari 2600 games from Atari itself... 
 Fathom (1983).a26                             0b55399cf640a2a00ba72dd155a0c140    F8    60  55  A
 Fire Fighter (1982).a26                       d09f1830fb316515b90694c45728d702    4K    60  53  A
 Fishing Derby (1980).a26                      b8865f05676e64f3bec72b9defdacfa7    2K    48  43  B   Playable desite slower framerate.
@@ -124,15 +124,15 @@ Keystone Kapers (1983).a26                    be929419902e21bd7830a7a7d746195d  
 Lady Bug.a26                                  adfbd2e8a38f96e03751717f7422851d    F6    60  60  B   Damn fine game. Uses a lot of under/overscan so you can't get score plus SPECIAL at the top but very playable.
 Laser Blast (1981).a26                        931b91a8ea2d39fe4dca1a23832b591a    2K    60  52  A
 Laser Gates (1983).a26                        1fa58679d4a39052bd9db059e8cda4ad    4K    60  60  A   An actual fast-paced shooter on the Atari!
-Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    47  30  B   Playable despite lower framerate
-Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    47  30  B   Playable despite lower framerate
+Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    56  46  B   Very Playable despite lower framerate
+Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    56  46  B   Very Playable despite lower framerate
 Lock 'n' Chase (1982).a26                     71464c54da46adae9447926fdbfc1abe    4K    60  59  A
 Man Goes Down.a26                             402d876ec4a73f9e3133f8f7f7992a1e    F6    60  52  A   My favorite homebew despite being not finished. 
 M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237    4K    60  58  A
 Medieval Mayhem.a26                           f7fac15cf54b55c5597718b6742dbec2    F4    60  60  A
 Mega Force (1982).a26                         daeb54957875c50198a7e616f9cc8144    4K    60  56  A
 MegaMania (1982).a26                          318a9d6dda791268df92d72679914ac3    4K    60  58  A
-Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    51  42  C   A bit too slow to be playable
+Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    50  42  C   A bit too slow to be playable
 Millipede (1984).a26                          3c57748c8286cf9e821ecd064f21aaa9    F6SC  60  51  A   Flicker Flee is a little blury unfortunately - stick to Normal Mode
 Miniature Golf (1979).a26                     df62a658496ac98a3aa4a6ee5719c251    2K    60  60  A
 Missile Command (1981).a26                    3a2e2d0c6892aa14544083dfb7762782    4K    60  60  A
@@ -144,16 +144,16 @@ Ms. Pac-Man (1982).a26                        87e79cd41ce136fd4f72cc6e2c161bee  
 Night Driver (1980).a26                       392f00fd1a074a3c15bc96b0a57d52a1    2K    60  60  C   Just a bit too difficult to control.
 Odin.a26                                      e20fc6ba44176e9149ef6d3f99221ac5    4K    60  60  A
 Odin-joystick.a26                             67afbf02142c66861a1d682e4c0ea46e    4K    60  60  A
-Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    48  42  B   Just a bit too slow to be really enjoyable. At times gets up to 50+FPS but needs a bit more.
+Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    50  42  B   Just a bit too slow to be really enjoyable. At times gets up to 52+FPS but needs a bit more. But close!
 Omicron 16k.a26                               bc593f2284c67b7d8716d110f541953f    F6    60  60  A
 Omicron 2k.a26                                2148917316ca5ce1672f6c49c0f89d0b    2K    60  60  A
 Oystron (V2.9) (PD).a26                       91f0a708eeb93c133e9672ad2c8e0429    4K    60  58  A
 Pac-Man (1982).a26                            6e372f076fb9586aff416144f5cfe1cb    4K    60  60  A   Recommend Flicker Free Mode
 Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced    F8    60  60  A   Amazing improvement on the original
-Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    51  45  A   A bit of slowdown but still very enjoyable
+Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    53  46  A   A bit of slowdown but still very enjoyable
 Phoenix (1982).a26                            7e52a95074a66640fcfde124fffd491a    F8    60  60  A
 Pitfall! (1982).a26                           3e90cf23106f2e08b2781e41299de556    4K    60  45  A   Classic!
-Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   50  30  D   Sound is forced off to get a frame rate that makes it almost playable.
+Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   51  30  D   Sound is forced off to get a frame rate that makes it almost playable.
 Plaque Attack (1983).a26                      da4e3396aa2db3bd667f83a1cb9e4a36    4K    60  60  A   
 Pole Position (1983).a26                      5f39353f7c6925779b0169a87ff86f1e    F8    60  60  A
 Pressure Cooker (1983).a26                    97d079315c09796ff6d95a06e4b70171    F8    60  53  B
@@ -200,7 +200,7 @@ Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729  
 Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
 Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  57  A   Recommend Flicker Free mode.
 Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
-Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    47  35  C   Too slow to be playable... even without sound.
+Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    55  42  B   A bit of slowdown but playable
 Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K    60  58  A
 Surround (1977).a26                           4d7517ae69f95cfbc053be01312b7dba    2K    60  60  A
 Swoops! (v0.96).a26                           278f14887d601b5e5b620f1870bc09f6    4K    60  60  A
