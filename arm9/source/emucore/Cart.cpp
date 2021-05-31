@@ -60,7 +60,7 @@ static const CartInfo table[] =
     {"525f2dfc8b21b0186cff2568e0509bfc",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  0},    // Activision Decathlon (1983) [fixed].bin
     {"a1bcbe0bfe6570da2661fc4de2f74e8a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  1},    // Actionauts.bin
     {"157bddb7192754a45372be196797f284",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  210,   0,  1},    // Adventure (1980).bin
-    {"ca4f8c5b4d6fb9d608bb96bc7ebd26c7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  0,  ANA1_0,  210,   0,  5},    // Adventures of TRON (1982).bin
+    {"ca4f8c5b4d6fb9d608bb96bc7ebd26c7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  5},    // Adventures of TRON (1982).bin
     {"4d77f291dca1518d7d8e47838695f54b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  0},    // Airlock (1982).bin
     {"a9cb638cd2cb2e8e0643d7a67db4281c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   4,  5},    // Air Raiders (1982).bin
     {"16cb43492987d2f32b423817cdaaf7c4",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  0},    // Air-Sea Battle (1977).bin
