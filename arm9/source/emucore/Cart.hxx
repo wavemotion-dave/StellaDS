@@ -35,6 +35,8 @@ struct CartInfo
   Int8  controllerType;
   Int8  special;
   Int8  mode;
+  Int8  vblankZero;
+  Int8  hBlankZero;
   Int8  analogSensitivity;      // 10=1.0
   uInt8 screenScale;
   Int8  xOffset;

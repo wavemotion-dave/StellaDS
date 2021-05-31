@@ -258,9 +258,6 @@ class TIA : public Device , public MediaSource
     // Update the current frame buffer to the specified color clock
     void updateFrame(Int32 clock);
 
-    // Waste cycles until the current scanline is finished
-    void waitHorizontalSync();
-
   private:
     // Console the TIA is associated with
     const Console& myConsole;

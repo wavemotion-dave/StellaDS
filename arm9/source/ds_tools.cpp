@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 64
+#define MAX_DEBUG 3
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -162,6 +162,10 @@ void vblankIntr()
         REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
         REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
         bScreenRefresh = 0;
+        
+        debug[0] = myCartInfo.screenScale;
+        debug[1] = myCartInfo.xOffset;
+        debug[2] = myCartInfo.yOffset;
     }
 }
 
@@ -210,9 +214,9 @@ void dsPrintCartType(char * type)
 
 void dsWriteTweaks(void)
 {
-#ifdef DEBUG_DUMP    
+#ifdef DEBUG_DUMP
     FILE *fp;
-    dsPrintValue(22,0,0, (char*)"SNAP");
+    dsPrintValue(22,0,0, (char*)"CFG");
     fp = fopen("../StellaDS.txt", "a+");
     if (fp != NULL)
     {
@@ -221,7 +225,7 @@ void dsWriteTweaks(void)
         fclose(fp);
     }
     WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
-    dsPrintValue(22,0,0, (char*)"    ");
+    dsPrintValue(22,0,0, (char*)"   ");
 #endif   
 }
 
@@ -541,16 +545,10 @@ void dsDisplayButton(unsigned char button)
       }
       break;
     case 8: // PAL<> NTSC
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(22)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
-        *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
-      }
+      // No longer used...
       break;
     case 9: // PAL<> NTSC
-      for (i=0;i<4;i++) {
-        *(ptrBg0+(22)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
-        *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
-      }
+      // No longer used...
       break;
 
     case 10: // Left Difficulty - B
@@ -581,27 +579,27 @@ void dsDisplayButton(unsigned char button)
 
     case 14: // Flicker Free - ON
       for (i=0;i<4;i++) {
-        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
-        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
+        *(ptrBg0+(22)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
+        *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
       }
       break;
     case 15: // Flicker Free - OFF (normal mode)
       for (i=0;i<4;i++) {
-        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
-        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
+        *(ptrBg0+(22)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
+        *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
       }
       break;
           
     case 16: // Sound - ON
       for (i=0;i<4;i++) {
-        *(ptrBg0+(16)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
-        *(ptrBg0+(17)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
+        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
+        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(3)*32+(16+i));
       }
       break;
     case 17: // Sound - OFF
       for (i=0;i<4;i++) {
-        *(ptrBg0+(16)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
-        *(ptrBg0+(17)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
+        *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
+        *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
       }
       break;          
   }
@@ -863,7 +861,7 @@ void dsInstallSoundEmuFIFO(void)
 ITCM_CODE void dsMainLoop(void)
 {
     char fpsbuf[32];
-    unsigned int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1,console_palette=1, left_difficulty=0, right_difficulty=0,romSel;
+    unsigned int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, left_difficulty=0, right_difficulty=0,romSel;
     int iTx,iTy;
     static int dampen=0;
     static int info_dampen=0;
@@ -908,6 +906,7 @@ ITCM_CODE void dsMainLoop(void)
                     ;
             }
 
+            // Have we processed 60 frames... start over...
             if (++atari_frames == 60)
             {
                 TIMER0_CR=0;
@@ -1133,7 +1132,7 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < A26_VID_HEIGHT) myCartInfo.screenScale++;
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 192) myCartInfo.screenScale--;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 190) myCartInfo.screenScale--;
                     
                     bScreenRefresh = 1;
                 }
@@ -1179,7 +1178,6 @@ ITCM_CODE void dsMainLoop(void)
             {
                 int x = gTotalAtariFrames;
                 gTotalAtariFrames = 0;
-                if (x == 61) x=60;
                 fpsbuf[0] = '0' + (int)x/100;
                 x = x % 100;
                 fpsbuf[1] = '0' + (int)x/10;
@@ -1189,7 +1187,7 @@ ITCM_CODE void dsMainLoop(void)
             }
             DumpDebugData();
         }
-
+                
         // ----------------------------------------
         // If the information screen is shown... 
         // any press of the touch dismisses it...
@@ -1303,17 +1301,8 @@ ITCM_CODE void dsMainLoop(void)
                         }
                     }
                 }
-                else if ((iTx>210) && (iTx<250) && (iTy>170) && (iTy<200)) 
-                {     // 48,100 -> 208,132 palette PAL <> NTSC
-                    // Toggle palette
-                    soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    console_palette=1-console_palette;
-                    theConsole->togglePalette();
-                    dsInitPalette();
-                    dsDisplayButton(9-console_palette);
-                }
-                else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<170)) 
-                { // Fast vs Flicker-Free
+                else if ((iTx>210) && (iTx<250) && (iTy>170) && (iTy<200))  // Fast vs Flicker-Free Mode
+                {
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     if (myCartInfo.mode == MODE_NO)
                     {
@@ -1325,8 +1314,8 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
                 }
-                else if ((iTx>210) && (iTx<250) && (iTy>120) && (iTy<140)) 
-                { // Sound On/Off
+                else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<170))  // Sound ON/OFF
+                {
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     bSoundEnabled = 1-bSoundEnabled;
                     if (bSoundEnabled)

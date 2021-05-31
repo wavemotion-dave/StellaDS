@@ -125,7 +125,7 @@ void CartridgeDPC::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPC::clockRandomNumberGenerator()
 {
-  myRandomNumber = 0;
+  myRandomNumber++;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -160,6 +160,11 @@ uInt8 CartridgeDPC::peek(uInt16 address)
     
     switch(function)
     {
+      case 0x00:
+        if (index < 4) result = myRandomNumber; // Not really random but good enough as it's only to flash the 'eel' in Pitfall II
+        myRandomNumber++;
+        break;
+            
       // DFx display data read
       case 0x01:
       {

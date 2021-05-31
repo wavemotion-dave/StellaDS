@@ -15,6 +15,7 @@
 //
 // $Id: M6532.cxx,v 1.3 2002/12/15 04:58:14 bwmott Exp $
 //============================================================================
+#include <nds.h>
 
 #include <assert.h>
 #include "Console.hxx"
@@ -71,7 +72,7 @@ void M6532::reset()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6532::systemCyclesReset()
+ITCM_CODE void M6532::systemCyclesReset()
 {
   // System cycles are being reset to zero so we need to adjust
   // the cycle count we remembered when the timer was last set
@@ -117,7 +118,7 @@ void M6532::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 M6532::peek(uInt16 addr)
+ITCM_CODE uInt8 M6532::peek(uInt16 addr)
 {
   switch(addr & 0x07)
   {
@@ -218,7 +219,7 @@ uInt8 M6532::peek(uInt16 addr)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6532::poke(uInt16 addr, uInt8 value)
+ITCM_CODE void M6532::poke(uInt16 addr, uInt8 value)
 {
   if((addr & 0x07) == 0x00)         // Port A I/O Register (Joystick)
   {

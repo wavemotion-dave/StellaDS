@@ -72,8 +72,6 @@ uInt8   myVDELP1                    __attribute__((section(".dtcm")));
 uInt8   myVDELBL                    __attribute__((section(".dtcm")));
 uInt8   myRESMP0                    __attribute__((section(".dtcm")));
 uInt8   myRESMP1                    __attribute__((section(".dtcm")));
-uInt32  myFrameXStart               __attribute__((section(".dtcm")));
-uInt32  myFrameWidth                __attribute__((section(".dtcm")));
 uInt32  myFrameYStart               __attribute__((section(".dtcm")));
 uInt32  myFrameHeight               __attribute__((section(".dtcm")));
 uInt32  myStartDisplayOffset        __attribute__((section(".dtcm")));
@@ -106,7 +104,6 @@ uInt8   myVBLANK                    __attribute__((section(".dtcm")));
 
 Int32   myLastHMOVEClock            __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
-uInt8   myAllowHMOVEBlanks          __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt32  myM0CosmicArkCounter        __attribute__((section(".dtcm")));
 
@@ -377,16 +374,8 @@ void TIA::reset()
   myDSFramePointer = BG_GFX;
 
   // Calculate color clock offsets for starting and stoping frame drawing
-  if (myCartInfo.special == SPEC_PITFALL2)    
-  {
-    myStartDisplayOffset = 228 * (32+5);                                          // Pitfall2 we reduce as much
-    myStopDisplayOffset = myStartDisplayOffset + 228 * (A26_VID_HEIGHT-10);       // as possible to gain speed...
-  }
-  else
-  {
-    myStartDisplayOffset = 228 * 32;                                              // Allow for 2 underscan lines...
-    myStopDisplayOffset = myStartDisplayOffset + 228 * A26_VID_HEIGHT;            // And 10+ overscan lines... 
-  }
+  myStartDisplayOffset = 228 * 30;                                              // Allow for 4 underscan lines...
+  myStopDisplayOffset = myStartDisplayOffset + 228 * A26_VID_HEIGHT;            // And 18 overscan lines...  many games utilize some of these...
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;
@@ -458,23 +447,11 @@ void TIA::reset()
   myDumpEnabled = false;
   myDumpDisabledCycle = 0;
 
-  myAllowHMOVEBlanks = 1;
-
-  myFrameXStart = 0;
-  myFrameWidth = 160;
   myFrameYStart = 34;
   myFrameHeight = 210;
-
-  // Make sure the starting x and width values are reasonable
-  if((myFrameXStart + myFrameWidth) > 160)
-  {
-    // Values are illegal so reset to default values
-    myFrameXStart = 0;
-    myFrameWidth = 160;
-  }
-
-    myColorLossEnabled = false;
-    myMaximumNumberOfScanlines = 290;
+    
+  myColorLossEnabled = false;
+  myMaximumNumberOfScanlines = 290;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -569,7 +546,7 @@ const uInt32* TIA::palette() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt32 TIA::width() const 
 {
-  return myFrameWidth; 
+  return 160; 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1083,17 +1060,24 @@ void TIA::computePlayfieldMaskTable()
 inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
 {
   // Calculate the ending frame pointer value
-  uInt8* ending = myFramePointer + clocksToUpdate;
 
   // See if we're in the vertical blank region
   if(myVBLANK & 0x02)
   {
-      memset(myFramePointer, 0, clocksToUpdate);
+      // -------------------------------------------------------------------------------------------
+      // Some games present a static screen and so there is really no reason to blank the memory 
+      // which can be time consuming... so check the flag for the cart currently being emulated...
+      // -------------------------------------------------------------------------------------------
+      if (myCartInfo.vblankZero) 
+      {
+          memset(myFramePointer, 0, clocksToUpdate);
+      }
+      myFramePointer += clocksToUpdate;
   }
   // Handle all other possible combinations
   else
-  {     
-      //debug[myEnabledObjects&0x3F]++;
+  {
+      uInt8* ending = myFramePointer + clocksToUpdate;
       if (myEnabledObjects == 0x00)  // Background handling...
       {
           memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
@@ -2612,8 +2596,9 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           }
         }
       }        
+      myFramePointer = ending;
   }
-  myFramePointer = ending;
+  
 }
 
 
@@ -2659,15 +2644,13 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       myClockAtLastUpdate = clock;
     }
 
-    Int32 startOfScanLine = HBLANK + myFrameXStart;
-
     // Skip over as many horizontal blank clocks as we can
-    if(clocksFromStartOfScanLine < startOfScanLine)
+    if(clocksFromStartOfScanLine < HBLANK)
     {
       uInt32 tmp;
 
-      if((startOfScanLine - clocksFromStartOfScanLine) < clocksToUpdate)
-        tmp = startOfScanLine - clocksFromStartOfScanLine;
+      if((HBLANK - clocksFromStartOfScanLine) < clocksToUpdate)
+        tmp = HBLANK - clocksFromStartOfScanLine;
       else
         tmp = clocksToUpdate;
 
@@ -2681,32 +2664,24 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     // Update as much of the scanline as we can
     if(clocksToUpdate != 0)
     {
-      updateFrameScanline(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
+        updateFrameScanline(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
     }
 
     // Handle HMOVE blanks if they are enabled
-    if(myHMOVEBlankEnabled && (startOfScanLine < HBLANK + 8) &&
-        (clocksFromStartOfScanLine < (HBLANK + 8)))
+    if(myHMOVEBlankEnabled && (clocksFromStartOfScanLine < (HBLANK + 8)))
     {
-        // --------------------------------------------------------------------
-        // TBD: This is a major bottleneck in many games... is there any 
-        // way to clear memory faster than memset()?  I tried the DMA
-        // fills but doing that to main memory has drawbacks...
-        // --------------------------------------------------------------------
-      Int32 blanks = (HBLANK + 8) - clocksFromStartOfScanLine;
-      memset(oldFramePointer, 0, blanks);
+        Int32 blanks = (HBLANK + 8) - clocksFromStartOfScanLine;
+        memset(oldFramePointer, 0, blanks);
 
-      if((clocksToUpdate + clocksFromStartOfScanLine) >= (HBLANK + 8))
-      {
-        myHMOVEBlankEnabled = false;
-      }
+        if((clocksToUpdate + clocksFromStartOfScanLine) >= (HBLANK + 8))
+        {
+            myHMOVEBlankEnabled = false;
+        }
     }
 
     // See if we're at the end of a scanline
     if(myClocksToEndOfScanLine == 228)
     {
-      //myFramePointer -= (160 - myFrameWidth - myFrameXStart); // Removed as myFrameWidth is always 160 and myFrameXStart is always 0
-
       // Yes, so set PF mask based on current CTRLPF reflection state 
       myCurrentPFMask = ourPlayfieldTable[myCTRLPF & 0x01];
 
@@ -2782,16 +2757,6 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   while(myClockAtLastUpdate < clock);
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void TIA::waitHorizontalSync()
-{
-  uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
-
-  if (cyclesToEndOfLine < 76)
-  {
-    gSystemCycles += cyclesToEndOfLine;
-  }
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
@@ -3015,14 +2980,18 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x02:    // Wait for leading edge of HBLANK
     {
-      // Tell the cpu to waste the necessary amount of time
-      waitHorizontalSync();
-      break;
+        // Tell the cpu to waste the necessary amount of time
+        uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
+
+        if (cyclesToEndOfLine < 76)
+        {
+            gSystemCycles += cyclesToEndOfLine;
+        }
+        break;
     }
 
     case 0x03:    // Reset horizontal sync counter
     {
-//      cerr << "TIA Poke: " << hex << addr << endl;
       break;
     }
 
@@ -3576,10 +3545,9 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       Int32 x = ((clock - myClockWhenFrameStarted) % 228) / 3;
 
       // See if we need to enable the HMOVE blank bug
-      if(myAllowHMOVEBlanks && ourHMOVEBlankEnableCycles[x])
+      if(myCartInfo.hBlankZero && ourHMOVEBlankEnableCycles[x])
       {
-        // TODO: Allow this to be turned off using properties...
-        myHMOVEBlankEnabled = true;
+          myHMOVEBlankEnabled = true;
       }
 
       myPOSP0 += ourCompleteMotionTable[x][myHMP0];

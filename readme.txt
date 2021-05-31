@@ -32,8 +32,20 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V2.3a : 30-May-2021 by Dave Bernazzani (wavemotion)
-  * Fixed crash if you try to load game then use 'B' button to cancel. Sorry!
+V2.4 : 31-May-2021 by Dave Bernazzani (wavemotion)
+  * A bit more juice squeezed out of the TIA. Added cart-specific options
+    to bypass VerticalBlank zero (not all games need that memory cleared if
+    we are dealing with a static screen... and this buys us CPU cycles!) and,
+    somewhat more dangerously, HorizontalBlank clearing can be disabled for
+    more speed. Only a few of the more stubborn games utilize these!
+  * Removed PAL/NTSC option... only NTSC is supported (all games were released
+    in NTSC except a dozen PAL exclusives which have long since been converted
+    to run on NTSC - Search Atariage).
+  * General cleanup and minor memory/code optimizations to get the most out 
+    of the emulator.
+  * Added 2 more lines of resolution before the top of the screen and 5 more
+    below... this allows the games that utilize underscan and/or significant
+    overscan to show properly.
 
 V2.3 : 30-May-2021 by Dave Bernazzani (wavemotion)
   * And more improvement/stramline of TIA rendering to give a 10% boost

@@ -32,7 +32,7 @@ Asteroids (1981).a26                          dd7884b4f93cab423ac471aa1935e3df  
 Astroblast (1982).a26                         170e7589a48739cfb9cc782cbb0fe25a    4K    60  60  A
 A-Team (AKA Saboteur) (1984).a26              cd5af682685cfecbc25a983e16b9d833    F8    60  60  A
 Atlantis (1982).a26                           9ad36e699ef6f45d9eb6c4cf90475c9f    4K    60  60  A
-Barnstorming (1982).a26                       f8240e62d8c0a64a61e19388414e3104    4K    60  60  A   Barns are not the correct red color... needs palett investigation.  
+Barnstorming (1982).a26                       f8240e62d8c0a64a61e19388414e3104    4K    60  60  A  
 Basketball (1978).a26                         ab4ac994865fb16ebb85738316309457    2K    60  60  A
 Battlezone (1983).a26                         41f252a66c6301f1e8ab3612c19bc5d4    F8    60  51  A
 Beamrider (1984).a26                          79ab4123a83dc11d468fb2108ea09e2e    F8    60  59  A   Flicker Free recommended. 
@@ -88,7 +88,7 @@ Elevator Action (1983).a26                    71f8bacfbdca019113f3f0801849057e  
 Elevators Amiss.a26                           7657b6373fcc9ad69850a687bee48aa1    4K    51  40  B   Very playable despite some slowdown.
 Enduro (1983).a26                             94b92a882f6dbaa6993a46e2dcc58402    4K    60  52  A   
 E.T. - The Extra-Terrestrial (1982).a26       615a3bf251a38eb6638cdc7ffbde5480    F8    60  60  A   Why bother...
-Escape from the Mindmaster (1982).a26         81f4f0285f651399a12ff2e2f35bab77    AR    40+ 40+ B   A bit of slowdown but gameplay is still enjoyable.
+Escape from the Mindmaster (1982).a26         81f4f0285f651399a12ff2e2f35bab77    AR    42+ 40+ B   Frame rate varies from 42-59... but gameplay is still enjoyable.
 Ewok Adventure.a26                            d44d90e7c389165f5034b5844077777f    E0    60  55  A
 Fall Down.a26                                 76181e047c0507b2779b4bcbf032c9d5    F8    60  60  A
 Fantastic Voyage (1982).a26                   b80d50ecee73919a507498d0a4d922ae    4K    60  50  A
@@ -111,7 +111,7 @@ Grand Prix (1982).a26                         2903896d88a341511586d69fcfc20f7d  
 Gunfight (Manuel Polik).a26                   f750b5d613796963acecab1690f554ae    4K    60  50  A
 Haunted House (1982).a26                      f0a6e99f5875891246c3dbecbf2d2cea    4K    60  60  A
 H.E.R.O. (1984).a26                           fca4a5be1251927027f2c24774a02160    F8    60  50  A   
-Indy 500 (1977).a26                           c5301f549d0722049bb0add6b10d1e09    2K    60  50  A   Digital Driving Controller a little touchy... needs work.
+Indy 500 (1977).a26                           c5301f549d0722049bb0add6b10d1e09    2K    60  50  B   Digital Driving Controller a little touchy... needs work.
 Jawbreaker (1982).a26                         58a82e1da64a692fd727c25faef2ecc9    4K    60  60  A   A little more difficult making the tight corners with a D-Pad vs Joystick
 Joust (1983).a26                              3276c777cbe97cdd2b4a63ffc16b7151    F8    60  50  A
 Joust Pong.a26                                ec40d4b995a795650cf5979726da67df    4K    60  50  A
@@ -124,8 +124,8 @@ Keystone Kapers (1983).a26                    be929419902e21bd7830a7a7d746195d  
 Lady Bug.a26                                  adfbd2e8a38f96e03751717f7422851d    F6    60  60  B   Damn fine game. Uses a lot of under/overscan so you can't get score plus SPECIAL at the top but very playable.
 Laser Blast (1981).a26                        931b91a8ea2d39fe4dca1a23832b591a    2K    60  52  A
 Laser Gates (1983).a26                        1fa58679d4a39052bd9db059e8cda4ad    4K    60  60  A   An actual fast-paced shooter on the Atari!
-Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    60  46  B   Very Playable despite lower framerate
-Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    60  46  B   Very Playable despite lower framerate
+Lead (16k).a26                                021dbeb7417cac4e5f8e867393e742d6    F6    60  46  A   
+Lead (8k).a26                                 c98ff002205095c8a40f7a537a7e8f01    F8    60  46  A  
 Lock 'n' Chase (1982).a26                     71464c54da46adae9447926fdbfc1abe    4K    60  59  A
 Man Goes Down.a26                             402d876ec4a73f9e3133f8f7f7992a1e    F6    60  52  A   My favorite homebew despite being not finished. 
 M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237    4K    60  58  A
@@ -144,7 +144,7 @@ Ms. Pac-Man (1982).a26                        87e79cd41ce136fd4f72cc6e2c161bee  
 Night Driver (1980).a26                       392f00fd1a074a3c15bc96b0a57d52a1    2K    60  60  C   Just a bit too difficult to control.
 Odin.a26                                      e20fc6ba44176e9149ef6d3f99221ac5    4K    60  60  A
 Odin-joystick.a26                             67afbf02142c66861a1d682e4c0ea46e    4K    60  60  A
-Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    53  44  B   At times gets up to 53+FPS but needs a bit more. But very close and quite playable.
+Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    53  44  B   At times gets up to 55+FPS but needs a bit more. But very close and quite playable.
 Omicron 16k.a26                               bc593f2284c67b7d8716d110f541953f    F6    60  60  A
 Omicron 2k.a26                                2148917316ca5ce1672f6c49c0f89d0b    2K    60  60  A
 Oystron (V2.9) (PD).a26                       91f0a708eeb93c133e9672ad2c8e0429    4K    60  58  A
@@ -153,7 +153,7 @@ Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced  
 Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    53  46  A   A bit of slowdown but still very enjoyable
 Phoenix (1982).a26                            7e52a95074a66640fcfde124fffd491a    F8    60  60  A
 Pitfall! (1982).a26                           3e90cf23106f2e08b2781e41299de556    4K    60  45  A   Classic!
-Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   55  30  D   Sound is forced off to get a frame rate that makes it almost playable.
+Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   56  30  D   Sound is forced off to get a frame rate that makes it playable.
 Plaque Attack (1983).a26                      da4e3396aa2db3bd667f83a1cb9e4a36    4K    60  60  A   
 Pole Position (1983).a26                      5f39353f7c6925779b0169a87ff86f1e    F8    60  60  A
 Pressure Cooker (1983).a26                    97d079315c09796ff6d95a06e4b70171    F8    60  53  B
@@ -200,7 +200,7 @@ Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729  
 Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
 Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  57  A   Recommend Flicker Free mode.
 Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
-Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    60  42  B  
+Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    57  42  C   Paddles required  
 Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K    60  58  A
 Surround (1977).a26                           4d7517ae69f95cfbc053be01312b7dba    2K    60  60  A
 Swoops! (v0.96).a26                           278f14887d601b5e5b620f1870bc09f6    4K    60  60  A
