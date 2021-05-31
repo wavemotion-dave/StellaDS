@@ -121,7 +121,7 @@ static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
 /* Rather than have a table with 511 entries, I use a random number */
 /* generator. */
 
-static uint8 Bit9[POLY9_SIZE];
+static uint8 Bit9[POLY9_SIZE]  __attribute__((section(".dtcm")));
 
 static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
 static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
@@ -309,9 +309,8 @@ void Tia_process (void)
     register uint8 div_n_cnt0,div_n_cnt1;
     register uint8 p5_0, p5_1,outvol_0,outvol_1;
     
-  psound_buffer++;
-  if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-    
+    psound_buffer++;
+    if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
 
     audc0 = AUDC[0];
     audv0 = AUDV[0];

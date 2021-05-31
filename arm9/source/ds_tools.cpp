@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.3"
+#define VERSION "2.4"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -43,17 +43,17 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 3
+#define MAX_DEBUG 20
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
 
 FICA2600 vcsromlist[1024];
-unsigned int countvcs=0, ucFicAct=0;
+unsigned short int countvcs=0, ucFicAct=0;
 
-static int bShowKeyboard = false;
-static int bShowPaddles = false;
-static int bShowInfo = false;
+static short bShowKeyboard = false;
+static short bShowPaddles = false;
+static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 Sound* theSDLSnd = (Sound*) NULL;
@@ -163,9 +163,9 @@ void vblankIntr()
         REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
         bScreenRefresh = 0;
         
-        debug[0] = myCartInfo.screenScale;
-        debug[1] = myCartInfo.xOffset;
-        debug[2] = myCartInfo.yOffset;
+        //debug[0] = myCartInfo.screenScale;
+        //debug[1] = myCartInfo.xOffset;
+        //debug[2] = myCartInfo.yOffset;
     }
 }
 
@@ -187,9 +187,10 @@ void dsInitTimer(void)
 
 void dsInitPalette(void) 
 {
-  // Init DS Specific palette
-  const uInt32* gamePalette = theConsole->myMediaSource->palette();
-  for(uInt32 i = 0; i < 256; i++)   {
+    // Init DS Specific palette
+    const uInt32* gamePalette = theConsole->myMediaSource->palette();
+    for(uInt32 i = 0; i < 256; i++)   
+    {
         uInt8 r, g, b;
 
         r = (uInt8) ((gamePalette[i] & 0x00ff0000) >> 19);
@@ -212,7 +213,7 @@ void dsPrintCartType(char * type)
 #endif    
 }
 
-void dsWriteTweaks(void)
+ITCM_CODE void dsWriteTweaks(void)
 {
 #ifdef DEBUG_DUMP
     FILE *fp;
@@ -226,7 +227,7 @@ void dsWriteTweaks(void)
     }
     WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
     dsPrintValue(22,0,0, (char*)"   ");
-#endif   
+#endif    
 }
 
 void dsShowScreenEmu(void)

@@ -228,9 +228,6 @@ class TIA : public Device , public MediaSource
     virtual void togglePalette();
     
   private:
-    // Actual palette = NTSC
-    uInt32 ourActualPalette ;
-
     // Compute the ball mask table
     void computeBallMaskTable();
 

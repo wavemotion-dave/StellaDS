@@ -281,7 +281,7 @@ static const CartInfo table[] =
     {"20dca534b997bf607d658e77fbb3c0ee",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   0,  5},    // Fire Fly (1983).bin
     {"d3171407c3a8bb401a3a62eb578f48fb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  0},    // Fire Spinner.bin
     {"3fe43915e5655cf69485364e9f464097",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  9},    // Fisher Price (1983).bin
-    {"b8865f05676e64f3bec72b9defdacfa7",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  210,   0,  4},    // Fishing Derby (1980).bin
+    {"b8865f05676e64f3bec72b9defdacfa7",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  210,   0,  4},    // Fishing Derby (1980).bin
     {"db112399ab6d6402cc2b34f18ef449da",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0, -2},    // Fixit.bin
     {"30512e0e83903fc05541d2f6a6a62654",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   0,  0},    // Flag Capture (1978).bin
     {"163ff70346c5f4ce4048453d3a2381db",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   0,  1},    // FlapPing.bin
