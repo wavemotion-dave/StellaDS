@@ -32,6 +32,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.5 : 1-Jun-2021 by Dave Bernazzani (wavemotion)
+  * Restored PAL palette selection when choosing a game.
+  * Eeked out 1 or 2 FPS on Starpath Supercharger games by limiting the number
+    of vertical scanlines we will show.
 V2.4 : 31-May-2021 by Dave Bernazzani (wavemotion)
   * A bit more juice squeezed out of the TIA. Added cart-specific options
     to bypass VerticalBlank zero (not all games need that memory cleared if

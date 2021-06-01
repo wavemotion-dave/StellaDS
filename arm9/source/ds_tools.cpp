@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.4"
+#define VERSION "2.5"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 20
+#define MAX_DEBUG 4
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -150,6 +150,7 @@ void ShowStatusLine(void)
      dsPrintValue(30,0,0, (char *)"FS");
     else
      dsPrintValue(30,0,0, (char *)"  ");
+    WAITVBL;
 }
 
 
@@ -467,7 +468,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
   dsPrintValue(16-strlen(szName)/2,2,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
-  sprintf(szName,"%s [%s]","A TO SELECT, B TO GO BACK", VERSION);
+  sprintf(szName,"%s [%s]","A=CHOOSE, Y=PAL, B=GO BACK", VERSION);
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
   for (ucBcl=0;ucBcl<17; ucBcl++) {
     ucGame= ucBcl+NoDebGame;
@@ -736,12 +737,21 @@ unsigned int dsWaitForRom(void)
       while (keysCurrent() & KEY_B);
     }
 
-    if (keysCurrent() & KEY_A)
+    if (keysCurrent() & KEY_A || keysCurrent() & KEY_Y)
     {
       if (!vcsromlist[ucFicAct].directory)
       {
+        extern uInt8 bUseAlternatePalette;
         bRet=true;
         bDone=true;
+        if (keysCurrent() & KEY_Y) 
+        {
+            bUseAlternatePalette = 1;
+        }
+        else
+        {
+            bUseAlternatePalette = 0;
+        }
       }
       else
       {
@@ -843,7 +853,7 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 }
 
 //---------------------------------------------------------------------------------
-void dsInstallSoundEmuFIFO(void)
+ITCM_CODE void dsInstallSoundEmuFIFO(void)
 {
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
@@ -1397,7 +1407,7 @@ int a26Filescmp (const void *c1, const void *c2)
   return strcasecmp (p1->filename, p2->filename);
 }
 
-void vcsFindFiles(void) 
+ITCM_CODE void vcsFindFiles(void) 
 {
   DIR *pdir;
   struct dirent *pent;

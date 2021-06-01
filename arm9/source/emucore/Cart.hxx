@@ -38,6 +38,7 @@ struct CartInfo
   Int8  vblankZero;
   Int8  hBlankZero;
   Int8  analogSensitivity;      // 10=1.0
+  uInt8 displayStopScanline;  
   uInt8 screenScale;
   Int8  xOffset;
   Int8  yOffset;
