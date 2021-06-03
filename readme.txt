@@ -32,6 +32,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.6 : 3-Jun-2021 by Dave Bernazzani (wavemotion)
+  * Fixed ability to scale/move screen with Paddle games.
+  * Tweaked more than 100 game screen offsets to better center/show them by default.
+  * Minor cleanups to the code and memory.
 V2.5 : 1-Jun-2021 by Dave Bernazzani (wavemotion)
   * Restored PAL palette selection when choosing a game.
   * Eeked out 1 or 2 FPS on Starpath Supercharger games by limiting the number

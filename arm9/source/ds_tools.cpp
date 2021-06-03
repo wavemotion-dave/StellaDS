@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 3
+#define MAX_DEBUG 5
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -144,13 +144,12 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
   }
 }
 
-void ShowStatusLine(void)
+ITCM_CODE void ShowStatusLine(void)
 {
     if (full_speed)
      dsPrintValue(30,0,0, (char *)"FS");
     else
      dsPrintValue(30,0,0, (char *)"  ");
-    swiWaitForVBlank(); 
 }
 
 
@@ -178,15 +177,16 @@ void dsInitScreenMain(void)
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
     vramSetBankE(VRAM_E_LCD );                // Not using this for video but 64K of faster RAM always useful! Mapped at 0x06880000
+    WAITVBL;
 }
 
-void dsInitTimer(void)
+ITCM_CODE void dsInitTimer(void)
 {
     TIMER0_DATA=0;
     TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
 }
 
-void dsInitPalette(void) 
+ITCM_CODE void dsInitPalette(void) 
 {
     // Init DS Specific palette
     const uInt32* gamePalette = theConsole->myMediaSource->palette();
@@ -202,12 +202,12 @@ void dsInitPalette(void)
     }
 }
 
-void dsWarnIncompatibileCart(void)
+ITCM_CODE void dsWarnIncompatibileCart(void)
 {
     dsPrintValue(5,0,0, (char*)"DPC+ CART NOT SUPPORTED");
 }
 
-void dsPrintCartType(char * type)
+ITCM_CODE void dsPrintCartType(char * type)
 {
 #ifdef DEBUG_DUMP    
     dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
