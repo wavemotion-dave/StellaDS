@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.5"
+#define VERSION "2.5a"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 4
+#define MAX_DEBUG 3
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -150,7 +150,7 @@ void ShowStatusLine(void)
      dsPrintValue(30,0,0, (char *)"FS");
     else
      dsPrintValue(30,0,0, (char *)"  ");
-    WAITVBL;
+    swiWaitForVBlank(); 
 }
 
 
@@ -824,7 +824,7 @@ unsigned int dsWaitOnMenu(unsigned int actState)
   return uState;
 }
 
-void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
+ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
   u16 *pusEcran,*pusMap;
   u16 usCharac;
@@ -853,7 +853,7 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 }
 
 //---------------------------------------------------------------------------------
-ITCM_CODE void dsInstallSoundEmuFIFO(void)
+void dsInstallSoundEmuFIFO(void)
 {
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
@@ -1046,7 +1046,10 @@ ITCM_CODE void dsMainLoop(void)
                                                                                       (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
                     if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
                     {
-                        keys_pressed = 0;   // If these were pressed... don't handle them below...
+                        if (!((keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L))))  // We want to still process for L/R shoulder buttons for possible screen scaling...
+                        {
+                            keys_pressed = 0;   // If these were pressed... don't handle them below...
+                        }
                     }
                     break;
                     
@@ -1407,11 +1410,11 @@ int a26Filescmp (const void *c1, const void *c2)
   return strcasecmp (p1->filename, p2->filename);
 }
 
+static char filenametmp[255];
 ITCM_CODE void vcsFindFiles(void) 
 {
   DIR *pdir;
   struct dirent *pent;
-  char filenametmp[255];
 
   countvcs = 0;
 
