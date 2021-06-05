@@ -118,7 +118,7 @@ class CartridgeAR : public Cartridge
     void loadIntoRAM(uInt8 load);
 
     // Sets up a "dummy" BIOS ROM in the ROM bank of the cartridge
-    void initializeROM(bool fastbios);
+    void initializeROM(void);
 
   private:
     // The 256 byte header for the current 8448 byte load

@@ -55,7 +55,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
   bPossibleLoad=1;
         
   // Initialize SC BIOS ROM
-  initializeROM(0);
+  initializeROM();
   reset();
 }
 
@@ -313,7 +313,7 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeAR::initializeROM(bool fastbios)
+void CartridgeAR::initializeROM(void)
 {
   static uInt8 dummyROMCode[] = {
     0xa5, 0xfa, 0x85, 0x80, 0x4c, 0x18, 0xf8, 0xff, 
@@ -356,8 +356,7 @@ void CartridgeAR::initializeROM(bool fastbios)
 
   // If fastbios is enabled, set the wait time between vertical bars
   // to 0 (default is 8), which is stored at address 189 of the bios
-  if(fastbios)
-    dummyROMCode[189] = 0x0;
+  dummyROMCode[189] = 0x04;
 
   uInt32 size = sizeof(dummyROMCode);
 
