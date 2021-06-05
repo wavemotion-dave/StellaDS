@@ -55,7 +55,7 @@ static const CartInfo table[] =
     {"DefaultCart_xxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Default Cart is 4k, full-scale, L-Joy and nothing special...
     {"0db4f4150fecf77e4ce72ca4d04c052f",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // 3-D Tic-Tac-Toe (1980).bin
     {"b6d13da9e641b95352f090090e440ce4",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Aardvark.bin
-    {"b6c2b4ddc42ef5db21cfcc3f8be120d6",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   198,   0,  1},    // Aardvark (32k Demo).bin    
+    {"82ee056af81203af58092ff2e6cf079d",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   198,   0,  1},    // Aardvark (32k).bin    
     {"ac7c2260378975614192ca2bc3d20e0b",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Activision Decathlon (1983).bin
     {"525f2dfc8b21b0186cff2568e0509bfc",  "FE",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Activision Decathlon (1983) [fixed].bin
     {"a1bcbe0bfe6570da2661fc4de2f74e8a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Actionauts.bin

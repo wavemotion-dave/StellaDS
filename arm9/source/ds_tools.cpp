@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 5
+#define MAX_DEBUG 3
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
@@ -153,7 +153,7 @@ ITCM_CODE void ShowStatusLine(void)
 }
 
 
-int bScreenRefresh = 0;
+char bScreenRefresh = 0;
 void vblankIntr() 
 {
     if (bScreenRefresh)
@@ -162,7 +162,6 @@ void vblankIntr()
         REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
         REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
         bScreenRefresh = 0;
-        
         //debug[0] = myCartInfo.screenScale;
         //debug[1] = myCartInfo.xOffset;
         //debug[2] = myCartInfo.yOffset;
@@ -1411,7 +1410,7 @@ int a26Filescmp (const void *c1, const void *c2)
 }
 
 static char filenametmp[255];
-ITCM_CODE void vcsFindFiles(void) 
+void vcsFindFiles(void) 
 {
   DIR *pdir;
   struct dirent *pent;
