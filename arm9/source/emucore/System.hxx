@@ -283,7 +283,7 @@ class System
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 System::getDataBusState() const
+inline __attribute__((always_inline)) uInt8 System::getDataBusState() const
 {
   return myDataBusState;
 }

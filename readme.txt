@@ -32,6 +32,9 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.7 : 3-Jun-2021 by Dave Bernazzani (wavemotion)
+  * A few more games added to the compatibility list.
+  * A minor optimization for fetching PC contents - yielding 1 or 2FPS in many games.
 V2.6 : 3-Jun-2021 by Dave Bernazzani (wavemotion)
   * Fixed ability to scale/move screen with Paddle games.
   * Tweaked more than 100 game screen offsets to better center/show them by default.

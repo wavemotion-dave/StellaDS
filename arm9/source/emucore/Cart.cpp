@@ -342,6 +342,7 @@ static const CartInfo table[] =
     {"2cc640f904e1034bf438075a139548d3",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Heartbreak.bin
     {"fca4a5be1251927027f2c24774a02160",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  8},    // H.E.R.O. (1984).bin
     {"260c787e8925bf3649c8aeae5b97dcc0",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Hell Driver (ITT Family Games, Thomas Jentzsch) (NTSC).bin
+    {"129d6c4cda0cd883faac4ae20499e0c2",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Hellway
     {"3d48b8b586a09bdbf49f1a016bf4d29a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0, -1},    // Hole Hunter (AKA Topy).bin
     {"c52d9bbdc5530e1ef8e8ba7be692b01e",  "F8",   CTR_KEYBOARD,  SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Holey Moley (1984).bin
     {"0bfabf1e98bdb180643f35f2165995d0",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Home Run - Baseball (1978).bin
@@ -639,6 +640,7 @@ static const CartInfo table[] =
     {"2a0ba55e56e7a596146fa729acf0e109",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   4,  3},    // Sky Jinks (1982).bin
     {"4c9307de724c36fd487af6c99ca078f2",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  3},    // Sky Patrol (1982).bin
     {"3b91c347d8e6427edbe942a7a405290d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  6},    // Sky Skipper (1983).bin
+    {"024e97dabc0b083c31ea52a83cca4e01",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Slideboy 
     {"f90b5da189f24d7e1a2117d8c8abc952",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Slot Machine (1979).bin
     {"705fe719179e65b0af328644f3a04900",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Slot Machine (1979).bin
     {"81254ebce88fa46c4ff5a2f4d2bad538",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Slot Machine (1979).bin
@@ -808,6 +810,7 @@ static const CartInfo table[] =
     {"73e66e82ac22b305eb4d9578e866236e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Unknown Datatech Game.bin
     {"5f950a2d1eb331a1276819520705df94",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Unknown Universal Game (1983).bin
     {"a499d720e7ee35c62424de882a3351b6",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   200,   2,  0},    // Up 'n Down (1984).bin
+    {"a128b1a092e3d16c4f7793e5ee50e67a",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  4},    // UPP+
     {"c6556e082aac04260596b4045bc122de",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Vanguard (1982).bin
     {"787ebc2609a31eb5c57c4a18837d1aee",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Vault Assault.bin
     {"bf7389cbfee666b33b8a88cc6c830edd",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Vault (TE).bin
@@ -856,7 +859,13 @@ static const CartInfo table[] =
     // Some Work in Progress Carts (these MD5s will change when released BIN is available)
     {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   202,   0,  4},    // Venture Reloaded (RC3).bin
     {"2df8ea51bcc9f1b3b4c61a141b5a1405",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // NinjishGuy_prerelease.bin
-
+    
+    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
+    
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // End of list...
 };
 

@@ -191,9 +191,6 @@ class M6502
     /// Pointer to the system the processor is installed in or the null pointer
     System* mySystem;
 
-    /// Indicates the number of system cycles per processor cycle 
-    const uInt32 mySystemCyclesPerProcessorCycle;
-
   protected:
     /// Lookup table used for binary-code-decimal math
     static uInt8 ourBCDTable[2][256];

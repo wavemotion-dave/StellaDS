@@ -21,8 +21,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
     : myExecutionStatus(0),
-      mySystem(0),
-      mySystemCyclesPerProcessorCycle(systemCyclesPerProcessorCycle)
+      mySystem(0)
 {
   uInt16 t;
 

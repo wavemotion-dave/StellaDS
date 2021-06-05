@@ -35,7 +35,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 
-#define VERSION "2.5a"
+#define VERSION "2.7"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -1191,6 +1191,7 @@ ITCM_CODE void dsMainLoop(void)
             {
                 int x = gTotalAtariFrames;
                 gTotalAtariFrames = 0;
+                if ((!full_speed) && (x>60)) x--;
                 fpsbuf[0] = '0' + (int)x/100;
                 x = x % 100;
                 fpsbuf[1] = '0' + (int)x/10;

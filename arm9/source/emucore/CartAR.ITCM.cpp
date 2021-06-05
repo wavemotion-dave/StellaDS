@@ -356,7 +356,7 @@ void CartridgeAR::initializeROM(void)
 
   // If fastbios is enabled, set the wait time between vertical bars
   // to 0 (default is 8), which is stored at address 189 of the bios
-  dummyROMCode[189] = 0x04;
+  dummyROMCode[189] = 0x03;
 
   uInt32 size = sizeof(dummyROMCode);
 
