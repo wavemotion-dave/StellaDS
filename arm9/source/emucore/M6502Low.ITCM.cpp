@@ -42,6 +42,7 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
+    asm(".rept 17 ; nop ; .endr");      // SNAKE OIL ... adjust the NOPs here to help with loop hot-spot alignments...
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
