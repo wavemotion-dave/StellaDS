@@ -114,7 +114,6 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
 
   mySystem->reset();
 
-  myFrameRate = 60;
   fakePaddleResistance = 500000;
 
   mySound.init(this, myMediaSource, mySystem);
@@ -143,12 +142,6 @@ void Console::update()
 {
 // myFrameBuffer.update();
 	myMediaSource->update();
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 Console::frameRate() const
-{
-  return myFrameRate;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

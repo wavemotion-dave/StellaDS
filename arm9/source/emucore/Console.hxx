@@ -90,11 +90,6 @@ class Console
     }
 
     /**
-      Get the frame rate for the emulation
-    */
-    uInt32 frameRate() const;
-
-    /**
       Get the sound object of the console
 
       @return The sound object for this console
@@ -185,9 +180,6 @@ class Console
 
     // Reference to the Sound object
     Sound& mySound;
-
-    // Frame rate being used by the emulator
-    uInt32 myFrameRate;
 
     // Pointer to the EventHandler object
     EventHandler* myEventHandler;
