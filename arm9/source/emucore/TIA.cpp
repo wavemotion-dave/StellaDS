@@ -36,10 +36,32 @@
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
 
-uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
-uInt8   dma_channel                 __attribute__((section(".dtcm")));
-uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
-uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
+uInt32  myPF                        __attribute__((section(".dtcm")));
+uInt32  myColor[4]                  __attribute__((section(".dtcm")));
+uInt32  myFrameYStart               __attribute__((section(".dtcm")));
+uInt32  myFrameHeight               __attribute__((section(".dtcm")));
+uInt32  myStartDisplayOffset        __attribute__((section(".dtcm")));
+uInt32  myStopDisplayOffset         __attribute__((section(".dtcm")));
+Int32   myVSYNCFinishClock          __attribute__((section(".dtcm")));
+uInt8*  myCurrentFrameBuffer[2]     __attribute__((section(".dtcm")));
+uInt8*  myFramePointer              __attribute__((section(".dtcm")));
+uInt16* myDSFramePointer            __attribute__((section(".dtcm")));
+Int32   myLastHMOVEClock            __attribute__((section(".dtcm")));
+uInt32  myM0CosmicArkCounter        __attribute__((section(".dtcm")));
+uInt32  ourPlayfieldTable[2][160]   __attribute__((section(".dtcm")));
+Int32   myClockWhenFrameStarted     __attribute__((section(".dtcm")));
+Int32   myCyclesWhenFrameStarted    __attribute__((section(".dtcm")));
+Int32   myClockStartDisplay         __attribute__((section(".dtcm")));
+Int32   myClockStopDisplay          __attribute__((section(".dtcm")));
+Int32   myClockAtLastUpdate         __attribute__((section(".dtcm")));
+Int32   myClocksToEndOfScanLine     __attribute__((section(".dtcm")));
+Int32   myMaximumNumberOfScanlines  __attribute__((section(".dtcm")));
+uInt8*  myCurrentBLMask             __attribute__((section(".dtcm")));
+uInt8*  myCurrentM0Mask             __attribute__((section(".dtcm")));
+uInt8*  myCurrentM1Mask             __attribute__((section(".dtcm")));
+uInt8*  myCurrentP0Mask             __attribute__((section(".dtcm")));
+uInt8*  myCurrentP1Mask             __attribute__((section(".dtcm")));
+uInt32* myCurrentPFMask             __attribute__((section(".dtcm")));
 uInt16  ourCollisionTable[256]      __attribute__((section(".dtcm")));
 uInt16  myCollision                 __attribute__((section(".dtcm")));    
 Int16   myPOSP0                     __attribute__((section(".dtcm")));         
@@ -47,13 +69,15 @@ Int16   myPOSP1                     __attribute__((section(".dtcm")));
 Int16   myPOSM0                     __attribute__((section(".dtcm")));         
 Int16   myPOSM1                     __attribute__((section(".dtcm")));         
 Int16   myPOSBL                     __attribute__((section(".dtcm")));       
+uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
+uInt8   dma_channel                 __attribute__((section(".dtcm")));
+uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
+uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
 uInt8   myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
-uInt32  myColor[4]                  __attribute__((section(".dtcm")));
 uInt8   myPriorityEncoder[2][256]   __attribute__((section(".dtcm")));
 uInt8   myCTRLPF                    __attribute__((section(".dtcm")));
 uInt8   myREFP0                     __attribute__((section(".dtcm")));
 uInt8   myREFP1                     __attribute__((section(".dtcm")));
-uInt32  myPF                        __attribute__((section(".dtcm")));
 uInt8   myGRP0                      __attribute__((section(".dtcm")));
 uInt8   myGRP1                      __attribute__((section(".dtcm")));
 uInt8   myDGRP0                     __attribute__((section(".dtcm")));
@@ -72,47 +96,17 @@ uInt8   myVDELP1                    __attribute__((section(".dtcm")));
 uInt8   myVDELBL                    __attribute__((section(".dtcm")));
 uInt8   myRESMP0                    __attribute__((section(".dtcm")));
 uInt8   myRESMP1                    __attribute__((section(".dtcm")));
-uInt32  myFrameYStart               __attribute__((section(".dtcm")));
-uInt32  myFrameHeight               __attribute__((section(".dtcm")));
-uInt32  myStartDisplayOffset        __attribute__((section(".dtcm")));
-uInt32  myStopDisplayOffset         __attribute__((section(".dtcm")));
-Int32   myVSYNCFinishClock          __attribute__((section(".dtcm")));
 uInt8   myEnabledObjects            __attribute__((section(".dtcm")));
-uInt8*  myCurrentFrameBuffer[2]     __attribute__((section(".dtcm")));
-uInt8*  myFramePointer              __attribute__((section(".dtcm")));
-uInt16* myDSFramePointer            __attribute__((section(".dtcm")));
-
-Int32   myClockWhenFrameStarted     __attribute__((section(".dtcm")));
-Int32   myCyclesWhenFrameStarted    __attribute__((section(".dtcm")));
-Int32   myClockStartDisplay         __attribute__((section(".dtcm")));
-Int32   myClockStopDisplay          __attribute__((section(".dtcm")));
-Int32   myClockAtLastUpdate         __attribute__((section(".dtcm")));
-Int32   myClocksToEndOfScanLine     __attribute__((section(".dtcm")));
-Int32   myMaximumNumberOfScanlines  __attribute__((section(".dtcm")));
-
 uInt8   myCurrentGRP0               __attribute__((section(".dtcm")));
 uInt8   myCurrentGRP1               __attribute__((section(".dtcm")));
-uInt8*  myCurrentBLMask             __attribute__((section(".dtcm")));
-uInt8*  myCurrentM0Mask             __attribute__((section(".dtcm")));
-uInt8*  myCurrentM1Mask             __attribute__((section(".dtcm")));
-uInt8*  myCurrentP0Mask             __attribute__((section(".dtcm")));
-uInt8*  myCurrentP1Mask             __attribute__((section(".dtcm")));
-uInt32* myCurrentPFMask             __attribute__((section(".dtcm")));
-
 uInt8   myVSYNC                     __attribute__((section(".dtcm")));
 uInt8   myVBLANK                    __attribute__((section(".dtcm")));
-
-Int32   myLastHMOVEClock            __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
-uInt32  myM0CosmicArkCounter        __attribute__((section(".dtcm")));
-
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
-uInt32  ourPlayfieldTable[2][160]   __attribute__((section(".dtcm")));
-
 uInt8 bUseAlternatePalette = 0;
 
-Int16 ourPokeDelayTable[64] __attribute__((section(".dtcm"))) = {
+Int16 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
    0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
    0,  0,  8,  8,  8,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -120,7 +114,7 @@ Int16 ourPokeDelayTable[64] __attribute__((section(".dtcm"))) = {
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 delay_tab[] __attribute__((section(".dtcm"))) = 
+uInt32 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 
 {
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
@@ -130,7 +124,7 @@ uInt32 delay_tab[] __attribute__((section(".dtcm"))) =
 };
    
 // This 1k table is not worth putting in FAST memory - doesn't buy us much and is rather large...
-uInt32 color_repeat_table[]  = {
+uInt32 __attribute__ ((aligned (4))) color_repeat_table[]  = {
         0x00000000,  0x00000000,  0x02020202,  0x02020202,  0x04040404,  0x04040404,  0x06060606,  0x06060606,  
         0x08080808,  0x08080808,  0x0A0A0A0A,  0x0A0A0A0A,  0x0C0C0C0C,  0x0C0C0C0C,  0x0E0E0E0E,  0x0E0E0E0E,  
         0x10101010,  0x10101010,  0x12121212,  0x12121212,  0x14141414,  0x14141414,  0x16161616,  0x16161616,  
@@ -261,13 +255,10 @@ Int8 ourCompleteMotionTable[76][16] __attribute__((section(".dtcm"))) = {
 
 
 // -----------------------------------------------------------
-// These two slower buffers are for non VRAM to VRAM copy
-// which we use for the older DS-LITE and DS-PHAT models
-// which run at a slower CPU speed - othrewise we get 
-// graphical glitches... 
+// These two big buffers are our ping-pong video memory...
 // -----------------------------------------------------------
-uInt8 videoBuf0[160 * 300];
-uInt8 videoBuf1[160 * 300];
+uInt8 __attribute__ ((aligned (4))) videoBuf0[160 * 300];
+uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
 #define MYCOLUBK  0
 #define MYCOLUPF  1
 #define MYCOLUP0  2

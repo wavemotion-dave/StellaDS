@@ -230,6 +230,9 @@ class System
       Device* device;
     };
     
+    // Pointer to a dynamically allocated array of PageAccess structures
+    PageAccess* myPageAccessTable;
+
     /**
       Set the page accessing method for the specified page.
 
@@ -258,9 +261,6 @@ class System
  
     // Number of pages in the system
     const uInt16 myNumberOfPages;
-
-    // Pointer to a dynamically allocated array of PageAccess structures
-    PageAccess* myPageAccessTable;
 
     // Array of all the devices attached to the system
     Device* myDevices[100];

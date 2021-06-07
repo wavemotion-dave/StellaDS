@@ -24,7 +24,7 @@
 #include "System.hxx"
 #include <iostream>
 
-extern uInt8 NumberOfDistinctAccesses;
+extern uInt32 NumberOfDistinctAccesses;
 extern uInt8 fast_cart_buffer[];
 
 

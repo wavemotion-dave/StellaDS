@@ -26,7 +26,7 @@
 #include <iostream>
 
 // An amazing 128 bytes of RAM
-uInt8 myRAM[128] __attribute__((section(".dtcm")));
+uInt8 myRAM[128] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6532::M6532(const Console& console)

@@ -29,8 +29,8 @@
 // better than some global variable hack but the speedup is needed to bring
 // even more games up to 60 FPS. Sometimes the ends justify the means.
 // ---------------------------------------------------------------------------
-Int32  gSystemCycles    __attribute__((section(".dtcm"))) = 0;
-uInt8  myDataBusState   __attribute__((section(".dtcm"))) = 0;
+Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
+uInt8  myDataBusState  __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)

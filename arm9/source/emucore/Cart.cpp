@@ -47,8 +47,8 @@ extern void dsWarnIncompatibileCart(void);
 extern void dsPrintCartType(char *);
 
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger "AR" carts
-uInt8 fast_cart_buffer[8*1024] __attribute__((section(".dtcm")));
-CartInfo myCartInfo __attribute__((section(".dtcm")));
+uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
+CartInfo myCartInfo __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 
 static const CartInfo table[] = 
 {
