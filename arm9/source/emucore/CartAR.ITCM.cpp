@@ -27,7 +27,6 @@
 extern uInt32 NumberOfDistinctAccesses;
 extern uInt8 fast_cart_buffer[];
 
-
 uInt8 myWriteEnabled __attribute__((section(".dtcm")));
 uInt8 myDataHoldRegister __attribute__((section(".dtcm")));
 uInt8 myWritePending __attribute__((section(".dtcm")));
@@ -120,95 +119,14 @@ void CartridgeAR::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeAR::peek(uInt16 addr)
 {
-  addr &= 0x0FFF;     // Map down to 4k...
-  if (addr & 0x0800)  // If we are in the upper bank...
-  {
-      if (bPossibleLoad)  // True only if our last AR configuration says we are "ROM" in the upper bank...
-      {
-          // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
-          if(addr == 0x0850)
-          {
-            // Get load that's being accessed (BIOS places load number at 0x80)
-            uInt8 load = mySystem->peek(0x0080);
-
-            // Read the specified load into RAM
-            loadIntoRAM(load);
-
-            return myImage1[addr];
-          }
-      }
-
-      // Is the bank configuration hotspot being accessed?
-      if((addr) == 0x0FF8)
-      {
-        // Yes, so handle bank configuration
-        myWritePending = false;
-        bankConfiguration(myDataHoldRegister);
-      }
-      // Handle poke if writing enabled
-      else if (myWritePending && myWriteEnabled)
-      {
-          if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
-          {
-              if(!bPossibleLoad)    // Can't poke to ROM :-)
-                 myImage1[addr] = myDataHoldRegister;
-              myWritePending = false;
-          }
-      }
-
-      return myImage1[addr];
-  }
-  else // WE are in the lower bank
-  {
-      // Is the data hold register being set?
-      if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
-      {
-        myDataHoldRegister = addr;
-        NumberOfDistinctAccesses = 0;
-        myWritePending = true;
-      }
-      // Handle poke if writing enabled
-      else if (myWritePending && myWriteEnabled)
-      {
-          if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
-          {
-              myImage0[addr] = myDataHoldRegister;
-              myWritePending = false;
-          }
-      }
-
-     return myImage0[addr];
-  }
+    // Not used... all AR peek handling done directly in 6502-Low for speed
+    return 0x00;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::poke(uInt16 addr, uInt8)
 {
-  addr &= 0x0FFF; // Map down to 4k...
-
-  // Is the data hold register being set?
-  if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
-  {
-    myDataHoldRegister = addr;
-    NumberOfDistinctAccesses = 0;
-    myWritePending = true;
-  }
-  // Is the bank configuration hotspot being accessed?
-  else if (addr == 0x0FF8)
-  {
-    // Yes, so handle bank configuration
-    myWritePending = false;
-    bankConfiguration(myDataHoldRegister);
-  }
-  // Handle poke if writing enabled
-  else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == DISTINCT_THRESHOLD))
-  {
-    if((addr & 0x0800) == 0)
-        myImage0[addr] = myDataHoldRegister;
-    else if(!bPossibleLoad)    // Can't poke to ROM :-)
-      myImage1[addr] = myDataHoldRegister;
-    myWritePending = false;
-  }
+    // Not used... all AR poke handling done directly in 6502-Low for speed
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

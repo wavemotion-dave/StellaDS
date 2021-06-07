@@ -26,7 +26,6 @@
 #include "Cart4K.hxx"
 #include "CartAR.hxx"
 #include "CartDPC.hxx"
-#include "CartDPCPlus.hxx"
 #include "CartE0.hxx"
 #include "CartE7.hxx"
 #include "CartF4.hxx"
@@ -864,7 +863,6 @@ static const CartInfo table[] =
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // End of list...
 };
@@ -891,7 +889,7 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeDPC(image, size);
   else if (type == "DPCP")
   {
-      cartridge = new CartridgeDPCPlus(image, size);
+      cartridge = new Cartridge4K(image); // It's gonna fail anyway...
       dsWarnIncompatibileCart();
   }
   else if(type == "E0")
