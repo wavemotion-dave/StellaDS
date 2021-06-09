@@ -172,7 +172,7 @@ static const CartInfo table[] =
     {"749fec9918160921576f850b2375b516",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   190,   0, -3},    // China Syndrome (1982).bin
     {"c1cb228470a87beb5f36e90ac745da26",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   4,  5},    // Chopper Command (1982).bin
     {"3f58f972276d1e4e0e09582521ed7a5b",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  5},    // Chuck Norris Superkicks (1983).bin
-    {"a7b96a8150600b3e800a4689c3ec60a2",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_7,  210,   210,   0,  0},    // Circus Atari (1980).bin
+    {"a7b96a8150600b3e800a4689c3ec60a2",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_7,  210,   210,   0,  2},    // Circus Atari (1980).bin
     {"5f383ce70c30c5059f13e89933b05c4a",  "F8",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_7,  210,   210,   0,  0},    // Circus Atariage 2020.bin  
     {"13a11a95c9a9fb0465e419e4e2dbd50a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  3},    // Climber5.bin
     {"1e587ca91518a47753a28217cd4fd586",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Coco Nuts (1982).bin

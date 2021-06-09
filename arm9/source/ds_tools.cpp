@@ -43,7 +43,7 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 3
+#define MAX_DEBUG 64
 Int32 debug[MAX_DEBUG]={0};
 //#define DEBUG_DUMP
 char my_filename[128];
