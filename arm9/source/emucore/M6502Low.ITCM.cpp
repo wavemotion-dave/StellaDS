@@ -42,7 +42,6 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
-    asm(".rept 2 ; nop ; .endr");      // SNAKE OIL ... adjust the NOPs here to help with loop hot-spot alignments...
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -200,18 +199,15 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
       if (addr & 0x0800)  // If we are in the upper bank...
       {
           // Is the "dummy" SC BIOS hotspot for reading a load being accessed?
-          if(addr == 0x0850)
+          if(addr == 0x0850 && bPossibleLoad)
           {
-              if (bPossibleLoad)  // True only if our last AR configuration says we are "ROM" in the upper bank...
-              {
-                // Get load that's being accessed (BIOS places load number at 0x80)
-                uInt8 load = mySystem->peek(0x0080);
+            // Get load that's being accessed (BIOS places load number at 0x80)
+            uInt8 load = mySystem->peek(0x0080);
 
-                // Read the specified load into RAM
-                myAR->loadIntoRAM(load);
+            // Read the specified load into RAM
+            myAR->loadIntoRAM(load);
 
-                return myImage1[addr];
-              }
+            return myImage1[addr];
           }
           // Is the bank configuration hotspot being accessed?
           else if(addr == 0x0FF8)
@@ -221,7 +217,7 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
             myAR->bankConfiguration(myDataHoldRegister);
           }
           // Handle poke if writing enabled
-          else if (/*myWriteEnabled &&*/ myWritePending)
+          else if (myWritePending)
           {
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
@@ -236,14 +232,14 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
       else // WE are in the lower bank
       {
           // Is the data hold register being set?
-          if((!(addr&0xFF00)) && (!myWriteEnabled || !myWritePending))
+          if((!(addr & 0x0F00)) && (!myWritePending))
           {
             myDataHoldRegister = addr;
             NumberOfDistinctAccesses = 0;
             if (myWriteEnabled) myWritePending = true;
           }
           // Handle poke if writing enabled
-          else if (myWriteEnabled && myWritePending)
+          else if (myWritePending)
           {
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
@@ -274,7 +270,7 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
       uInt16 addr = address & 0x0FFF; // Map down to 4k...
 
       // Is the data hold register being set?
-      if((addr <= 0xFF) && (!myWriteEnabled || !myWritePending))
+      if(!(addr & 0x0F00) && (!myWritePending))
       {
         myDataHoldRegister = addr;
         NumberOfDistinctAccesses = 0;
@@ -288,13 +284,16 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
         myAR->bankConfiguration(myDataHoldRegister);
       }
       // Handle poke if writing enabled
-      else if(myWriteEnabled && myWritePending &&  (NumberOfDistinctAccesses == DISTINCT_THRESHOLD))
+      else if (myWritePending)
       {
-        if((addr & 0x0800) == 0)
-            myImage0[addr] = myDataHoldRegister;
-        else if(!bPossibleLoad)    // Can't poke to ROM :-)
-          myImage1[addr] = myDataHoldRegister;
-        myWritePending = false;
+          if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
+          {
+            if((addr & 0x0800) == 0)
+              myImage0[addr] = myDataHoldRegister;
+            else if(!bPossibleLoad)    // Can't poke to ROM :-)
+              myImage1[addr] = myDataHoldRegister;
+            myWritePending = false;
+          }
       }
   }
   else

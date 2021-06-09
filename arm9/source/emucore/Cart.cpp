@@ -746,7 +746,7 @@ static const CartInfo table[] =
     {"4d7517ae69f95cfbc053be01312b7dba",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   200,   0,  3},    // Surround (1977).bin
     {"31d08cb465965f80d3541a57ec82c625",  "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  3},    // Surround (4k).bin   
     {"c370c3268ad95b3266d6e36ff23d1f0c",  "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Surround (pal).bin  
-    {"045035f995272eb2deb8820111745a07",  "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   1,  1,  ANA1_0,  207,   210,   4,  8},    // Survival Island (1983).bin
+    {"045035f995272eb2deb8820111745a07",  "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   1,  1,  ANA1_0,  207,   210,   4,  9},    // Survival Island (1983).bin
     {"85e564dae5687e431955056fbda10978",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   194,   0, -4},    // Survival Run (1983).bin
     {"59e53894b3899ee164c91cfa7842da66",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0, 10},    // Survival Run (Data Age).bin
     {"e51c23389e43ab328ccfb05be7d451da",  "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Sweat! - The Decathlon (1983).bin
@@ -860,6 +860,7 @@ static const CartInfo table[] =
     {"2df8ea51bcc9f1b3b4c61a141b5a1405",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // NinjishGuy_prerelease.bin
     
     // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
