@@ -1,4 +1,4 @@
-StellaDSi 2.7 Compatibility List [partial list - to give a sense of what can be expected]
+StellaDSi 2.8 Compatibility List [partial list - to give a sense of what can be expected]
 
 Grade is not an indication of how good the game is - it's an indication as to how well the game plays under emulation on a DSi (running at 133MHz).
 If you run the emulator on a DS (running at 67MHz) - it's just too little CPU power to get the job done for most games but some playable ones: 
@@ -19,7 +19,7 @@ Game                                          MD5sum                            
 Aardvark.a26                                  b6d13da9e641b95352f090090e440ce4    F8    60  50  A   
 Activision Decathlon (1983).a26               ac7c2260378975614192ca2bc3d20e0b    FE    60  60  A   Plays fine but difficult to play well with D-Pad vs Joystick
 Adventure (1980).a26                          157bddb7192754a45372be196797f284    4K    60  60  A   Just the way you remember it! Such fond memories...
-Adventures of TRON (1982).a26                 ca4f8c5b4d6fb9d608bb96bc7ebd26c7    4K    60  58  A   My guilty pleasure!
+Adventures of TRON (1982).a26                 ca4f8c5b4d6fb9d608bb96bc7ebd26c7    4K    60  60  A   My guilty pleasure!
 Airlock (1982).a26                            4d77f291dca1518d7d8e47838695f54b    4K    60  52  A
 Air Raiders (1982).a26                        a9cb638cd2cb2e8e0643d7a67db4281c    4K    60  54  A
 Air-Sea Battle (1977).a26                     16cb43492987d2f32b423817cdaaf7c4    2K    60  60  A
@@ -53,7 +53,7 @@ California Games (1988).a26                   9ab72d3fd2cc1a0c9adb504502579037  
 Canyon Bomber (1979).a26                      feedcc20bc3ca34851cd5d9e38aa2ca6    2K    60  60  A
 Carnival (1982).a26                           028024fb8e5e5f18ea586652f9799c96    4K    60  60  A   Recommend Flicker Free mode for best visual experience.
 Casino (1979).a26                             b816296311019ab69a21cb9e9e235d12    4K    60  60  A
-Cat Trax (1983).a26                           76f66ce3b83d7a104a899b4b3354a2f2    4K    60  57  B   Recommend Flicker Free mode for best visual experience.
+Cat Trax (1983).a26                           76f66ce3b83d7a104a899b4b3354a2f2    4K    60  60  B   Recommend Flicker Free mode for best visual experience.
 Cave In.a26                                   1cedebe83d781cc22e396383e028241a    F4SC  60  60  A
 Centipede (1982).a26                          91c2098e88a6b13f977af8c003e0bca5    F8    60  60  A   Recommend Flicker Free mode for best visual experience.
 Chopper Command (1982).a26                    c1cb228470a87beb5f36e90ac745da26    4K    60  54  A
@@ -85,10 +85,10 @@ DOT.a26                                       7386004f9a5a7daf7e50ac8547088337  
 Dragonfire (1982).a26                         41810dd94bd0de1110bedc5092bef5b0    4K    60  60  A
 Dragster (1980).a26                           77057d9d14b99e465ea9e29783af0ae3    2K    60  60  A
 Elevator Action (1983).a26                    71f8bacfbdca019113f3f0801849057e    F8SC  60  60  B   No sound... not sure if that's normal.
-Elevators Amiss.a26                           7657b6373fcc9ad69850a687bee48aa1    4K    56  40  B   Very playable despite minor slowdown.
-Enduro (1983).a26                             94b92a882f6dbaa6993a46e2dcc58402    4K    60  52  A   
+Elevators Amiss.a26                           7657b6373fcc9ad69850a687bee48aa1    4K    60  48  A   
+Enduro (1983).a26                             94b92a882f6dbaa6993a46e2dcc58402    4K    60  54  A   
 E.T. - The Extra-Terrestrial (1982).a26       615a3bf251a38eb6638cdc7ffbde5480    F8    60  60  A   Why bother...
-Escape from the Mindmaster (1982).a26         81f4f0285f651399a12ff2e2f35bab77    AR    42+ 40+ B   Frame rate varies from 42-60... but gameplay is still enjoyable.
+Escape from the Mindmaster (1982).a26         81f4f0285f651399a12ff2e2f35bab77    AR    45+ 40+ B   Frame rate varies from 45-60... but gameplay is still enjoyable.
 Ewok Adventure.a26                            d44d90e7c389165f5034b5844077777f    E0    60  55  A
 Fall Down.a26                                 76181e047c0507b2779b4bcbf032c9d5    F8    60  60  A
 Fantastic Voyage (1982).a26                   b80d50ecee73919a507498d0a4d922ae    4K    60  50  A
@@ -132,7 +132,7 @@ M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237  
 Medieval Mayhem.a26                           f7fac15cf54b55c5597718b6742dbec2    F4    60  60  A
 Mega Force (1982).a26                         daeb54957875c50198a7e616f9cc8144    4K    60  56  A
 MegaMania (1982).a26                          318a9d6dda791268df92d72679914ac3    4K    60  58  A
-Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    56  42  B   A bit slow but playable
+Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    57  42  B   A tiny bit of slowdown but still very enjoyable
 Millipede (1984).a26                          3c57748c8286cf9e821ecd064f21aaa9    F6SC  60  51  A   Flicker Flee is a little blury unfortunately - stick to Normal Mode
 Miniature Golf (1979).a26                     df62a658496ac98a3aa4a6ee5719c251    2K    60  60  A
 Missile Command (1981).a26                    3a2e2d0c6892aa14544083dfb7762782    4K    60  60  A
@@ -144,13 +144,13 @@ Ms. Pac-Man (1982).a26                        87e79cd41ce136fd4f72cc6e2c161bee  
 Night Driver (1980).a26                       392f00fd1a074a3c15bc96b0a57d52a1    2K    60  60  C   Just a bit too difficult to control.
 Odin.a26                                      e20fc6ba44176e9149ef6d3f99221ac5    4K    60  60  A
 Odin-joystick.a26                             67afbf02142c66861a1d682e4c0ea46e    4K    60  60  A
-Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    56  44  B   At times gets up to 58FPS but needs a bit more. But very close and quite playable.
+Official Frogger (Sega).a26                   c73ae5ba5a0a3f3ac77f0a9e14770e73    AR    58  44  B   At times gets up to 60FPS but needs a bit more. But very close and quite playable.
 Omicron 16k.a26                               bc593f2284c67b7d8716d110f541953f    F6    60  60  A
 Omicron 2k.a26                                2148917316ca5ce1672f6c49c0f89d0b    2K    60  60  A
 Oystron (V2.9) (PD).a26                       91f0a708eeb93c133e9672ad2c8e0429    4K    60  58  A
 Pac-Man (1982).a26                            6e372f076fb9586aff416144f5cfe1cb    4K    60  60  A   Recommend Flicker Free Mode
 Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced    F8    60  60  A   Amazing improvement on the original
-Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    56  46  A   A bit of slowdown but hardly noticable
+Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    58  46  A   A bit of slowdown but hardly noticable
 Phoenix (1982).a26                            7e52a95074a66640fcfde124fffd491a    F8    60  60  A
 Pitfall! (1982).a26                           3e90cf23106f2e08b2781e41299de556    4K    60  45  A   Classic!
 Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   58  30  D   Sound is forced off to get a frame rate that makes it playable.
@@ -182,11 +182,11 @@ Sky Diver (1979).a26                          46c021a3e9e2fd00919ca3dd1a6b76d8  
 Sky Patrol (1982).a26                         4c9307de724c36fd487af6c99ca078f2    F8    60  58  A
 Sky Skipper (1983).a26                        3b91c347d8e6427edbe942a7a405290d    4K    60  60  A
 Solar Fox (1983).a26                          947317a89af38a49c4864d6bdd6a91fb    F8    60  60  A
-Solaris (1986).a26                            e72eb8d4410152bdcb69e7fba327b420    F6    60  40+ B   Frame rate is a bit all over the map as you go through different aspects of the game but it's very playable.
+Solaris (1986).a26                            e72eb8d4410152bdcb69e7fba327b420    F6    60  50+ B   Frame rate is a bit all over the map as you go through different aspects of the game but it's very playable.
 Space Cavern (1981).a26                       df6a28a89600affe36d94394ef597214    4K    60  60  A
 Space Invaders (1980).a26                     72ffbef6504b75e69ee1045af9075f66    4K    60  60  A
 SpaceMaster X-7 (1983).a26                    45040679d72b101189c298a864a5b5ba    4K    60  60  A
-Space Shuttle (1983).a26                      5894c9c0c1e7e29f3ab86c6d3f673361    F8    60  46  B   Occasional tiny slowdown but very playable - it uses all the switches on the VCS!
+Space Shuttle (1983).a26                      5894c9c0c1e7e29f3ab86c6d3f673361    F8    60  50  B   Occasional tiny slowdown but very playable - it uses all the switches on the VCS!
 Space Treat.a26                               6c9a32ad83bcfde3774536e52be1cce7    4K    60  60  A   My second favorite homebrew game!
 Space Treat Deluxe.a26                        9e135f5dce61e3435314f5cddb33752f    4K    60  60  A   My second favorite homebrew game!
 Spider Fighter (1982).a26                     24d018c4a6de7e5bd19a36f2b879b335    4K    60  60  A   Damn fine game.
@@ -198,7 +198,7 @@ Star Raiders (1982).a26                       cbd981a23c592fb9ab979223bb368cd5  
 Star Ship (1977).a26                          e363e467f605537f3777ad33e74e113a    2K    60  60  A
 Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729    F8    60  51  A
 Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
-Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  57  A   Recommend Flicker Free mode.
+Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  60  A   Recommend Flicker Free mode.
 Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
 Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    60  45  C   Paddles required  
 Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K    60  58  A

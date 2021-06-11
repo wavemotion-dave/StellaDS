@@ -32,17 +32,25 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V2.7 : 3-Jun-2021 by Dave Bernazzani (wavemotion)
+V2.8 : 11-Jun-2021 by Dave Bernazzani (wavemotion)
+  * A couple dozen micro-tweaks to the sound driver to squeeze out a bit more
+    performance. Elevators Amiss is now running at 60FPS! All of the Starpath
+    Supercharger games are running in the high 50s and many are at 60FPS.
+
+V2.7 : 4-Jun-2021 by Dave Bernazzani (wavemotion)
   * A few more games added to the compatibility list.
   * A minor optimization for fetching PC contents - yielding 1 or 2FPS in many games.
+
 V2.6 : 3-Jun-2021 by Dave Bernazzani (wavemotion)
   * Fixed ability to scale/move screen with Paddle games.
   * Tweaked more than 100 game screen offsets to better center/show them by default.
   * Minor cleanups to the code and memory.
+
 V2.5 : 1-Jun-2021 by Dave Bernazzani (wavemotion)
   * Restored PAL palette selection when choosing a game.
   * Eeked out 1 or 2 FPS on Starpath Supercharger games by limiting the number
     of vertical scanlines we will show. Elevators Amiss is now close to 54FPS!
+
 V2.4 : 31-May-2021 by Dave Bernazzani (wavemotion)
   * A bit more juice squeezed out of the TIA. Added cart-specific options
     to bypass VerticalBlank zero (not all games need that memory cleared if
