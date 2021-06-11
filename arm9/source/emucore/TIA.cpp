@@ -106,7 +106,7 @@ uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 uInt8 bUseAlternatePalette = 0;
 
-Int16 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
+Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
    0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
    0,  0,  8,  8,  8,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -114,7 +114,7 @@ Int16 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 
+Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 
 {
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
@@ -2599,12 +2599,10 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 {
   // See if we're in the nondisplayable portion of the screen or if
   // we've already updated this portion of the screen
-  if((clock < myClockStartDisplay) || 
-      (myClockAtLastUpdate >= myClockStopDisplay) ||  
-      (myClockAtLastUpdate >= clock))
-  {
-    return;
-  }
+  // We do these in the order of "most likely"
+  if (clock < myClockStartDisplay)               return;
+  if (myClockAtLastUpdate >= myClockStopDisplay) return;
+  if (myClockAtLastUpdate >= clock)              return;
 
   // Truncate the number of cycles to update to the stop display point
   if(clock > myClockStopDisplay)
@@ -2755,8 +2753,9 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
     uInt8 noise = myDataBusState & 0x3F; 
     if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
-  // Update frame to current color clock before we look at anything!
-    updateFrame((gSystemCycles+gSystemCycles+gSystemCycles));
+
+    // Update frame to current color clock before we look at anything!
+    updateFrame((3*gSystemCycles));
         
   switch(addr & 0x000f)
   {
@@ -2908,8 +2907,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 {
   addr = addr & 0x003f;
 
-  Int32 clock = (gSystemCycles+gSystemCycles+gSystemCycles); 
-  Int16 delay = ourPokeDelayTable[addr];
+  Int32 clock = (3*gSystemCycles); 
+  Int8 delay = ourPokeDelayTable[addr];
   Int32 delta_clock = (clock - myClockWhenFrameStarted);
 
   // See if this is a poke to a PF register
@@ -2920,14 +2919,6 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
   // Update frame to current CPU cycle before we make any changes!
   updateFrame(clock + delay);
-
-#if 0 // In theory, this should never happen... let's find out!!
-  // If a VSYNC hasn't been generated in time go ahead and end the frame
-  if(((delta_clock) / 228) > myMaximumNumberOfScanlines)
-  {
-    mySystem->m6502().stop();
-  }
-#endif
     
   switch(addr)
   {
@@ -3290,15 +3281,32 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     }
 
     case 0x15:    // Audio control 0
+          AUDC[0] = value & 0x0f;
+          Update_tia_sound(0);
+          break;
     case 0x16:    // Audio control 1
+          AUDC[1] = value & 0x0f;
+          Update_tia_sound(1);
+          break;
+          
     case 0x17:    // Audio frequency 0
+          AUDF[0] = value & 0x1f;
+          Update_tia_sound(0);
+          break;          
     case 0x18:    // Audio frequency 1
+          AUDF[1] = value & 0x1f;
+          Update_tia_sound(1);
+          break;
+          
     case 0x19:    // Audio volume 0
+          AUDV[0] = (value & 0x0f) << 3;
+          Update_tia_sound(0);
+          break;
+
     case 0x1A:    // Audio volume 1
-    {
-      Update_tia_sound (addr, value);
-      break;
-    }
+          AUDV[1] = (value & 0x0f) << 3;
+          Update_tia_sound(1);
+          break;
   
     case 0x1B: // Graphics Player 0
     {

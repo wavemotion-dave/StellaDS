@@ -89,13 +89,11 @@
 /* LOCAL GLOBAL VARIABLE DEFINITIONS */
 
 /* structures to hold the 6 tia sound control bytes */
-static uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
-static uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
-static uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
+uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
+uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
+uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
 static uint8 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
-
-static uint32 volume __attribute__((section(".dtcm")));    /* output sample volume percentage */
 
 /* Initialze the bit patterns for the polynomials. */
 
@@ -105,10 +103,13 @@ static uint32 volume __attribute__((section(".dtcm")));    /* output sample volu
 /* efficient processing. */
 
 static uint8 Bit4[POLY4_SIZE] __attribute__((section(".dtcm"))) =
-      { 1,1,0,1,1,1,0,0,0,0,1,0,1,0,0 };
+      { 0xff,0xff,0,0xff,0xff,0xff,0,0,0,0,0xff,0,0xff,0,0 };
 
 static uint8 Bit5[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
       { 0,0,1,0,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,1,1,1,0,1,0,1,0,0,0,0,1 };
+
+static uint8 Bit5a[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
+      { 0,0,0xff,0,0xff,0xff,0,0,0xff,0xff,0xff,0xff,0xff,0,0,0,0xff,0xff,0,0xff,0xff,0xff,0,0xff,0,0xff,0,0,0,0,0xff };
 
 /* I've treated the 'Div by 31' counter as another polynomial because of */
 /* the way it operates.  It does not have a 50% duty cycle, but instead */
@@ -118,11 +119,9 @@ static uint8 Bit5[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
 static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
-/* Rather than have a table with 511 entries, I use a random number */
-/* generator. */
-
-static uint8 Bit9[POLY9_SIZE];
-
+/* Rather than have a table with 511 entries, I use a random number generator. */
+static uint8 Bit9[POLY9_SIZE] __attribute__((section(".dtcm")));
+    
 static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
 static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
 static uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
@@ -135,7 +134,10 @@ static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n max
 /* which has 8 binary digits to the right of the decimal point. */
 
 static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-static signed short Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+static int16  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+
+uint8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
+uint8* psound_buffer __attribute__((section(".dtcm"))) = (uint8*)sound_buffer;
 
 /*****************************************************************************/
 /* Module:  Tia_sound_init()                                                 */
@@ -160,7 +162,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
    /* fill the 9bit polynomial with random bits */
    for (n=0; n<POLY9_SIZE; n++)
    {
-      Bit9[n] = rand() & 0x01;       /* fill poly9 with random bits */
+      Bit9[n] = ((rand() & 0x01) ? 0xFF:0x00);       /* fill poly9 with random bits */
    }
 
    /* calculate the sample 'divide by N' value based on the playback freq. */
@@ -180,8 +182,8 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
       P5[chan] = 0;
       P9[chan] = 0;
    }
-
-   volume = 100;
+    
+   psound_buffer = (uint8*)sound_buffer;
 }
 
 /*****************************************************************************/
@@ -201,87 +203,44 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 /*                                                                           */
 /*****************************************************************************/
 
-void Update_tia_sound (uint16 addr, uint8 val)
+void Update_tia_sound (uint8 chan)
 {
     uint16 new_val;
-    uint8 chan;
+    
+   /* an AUDC value of 0 is a special case */
+   if (AUDC[chan] == SET_TO_1)
+   {
+      /* indicate the clock is zero so no processing will occur */
+      new_val = 0;
 
-    /* determine which address was changed */
-    switch (addr)
-    {
-       case AUDC0:
-          AUDC[0] = val & 0x0f;
-          chan = 0;
-          break;
+      /* and set the output to the selected volume */
+      Outvol[chan] = AUDV[chan];
+   }
+   else
+   {
+      /* otherwise calculate the 'divide by N' value */
+      new_val = AUDF[chan] + 1;
 
-       case AUDC1:
-          AUDC[1] = val & 0x0f;
-          chan = 1;
-          break;
+      /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
+      if ((AUDC[chan] & DIV3_MASK) == DIV3_MASK)
+      {
+         new_val *= 3;
+      }
+   }
 
-       case AUDF0:
-          AUDF[0] = val & 0x1f;
-          chan = 0;
-          break;
+   /* only reset those channels that have changed */
+   if (new_val != Div_n_max[chan])
+   {
+      /* reset the divide by n counters */
+      Div_n_max[chan] = new_val;
 
-       case AUDF1:
-          AUDF[1] = val & 0x1f;
-          chan = 1;
-          break;
-
-       case AUDV0:
-          AUDV[0] = (val & 0x0f) << 3;
-          chan = 0;
-          break;
-
-       case AUDV1:
-          AUDV[1] = (val & 0x0f) << 3;
-          chan = 1;
-          break;
-
-       default:
-          chan = 255;
-          break;
-    }
-
-    /* if the output value changed */
-    if (chan != 255)
-    {
-       /* an AUDC value of 0 is a special case */
-       if (AUDC[chan] == SET_TO_1)
-       {
-          /* indicate the clock is zero so no processing will occur */
-          new_val = 0;
-
-          /* and set the output to the selected volume */
-          Outvol[chan] = AUDV[chan];
-       }
-       else
-       {
-          /* otherwise calculate the 'divide by N' value */
-          new_val = AUDF[chan] + 1;
-
-          /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
-          if ((AUDC[chan] & DIV3_MASK) == DIV3_MASK)
-          {
-             new_val *= 3;
-          }
-       }
-
-       /* only reset those channels that have changed */
-       if (new_val != Div_n_max[chan])
-       {
-          /* reset the divide by n counters */
-          Div_n_max[chan] = new_val;
-
-          /* if the channel is now volume only or was volume only */
-          if ((Div_n_cnt[chan] == 0) || (new_val == 0))
-          {
-             /* reset the counter (otherwise let it complete the previous) */
-             Div_n_cnt[chan] = new_val;
-          }
-       }
-    }
+      /* if the channel is now volume only or was volume only */
+      if ((Div_n_cnt[chan] == 0) || (new_val == 0))
+      {
+         /* reset the counter (otherwise let it complete the previous) */
+         Div_n_cnt[chan] = new_val;
+      }
+   }
 }
 
 /*****************************************************************************/
@@ -299,158 +258,90 @@ void Update_tia_sound (uint16 addr, uint8 val)
 /* Outputs: the buffer will be filled with n bytes of audio - no return val  */
 /*                                                                           */
 /*****************************************************************************/
-uint8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
-uint8* psound_buffer __attribute__((section(".dtcm")));
-
 void Tia_process (void)
 {
-    register uint8 n=1;
-	register uint8 audc0,audv0,audc1,audv1;
-    register uint8 div_n_cnt0,div_n_cnt1;
-    register uint8 p5_0, p5_1,outvol_0,outvol_1;
-    
-    psound_buffer++;
-    if (psound_buffer>=&sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-
-    audc0 = AUDC[0];
-    audv0 = AUDV[0];
-    audc1 = AUDC[1];
-    audv1 = AUDV[1];
-
-    /* make temporary local copy */
-    p5_0 = P5[0];
-    p5_1 = P5[1];
-    outvol_0 = Outvol[0];
-    outvol_1 = Outvol[1];
-    div_n_cnt0 = Div_n_cnt[0];
-    div_n_cnt1 = Div_n_cnt[1];
+    if (++psound_buffer >= &sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
 
     /* loop until the buffer is filled */
-    while (n)
+    while (1)
     {
        /* Process channel 0 */
-       if (div_n_cnt0 > 1)
+       if (Div_n_cnt[0] > 1)
        {
-          div_n_cnt0--;
+          Div_n_cnt[0]--;
        }
-       else if (div_n_cnt0 == 1)
+       else if (Div_n_cnt[0] == 1)
        {
-          div_n_cnt0 = Div_n_max[0];
+          Div_n_cnt[0] = Div_n_max[0];
 
-          /* the P5 counter has multiple uses, so we inc it here */
-          p5_0++;
-          if (p5_0 == POLY5_SIZE)
-             p5_0 = 0;
-
+          if (++P5[0] == POLY5_SIZE) P5[0] = 0;
+           
           /* check clock modifier for clock tick */
-          if  (((audc0 & 0x02) == 0) ||
-              (((audc0 & 0x01) == 0) && Div31[p5_0]) ||
-              (((audc0 & 0x01) == 1) &&  Bit5[p5_0]))
+          if  ( ((AUDC[0] & 0x02) == 0) ||
+                (((AUDC[0] & 0x01) == 0) && Div31[P5[0]]) ||
+                (((AUDC[0] & Bit5[P5[0]]))) )
           {
-             if (audc0 & 0x04)       /* pure modified clock selected */
+             if (AUDC[0] & 0x04)       /* pure modified clock selected */
              {
-                if (outvol_0)        /* if the output was set */
-                   outvol_0 = 0;     /* turn it off */
-                else
-                   outvol_0 = audv0; /* else turn it on */
+                 Outvol[0] = (Outvol[0] ? 0:AUDV[0]);  // Toggle outvol
              }
-             else if (audc0 & 0x08)    /* check for p5/p9 */
+             else if (AUDC[0] & 0x08)
              {
-                if (audc0 == POLY9)    /* check for poly9 */
-                {
-                   /* inc the poly9 counter */
-                   P9[0]++;
-                   if (P9[0] == POLY9_SIZE)
-                      P9[0] = 0;
-
-                   if (Bit9[P9[0]])
-                      outvol_0 = audv0;
-                   else
-                      outvol_0 = 0;
-                }
-                else                        /* must be poly5 */
-                {
-                   if (Bit5[p5_0])
-                      outvol_0 = audv0;
-                   else
-                      outvol_0 = 0;
-                }
+                 if (AUDC[0] == POLY9)    /* check for poly9 */
+                 {
+                    if (++P9[0] == POLY9_SIZE) P9[0]=0;
+                    Outvol[0] = Bit9[P9[0]] & AUDV[0];
+                 }
+                 else // Must be poly5
+                 {
+                    Outvol[0] = (Bit5a[P5[0]] & AUDV[0]);
+                 }
              }
              else  /* poly4 is the only remaining option */
              {
-                /* inc the poly4 counter */
-                P4[0]++;
-                if (P4[0] == POLY4_SIZE)
-                   P4[0] = 0;
-
-                if (Bit4[P4[0]])
-                   outvol_0 = audv0;
-                else
-                   outvol_0 = 0;
+                if (++P4[0] == POLY4_SIZE) P4[0] = 0;
+                Outvol[0] = (Bit4[P4[0]] & AUDV[0]);
              }
           }
        }
 
 
        /* Process channel 1 */
-       if (div_n_cnt1 > 1)
+       if (Div_n_cnt[1] > 1)
        {
-          div_n_cnt1--;
+          Div_n_cnt[1]--;
        }
-       else if (div_n_cnt1 == 1)
+       else if (Div_n_cnt[1] == 1)
        {
-          div_n_cnt1 = Div_n_max[1];
+          Div_n_cnt[1] = Div_n_max[1];
 
-          /* the P5 counter has multiple uses, so we inc it here */
-          p5_1++;
-          if (p5_1 == POLY5_SIZE)
-             p5_1 = 0;
-
+          if (++P5[1] == POLY5_SIZE) P5[1] = 0;
+           
           /* check clock modifier for clock tick */
-          if  (((audc1 & 0x02) == 0) ||
-              (((audc1 & 0x01) == 0) && Div31[p5_1]) ||
-              (((audc1 & 0x01) == 1) &&  Bit5[p5_1]))
+          if  ( ((AUDC[1] & 0x02) == 0) ||
+                (((AUDC[1] & 0x01) == 0) && Div31[P5[1]]) ||
+                (((AUDC[1] & Bit5[P5[1]]))) )
           {
-             if (audc1 & 0x04)       /* pure modified clock selected */
+             if (AUDC[1] & 0x04)       /* pure modified clock selected */
              {
-                if (outvol_1)        /* if the output was set */
-                   outvol_1 = 0;     /* turn it off */
-                else
-                   outvol_1 = audv1; /* else turn it on */
+                 Outvol[1] = (Outvol[1] ? 0:AUDV[1]);  // Toggle outvol
              }
-             else if (audc1 & 0x08)    /* check for p5/p9 */
+             else if (AUDC[1] & 0x08)
              {
-                if (audc1 == POLY9)    /* check for poly9 */
-                {
-                   /* inc the poly9 counter */
-                   P9[1]++;
-                   if (P9[1] == POLY9_SIZE)
-                      P9[1] = 0;
-
-                   if (Bit9[P9[1]])
-                      outvol_1 = audv1;
-                   else
-                      outvol_1 = 0;
-                }
-                else                        /* must be poly5 */
-                {
-                   if (Bit5[p5_1])
-                      outvol_1 = audv1;
-                   else
-                      outvol_1 = 0;
-                }
+                 if (AUDC[1] == POLY9)    /* check for poly9 */
+                 {
+                    if (++P9[1] == POLY9_SIZE) P9[1]=0;
+                    Outvol[1] = Bit9[P9[1]] & AUDV[1];
+                 }
+                 else // Must be poly5
+                 {
+                    Outvol[1] = (Bit5a[P5[1]] & AUDV[1]);
+                 }
              }
              else  /* poly4 is the only remaining option */
              {
-                /* inc the poly4 counter */
-                P4[1]++;
-                if (P4[1] == POLY4_SIZE)
-                   P4[1] = 0;
-
-                if (Bit4[P4[1]])
-                   outvol_1 = audv1;
-                else
-                   outvol_1 = 0;
+                if (++P4[1] == POLY4_SIZE) P4[1] = 0;
+                Outvol[1] = (Bit4[P4[1]] & AUDV[1]);
              }
           }
        }
@@ -468,20 +359,10 @@ void Tia_process (void)
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-           extern uint8* psound_buffer;
-          *(psound_buffer) = ((uint8) ( (uint32)outvol_0 + (uint32) outvol_1))/2 +128;
-          /* and indicate one less byte to process */
-          n--;
+          *(psound_buffer) = ((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1;
+          /* and done! */
+          break;
        }
     }
-
-    /* save for next round */
-    P5[0] = p5_0;
-    P5[1] = p5_1;
-    Outvol[0] = outvol_0;
-    Outvol[1] = outvol_1;
-    Div_n_cnt[0] = div_n_cnt0;
-    Div_n_cnt[1] = div_n_cnt1;
 }
-
 

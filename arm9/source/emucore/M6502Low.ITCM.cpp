@@ -42,6 +42,7 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
+    //asm(".rept 15 ; nop ; .endr");
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -265,6 +266,7 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;  
+    
   if (address & 0xF000)
   {
       uInt16 addr = address & 0x0FFF; // Map down to 4k...
