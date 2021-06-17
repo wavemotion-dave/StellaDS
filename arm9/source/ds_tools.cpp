@@ -1,4 +1,3 @@
-
 // =====================================================================================================
 // Stella DSi - Improved Version by Dave Bernazzani (wavemotion)
 //
@@ -21,6 +20,7 @@
 #include "bgPaddles.h"
 #include "bgKeypad.h"
 #include "bgInfo.h"
+#include "bgInstructions.h"
 
 #include "clickNoQuit_wav.h"
 #include "clickQuit_wav.h"
@@ -34,8 +34,10 @@
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"
 #include "Cart.hxx"
+#include "highscore.h"
+#include "instructions.h"
 
-#define VERSION "2.7"
+#define VERSION "2.9"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -43,9 +45,9 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 64
+#define MAX_DEBUG 6
 Int32 debug[MAX_DEBUG]={0};
-//#define DEBUG_DUMP
+int DEBUG_DUMP = 0;
 char my_filename[128];
 
 FICA2600 vcsromlist[1024];
@@ -73,44 +75,45 @@ int gTotalAtariFrames=0;
 
 static void DumpDebugData(void)
 {
-#ifdef DEBUG_DUMP
-    char dbgbuf[32];
-    for (int i=0; i<MAX_DEBUG; i++)
-    {
-        int idx=0;
-        int val = debug[i];
-        dbgbuf[idx++] = '0' + (i / 10);
-        dbgbuf[idx++] = '0' + (i % 10);
-        dbgbuf[idx++] = ':';
-        if (val < 0)
+    if (DEBUG_DUMP)
+    {        
+        char dbgbuf[32];
+        for (int i=0; i<MAX_DEBUG; i++)
         {
-            dbgbuf[idx++] = '-';
-            val = -val;
+            int idx=0;
+            int val = debug[i];
+            dbgbuf[idx++] = '0' + (i / 10);
+            dbgbuf[idx++] = '0' + (i % 10);
+            dbgbuf[idx++] = ':';
+            if (val < 0)
+            {
+                dbgbuf[idx++] = '-';
+                val = -val;
+            }
+            else
+            {
+                dbgbuf[idx++] = '0' + (int)val/1000000;
+            }
+            val = val % 1000000;
+            dbgbuf[idx++] = '0' + (int)val/100000;
+            val = val % 100000;
+            dbgbuf[idx++] = '0' + (int)val/10000;
+            val = val % 10000;
+            dbgbuf[idx++] = '0' + (int)val/1000;
+            val= val % 1000;
+            dbgbuf[idx++] = '0' + (int)val/100;
+            val = val % 100;
+            dbgbuf[idx++] = '0' + (int)val/10;
+            dbgbuf[idx++] = '0' + (int)val%10;
+            dbgbuf[idx++] = 0;
+
+            if (i > 42)
+                dsPrintValue(22,2+(i-43),0, dbgbuf);
+            else if (i > 21)
+                dsPrintValue(11,2+(i-22),0, dbgbuf);
+            else dsPrintValue(0,2+i,0, dbgbuf);
         }
-        else
-        {
-            dbgbuf[idx++] = '0' + (int)val/1000000;
-        }
-        val = val % 1000000;
-        dbgbuf[idx++] = '0' + (int)val/100000;
-        val = val % 100000;
-        dbgbuf[idx++] = '0' + (int)val/10000;
-        val = val % 10000;
-        dbgbuf[idx++] = '0' + (int)val/1000;
-        val= val % 1000;
-        dbgbuf[idx++] = '0' + (int)val/100;
-        val = val % 100;
-        dbgbuf[idx++] = '0' + (int)val/10;
-        dbgbuf[idx++] = '0' + (int)val%10;
-        dbgbuf[idx++] = 0;
-        
-        if (i > 42)
-            dsPrintValue(22,2+(i-43),0, dbgbuf);
-        else if (i > 21)
-            dsPrintValue(11,2+(i-22),0, dbgbuf);
-        else dsPrintValue(0,2+i,0, dbgbuf);
     }
-#endif
 }
 
 
@@ -162,9 +165,9 @@ void vblankIntr()
         REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
         REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
         bScreenRefresh = 0;
-        //debug[0] = myCartInfo.screenScale;
-        //debug[1] = myCartInfo.xOffset;
-        //debug[2] = myCartInfo.yOffset;
+        debug[0] = myCartInfo.screenScale;
+        debug[1] = myCartInfo.xOffset;
+        debug[2] = myCartInfo.yOffset;
     }
 }
 
@@ -208,14 +211,15 @@ ITCM_CODE void dsWarnIncompatibileCart(void)
 
 ITCM_CODE void dsPrintCartType(char * type)
 {
-#ifdef DEBUG_DUMP    
-    dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
-#endif    
+    if (DEBUG_DUMP)
+    {
+        dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
+    }
 }
 
 ITCM_CODE void dsWriteTweaks(void)
 {
-#ifdef DEBUG_DUMP
+#ifdef WRITE_TWEAKS
     FILE *fp;
     dsPrintValue(22,0,0, (char*)"CFG");
     fp = fopen("../StellaDS.txt", "a+");
@@ -255,6 +259,7 @@ void dsShowScreenInfo(void)
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
   swiWaitForVBlank();
 }
+
 
 void dsShowScreenPaddles(void) 
 {
@@ -751,6 +756,15 @@ unsigned int dsWaitForRom(void)
         else
         {
             bUseAlternatePalette = 0;
+        }
+       
+        if (keysCurrent() & KEY_X)
+        {
+            DEBUG_DUMP = 1;
+        }
+        else
+        {
+            DEBUG_DUMP = 0;   
         }
       }
       else
@@ -1350,7 +1364,7 @@ ITCM_CODE void dsMainLoop(void)
                     if (bShowInfo == false)
                     {
                         bShowInfo = true;
-                        info_dampen = 7;
+                        info_dampen = 15;
                         dsShowScreenInfo();
                     }
                     else
@@ -1382,6 +1396,31 @@ ITCM_CODE void dsMainLoop(void)
                     else
                     {
                         bShowKeyboard = false;
+                        dsShowScreenMain(false);
+                    }
+                }
+                else if ((iTx>140) && (iTx<160) && (iTy>150) && (iTy<200)) 
+                { // High Score!
+                    irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
+                    
+                    highscore_display();
+                    
+                    if (bSoundEnabled)
+                    {
+                        irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+                    }
+                }
+                else if ((iTx>170) && (iTx<200) && (iTy>150) && (iTy<200)) 
+                { // Instruction Manual!
+                    if (bShowInfo == false)
+                    {
+                        bShowInfo = true;
+                        info_dampen = 15;
+                        dsShowScreenInstructions();
+                    }
+                    else
+                    {
+                        bShowInfo = false;
                         dsShowScreenMain(false);
                     }
                 }

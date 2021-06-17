@@ -4,6 +4,7 @@
 
 #include "intro.h"
 #include "ds_tools.h"
+#include "highscore.h"
 
 #include "clickNoQuit_wav.h"
 #include "clickQuit_wav.h"
@@ -13,13 +14,16 @@ int main(int argc, char **argv) {
   consoleDemoInit();
   soundEnable();
   lcdMainOnTop();
-
+    
   // Init Fat
 	if (!fatInitDefault()) {
 		iprintf("Unable to initialize libfat!\n");
 		return -1;
 	}
 
+  // Init high score (must be done after FAT init)
+  highscore_init();
+    
   // Init Timer
 	dsInitTimer();
   dsInstallSoundEmuFIFO();
