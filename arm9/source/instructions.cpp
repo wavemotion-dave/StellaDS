@@ -96,6 +96,44 @@ const struct instructions_t instructions[] =
                                           "Alien Mothership is worth 200\n"
     },
     
+    {"c5930d0e8cdae3e037349bfa08e871be",  "YARS' REVENGE (c)1982 Atari\n"
+                                          " \n"
+                                          "Game 0:  Easy - Slow Destroyer\n"
+                                          "Game 2:  Normal Game\n"
+                                          "Game 4:  Hard - Cannon Bounce\n"
+                                          "Game 6:  Ultimate Yars!\n"
+                                          " \n"
+                                          "L-Diff:  A=Faster Swirls\n"
+                                          " \n"  
+                                          "SCORING:\n"
+                                          "Cell hit by Missile          69\n"
+                                          "Cell devoured by Yar         69\n"
+                                          "Qotile destroyed           1000\n"
+                                          "Swirl destroyed in place   2000\n"
+                                          "Swirl destroyed in mid-air 6000\n"
+                                          " \n"            
+                                          "AT 70,000 Swirl Triples in Freq\n"            
+                                          "AT 150,000 Swirl Heat Seaking\n"
+    },
+    
+    {"7dcbfd2acc013e817f011309c7504daa",  "PHASER PATROL (c)1982 STARPATH\n"
+                                          " \n"
+                                          "L-Diff: A=Sector Map, B=Combat\n"
+                                          "R-Diff: A=Harder Game\n"
+                                          "Color:  Shields ON/OFF\n"
+                                          " \n"  
+                                          "Destroy the Dracon Armada!\n"
+                                          "Use Sector Map to find enemy.\n"            
+                                          "Find Starbase for Repair\n"  
+                                          " \n"  
+                                          "DAMAGE COLOR PER SYSTEM:\n"  
+                                          "Green:  Fully Operational\n"  
+                                          "Yellow: System Damaged\n"  
+                                          "Red:    System Destroyed\n"  
+                                          " \n"  
+                                          "RANKS: HERO,ACE,PILOT,GREENHORN\n"  
+    },
+
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
 
