@@ -21,15 +21,16 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 
-  // Init high score (must be done after FAT init)
-  highscore_init();
-    
   // Init Timer
-	dsInitTimer();
+  dsInitTimer();
   dsInstallSoundEmuFIFO();
 
   // Intro and main screen
   intro_logo();
+    
+// Init high score (must be done after FAT init)
+  highscore_init();
+      
   dsInitScreenMain();
   if (argc > 1) {
     dsShowScreenMain(true);

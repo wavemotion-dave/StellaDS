@@ -12,6 +12,8 @@
 
 #define MAX_HS_GAMES 715
 
+#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
+
 struct score_t 
 {
     char    initials[4];
@@ -91,7 +93,7 @@ void highscore_save(void)
 }
 
 struct score_t score_entry;
-char zzz[33];
+char hs_line[33];
 char md5[33];
 
 void show_scores(short foundIdx)
@@ -99,8 +101,8 @@ void show_scores(short foundIdx)
     dsPrintValue(7,3,0, (char*)"** HIGH SCORES **");
     for (int i=0; i<10; i++)
     {
-        sprintf(zzz, "%04d-%02d-%02d   %-3s   %-6s", highscore_table[foundIdx].scores[i].year, highscore_table[foundIdx].scores[i].month,highscore_table[foundIdx].scores[i].day, highscore_table[foundIdx].scores[i].initials, highscore_table[foundIdx].scores[i].score);
-        dsPrintValue(3,6+i, 0, zzz);
+        sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s", highscore_table[foundIdx].scores[i].year, highscore_table[foundIdx].scores[i].month,highscore_table[foundIdx].scores[i].day, highscore_table[foundIdx].scores[i].initials, highscore_table[foundIdx].scores[i].score);
+        dsPrintValue(3,6+i, 0, hs_line);
     }
     dsPrintValue(3,20,0, (char*)"PRESS X FOR NEW HI SCORE     ");
     dsPrintValue(3,21,0, (char*)"PRESS B TO EXIT              ");
@@ -256,15 +258,15 @@ void highscore_display(void)
                     dampen--;
                 }
 
-                sprintf(zzz, "%04d-%02d-%02d   %-3s   %-6s", score_entry.year, score_entry.month, score_entry.day, score_entry.initials, score_entry.score);
+                sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s", score_entry.year, score_entry.month, score_entry.day, score_entry.initials, score_entry.score);
                 if ((++blink % 60) > 30)
                 {
                     if (entry_idx < 3)
-                        zzz[13+entry_idx] = '_';
+                        hs_line[13+entry_idx] = '_';
                     else
-                        zzz[16+entry_idx] = '_';
+                        hs_line[16+entry_idx] = '_';
                 }
-                dsPrintValue(3,17, 0, (char*)zzz);
+                dsPrintValue(3,17, 0, (char*)hs_line);
             }
             
             show_scores(foundIdx);
@@ -279,7 +281,10 @@ void highscore_display(void)
     dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
     dmaVal = *(bgGetMapPtr(bg1b) +31*32);
     dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-    
+    for (int i=0; i<12; i++)
+    {
+        WAITVBL;
+    }
 }
 
 
