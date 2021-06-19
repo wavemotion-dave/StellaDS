@@ -275,16 +275,6 @@ void highscore_display(void)
             entry_idx=0;
         }
     }    
-    
-    decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-    decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-    dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
-    dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-    dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-    for (int i=0; i<12; i++)
-    {
-        WAITVBL;
-    }
 }
 
 

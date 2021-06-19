@@ -45,9 +45,9 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
-#define MAX_DEBUG 6
+#define MAX_DEBUG 5
 Int32 debug[MAX_DEBUG]={0};
-int DEBUG_DUMP = 0;
+char DEBUG_DUMP = 0;
 char my_filename[128];
 
 FICA2600 vcsromlist[1024];
@@ -70,6 +70,9 @@ bool fpsDisplay = false;
 static int bSoundEnabled = 1;
 static int full_speed=0;
 int gTotalAtariFrames=0;
+
+unsigned short int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, left_difficulty=0, right_difficulty=0,romSel;
+
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
@@ -147,12 +150,9 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
   }
 }
 
-ITCM_CODE void ShowStatusLine(void)
+inline void ShowStatusLine(void)
 {
-    if (full_speed)
-     dsPrintValue(30,0,0, (char *)"FS");
-    else
-     dsPrintValue(30,0,0, (char *)"  ");
+    dsPrintValue(30,0,0, (full_speed ? (char *)"FS" : (char *)"  "));
 }
 
 
@@ -248,6 +248,7 @@ void dsShowScreenEmu(void)
   REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
   REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
   REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
+  swiWaitForVBlank();
 }
 
 void dsShowScreenInfo(void) 
@@ -279,220 +280,6 @@ void dsShowScreenKeypad(void)
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
   swiWaitForVBlank();
-}
-
-void dsShowScreenMain(bool bFull) 
-{
-  // Init BG mode for 16 bits colors
-  if (bFull)
-  {
-      videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE );
-      videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE);
-      vramSetBankA(VRAM_A_MAIN_BG); vramSetBankC(VRAM_C_SUB_BG);
-      bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
-      bg0b = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
-      bg1b = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 30,0);
-      bgSetPriority(bg0b,1);bgSetPriority(bg1b,0);
-
-      decompress(bgTopTiles, bgGetGfxPtr(bg0), LZ77Vram);
-      decompress(bgTopMap, (void*) bgGetMapPtr(bg0), LZ77Vram);
-      dmaCopy((void *) bgTopPal,(u16*) BG_PALETTE,256*2);
-  }
-
-  decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
-  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-
-  REG_BLDCNT=0; REG_BLDCNT_SUB=0; REG_BLDY=0; REG_BLDY_SUB=0;
-
-  swiWaitForVBlank();
-}
-
-
-void dsFreeEmu(void) 
-{
-  // Stop timer of sound
-  TIMER2_CR=0; irqDisable(IRQ_TIMER2);
-
-  if (theConsole)
-    delete theConsole;
-  if (theSDLSnd)
-    delete theSDLSnd;
-}
-
-bool dsLoadGame(char *filename) 
-{
-  unsigned int buffer_size=0;
-  strcpy(my_filename, filename);
-    
-  // Load the file
-  FILE *romfile = fopen(filename, "r");
-  if (romfile != NULL)
-  {
-    // Free buffer if needed
-    TIMER2_CR=0; irqDisable(IRQ_TIMER2);
-
-    if (theConsole)
-      delete theConsole;
-    if (theSDLSnd)
-      delete theSDLSnd;
-
-    theSDLSnd = new SoundSDL(512);
-    theSDLSnd->setVolume(100);
-
-    fseek(romfile, 0, SEEK_END);
-    buffer_size = ftell(romfile);
-    if (buffer_size < MAX_FILE_SIZE)
-    {
-        rewind(romfile);
-        fread(filebuffer, buffer_size, 1, romfile);
-        fclose(romfile);
-
-        // Init the emulation
-        theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
-        dsInitPalette();
-
-        // The sound in Pitfall2 doesn't work right anyway - get the speed by turning it off...
-        if (myCartInfo.special == SPEC_PITFALL2)
-        {
-            bSoundEnabled = false;
-        }
-
-        psound_buffer=sound_buffer;
-        memset(sound_buffer, 0x00, SOUND_SIZE);
-        TIMER2_DATA = TIMER_FREQ(22050);
-        TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
-        irqSet(IRQ_TIMER2, Tia_process);
-        if (bSoundEnabled)
-        {
-            irqEnable(IRQ_TIMER2);
-            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
-        }
-        else
-        {
-            irqDisable(IRQ_TIMER2);
-            fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
-        }
-
-        theConsole->fakePaddleResistance = 450000;
-        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
-        
-        TIMER0_CR=0;
-        TIMER0_DATA=0;
-        TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
-        atari_frames=0;
-        memset(debug, 0x00, sizeof(debug));
-        
-        return true;
-    }
-    else return false;
-  }
-  return false;
-}
-
-unsigned int dsReadPad(void)
-{
-    unsigned int keys_pressed, ret_keys_pressed;
-
-    do {
-        keys_pressed = keysCurrent();
-    } while ((keys_pressed & (KEY_LEFT | KEY_RIGHT | KEY_DOWN | KEY_UP | KEY_A | KEY_B | KEY_L | KEY_R))==0);
-    ret_keys_pressed = keys_pressed;
-
-    do {
-        keys_pressed = keysCurrent();
-    } while ((keys_pressed & (KEY_LEFT | KEY_RIGHT | KEY_DOWN | KEY_UP | KEY_A | KEY_B | KEY_L | KEY_R))!=0);
-
-    return ret_keys_pressed;
-}
-
-bool dsWaitOnQuit(void)
-{
-  bool bRet=false, bDone=false;
-  unsigned int keys_pressed;
-  unsigned int posdeb=0;
-  char szName[32];
-
-  decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgFileSelPal,(u16*) BG_PALETTE_SUB,256*2);
-  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-
-  strcpy(szName,"Quit StellaDS ?");
-  dsPrintValue(16-strlen(szName)/2,2,0,szName);
-  sprintf(szName,"%s","A TO CONFIRM, B TO GO BACK");
-  dsPrintValue(16-strlen(szName)/2,23,0,szName);
-
-  while(!bDone)
-  {
-    strcpy(szName,"          YES          ");
-    dsPrintValue(5,10+0,(posdeb == 0 ? 1 :  0),szName);
-    strcpy(szName,"          NO           ");
-    dsPrintValue(5,14+1,(posdeb == 2 ? 1 :  0),szName);
-    swiWaitForVBlank();
-
-    // Check pad
-    keys_pressed=dsReadPad();
-    if (keys_pressed & KEY_UP) {
-      if (posdeb) posdeb-=2;
-    }
-    if (keys_pressed & KEY_DOWN) {
-      if (posdeb<1) posdeb+=2;
-    }
-    if (keys_pressed & KEY_A) {
-      bRet = (posdeb ? false : true);
-      bDone = true;
-    }
-    if (keys_pressed & KEY_B) {
-      bDone = true;
-    }
-  }
-
-  decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
-  dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-
-  return bRet;
-}
-
-void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
-{
-  unsigned int ucBcl,ucGame;
-  char szName[256];
-  char szName2[256];
-
-  // Display all games if possible
-  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) (bgGetMapPtr(bg1b)),32*24*2);
-  sprintf(szName,"%04d/%04d GAMES",(int)(1+ucSel+NoDebGame),countvcs);
-  dsPrintValue(16-strlen(szName)/2,2,0,szName);
-  dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
-  dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
-  sprintf(szName,"%s [%s]","A=CHOOSE, Y=PAL, B=GO BACK", VERSION);
-  dsPrintValue(16-strlen(szName)/2,23,0,szName);
-  for (ucBcl=0;ucBcl<17; ucBcl++) {
-    ucGame= ucBcl+NoDebGame;
-    if (ucGame < countvcs)
-    {
-      strcpy(szName,vcsromlist[ucGame].filename);
-      szName[29]='\0';
-      if (vcsromlist[ucGame].directory)
-      {
-        sprintf(szName,"[%s]",vcsromlist[ucGame].filename);
-        sprintf(szName2,"%-29s",szName);
-        dsPrintValue(0,5+ucBcl,(ucSel == ucBcl ? 1 :  0),szName2);
-      }
-      else
-      {
-        dsPrintValue(1,5+ucBcl,(ucSel == ucBcl ? 1 : 0),szName);
-      }
-    }
-  }
 }
 
 void dsDisplayButton(unsigned char button)
@@ -610,7 +397,227 @@ void dsDisplayButton(unsigned char button)
       }
       break;          
   }
+  swiWaitForVBlank();
 }
+
+void dsShowScreenMain(bool bFull) 
+{
+  // Init BG mode for 16 bits colors
+  if (bFull)
+  {
+      videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE );
+      videoSetModeSub(MODE_0_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG1_ACTIVE);
+      vramSetBankA(VRAM_A_MAIN_BG); vramSetBankC(VRAM_C_SUB_BG);
+      bg0 = bgInit(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
+      bg0b = bgInitSub(0, BgType_Text8bpp, BgSize_T_256x256, 31,0);
+      bg1b = bgInitSub(1, BgType_Text8bpp, BgSize_T_256x256, 30,0);
+      bgSetPriority(bg0b,1);bgSetPriority(bg1b,0);
+
+      decompress(bgTopTiles, bgGetGfxPtr(bg0), LZ77Vram);
+      decompress(bgTopMap, (void*) bgGetMapPtr(bg0), LZ77Vram);
+      dmaCopy((void *) bgTopPal,(u16*) BG_PALETTE,256*2);
+  }
+
+  decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+  decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+  dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+
+  REG_BLDCNT=0; REG_BLDCNT_SUB=0; REG_BLDY=0; REG_BLDY_SUB=0;
+    
+  dsDisplayButton(3-console_color);
+  dsDisplayButton(10+left_difficulty);
+  dsDisplayButton(12+right_difficulty);
+  dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
+  dsDisplayButton(16+bSoundEnabled);
+  ShowStatusLine();    
+
+  swiWaitForVBlank();
+}
+
+
+void dsFreeEmu(void) 
+{
+  // Stop timer of sound
+  TIMER2_CR=0; irqDisable(IRQ_TIMER2);
+
+  if (theConsole)
+    delete theConsole;
+  if (theSDLSnd)
+    delete theSDLSnd;
+}
+
+bool dsLoadGame(char *filename) 
+{
+  unsigned int buffer_size=0;
+  strcpy(my_filename, filename);
+    
+  // Load the file
+  FILE *romfile = fopen(filename, "r");
+  if (romfile != NULL)
+  {
+    // Free buffer if needed
+    TIMER2_CR=0; irqDisable(IRQ_TIMER2);
+
+    if (theConsole)
+      delete theConsole;
+    if (theSDLSnd)
+      delete theSDLSnd;
+
+    theSDLSnd = new SoundSDL(512);
+    theSDLSnd->setVolume(100);
+
+    fseek(romfile, 0, SEEK_END);
+    buffer_size = ftell(romfile);
+    if (buffer_size < MAX_FILE_SIZE)
+    {
+        rewind(romfile);
+        fread(filebuffer, buffer_size, 1, romfile);
+        fclose(romfile);
+
+        // Init the emulation
+        theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
+        dsInitPalette();
+
+        // The sound in Pitfall2 doesn't work right anyway - get the speed by turning it off...
+        if (myCartInfo.special == SPEC_PITFALL2)
+        {
+            bSoundEnabled = false;
+        }
+
+        psound_buffer=sound_buffer;
+        memset(sound_buffer, 0x00, SOUND_SIZE);
+        TIMER2_DATA = TIMER_FREQ(22050);
+        TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
+        irqSet(IRQ_TIMER2, Tia_process);
+        if (bSoundEnabled)
+        {
+            irqEnable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+        }
+        else
+        {
+            irqDisable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
+        }
+
+        theConsole->fakePaddleResistance = 450000;
+        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+        
+        TIMER0_CR=0;
+        TIMER0_DATA=0;
+        TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
+        atari_frames=0;
+        memset(debug, 0x00, sizeof(debug));
+        
+        return true;
+    }
+    else return false;
+  }
+  return false;
+}
+
+unsigned int dsReadPad(void)
+{
+    unsigned int keys_pressed, ret_keys_pressed;
+
+    do {
+        keys_pressed = keysCurrent();
+    } while ((keys_pressed & (KEY_LEFT | KEY_RIGHT | KEY_DOWN | KEY_UP | KEY_A | KEY_B | KEY_L | KEY_R))==0);
+    ret_keys_pressed = keys_pressed;
+
+    do {
+        keys_pressed = keysCurrent();
+    } while ((keys_pressed & (KEY_LEFT | KEY_RIGHT | KEY_DOWN | KEY_UP | KEY_A | KEY_B | KEY_L | KEY_R))!=0);
+
+    return ret_keys_pressed;
+}
+
+bool dsWaitOnQuit(void)
+{
+  bool bRet=false, bDone=false;
+  unsigned int keys_pressed;
+  unsigned int posdeb=0;
+  char szName[32];
+
+  decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+  decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+  dmaCopy((void *) bgFileSelPal,(u16*) BG_PALETTE_SUB,256*2);
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+
+  strcpy(szName,"Quit StellaDS?");
+  dsPrintValue(16-strlen(szName)/2,2,0,szName);
+  sprintf(szName,"%s","A TO CONFIRM, B TO GO BACK");
+  dsPrintValue(16-strlen(szName)/2,23,0,szName);
+
+  while(!bDone)
+  {
+    strcpy(szName,"          YES          ");
+    dsPrintValue(5,10+0,(posdeb == 0 ? 1 :  0),szName);
+    strcpy(szName,"          NO           ");
+    dsPrintValue(5,14+1,(posdeb == 2 ? 1 :  0),szName);
+    swiWaitForVBlank();
+
+    // Check pad
+    keys_pressed=dsReadPad();
+    if (keys_pressed & KEY_UP) {
+      if (posdeb) posdeb-=2;
+    }
+    if (keys_pressed & KEY_DOWN) {
+      if (posdeb<1) posdeb+=2;
+    }
+    if (keys_pressed & KEY_A) {
+      bRet = (posdeb ? false : true);
+      bDone = true;
+    }
+    if (keys_pressed & KEY_B) {
+      bDone = true;
+    }
+  }
+    
+  dsShowScreenMain(false);
+
+  return bRet;
+}
+
+void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
+{
+  unsigned int ucBcl,ucGame;
+  char szName[256];
+  char szName2[256];
+
+  // Display all games if possible
+  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
+  dmaFillWords(dmaVal | (dmaVal<<16),(void*) (bgGetMapPtr(bg1b)),32*24*2);
+  sprintf(szName,"%04d/%04d GAMES",(int)(1+ucSel+NoDebGame),countvcs);
+  dsPrintValue(16-strlen(szName)/2,2,0,szName);
+  dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
+  dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
+  sprintf(szName,"%s [%s]","A=CHOOSE, Y=PAL, B=GO BACK", VERSION);
+  dsPrintValue(16-strlen(szName)/2,23,0,szName);
+  for (ucBcl=0;ucBcl<17; ucBcl++) {
+    ucGame= ucBcl+NoDebGame;
+    if (ucGame < countvcs)
+    {
+      strcpy(szName,vcsromlist[ucGame].filename);
+      szName[29]='\0';
+      if (vcsromlist[ucGame].directory)
+      {
+        sprintf(szName,"[%s]",vcsromlist[ucGame].filename);
+        sprintf(szName2,"%-29s",szName);
+        dsPrintValue(0,5+ucBcl,(ucSel == ucBcl ? 1 :  0),szName2);
+      }
+      else
+      {
+        dsPrintValue(1,5+ucBcl,(ucSel == ucBcl ? 1 : 0),szName);
+      }
+    }
+  }
+}
+
+
 
 unsigned int dsWaitForRom(void)
 {
@@ -789,11 +796,7 @@ unsigned int dsWaitForRom(void)
     swiWaitForVBlank();
   }
 
-  decompress(bgBottomTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgBottomMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgBottomPal,(u16*) BG_PALETTE_SUB,256*2);
-  dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
+  dsShowScreenMain(false);
 
   return bRet;
 }
@@ -886,7 +889,6 @@ void dsInstallSoundEmuFIFO(void)
 ITCM_CODE void dsMainLoop(void)
 {
     char fpsbuf[32];
-    unsigned int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, left_difficulty=0, right_difficulty=0,romSel;
     int iTx,iTy;
     static int dampen=0;
     static int info_dampen=0;
@@ -1251,12 +1253,6 @@ ITCM_CODE void dsMainLoop(void)
                     else
                     {
                         WAITVBL;
-                        dsDisplayButton(3-console_color);
-                        dsDisplayButton(10+left_difficulty);
-                        dsDisplayButton(12+right_difficulty);
-                        dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
-                        dsDisplayButton(16+bSoundEnabled);
-                        ShowStatusLine();
                     }
                 }
                 else if ((iTx>240) && (iTx<256) && (iTy>0) && (iTy<20))  
@@ -1404,6 +1400,12 @@ ITCM_CODE void dsMainLoop(void)
                     irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     
                     highscore_display();
+                    dsShowScreenMain(false);
+                    for (int i=0; i<12; i++)
+                    {
+                        WAITVBL;
+                    }
+                    
                     
                     if (bSoundEnabled)
                     {
