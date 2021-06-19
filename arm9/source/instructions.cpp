@@ -246,6 +246,26 @@ const struct instructions_t instructions[] =
                                           "Wave Bonus/Truck:  100 pts\n"
                                           "Bonus Ship every 10000 pts\n"
         },
+    
+    {"7657b6373fcc9ad69850a687bee48aa1",  "ELEVATORS AMISS\n"
+                                          "(c)2007 BY BMONTGOMERY\n"
+                                          " \n"  
+                                          "Guide Maid Maria to the top\n"
+                                          "floor while avoiding Elevators\n"  
+                                          " \n"  
+                                          "GAME     ELEV  BONUS\n"
+                                          "NORMAL:   7     40 pts\n"
+                                          "EXPERT:   7     60 pts\n"
+                                          "CHILD:    2      0 pts\n"
+                                          "NOVICE:   4     20 pts\n"
+                                          " \n"  
+                                          "SCORING:\n"
+                                          "Get Across Floor:  Timer pts\n"
+                                          "Get to top Floor:  Bonus pts\n"
+                                          " \n"  
+                                          "Press Joy Button for SPEED!\n"  
+        },
+    
         
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
@@ -288,6 +308,6 @@ void dsShowScreenInstructions(void)
   else
   {
       dsPrintValue(1,4,0, (char *)"Game Manual Not Found");
-      dsPrintValue(1,5,0, (char *)"You can add your own soon!");
+      dsPrintValue(1,5,0, (char *)"Many more comming soon!");
   }
 }

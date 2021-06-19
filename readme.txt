@@ -32,6 +32,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V2.9 : 19-Jun-2021 by Dave Bernazzani (wavemotion)
+  * High Score Support!
+  * Preliminary Instruction Manual support (only a dozen games so far)
+
 V2.8 : 11-Jun-2021 by Dave Bernazzani (wavemotion)
   * A couple dozen micro-tweaks to the sound driver to squeeze out a bit more
     performance. Elevators Amiss is now running at 60FPS! All of the Starpath
