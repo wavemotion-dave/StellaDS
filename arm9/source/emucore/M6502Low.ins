@@ -34,26 +34,26 @@ case 0x69:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -65,26 +65,26 @@ case 0x65:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -99,26 +99,26 @@ case 0x75:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -132,26 +132,26 @@ case 0x6d:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -167,26 +167,26 @@ case 0x7d:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -202,26 +202,26 @@ case 0x79:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -238,26 +238,26 @@ case 0x61:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -274,26 +274,26 @@ case 0x71:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
     C = (nonBCDSum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -313,7 +313,7 @@ case 0x4b:
   A = (A >> 1) & 0x7f;
 
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -326,8 +326,8 @@ case 0x2b:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
-  C = N;
+  N = A;
+  C = (N ? 1:0);
 }
 break;
 
@@ -339,7 +339,7 @@ case 0x29:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -350,7 +350,7 @@ case 0x25:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -364,7 +364,7 @@ case 0x35:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -377,7 +377,7 @@ case 0x2d:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -392,7 +392,7 @@ case 0x3d:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -407,7 +407,7 @@ case 0x39:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -423,7 +423,7 @@ case 0x21:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -439,7 +439,7 @@ case 0x31:
 {
   A &= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -454,7 +454,7 @@ case 0x8b:
   // reported to be unstable!
   A = (A | 0xee) & X & operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -472,11 +472,11 @@ case 0x6b:
     A &= operand;
     A = ((A >> 1) & 0x7f) | (C ? 0x80 : 0x00);
 
-    C = A & 0x40;
+    C = ((A & 0x40) ? 1:0);
     V = (A & 0x40) ^ ((A & 0x20) << 1);
 
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -512,12 +512,12 @@ case 0x0a:
 }
 {
   // Set carry flag according to the left-most bit in A
-  C = A & 0x80;
+  C = ((A & 0x80) ? 1:0);
 
   A <<= 1;
 
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -529,7 +529,7 @@ case 0x06:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
@@ -549,7 +549,7 @@ case 0x16:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
@@ -568,7 +568,7 @@ case 0x0e:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
@@ -589,7 +589,7 @@ case 0x1e:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
@@ -681,7 +681,7 @@ case 0x30:
   operand = peek(PC++);
 }
 {
-  if(N)
+  if(N & 0x80)
   {
     fake_peek();
     uInt16 address = PC + (Int8)operand;
@@ -715,7 +715,7 @@ case 0x10:
   operand = peek(PC++);
 }
 {
-  if(!N)
+  if(!(N & 0x80))
   {
     fake_peek();
     uInt16 address = PC + (Int8)operand;
@@ -784,7 +784,7 @@ case 0x18:
   fake_peek();
 }
 {
-  C = false;
+  C = 0;
 }
 break;
 
@@ -828,7 +828,7 @@ case 0xc9:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -841,7 +841,7 @@ case 0xc5:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -857,7 +857,7 @@ case 0xd5:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -872,7 +872,7 @@ case 0xcd:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -889,7 +889,7 @@ case 0xdd:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -906,7 +906,7 @@ case 0xd9:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -924,7 +924,7 @@ case 0xc1:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -942,7 +942,7 @@ case 0xd1:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -956,7 +956,7 @@ case 0xe0:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -969,7 +969,7 @@ case 0xe4:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -984,7 +984,7 @@ case 0xec:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -998,7 +998,7 @@ case 0xc0:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -1011,7 +1011,7 @@ case 0xc4:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -1026,7 +1026,7 @@ case 0xcc:
 
   notZ = value;
   N = value & 0x0080;
-  C = !(value & 0x0100);
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -1045,7 +1045,7 @@ case 0xcf:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1065,7 +1065,7 @@ case 0xdf:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1085,7 +1085,7 @@ case 0xdb:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1102,7 +1102,7 @@ case 0xc7:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1121,7 +1121,7 @@ case 0xd7:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1142,7 +1142,7 @@ case 0xc3:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1163,7 +1163,7 @@ case 0xd3:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-  C = !(value2 & 0x0100);
+   C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1243,7 +1243,7 @@ case 0xca:
   X--;
 
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -1256,7 +1256,7 @@ case 0x88:
   Y--;
 
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -1268,7 +1268,7 @@ case 0x49:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1279,7 +1279,7 @@ case 0x45:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1293,7 +1293,7 @@ case 0x55:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1306,7 +1306,7 @@ case 0x4d:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1321,7 +1321,7 @@ case 0x5d:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1336,7 +1336,7 @@ case 0x59:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1352,7 +1352,7 @@ case 0x41:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1368,7 +1368,7 @@ case 0x51:
 {
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1447,7 +1447,7 @@ case 0xe8:
 {
   X++;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -1459,7 +1459,7 @@ case 0xc8:
 {
   Y++;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -1480,14 +1480,14 @@ case 0xef:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1499,7 +1499,7 @@ case 0xef:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1525,14 +1525,14 @@ case 0xff:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1544,7 +1544,7 @@ case 0xff:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1570,14 +1570,14 @@ case 0xfb:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1589,7 +1589,7 @@ case 0xfb:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1612,14 +1612,14 @@ case 0xe7:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1631,7 +1631,7 @@ case 0xe7:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1656,14 +1656,14 @@ case 0xf7:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1675,7 +1675,7 @@ case 0xf7:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1702,14 +1702,14 @@ case 0xe3:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1721,7 +1721,7 @@ case 0xe3:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1748,14 +1748,14 @@ case 0xf3:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -1767,7 +1767,7 @@ case 0xf3:
 
     A = ourBCDTable[1][difference];
     notZ = A;
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -1830,7 +1830,7 @@ case 0xbb:
 {
   A = X = SP = SP & operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1845,7 +1845,7 @@ case 0xaf:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1861,7 +1861,7 @@ case 0xbf:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1873,7 +1873,7 @@ case 0xa7:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1888,7 +1888,7 @@ case 0xb7:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1905,7 +1905,7 @@ case 0xa3:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1922,7 +1922,7 @@ case 0xb3:
   A = operand;
   X = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1934,7 +1934,7 @@ case 0xa9:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1945,7 +1945,7 @@ case 0xa5:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1959,7 +1959,7 @@ case 0xb5:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1972,7 +1972,7 @@ case 0xad:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -1987,7 +1987,7 @@ case 0xbd:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2002,7 +2002,7 @@ case 0xb9:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2018,7 +2018,7 @@ case 0xa1:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2034,7 +2034,7 @@ case 0xb1:
 {
   A = operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2046,7 +2046,7 @@ case 0xa2:
 {
   X = operand;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -2057,7 +2057,7 @@ case 0xa6:
 {
   X = operand;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -2071,7 +2071,7 @@ case 0xb6:
 {
   X = operand;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -2084,7 +2084,7 @@ case 0xae:
 {
   X = operand;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -2099,7 +2099,7 @@ case 0xbe:
 {
   X = operand;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -2111,7 +2111,7 @@ case 0xa0:
 {
   Y = operand;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -2122,7 +2122,7 @@ case 0xa4:
 {
   Y = operand;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -2136,7 +2136,7 @@ case 0xb4:
 {
   Y = operand;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -2149,7 +2149,7 @@ case 0xac:
 {
   Y = operand;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -2164,7 +2164,7 @@ case 0xbc:
 {
   Y = operand;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -2180,7 +2180,7 @@ case 0x4a:
   A = (A >> 1) & 0x7f;
 
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2274,7 +2274,7 @@ case 0xab:
   // reported to be very unstable!
   A = X = (A | 0xee) & operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2366,7 +2366,7 @@ case 0x09:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2377,7 +2377,7 @@ case 0x05:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2391,7 +2391,7 @@ case 0x15:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2404,7 +2404,7 @@ case 0x0d:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2419,7 +2419,7 @@ case 0x1d:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2434,7 +2434,7 @@ case 0x19:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2450,7 +2450,7 @@ case 0x01:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2466,7 +2466,7 @@ case 0x11:
 {
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2499,7 +2499,7 @@ case 0x68:
   peek(0x0100 + SP++);
   A = peek(0x0100 + SP);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2523,13 +2523,13 @@ case 0x2f:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2543,13 +2543,13 @@ case 0x3f:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2563,13 +2563,13 @@ case 0x3b:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2580,13 +2580,13 @@ case 0x27:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2599,13 +2599,13 @@ case 0x37:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2620,13 +2620,13 @@ case 0x23:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2641,13 +2641,13 @@ case 0x33:
   poke(operandAddress, operand);
 }
 {
-  uInt8 value = (operand << 1) | (C ? 1 : 0);
+  uInt8 value = (operand << 1) | (C);
   poke(operandAddress, value);
 
   A &= value;
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2660,12 +2660,12 @@ case 0x2a:
   bool oldC = C;
 
   // Set carry flag according to the left-most bit
-  C = A & 0x80;
+  C = ((A & 0x80) ? 1:0);
 
   A = (A << 1) | (oldC ? 1 : 0);
 
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2680,7 +2680,7 @@ case 0x26:
   bool oldC = C;
 
   // Set carry flag according to the left-most bit in operand
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand = (operand << 1) | (oldC ? 1 : 0);
   poke(operandAddress, operand);
@@ -2702,7 +2702,7 @@ case 0x36:
   bool oldC = C;
 
   // Set carry flag according to the left-most bit in operand
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand = (operand << 1) | (oldC ? 1 : 0);
   poke(operandAddress, operand);
@@ -2723,7 +2723,7 @@ case 0x2e:
   bool oldC = C;
 
   // Set carry flag according to the left-most bit in operand
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand = (operand << 1) | (oldC ? 1 : 0);
   poke(operandAddress, operand);
@@ -2746,7 +2746,7 @@ case 0x3e:
   bool oldC = C;
 
   // Set carry flag according to the left-most bit in operand
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand = (operand << 1) | (oldC ? 1 : 0);
   poke(operandAddress, operand);
@@ -2770,7 +2770,7 @@ case 0x6a:
   A = ((A >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
 
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -2880,23 +2880,23 @@ case 0x6f:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -2923,23 +2923,23 @@ case 0x7f:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -2966,23 +2966,23 @@ case 0x7b:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -3006,23 +3006,23 @@ case 0x67:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -3048,23 +3048,23 @@ case 0x77:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -3092,23 +3092,23 @@ case 0x63:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -3136,23 +3136,23 @@ case 0x73:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
-    sum = (Int16)A + (Int16)operand + (C ? 1 : 0);
+    sum = (Int16)A + (Int16)operand + (C);
     A = sum;
     C = (sum > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C ? 1 : 0);
+    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
     notZ = A;
-    N = A & 0x80;
+    N = A;
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
   }
 }
@@ -3240,14 +3240,14 @@ case 0xeb:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3258,9 +3258,9 @@ case 0xeb:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3278,14 +3278,14 @@ case 0xe5:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3296,9 +3296,9 @@ case 0xe5:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3319,14 +3319,14 @@ case 0xf5:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3337,9 +3337,9 @@ case 0xf5:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3359,14 +3359,14 @@ case 0xed:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3377,9 +3377,9 @@ case 0xed:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3401,14 +3401,14 @@ case 0xfd:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3419,9 +3419,9 @@ case 0xfd:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3443,14 +3443,14 @@ case 0xf9:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3461,9 +3461,9 @@ case 0xf9:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3486,14 +3486,14 @@ case 0xe1:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3504,9 +3504,9 @@ case 0xe1:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3529,14 +3529,14 @@ case 0xf1:
   if(!D)
   {
     operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C ? 1 : 0);
+    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((difference > 127) || (difference < -128));
 
-    difference = ((Int16)A) + ((Int16)operand) + (C ? 1 : 0);
+    difference = ((Int16)A) + ((Int16)operand) + (C);
     A = difference;
     C = (difference > 0xff);
     notZ = A;
-    N = A & 0x80;
+    N = A;
   }
   else
   {
@@ -3547,9 +3547,9 @@ case 0xf1:
       difference += 100;
 
     // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C ? 1 : 0)) & 0xff;
+    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
     A = ourBCDTable[1][difference];
-    N = A & 0x80;
+    N = A;
 
     C = (oldA >= (operand + (C ? 0 : 1)));
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
@@ -3567,8 +3567,8 @@ case 0xcb:
   X = (value & 0xff);
 
   notZ = X;
-  N = X & 0x80;
-  C = !(value & 0x0100);
+  N = X;
+  C = ((value & 0x0100) ? 0:1);
 }
 break;
 
@@ -3578,7 +3578,7 @@ case 0x38:
   fake_peek();
 }
 {
-  C = true;
+  C = 1;
 }
 break;
 
@@ -3688,14 +3688,14 @@ case 0x0f:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3710,14 +3710,14 @@ case 0x1f:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3732,14 +3732,14 @@ case 0x1b:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3751,14 +3751,14 @@ case 0x07:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3772,14 +3772,14 @@ case 0x17:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3795,14 +3795,14 @@ case 0x03:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3818,14 +3818,14 @@ case 0x13:
 }
 {
   // Set carry flag according to the left-most bit in value
-  C = operand & 0x80;
+  C = ((operand & 0x80) ? 1:0);
 
   operand <<= 1;
   poke(operandAddress, operand);
 
   A |= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3846,7 +3846,7 @@ case 0x4f:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3868,7 +3868,7 @@ case 0x5f:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3890,7 +3890,7 @@ case 0x5b:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3909,7 +3909,7 @@ case 0x47:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3930,7 +3930,7 @@ case 0x57:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3953,7 +3953,7 @@ case 0x43:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -3976,7 +3976,7 @@ case 0x53:
 
   A ^= operand;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -4131,7 +4131,7 @@ case 0xaa:
 {
   X = A;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -4143,7 +4143,7 @@ case 0xa8:
 {
   Y = A;
   notZ = Y;
-  N = Y & 0x80;
+  N = Y;
 }
 break;
 
@@ -4155,7 +4155,7 @@ case 0xba:
 {
   X = SP;
   notZ = X;
-  N = X & 0x80;
+  N = X;
 }
 break;
 
@@ -4167,7 +4167,7 @@ case 0x8a:
 {
   A = X;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 
@@ -4189,7 +4189,7 @@ case 0x98:
 {
   A = Y;
   notZ = A;
-  N = A & 0x80;
+  N = A;
 }
 break;
 

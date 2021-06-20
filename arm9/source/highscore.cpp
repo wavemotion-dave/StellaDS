@@ -176,7 +176,7 @@ void highscore_display(void)
             {
                 swiWaitForVBlank();
                 if (keysCurrent() & KEY_SELECT) {bEntryDone=1;}
-                
+
                 if (keysCurrent() & KEY_START) 
                 {
                     strcpy(last_initials, score_entry.initials);
@@ -273,6 +273,22 @@ void highscore_display(void)
             
             bEntryDone=0;
             entry_idx=0;
+        }
+        
+        // Clear the entire game of scores... 
+        if ((keysCurrent() & KEY_L) && (keysCurrent() & KEY_R) && (keysCurrent() & KEY_Y))
+        {
+            strcpy(highscore_table[foundIdx].md5sum, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            for (int j=0; j<10; j++)
+            {
+                strcpy(highscore_table[foundIdx].scores[j].score, "000000");
+                strcpy(highscore_table[foundIdx].scores[j].initials, "   ");
+                highscore_table[foundIdx].scores[j].year = 0;
+                highscore_table[foundIdx].scores[j].month = 0;
+                highscore_table[foundIdx].scores[j].day = 0;
+            }
+            show_scores(foundIdx);
+            highscore_save();                    
         }
     }    
 }
