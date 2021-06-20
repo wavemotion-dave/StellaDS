@@ -33,7 +33,6 @@ case 0x69:
   operand = peek(PC++);
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -48,6 +47,7 @@ case 0x69:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -64,7 +64,6 @@ case 0x65:
   operand = peek(peek(PC++));
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -79,6 +78,7 @@ case 0x65:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -98,7 +98,6 @@ case 0x75:
   operand = peek(address); 
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -113,6 +112,7 @@ case 0x75:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -131,7 +131,6 @@ case 0x6d:
   operand = peek(address);
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -146,6 +145,7 @@ case 0x6d:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -201,7 +201,6 @@ case 0x79:
     operand = peek((high | low) + Y);
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -216,6 +215,7 @@ case 0x79:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -237,7 +237,6 @@ case 0x61:
   operand = peek(address);
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -252,6 +251,7 @@ case 0x61:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -273,7 +273,6 @@ case 0x71:
     operand = peek((high | low) + Y);
 }
 {
-  uInt8 oldA = A;
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -288,6 +287,7 @@ case 0x71:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -1475,8 +1475,6 @@ case 0xef:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1491,8 +1489,8 @@ case 0xef:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A; 
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -1520,8 +1518,6 @@ case 0xff:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1536,6 +1532,7 @@ case 0xff:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
         - (C ? 0 : 1);
 
@@ -1565,8 +1562,6 @@ case 0xfb:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1581,8 +1576,8 @@ case 0xfb:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -1607,8 +1602,6 @@ case 0xe7:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1623,8 +1616,8 @@ case 0xe7:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand]  - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -1651,8 +1644,6 @@ case 0xf7:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1667,8 +1658,8 @@ case 0xf7:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -1697,8 +1688,6 @@ case 0xe3:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1713,8 +1702,8 @@ case 0xe3:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -1743,8 +1732,6 @@ case 0xf3:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -1759,8 +1746,8 @@ case 0xf3:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -2869,7 +2856,6 @@ case 0x6f:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -2891,6 +2877,7 @@ case 0x6f:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -2912,7 +2899,6 @@ case 0x7f:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -2934,6 +2920,7 @@ case 0x7f:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -2955,7 +2942,6 @@ case 0x7b:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -2977,6 +2963,7 @@ case 0x7b:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -2995,7 +2982,6 @@ case 0x67:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -3017,6 +3003,7 @@ case 0x67:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -3037,7 +3024,6 @@ case 0x77:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -3059,6 +3045,7 @@ case 0x77:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -3081,7 +3068,6 @@ case 0x63:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -3103,6 +3089,7 @@ case 0x63:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -3125,7 +3112,6 @@ case 0x73:
   poke(operandAddress, operand);
 }
 {
-  uInt8 oldA = A;
   bool oldC = C;
 
   // Set carry flag according to the right-most bit
@@ -3147,6 +3133,7 @@ case 0x73:
   }
   else
   {
+    uInt8 oldA = A;
     Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
@@ -3235,8 +3222,6 @@ case 0xeb:
   operand = peek(PC++);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3251,8 +3236,8 @@ case 0xeb:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3273,8 +3258,6 @@ case 0xe5:
   operand = peek(peek(PC++));
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3289,8 +3272,8 @@ case 0xe5:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3314,8 +3297,6 @@ case 0xf5:
   operand = peek(address); 
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3330,8 +3311,8 @@ case 0xf5:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3354,8 +3335,6 @@ case 0xed:
   operand = peek(address);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3370,8 +3349,8 @@ case 0xed:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3396,8 +3375,6 @@ case 0xfd:
     operand = peek((high | low) + X);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3412,8 +3389,8 @@ case 0xfd:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3438,8 +3415,6 @@ case 0xf9:
     operand = peek((high | low) + Y);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3454,8 +3429,8 @@ case 0xf9:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3481,8 +3456,6 @@ case 0xe1:
   operand = peek(address);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3497,8 +3470,8 @@ case 0xe1:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;
@@ -3524,8 +3497,6 @@ case 0xf1:
     operand = peek((high | low) + Y);
 }
 {
-  uInt8 oldA = A;
-
   if(!D)
   {
     operand = ~operand;
@@ -3540,8 +3511,8 @@ case 0xf1:
   }
   else
   {
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
+    uInt8 oldA = A;
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
 
     if(difference < 0)
       difference += 100;

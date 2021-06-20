@@ -42,7 +42,7 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
-    asm(".rept 8 ; nop ; .endr");
+    asm(".rept 1 ; nop ; .endr");
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -59,7 +59,7 @@ inline uInt8 M6502Low::peek(uInt16 address)
 {
   gSystemCycles++;
 
-  System::PageAccess& access = mySystem->myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+  PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
   if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
   else myDataBusState = access.device->peek(address);
 
@@ -71,7 +71,7 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
     
-  System::PageAccess& access = mySystem->myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+  PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
   if(access.directPokeBase != 0) *(access.directPokeBase + (address & MY_PAGE_MASK)) = value;
   else access.device->poke(address, value);
     
@@ -103,7 +103,7 @@ bool M6502Low::execute(uInt16 number)
     {
       // Get the next 6502 instruction - do this the fast way!
       gSystemCycles++;
-      System::PageAccess& access = mySystem->myPageAccessTable[(PC & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+      PageAccess& access = myPageAccessTable[(PC & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
       if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (PC & MY_PAGE_MASK));
       else myDataBusState = access.device->peek(PC);        
       PC++;
@@ -254,7 +254,7 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
   }
   else
   {
-      System::PageAccess& access = mySystem->myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
       if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
       else myDataBusState = access.device->peek(address);        
       return myDataBusState; 
@@ -300,7 +300,7 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
   }
   else
   {
-      System::PageAccess& access = mySystem->myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
       if(access.directPokeBase != 0) *(access.directPokeBase + (address & MY_PAGE_MASK)) = value;
       else access.device->poke(address, value);
       myDataBusState = value;

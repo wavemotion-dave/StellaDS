@@ -76,7 +76,7 @@ void Cartridge3E::install(System& system)
   // Set the page accessing methods for the hot spots (for 100% emulation
   // I would need to chain any accesses below 0x40 to the TIA but for
   // now I'll just forget about them)
-  System::PageAccess access;
+  PageAccess access;
   for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -162,7 +162,7 @@ void Cartridge3E::bank(uInt16 bank)
     uInt16 shift = mySystem->pageShift();
   
     // Setup the page access methods for the current bank
-    System::PageAccess access;
+    PageAccess access;
     access.device = this;
     access.directPokeBase = 0;
   
@@ -184,7 +184,7 @@ void Cartridge3E::bank(uInt16 bank)
     uInt32 address;
   
     // Setup the page access methods for the current bank
-    System::PageAccess access;
+    PageAccess access;
     access.device = this;
     access.directPokeBase = 0;
   

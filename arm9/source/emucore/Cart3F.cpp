@@ -57,7 +57,7 @@ void Cartridge3F::reset()
   bank(0);
 }
 
-static  System::PageAccess access;
+static PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3F::install(System& system)

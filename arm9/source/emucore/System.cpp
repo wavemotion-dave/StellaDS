@@ -32,6 +32,9 @@
 Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 uInt8  myDataBusState  __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 
+  // Allocate page table
+PageAccess myPageAccessTable[128];  // We put this in fixed main memory to make access faster...
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)
     : myAddressMask((1 << n) - 1),
@@ -45,9 +48,6 @@ System::System(uInt16 n, uInt16 m)
           
   // Make sure the arguments are reasonable
   assert((1 <= m) && (m <= n) && (n <= 16));
-
-  // Allocate page table
-  myPageAccessTable = new PageAccess[myNumberOfPages];
 
   // Initialize page access table
   PageAccess access;
@@ -73,7 +73,7 @@ System::~System()
   delete myM6502;
 
   // Free my page access table
-  delete[] myPageAccessTable;
+  //delete[] myPageAccessTable;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -137,7 +137,7 @@ void System::setPageAccess(uInt16 page, const PageAccess& access)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const System::PageAccess& System::getPageAccess(uInt16 page)
+const PageAccess& System::getPageAccess(uInt16 page)
 {
   return myPageAccessTable[page];
 }

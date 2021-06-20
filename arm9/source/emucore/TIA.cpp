@@ -480,7 +480,7 @@ void TIA::install(System& system)
 
 
   // All accesses are to this device
-  System::PageAccess access;
+  PageAccess access;
   access.directPeekBase = 0;
   access.directPokeBase = 0;
   access.device = this;

@@ -22,7 +22,7 @@
 #include "Random.hxx"
 #include "System.hxx"
 
-static System::PageAccess access;
+static PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF4::CartridgeF4(const uInt8* image)

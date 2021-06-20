@@ -31,6 +31,36 @@ extern Int32 gSystemCycles;    // Number of system cycles executed since the las
 extern uInt32 debug[];         // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
 extern uInt8  myDataBusState;  // The current state of the Data Bus
 
+/**
+  Structure used to specify access methods for a page
+*/
+struct PageAccess
+{
+  /**
+    Pointer to a block of memory or the null pointer.  The null pointer
+    indicates that the device's peek method should be invoked for reads
+    to this page, while other values are the base address of an array 
+    to directly access for reads to this page.
+  */
+  uInt8* directPeekBase;
+
+  /**
+    Pointer to a block of memory or the null pointer.  The null pointer
+    indicates that the device's poke method should be invoked for writes
+    to this page, while other values are the base address of an array 
+    to directly access for pokes to this page.
+  */
+  uInt8* directPokeBase;
+
+  /**
+    Pointer to the device associated with this page or to the system's 
+    null device if the page hasn't been mapped to a device
+  */
+  Device* device;
+};
+
+extern PageAccess myPageAccessTable[128];
+
 #define MY_PAGE_SHIFT   7
 #define MY_PAGE_MASK    0x7F
 #define MY_ADDR_SHIFT   13
@@ -202,37 +232,6 @@ class System
     void poke(uInt16 address, uInt8 value);
 
   public:
-    /**
-      Structure used to specify access methods for a page
-    */
-    struct PageAccess
-    {
-      /**
-        Pointer to a block of memory or the null pointer.  The null pointer
-        indicates that the device's peek method should be invoked for reads
-        to this page, while other values are the base address of an array 
-        to directly access for reads to this page.
-      */
-      uInt8* directPeekBase;
-
-      /**
-        Pointer to a block of memory or the null pointer.  The null pointer
-        indicates that the device's poke method should be invoked for writes
-        to this page, while other values are the base address of an array 
-        to directly access for pokes to this page.
-      */
-      uInt8* directPokeBase;
-
-      /**
-        Pointer to the device associated with this page or to the system's 
-        null device if the page hasn't been mapped to a device
-      */
-      Device* device;
-    };
-    
-    // Pointer to a dynamically allocated array of PageAccess structures
-    PageAccess* myPageAccessTable;
-
     /**
       Set the page accessing method for the specified page.
 

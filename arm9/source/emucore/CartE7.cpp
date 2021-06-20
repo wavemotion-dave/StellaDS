@@ -70,7 +70,7 @@ void CartridgeE7::install(System& system)
       ((0x1900 & mask) == 0) && ((0x1A00 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
+  PageAccess access;
   for(uInt32 i = (0x1FE0 & ~mask); i < 0x2000; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -146,7 +146,7 @@ void CartridgeE7::bank(uInt16 slice)
   // Setup the page access methods for the current bank
   if(slice != 7)
   {
-    System::PageAccess access;
+    PageAccess access;
     access.device = this;
     access.directPokeBase = 0;
 
@@ -159,7 +159,7 @@ void CartridgeE7::bank(uInt16 slice)
   }
   else
   {
-    System::PageAccess access;
+    PageAccess access;
     access.device = this;
 
     // Set the page accessing method for the 1K slice of RAM writing pages
@@ -191,7 +191,7 @@ void CartridgeE7::bankRAM(uInt16 bank)
   uInt16 shift = mySystem->pageShift();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
 
   // Set the page accessing method for the 256 bytes of RAM writing pages

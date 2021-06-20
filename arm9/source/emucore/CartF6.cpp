@@ -21,7 +21,7 @@
 #include "System.hxx"
 #include <iostream>
 
-static  System::PageAccess access;
+static  PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF6::CartridgeF6(const uInt8* image)
@@ -137,7 +137,7 @@ void CartridgeF6::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeF6::bank(uInt16 bank)
+inline void CartridgeF6::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;

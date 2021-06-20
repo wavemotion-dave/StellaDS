@@ -93,7 +93,7 @@ void M6532::install(System& system)
   assert((0x1080 & mask) == 0);
   
   // All accesses are to this device
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
 
   // We're installing in a 2600 system

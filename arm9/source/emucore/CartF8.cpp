@@ -21,7 +21,7 @@
 #include "System.hxx"
 #include <iostream>
 
-static  System::PageAccess access;
+static  PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)

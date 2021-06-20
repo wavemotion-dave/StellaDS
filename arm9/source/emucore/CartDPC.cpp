@@ -22,7 +22,7 @@
 #include "System.hxx"
 
 // Setup the page access methods for the current bank
-System::PageAccess access;
+PageAccess access;
 
 uInt16 myCurrentOffset = 0;
 

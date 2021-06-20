@@ -63,7 +63,7 @@ void CartridgeE0::install(System& system)
       ((0x1800 & mask) == 0) && ((0x1C00 & mask) == 0));
 
   // Set the page acessing methods for the first part of the last segment
-  System::PageAccess access;
+  PageAccess access;
   access.directPokeBase = 0;
   access.device = this;
   for(uInt32 i = 0x1C00; i < (0x1FE0U & ~mask); i += (1 << shift))
@@ -139,7 +139,7 @@ void CartridgeE0::segmentZero(uInt16 slice)
   uInt16 shift = mySystem->pageShift();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
 
@@ -159,7 +159,7 @@ void CartridgeE0::segmentOne(uInt16 slice)
   uInt16 shift = mySystem->pageShift();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
 
@@ -179,7 +179,7 @@ void CartridgeE0::segmentTwo(uInt16 slice)
   uInt16 shift = mySystem->pageShift();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
 

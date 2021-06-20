@@ -100,7 +100,7 @@ class CartridgeUA : public Cartridge
     uInt8 myImage[8192];
    
     // Previous Device's page access
-    System::PageAccess myHotSpotPageAccess;
+    PageAccess myHotSpotPageAccess;
 };
 #endif
 

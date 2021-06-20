@@ -68,7 +68,7 @@ void CartridgeF6SC::install(System& system)
   assert(((0x1080 & mask) == 0) && ((0x1100 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
+  PageAccess access;
   for(uInt32 i = (0x1FF6 & ~mask); i < 0x2000; i += (1 << shift))
   {
     access.directPeekBase = 0;
@@ -184,7 +184,7 @@ void CartridgeF6SC::bank(uInt16 bank)
   uInt16 mask = mySystem->pageMask();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
 

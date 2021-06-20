@@ -64,7 +64,7 @@ void CartridgeUA::install(System& system)
   myHotSpotPageAccess = mySystem->getPageAccess(0x0220 >> shift);
 
   // Set the page accessing methods for the hot spots
-  System::PageAccess access;
+  PageAccess access;
   access.directPeekBase = 0;
   access.directPokeBase = 0;
   access.device = this;
@@ -145,7 +145,7 @@ void CartridgeUA::bank(uInt16 bank)
 //  uInt16 mask = mySystem->pageMask();
 
   // Setup the page access methods for the current bank
-  System::PageAccess access;
+  PageAccess access;
   access.device = this;
   access.directPokeBase = 0;
 

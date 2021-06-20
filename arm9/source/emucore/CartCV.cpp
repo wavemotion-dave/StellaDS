@@ -87,7 +87,7 @@ void CartridgeCV::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1800 & mask) == 0);
 
-  System::PageAccess access;
+  PageAccess access;
   access.directPokeBase = 0;
   access.device = this;
 

@@ -22,7 +22,7 @@
 #include "System.hxx"
 #include <iostream>
 
-static  System::PageAccess access;
+static  PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF4SC::CartridgeF4SC(const uInt8* image)
