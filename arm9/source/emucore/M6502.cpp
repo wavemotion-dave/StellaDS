@@ -83,7 +83,7 @@ uInt8 M6502::PS() const
 {
   uInt8 ps = 0x20;
 
-  if(N) 
+  if(N & 0x80) 
     ps |= 0x80;
   if(V) 
     ps |= 0x40;

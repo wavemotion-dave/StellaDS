@@ -483,7 +483,7 @@ case 0x6b:
     uInt8 value = A & operand;
 
     A = ((value >> 1) & 0x7f) | (C ? 0x80 : 0x00);
-    N = C;
+    N = (C ? 0x80:0x00);
     notZ = A;
     V = (value ^ A) & 0x40;
 
