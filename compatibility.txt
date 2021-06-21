@@ -1,4 +1,4 @@
-StellaDSi 2.8 Compatibility List [partial list - to give a sense of what can be expected]
+StellaDSi 3.0 Compatibility List [partial list - to give a sense of what can be expected]
 
 Grade is not an indication of how good the game is - it's an indication as to how well the game plays under emulation on a DSi (running at 133MHz).
 If you run the emulator on a DS (running at 67MHz) - it's just too little CPU power to get the job done for most games but some playable ones: 
@@ -132,7 +132,7 @@ M.A.S.H (1983).a26                            835759ff95c2cdc2324d7c1e7c5fa237  
 Medieval Mayhem.a26                           f7fac15cf54b55c5597718b6742dbec2    F4    60  60  A
 Mega Force (1982).a26                         daeb54957875c50198a7e616f9cc8144    4K    60  56  A
 MegaMania (1982).a26                          318a9d6dda791268df92d72679914ac3    4K    60  58  A
-Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    57  42  B   A tiny bit of slowdown but still very enjoyable
+Midnight Magic (1984).a26                     f1554569321dc933c87981cf5c239c43    F6    58  42  B   A tiny bit of slowdown but still very enjoyable
 Millipede (1984).a26                          3c57748c8286cf9e821ecd064f21aaa9    F6SC  60  51  A   Flicker Flee is a little blury unfortunately - stick to Normal Mode
 Miniature Golf (1979).a26                     df62a658496ac98a3aa4a6ee5719c251    2K    60  60  A
 Missile Command (1981).a26                    3a2e2d0c6892aa14544083dfb7762782    4K    60  60  A
@@ -153,7 +153,7 @@ Pac-Man 8k.a26                                98d41ef327c58812ecc75bf1611ddced  
 Phaser Patrol (1982).a26                      7dcbfd2acc013e817f011309c7504daa    AR    58  46  A   A bit of slowdown but hardly noticable
 Phoenix (1982).a26                            7e52a95074a66640fcfde124fffd491a    F8    60  60  A
 Pitfall! (1982).a26                           3e90cf23106f2e08b2781e41299de556    4K    60  45  A   Classic!
-Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   58  30  D   Sound is forced off to get a frame rate that makes it playable.
+Pitfall II - Lost Caverns (1983).a26          6d842c96d5a01967be9680080dd5be54    DPC   59  30  D   Sound is forced off to get a frame rate that makes it playable.
 Plaque Attack (1983).a26                      da4e3396aa2db3bd667f83a1cb9e4a36    4K    60  60  A   
 Pole Position (1983).a26                      5f39353f7c6925779b0169a87ff86f1e    F8    60  60  A
 Pressure Cooker (1983).a26                    97d079315c09796ff6d95a06e4b70171    F8    60  53  B
@@ -200,7 +200,7 @@ Star Trek - Strategic Operations (1983).a26   03c3f7ba4585e349dd12bfa7b34b7729  
 Steeplechase (1980).a26                       656dc247db2871766dffd978c71da80c    2K    60  51  A
 Stellar Track (1980).a26                      0b8d3002d8f744a753ba434a4d39249a    4K    60  60  A   Recommend Flicker Free mode.
 Street Racer (1977).a26                       396f7bc90ab4fa4975f8c74abe4e81f0    2K    60  60  A
-Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    60  45  C   Paddles required  
+Super Breakout (1982).a26                     8885d0ce11c5b40c3a8a8d9ed28cefef    4K    59  45  C   Paddles required  
 Superman (1979).a26                           5de8803a59c36725888346fdc6e7429d    4K    60  58  A
 Surround (1977).a26                           4d7517ae69f95cfbc053be01312b7dba    2K    60  60  A
 Swoops! (v0.96).a26                           278f14887d601b5e5b620f1870bc09f6    4K    60  60  A
