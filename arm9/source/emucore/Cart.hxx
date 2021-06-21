@@ -24,8 +24,13 @@ class System;
 
 #include "bspf.hxx"
 #include "Device.hxx"
+#include "System.hxx"
 
 extern uInt8 fast_cart_buffer[];
+
+extern PageAccess page_access;
+extern uInt16 myCurrentOffset;
+
 
 // The following is a simple table mapping games to type's using MD5 values
 struct CartInfo

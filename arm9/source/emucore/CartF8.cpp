@@ -21,7 +21,6 @@
 #include "System.hxx"
 #include <iostream>
 
-static  PageAccess access;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
@@ -62,14 +61,14 @@ void CartridgeF8::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1000 & mask) == 0);
 
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
-  access.device = this;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
+  page_access.device = this;
     
   // Set the page accessing methods for the hot spots
   for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    mySystem->setPageAccess(i >> shift, access);
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Install pages for bank 1
@@ -128,10 +127,9 @@ void CartridgeF8::bank(uInt16 bank)
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x1000; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0000; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myImage[myCurrentOffset + (address & 0x0FFF)];
-    mySystem->setPageAccess(access_num++, access);
+      myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
   }
 }
 

@@ -21,11 +21,6 @@
 #include "CartDPC.hxx"
 #include "System.hxx"
 
-// Setup the page access methods for the current bank
-PageAccess access;
-
-uInt16 myCurrentOffset = 0;
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
 {
@@ -102,20 +97,20 @@ void CartridgeDPC::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert(((0x1080 & mask) == 0) && ((0x1100 & mask) == 0));
 
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
-  access.device = this;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
+  page_access.device = this;
   
   // Set the page accessing methods for the hot spots
   for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    mySystem->setPageAccess(i >> shift, access);
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Set the page accessing method for the DPC reading & writing pages
   for(uInt32 j = 0x1000; j < 0x1080; j += (1 << shift))
   {
-    mySystem->setPageAccess(j >> shift, access);
+    mySystem->setPageAccess(j >> shift, page_access);
   }
 
   // Install pages for bank 1
@@ -283,8 +278,6 @@ inline void CartridgeDPC::bank(uInt16 bank)
   // Map Program ROM image into the system
   for(uInt32 address = 0x1080; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myProgramImage[myCurrentOffset + (address & 0x0FFF)];
-    mySystem->setPageAccess(access_num++, access);
+    myPageAccessTable[access_num++].directPeekBase = &myProgramImage[myCurrentOffset + (address & 0x0FFF)];
   }
-
 }

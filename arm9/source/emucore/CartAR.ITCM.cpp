@@ -18,6 +18,7 @@
 #include <nds.h>
 #include <assert.h>
 #include <string.h>
+#include "Cart.hxx"
 #include "CartAR.hxx"
 #include "M6502Low.hxx"
 #include "Random.hxx"
@@ -103,13 +104,12 @@ void CartridgeAR::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1000 & mask) == 0);
 
-  PageAccess access;
   for(uInt32 i = 0x1000; i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
     
   bankConfiguration(0);

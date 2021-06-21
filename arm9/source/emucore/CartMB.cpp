@@ -61,13 +61,12 @@ void CartridgeMB::install(System& system)
   assert((0x1000 & mask) == 0);
 
   // Set the page accessing methods for the hot spots
-  PageAccess access;
   for(uInt32 i = (0x1FF0 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Install pages for bank 1
@@ -106,15 +105,14 @@ void CartridgeMB::incbank()
   uInt16 mask = mySystem->pageMask();
 
   // Setup the page access methods for the current bank
-  PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
+  page_access.device = this;
+  page_access.directPokeBase = 0;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < (0x1FF0U & ~mask);
       address += (1 << shift))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    page_access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
+    mySystem->setPageAccess(address >> shift, page_access);
   }
 }

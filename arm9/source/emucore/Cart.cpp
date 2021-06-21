@@ -48,6 +48,8 @@ extern void dsPrintCartType(char *);
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger "AR" carts
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 CartInfo myCartInfo __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
+PageAccess page_access __attribute__((section(".dtcm")));
+ uInt16 myCurrentOffset __attribute__((section(".dtcm")));
 
 
 static const CartInfo table[] = 
@@ -482,7 +484,7 @@ static const CartInfo table[] =
     {"97184b263722748757cfdc41107ca5c0",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mr. Do!'s Castle (1984).bin
     {"8644352b806985efde499ae6fc7b0fec",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mr. Postman (1983).bin
     {"f0daaa966199ef2b49403e9a29d12c50",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mr. Postman.bin
-    {"b54be87652cd9af6095f7d7f154762c6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mr_Yo-Yo_NTSC_FINAL_DIGITAL.bin
+    {"b54be87652cd9af6095f7d7f154762c6",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mr_Yo-Yo_NTSC_FINAL_DIGITAL.bin
     {"cd7ee8477d7b42aba3700262761eaff8",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Msgalactopus-FIX2.bin
     {"87e79cd41ce136fd4f72cc6e2c161bee",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   208,   0, -1},    // Ms. Pac-Man (1982).bin
     {"ddf72763f88afa541f6b52f366c90e3a",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   206,   0,  1},    // Muncher.bin
@@ -886,6 +888,8 @@ static const CartInfo table[] =
     {"c1e6e4e7ef5f146388a090f1c469a2fa",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   200,   0, -2},    // Z-Tack (AKA Base Attack) (1983) (Bomb - Onbase).bin
 
     // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //

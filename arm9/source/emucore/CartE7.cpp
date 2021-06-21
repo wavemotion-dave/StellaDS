@@ -70,22 +70,21 @@ void CartridgeE7::install(System& system)
       ((0x1900 & mask) == 0) && ((0x1A00 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  PageAccess access;
   for(uInt32 i = (0x1FE0 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Setup the second segment to always point to the last ROM slice
   for(uInt32 j = 0x1A00; j < (0x1FE0U & ~mask); j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = &myImage[7 * 2048 + (j & 0x07FF)];
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = &myImage[7 * 2048 + (j & 0x07FF)];
+    page_access.directPokeBase = 0;
+    mySystem->setPageAccess(j >> shift, page_access);
   }
   myCurrentSlice[1] = 7;
 
@@ -146,38 +145,33 @@ void CartridgeE7::bank(uInt16 slice)
   // Setup the page access methods for the current bank
   if(slice != 7)
   {
-    PageAccess access;
-    access.device = this;
-    access.directPokeBase = 0;
+    page_access.directPokeBase = 0;
 
     // Map ROM image into first segment
     for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
     {
-      access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-      mySystem->setPageAccess(address >> shift, access);
+      page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
+      mySystem->setPageAccess(address >> shift, page_access);
     }
   }
   else
   {
-    PageAccess access;
-    access.device = this;
-
     // Set the page accessing method for the 1K slice of RAM writing pages
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
     for(uInt32 j = 0x1000; j < 0x1400; j += (1 << shift))
     {
-      access.directPokeBase = &myRAM[j & 0x03FF];
-      mySystem->setPageAccess(j >> shift, access);
+      page_access.directPokeBase = &myRAM[j & 0x03FF];
+      mySystem->setPageAccess(j >> shift, page_access);
     }
 
     // Set the page accessing method for the 1K slice of RAM reading pages
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
     for(uInt32 k = 0x1400; k < 0x1800; k += (1 << shift))
     {
-      access.directPeekBase = &myRAM[k & 0x03FF];
-      mySystem->setPageAccess(k >> shift, access);
+      page_access.directPeekBase = &myRAM[k & 0x03FF];
+      mySystem->setPageAccess(k >> shift, page_access);
     }
   }
 }
@@ -190,25 +184,21 @@ void CartridgeE7::bankRAM(uInt16 bank)
   uInt16 offset = bank << 8;
   uInt16 shift = mySystem->pageShift();
 
-  // Setup the page access methods for the current bank
-  PageAccess access;
-  access.device = this;
-
   // Set the page accessing method for the 256 bytes of RAM writing pages
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
   for(uInt32 j = 0x1800; j < 0x1900; j += (1 << shift))
   {
-    access.directPokeBase = &myRAM[1024 + offset + (j & 0x00FF)];
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.directPokeBase = &myRAM[1024 + offset + (j & 0x00FF)];
+    mySystem->setPageAccess(j >> shift, page_access);
   }
 
   // Set the page accessing method for the 256 bytes of RAM reading pages
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
   for(uInt32 k = 0x1900; k < 0x1A00; k += (1 << shift))
   {
-    access.directPeekBase = &myRAM[1024 + offset + (k & 0x00FF)];
-    mySystem->setPageAccess(k >> shift, access);
+    page_access.directPeekBase = &myRAM[1024 + offset + (k & 0x00FF)];
+    mySystem->setPageAccess(k >> shift, page_access);
   }
 }

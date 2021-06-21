@@ -58,15 +58,14 @@ void Cartridge4K::install(System& system)
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1000 & mask) == 0);
 
-  PageAccess access;
-  access.directPokeBase = 0;
-  access.device = this;
+ page_access.directPokeBase = 0;
+ page_access.device = this;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < 0x2000; address += (1 << shift))
   {
-    access.directPeekBase = &myImage[address & 0x0FFF];
-    mySystem->setPageAccess(address >> mySystem->pageShift(), access);
+   page_access.directPeekBase = &myImage[address & 0x0FFF];
+    mySystem->setPageAccess(address >> mySystem->pageShift(), page_access);
   }
 }
 

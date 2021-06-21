@@ -92,9 +92,6 @@ class CartridgeF6SC : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-
     // The 16K ROM image of the cartridge
     uInt8 myImage[16384];
 

@@ -93,22 +93,21 @@ void CartridgeMC::install(System& system)
   // TODO: These TIA accesses may need to be chained, however, at this
   //       point Chris isn't sure if the hardware will allow it or not
   //
-  PageAccess access;
   for(uInt32 i = 0x00; i < 0x40; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Map the cartridge into the system
   for(uInt32 j = 0x1000; j < 0x2000; j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(j >> shift, page_access);
   }
 }
 

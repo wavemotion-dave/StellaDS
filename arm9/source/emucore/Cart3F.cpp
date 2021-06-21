@@ -57,8 +57,6 @@ void Cartridge3F::reset()
   bank(0);
 }
 
-static PageAccess access;
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3F::install(System& system)
 {
@@ -72,24 +70,24 @@ void Cartridge3F::install(System& system)
   // We're going to map the first 80 hex bytes here... we will chain call into TIA as needed
   for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Setup the second segment to always point to the last ROM slice
   for(uInt32 j = 0x1800; j < 0x2000; j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
+    page_access.directPokeBase = 0;
+    mySystem->setPageAccess(j >> shift, page_access);
   }
     
   // Leave these zero for faster bank switch
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
 
   // Install pages for bank 0 into the first segment
   bank(0);
@@ -137,7 +135,7 @@ void Cartridge3F::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-    mySystem->setPageAccess(address >> shift, access);
+    page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
+    mySystem->setPageAccess(address >> shift, page_access);
   }
 }

@@ -76,22 +76,21 @@ void Cartridge3E::install(System& system)
   // Set the page accessing methods for the hot spots (for 100% emulation
   // I would need to chain any accesses below 0x40 to the TIA but for
   // now I'll just forget about them)
-  PageAccess access;
   for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+   page_access.directPeekBase = 0;
+   page_access.directPokeBase = 0;
+   page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Setup the second segment to always point to the last ROM slice
   for(uInt32 j = 0x1800; j < 0x2000; j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(j >> shift, access);
+   page_access.device = this;
+   page_access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
+   page_access.directPokeBase = 0;
+    mySystem->setPageAccess(j >> shift, page_access);
   }
 
   // Install pages for bank 0 into the first segment
@@ -162,15 +161,14 @@ void Cartridge3E::bank(uInt16 bank)
     uInt16 shift = mySystem->pageShift();
   
     // Setup the page access methods for the current bank
-    PageAccess access;
-    access.device = this;
-    access.directPokeBase = 0;
+   page_access.device = this;
+   page_access.directPokeBase = 0;
   
     // Map ROM image into the system
     for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
     {
-      access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-      mySystem->setPageAccess(address >> shift, access);
+     page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
+      mySystem->setPageAccess(address >> shift, page_access);
     }
   }
   else
@@ -184,24 +182,23 @@ void Cartridge3E::bank(uInt16 bank)
     uInt32 address;
   
     // Setup the page access methods for the current bank
-    PageAccess access;
-    access.device = this;
-    access.directPokeBase = 0;
+   page_access.device = this;
+   page_access.directPokeBase = 0;
   
     // Map read-port RAM image into the system
     for(address = 0x1000; address < 0x1400; address += (1 << shift))
     {
-      access.directPeekBase = &myRam[offset + (address & 0x03FF)];
-      mySystem->setPageAccess(address >> shift, access);
+     page_access.directPeekBase = &myRam[offset + (address & 0x03FF)];
+      mySystem->setPageAccess(address >> shift, page_access);
     }
 
-    access.directPeekBase = 0;
+   page_access.directPeekBase = 0;
 
     // Map write-port RAM image into the system
     for(address = 0x1400; address < 0x1800; address += (1 << shift))
     {
-      access.directPokeBase = &myRam[offset + (address & 0x03FF)];
-      mySystem->setPageAccess(address >> shift, access);
+     page_access.directPokeBase = &myRam[offset + (address & 0x03FF)];
+      mySystem->setPageAccess(address >> shift, page_access);
     }
   }
 }

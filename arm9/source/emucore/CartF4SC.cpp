@@ -22,8 +22,6 @@
 #include "System.hxx"
 #include <iostream>
 
-static  PageAccess access;
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF4SC::CartridgeF4SC(const uInt8* image)
 {
@@ -72,33 +70,33 @@ void CartridgeF4SC::install(System& system)
   // Set the page accessing methods for the hot spots
   for(uInt32 i = (0x1FF4 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Set the page accessing method for the RAM writing pages
   for(uInt32 j = 0x1000; j < 0x1080; j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = 0;
-    access.directPokeBase = &myRAM[j & 0x007F];
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = &myRAM[j & 0x007F];
+    mySystem->setPageAccess(j >> shift, page_access);
   }
 
   // Set the page accessing method for the RAM reading pages
   for(uInt32 k = 0x1080; k < 0x1100; k += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = &myRAM[k & 0x007F];
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(k >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = &myRAM[k & 0x007F];
+    page_access.directPokeBase = 0;
+    mySystem->setPageAccess(k >> shift, page_access);
   }
 
   // Leave these at zero for faster bank switch
-  access.directPeekBase = 0;
-  access.directPokeBase = 0;
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
     
   // Install pages for bank 0
   bank(0);
@@ -142,11 +140,13 @@ void CartridgeF4SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;
+    
+  // Setup the page access methods for the current bank
+  uInt32 access_num = 0x1100 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x1100; address < (0x1FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0100; address < (0x0FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    access.directPeekBase = &myImage[myCurrentOffset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> MY_PAGE_SHIFT, access);
+      myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
   }
 }

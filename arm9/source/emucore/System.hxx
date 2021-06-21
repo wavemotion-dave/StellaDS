@@ -28,7 +28,7 @@ class NullDevice;
 #include "NullDev.hxx"
 
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
-extern uInt32 debug[];         // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
+extern Int32 debug[];         // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
 extern uInt8  myDataBusState;  // The current state of the Data Bus
 
 /**
@@ -203,13 +203,6 @@ class System
     void resetCycles();
 
   public:
-    /**
-      Get the current state of the data bus in the system.  The current
-      state is the last data that was accessed by the system.
-
-      @return the data bus state
-    */  
-    uInt8 getDataBusState() const;
 
     /**
       Get the byte at the specified address.  No masking of the
@@ -280,12 +273,6 @@ class System
     // Assignment operator isn't supported by this class so make it private
     System& operator = (const System&);
 };
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline __attribute__((always_inline)) uInt8 System::getDataBusState() const
-{
-  return myDataBusState;
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 System::peek_pc(void)

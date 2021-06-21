@@ -68,31 +68,30 @@ void CartridgeFASC::install(System& system)
   assert(((0x1100 & mask) == 0) && ((0x1200 & mask) == 0));
 
   // Set the page accessing methods for the hot spots
-  PageAccess access;
   for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    access.directPeekBase = 0;
-    access.directPokeBase = 0;
-    access.device = this;
-    mySystem->setPageAccess(i >> shift, access);
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
+    mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Set the page accessing method for the RAM writing pages
   for(uInt32 j = 0x1000; j < 0x1100; j += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = 0;
-    access.directPokeBase = &myRAM[j & 0x00FF];
-    mySystem->setPageAccess(j >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = &myRAM[j & 0x00FF];
+    mySystem->setPageAccess(j >> shift, page_access);
   }
  
   // Set the page accessing method for the RAM reading pages
   for(uInt32 k = 0x1100; k < 0x1200; k += (1 << shift))
   {
-    access.device = this;
-    access.directPeekBase = &myRAM[k & 0x00FF];
-    access.directPokeBase = 0;
-    mySystem->setPageAccess(k >> shift, access);
+    page_access.device = this;
+    page_access.directPeekBase = &myRAM[k & 0x00FF];
+    page_access.directPokeBase = 0;
+    mySystem->setPageAccess(k >> shift, page_access);
   }
 
   // Install pages for bank 2
@@ -174,15 +173,14 @@ void CartridgeFASC::bank(uInt16 bank)
   uInt16 mask = mySystem->pageMask();
 
   // Setup the page access methods for the current bank
-  PageAccess access;
-  access.device = this;
-  access.directPokeBase = 0;
+  page_access.device = this;
+  page_access.directPokeBase = 0;
 
   // Map ROM image into the system
   for(uInt32 address = 0x1200; address < (0x1FF8U & ~mask);
       address += (1 << shift))
   {
-    access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
-    mySystem->setPageAccess(address >> shift, access);
+    page_access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
+    mySystem->setPageAccess(address >> shift, page_access);
   }
 }
