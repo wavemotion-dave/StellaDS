@@ -538,7 +538,7 @@ static const CartInfo table[] =
     {"09388bf390cd9a86dc0849697b96c7dc",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Pete Rose Baseball (1988).bin
     {"e9034b41741dcee64ab6605aba9de455",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   201,   0, -1},    // Phantom Tank (Digivision).bin
     {"6a222c26bcece3a510ddda21398f72c6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   203,   0, -1},    // Phantom Tank (Digivision) [alt].bin        
-    {"e959b5a2c882ccaacb43c32790957c2d",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Phantom II, Pirate (2006) (David Weavil).bin
+    {"e959b5a2c882ccaacb43c32790957c2d",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Phantom II, Pirate (2006) (David Weavil).bin
     {"62f74a2736841191135514422b20382d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Pharaoh's Curse.bin
     {"7dcbfd2acc013e817f011309c7504daa",  "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  192,   210,   0, -3},    // Phaser Patrol (1982).bin
     {"7e52a95074a66640fcfde124fffd491a",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Phoenix (1982).bin
@@ -844,7 +844,7 @@ static const CartInfo table[] =
     {"bf7389cbfee666b33b8a88cc6c830edd",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Vault (TE).bin
     {"d08fccfbebaa531c4a4fa7359393a0a9",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Venetian Blinds Demo (1982).bin
     {"3e899eba0ca8cd2972da1ae5479b4f0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Venture (1982).bin
-    {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   202,   0,  4},    // Venture Reloaded (RC3).bin
+    {"7412f6788087d7e912c33ba03b36dd1b",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  4},    // Venture Reloaded (RC3).bin
     {"0956285e24a18efa10c68a33846ca84d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Viagem Espacial.bin
     {"539d26b6e9df0da8e7465f0f5ad863b7",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Video Checkers (1980).bin
     {"f0b7db930ca0e548c41a97160b9f6275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Video Chess (1979).bin
