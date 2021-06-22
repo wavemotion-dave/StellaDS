@@ -58,7 +58,7 @@ const struct instructions_t instructions[] =
                                             " \n"
     },
     
-    {"dd7884b4f93cab423ac471aa1935e3df",  "Asteroids (c)1981 Atari"
+    {"dd7884b4f93cab423ac471aa1935e3df",  "Asteroids (c)1981 Atari\n"
                                             "GAME 1: Slow, Extra Life AT  5K\n"
                                             "GAME 2: Fast, Extra Life AT  5K\n"
                                             "GAME 3: Slow, Extra Life AT 10K\n"
@@ -76,10 +76,9 @@ const struct instructions_t instructions[] =
                                             "LARGE ASTEROIDS    20 PTS\n"
                                             "SATELLITES        200 PTS\n"
                                             "UFOs             1000 PTS\n"
-                                            " \n"
     },
     
-    {"ccbd36746ed4525821a8083b0d6d2c2c",  "Asteroids (c)1981 Atari"
+    {"ccbd36746ed4525821a8083b0d6d2c2c",  "Asteroids (c)1981 Atari\n"
                                             "GAME 1: Slow, Extra Life AT  5K\n"
                                             "GAME 2: Fast, Extra Life AT  5K\n"
                                             "GAME 3: Slow, Extra Life AT 10K\n"
@@ -97,7 +96,6 @@ const struct instructions_t instructions[] =
                                             "LARGE ASTEROIDS    20 PTS\n"
                                             "SATELLITES        200 PTS\n"
                                             "UFOs             1000 PTS\n"
-                                            " \n"
     },
 
     {"9ad36e699ef6f45d9eb6c4cf90475c9f",  "ATLANTIS (c)1982 IMAGIC"
