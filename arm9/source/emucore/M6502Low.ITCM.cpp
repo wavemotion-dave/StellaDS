@@ -42,7 +42,7 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
-    asm(".rept 7 ; nop ; .endr");
+    asm(".rept 5 ; nop ; .endr");
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
