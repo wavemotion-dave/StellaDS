@@ -32,6 +32,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.1 : 22-Jun-2021 by Dave Bernazzani (wavemotion)
+  * Up to 30 instruction manuals added.
+  * Fix for difficulty switches (they reset on new game)
+  * Fix for High Score initials so it recalls last known entry.
+
 V3.0 : 21-Jun-2021 by Dave Bernazzani (wavemotion)
   * Reworked the page access and bank switching to eek out another 2-3% speed!
   * Cleanup for the CPU Core
