@@ -455,7 +455,8 @@ const struct instructions_t instructions[] =
     
     {"fb4ca865abc02d66e39651bd9ade140a",  "RABBIT TRANSIT (c)1983 ARCADIA\n"
                                           " \n"  
-                                          "Guide Your Bunny to Adventure!\n"
+                                          "Guide Your Bunny to the\n"
+                                          "Bunny Bushes!\n"
                                           " \n"  
                                           "L-DIFF: A=Turtle Submerges\n"
                                           " \n"  
@@ -464,6 +465,8 @@ const struct instructions_t instructions[] =
                                           "Bonus Points for Time Remain\n"
                                           " \n"  
                                           "Extra Bunny at 10,000 PTS\n"  
+                                          " \n"
+        
         },
         
     {"240bfbac5163af4df5ae713985386f92",  "SEA QUEST (c)1983 ACTIVISION\n"

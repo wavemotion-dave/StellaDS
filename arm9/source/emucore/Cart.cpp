@@ -917,7 +917,7 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeDPC(image, size);
   else if (type == "DPCP")
   {
-      cartridge = new CartridgeF4SC(image); // It's gonna fail anyway...
+      cartridge = new Cartridge4K(image); // It's gonna fail anyway...
       dsWarnIncompatibileCart();
   }
   else if(type == "E0")

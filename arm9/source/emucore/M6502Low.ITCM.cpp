@@ -42,7 +42,7 @@ M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
     NumberOfDistinctAccesses = 0;
-    asm(".rept 5 ; nop ; .endr");
+    asm(".rept 3 ; nop ; .endr");
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -318,8 +318,8 @@ bool M6502Low::execute_AR(uInt16 number)
   // Loop until execution is stopped or a fatal error occurs
   for(;;)
   {
-    uInt16 operandAddress=0;
-    uInt8 operand=0;
+    uInt16 operandAddress;
+    uInt8 operand;
       
     for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
     {
