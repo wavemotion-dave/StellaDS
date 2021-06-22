@@ -485,6 +485,9 @@ bool dsLoadGame(char *filename)
         {
             bSoundEnabled = false;
         }
+        
+        
+        left_difficulty=0; right_difficulty=0;
 
         psound_buffer=sound_buffer;
         memset(sound_buffer, 0x00, SOUND_SIZE);
