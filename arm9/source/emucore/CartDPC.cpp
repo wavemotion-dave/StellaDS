@@ -100,6 +100,7 @@ void CartridgeDPC::reset()
   mySystemCycles = mySystem->cycles();
 
   // Upon reset we switch to bank 1
+  myCurrentOffset = 4096;
   bank(1);
 }
 
@@ -140,13 +141,13 @@ void CartridgeDPC::install(System& system)
   }
 
   // Install pages for bank 1
+  myCurrentOffset = 4096;
   bank(1);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPC::bank(uInt16 bank)
 { 
-  myCurrentOffset = bank * 4096;
   uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
   // Map Program ROM image into the system
   for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
@@ -217,8 +218,8 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
   else
   {
     // Switch banks if necessary
-    if (address == 0x0FF8) bank(0);
-    else if (address == 0x0FF9) bank(1);
+    if (address == 0x0FF8) {  myCurrentOffset = 0; bank(0);}
+    else if (address == 0x0FF9) {  myCurrentOffset = 4096;bank(1);}
     return myProgramImage[myCurrentOffset + address];
   }
 }
@@ -272,7 +273,7 @@ ITCM_CODE void CartridgeDPC::poke(uInt16 address, uInt8 value)
   else
   {
     // Switch banks if necessary
-    if (address == 0x0FF8) bank(0);
-    else if (address == 0x0FF9) bank(1);
+    if (address == 0x0FF8) { myCurrentOffset = 0; bank(0);}
+    else if (address == 0x0FF9) {  myCurrentOffset = 4096;bank(1);}
   }
 }
