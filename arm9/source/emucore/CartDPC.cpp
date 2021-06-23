@@ -15,17 +15,45 @@
 //
 // $Id: CartDPC.cxx,v 1.9 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
-
+#include <nds.h>
 #include <assert.h>
 #include <iostream>
 #include "CartDPC.hxx"
 #include "System.hxx"
+
+// The 8K program ROM image of the cartridge
+uInt8 *myProgramImage __attribute__((section(".dtcm")));
+
+// The 2K display ROM image of the cartridge
+uInt8 myDisplayImage[2048];
+
+// The top registers for the data fetchers
+uInt8 myTops[8];
+
+// The bottom registers for the data fetchers
+uInt8 myBottoms[8];
+
+// The counter registers for the data fetchers
+uInt16 myCounters[8] __attribute__((section(".dtcm")));
+
+// The flag registers for the data fetchers
+uInt8 myFlags[8];
+
+// The music mode DF5, DF6, & DF7 enabled flags
+uInt8 myMusicMode[3];
+
+// The random number generator register
+uInt8 myRandomNumber;
+
+// System cycle count when the last update to music data fetchers occurred
+Int32 mySystemCycles; 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
 {
   uInt32 addr;
 
+  myProgramImage = fast_cart_buffer;    
   // Copy the program ROM image into my buffer
   for(addr = 0; addr < 8192; ++addr)
   {
@@ -52,7 +80,6 @@ CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
 
   // Initialize the system cycles counter & fractional clock values
   mySystemCycles = 0;
-  myFractionalClocks = 0.0;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -71,7 +98,6 @@ void CartridgeDPC::reset()
 {
   // Update cycles to the current system cycles
   mySystemCycles = mySystem->cycles();
-  myFractionalClocks = 0.0;
 
   // Upon reset we switch to bank 1
   bank(1);
@@ -118,19 +144,20 @@ void CartridgeDPC::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeDPC::clockRandomNumberGenerator()
-{
-  myRandomNumber++;
+inline void CartridgeDPC::bank(uInt16 bank)
+{ 
+  myCurrentOffset = bank * 4096;
+  uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
+  // Map Program ROM image into the system
+  for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  {
+    myPageAccessTable[access_num++].directPeekBase = &myProgramImage[myCurrentOffset + address];
+  }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeDPC::updateMusicModeDataFetchers()
-{  
-  return;
-}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeDPC::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
@@ -190,24 +217,14 @@ uInt8 CartridgeDPC::peek(uInt16 address)
   else
   {
     // Switch banks if necessary
-    switch(address)
-    {
-      case 0x0FF8:
-        // Set the current bank to the lower 4k bank
-        bank(0);
-        break;
-
-      case 0x0FF9:
-        // Set the current bank to the upper 4k bank
-        bank(1);
-        break;
-    }
+    if (address == 0x0FF8) bank(0);
+    else if (address == 0x0FF9) bank(1);
     return myProgramImage[myCurrentOffset + address];
   }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeDPC::poke(uInt16 address, uInt8 value)
+ITCM_CODE void CartridgeDPC::poke(uInt16 address, uInt8 value)
 {
   address = address & 0x0FFF;
 
@@ -255,29 +272,7 @@ void CartridgeDPC::poke(uInt16 address, uInt8 value)
   else
   {
     // Switch banks if necessary
-    switch(address)
-    {
-      case 0x0FF8:
-        // Set the current bank to the lower 4k bank
-        bank(0);
-        break;
-
-      case 0x0FF9:
-        // Set the current bank to the upper 4k bank
-        bank(1);
-        break;
-    }
-  }
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeDPC::bank(uInt16 bank)
-{ 
-  myCurrentOffset = bank * 4096;
-  uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
-  // Map Program ROM image into the system
-  for(uInt32 address = 0x1080; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
-  {
-    myPageAccessTable[access_num++].directPeekBase = &myProgramImage[myCurrentOffset + (address & 0x0FFF)];
+    if (address == 0x0FF8) bank(0);
+    else if (address == 0x0FF9) bank(1);
   }
 }

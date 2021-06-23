@@ -49,7 +49,7 @@ extern void dsPrintCartType(char *);
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 CartInfo myCartInfo __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
- uInt16 myCurrentOffset __attribute__((section(".dtcm")));
+uInt16 myCurrentOffset __attribute__((section(".dtcm")));
 
 
 static const CartInfo table[] = 
@@ -636,7 +636,7 @@ static const CartInfo table[] =
     {"c880c659cdc0f84c4a66bc818f89618e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   202,   0, -4},    // Sesam, Oeffne Dich (AKA Open Sesame) (Bitcorp, TJ).bin
     {"3034532daf80997f752aee680d2e7fc3",  "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Seaweed Assault.bin
     {"dde55d9868911407fe8b3fefef396f00",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Sea Wolf.bin
-    {"605fd59bfef88901c8c4794193a4cbad",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   199,   0,  5},    // Secret Agent (1983).bin
+    {"605fd59bfef88901c8c4794193a4cbad",  "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   199,   0,  5},    // Secret Agent (1983).bin
     {"fc24a94d4371c69bc58f5245ada43c44",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  2},    // Secret Quest (1989).bin
     {"8da51e0c4b6b46f7619425119c7d018e",  "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   3,  8},    // Sentinel (1990).bin
     {"258f8f1a6d9af8fc1980b22361738678",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Shadow Reflex (Beta 10-26-2020).bin

@@ -98,51 +98,6 @@ class CartridgeDPC : public Cartridge
       @param bank The bank that should be installed in the system
     */
     inline void bank(uInt16 bank);
-
-    /** 
-      Clocks the random number generator to move it to its next state
-    */
-    void clockRandomNumberGenerator();
-
-    /** 
-      Updates any data fetchers in music mode based on the number of
-      CPU cycles which have passed since the last update.
-    */
-    void updateMusicModeDataFetchers();
-
-  private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-
-    // The 8K program ROM image of the cartridge
-    uInt8 myProgramImage[8192];
-
-    // The 2K display ROM image of the cartridge
-    uInt8 myDisplayImage[2048];
-
-    // The top registers for the data fetchers
-    uInt8 myTops[8];
-
-    // The bottom registers for the data fetchers
-    uInt8 myBottoms[8];
-
-    // The counter registers for the data fetchers
-    uInt16 myCounters[8];
-
-    // The flag registers for the data fetchers
-    uInt8 myFlags[8];
-
-    // The music mode DF5, DF6, & DF7 enabled flags
-    bool myMusicMode[3];
-
-    // The random number generator register
-    uInt8 myRandomNumber;
-
-    // System cycle count when the last update to music data fetchers occurred
-    Int32 mySystemCycles;
-
-    // Fractional DPC music OSC clocks unused during the last update
-    double myFractionalClocks;
 };
 #endif
 
