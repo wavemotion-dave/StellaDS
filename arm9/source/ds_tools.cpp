@@ -43,6 +43,9 @@
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
 extern uInt8 *psound_buffer;
 
+#define MAX_RESISTANCE  1000000
+#define MIN_RESISTANCE  80000
+
 int atari_frames=0;
 
 #define MAX_DEBUG 5
@@ -498,8 +501,11 @@ bool dsLoadGame(char *filename)
             fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
         }
 
+        // Center all paddles...
         theConsole->fakePaddleResistance = 450000;
-        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
+        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11,    theConsole->fakePaddleResistance);
+        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F9,     theConsole->fakePaddleResistance);
         
         TIMER0_CR=0;
         TIMER0_DATA=0;
@@ -1034,14 +1040,14 @@ ITCM_CODE void dsMainLoop(void)
                     if(keys_pressed & (KEY_LEFT))
                     {
                         theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
-                        if (theConsole->fakePaddleResistance > 800000) theConsole->fakePaddleResistance = 800000;
+                        if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
                         theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
                     }
                     else
                     if(keys_pressed & (KEY_RIGHT))
                     {
                         theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
-                        if (theConsole->fakePaddleResistance < 100000) theConsole->fakePaddleResistance = 100000;
+                        if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
                         theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
                     }
                     else
@@ -1049,12 +1055,48 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         touchPosition touch;
                         touchRead(&touch);
-                        theConsole->fakePaddleResistance = (900000 - ((800000 / 255) * touch.px));
+                        theConsole->fakePaddleResistance = ((MIN_RESISTANCE+MAX_RESISTANCE) - ((MAX_RESISTANCE / 255) * touch.px));
                         keys_touch = 1;
                         theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
                     }
 
                     theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_END:StellaEvent::KCODE_F12), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
+                                                                                      (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
+                    if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
+                    {
+                        if (!((keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L))))  // We want to still process for L/R shoulder buttons for possible screen scaling...
+                        {
+                            keys_pressed = 0;   // If these were pressed... don't handle them below...
+                        }
+                    }
+                    break;
+                    
+                case CTR_PADDLE2:
+                case CTR_PADDLE3:
+                    if(keys_pressed & (KEY_LEFT))
+                    {
+                        theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
+                        if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
+                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                    }
+                    else
+                    if(keys_pressed & (KEY_RIGHT))
+                    {
+                        theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
+                        if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
+                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                    }
+                    else
+                    if (bShowPaddles  && (keys_pressed & KEY_TOUCH))
+                    {
+                        touchPosition touch;
+                        touchRead(&touch);
+                        theConsole->fakePaddleResistance = ((MIN_RESISTANCE+MAX_RESISTANCE) - ((MAX_RESISTANCE / 255) * touch.px));
+                        keys_touch = 1;
+                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                    }
+
+                    theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F10:StellaEvent::KCODE_F14), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
                                                                                       (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
                     if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
                     {

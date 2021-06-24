@@ -190,8 +190,6 @@ void EventHandler::setDefaultKeymap()
   myKeyTable[StellaEvent::KCODE_DELETE]    = Event::PaddleZeroResistance;
   myKeyTable[StellaEvent::KCODE_END]       = Event::PaddleZeroFire;
 
-  myKeyTable[StellaEvent::KCODE_F11]       = Event::PaddleOneResistance;
-  myKeyTable[StellaEvent::KCODE_F12]       = Event::PaddleOneFire;
     
   myKeyTable[StellaEvent::KCODE_F1]        = Event::ConsoleSelect;
   myKeyTable[StellaEvent::KCODE_F2]        = Event::ConsoleReset;
@@ -201,9 +199,12 @@ void EventHandler::setDefaultKeymap()
   myKeyTable[StellaEvent::KCODE_F6]        = Event::ConsoleLeftDifficultyB;
   myKeyTable[StellaEvent::KCODE_F7]        = Event::ConsoleRightDifficultyA;
   myKeyTable[StellaEvent::KCODE_F8]        = Event::ConsoleRightDifficultyB;
-  myKeyTable[StellaEvent::KCODE_F9]        = Event::SaveState;
-  myKeyTable[StellaEvent::KCODE_F10]       = Event::ChangeState;
-
+  myKeyTable[StellaEvent::KCODE_F9]        = Event::PaddleTwoResistance;
+  myKeyTable[StellaEvent::KCODE_F10]       = Event::PaddleTwoFire;
+  myKeyTable[StellaEvent::KCODE_F11]       = Event::PaddleOneResistance;
+  myKeyTable[StellaEvent::KCODE_F12]       = Event::PaddleOneFire;
+  myKeyTable[StellaEvent::KCODE_F13]       = Event::PaddleThreeResistance;
+  myKeyTable[StellaEvent::KCODE_F14]       = Event::PaddleThreeFire;
   myKeyTable[StellaEvent::KCODE_PAUSE]     = Event::Pause;
 }
 

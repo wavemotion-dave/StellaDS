@@ -74,7 +74,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   // -------------------------------------------------------------------------------------------
   // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers
   // -------------------------------------------------------------------------------------------
-  if ((myCartInfo.controllerType == CTR_PADDLE0) || (myCartInfo.controllerType == CTR_PADDLE1))
+  if ((myCartInfo.controllerType == CTR_PADDLE0) || (myCartInfo.controllerType == CTR_PADDLE1) || (myCartInfo.controllerType == CTR_PADDLE2) || (myCartInfo.controllerType == CTR_PADDLE3))
   {
       myControllers[0] = new Paddles(Controller::Left, *myEvent);
       myControllers[1] = new Paddles(Controller::Right, *myEvent);

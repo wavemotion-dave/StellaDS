@@ -60,6 +60,8 @@ extern CartInfo myCartInfo;
 #define CTR_KEYBOARD  6     // For keyboard games like Codebreaker
 #define CTR_STARRAID  7     // Star raiders has Left Joystick and Right Keypad
 #define CTR_BOOSTER   8     // Omega Race and Thrust+
+#define CTR_PADDLE2   9     // Paddle in right port
+#define CTR_PADDLE3  10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
 
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
@@ -81,6 +83,10 @@ extern CartInfo myCartInfo;
 #define ANA1_3       13
 #define ANA1_4       14
 #define ANA1_5       15
+#define ANA1_6       16
+#define ANA1_7       17
+#define ANA1_8       18
+#define ANA1_9       19
 #define ANA2_0       20
 #define ANA2_5       25
 
