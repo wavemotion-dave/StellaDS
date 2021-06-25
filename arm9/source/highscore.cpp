@@ -10,8 +10,10 @@
 #include "bgHighScore.h"
 #include "bgBottom.h"
 
-#define MAX_HS_GAMES 1000
-#define HS_VERSION   0x0001
+#define MAX_HS_GAMES    1000
+#define HS_VERSION      0x0001
+
+#define HS_OPT_SORTLOW  0x0001
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
@@ -138,6 +140,28 @@ struct score_t score_entry;
 char hs_line[33];
 char md5[33];
 
+void highscore_showoptions(short foundIdx)
+{
+    dsPrintValue(28,3,0, (char*)"   ");
+    if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+    {
+        dsPrintValue(28,3,0, (char*)"LOW");
+    }
+}
+
+void show_scores_no_legend(short foundIdx)
+{
+    dsPrintValue(7,2,0, (char*)"** HIGH SCORES **");
+    dsPrintValue(7,3,0, (char*)highscores.highscore_table[foundIdx].notes);
+    for (int i=0; i<10; i++)
+    {
+        sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s", highscores.highscore_table[foundIdx].scores[i].year, highscores.highscore_table[foundIdx].scores[i].month,highscores.highscore_table[foundIdx].scores[i].day, 
+                                                         highscores.highscore_table[foundIdx].scores[i].initials, highscores.highscore_table[foundIdx].scores[i].score);
+        dsPrintValue(3,6+i, 0, hs_line);
+    }
+    highscore_showoptions(foundIdx);
+}
+
 void show_scores(short foundIdx)
 {
     dsPrintValue(7,2,0, (char*)"** HIGH SCORES **");
@@ -149,10 +173,42 @@ void show_scores(short foundIdx)
         dsPrintValue(3,6+i, 0, hs_line);
     }
     dsPrintValue(3,20,0, (char*)"PRESS X FOR NEW HI SCORE     ");
-    dsPrintValue(3,21,0, (char*)"PRESS Y FOR NOTES            ");
+    dsPrintValue(3,21,0, (char*)"PRESS Y FOR NOTES/OPTIONS    ");
     dsPrintValue(3,22,0, (char*)"PRESS B TO EXIT              ");
     dsPrintValue(3,23,0, (char*)"SCORES AUTO SORT AFTER ENTRY ");
     dsPrintValue(3,17,0, (char*)"                             ");
+    highscore_showoptions(foundIdx);
+}
+
+void highscore_sort(short foundIdx)
+{
+    // Bubblesort!!
+    for (int i=0; i<9; i++)
+    {
+        for (int j=0; j<9; j++)
+        {
+            if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+            {
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, highscores.highscore_table[foundIdx].scores[j].score) < 0)
+                {
+                    // Swap...
+                    memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j], &highscores.highscore_table[foundIdx].scores[j+1], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j+1], &score_entry, sizeof(score_entry));
+                }
+            }
+            else
+            {
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, highscores.highscore_table[foundIdx].scores[j].score) > 0)
+                {
+                    // Swap...
+                    memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j], &highscores.highscore_table[foundIdx].scores[j+1], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j+1], &score_entry, sizeof(score_entry));
+                }
+            }
+        }
+    }    
 }
 
 void highscore_entry(short foundIdx)
@@ -184,19 +240,7 @@ void highscore_entry(short foundIdx)
             strcpy(highscores.last_initials, score_entry.initials);
             memcpy(&highscores.highscore_table[foundIdx].scores[9], &score_entry, sizeof(score_entry));
             strcpy(highscores.highscore_table[foundIdx].md5sum, md5);                    
-            for (int i=0; i<9; i++)
-            {
-                for (int j=0; j<9; j++)
-                {
-                    if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, highscores.highscore_table[foundIdx].scores[j].score) > 0)
-                    {
-                        // Swap...
-                        memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
-                        memcpy(&highscores.highscore_table[foundIdx].scores[j], &highscores.highscore_table[foundIdx].scores[j+1], sizeof(score_entry));
-                        memcpy(&highscores.highscore_table[foundIdx].scores[j+1], &score_entry, sizeof(score_entry));
-                    }
-                }
-            }
+            highscore_sort(foundIdx);
             highscore_save();
             bEntryDone=1;
         }
@@ -283,9 +327,9 @@ void highscore_options(short foundIdx)
     char dampen=0;
     
     dsPrintValue(3,20,0, (char*)"UP/DN/LEFT/RIGHT ENTER NOTES");
-    dsPrintValue(3,21,0, (char*)"PRESS START TO SAVE NOTES   ");
-    dsPrintValue(3,22,0, (char*)"PRESS SELECT TO CANCEL      ");
-    dsPrintValue(3,23,0, (char*)"                            ");
+    dsPrintValue(3,21,0, (char*)"X=TOGGLE SORT, L+R=CLR SCORE");
+    dsPrintValue(3,22,0, (char*)"PRESS START TO SAVE OPTIONS ");
+    dsPrintValue(3,23,0, (char*)"PRESS SELECT TO CANCEL      ");
     dsPrintValue(3,17,0, (char*)"NOTE: ");
 
     strcpy(notes, highscores.highscore_table[foundIdx].notes);
@@ -342,6 +386,41 @@ void highscore_options(short foundIdx)
                 blink=0;
                 dampen=10;
             }
+
+            if (keysCurrent() & KEY_X)  
+            {
+                if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+                {
+                    highscores.highscore_table[foundIdx].options &= (uint16)~HS_OPT_SORTLOW;
+                }
+                else
+                {
+                    highscores.highscore_table[foundIdx].options |= (uint16)HS_OPT_SORTLOW;
+                }
+                highscore_showoptions(foundIdx);
+                highscore_sort(foundIdx);
+                dampen=15;
+            }
+            
+            // Clear the entire game of scores... 
+            if ((keysCurrent() & KEY_L) && (keysCurrent() & KEY_R))
+            {
+                strcpy(highscores.highscore_table[foundIdx].md5sum, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                highscores.highscore_table[foundIdx].options = 0x0000;
+                strcpy(highscores.highscore_table[foundIdx].notes, "                    ");
+                strcpy(notes, "                    ");                
+                for (int j=0; j<10; j++)
+                {
+                    strcpy(highscores.highscore_table[foundIdx].scores[j].score, "000000");
+                    strcpy(highscores.highscore_table[foundIdx].scores[j].initials, "   ");
+                    strcpy(highscores.highscore_table[foundIdx].scores[j].reserved, "    ");
+                    highscores.highscore_table[foundIdx].scores[j].year = 0;
+                    highscores.highscore_table[foundIdx].scores[j].month = 0;
+                    highscores.highscore_table[foundIdx].scores[j].day = 0;
+                }
+                show_scores_no_legend(foundIdx);
+                highscore_save();                    
+            }            
         }
         else
         {
@@ -406,23 +485,6 @@ void highscore_display(void)
         if (keysCurrent() & KEY_B) bDone=1;
         if (keysCurrent() & KEY_X) highscore_entry(foundIdx);
         if (keysCurrent() & KEY_Y) highscore_options(foundIdx);
-        
-        // Clear the entire game of scores... 
-        if ((keysCurrent() & KEY_L) && (keysCurrent() & KEY_R) && (keysCurrent() & KEY_Y))
-        {
-            strcpy(highscores.highscore_table[foundIdx].md5sum, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-            for (int j=0; j<10; j++)
-            {
-                strcpy(highscores.highscore_table[foundIdx].scores[j].score, "000000");
-                strcpy(highscores.highscore_table[foundIdx].scores[j].initials, "   ");
-                strcpy(highscores.highscore_table[foundIdx].scores[j].reserved, "    ");
-                highscores.highscore_table[foundIdx].scores[j].year = 0;
-                highscores.highscore_table[foundIdx].scores[j].month = 0;
-                highscores.highscore_table[foundIdx].scores[j].day = 0;
-            }
-            show_scores(foundIdx);
-            highscore_save();                    
-        }
     }    
 }
 

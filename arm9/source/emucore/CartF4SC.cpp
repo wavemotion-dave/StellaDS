@@ -147,6 +147,7 @@ void CartridgeF4SC::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0100; address < (0x0FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
+      page_access.directPeekBase = &myImage[myCurrentOffset + address];
+      mySystem->setPageAccess(access_num++, page_access);
   }
 }
