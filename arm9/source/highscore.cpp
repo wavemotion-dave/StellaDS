@@ -13,9 +13,10 @@
 #define MAX_HS_GAMES    1000
 #define HS_VERSION      0x0001
 
-#define HS_OPT_SORTLOW  0x0001
-
-#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
+#define HS_OPT_SORTMASK  0x0003
+#define HS_OPT_SORTLOW   0x0001
+#define HS_OPT_SORTTIME  0x0002
+#define HS_OPT_SORTASCII 0x0003
 
 #pragma pack(1)
 
@@ -140,44 +141,56 @@ struct score_t score_entry;
 char hs_line[33];
 char md5[33];
 
-void highscore_showoptions(short foundIdx)
+void highscore_showoptions(uint16 options)
 {
-    dsPrintValue(28,3,0, (char*)"   ");
-    if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+    if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTLOW)
     {
-        dsPrintValue(28,3,0, (char*)"LOW");
+        dsPrintValue(21,5,0, (char*)"[LOW]  ");
+    }
+    else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)
+    {
+        dsPrintValue(21,5,0, (char*)"[TIME] ");
+    }
+    else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
+    {
+        dsPrintValue(21,5,0, (char*)"[ASCII]");
+    }
+    else
+    {   
+        dsPrintValue(21,5,0, (char*)"       ");    
     }
 }
 
-void show_scores_no_legend(short foundIdx)
+void show_scores(short foundIdx, bool bShowLegend)
 {
     dsPrintValue(7,2,0, (char*)"** HIGH SCORES **");
-    dsPrintValue(7,3,0, (char*)highscores.highscore_table[foundIdx].notes);
+    dsPrintValue(24 - (strlen(highscores.highscore_table[foundIdx].notes)/2),3,0, (char*)highscores.highscore_table[foundIdx].notes);
     for (int i=0; i<10; i++)
     {
-        sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s", highscores.highscore_table[foundIdx].scores[i].year, highscores.highscore_table[foundIdx].scores[i].month,highscores.highscore_table[foundIdx].scores[i].day, 
-                                                         highscores.highscore_table[foundIdx].scores[i].initials, highscores.highscore_table[foundIdx].scores[i].score);
+        if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)
+        {
+            sprintf(hs_line, "%04d-%02d-%02d   %-3s   %c%c:%c%c.%c%c", highscores.highscore_table[foundIdx].scores[i].year, highscores.highscore_table[foundIdx].scores[i].month,highscores.highscore_table[foundIdx].scores[i].day, 
+                                                             highscores.highscore_table[foundIdx].scores[i].initials, highscores.highscore_table[foundIdx].scores[i].score[0], highscores.highscore_table[foundIdx].scores[i].score[1],
+                                                             highscores.highscore_table[foundIdx].scores[i].score[2], highscores.highscore_table[foundIdx].scores[i].score[3], highscores.highscore_table[foundIdx].scores[i].score[4],
+                                                             highscores.highscore_table[foundIdx].scores[i].score[5]);
+        }
+        else
+        {
+            sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s  ", highscores.highscore_table[foundIdx].scores[i].year, highscores.highscore_table[foundIdx].scores[i].month,highscores.highscore_table[foundIdx].scores[i].day, 
+                                                               highscores.highscore_table[foundIdx].scores[i].initials, highscores.highscore_table[foundIdx].scores[i].score);
+        }
         dsPrintValue(3,6+i, 0, hs_line);
     }
-    highscore_showoptions(foundIdx);
-}
-
-void show_scores(short foundIdx)
-{
-    dsPrintValue(7,2,0, (char*)"** HIGH SCORES **");
-    dsPrintValue(7,3,0, (char*)highscores.highscore_table[foundIdx].notes);
-    for (int i=0; i<10; i++)
+    
+    if (bShowLegend)
     {
-        sprintf(hs_line, "%04d-%02d-%02d   %-3s   %-6s", highscores.highscore_table[foundIdx].scores[i].year, highscores.highscore_table[foundIdx].scores[i].month,highscores.highscore_table[foundIdx].scores[i].day, 
-                                                         highscores.highscore_table[foundIdx].scores[i].initials, highscores.highscore_table[foundIdx].scores[i].score);
-        dsPrintValue(3,6+i, 0, hs_line);
+        dsPrintValue(3,20,0, (char*)"PRESS X FOR NEW HI SCORE     ");
+        dsPrintValue(3,21,0, (char*)"PRESS Y FOR NOTES/OPTIONS    ");
+        dsPrintValue(3,22,0, (char*)"PRESS B TO EXIT              ");
+        dsPrintValue(3,23,0, (char*)"SCORES AUTO SORT AFTER ENTRY ");
+        dsPrintValue(3,17,0, (char*)"                             ");
     }
-    dsPrintValue(3,20,0, (char*)"PRESS X FOR NEW HI SCORE     ");
-    dsPrintValue(3,21,0, (char*)"PRESS Y FOR NOTES/OPTIONS    ");
-    dsPrintValue(3,22,0, (char*)"PRESS B TO EXIT              ");
-    dsPrintValue(3,23,0, (char*)"SCORES AUTO SORT AFTER ENTRY ");
-    dsPrintValue(3,17,0, (char*)"                             ");
-    highscore_showoptions(foundIdx);
+    highscore_showoptions(highscores.highscore_table[foundIdx].options);
 }
 
 char cmp1[21];
@@ -189,7 +202,7 @@ void highscore_sort(short foundIdx)
     {
         for (int j=0; j<9; j++)
         {
-            if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+            if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW) || (highscores.highscore_table[foundIdx].options & HS_OPT_SORTTIME))
             {
                 if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, "000000") == 0)
                      strcpy(cmp1, "999999");
@@ -325,11 +338,12 @@ void highscore_entry(short foundIdx)
         dsPrintValue(3,17, 0, (char*)hs_line);
     }
     
-    show_scores(foundIdx);
+    show_scores(foundIdx, true);
 }
 
-void highscore_options(short foundIdx)
+void highscore_options(short foundIdx, char *md5)
 {
+    uint16 options = 0x0000;
     char notes[21];
     char bEntryDone = 0;
     char blink=0;
@@ -343,6 +357,8 @@ void highscore_options(short foundIdx)
     dsPrintValue(3,17,0, (char*)"NOTE: ");
 
     strcpy(notes, highscores.highscore_table[foundIdx].notes);
+    options = highscores.highscore_table[foundIdx].options;
+    
     while (!bEntryDone)
     {
         swiWaitForVBlank();
@@ -351,6 +367,9 @@ void highscore_options(short foundIdx)
         if (keysCurrent() & KEY_START) 
         {
             strcpy(highscores.highscore_table[foundIdx].notes, notes);
+            highscores.highscore_table[foundIdx].options = options;
+            strcpy(highscores.highscore_table[foundIdx].md5sum, md5);
+            highscore_sort(foundIdx);
             highscore_save();
             bEntryDone=1;
         }
@@ -399,16 +418,20 @@ void highscore_options(short foundIdx)
 
             if (keysCurrent() & KEY_X)  
             {
-                if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
+                if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTLOW)
                 {
-                    highscores.highscore_table[foundIdx].options &= (uint16)~HS_OPT_SORTLOW;
+                    options &= (uint16)~HS_OPT_SORTMASK;
+                    options |= HS_OPT_SORTTIME;
+                }
+                else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)
+                {
+                    options &= (uint16)~HS_OPT_SORTMASK;
                 }
                 else
                 {
-                    highscores.highscore_table[foundIdx].options |= (uint16)HS_OPT_SORTLOW;
+                    options |= (uint16)HS_OPT_SORTLOW;
                 }
-                highscore_showoptions(foundIdx);
-                highscore_sort(foundIdx);
+                highscore_showoptions(options);
                 dampen=15;
             }
             
@@ -428,7 +451,7 @@ void highscore_options(short foundIdx)
                     highscores.highscore_table[foundIdx].scores[j].month = 0;
                     highscores.highscore_table[foundIdx].scores[j].day = 0;
                 }
-                show_scores_no_legend(foundIdx);
+                show_scores(foundIdx, false);
                 highscore_save();                    
             }            
         }
@@ -445,7 +468,7 @@ void highscore_options(short foundIdx)
         dsPrintValue(9,17, 0, (char*)hs_line);
     }
     
-    show_scores(foundIdx);
+    show_scores(foundIdx, true);
 }
 
 void highscore_display(void) 
@@ -487,14 +510,14 @@ void highscore_display(void)
         foundIdx = firstBlank;   
     }
     
-    show_scores(foundIdx);
+    show_scores(foundIdx, true);
 
     while (!bDone)
     {
         if (keysCurrent() & KEY_A) bDone=1;
         if (keysCurrent() & KEY_B) bDone=1;
         if (keysCurrent() & KEY_X) highscore_entry(foundIdx);
-        if (keysCurrent() & KEY_Y) highscore_options(foundIdx);
+        if (keysCurrent() & KEY_Y) highscore_options(foundIdx, md5);
     }    
 }
 
