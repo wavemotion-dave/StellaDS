@@ -888,8 +888,7 @@ static const CartInfo table[] =
     {"c1e6e4e7ef5f146388a090f1c469a2fa",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   200,   0, -2},    // Z-Tack (AKA Base Attack) (1983) (Bomb - Onbase).bin
 
     // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    //
-    
+
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // End of list...
 };
 

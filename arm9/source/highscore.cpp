@@ -180,6 +180,8 @@ void show_scores(short foundIdx)
     highscore_showoptions(foundIdx);
 }
 
+char cmp1[21];
+char cmp2[21];
 void highscore_sort(short foundIdx)
 {
     // Bubblesort!!
@@ -189,7 +191,15 @@ void highscore_sort(short foundIdx)
         {
             if (highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW)
             {
-                if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, highscores.highscore_table[foundIdx].scores[j].score) < 0)
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, "000000") == 0)
+                     strcpy(cmp1, "999999");
+                else 
+                    strcpy(cmp1, highscores.highscore_table[foundIdx].scores[j+1].score);
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j].score, "000000") == 0)
+                     strcpy(cmp2, "999999");
+                else 
+                    strcpy(cmp2, highscores.highscore_table[foundIdx].scores[j].score);
+                if (strcmp(cmp1, cmp2) < 0)
                 {
                     // Swap...
                     memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
