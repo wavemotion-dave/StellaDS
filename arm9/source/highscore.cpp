@@ -145,19 +145,19 @@ void highscore_showoptions(uint16 options)
 {
     if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTLOW)
     {
-        dsPrintValue(21,5,0, (char*)"[LOW]  ");
+        dsPrintValue(22,5,0, (char*)"[LOWSC]");
     }
     else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)
     {
-        dsPrintValue(21,5,0, (char*)"[TIME] ");
+        dsPrintValue(22,5,0, (char*)"[TIME] ");
     }
     else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
     {
-        dsPrintValue(21,5,0, (char*)"[ASCII]");
+        dsPrintValue(22,5,0, (char*)"[ALPHA]");
     }
     else
     {   
-        dsPrintValue(21,5,0, (char*)"       ");    
+        dsPrintValue(22,5,0, (char*)"       ");    
     }
 }
 
@@ -202,7 +202,7 @@ void highscore_sort(short foundIdx)
     {
         for (int j=0; j<9; j++)
         {
-            if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTLOW) || (highscores.highscore_table[foundIdx].options & HS_OPT_SORTTIME))
+            if (((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTLOW) || ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME))
             {
                 if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, "000000") == 0)
                      strcpy(cmp1, "999999");
@@ -213,6 +213,25 @@ void highscore_sort(short foundIdx)
                 else 
                     strcpy(cmp2, highscores.highscore_table[foundIdx].scores[j].score);
                 if (strcmp(cmp1, cmp2) < 0)
+                {
+                    // Swap...
+                    memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j], &highscores.highscore_table[foundIdx].scores[j+1], sizeof(score_entry));
+                    memcpy(&highscores.highscore_table[foundIdx].scores[j+1], &score_entry, sizeof(score_entry));
+                }
+            }
+            else if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
+            {
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j+1].score, "000000") == 0)
+                     strcpy(cmp1, "------");
+                else 
+                    strcpy(cmp1, highscores.highscore_table[foundIdx].scores[j+1].score);
+                if (strcmp(highscores.highscore_table[foundIdx].scores[j].score, "000000") == 0)
+                     strcpy(cmp2, "------");
+                else 
+                    strcpy(cmp2, highscores.highscore_table[foundIdx].scores[j].score);
+                
+                if (strcmp(cmp1, cmp2) > 0)
                 {
                     // Swap...
                     memcpy(&score_entry, &highscores.highscore_table[foundIdx].scores[j], sizeof(score_entry));
@@ -286,7 +305,7 @@ void highscore_entry(short foundIdx)
 
             if (keysCurrent() & KEY_UP)
             {
-                if (entry_idx < 3)
+                if (entry_idx < 3) // This is the initials
                 {
                     if (score_entry.initials[entry_idx] == ' ')
                         score_entry.initials[entry_idx] = 'A';
@@ -294,10 +313,23 @@ void highscore_entry(short foundIdx)
                         score_entry.initials[entry_idx] = ' ';
                     else score_entry.initials[entry_idx]++;
                 }
-                else
+                else    // This is the score...
                 {
-                    score_entry.score[entry_idx-3]++;
-                    if (score_entry.score[entry_idx-3] > '9') score_entry.score[entry_idx-3] = '0';
+                    if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
+                    {
+                        if (score_entry.score[entry_idx-3] == ' ')
+                            score_entry.score[entry_idx-3] = 'A';
+                        else if (score_entry.score[entry_idx-3] == 'Z')
+                            score_entry.score[entry_idx-3] = '0';
+                        else if (score_entry.score[entry_idx-3] == '9')
+                            score_entry.score[entry_idx-3] = ' ';
+                        else score_entry.score[entry_idx-3]++;
+                    }
+                    else
+                    {
+                        score_entry.score[entry_idx-3]++;
+                        if (score_entry.score[entry_idx-3] > '9') score_entry.score[entry_idx-3] = '0';
+                    }
                 }
                 blink=0;
                 dampen=10;
@@ -305,7 +337,7 @@ void highscore_entry(short foundIdx)
 
             if (keysCurrent() & KEY_DOWN)
             {
-                if (entry_idx < 3)
+                if (entry_idx < 3) // // This is the initials
                 {
                     if (score_entry.initials[entry_idx] == ' ')
                         score_entry.initials[entry_idx] = 'Z';
@@ -313,10 +345,23 @@ void highscore_entry(short foundIdx)
                         score_entry.initials[entry_idx] = ' ';
                     else score_entry.initials[entry_idx]--;
                 }
-                else
+                else   // This is the score...
                 {
-                    score_entry.score[entry_idx-3]--;
-                    if (score_entry.score[entry_idx-3] < '0') score_entry.score[entry_idx-3] = '9';
+                    if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
+                    {
+                        if (score_entry.score[entry_idx-3] == ' ')
+                            score_entry.score[entry_idx-3] = '9';
+                        else if (score_entry.score[entry_idx-3] == '0')
+                            score_entry.score[entry_idx-3] = 'Z';
+                        else if (score_entry.score[entry_idx-3] == 'A')
+                            score_entry.score[entry_idx-3] = ' ';
+                        else score_entry.score[entry_idx-3]--;
+                    }
+                    else
+                    {
+                        score_entry.score[entry_idx-3]--;
+                        if (score_entry.score[entry_idx-3] < '0') score_entry.score[entry_idx-3] = '9';
+                    }
                 }
                 blink=0;
                 dampen=10;
@@ -424,6 +469,11 @@ void highscore_options(short foundIdx, char *md5)
                     options |= HS_OPT_SORTTIME;
                 }
                 else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)
+                {
+                    options &= (uint16)~HS_OPT_SORTMASK;
+                    options |= HS_OPT_SORTASCII;
+                }
+                else if ((options & HS_OPT_SORTMASK) == HS_OPT_SORTASCII)
                 {
                     options &= (uint16)~HS_OPT_SORTMASK;
                 }
