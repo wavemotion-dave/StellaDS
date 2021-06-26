@@ -32,7 +32,7 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V3.2 : 26-Jun-2021 by Dave Bernazzani (wavemotion)
+V3.3 : 26-Jun-2021 by Dave Bernazzani (wavemotion)
   * Added [TIME], [LOW] and [ALPHA] as high-score options.
   * Fixed small graphical glitches in F8, F6 and F4 games.
   * Another 5 instruction manuals added.
