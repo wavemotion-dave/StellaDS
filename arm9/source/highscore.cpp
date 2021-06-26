@@ -164,7 +164,7 @@ void highscore_showoptions(uint16 options)
 void show_scores(short foundIdx, bool bShowLegend)
 {
     dsPrintValue(7,2,0, (char*)"** HIGH SCORES **");
-    dsPrintValue(24 - (strlen(highscores.highscore_table[foundIdx].notes)/2),3,0, (char*)highscores.highscore_table[foundIdx].notes);
+    dsPrintValue(7,3,0, (char*)highscores.highscore_table[foundIdx].notes);
     for (int i=0; i<10; i++)
     {
         if ((highscores.highscore_table[foundIdx].options & HS_OPT_SORTMASK) == HS_OPT_SORTTIME)

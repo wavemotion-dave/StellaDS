@@ -32,6 +32,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.2 : 26-Jun-2021 by Dave Bernazzani (wavemotion)
+  * Added [TIME], [LOW] and [ALPHA] as high-score options.
+  * Fixed small graphical glitches in F8, F6 and F4 games.
+  * Another 5 instruction manuals added.
+
 V3.2 : 24-Jun-2021 by Dave Bernazzani (wavemotion)
   * Vastly improved high score internals to support future enhancements.
   * Cleanup of paddle handling - games like Tac-Scan now work.
