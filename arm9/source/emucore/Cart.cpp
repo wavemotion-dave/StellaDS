@@ -232,8 +232,8 @@ static const CartInfo table[] =
     {"e4c00beb17fdc5881757855f2838c816",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Deadly Duck (1982).bin
     {"4e15ddfd48bca4f0bf999240c47b49f5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   195,   0,  2},    // Death Trap (1983).bin
     {"0f643c34e40e3f1daafd9c524d3ffe64",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender (1982).bin
-    {"bbb4ed29300848f579f730962d277700",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender Arcade (1982).bin
-    {"3a771876e4b61d42e3a3892ad885d889",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender II (Stargate) (1988).bin
+    {"bbb4ed29300848f579f730962d277700",  "F8SC", CTR_STARGATE,  SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender Arcade (1982).bin
+    {"3a771876e4b61d42e3a3892ad885d889",  "F8SC", CTR_STARGATE,  SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender II (Stargate) (1988).bin
     {"d09935802d6760ae58253685ff649268",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Demolition Herby (1983).bin
     {"bcb2967b6a9254bcccaf906468a22241",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  6},    // Demon Attack (1981).bin
     {"f0e0addc07971561ab80d9abe1b8d333",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  6},    // Demon Attack (1981) [alt].bin
@@ -746,7 +746,7 @@ static const CartInfo table[] =
     {"21d7334e406c2407e69dbddd7cec3583",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // Stampede (1981).bin
     {"d9c9cece2e769c7985494b1403a25721",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Star Castle.bin
     {"f526d0c519f5001adb1fc7948bfbb3ce",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   6,  9},    // Star Fox (1983).bin
-    {"0c48e820301251fbb6bcdc89bd3555d9",  "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Stargate (1984).bin
+    {"0c48e820301251fbb6bcdc89bd3555d9",  "F8SC", CTR_STARGATE,  SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Stargate (1984).bin
     {"a3c1c70024d7aabb41381adbfb6d3b25",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, 12},    // Stargunner (1982).bin
     {"d69559f9c9dc6ef528d841bf9d91b275",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // StarMaster (1982).bin
     {"fb88baa01afd34e0e4b601e1d29bc806",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Star Fire.bin
@@ -911,9 +911,7 @@ static const CartInfo table[] =
     {"c1e6e4e7ef5f146388a090f1c469a2fa",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   200,   0, -2},    // Z-Tack (AKA Base Attack) (1983) (Bomb - Onbase).bin
 
     // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // 
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // 
-    
+   
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // End of list...
 };
 

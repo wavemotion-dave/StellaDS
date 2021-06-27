@@ -62,6 +62,7 @@ extern CartInfo myCartInfo;
 #define CTR_BOOSTER   8     // Omega Race and Thrust+
 #define CTR_PADDLE2   9     // Paddle in right port
 #define CTR_PADDLE3  10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
+#define CTR_STARGATE 11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
 
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9

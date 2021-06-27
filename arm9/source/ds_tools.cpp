@@ -951,11 +951,25 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
+                case CTR_STARGATE:
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B)) | (keys_pressed & (KEY_Y))));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    // For Defender II, aka Stargate games
+                    if (myCartInfo.controllerType == CTR_STARGATE)
+                    {
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_Y));
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_B));
+
+                        // Unfortunately for Stargate, we can't use these keys for UI handling below...
+                        if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
+                        {
+                            keys_pressed = 0;
+                        }
+                    }                    
                     break;
                     
                 case CTR_RJOY:
