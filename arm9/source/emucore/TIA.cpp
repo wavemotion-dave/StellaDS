@@ -35,7 +35,7 @@
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
-
+uint32  myBlendBk = 0;
 uInt32  myPF                        __attribute__((section(".dtcm")));
 uInt32  myColor[4]                  __attribute__((section(".dtcm")));
 uInt32  myFrameYStart               __attribute__((section(".dtcm")));
@@ -2668,7 +2668,15 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
             myHMOVEBlankEnabled = false;
         }
     }
-
+      
+    // ------------------------------------------------------------------------
+    // If we are mid-scanline... we record the background color for blending
+    // ------------------------------------------------------------------------
+    if ((myClocksToEndOfScanLine > 75) && (myClocksToEndOfScanLine < 199))
+    {
+        myBlendBk = myColor[MYCOLUBK];  
+    }
+      
     // See if we're at the end of a scanline
     if(myClocksToEndOfScanLine == 228)
     {
@@ -2722,13 +2730,47 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           addr += 160;
           uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[0][addr]);
           uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1][addr]);
-          dma_channel = 1-dma_channel;
           // "steal" a bit of VRAM which has no cache write... 
           uInt32 *fp_blend = (uInt32 *)0x0601E000;
           for (int i=0; i<40; i++)
           {
             *fp_blend++ = *fp1++ | *fp2++;
           }
+          dma_channel = 1-dma_channel;
+          dmaCopyWordsAsynch(dma_channel, (uInt32 *)0x0601E000, myDSFramePointer, 160);
+      }
+      else if (myCartInfo.mode == MODE_BACKG)
+      {
+          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
+          addr += 160;
+          uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+          uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+          // "steal" a bit of VRAM which has no cache write... 
+          uInt32 *fp_blend = (uInt32 *)0x0601E000;
+          for (int i=0; i<40; i++)
+          {
+            if (*fp1 == myBlendBk) *fp_blend++ = *fp2;          // mid-screen background - use previous frame
+            else *fp_blend++ = *fp1;                            // Use current frame 
+            fp1++;fp2++;
+          }
+          dma_channel = 1-dma_channel;
+          dmaCopyWordsAsynch(dma_channel, (uInt32 *)0x0601E000, myDSFramePointer, 160);
+      }
+      else if (myCartInfo.mode == MODE_BLACK)
+      {
+          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
+          addr += 160;
+          uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+          uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+          // "steal" a bit of VRAM which has no cache write... 
+          uInt32 *fp_blend = (uInt32 *)0x0601E000;
+          for (int i=0; i<40; i++)
+          {
+            if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
+            else *fp_blend++ = *fp1;                            // Use current frame 
+            fp1++;fp2++;
+          }
+          dma_channel = 1-dma_channel;
           dmaCopyWordsAsynch(dma_channel, (uInt32 *)0x0601E000, myDSFramePointer, 160);
       }
       else
@@ -2738,7 +2780,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           // By using slightly "stale" data, we ensure that we are outputting the right data and not something previously cached.
           // DMA and ARM9 is tricky stuff... I'll admit I don't fully understand it and there is some voodoo... but this works.
           // ------------------------------------------------------------------------------------------------------------------------
-          dma_channel=(dma_channel+1) & 0x01;
+          dma_channel = 1-dma_channel;
           dmaCopyWordsAsynch(dma_channel, myFramePointer+160, myDSFramePointer, 160);   
       }
       myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
@@ -3707,7 +3749,7 @@ const uInt32 TIA::ourNTSCPalette[256] =
   0x3e9421, 0x4a9f2e, 0x57ab3b, 0x5cbd55, 
   0x61d070, 0x69e27a, 0x72f584, 0x7cfa8d, 
   0x87ff97, 0x9affa6, 0xadffb6, 0xadffb6, 
-    
+ 
   0x0a4108, 0x0d540a, 0x10680d, 0x137d0f,           // 12
   0x169212, 0x19a514, 0x1cb917, 0x1ec919, 
   0x21d91b, 0x47e42d, 0x6ef040, 0x78f74d, 

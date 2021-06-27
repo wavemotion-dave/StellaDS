@@ -993,6 +993,50 @@ const struct instructions_t instructions[] =
                                           "bug remaining at end of wave\n"
     },
 
+    {"170e7589a48739cfb9cc782cbb0fe25a",  "ASTROBLAST (c)1982 MATEL\n"
+                                          " \n"
+                                          "DESTROY FALLING ROCKS\n"
+                                          "L-DIFF:  A=AUTO FIRE\n"
+                                          "R-DIFF:  A=FASTER PACE\n"
+                                          "SCORE+     BG  SM  SP PUL UFO\n"
+                                          "0  - 1K    10  20  40  80 ---\n"
+                                          "1K - 5K    20  40  80 160 ---\n"
+                                          "5K - 20K   30  60 120 240 ---\n"
+                                          "20K- 50K   40  80 160 320 400\n"
+                                          "50,000+    50 100 200 400 500\n"
+                                          "SCORE-     BG  SM  SP  HIT\n"
+                                          "0  - 1K     5  10 100  100\n"
+                                          "1K - 5K    10  20 200  200\n"
+                                          "5K - 20K   15  30 300  300\n"
+                                          "20K- 50K   20  40 400  400\n"
+                                          "50,000+    25  50 500  500\n"
+                                          "EXTRA LIFE EVERY 1000 PTS\n"
+    },
+
+    {"4d5f6db55f7f44fd0253258e810bde21",  "ASTROBLAST (c)1982 MATEL\n"
+                                          " \n"
+                                          "DESTROY FALLING ROCKS\n"
+                                          "L-DIFF:  A=AUTO FIRE\n"
+                                          "R-DIFF:  A=FASTER PACE\n"
+                                          "SCORE+     BG  SM  SP PUL UFO\n"
+                                          "0  - 1K    10  20  40  80 ---\n"
+                                          "1K - 5K    20  40  80 160 ---\n"
+                                          "5K - 20K   30  60 120 240 ---\n"
+                                          "20K- 50K   40  80 160 320 400\n"
+                                          "50,000+    50 100 200 400 500\n"
+                                          "SCORE-     BG  SM  SP  HIT\n"
+                                          "0  - 1K     5  10 100  100\n"
+                                          "1K - 5K    10  20 200  200\n"
+                                          "5K - 20K   15  30 300  300\n"
+                                          "20K- 50K   20  40 400  400\n"
+                                          "50,000+    25  50 500  500\n"
+                                          "EXTRA LIFE EVERY 1000 PTS\n"
+    },
+    
+
+
+          
+          
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
 

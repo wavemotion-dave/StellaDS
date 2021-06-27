@@ -1383,7 +1383,8 @@ ITCM_CODE void dsMainLoop(void)
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     if (myCartInfo.mode == MODE_NO)
                     {
-                        myCartInfo.mode = MODE_FF;
+                        extern uint8 original_flicker_mode;
+                        myCartInfo.mode = (original_flicker_mode == MODE_NO ? MODE_FF:original_flicker_mode);
                     }
                     else
                     {

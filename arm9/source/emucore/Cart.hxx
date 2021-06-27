@@ -71,7 +71,9 @@ extern CartInfo myCartInfo;
 #define SPEC_AR       4     // AR Carts we must track distinct memory access
 
 #define MODE_NO       0     // Normal Mode
-#define MODE_FF       1     // Flicker Free Mode
+#define MODE_FF       1     // Flicker Free Mode (blend last 2 frames equally)
+#define MODE_BACKG    2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
+#define MODE_BLACK    3     // Ficker Reduce (using Black background improvement only)
 
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower

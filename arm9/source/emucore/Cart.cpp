@@ -50,7 +50,7 @@ uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (16))) __attribute__((sec
 CartInfo myCartInfo __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
 uInt16 myCurrentOffset __attribute__((section(".dtcm")));
-
+uint8 original_flicker_mode = 0;
 
 static const CartInfo table[] = 
 {
@@ -90,7 +90,7 @@ static const CartInfo table[] =
     {"89a68746eff7f266bbf08de2483abe55",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Asterix (AKA Taz) (1983).bin
     {"dd7884b4f93cab423ac471aa1935e3df",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Asteroids (1981).bin
     {"ccbd36746ed4525821a8083b0d6d2c2c",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Asteroids (1981) [no copyright].bin
-    {"170e7589a48739cfb9cc782cbb0fe25a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, -3},    // Astroblast (1982).bin
+    {"170e7589a48739cfb9cc782cbb0fe25a",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   210,   0, -3},    // Astroblast (1982).bin
     {"4d5f6db55f7f44fd0253258e810bde21",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, -3},    // Astroblast (BetterBlast).bin
     {"8f53a3b925f0fd961d9b8c4d46ee6755",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Astrowar (Unknown).bin
     {"7a27eb22570fd1af0b0fec5cab48db61",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // AstronomerNTSC.bin
@@ -312,7 +312,7 @@ static const CartInfo table[] =
     {"8e0ab801b1705a740b476b7f588c6d16",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   5,  2},    // Freeway (1981).bin
     {"f40e0d51e6d869975257133b47585374",  "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Frantic 20200828.bin    
     {"e80a4026d29777c3c7993fbfaee8920f",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Frisco (Unknown).bin
-    {"081e2c114c9c20b61acf25fc95c71bf4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, -3},    // Frogger (1982).bin
+    {"081e2c114c9c20b61acf25fc95c71bf4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  210,   210,   0, -3},    // Frogger (1982).bin
     {"27c6a2ca16ad7d814626ceea62fa8fb4",  "E0",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  5},    // Frogger II - Threeedeep! (1984).bin
     {"f67181b3a01b9c9159840b15449b87b0",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Frog Pond (1982).bin
     {"dcc2956c7a39fdbf1e861fc5c595da0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  7},    // Frogs and Flies (1982).bin
@@ -478,8 +478,8 @@ static const CartInfo table[] =
     {"4543b7691914dfd69c3755a5287a95e1",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Mines of Minos (1982).bin
     {"df62a658496ac98a3aa4a6ee5719c251",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   200,   0,  6},    // Miniature Golf (1979).bin
     {"bb6fc47aed82b3f65c4938bf668de767",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, -3},    // Minotaur (2006) (Michael Biggs).bin
-    {"3a2e2d0c6892aa14544083dfb7762782",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   204,   0,  5},    // Missile Command (1981).bin
-    {"1a8204a2bcd793f539168773d9ad6230",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  5},    // Missile Command (1981) [no initials].bin
+    {"3a2e2d0c6892aa14544083dfb7762782",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   204,   0,  4},    // Missile Command (1981).bin
+    {"1a8204a2bcd793f539168773d9ad6230",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   210,   0,  4},    // Missile Command (1981) [no initials].bin
     {"e6e5bb0e4f4350da573023256268313d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, 12},    // Missile Control (AKA Raketen-Angriff) (Ariola, Thomas Jentzsch).bin
     {"4c6afb8a44adf8e28f49164c84144bfe",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Mission 3000 A.D. (1983).bin
     {"4181087389a79c7f59611fb51c263137",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0, -4},    // Miss Piggy's Wedding (1983).bin
@@ -703,7 +703,7 @@ static const CartInfo table[] =
     {"5f7ae9a7f8d79a3b37e8fc841f65643a",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Sorcerer's Apprentice (1983).bin
     {"17badbb3f54d1fc01ee68726882f26a6",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Space Attack (1982).bin
     {"1d566002bbc51e5eee73de4c595fd545",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // SpaceBattleFinal4N.bin
-    {"df6a28a89600affe36d94394ef597214",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Space Cavern (1981).bin
+    {"df6a28a89600affe36d94394ef597214",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   210,   0,  0},    // Space Cavern (1981).bin
     {"ec5c861b487a5075876ab01155e74c6c",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  5},    // Spacechase (1981) .bin
     {"44ca1a88274ff55787ed1763296b8456",  "F4",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  4},    // SpaceGame-Final.bin
     {"94255d5c05601723a58df61726bc2615",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // SpaceGame 2K.bin
@@ -1020,6 +1020,8 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
       myCartInfo.mode = MODE_NO;    
   }
+    
+  original_flicker_mode = myCartInfo.mode;
   
   // Handle special situations...
   if (myCartInfo.special == SPEC_HAUNTED)
