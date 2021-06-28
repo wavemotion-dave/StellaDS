@@ -295,7 +295,6 @@ const struct instructions_t instructions[] =
                                           "GAME 33: LV3 NORMAL\n"
                                           "GAME 35: LV3 MORE ALIENS\n"        
                                           "L-Diff:  A=Frenzied mode\n"
-                                          " \n"            
                                           "Lg Electrosaurus       115 pts\n"
                                           "Sm Electrosaurus       165 pts\n"
                                           "shaggy marsupods       200 pts\n"
@@ -312,7 +311,7 @@ const struct instructions_t instructions[] =
                                           "NO LIFE LOST ON LEVEL 1000 pts\n"
                                           " \n"
                                           "Additional bonus from 10-1000\n"
-                                          "points depending on level clear\n"
+                                          "points depend on level cleared\n"
                                           " \n"
                                           "THERE ARE 99 LEVELS IN ALL!\n"
     },
@@ -329,7 +328,6 @@ const struct instructions_t instructions[] =
                                           "Game 6:  Trail Boss\n"
                                           "Game 7:  Rancher\n"
                                           "Game 8:  Cattle Baron\n"
-                                          " \n"
                                           "L-Diff:  A=Shorter Rope\n"
                                           " \n"            
                                           "Black Angus           100 pts\n"
@@ -1032,9 +1030,6 @@ const struct instructions_t instructions[] =
                                           "EXTRA LIFE EVERY 1000 PTS\n"
     },
     
-
-
-          
           
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };

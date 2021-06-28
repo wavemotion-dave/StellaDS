@@ -175,7 +175,7 @@ static const CartInfo table[] =
     {"049b33b03e7928af596c9d683f587475",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // Caverns.bin
     {"91c2098e88a6b13f977af8c003e0bca5",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Centipede (1982).bin
     {"5d799bfa9e1e7b6224877162accada0d",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Challenge of.... Nexar (1982).bin
-    {"73158ea51d77bf521e1369311d26c27b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   205,   0,  3},    // Challenge (Zellers).bin
+    {"73158ea51d77bf521e1369311d26c27b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  210,   205,   0,  3},    // Challenge (Zellers).bin
     {"ce09df4f125e49a8239c954e22fe8adb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Chakdust - NTSC Cart.bin    
     {"ace319dc4f76548659876741a6690d57",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // Championship Soccer (1980).bin
     {"3e33ac10dcf2dff014bc1decf8a9aea4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   204,   0, -2},    // Chase the Chuckwagon (1983).bin
@@ -226,7 +226,7 @@ static const CartInfo table[] =
     {"6333ef5b5cbb77acd47f558c8b7a95d3",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  5},    // Dark Mage (8K) (PD).bin
     {"e4c00beb17fdc5881757855f2838c816",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Deadly Duck (1982).bin
     {"4e15ddfd48bca4f0bf999240c47b49f5",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   195,   0,  2},    // Death Trap (1983).bin
-    {"0f643c34e40e3f1daafd9c524d3ffe64",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender (1982).bin
+    {"0f643c34e40e3f1daafd9c524d3ffe64",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender (1982).bin
     {"bbb4ed29300848f579f730962d277700",  "F8SC", CTR_STARGATE,  SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender Arcade (1982).bin
     {"3a771876e4b61d42e3a3892ad885d889",  "F8SC", CTR_STARGATE,  SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Defender II (Stargate) (1988).bin
     {"d09935802d6760ae58253685ff649268",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Demolition Herby (1983).bin
@@ -536,8 +536,8 @@ static const CartInfo table[] =
     {"890c13590e0d8d5d6149737d930e4d95",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  2},    // Outlaw (1978).bin
     {"f97dee1aa2629911f30f225ca31789d4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Out of Control (1983).bin
     {"91f0a708eeb93c133e9672ad2c8e0429",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Oystron (V2.9) (PD).bin
-    {"6e372f076fb9586aff416144f5cfe1cb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   1, -2},    // Pac-Man (1982).bin
-    {"b36040a2f9ecafa73d835d804a572dbf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   1, -2},    // Pac Man (1983) (Digitel).bin
+    {"6e372f076fb9586aff416144f5cfe1cb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   210,   1, -2},    // Pac-Man (1982).bin
+    {"b36040a2f9ecafa73d835d804a572dbf",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,1,  1,  ANA1_0,  210,   210,   1, -2},    // Pac Man (1983) (Digitel).bin
     {"880e45b99c785e9910450b88e69c49eb",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Pac-Man 4k.bin
     {"6e88da2b704916eb04a998fed9e23a3e",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  3},    // Pac-Man_4k (debro).bin
     {"98d41ef327c58812ecc75bf1611ddced",  "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   202,   0,  1},    // Pac-Man 8k.bin

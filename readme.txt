@@ -32,6 +32,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.4 : 28-Jun-2021 by Dave Bernazzani (wavemotion)
+  * Added new flicker reduction algorithms to help with games
+    like Frogger, Asteroids, Astroblast, Pac-Man, etc.
+  * Total instruction manuals: 50!
+
 V3.3 : 26-Jun-2021 by Dave Bernazzani (wavemotion)
   * Added [TIME], [LOW] and [ALPHA] as high-score options.
   * Fixed small graphical glitches in F8, F6 and F4 games.

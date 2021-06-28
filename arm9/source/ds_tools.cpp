@@ -37,7 +37,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.3"
+#define VERSION "3.4"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
