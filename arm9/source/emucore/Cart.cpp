@@ -206,7 +206,7 @@ static const CartInfo table[] =
     {"7d903411807704e725cf3fafbeb97255",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  1},    // Cosmic Ark (1982) [selectable starfield].bin
     {"133b56de011d562cbab665968bde352b",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Cosmic Commuter (1984).bin
     {"f367e58667a30e7482175809e3cec4d4",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // Cosmic Corridor (1983).bin
-    {"3c853d864a1d5534ed0d4b325347f131",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0,  3},    // Cosmic Creeps (1982).bin
+    {"3c853d864a1d5534ed0d4b325347f131",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  210,   210,   0,  3},    // Cosmic Creeps (1982).bin
     {"e5f17b3e62a21d0df1ca9aee1aa8c7c5",  "2K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   210,   0, -1},    // Cosmic Swarm (1982).bin
     {"fe67087f9c22655ce519616fc6c6ef4d",  "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   3,  1},    // Crack'ed (1988).bin
     {"a184846d8904396830951217b47d13d9",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   4,  7},    // Crackpots (1983).bin
@@ -913,6 +913,9 @@ static const CartInfo table[] =
     {"c1e6e4e7ef5f146388a090f1c469a2fa",  "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  210,   200,   0, -2},    // Z-Tack (AKA Base Attack) (1983) (Bomb - Onbase).bin
 
     // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // 
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // 
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // 
    
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  210,   210,   0,  0},    // End of list...
 };
