@@ -220,6 +220,21 @@ const struct instructions_t instructions[] =
     },
     
     
+    {"94b92a882f6dbaa6993a46e2dcc58402",  "ENDURO (c)1983 ACTIVISION\n"
+                                          " \n"
+                                          "PASS THE REQUIRED NUMBER OF\n"
+                                          "CARS EACH DAY TO ENDURE!\n"
+                                          " \n"
+                                          "PRESS BUTTON TO ACCELERATE\n"
+                                          "PULL BACK ON JOY TO BRAKE\n"
+                                          " \n"
+                                          "MUST PASS 200 CARDS ON FIRST\n"
+                                          "DAY AND 300 ON SUBSEQUENT DAYS\n"
+                                          " \n"
+                                          "YOUR ODOMETER IS YOUR SCORE\n"        
+    },    
+    
+    
     {"133b56de011d562cbab665968bde352b",  "COSMIC COMMUTER\n"
                                           "(c)1984 by ACTIVISION\n"
                                           " \n"
@@ -629,19 +644,19 @@ const struct instructions_t instructions[] =
                                           "CATCH THE ENEMY IN A CROSSFIRE\n"
                                           "Game 1: DIAGNONAL LASER\n"
                                           "Game 2: PARALELL LASER\n"
-                                          "L-DIFF: A=FAST SPECTRON\n"
+                                          "L-DIFF: A=SLOW SPECTRON\n"
                                           " \n"  
                                           "WAVE NUMBER   SHIP   MORPUL\n"  
                                           "WAVE ONE       10     --   PTS\n"
                                           "WAVE TWO       20     20   PTS\n"
                                           "WAVE THREE     30     30   PTS\n"
                                           "WAVE FOUR+    +10    +10   PTS\n"
-                                          "AWARDS:\n"
-                                          "1K  - 10K       PURPLE HEART\n"
-                                          "10K - 30K       CERT OF HONOR\n"
-                                          "30K - 50K       MEDAL OF VALOR\n"
-                                          "50K - 70K       SPECTRA MEDALLION\n"
-                                          "70K - 100K      MEDAL OF KLIG\n"
+                                          " \n"
+                                          "1K  - 10K     PURPLE HEART\n"
+                                          "10K - 30K     CERT OF HONOR\n"
+                                          "30K - 50K     MEDAL OF VALOR\n"
+                                          "50K - 70K     SPECTRA MEDALLION\n"
+                                          "70K - 100K    MEDAL OF KLIG\n"
         },
     
     
@@ -1264,7 +1279,42 @@ const struct instructions_t instructions[] =
                                           "5 STAGES CLEAR       15000 PTS\n"
                                           "ESCAPE TIME BONUS 500/SEC\n"
     },
-         
+
+    {"0f604cd4c9d2795cf5746e8af7948064",  "CONDOR ATTACK (c)1982 CHAMP\n"
+                                          " \n"
+                                          "A RIFT IN TIME HAS CAUSED\n"
+                                          "PREHISTORIC CONDOR ATTACK!\n"
+                                          " \n"
+                                          "DIFF SWITCHES:  A,A=FATTER BASE\n"
+                                          " \n"
+                                          "SMALL UPPER Attacker   3 PTS\n"
+                                          "LV 1 large ATTACKER   10 PTS\n"
+                                          "LV 2 large ATTACKER   20 PTS\n"
+                                          "LV 3 large ATTACKER   40 PTS\n"
+                                          "LV 4 large ATTACKER   50 PTS\n"
+                                          "LV 5 large ATTACKER   60 PTS\n"
+                                          "LV 6 large ATTACKER   70 PTS\n"
+                                          "LV 7 large ATTACKER   80 PTS\n"
+                                          "LV 8 large ATTACKER   90 PTS\n"
+                                          "LV 9 large ATTACKER   99 PTS\n"
+                                          "Extra FIREBASES EVERY 1000 PTS\n"   
+    },
+    
+    {"90ccf4f30a5ad8c801090b388ddd5613",  "DRAGONSTOMPER (c)1982 ARCADIA\n"
+                                          " \n"
+                                          "Part One: Enchanted Countryside\n"
+                                          "Part Two: The Oppressed Village\n"
+                                          "Part Three: The Dragon's Cave\n"
+                                          " \n"
+                                          "JOYSTICK TO MOVE, FIGHT OR USE\n"
+                                          "AN ITEM OR MAGIC SPELL. CHECK\n"
+                                          "STATUS OFTEN - IF STR DROPS TO\n"
+                                          "BELOW 0 YOU DIE. TO RESSURECT\n"
+                                          "IN FIRST PART, PRESS RESET BUT\n"
+                                          "YOU LOSE ALL MAGIC OBJECTS.\n"
+    },
+    
+    
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
 
