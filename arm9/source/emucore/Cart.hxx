@@ -57,18 +57,20 @@ extern CartInfo myCartInfo;
 #define CTR_PADDLE0   3     // For Paddle Games like Breakout and Kaboom
 #define CTR_PADDLE1   4     // A few odd games use the OTHER paddle...sigh...
 #define CTR_DRIVING   5     // For Driving Controller games like Indy500
-#define CTR_KEYBOARD  6     // For keyboard games like Codebreaker
+#define CTR_KEYBOARD0 6     // For keyboard games like Codebreaker
 #define CTR_STARRAID  7     // Star raiders has Left Joystick and Right Keypad
 #define CTR_BOOSTER   8     // Omega Race and Thrust+
 #define CTR_PADDLE2   9     // Paddle in right port
 #define CTR_PADDLE3  10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
 #define CTR_STARGATE 11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
+#define CTR_KEYBOARD1 12    // For keyboard games - second port
 
 #define SPEC_NONE     0     // Nothing special to do with this game...
 #define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
 #define SPEC_CONMARS  2     // Conquest of Mars - fix bug for collision detections
 #define SPEC_PITFALL2 3     // For Pitfall 2 we are employing a few other tricks to get speed...
 #define SPEC_AR       4     // AR Carts we must track distinct memory access
+#define SPEC_QUADRUN  5     // Quadrun has some audio artifacts we can't generate so we disable them
 
 #define MODE_NO       0     // Normal Mode
 #define MODE_FF       1     // Flicker Free Mode (blend last 2 frames equally)

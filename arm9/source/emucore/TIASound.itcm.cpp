@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "Cart.hxx"
 
 #define SOUND_SIZE (8192)
 
@@ -283,7 +284,10 @@ void Tia_process (void)
           {
              if (AUDC[0] & 0x04)       /* pure modified clock selected */
              {
-                 Outvol[0] = (Outvol[0] ? 0:AUDV[0]);  // Toggle outvol
+                 if (myCartInfo.special == SPEC_QUADRUN)    // Eliminate screech... 
+                     Outvol[0] = 0;
+                 else
+                     Outvol[0] = (Outvol[0] ? 0:AUDV[0]);  // Toggle outvol
              }
              else if (AUDC[0] & 0x08)
              {
@@ -359,7 +363,8 @@ void Tia_process (void)
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-          *(psound_buffer) = ((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1;
+            *(psound_buffer) = ((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1;
+           
           /* and done! */
           break;
        }

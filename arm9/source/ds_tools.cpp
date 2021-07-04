@@ -1135,7 +1135,46 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     break;
                     
-                case CTR_KEYBOARD:
+                case CTR_KEYBOARD0:
+                    if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
+                    {
+                        touchPosition touch;
+                        touchRead(&touch);
+                        keys_touch = 1;
+
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 1);
+
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 1);
+
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 1);
+
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 1);
+                    }
+                    else
+                    {
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 0);
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 0);
+                    }
+                    
+                case CTR_KEYBOARD1:
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
                     {
                         touchPosition touch;
@@ -1172,8 +1211,7 @@ ITCM_CODE void dsMainLoop(void)
                         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 0);
                         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 0);
                         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 0);
-                    }
-            } // End Controller Switch
+                    }            } // End Controller Switch
 
             // --------------------------------------------------------------------------------------
             // For things like showing paddles or console switches, we can do this much slower...
