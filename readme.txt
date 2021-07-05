@@ -32,6 +32,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.5 : 5-July-2021 by Dave Bernazzani (wavemotion)
+  * Sound on Quadrun improved.
+  * Total instruction manuals: 75!
+
 V3.4 : 28-Jun-2021 by Dave Bernazzani (wavemotion)
   * Added new flicker reduction algorithms to help with games
     like Frogger, Asteroids, Astroblast, Pac-Man, etc.

@@ -37,7 +37,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.4"
+#define VERSION "3.5"
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -502,7 +502,7 @@ bool dsLoadGame(char *filename)
         }
 
         // Center all paddles...
-        theConsole->fakePaddleResistance = 450000;
+        theConsole->fakePaddleResistance = ((MAX_RESISTANCE+MIN_RESISTANCE)/2);
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11,    theConsole->fakePaddleResistance);
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F9,     theConsole->fakePaddleResistance);
