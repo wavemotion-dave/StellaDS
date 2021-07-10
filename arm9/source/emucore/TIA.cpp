@@ -104,7 +104,6 @@ uInt8   myVBLANK                    __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
-uInt8 bUseAlternatePalette = 0;
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
    0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
@@ -173,7 +172,7 @@ uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int8 ourCompleteMotionTable[76][16] __attribute__((section(".dtcm"))) = {
+Int8 ourCompleteMotionTable[76][16] = {
   { 0, -1, -2, -3, -4, -5, -6, -7,  8,  7,  6,  5,  4,  3,  2,  1}, // HBLANK
   { 0, -1, -2, -3, -4, -5, -6, -7,  8,  7,  6,  5,  4,  3,  2,  1}, // HBLANK
   { 0, -1, -2, -3, -4, -5, -6, -7,  8,  7,  6,  5,  4,  3,  2,  1}, // HBLANK
@@ -270,7 +269,7 @@ TIA::TIA(const Console& console, Sound& sound)
       mySound(sound),
       myColorLossEnabled(false)
 {
-  myMaximumNumberOfScanlines = 262; 
+  myMaximumNumberOfScanlines = ((myCartInfo.tv_type == PAL) ? 312:262); 
   // --------------------------------------------------------------------------------------
   // Allocate buffers for two frame buffers - Turns out Video Memory is actually slower
   // since we do a lot of 8-bit reads and the video memory is 16-bits wide. So we handle
@@ -364,8 +363,8 @@ void TIA::reset()
   myDSFramePointer = BG_GFX;
 
   // Calculate color clock offsets for starting and stoping frame drawing
-  myStartDisplayOffset = 228 * 30;                                                          // Allow for 4 underscan lines...
-  myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayStopScanline));    // Normally 18 overscan lines... but it's cart specific...
+  myStartDisplayOffset = 228 * myCartInfo.displayStartScanline;                              // Allow for some underscan lines on a per-cart basis
+  myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayStopScanline));     // Allow for some overscan lines on a per-cart basis
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;
@@ -530,7 +529,7 @@ ITCM_CODE void TIA::update()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const uInt32* TIA::palette() const
 {
-    return (bUseAlternatePalette ? ourPALPalette : ourNTSCPalette);
+    return ((myCartInfo.tv_type == PAL) ? ourPALPalette : ourNTSCPalette);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

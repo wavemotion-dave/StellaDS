@@ -15,6 +15,21 @@ Features :
  See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
  going to be NTSC No-Intro roms (the good ones!). PAL roms may cut off at the bottom
  of the screen and may not run at the right speed.
+ 
+PAL vs NTSC:
+------------
+StellaDS supports PAL games but be warned... in the very early days of video
+games, 99% of all games were developed as NTSC for the American Market and
+only later ported to a PAL system for our European friends. Some game makers
+did a good job (Imagic). Some did an OK job (Atari). And some did not do well
+(Activision). That means that some games just don't run at the right speed 
+for the PAL market - since Activision did not optiize for PAL, the games run
+17% slower due to the frame rate difference. To make matters worse, the main
+benefit of PAL is that the programmer has more scanlines to work with but the
+DS only has 192 pixel rows... so with PAL we must compress the image and
+that results in missing pixel rows. All of this to say: while PAL is supported
+you are generally going to get the most genuine Atari 2600 experience with
+NTSC roms. 
 
 Missing :
 ---------
@@ -32,6 +47,12 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.6 :10-July-2021 by Dave Bernazzani (wavemotion)
+  * PAL Support!  PAL games will render in proper 50Hz / 312 Scanlines.
+  * Database of known games expanded from 850 to 1900.
+  * Long rom filenames now scroll when selecting a game.
+  * Total instruction manuals: 80!
+
 V3.5 : 5-July-2021 by Dave Bernazzani (wavemotion)
   * Sound on Quadrun improved.
   * Total instruction manuals: 75!

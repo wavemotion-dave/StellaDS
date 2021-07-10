@@ -29,7 +29,7 @@ extern Console* theConsole;
 extern Sound* theSound;
 
 extern unsigned int etatEmu;
-extern FICA2600 vcsromlist[1024];  
+extern FICA2600 vcsromlist[];
 
 extern volatile u32 emuFps;
 extern volatile u32 emuActFrames;

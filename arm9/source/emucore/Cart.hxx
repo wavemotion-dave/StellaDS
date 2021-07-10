@@ -31,11 +31,15 @@ extern uInt8 fast_cart_buffer[];
 extern PageAccess page_access;
 extern uInt16 myCurrentOffset;
 
+#define NTSC    0
+#define PAL     1
+
 
 // The following is a simple table mapping games to type's using MD5 values
 struct CartInfo
 {
   string md5;
+  string gameID;
   string type;
   Int8  controllerType;
   Int8  special;
@@ -43,39 +47,42 @@ struct CartInfo
   Int8  vblankZero;
   Int8  hBlankZero;
   Int8  analogSensitivity;      // 10=1.0
+  uInt8 tv_type;                // NTSC or PAL
+  uInt8 displayStartScanline;   
   uInt8 displayStopScanline;  
-  uInt8 screenScale;
+  uInt8 screenScale;            // 100 = 100% (smaller numbers squish screen to fit)
   Int8  xOffset;
   Int8  yOffset;
 };
 
 extern CartInfo myCartInfo;
 
-#define CTR_LJOY      0     // Left Joystick is used for player 1 (default)
-#define CTR_RJOY      1     // Right Joystick is used for player 1
-#define CTR_RAIDERS   2     // Special 2 joystick setup for Raiders of the Lost Ark
-#define CTR_PADDLE0   3     // For Paddle Games like Breakout and Kaboom
-#define CTR_PADDLE1   4     // A few odd games use the OTHER paddle...sigh...
-#define CTR_DRIVING   5     // For Driving Controller games like Indy500
-#define CTR_KEYBOARD0 6     // For keyboard games like Codebreaker
-#define CTR_STARRAID  7     // Star raiders has Left Joystick and Right Keypad
-#define CTR_BOOSTER   8     // Omega Race and Thrust+
-#define CTR_PADDLE2   9     // Paddle in right port
-#define CTR_PADDLE3  10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
-#define CTR_STARGATE 11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
-#define CTR_KEYBOARD1 12    // For keyboard games - second port
+#define CTR_LJOY         0     // Left Joystick is used for player 1 (default)
+#define CTR_RJOY         1     // Right Joystick is used for player 1
+#define CTR_RAIDERS      2     // Special 2 joystick setup for Raiders of the Lost Ark
+#define CTR_PADDLE0      3     // For Paddle Games like Breakout and Kaboom
+#define CTR_PADDLE1      4     // A few odd games use the OTHER paddle...sigh...
+#define CTR_DRIVING      5     // For Driving Controller games like Indy500
+#define CTR_KEYBOARD0    6     // For keyboard games like Codebreaker
+#define CTR_STARRAID     7     // Star raiders has Left Joystick and Right Keypad
+#define CTR_BOOSTER      8     // Omega Race and Thrust+
+#define CTR_PADDLE2      9     // Paddle in right port
+#define CTR_PADDLE3     10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
+#define CTR_STARGATE    11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
+#define CTR_KEYBOARD1   12     // For keyboard games - second port
+#define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
 
-#define SPEC_NONE     0     // Nothing special to do with this game...
-#define SPEC_HAUNTED  1     // Haunted House - fix bug by patching offset 1103's E5 to E9
-#define SPEC_CONMARS  2     // Conquest of Mars - fix bug for collision detections
-#define SPEC_PITFALL2 3     // For Pitfall 2 we are employing a few other tricks to get speed...
-#define SPEC_AR       4     // AR Carts we must track distinct memory access
-#define SPEC_QUADRUN  5     // Quadrun has some audio artifacts we can't generate so we disable them
+#define SPEC_NONE        0     // Nothing special to do with this game...
+#define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9
+#define SPEC_CONMARS     2     // Conquest of Mars - fix bug for collision detections
+#define SPEC_PITFALL2    3     // For Pitfall 2 we are employing a few other tricks to get speed...
+#define SPEC_AR          4     // AR Carts we must track distinct memory access
+#define SPEC_QUADRUN     5     // Quadrun has some audio artifacts we can't generate so we disable them
 
-#define MODE_NO       0     // Normal Mode
-#define MODE_FF       1     // Flicker Free Mode (blend last 2 frames equally)
-#define MODE_BACKG    2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
-#define MODE_BLACK    3     // Ficker Reduce (using Black background improvement only)
+#define MODE_NO          0     // Normal Mode
+#define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)
+#define MODE_BACKG       2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
+#define MODE_BLACK       3     // Ficker Reduce (using Black background improvement only)
 
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower

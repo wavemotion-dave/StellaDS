@@ -37,7 +37,9 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.5"
+#define VERSION "3.6"
+
+//#define WRITE_TWEAKS
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -48,12 +50,14 @@ extern uInt8 *psound_buffer;
 
 int atari_frames=0;
 
+uInt8 tv_type_requested = NTSC;
+
 #define MAX_DEBUG 5
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128];
 
-FICA2600 vcsromlist[1024];
+FICA2600 vcsromlist[1200];
 unsigned short int countvcs=0, ucFicAct=0;
 
 static short bShowKeyboard = false;
@@ -83,11 +87,22 @@ static void DumpDebugData(void)
 {
     if (DEBUG_DUMP)
     {        
-        char dbgbuf[32];
+        char dbgbuf[36];
+        int idx=0;
+        int val=0;
+
+        sprintf(dbgbuf, "%32s", myCartInfo.md5.c_str());                            dsPrintValue(0,2,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.Scale:     %03d", myCartInfo.screenScale);            dsPrintValue(1,3,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.xOffset:   %03d", myCartInfo.xOffset);                dsPrintValue(1,4,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayStopScanline);    dsPrintValue(1,7,0, dbgbuf);
+        
         for (int i=0; i<MAX_DEBUG; i++)
         {
-            int idx=0;
-            int val = debug[i];
+            idx=0;
+            val = debug[i];
+            dbgbuf[idx++] = 'D';
             dbgbuf[idx++] = '0' + (i / 10);
             dbgbuf[idx++] = '0' + (i % 10);
             dbgbuf[idx++] = ':';
@@ -113,11 +128,11 @@ static void DumpDebugData(void)
             dbgbuf[idx++] = '0' + (int)val%10;
             dbgbuf[idx++] = 0;
 
-            if (i > 42)
-                dsPrintValue(22,2+(i-43),0, dbgbuf);
-            else if (i > 21)
-                dsPrintValue(11,2+(i-22),0, dbgbuf);
-            else dsPrintValue(0,2+i,0, dbgbuf);
+            if (i > 22)
+                dsPrintValue(22,9+(i-23),0, dbgbuf);
+            else if (i > 11)
+                dsPrintValue(11,9+(i-12),0, dbgbuf);
+            else dsPrintValue(0,9+i,0, dbgbuf);
         }
     }
 }
@@ -155,7 +170,14 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
 
 inline void ShowStatusLine(void)
 {
-    dsPrintValue(30,0,0, (full_speed ? (char *)"FS" : (char *)"  "));
+    if (myCartInfo.tv_type == PAL)
+    {
+        dsPrintValue(29,0,0, (full_speed ? (char *)" FS" : (char *)"PAL"));
+    }
+    else
+    {
+        dsPrintValue(29,0,0, (full_speed ? (char *)" FS" : (char *)"   "));
+    }
 }
 
 
@@ -164,13 +186,10 @@ void vblankIntr()
 {
     if (bScreenRefresh)
     {
-        REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
-        REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
-        REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
+        REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale);
+        REG_BG3Y = (myCartInfo.yOffset)<<8;
+        REG_BG3X = (myCartInfo.xOffset)<<8;
         bScreenRefresh = 0;
-        debug[0] = myCartInfo.screenScale;
-        debug[1] = myCartInfo.xOffset;
-        debug[2] = myCartInfo.yOffset;
     }
 }
 
@@ -228,7 +247,9 @@ ITCM_CODE void dsWriteTweaks(void)
     fp = fopen("../StellaDS.txt", "a+");
     if (fp != NULL)
     {
-        fprintf(fp, "%-70s %-32s %4s %2s    %3d  %3d  %3d\n", my_filename, myCartInfo.md5.c_str(), myCartInfo.type.c_str(), (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset);
+        fprintf(fp, "%-32s %4s %2s    %3d  %3d  %3d  %3d  %3d  %s\n", myCartInfo.md5.c_str(), myCartInfo.type.c_str(), 
+                (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayStopScanline, 
+                myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset, my_filename);
         fflush(fp);
         fclose(fp);
     }
@@ -248,9 +269,13 @@ void dsShowScreenEmu(void)
 
   REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ;
   REG_BG3PB = 0; REG_BG3PC = 0;
-  REG_BG3PD = ((A26_VID_HEIGHT / myCartInfo.screenScale) << 8) | ((A26_VID_HEIGHT % myCartInfo.screenScale) ) ;
-  REG_BG3X = (A26_VID_XOFS+myCartInfo.xOffset)<<8;
-  REG_BG3Y = (A26_VID_YOFS+myCartInfo.yOffset)<<8;
+  REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale) ;
+  REG_BG3X = (myCartInfo.xOffset)<<8;
+  REG_BG3Y = (myCartInfo.yOffset)<<8;
+
+  ShowStatusLine(); 
+    
+  bScreenRefresh = 1;
   swiWaitForVBlank();
 }
 
@@ -454,7 +479,8 @@ void dsFreeEmu(void)
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
-  strcpy(my_filename, filename);
+  strncpy(my_filename, filename, 127);
+  my_filename[127] = 0;
     
   // Load the file
   FILE *romfile = fopen(filename, "r");
@@ -584,11 +610,11 @@ bool dsWaitOnQuit(void)
   return bRet;
 }
 
+char szName[256];
+char szName2[256];
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 {
   unsigned int ucBcl,ucGame;
-  char szName[256];
-  char szName2[256];
 
   // Display all games if possible
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
@@ -625,6 +651,7 @@ unsigned int dsWaitForRom(void)
 {
   bool bDone=false, bRet=false;
   u32 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
+  u32 uLenFic=0, ucFlip=0, ucFlop=0;
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -671,6 +698,7 @@ unsigned int dsWaitForRom(void)
         ucHaut++;
         if (ucHaut>10) ucHaut=0;
       }
+      uLenFic=0; ucFlip=0; ucFlop=0;     
     }
     else
     {
@@ -699,6 +727,7 @@ unsigned int dsWaitForRom(void)
         ucBas++;
         if (ucBas>10) ucBas=0;
       }
+      uLenFic=0; ucFlip=0; ucFlop=0;     
     }
     else {
       ucBas = 0;
@@ -719,6 +748,7 @@ unsigned int dsWaitForRom(void)
         ucSBas++;
         if (ucSBas>10) ucSBas=0;
       }
+      uLenFic=0; ucFlip=0; ucFlop=0;     
     }
     else {
       ucSBas = 0;
@@ -740,6 +770,7 @@ unsigned int dsWaitForRom(void)
         ucSHaut++;
         if (ucSHaut>10) ucSHaut=0;
       }
+      uLenFic=0; ucFlip=0; ucFlop=0;     
     }
     else {
       ucSHaut = 0;
@@ -755,16 +786,17 @@ unsigned int dsWaitForRom(void)
     {
       if (!vcsromlist[ucFicAct].directory)
       {
-        extern uInt8 bUseAlternatePalette;
         bRet=true;
         bDone=true;
         if (keysCurrent() & KEY_Y) 
         {
-            bUseAlternatePalette = 1;
+            tv_type_requested = PAL;
+            myCartInfo.tv_type = PAL;
         }
         else
         {
-            bUseAlternatePalette = 0;
+            tv_type_requested = NTSC;
+            myCartInfo.tv_type = NTSC;
         }
        
         if (keysCurrent() & KEY_X)
@@ -795,6 +827,32 @@ unsigned int dsWaitForRom(void)
         while (keysCurrent() & KEY_A);
       }
     }
+      
+    // If the filename is too long... scroll it.
+    if (strlen(vcsromlist[ucFicAct].filename) > 29) 
+    {
+      ucFlip++;
+      if (ucFlip >= 15) 
+      {
+        ucFlip = 0;
+        uLenFic++;
+        if ((uLenFic+29)>strlen(vcsromlist[ucFicAct].filename)) 
+        {
+          ucFlop++;
+          if (ucFlop >= 15) 
+          {
+            uLenFic=0;
+            ucFlop = 0;
+          }
+          else
+            uLenFic--;
+        }
+        strncpy(szName,vcsromlist[ucFicAct].filename+uLenFic,29);
+        szName[29] = '\0';
+        dsPrintValue(1,5+romSelected,1,szName);
+      }
+    }
+      
     swiWaitForVBlank();
   }
 
@@ -888,10 +946,10 @@ void dsInstallSoundEmuFIFO(void)
 }
 
 
+char fpsbuf[32];
+int iTx,iTy;
 ITCM_CODE void dsMainLoop(void)
 {
-    char fpsbuf[32];
-    int iTx,iTy;
     static int dampen=0;
     static int info_dampen=0;
 
@@ -931,12 +989,12 @@ ITCM_CODE void dsMainLoop(void)
             // 655 -> 50 fps and 546 -> 60 fps
             if (!full_speed)
             {
-                while(TIMER0_DATA < (546*atari_frames))
+                while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
                     ;
             }
 
             // Have we processed 60 frames... start over...
-            if (++atari_frames == 60)
+            if (++atari_frames == (myCartInfo.tv_type ? 50:60))
             {
                 TIMER0_CR=0;
                 TIMER0_DATA=0;
@@ -951,25 +1009,41 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-                case CTR_STARGATE:
+
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B)) | (keys_pressed & (KEY_Y))));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
-                    // For Defender II, aka Stargate games
-                    if (myCartInfo.controllerType == CTR_STARGATE)
-                    {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_Y));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_B));
+                    break;
 
-                        // Unfortunately for Stargate, we can't use these keys for UI handling below...
-                        if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
-                        {
-                            keys_pressed = 0;
-                        }
-                    }                    
+                case CTR_STARGATE:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_Y));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_B));
+                    // Unfortunately for Stargate, we can't use these keys for UI handling below...
+                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
+                    {
+                        keys_pressed = 0;
+                    }
+                    break;
+                    
+                case CTR_SOLARIS:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_Y));
+                    if (keys_pressed & (KEY_Y))
+                    {
+                        keys_pressed = 0;
+                    }
                     break;
                     
                 case CTR_RJOY:
@@ -1251,9 +1325,19 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < A26_VID_HEIGHT) myCartInfo.screenScale++;
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 190) myCartInfo.screenScale--;
-                    
+                    // Allow scaling from 51% to 100%
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 100) myCartInfo.screenScale++;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 51) myCartInfo.screenScale--;
+
+#ifdef WRITE_TWEAKS
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  if (myCartInfo.displayStartScanline < 100) myCartInfo.displayStartScanline++;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.displayStartScanline > 15) myCartInfo.displayStartScanline--;
+                    extern uInt32 myStartDisplayOffset;
+                    extern uInt32 myStopDisplayOffset;
+                    myStartDisplayOffset = 228 * myCartInfo.displayStartScanline;                              // Allow for some underscan lines on a per-cart basis
+                    myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayStopScanline));     // Allow for some overscan lines on a per-cart basis
+                        
+#endif              
                     bScreenRefresh = 1;
                 }
 
@@ -1535,16 +1619,24 @@ ITCM_CODE void dsMainLoop(void)
 
 //----------------------------------------------------------------------------------
 // Find files (a26 / bin) available
-int a26Filescmp (const void *c1, const void *c2) 
+ITCM_CODE int a26Filescmp (const void *c1, const void *c2) 
 {
   FICA2600 *p1 = (FICA2600 *) c1;
   FICA2600 *p2 = (FICA2600 *) c2;
 
-  return strcasecmp (p1->filename, p2->filename);
+  if (p1->filename[0] == '.' && p2->filename[0] != '.')
+      return -1;
+  if (p2->filename[0] == '.' && p1->filename[0] != '.')
+      return 1;
+  if (p1->directory && !(p2->directory))
+      return -1;
+  if (p2->directory && !(p1->directory))
+      return 1;
+  return strcasecmp (p1->filename, p2->filename);    
 }
 
 static char filenametmp[255];
-void vcsFindFiles(void) 
+ITCM_CODE void vcsFindFiles(void) 
 {
   DIR *pdir;
   struct dirent *pent;
