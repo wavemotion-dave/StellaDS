@@ -207,8 +207,8 @@ static const CartInfo table[] =
     {"0d22edcb05e5e52f45ddfe171e3c4b50",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Bee Ball.bin
     {"d655f3b4e327d2713f52b2e342bf25c6",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Bell Hopper (2011) (Tjoppen) (NTSC).bin    
     {"ee6665683ebdb539e89ba620981cb0f6",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berenstain Bears (1983).bin
-    {"b8ed78afdb1e6cfe44ef6e3428789d5f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bermuda Triangle (1982).bin
-    {"36c993dc328933e4dd6374a8ffe224f4",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   47,    245,    51,   0,  0},    // Bermuda Triangle (1982) (PAL).bin
+    {"b8ed78afdb1e6cfe44ef6e3428789d5f",  "BERMUD", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bermuda Triangle (1982).bin
+    {"36c993dc328933e4dd6374a8ffe224f4",  "BERMUD", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   47,    245,    51,   0,  0},    // Bermuda Triangle (1982) (PAL).bin
     {"136f75c4dd02c29283752b7e5799f978",  "BERZRK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   0, -1},    // Berzerk (1982).bin
     {"fac28963307b6e85082ccd77c88325e7",  "BERZRK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (1982).bin
     {"0805366f1b165a64b6d4df20d2c39d25",  "BERZRK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
@@ -436,10 +436,10 @@ static const CartInfo table[] =
     {"3f3ad2765c874ca13c015ca6a44a40a1",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  7},    // Crackpots (1983).bin
     {"606c2c1753051e03c1f1ac096c9d2832",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  7},    // Crackpots (1983).bin
     {"13448eb5ba575e8d7b8d5b280ea6788f",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  7},    // Crackpots (1983).bin
-    {"73aa02458b413091ac940c0489301710",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
-    {"7f54fa6aa824001af415503c313262f2",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
-    {"2825f4d068feba6973e61c84649489fe",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
-    {"f3c431930e035a457fe370ed4d230659",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
+    {"73aa02458b413091ac940c0489301710",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
+    {"7f54fa6aa824001af415503c313262f2",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
+    {"2825f4d068feba6973e61c84649489fe",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
+    {"f3c431930e035a457fe370ed4d230659",  "CRAPOT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   51,    245,   100,   4, 17},    // Crackpots (1983) (PAL).bin
     {"fb88c400d602fe759ae74ef1716ee84e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,    93,   0,  0},    // Crash Dive (1983).bin
     {"0cebb0bb45a856b23f56d21ce7d1bc34",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,   100,   0,  0},    // Crash Dive (1983) (PAL).bin
     {"9c53b60a7b439a01efa46ae1effa348e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Crazy Ballon.bin
@@ -532,7 +532,7 @@ static const CartInfo table[] =
     {"5a6febb9554483d8c71c86a84a0aa74e",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Donkey Kong Junior (1983).bin
     {"2880c6b59bd54b153174676e465167c7",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Donkey Kong Junior (1983).bin
     {"2091af29b4e7b86914d79d9aaa4cbd20",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   66,    245,    97,   0,  0},    // Donkey Kong Junior (1983) (PAL).bin
-    {"494cda91cc640551b4898c82be058dd9",  "??????", "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Donkey Kong VCS (pal).bin    
+    {"494cda91cc640551b4898c82be058dd9",  "??????", "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Donkey Kong VCS (PAL).bin    
     {"f1ae6305fa33a948e36deb0ef12af852",  "??????", "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Donkey Kong VCS.bin
     {"7386004f9a5a7daf7e50ac8547088337",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // DOT.bin
     {"7e2fe40a788e56765fe56a3576019968",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  6},    // Double Dragon (1989).bin
@@ -579,7 +579,7 @@ static const CartInfo table[] =
     {"eed92cd796494529e3a1834bceb77ddd",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // ElfDashNTSC_011308.bin.bin
     {"b6812eaf87127f043e78f91f2028f9f4",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Eli's Ladder (1982).bin
     {"7eafc9827e8d5b1336905939e097aae7",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Elk Attack (1987).bin
-    {"dbc8829ef6f12db8f463e30f60af209f",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Encounter at L-5 (1982).bin
+    {"dbc8829ef6f12db8f463e30f60af209f",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  36,    210,    93,   0,  0},    // Encounter at L-5 (1982).bin
     {"5188fee071d3c5ef0d66fb45c123e4a5",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   44,    245,    93,   0,  0},    // Encounter at L-5 (1982) (PAL).bin
     {"94b92a882f6dbaa6993a46e2dcc58402",  "ENDURO", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   4,  0},    // Enduro (1983).bin
     {"de62f8a30298e2325249fe112ecb5c10",  "ENDURO", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   4,  0},    // Enduro (1983).bin
@@ -602,8 +602,8 @@ static const CartInfo table[] =
     {"9f5096a6f1a5049df87798eb59707583",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  32,    210,    96,   0,  0},    // Entity (1983).bin
     {"6b683be69f92958abe0e2a9945157ad5",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,    94,   0,  2},    // Entombed (1982).bin
     {"7e6a1375ee356f5a682f643bb8b7090c",  "??????", "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Epic Adventure v28.bin
-    {"81f4f0285f651399a12ff2e2f35bab77",  "??????", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    200,   100,   2,  0},    // Escape from the Mindmaster (1982).bin
-    {"c9e721eb29c940c2e743485b044c0a3f",  "??????", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  PAL,   58,    230,   100,   0,  0},    // Escape from the Mindmaster (1982) (PAL).bin
+    {"81f4f0285f651399a12ff2e2f35bab77",  "MINDMA", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    200,   100,   2,  0},    // Escape from the Mindmaster (1982).bin
+    {"c9e721eb29c940c2e743485b044c0a3f",  "MINDMA", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  PAL,   58,    230,   100,   0,  0},    // Escape from the Mindmaster (1982) (PAL).bin
     {"8334075902fa9f3471905a30fc84e706",  "??????", "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Escape It (2009) (Alan W. Smith).bin
     {"f344ac1279152157d63e64aa39479599",  "??????", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Espial (1984).bin
     {"f7a138eed69665b5cd1bfa796a550b01",  "??????", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Espial (1984) (PAL).bin
@@ -1097,10 +1097,10 @@ static const CartInfo table[] =
     {"4af4103759d603c82b1c9c5acd2d8faf",  "MOONSW", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   43,    245,    61,   0,  0},    // Moonsweeper (1983) (PAL).bin
     {"7d1034bcb38c9b746ea2c0ae37d9dff2",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Morse Code Tutor.bin
     {"9c20e20fa4c5fad038b3e5cee3706c0b",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Moth 7.2.bin
-    {"5641c0ff707630d2dd829b26a9f2e98f",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Motocross Racer (1983).bin
-    {"de0173ed6be9de6fd049803811e5f1a8",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Motocross Racer (1983).bin
-    {"f5a2f6efa33a3e5541bc680e9dc31d5b",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Motocross Racer (1983) (PAL).bin
-    {"a20b7abbcdf90fbc29ac0fafa195bd12",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Motocross Racer (1983) (PAL).bin
+    {"5641c0ff707630d2dd829b26a9f2e98f",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Motocross Racer (1990).bin
+    {"de0173ed6be9de6fd049803811e5f1a8",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Motocross Racer (1990).bin
+    {"f5a2f6efa33a3e5541bc680e9dc31d5b",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   67,    245,    68,   0,  0},    // Motocross (1983) (PAL).bin
+    {"a20b7abbcdf90fbc29ac0fafa195bd12",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   67,    245,    68,   0,  0},    // Motocross (1983) (PAL).bin
     {"378a62af6e9c12a760795ff4fc939656",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // MotoRodeo (1990).bin
     {"b1e2d5dc1353af6d56cd2fe7cfe75254",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   45,    245,   100,   0,  0},    // MotoRodeo (1990) (PAL).bin
     {"db4eb44bc5d652d9192451383d3249fc",  "??????", "FASC", CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Mountain King (1983).bin
@@ -1231,10 +1231,9 @@ static const CartInfo table[] =
     {"7454786af7126ccc7a0c31fcf5af40f1",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   54,    245,    69,   0,  0},    // Phantom Tank (Digivision) (PAL).bin
     {"6b1fc959e28bd71aed7b89014574bdc2",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   41,    245,    62,   0,  1},    // Phantom Tank (Digivision) (PAL).bin
     {"5a9d188245aff829efde816fcade0b16",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   54,    245,    69,   0,  0},    // Phantom Tank (Digivision) (PAL).bin
-    {"62f74a2736841191135514422b20382d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pharaoh's Curse (1983).bin
-    {"2ae700c9dba843a68dfdca40d7d86bd6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  44,    210,   100,   0,  0},    // Pharaoh's Curse (1983).bin
-    {"3577e19714921912685bb0e32ddf943c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   57,    245,    99,   0,  0},    // Pharaoh's Curse (1983) (PAL).bin
-    {"a69f5b1761a8a11c98e706ec7204937f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   47,    245,   100,   0,  0},    // Pharaoh's Curse (1983) (PAL).bin
+    {"2ae700c9dba843a68dfdca40d7d86bd6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  44,    230,    58,   0,  0},    // Pharaoh's Curse (1983) (NTSC by TJ).bin
+    {"3577e19714921912685bb0e32ddf943c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   47,    245,    58,   0,  1},    // Pharaoh's Curse (1983) (PAL).bin
+    {"a69f5b1761a8a11c98e706ec7204937f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   47,    250,    58,   0,  1},    // Pharaoh's Curse (1983) (PAL).bin
     {"7dcbfd2acc013e817f011309c7504daa",  "PHASER", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  NTSC,  31,    192,   100,   0,  0},    // Phaser Patrol (1982).bin
     {"72305c997f2cec414fe6f8c946172f83",  "PHASER", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  PAL,   40,    230,   100,   0,  0},    // Phaser Patrol (1982) (PAL).bin
     {"7e52a95074a66640fcfde124fffd491a",  "PHOENX", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Phoenix (1982).bin
@@ -1289,14 +1288,14 @@ static const CartInfo table[] =
     {"7ced6709f091e79a2ab9575d3516a4ac",  "PLAQUE", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Plaque Attack (1983) (PAL).bin
     {"8bbfd951c89cc09c148bfabdefa08bec",  "??????", "UA",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  33,    210,    94,   0,  0},    // Pleiades (1983).bin
     {"8c136e97c0a4af66da4a249561ed17db",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Poker_squares.bin
-    {"44f71e70b89dcc7cf39dfd622cfb9a27",  "??????", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polaris (1983).bin
-    {"87bea777a34278d29b3b6029833c5422",  "??????", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  38,    210,   100,   0,  0},    // Polaris (1983) (TJ).bin
-    {"203049f4d8290bb4521cc4402415e737",  "??????", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  5},    // Polaris (1983) (PAL).bin
-    {"a4ff39d513b993159911efe01ac12eba",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
-    {"5f39353f7c6925779b0169a87ff86f1e",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (1983)[alt].bin
-    {"3225676f5c0c577aeccfaa7e6bedd765",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
-    {"5da8fd0b5ed33a360bff37f8b5d0cd58",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
-    {"b56264f738b2eb2c8f7cf5a2a75e5fdc",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pole Position (1983) (PAL).bin    
+    {"44f71e70b89dcc7cf39dfd622cfb9a27",  "POLARI", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polaris (1983).bin
+    {"87bea777a34278d29b3b6029833c5422",  "POLARI", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  38,    210,   100,   0,  0},    // Polaris (1983) (TJ).bin
+    {"203049f4d8290bb4521cc4402415e737",  "POLARI", "3F",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  5},    // Polaris (1983) (PAL).bin
+    {"a4ff39d513b993159911efe01ac12eba",  "POLEPO", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
+    {"5f39353f7c6925779b0169a87ff86f1e",  "POLEPO", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (1983)[alt].bin
+    {"3225676f5c0c577aeccfaa7e6bedd765",  "POLEPO", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
+    {"5da8fd0b5ed33a360bff37f8b5d0cd58",  "POLEPO", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin    
+    {"b56264f738b2eb2c8f7cf5a2a75e5fdc",  "POLEPO", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pole Position (1983) (PAL).bin    
     {"ee28424af389a7f3672182009472500c",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polo (1978).bin
     {"a83b070b485cf1fb4d5a48da153fdf1a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Pompeii (1983).bin
     {"4799a40b6e889370b7ee55c17ba65141",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  28,    210,    90,   0,  0},    // Pooyan (1983).bin
@@ -1441,11 +1440,11 @@ static const CartInfo table[] =
     {"aad61898633f470ce528e3d7ef3d0adb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    78,   0,  1},    // Rush Hour (1983).bin
     {"ebf2dff78a08733251bf3838f02f7938",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    78,   0,  1},    // Rush Hour (1983).bin
     {"b9b4612358a0b2c1b4d66bb146767306",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    78,   0,  1},    // Rush Hour (1983).bin
-    {"a4ecb54f877cd94515527b11e698608c",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
-    {"64fab9d15df937915b1c392fc119b83b",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
-    {"350e0f7b562ec5e457b3f5af013648db",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
-    {"4e01d9072c500331e65bb87c24020d3f",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
-    {"1ec57bbd27bdbd08b60c391c4895c1cf",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
+    {"a4ecb54f877cd94515527b11e698608c",  "SABOTR", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
+    {"64fab9d15df937915b1c392fc119b83b",  "SABOTR", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
+    {"350e0f7b562ec5e457b3f5af013648db",  "SABOTR", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
+    {"4e01d9072c500331e65bb87c24020d3f",  "SABOTR", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
+    {"1ec57bbd27bdbd08b60c391c4895c1cf",  "SABOTR", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Saboteur (1983).bin
     {"4d502d6fb5b992ee0591569144128f99",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Save Mary! (1989).bin
     {"7bb286cb659d146af3966d699b51f509",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Save Mary! (1989).bin
     {"4884b1297500bd1243659e43c7e7579e",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0, 12},    // Save Mary! (1989) (PAL).bin
@@ -1460,12 +1459,12 @@ static const CartInfo table[] =
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
     {"1bc2427ac9b032a52fe527c7b26ce22c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sea Battle (1983).bin
-    {"624e0a77f9ec67d628211aaf24d8aea6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
-    {"07f42847a79e4f5ae55cc03304b18c25",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
-    {"3fd53bfeee39064c945a769f17815a7f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
-    {"07f42847a79e4f5ae55cc03304b18c25",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
-    {"74d072e8a34560c36cacbc57b2462360",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   38,    245,    85,   2,  0},    // Sea Hawk (1983) (PAL).bin
-    {"1b8d35d93697450ea26ebf7ff17bd4d1",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   38,    245,    85,   2,  0},    // Sea Hawk (1983) (PAL).bin
+    {"624e0a77f9ec67d628211aaf24d8aea6",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
+    {"07f42847a79e4f5ae55cc03304b18c25",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
+    {"3fd53bfeee39064c945a769f17815a7f",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
+    {"07f42847a79e4f5ae55cc03304b18c25",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
+    {"74d072e8a34560c36cacbc57b2462360",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   38,    245,    85,   2,  0},    // Sea Hawk (1983) (PAL).bin
+    {"1b8d35d93697450ea26ebf7ff17bd4d1",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   38,    245,    85,   2,  0},    // Sea Hawk (1983) (PAL).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  9},    // Sea Hunt (1987).bin
     {"d8acaa980cda94b65066568dd04d9eb0",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  9},    // Sea Hunt (1987).bin
     {"340f546d59e72fb358c49ac2ca8482bb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,    64,   0,  5},    // Sea Hunt (1987) (PAL).bin
@@ -1707,8 +1706,8 @@ static const CartInfo table[] =
     {"c5bab953ac13dbb2cba03cd0684fb125",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,    96,   0,  0},    // StayFrosty.bin
     {"541cac55ebcf7891d9d51c415922303f",  "??????", "F4SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // StayFrosty2.bin
     {"656dc247db2871766dffd978c71da80c",  "??????", "2K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
-    {"1619bc27632f9148d8480cd813aa74c3",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  PAL,   29,    245,    93,   0, -1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
-    {"f1eeeccc4bba6999345a2575ae96508e",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  PAL,   52,    245,   100,   0,  0},    // Steeplechase (1983 Video Gems) (PAL).bin
+    {"1619bc27632f9148d8480cd813aa74c3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
+    {"f1eeeccc4bba6999345a2575ae96508e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
     {"0b8d3002d8f744a753ba434a4d39249a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Stellar Track (1980).bin
     {"23fad5a125bcd4463701c8ad8a0043a9",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Stone Age (1983).bin
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Strategy X (1983).bin
@@ -1759,7 +1758,7 @@ static const CartInfo table[] =
     {"dbb10b904242fcfb8428f372e00c01af",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Superman (1979) (PAL).bin
     {"fd10915633aea4f9cd8b518a25d62b55",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,   100,   0,  0},    // Superman (1979) (PAL).bin
     {"6fac680fc9a72e0e54255567c72afe34",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,   100,   0,  0},    // Superman (1979) (PAL).bin
-    {"59b70658f9dd0e2075770b07be1a35cf",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  37,    215,   100,   0,  0},    // Surfer's Paradise - But Danger Below! (1983) (NTSC by TJ).bin
+    {"59b70658f9dd0e2075770b07be1a35cf",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  37,    215,    90,   0,  2},    // Surfer's Paradise - But Danger Below! (1983) (NTSC by TJ).bin
     {"c20f15282a1aa8724d70c117e5c9709e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,   100,   0,  0},    // Surfer's Paradise - But Danger Below! (1983) (PAL).bin
     {"aec9b885d0e8b24e871925630884095c",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Surf's Up (1983).bin
     {"a2170318a8ef4b50a1b1d38567c220d6",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Surf's Up (1983).bin
@@ -1785,10 +1784,10 @@ static const CartInfo table[] =
     {"bc5389839857612cfabeb810ba7effdc",  "WATERW", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    94,   0,  6},    // SwordQuest - WaterWorld (1983).bin
     {"c0eee10f8868de535c9ac0995ef3f6dc",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sync.bin
     {"2c2aea31b01c6126c1a43e10cacbfd58",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Synth Cart.bin
-    {"d45ebf130ed9070ea8ebd56176e48a38",  "??????", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
-    {"4892b85c248131d6a42c66a4163a40d0",  "??????", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
-    {"6aca52e11b597ab84b33d5252e1cd9d1",  "??????", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
-    {"06e5dc181a8eda1c31cc7c581c68b6ef",  "??????", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  PAL,   59,    245,   100,   0,  0},    // Tac-Scan (1982) (PAL).bin
+    {"d45ebf130ed9070ea8ebd56176e48a38",  "TACSCN", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
+    {"4892b85c248131d6a42c66a4163a40d0",  "TACSCN", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
+    {"6aca52e11b597ab84b33d5252e1cd9d1",  "TACSCN", "4K",   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  NTSC,  34,    210,   100,   0,  0},    // Tac-Scan (1982).bin
+    {"06e5dc181a8eda1c31cc7c581c68b6ef",  "TACSCN", "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_6,  PAL,   59,    245,   100,   0,  0},    // Tac-Scan (1982) (PAL).bin
     {"c77d3b47f2293e69419b92522c6f6647",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  33,    210,    81,   0,  0},    // Tank Brigade (1983).bin
     {"fa6fe97a10efb9e74c0b5a816e6e1958",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  33,    210,    80,   0,  0},    // Tanks But No Tanks (1983).bin
     {"de3d0e37729d85afcb25a8d052a6e236",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Tapeworm (1982).bin
