@@ -1585,6 +1585,26 @@ const struct instructions_t instructions[] =
                 "13-16 ETC    ETC   ETC   VFAST\n"
     },
 
+    {"LEAD01",  "LEAD (c)2008 S. SERRA\n"
+                " \n"
+                "SURVIVE WAVE AFTER WAVE OF\n"
+                "ONCOMING ENENIES!\n"
+                " \n"
+                "1st STAGE:  FIRE STAGE\n"
+                "2nd STAGE:  DODGE STAGE\n"
+                "3rd STAGE:  SCRAMBLE STAGE\n"
+                "4th STAGE:  CATCH STAGE\n"
+                " \n"
+                "L-DIFF:  A=EXPERT GAME\n"
+                "R-DIFF:  A=SAFE SMART BOMB\n"
+                " \n"
+                "YOU GET 3 PTS FOR ENEMIES ON\n"
+                "STAGES 1-3 AND 5 PTS ON STAGE\n"
+                "4 PLUS A STAGE CLEAR BONUS.\n"
+                "DOWN ACTIVATES SMART BOMB BUT\n"
+                "CAUSES SCORE TO ROUND DOWN.\n"
+    },
+
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
 
