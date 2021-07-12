@@ -47,6 +47,12 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V3.7 :12-July-2021 by Dave Bernazzani (wavemotion)
+  * 100 Game Manuals!!
+  * Fix for Thwocker prototypes.
+  * Minor screen tweaks to tighten up some displays.
+  * New info graphic.
+
 V3.6 :10-July-2021 by Dave Bernazzani (wavemotion)
   * PAL Support!  PAL games will render in proper 50Hz / 312 Scanlines.
   * Database of known games expanded from 850 to 1900.

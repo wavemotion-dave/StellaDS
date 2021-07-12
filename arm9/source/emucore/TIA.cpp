@@ -55,7 +55,7 @@ Int32   myClockStartDisplay         __attribute__((section(".dtcm")));
 Int32   myClockStopDisplay          __attribute__((section(".dtcm")));
 Int32   myClockAtLastUpdate         __attribute__((section(".dtcm")));
 Int32   myClocksToEndOfScanLine     __attribute__((section(".dtcm")));
-Int32   myMaximumNumberOfScanlines  __attribute__((section(".dtcm")));
+uInt16  myMaximumNumberOfScanlines  __attribute__((section(".dtcm")));
 uInt8*  myCurrentBLMask             __attribute__((section(".dtcm")));
 uInt8*  myCurrentM0Mask             __attribute__((section(".dtcm")));
 uInt8*  myCurrentM1Mask             __attribute__((section(".dtcm")));
@@ -440,7 +440,6 @@ void TIA::reset()
   myFrameHeight = 210;
     
   myColorLossEnabled = false;
-  myMaximumNumberOfScanlines = 290;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

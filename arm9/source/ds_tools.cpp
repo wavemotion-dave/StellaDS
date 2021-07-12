@@ -37,9 +37,9 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.6"
+#define VERSION "3.7"
 
-#define WRITE_TWEAKS
+//#define WRITE_TWEAKS
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -633,8 +633,8 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
       szName[29]='\0';
       if (vcsromlist[ucGame].directory)
       {
-        sprintf(szName,"[%s]",vcsromlist[ucGame].filename);
-        sprintf(szName2,"%-29s",szName);
+        szName[27]='\0';
+        sprintf(szName2,"[%s]",szName);
         dsPrintValue(0,5+ucBcl,(ucSel == ucBcl ? 1 :  0),szName2);
       }
       else
