@@ -13,7 +13,6 @@
 // See the file "license" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //
-// $Id: Cart3F.cxx,v 1.4 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
 
 #include <string.h>
@@ -46,7 +45,7 @@ const uInt8 ourBankOrg[16][4] =
   { 6, 0, 5, 1 }   // Bank 7, 15  1 1 - - - 1 1 -
 };
 
-uInt8 tmpSlice[1024];
+static uInt8 tmpSlice[1024];
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeWD::CartridgeWD(const uInt8* image, uInt32 size)
     : mySize(size)
@@ -154,7 +153,7 @@ uInt8 CartridgeWD::peek(uInt16 address)
   else  // We are doing a real peek() of our ROM image - take into account the unusual bank switching...
   {
       address = address & 0x0FFF;       // Map down to 4k
-      if (address < 0x40)
+      if (address < 0x40)               // Lower 128 bytes of first bank is special RAM (first 64 bytes to READ, next 64 bytes to WRITE)
       {
         return myRam[address & 0x3F];
       }
@@ -182,7 +181,7 @@ void CartridgeWD::poke(uInt16 address, uInt8 value)
 {
   if (address & 0x1000)
   {
-      if ((address & 0x0FFF) < 0x0080)
+      if ((address & 0x0FFF) < 0x0080)  // Lower 128 bytes of first bank is special RAM (first 64 bytes to READ, next 64 bytes to WRITE)
       {
         myRam[address & 0x3F] = value;
       }

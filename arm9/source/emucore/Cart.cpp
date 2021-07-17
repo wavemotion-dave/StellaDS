@@ -1541,11 +1541,11 @@ static const CartInfo table[] =
     {"514f911ecff2be5eeff2f39c49a9725c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   39,    245,    88,   0,  0},    // Sky Skipper (1983) (PAL).bin
     {"024e97dabc0b083c31ea52a83cca4e01",  "??????", "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slideboy (final).bin
     {"6151575ffb5ceddd26173f709336776b",  "??????", "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slime.bin
-    {"f90b5da189f24d7e1a2117d8c8abc952",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
-    {"705fe719179e65b0af328644f3a04900",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
-    {"81254ebce88fa46c4ff5a2f4d2bad538",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
-    {"fc6052438f339aea373bbc999433388a",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   56,    245,    89,   0,  0},    // Slot Machine (1979) (PAL).bin
-    {"75ea128ba96ac6db8edf54b071027c4e",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Slot Machine (1979) (PAL).bin
+    {"f90b5da189f24d7e1a2117d8c8abc952",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
+    {"705fe719179e65b0af328644f3a04900",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
+    {"81254ebce88fa46c4ff5a2f4d2bad538",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Slot Machine (1979).bin
+    {"fc6052438f339aea373bbc999433388a",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   56,    245,    89,   0,  0},    // Slot Machine (1979) (PAL).bin
+    {"75ea128ba96ac6db8edf54b071027c4e",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Slot Machine (1979) (PAL).bin
     {"aed82052f7589df05a3f417bb4e45f0c",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    92,   0,  0},    // Slot Racers (1978).bin
     {"a7ed7dc5cbc901388afa59030fb11d26",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   62,    210,    92,   0,  0},    // Slot Racers (1978) (PAL).bin
     {"d1d704a7146e95709b57b6d4cac3f788",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   60,    210,    92,   0,  0},    // Slot Racers (1978) (PAL).bin
