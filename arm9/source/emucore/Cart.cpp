@@ -3,11 +3,8 @@
 // fcbdf405f0fc2027b0ea45bb5af94c1a *3-D Ghost Attack (1983) (Amiga - Video Soft, Michael K. Glass, Jerry Lawson) (Prototype) ~.bin
 // 60cd61a2dfccb0e2736434f9792c1672 *3-D Havoc (1983) (Amiga - Video Soft, Frank Ellis, Jerry Lawson) (2110) (Prototype) ~.bin
 // 50c7edc9f9dc0369abcdab3b4efeb5e9 *3-D Zapper (U.S. Games Corporation - JWDA, Todd Marshall) (Prototype).bin
-// 519f007c0e14fb90208dbb5199dfb604 *Depth Charge (1983) (Amiga - Video Soft) (Prototype) ~.bin
 // cfb83a3b0513acaf8be4cae1512281dc *Going-Up (1983) (Starpath Corporation) (Prototype) ~.bin
-// 32ae78abbb5e677e2aabae5cc86cec29 *Good Luck, Charlie Brown (04-18-1984) (Atari, Christopher H. Omarzu, Courtney Granner) (CX26112) (Prototype) ~.bin
 // b65d4a38d6047735824ee99684f3515e *MegaBoy (Dynacom) ~.bin
-// 3ad3dc799211ccd424d7c6d454401436 *Power Lords (1983) (Probe 2000 - NAP) (3149VC) (Prototype) ~.bin
 // 5d2c4d7567c1bda80173bf8d85b8a076 *S.A.C. Alert (Joyboard) (1983) (Amiga - Video Soft) (3135) (Prototype) (PAL).bin
 // 715dbf2e39ba8a52c5fe5cdd927b37e0 *S.A.C. Alert (Joyboard) (1983) (Amiga - Video Soft) (3135) (Prototype) ~.bin
 // 807841df228ee8aab0a06ee639ce5a8a *Turbo (1982) (Coleco - Product Guild - GMA, Michael Green, Anthony R. Henderson, Gary Littleton) (2455) (Prototype) ~.bin
@@ -54,6 +51,7 @@
 #include "CartMB.hxx"
 #include "CartCV.hxx"
 #include "CartUA.hxx"
+#include "CartWD.hxx"
 #include "MD5.hxx"
 
 extern void dsWarnIncompatibileCart(void);
@@ -501,6 +499,7 @@ static const CartInfo table[] =
     {"f91fb8da3223b79f1c9a07b77ebfa0b2",  "DEMDIA", "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_9,  NTSC,  34,    210,   100,   0,  0},    // Demons to Diamonds (1982).bin
     {"bf84f528de44225dd733c0e6a8e400a0",  "DEMDIA", "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_9,  NTSC,  34,    210,   100,   0,  0},    // Demons to Diamonds (1982).bin
     {"d62283aed0f4199adb2333de4c263e9c",  "DEMDIA", "4K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA0_9,  PAL,   44,    245,    59,   0,  2},    // Demons to Diamonds (1982) (PAL).bin
+    {"519f007c0e14fb90208dbb5199dfb604",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Depth Charge (1983) (Amiga - Video Soft).bin
     {"fd4f5536fd80f35c64d365df85873418",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Desert Falcon (1987).bin
     {"e9e6ad30549a6e2cd89fe93b7691d447",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   33,    245,   100,   0,  0},    // Desert Falcon (1987) (PAL).bin
     {"d4806775693fcaaa24cf00fc00edcdf3",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   33,    245,   100,   0,  0},    // Desert Falcon (1987) (PAL).bin
@@ -753,6 +752,7 @@ static const CartInfo table[] =
     {"bb756aa98b847dddc8fc170bc79f92b2",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   64,    245,   100,   3,  0},    // Golf (1980) (PAL).bin
     {"95351b46fa9c45471d852d28b9b4e00b",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Golf (1980) (PAL).bin
     {"9d522a3759aa855668e75962c84546f7",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   42,    245,    60,   3,  0},    // Golf (1980) (PAL).bin
+    {"32ae78abbb5e677e2aabae5cc86cec29",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   3,  1},    // Good Luck, Charlie Brown (04-18-1984).bin
     {"c16c79aad6272baffb8aae9a7fff0864",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Gopher (1982).bin
     {"c47b7389e76974fd0de3f088fea35576",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Gopher (1982).bin
     {"8f90590dba143d783df5a6cff2000e4d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0, 11},    // Gopher (1982) (PAL).bin
@@ -1252,7 +1252,7 @@ static const CartInfo table[] =
     {"8e4fa8c6ad8d8dce0db8c991c166cdaa",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pigs in Space (1983).bin
     {"95e1d834c57cdd525dd0bd6048a57f7b",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   44,    245,    76,   0,  0},    // Pigs in Space (1983) (PAL).bin
     {"4bcfde5f9dbd07f8145a409d9fdd6f60",  "??????", "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pinata 2014
-    {"56210a3b9ea6d5dd8f417a357ed8ca92",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  4},    // Pursuit of the Pink Panther Prototype (1983).bin
+    {"56210a3b9ea6d5dd8f417a357ed8ca92",  "??????", "WD",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  4},    // Pursuit of the Pink Panther Prototype (1983).bin
     {"aff90d7fb05e8f43937fc655bfffe2ea",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pirate (2006) (David Weavil).bin
     {"9b54c77b530582d013f0fa4334d785b7",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pirate Special Edition (2007) (David Weavil).bin
     {"3e90cf23106f2e08b2781e41299de556",  "PITFAL", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  4},    // Pitfall! (1982).bin
@@ -1306,6 +1306,7 @@ static const CartInfo table[] =
     {"c7f13ef38f61ee2367ada94fdcc6d206",  "??????", "E0",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,    96,   0,  8},    // Popeye (1983).bin
     {"e9cb18770a41a16de63b124c1e8bd493",  "??????", "E0",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   51,    245,    96,   0,  0},    // Popeye (1983) (PAL).bin
     {"f93d7fee92717e161e6763a88a293ffa",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Porky's (1983).bin
+    {"3ad3dc799211ccd424d7c6d454401436",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Power Lords (1983) (Probe 2000 - NAP).bin
     {"97d079315c09796ff6d95a06e4b70171",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   3,  5},    // Pressure Cooker (1983).bin
     {"525ea747d746f3e80e3027720e1fa7ac",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   61,    230,   100,   3,  5},    // Pressure Cooker (1983) (PAL).bin
     {"027a59a575b78860aed780b2ae7d001d",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pressure Cooker (1983) (PAL).bin
@@ -1512,8 +1513,8 @@ static const CartInfo table[] =
     {"39c78d682516d79130b379fa9deb8d1c",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Skeet Shoot (1981).bin
     {"0832fb2ee654bf9382bc57d2b16d2ffc",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Skeet Shoot (1981) (PAL).bin
     {"eafe8b40313a65792e88ff9f2fe2655c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    78,   0,  0},    // SkelPlus.bin
-    {"75723c16a975afb9da92022583fa802d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    210,    79,  -1,  0},    // Ski Hunt (aka Snow Hunter).bin
-    {"a23fb1710f3115d7b15e9c656f9a00bc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  29,    210,    80,   0,  0},    // Ski Hunt (alt).bin
+    {"75723c16a975afb9da92022583fa802d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  51,    232,    76,  -1,  0},    // Ski Hunt (aka Snow Hunter).bin
+    {"a23fb1710f3115d7b15e9c656f9a00bc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  29,    220,    80,   0,  0},    // Ski Hunt (alt).bin
     {"8654d7f0fb351960016e06646f639b02",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   36,    245,   100,   3,  1},    // Ski Hunt (PAL).bin
     {"6c1553ca90b413bf762dfc65f2b881c7",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,   100,   3,  1},    // Ski Hunt (PAL).bin
     {"5305f69fbf772fac4760cdcf87f1ab1f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  36,    210,   100,   0,  4},    // Ski Run (2600 Screen Search Console).bin
@@ -2046,6 +2047,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeCV(image, size);
   else if(type == "UA")
     cartridge = new CartridgeUA(image);
+  else if(type == "WD")
+    cartridge = new CartridgeWD(image, size);
   else
   {
     // TODO: At some point this should be handled in a better way...
