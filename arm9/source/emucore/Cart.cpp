@@ -1243,7 +1243,7 @@ static const CartInfo table[] =
     {"a8633050a686270fcf6c0cc4dcbad630",  "PHOENX", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Phoenix (1982).bin
     {"79fcdee6d71f23f6cf3d01258236c3b9",  "PHOENX", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,    91,   0,  1},    // Phoenix (1982) (PAL).bin
     {"51e390424f20e468d2b480030ce95d7b",  "PHOENX", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   61,    245,   100,   0,  1},    // Phoenix (1982) (PAL).bin
-    {"1d4e0a034ad1275bc4d75165ae236105",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // Pick Up (1983).bin
+    {"1d4e0a034ad1275bc4d75165ae236105",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  36,    215,   100,   0,  5},    // Pick Up (1983).bin
     {"c4060a31d61ba857e756430a0a15ed2e",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  27,    210,    90,   0,  0},    // Pick'n Pile (NTSC by Thomas Jentzsch).bin
     {"da79aad11572c80a96e261e4ac6392d0",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   56,    245,    90,   0, 13},    // Pick'n Pile (PAL).bin
     {"17c0a63f9a680e7a61beba81692d9297",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Picnic (1982).bin
@@ -1453,13 +1453,13 @@ static const CartInfo table[] =
     {"49571b26f46620a85f93448359324c28",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    88,   0,  6},    // Save Our Ship (Unknown).bin
     {"ed1a784875538c7871d035b7a98c2433",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Save Our Ship.bin
     {"01297d9b450455dd716db9658efb2fae",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,    89,   0,  0},    // Save Our Ship (Technovision) (PAL).bin
-    {"e377c3af4f54a51b85efe37d4b7029e6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
+    {"e377c3af4f54a51b85efe37d4b7029e6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  23,    210,    89,   0,  2},    // Save the Whales (1983).bin
     {"fe641247a4ab9bee970e19ab55f23b25",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
     {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "??????", "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Scramble (final).bin
-    {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
-    {"3fe43915e5655cf69485364e9f464097",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
-    {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
-    {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Scuba Diver (1983).bin
+    {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
+    {"3fe43915e5655cf69485364e9f464097",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
+    {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
+    {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"1bc2427ac9b032a52fe527c7b26ce22c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sea Battle (1983).bin
     {"624e0a77f9ec67d628211aaf24d8aea6",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
     {"07f42847a79e4f5ae55cc03304b18c25",  "SEAHWK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   2,  2},    // Sea Hawk (1983).bin
@@ -1472,8 +1472,8 @@ static const CartInfo table[] =
     {"340f546d59e72fb358c49ac2ca8482bb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,    64,   0,  5},    // Sea Hunt (1987) (PAL).bin
     {"1278f74ca1dfaa9122df3eca3c5bcaad",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,    64,   0,  5},    // Sea Hunt (1987) (PAL).bin
     {"7cd900e9eccbb240fe9c37fa28f917b5",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,    64,   0,  5},    // Sea Hunt (1987) (PAL).bin
-    {"dd45e370aceff765f1e72c619efd4399",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  30,    210,    76,   0,  0},    // Sea Monster (1982) (Bit Corporation) (PG201).bin
-    {"a4b9423877a0b86ca35b52ca3c994ac5",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  30,    210,    76,   0,  0},    // Sea Monster (1982) (Bit Corporation) (PG201).bin
+    {"dd45e370aceff765f1e72c619efd4399",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  26,    210,    76,   0,  1},    // Sea Monster (1982) (Bit Corporation) (PG201).bin
+    {"a4b9423877a0b86ca35b52ca3c994ac5",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  26,    210,    76,   0,  1},    // Sea Monster (1982) (Bit Corporation) (PG201).bin
     {"df6a46714960a3e39b57b3c3983801b5",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   53,    245,    76,   0,  0},    // Sea Monster (1982) (Bit Corporation) (PAL).bin
     {"2124cf92978c46684b6c39ccc2e33713",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,    76,   0,  0},    // Sea Monster (1982) (Bit Corporation) (PAL).bin
     {"68489e60268a5e6e052bad9c62681635",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   50,    245,    76,   0,  0},    // Sea Monster (1982) (Bit Corporation) (PAL).bin
