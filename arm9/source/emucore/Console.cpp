@@ -27,6 +27,7 @@
 #include "Driving.hxx"
 #include "Event.hxx"
 #include "EventHandler.hxx"
+#include "Genesis.hxx"
 #include "Joystick.hxx"
 #include "Keyboard.hxx"
 #include "M6502Low.hxx"
@@ -88,6 +89,11 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   {
       myControllers[0] = new BoosterGrip(Controller::Left, *myEvent);
       myControllers[1] = new BoosterGrip(Controller::Right, *myEvent);
+  }
+  else if (myCartInfo.controllerType == CTR_GENESIS)
+  {
+      myControllers[0] = new Genesis(Controller::Left, *myEvent);
+      myControllers[1] = new Genesis(Controller::Right, *myEvent);
   }
   else if ((myCartInfo.controllerType == CTR_KEYBOARD0) || (myCartInfo.controllerType == CTR_KEYBOARD1))
   {

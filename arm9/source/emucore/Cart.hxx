@@ -71,13 +71,13 @@ extern CartInfo myCartInfo;
 #define CTR_STARGATE    11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
 #define CTR_KEYBOARD1   12     // For keyboard games - second port
 #define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
+#define CTR_GENESIS     14     // For Genesis 2-button Controller support
 
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9
 #define SPEC_CONMARS     2     // Conquest of Mars - fix bug for collision detections
-#define SPEC_PITFALL2    3     // For Pitfall 2 we are employing a few other tricks to get speed...
+#define SPEC_QUADRUN     3     // Quadrun has some audio artifacts we can't generate so we disable them
 #define SPEC_AR          4     // AR Carts we must track distinct memory access
-#define SPEC_QUADRUN     5     // Quadrun has some audio artifacts we can't generate so we disable them
 
 #define MODE_NO          0     // Normal Mode
 #define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)

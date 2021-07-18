@@ -22,6 +22,8 @@
 #include "System.hxx"
 #include <iostream>
 
+uInt16 myCurrentSlice __attribute__((section(".dtcm"))) = 0;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeE7::CartridgeE7(const uInt8* image)
 {
@@ -31,6 +33,8 @@ CartridgeE7::CartridgeE7(const uInt8* image)
     myImage[addr] = image[addr];
   }
 
+  myRAM = fast_cart_buffer;
+    
   // Initialize RAM with random values
   Random random;
   for(uInt32 i = 0; i < 2048; ++i)
@@ -86,7 +90,6 @@ void CartridgeE7::install(System& system)
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(j >> shift, page_access);
   }
-  myCurrentSlice[1] = 7;
 
   // Install some default banks for the RAM and first segment
   bankRAM(0);
@@ -98,20 +101,29 @@ uInt8 CartridgeE7::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
-  // Switch banks if necessary
-  if((address >= 0x0FE0) && (address <= 0x0FE7))
+  if (address >= 0x0FE0)
   {
-    bank(address & 0x0007);
+      // Switch banks if necessary
+      if(address <= 0x0FE7)
+      {
+        bank(address & 0x0007);
+      }
+      else if(address <= 0x0FEB)
+      {
+        bankRAM(address & 0x0003);
+      }
+      return myImage[(7 << 11) + (address & 0x07FF)];
   }
-  else if((address >= 0x0FE8) && (address <= 0x0FEB))
+  else
   {
-    bankRAM(address & 0x0003);
+      // NOTE: The following does not handle reading from RAM, however,
+      // this function should never be called for RAM because of the
+      // way page accessing has been setup
+      if (address & 0x0800)
+          return myImage[(7 << 11) + (address & 0x07FF)];
+      else
+          return myImage[myCurrentSlice + (address & 0x07FF)];
   }
-
-  // NOTE: The following does not handle reading from RAM, however,
-  // this function should never be called for RAM because of the
-  // way page accessing has been setup
-  return myImage[(myCurrentSlice[address >> 11] << 11) + (address & 0x07FF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -119,16 +131,18 @@ void CartridgeE7::poke(uInt16 address, uInt8)
 {
   address = address & 0x0FFF;
 
-  // Switch banks if necessary
-  if((address >= 0x0FE0) && (address <= 0x0FE7))
+  if (address >= 0x0FE0)
   {
-    bank(address & 0x0007);
+      // Switch banks if necessary
+      if (address <= 0x0FE7)
+      {
+        bank(address & 0x0007);
+      }
+      else if (address <= 0x0FEB)
+      {
+        bankRAM(address & 0x0003);
+      }
   }
-  else if((address >= 0x0FE8) && (address <= 0x0FEB))
-  {
-    bankRAM(address & 0x0003);
-  }
-
   // NOTE: This does not handle writing to RAM, however, this 
   // function should never be called for RAM because of the
   // way page accessing has been setup
@@ -138,9 +152,8 @@ void CartridgeE7::poke(uInt16 address, uInt8)
 void CartridgeE7::bank(uInt16 slice)
 { 
   // Remember what bank we're in
-  myCurrentSlice[0] = slice;
-  uInt16 offset = slice << 11;
-  uInt16 shift = mySystem->pageShift();
+  myCurrentSlice = slice<<11;
+  uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Setup the page access methods for the current bank
   if(slice != 7)
@@ -148,30 +161,28 @@ void CartridgeE7::bank(uInt16 slice)
     page_access.directPokeBase = 0;
 
     // Map ROM image into first segment
-    for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
+    for(uInt32 address = 0x0000; address < 0x0800; address += (1 << MY_PAGE_SHIFT))
     {
-      page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-      mySystem->setPageAccess(address >> shift, page_access);
+      page_access.directPeekBase = &myImage[myCurrentSlice + address];
+      mySystem->setPageAccess(access_num++, page_access);
     }
   }
   else
   {
     // Set the page accessing method for the 1K slice of RAM writing pages
     page_access.directPeekBase = 0;
-    page_access.directPokeBase = 0;
-    for(uInt32 j = 0x1000; j < 0x1400; j += (1 << shift))
+    for(uInt32 j = 0x0000; j < 0x0400; j += (1 << MY_PAGE_SHIFT))
     {
-      page_access.directPokeBase = &myRAM[j & 0x03FF];
-      mySystem->setPageAccess(j >> shift, page_access);
+      page_access.directPokeBase = &myRAM[j];
+      mySystem->setPageAccess(access_num++, page_access);
     }
 
     // Set the page accessing method for the 1K slice of RAM reading pages
-    page_access.directPeekBase = 0;
     page_access.directPokeBase = 0;
-    for(uInt32 k = 0x1400; k < 0x1800; k += (1 << shift))
+    for(uInt32 k = 0x0000; k < 0x0400; k += (1 << MY_PAGE_SHIFT))
     {
-      page_access.directPeekBase = &myRAM[k & 0x03FF];
-      mySystem->setPageAccess(k >> shift, page_access);
+      page_access.directPeekBase = &myRAM[k];
+      mySystem->setPageAccess(access_num++, page_access);
     }
   }
 }
@@ -180,25 +191,22 @@ void CartridgeE7::bank(uInt16 slice)
 void CartridgeE7::bankRAM(uInt16 bank)
 { 
   // Remember what bank we're in
-  myCurrentRAM = bank;
-  uInt16 offset = bank << 8;
-  uInt16 shift = mySystem->pageShift();
+  uInt16 offset = 1024 + (bank << 8);
 
   // Set the page accessing method for the 256 bytes of RAM writing pages
   page_access.directPeekBase = 0;
-  page_access.directPokeBase = 0;
-  for(uInt32 j = 0x1800; j < 0x1900; j += (1 << shift))
+  uInt32 access_num = 0x1800 >> MY_PAGE_SHIFT;
+  for(uInt32 j = 0x0000; j < 0x0100; j += (1 << MY_PAGE_SHIFT))
   {
-    page_access.directPokeBase = &myRAM[1024 + offset + (j & 0x00FF)];
-    mySystem->setPageAccess(j >> shift, page_access);
+    page_access.directPokeBase = &myRAM[offset + j];
+    mySystem->setPageAccess(access_num++, page_access);
   }
 
   // Set the page accessing method for the 256 bytes of RAM reading pages
-  page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
-  for(uInt32 k = 0x1900; k < 0x1A00; k += (1 << shift))
+  for(uInt32 k = 0x0000; k < 0x0100; k += (1 << MY_PAGE_SHIFT))
   {
-    page_access.directPeekBase = &myRAM[1024 + offset + (k & 0x00FF)];
-    mySystem->setPageAccess(k >> shift, page_access);
+    page_access.directPeekBase = &myRAM[offset + k];
+    mySystem->setPageAccess(access_num++, page_access);
   }
 }

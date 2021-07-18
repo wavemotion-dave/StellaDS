@@ -37,9 +37,9 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.7"
+#define VERSION "3.8"
 
-#define WRITE_TWEAKS
+//#define WRITE_TWEAKS
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -1077,6 +1077,15 @@ ITCM_CODE void dsMainLoop(void)
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
                     break;
+                    
+                case CTR_GENESIS:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, (keys_pressed & (KEY_A)) | (keys_pressed & (KEY_Y))); // Normal fire button
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_5,     (keys_pressed & (KEY_B)));    // Second Genesis button "C"
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    break;                    
                     
                 case CTR_STARRAID:
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
