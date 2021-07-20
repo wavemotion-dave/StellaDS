@@ -72,6 +72,7 @@ extern CartInfo myCartInfo;
 #define CTR_KEYBOARD1   12     // For keyboard games - second port
 #define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
 #define CTR_GENESIS     14     // For Genesis 2-button Controller support
+#define CTR_MCA         15     // For missile command arcade - 3 button support
 
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9

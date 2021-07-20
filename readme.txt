@@ -48,7 +48,7 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 History :
 --------------------------------------------------------------------------------
 V3.8 :18-July-2021 by Dave Bernazzani (wavemotion)
-  * Massive update to database to support 50+ of the best Atari Hacks
+  * Massive update to database to support 50+ of the best Atari Hacks.
   * Support for WD bankswitching - Pursuit of the Pink Panther playable.
   * Genesis Controller support for all the awesome games that take advantage of it.
   * 120 Game Manuals!!

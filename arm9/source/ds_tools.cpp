@@ -39,7 +39,7 @@
 
 #define VERSION "3.8"
 
-//#define WRITE_TWEAKS
+#define WRITE_TWEAKS
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -948,6 +948,8 @@ void dsInstallSoundEmuFIFO(void)
 
 char fpsbuf[32];
 int iTx,iTy;
+uInt8 mca_dampen_y=0;
+uInt8 mca_dampen_a=0;
 ITCM_CODE void dsMainLoop(void)
 {
     static int dampen=0;
@@ -1009,8 +1011,18 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B)) | (keys_pressed & (KEY_Y))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    break;
+                    
+                case CTR_MCA:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, (keys_pressed & (KEY_Y)));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, (keys_pressed & (KEY_B)));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, (keys_pressed & (KEY_A)));
+                    
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
