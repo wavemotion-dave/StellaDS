@@ -141,7 +141,7 @@ class TIA : public Device , public MediaSource
       @param console The console the TIA is associated with
       @param sound   The sound object the TIA is associated with
     */
-    TIA(const Console& console, Sound& sound);
+    TIA(const Console& console);
  
     /**
       Destructor
@@ -258,9 +258,6 @@ class TIA : public Device , public MediaSource
   private:
     // Console the TIA is associated with
     const Console& myConsole;
-
-    // Sound object the TIA is associated with
-    Sound& mySound;
 
   private:
     // Indicates if color loss should be enabled or disabled.  Color loss

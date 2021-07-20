@@ -50,12 +50,8 @@ class Console
       @param image       The ROM image of the game to emulate
       @param size        The size of the ROM image  
       @param filename    The name of the file that contained the ROM image
-      @param settings    The settings object to use
-      @param profiles    The game profiles object to use
-      @param framebuffer The framebuffer object to use
-      @param sound       The sound object to use
     */
-    Console(const uInt8* image, uInt32 size, const char* filename,  Sound& sound);
+    Console(const uInt8* image, uInt32 size, const char* filename);
 
     /**
       Create a new console object by copying another one
@@ -86,12 +82,6 @@ class Console
       return (jack == Controller::Left) ? *myControllers[0] : *myControllers[1];
     }
 
-    /**
-      Get the sound object of the console
-
-      @return The sound object for this console
-    */
-    Sound& sound() const;
 
     /**
       Get the console switches
@@ -174,9 +164,6 @@ class Console
  
     // Pointer to the 6502 based system being emulated 
     System* mySystem;
-
-    // Reference to the Sound object
-    Sound& mySound;
 
     // Pointer to the EventHandler object
     EventHandler* myEventHandler;

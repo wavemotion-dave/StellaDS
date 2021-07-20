@@ -29,7 +29,6 @@
 #include "MediaSrc.hxx"
 #include "TIASound.hxx"
 #include "Sound.hxx"
-#include "SoundSDL.hxx"
 #include "Event.hxx"
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"
@@ -65,7 +64,6 @@ static short bShowPaddles = false;
 static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
-Sound* theSDLSnd = (Sound*) NULL;
 
 #define MAX_FILE_SIZE   (1024 * 64)
 uInt8  filebuffer[MAX_FILE_SIZE];
@@ -472,8 +470,6 @@ void dsFreeEmu(void)
 
   if (theConsole)
     delete theConsole;
-  if (theSDLSnd)
-    delete theSDLSnd;
 }
 
 bool dsLoadGame(char *filename) 
@@ -491,11 +487,6 @@ bool dsLoadGame(char *filename)
 
     if (theConsole)
       delete theConsole;
-    if (theSDLSnd)
-      delete theSDLSnd;
-
-    theSDLSnd = new SoundSDL(512);
-    theSDLSnd->setVolume(100);
 
     fseek(romfile, 0, SEEK_END);
     buffer_size = ftell(romfile);
@@ -506,7 +497,7 @@ bool dsLoadGame(char *filename)
         fclose(romfile);
 
         // Init the emulation
-        theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname", *theSDLSnd);
+        theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname");
         dsInitPalette();
 
         left_difficulty=0; right_difficulty=0;

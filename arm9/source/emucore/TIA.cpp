@@ -264,9 +264,8 @@ uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
 #define MYCOLUP1  3
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TIA::TIA(const Console& console, Sound& sound)
+TIA::TIA(const Console& console)
     : myConsole(console),
-      mySound(sound),
       myColorLossEnabled(false)
 {
   myMaximumNumberOfScanlines = ((myCartInfo.tv_type == PAL) ? 312:262); 
@@ -346,9 +345,6 @@ const char* TIA::name() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void TIA::reset()
 {
-  // Reset the sound device
-  mySound.reset();
-
   // Clear frame buffers
   for(uInt32 i = 0; i < 160 * 300; ++i)
   {
@@ -447,9 +443,6 @@ ITCM_CODE void TIA::systemCyclesReset()
 {
   // Get the current system cycle
   uInt32 cycles = gSystemCycles;
-
-  // Adjust the sound cycle indicator
-  mySound.adjustCycleCounter(-cycles);
 
   // Adjust the dump cycle
   myDumpDisabledCycle -= cycles;
@@ -3846,8 +3839,7 @@ const uInt32 TIA::ourPALPalette[256] =
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const TIA& c)
-    : myConsole(c.myConsole),
-      mySound(c.mySound)
+    : myConsole(c.myConsole)
 {
   assert(false);
 }

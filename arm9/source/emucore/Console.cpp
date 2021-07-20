@@ -45,8 +45,7 @@
 TIA *theTIA = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& sound)
-    : mySound(sound)
+Console::Console(const uInt8* image, uInt32 size, const char* filename)
 {
   myControllers[0] = 0;
   myControllers[1] = 0;
@@ -67,7 +66,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
 
   M6502* m6502 = new M6502Low(1);
   M6532* m6532 = new M6532(*this);
-  TIA* tia = new TIA(*this, mySound);
+  TIA* tia = new TIA(*this);
   myCartridge = Cartridge::create(image, size);
   theTIA = tia;
   Tia_sound_init(31400, 22050);
@@ -121,13 +120,10 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename, Sound& s
   mySystem->reset();
 
   fakePaddleResistance = 500000;
-
-  mySound.init(this, myMediaSource, mySystem);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const Console& console)
-    : mySound(console.mySound)
 {
   // TODO: Write this method
   assert(false);
@@ -148,12 +144,6 @@ void Console::update()
 {
 // myFrameBuffer.update();
 	myMediaSource->update();
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Sound& Console::sound() const
-{
-  return mySound;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
