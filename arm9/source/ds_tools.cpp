@@ -28,7 +28,6 @@
 #include "Console.hxx"
 #include "MediaSrc.hxx"
 #include "TIASound.hxx"
-#include "Sound.hxx"
 #include "Event.hxx"
 #include "StellaEvent.hxx"
 #include "EventHandler.hxx"

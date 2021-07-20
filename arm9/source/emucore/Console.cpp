@@ -36,7 +36,6 @@
 #include "MD5.hxx"
 #include "MediaSrc.hxx"
 #include "Paddles.hxx"
-#include "Sound.hxx"
 #include "Switches.hxx"
 #include "System.hxx"
 #include "TIA.hxx"

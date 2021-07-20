@@ -4,7 +4,6 @@
 #include <nds.h>
 
 #include "Console.hxx"
-#include "Sound.hxx"
 
 #define STELLADS_MENUINIT 0x01
 #define STELLADS_MENUSHOW 0x02

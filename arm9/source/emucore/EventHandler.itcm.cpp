@@ -24,7 +24,6 @@
 #include "EventHandler.hxx"
 #include "StellaEvent.hxx"
 #include "System.hxx"
-#include "Sound.hxx"
 #include "bspf.hxx"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

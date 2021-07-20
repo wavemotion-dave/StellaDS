@@ -28,7 +28,6 @@
 #include "System.hxx"
 #include "TIA.hxx"
 #include "TIASound.hxx"
-#include "Sound.hxx"
 #include "Cart.hxx"
 #define HBLANK 68
 
