@@ -34,7 +34,7 @@
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
-uint32  myBlendBk = 0;
+uint32  myBlendBk __attribute__((section(".dtcm"))) = 0;
 uInt32  myPF                        __attribute__((section(".dtcm")));
 uInt32  myColor[4]                  __attribute__((section(".dtcm")));
 uInt32  myFrameYStart               __attribute__((section(".dtcm")));
@@ -1037,37 +1037,36 @@ void TIA::computePlayfieldMaskTable()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
+inline void TIA::handleObjectsAndCollisions(uInt32 clocksToUpdate, uInt32 hpos)
 {
-  // Calculate the ending frame pointer value
-
   // See if we're in the vertical blank region
   if(myVBLANK & 0x02)
   {
       // -------------------------------------------------------------------------------------------
-      // Some games present a static screen and so there is really no reason to blank the memory 
-      // which can be time consuming... so check the flag for the cart currently being emulated...
+      // Some games present a fairly static screen from frame to frame and so there is really no 
+      // reason to blank the memory which can be time consuming... so check the flag for the cart
+      // currently being emulated...
       // -------------------------------------------------------------------------------------------
       if (myCartInfo.vblankZero) 
       {
-          memset(myFramePointer, 0, clocksToUpdate);
+          memset(myFramePointer, 0x00, clocksToUpdate);
       }
       myFramePointer += clocksToUpdate;
   }
-  // Handle all other possible combinations
+  else if (myEnabledObjects == 0x00)  // Background handling...
+  {      
+      memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
+      myFramePointer += clocksToUpdate;
+  }
+  // Handle all other possible combinations - WE DO THIS IN A SPECIFIC ORDER to improve speed... 
   else
   {
-      //debug[myEnabledObjects & 0x3F]++;
-      
+      // Calculate the ending frame pointer value
       uInt8* ending = myFramePointer + clocksToUpdate;
-      if (myEnabledObjects == 0x00)  // Background handling...
-      {
-          memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
-      }
       // --------------------------------------------------------------------------------
       // Ball and Playfield (very common) this is all stuff that starts with 0x30..0x3F
       // --------------------------------------------------------------------------------
-      else if ((myEnabledObjects & (myPFBit | myBLBit)) == (myPFBit | myBLBit)) 
+      if ((myEnabledObjects & (myPFBit | myBLBit)) == (myPFBit | myBLBit)) 
       {
           if (myEnabledObjects == (myPFBit | myBLBit)) // Playfield and Ball only are enabled
           {
@@ -1771,7 +1770,21 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
           if (myEnabledObjects == myPFBit) // Playfield bit set... with or without score
           {
               uInt32* mask = &myCurrentPFMask[hpos];
-              if (myPlayfieldPriorityAndScore & ScoreBit)   // Playfield is enabled and the score bit is set
+              if (myPlayfieldPriorityAndScore & PriorityBit)   // Priority bit overrides the Score bit
+              {
+                // Update a uInt8 at a time until reaching a uInt32 boundary
+                for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending); ++myFramePointer, ++mask)
+                {
+                  *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                }
+
+                // Now, update a uInt32 at a time
+                for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
+                {
+                  *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                }
+              }
+              else if (myPlayfieldPriorityAndScore & ScoreBit)   // Playfield is enabled and the score bit is set 
               {
                 // Update a uInt8 at a time until reaching a uInt32 boundary
                 for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending); ++myFramePointer, ++mask, ++hpos)
@@ -1785,7 +1798,7 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
                   *((uInt32*)myFramePointer) = (myPF & *mask) ? (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
                 }
               }          
-              else  // Playfield is enabled and the score bit is not set
+              else  // Playfield is enabled and the score bit is not set and priority clear...
               {
                 // Update a uInt8 at a time until reaching a uInt32 boundary
                 for(; ((uintptr_t)myFramePointer & 0x03) && (myFramePointer < ending); ++myFramePointer, ++mask)
@@ -2580,7 +2593,6 @@ inline void TIA::updateFrameScanline(uInt32 clocksToUpdate, uInt32 hpos)
       }        
       myFramePointer = ending;
   }
-  
 }
 
 
@@ -2641,11 +2653,12 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     // Remember frame pointer in case HMOVE blanks need to be handled
     uInt8* oldFramePointer = myFramePointer;
 
-    // Update as much of the scanline as we can
-    if(clocksToUpdate != 0)
-    {
-        updateFrameScanline(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
-    }
+    // ----------------------------------------------------------------
+    // Update as much of the scanline as we can. This is slow so
+    // this routine has been optimized to handle objects in a
+    // sort of "best" order...
+    // ----------------------------------------------------------------
+    handleObjectsAndCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
 
     // Handle HMOVE blanks if they are enabled
     if(myHMOVEBlankEnabled && (clocksFromStartOfScanLine < (HBLANK + 8)))
@@ -2662,11 +2675,11 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     // ------------------------------------------------------------------------
     // If we are mid-scanline... we record the background color for blending
     // ------------------------------------------------------------------------
-    if ((myClocksToEndOfScanLine > 75) && (myClocksToEndOfScanLine < 199))
+    if (myClocksToEndOfScanLine < 190)
     {
         myBlendBk = myColor[MYCOLUBK];  
     }
-      
+    else  
     // See if we're at the end of a scanline
     if(myClocksToEndOfScanLine == 228)
     {
@@ -2680,7 +2693,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
           [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-
+        
       // Handle the "Cosmic Ark" TIA bug if it's enabled
       if(myM0CosmicArkMotionEnabled)
       {
@@ -2713,7 +2726,12 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
               [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
         }
       }
-
+        
+      // --------------------------------------------------------------------------
+      // And now we must render this onto the DS screen... but first we check
+      // if the cart info says we are any sort of flicker-free or flicker-reduce
+      // and blend the frames... this is a bit slow so use with caution.
+      // --------------------------------------------------------------------------
       if (myCartInfo.mode == MODE_FF)
       {
           int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
@@ -2783,46 +2801,57 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
-    uInt8 noise = myDataBusState & 0x3F; 
+    uInt8 noise;
     if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
+    else noise = myDataBusState & 0x3F; 
+    
+    addr &= 0x000F;
+    
+    if (addr < 8)
+    {
+         // Update frame to current color clock before we look at anything!
+        updateFrame((3*gSystemCycles));
+        switch(addr)
+        {
+        case 0x00:    // CXM0P
+          if (myCollision & 0x0001) noise |= 0x80;
+          if (myCollision & 0x0002) noise |= 0x40;
+          return noise;
+        case 0x01:    // CXM1P
+          if (myCollision & 0x0004) noise |= 0x80;
+          if (myCollision & 0x0008) noise |= 0x40;
+          return noise;
+        case 0x02:    // CXP0FB
+          if (myCollision & 0x0010) noise |= 0x80;
+          if (myCollision & 0x0020) noise |= 0x40;
+          return noise;
+        case 0x03:    // CXP1FB
+          if (myCollision & 0x0040) noise |= 0x80;
+          if (myCollision & 0x0080) noise |= 0x40;
+          return noise;
+        case 0x04:    // CXM0FB
+          if (myCollision & 0x0100) noise |= 0x80;
+          if (myCollision & 0x0200) noise |= 0x40;
+          return noise;
+        case 0x05:    // CXM1FB
+          if (myCollision & 0x0400) noise |= 0x80;
+          if (myCollision & 0x0800) noise |= 0x40;
+          return noise;
+        case 0x06:    // CXBLPF
+          if (myCollision & 0x1000) noise |= 0x80;
+          return noise;
+        case 0x07:    // CXPPMM
+          if (myCollision & 0x2000) noise |= 0x80;
+          if (myCollision & 0x4000) noise |= 0x40;
+          return noise;
+        }
+    }
 
-    // Update frame to current color clock before we look at anything!
-    updateFrame((3*gSystemCycles));
-        
-  switch(addr & 0x000f)
-  {
-    case 0x00:    // CXM0P
-      if (myCollision & 0x0001) noise |= 0x80;
-      if (myCollision & 0x0002) noise |= 0x40;
-      return noise;
-    case 0x01:    // CXM1P
-      if (myCollision & 0x0004) noise |= 0x80;
-      if (myCollision & 0x0008) noise |= 0x40;
-      return noise;
-    case 0x02:    // CXP0FB
-      if (myCollision & 0x0010) noise |= 0x80;
-      if (myCollision & 0x0020) noise |= 0x40;
-      return noise;
-    case 0x03:    // CXP1FB
-      if (myCollision & 0x0040) noise |= 0x80;
-      if (myCollision & 0x0080) noise |= 0x40;
-      return noise;
-    case 0x04:    // CXM0FB
-      if (myCollision & 0x0100) noise |= 0x80;
-      if (myCollision & 0x0200) noise |= 0x40;
-      return noise;
-    case 0x05:    // CXM1FB
-      if (myCollision & 0x0400) noise |= 0x80;
-      if (myCollision & 0x0800) noise |= 0x40;
-      return noise;
-    case 0x06:    // CXBLPF
-      if (myCollision & 0x1000) noise |= 0x80;
-      return noise;
-    case 0x07:    // CXPPMM
-      if (myCollision & 0x2000) noise |= 0x80;
-      if (myCollision & 0x4000) noise |= 0x40;
-      return noise;
-
+    // ----------------------------------------------------------------
+    // Otherwise it's an input read... don't need to update frame yet.
+    // ----------------------------------------------------------------
+    switch (addr)
+    {
     case 0x08:    // INPT0
     {
       Int32 r = myConsole.controller(Controller::Left).read(Controller::Nine);
@@ -2872,7 +2901,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
         }
       }
     }
-          
+
     case 0x0A:    // INPT2
     {
       Int32 r = myConsole.controller(Controller::Right).read(Controller::Nine);
@@ -2931,26 +2960,51 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 
     default:
       return noise;
-  }
+    }
 }
 
+uInt8 poke_needs_update_display[] __attribute__((section(".dtcm"))) =
+{
+    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1,
+    1,1,1,1,1,0,0,0,   0,0,0,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1
+};
+
+uInt8 player_reset_pos[] =
+{
+  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+  3,   3,   3,   3,   3,   3,   3,   3,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,  16,
+ 17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,
+ 37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,
+ 57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,
+ 77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,
+ 97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
+117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
+137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156,
+157, 158, 159,   0,   1,   2,   3,   4 
+};
 
 ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 {
   addr = addr & 0x003f;
 
   Int32 clock = (3*gSystemCycles); 
-  Int8 delay = ourPokeDelayTable[addr];
   Int32 delta_clock = (clock - myClockWhenFrameStarted);
 
-  // See if this is a poke to a PF register
-  if(delay == -1)
-  {
-    delay = delay_tab[delta_clock % 228];
-  }
-
   // Update frame to current CPU cycle before we make any changes!
-  updateFrame(clock + delay);
+  if (poke_needs_update_display[addr])
+  {
+      Int8 delay = ourPokeDelayTable[addr];
+      // See if this is a poke to a PF register
+      if(delay == -1)
+      {
+        delay = delay_tab[delta_clock % 228];
+      }
+      updateFrame(clock + delay);
+  }
     
   switch(addr)
   {
@@ -3150,19 +3204,28 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x10:    // Reset Player 0
     {
-      Int32 hpos = (delta_clock) % 228;
-      Int32 newx = hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
+      uInt8 hpos = (delta_clock) % 228;
+      uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
 
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ0 & 7][myPOSP0][newx];
 
+      // Player is being reset in neither the delay nor display section
+      if (when == 0)
+      {
+        myPOSP0 = newx;
+
+        // So we setup the mask to skip the first copy of the player
+        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
+            [1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+      }
       // Player is being reset during the display of one of its copies
-      if(when == 1)
+      else if (when == 1)
       {
         // So we go ahead and update the display before moving the player
         // TODO: The 11 should depend on how much of the player has already
         // been displayed.  Probably change table to return the amount to
-        // delay by instead of just 1 (01/21/99).
+        // delay by instead of just 11 (01/21/99).
         updateFrame(clock + 11);
 
         myPOSP0 = newx;
@@ -3171,17 +3234,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
         myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
             [1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       }
-      // Player is being reset in neither the delay nor display section
-      else if(when == 0)
-      {
-        myPOSP0 = newx;
-
-        // So we setup the mask to skip the first copy of the player
-        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-            [1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
-      }
       // Player is being reset during the delay section of one of its copies
-      else if(when == -1)
+      else
       {
         myPOSP0 = newx;
 
@@ -3194,19 +3248,35 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x11:    // Reset Player 1
     {
-      Int32 hpos = (delta_clock) % 228;
-      Int32 newx = hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
+      uInt8 hpos = (delta_clock) % 228;
+      uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
+        
+      // TODO: Remove the following special hack for Rabbit Transit
+      // and Dragon Stomper (Excalibur) by StarPath/ARcadia
+      if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
+      {
+          newx = 11;
+      }
 
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ1 & 7][myPOSP1][newx];
 
+      // Player is being reset in neither the delay nor display section
+      if (when == 0)
+      {
+        myPOSP1 = newx;
+
+        // So we setup the mask to skip the first copy of the player
+        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
+            [1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+      }
       // Player is being reset during the display of one of its copies
-      if(when == 1)
+      else if (when == 1)
       {
         // So we go ahead and update the display before moving the player
         // TODO: The 11 should depend on how much of the player has already
         // been displayed.  Probably change table to return the amount to
-        // delay by instead of just 1 (01/21/99).
+        // delay by instead of just 11 (01/21/99).
         updateFrame(clock + 11);
 
         myPOSP1 = newx;
@@ -3215,17 +3285,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
         myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
             [1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
-      // Player is being reset in neither the delay nor display section
-      else if(when == 0)
-      {
-        myPOSP1 = newx;
-
-        // So we setup the mask to skip the first copy of the player
-        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-            [1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-      }
       // Player is being reset during the delay section of one of its copies
-      else if(when == -1)
+      else
       {
         myPOSP1 = newx;
 
@@ -3238,13 +3299,20 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x12:    // Reset Missle 0
     {
-      int hpos = (delta_clock) % 228;
+      uInt8 hpos = (delta_clock) % 228;
       myPOSM0 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
 
       // TODO: Remove the following special hack for Dolphin by
       // figuring out what really happens when Reset Missle 
       // occurs 20 cycles after an HMOVE (04/13/02).
       if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
+      {
+        myPOSM0 = 8;
+      }
+      // TODO: Remove the following special hack for Solaris by
+      // figuring out what really happens when Reset Missle 
+      // occurs 9 cycles after an HMOVE (04/11/08).
+      else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
       {
         myPOSM0 = 8;
       }
@@ -3256,7 +3324,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x13:    // Reset Missle 1
     {
-      int hpos = (delta_clock) % 228;
+      uInt8 hpos = (delta_clock) % 228;
       myPOSM1 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
 
       // TODO: Remove the following special hack for Pitfall II by
@@ -3274,17 +3342,27 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x14:    // Reset Ball
     {
-      int hpos = (delta_clock) % 228 ;
+      uInt8 hpos = (delta_clock) % 228 ;
       myPOSBL = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
-
-      // TODO: Remove the following special hack for Escape from the 
+        
+      // TODO: Remove the following special hack by figuring out what
+      // really happens when Reset Ball occurs 18 cycles after an HMOVE.
+      if((clock - myLastHMOVEClock) == (18 * 3))
+      {
+        // Escape from the Mindmaster (01/09/99)
+        if((hpos == 60) || (hpos == 69))
+          myPOSBL = 10;
+        // Mission Survive (04/11/08)
+        else if(hpos == 63)
+          myPOSBL = 7;
+      }
+      // TODO: Remove the following special hack for Escape from the
       // Mindmaster by figuring out what really happens when Reset Ball 
-      // occurs 18 cycles after an HMOVE (01/09/99).
-      if(((clock - myLastHMOVEClock) == (18 * 3)) && 
-          ((hpos == 60) || (hpos == 69)))
+      // occurs 15 cycles after an HMOVE (04/11/08).
+      else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
       {
         myPOSBL = 10;
-      }
+      } 
       // TODO: Remove the following special hack for Decathlon by
       // figuring out what really happens when Reset Ball 
       // occurs 3 cycles after an HMOVE (04/13/02).
@@ -3306,7 +3384,21 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
         myPOSBL = 5;
       }
- 
+      // TODO: Remove the following special hack for Swoops! by
+      // figuring out what really happens when Reset Ball 
+      // occurs 9 cycles after an HMOVE (04/11/08).
+      else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
+      {
+        myPOSBL = 7;
+      }
+      // TODO: Remove the following special hack for Solaris by
+      // figuring out what really happens when Reset Ball 
+      // occurs 12 cycles after an HMOVE (04/11/08).
+      else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
+      {
+        myPOSBL = 8;
+      }
+       
       myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
           [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
       break;
@@ -3654,9 +3746,6 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     default:
     {
-#ifdef DEBUG_ACCESSES
-      cerr << "BAD TIA Poke: " << hex << addr << endl;
-#endif
       break;
     }
   }

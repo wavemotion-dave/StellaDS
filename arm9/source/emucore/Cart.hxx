@@ -149,12 +149,20 @@ class Cartridge : public Device
       Utility method used by isProbably3F and isProbably3E
     */
     static int searchForBytes(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2);
+    static int searchForBytes3(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3);    
     static int searchForBytes4(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3, uInt8 byte4);
-
+    static int searchForBytes5(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3, uInt8 byte4, uInt8 byte5);
+    
     /**
       Returns true if the image is probably a SuperChip (256 bytes RAM)
     */
     static bool isProbablySC(const uInt8* image, uInt32 size);
+    
+    // Returns true if probalby FE cart
+    static bool isProbablyFE(const uInt8* image, uInt32 size);
+
+    // Returns true if probably UA cart
+    static bool isProbablyUA(const uInt8* image, uInt32 size);    
 
     /**
       Returns true if the image is probably a 3F bankswitching cartridge

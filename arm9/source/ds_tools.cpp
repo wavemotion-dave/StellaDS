@@ -50,7 +50,7 @@ int atari_frames=0;
 
 uInt8 tv_type_requested = NTSC;
 
-#define MAX_DEBUG 5
+#define MAX_DEBUG 8
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128];
@@ -99,7 +99,7 @@ static void DumpDebugData(void)
         {
             idx=0;
             val = debug[i];
-            dbgbuf[idx++] = 'D';
+            dbgbuf[idx++] = 'R';
             dbgbuf[idx++] = '0' + (i / 10);
             dbgbuf[idx++] = '0' + (i % 10);
             dbgbuf[idx++] = ':';
@@ -110,10 +110,8 @@ static void DumpDebugData(void)
             }
             else
             {
-                dbgbuf[idx++] = '0' + (int)val/1000000;
+                dbgbuf[idx++] = '0' + (int)val/100000;
             }
-            val = val % 1000000;
-            dbgbuf[idx++] = '0' + (int)val/100000;
             val = val % 100000;
             dbgbuf[idx++] = '0' + (int)val/10000;
             val = val % 10000;
@@ -1647,7 +1645,7 @@ ITCM_CODE int a26Filescmp (const void *c1, const void *c2)
 }
 
 static char filenametmp[255];
-ITCM_CODE void vcsFindFiles(void) 
+void vcsFindFiles(void) 
 {
   DIR *pdir;
   struct dirent *pent;
