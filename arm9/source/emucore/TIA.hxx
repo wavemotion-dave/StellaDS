@@ -82,8 +82,6 @@ extern    uInt8* myFramePointer;          // Pointer to the next pixel that will
 extern    uInt16* myDSFramePointer;       // Pointer to start of the DS video frame
 extern    uInt32 myFrameXStart;           // Where do we start drawing X Pos?
 extern    uInt32 myFrameYStart;           // Where do we start drawing Y Pos?
-extern    uInt32 myFrameWidth;            // The width of the frame
-extern    uInt32 myFrameHeight;           // The height of the frame
 extern    uInt32 myStartDisplayOffset;
 extern    uInt32 myStopDisplayOffset;
 extern    Int32 myVSYNCFinishClock; 

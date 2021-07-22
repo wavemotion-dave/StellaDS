@@ -35,9 +35,9 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.8"
+#define VERSION "3.9"
 
-#define WRITE_TWEAKS
+//#define WRITE_TWEAKS
 
 #define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
@@ -1628,7 +1628,7 @@ ITCM_CODE void dsMainLoop(void)
 
 //----------------------------------------------------------------------------------
 // Find files (a26 / bin) available
-ITCM_CODE int a26Filescmp (const void *c1, const void *c2) 
+int a26Filescmp (const void *c1, const void *c2) 
 {
   FICA2600 *p1 = (FICA2600 *) c1;
   FICA2600 *p2 = (FICA2600 *) c2;

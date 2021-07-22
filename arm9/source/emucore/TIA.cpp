@@ -34,11 +34,9 @@
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
-uint32  myBlendBk __attribute__((section(".dtcm"))) = 0;
+uint32  myBlendBk                   __attribute__((section(".dtcm"))) = 0;
 uInt32  myPF                        __attribute__((section(".dtcm")));
 uInt32  myColor[4]                  __attribute__((section(".dtcm")));
-uInt32  myFrameYStart               __attribute__((section(".dtcm")));
-uInt32  myFrameHeight               __attribute__((section(".dtcm")));
 uInt32  myStartDisplayOffset        __attribute__((section(".dtcm")));
 uInt32  myStopDisplayOffset         __attribute__((section(".dtcm")));
 Int32   myVSYNCFinishClock          __attribute__((section(".dtcm")));
@@ -431,9 +429,6 @@ void TIA::reset()
   myDumpEnabled = false;
   myDumpDisabledCycle = 0;
 
-  myFrameYStart = 34;
-  myFrameHeight = 210;
-    
   myColorLossEnabled = false;
 }
 
@@ -532,7 +527,7 @@ uInt32 TIA::width() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt32 TIA::height() const 
 {
-  return myFrameHeight; 
+  return 210; 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
