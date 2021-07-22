@@ -2115,7 +2115,6 @@ static const CartInfo table[] =
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // End of list...
 };

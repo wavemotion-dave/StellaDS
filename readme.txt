@@ -50,7 +50,8 @@ History :
 V3.9 :22-July-2021 by Dave Bernazzani (wavemotion)
   * Finally fixed graphical glitches in Rabbit Transit and Dragonstomper.
   * Many cleanups and improvements to the TIA handling.
-  * Anotehr 100 games added to the compatibility database.
+  * Added UA and FE bankswitching detection schemes.
+  * Another 100 games added to the compatibility database.
   
 V3.8 :18-July-2021 by Dave Bernazzani (wavemotion)
   * Massive update to database to support 50+ of the best Atari Hacks.
