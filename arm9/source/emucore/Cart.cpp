@@ -1,5 +1,3 @@
-//b3ff7cef2f04711ee683d040da5276fc   4K NO     34  210   89   -2    8  KITE! (2009) (Simon Quernhorst) (PAL).bin
-
 //============================================================================
 //
 //   SSSS    tt          lll  lll
@@ -973,6 +971,7 @@ static const CartInfo table[] =
     {"75e276ba12dc4504659481c31345703a",  "KILLER", "AR",   CTR_LJOY,      SPEC_AR,        MODE_NO,   0,  1,  ANA1_0,  PAL,   53,    230,   100,   0, 11},    // Killer Satellites (1983) (PAL).bin
     {"e21ee3541ebd2c23e817ffb449939c37",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  28,    210,    81,   0,  0},    // King Kong (1982).bin
     {"0b1056f1091cfdc5eb0e2301f47ac6c3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   30,    245,    75,   0,  0},    // King Kong (1982) (PAL).bin
+    {"b3ff7cef2f04711ee683d040da5276fc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   30,    245,    75,   0,  0},    // KITE! (2009) (Simon Quernhorst) (PAL).bin
     {"0dd4c69b5f9a7ae96a7a08329496779a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   54,    245,    79,   0,  0},    // King Kong (1982) (PAL).bin
     {"2c29182edf0965a7f56fe0897d2f84ba",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Klax (1990).bin
     {"eed9eaf1a0b6a2b9bc4c8032cb43e3fb",  "??????", "F6SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   48,    245,   100,   0,  0},    // Klax (1990) (PAL).bin
