@@ -35,7 +35,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "3.9"
+#define VERSION "4.0"
 
 //#define WRITE_TWEAKS
 
@@ -1355,6 +1355,7 @@ ITCM_CODE void dsMainLoop(void)
                 {
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_L))
                     {
+                        if (keys_pressed & KEY_A)   {lcdSwap();}                        
                         dsWriteTweaks();
                     }
                     else if (keys_pressed & KEY_X)

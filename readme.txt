@@ -47,6 +47,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.0 :24-July-2021 by Dave Bernazzani (wavemotion)
+  * Found another 3-5% speed up in TIA rendering! Official Frogger now at 60FPS.
+  * Press and hold L+R+A to swap LCD screens.
+  * Other minor cleanups and polish.
+  
 V3.9 :22-July-2021 by Dave Bernazzani (wavemotion)
   * Finally fixed graphical glitches in Rabbit Transit and Dragonstomper.
   * Many cleanups and improvements to the TIA handling.
@@ -273,10 +278,9 @@ V1.0 : 20/05/2011
 --------------------------------------------------------------------------------
 How to use StellaDS :
 --------------------------------------------------------------------------------
-YOU NEED PERHAPS TO PATCH THE NDS FILE WITH THE DLDI PATCH BEFORE USING IT. 
-Unzip StellaDS.nds from the StellaDS.zip archive in a directory of your flash / (micro) SD 
-/ MMC card.
-Put the a26/bin files where you want on your flashcard. 
+Put the a26/bin files where you want on your SD or flashcard. 
+
+Place StellaDS.NDS on your SD or flashcard.
 
 That's all, StellaDS can be use now :) !
 
@@ -293,6 +297,7 @@ Controls :
 
  * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
+ * L-Trig + R-Trig + A:  Swap LCD top/bottom.
  
  Use stylus on buttons for other actions on bottom screen.
 --------------------------------------------------------------------------------

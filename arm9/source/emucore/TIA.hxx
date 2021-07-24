@@ -248,7 +248,7 @@ class TIA : public Device , public MediaSource
     void computePlayfieldMaskTable();
 
     // Update the current frame buffer for objects and collisions
-    void handleObjectsAndCollisions(uInt32 clocksToUpdate, uInt32 hpos);
+    void handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos);
 
     // Update the current frame buffer to the specified color clock
     void updateFrame(Int32 clock);
