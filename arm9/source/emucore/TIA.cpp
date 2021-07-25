@@ -29,7 +29,8 @@
 #include "TIA.hxx"
 #include "TIASound.hxx"
 #include "Cart.hxx"
-#define HBLANK 68
+
+#define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
@@ -1031,7 +1032,14 @@ void TIA::computePlayfieldMaskTable()
   }
 }
 
-#define HANDLE_COLOR  \
+// -----------------------------------------------------------------------
+// Magic! This helps speedup rendering as it assumes the last color
+// is likely to be the next color drawn - and corrects if that's 
+// not true. We keep track of the last enabled bits and if those 
+// bits have not changed, there is no reason to update the myCollision
+// register and we can just blast out the last known color.
+// -----------------------------------------------------------------------
+#define HANDLE_COLOR_AND_COLLISIONS  \
               if (enabled == last_enabled)  \
               {  \
                   *myFramePointer = last_color;  \
@@ -1054,7 +1062,17 @@ void TIA::computePlayfieldMaskTable()
                   last_enabled = enabled;  \
               } 
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// -----------------------------------------------------------------------
+// We spent a LOT of time in here... so we've done our best to keep this
+// as streamlined as possible. We could reduce this to about 10 lines of
+// code if source-code / memory was at a preimium. But it's not - instead
+// we are after speed of execution and are willing to trade off these 
+// large if-then-else blocks to help with code execution to get as many 
+// games running at full frame rate as possible...
+//
+// Note: I'm 99% sure the compiler is ignoring the inline here... 
+// probably because the code is huge/complex.
+// -----------------------------------------------------------------------
 inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
   // See if we're in the vertical blank region
@@ -1121,7 +1139,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myP0Bit)) // Playfield and Ball plus Player 0 enabled...
@@ -1136,7 +1154,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM0Bit)) // Playfield and Ball plus Missile 0 enabled... (Elevators Amiss)
@@ -1151,7 +1169,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mBL++)                        enabled |= myBLBit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit)) // Playfield and Ball plus Missile 1 enabled...
@@ -1166,7 +1184,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mBL++)                        enabled |= myBLBit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myP1Bit | myM0Bit)) // Playfield and Ball plus Player 1 and Missile 0 enabled...
@@ -1183,7 +1201,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP1Bit)) // Playfield and Ball plus Missle 1 and Player 1
@@ -1200,7 +1218,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myP0Bit | myM0Bit | myM1Bit)) // Playfield and Ball plus Player 0 and Missile 0 plus Missile 1 enabled...
@@ -1219,7 +1237,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP1Bit | myM0Bit)) 
@@ -1238,7 +1256,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM1++)                        enabled |= myM1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }       
           else if (myEnabledObjects == (myPFBit | myBLBit | myP1Bit | myM0Bit | myP0Bit)) // Playfield and Ball plus P1, M0 and P0
@@ -1257,7 +1275,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }       
           else if (myEnabledObjects == (myPFBit | myBLBit | myP0Bit | myM0Bit)) // Playfield and Ball plus Player 0 and Missile 0 enabled...
@@ -1274,7 +1292,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myP1Bit)) // Playfield and Ball plus Player 1 enabled...
@@ -1289,7 +1307,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM0Bit | myM1Bit)) // Playfield and Ball plus Missile 0 and Missile 1 enabled...
@@ -1306,7 +1324,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(*mM0++)                        enabled |= myM0Bit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP0Bit)) // Playfield and Ball plus Missle 1 and Player 0
@@ -1323,7 +1341,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myBLBit | myM1Bit | myP1Bit | myM0Bit | myP0Bit)) // Everything is enbaled...
@@ -1344,7 +1362,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mM1++)                        enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }       
           else  // Unsure... need to check them all... this is slow.
@@ -1368,7 +1386,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(meo2 && *mM1++)                enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(meo3 && *mM0++)                enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }  
       }
@@ -1413,7 +1431,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myPFBit | myM1Bit)) // Player 0 and 1 plus Playfield plus Missile 1
@@ -1430,7 +1448,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM1++)                        enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myBLBit | myM1Bit)) // Player 0 and 1 plus Ball plus Missile 1
@@ -1448,7 +1466,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mM1++)                        enabled |= myM1Bit;
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myM1Bit)) // Player 0 and 1 plus Missile 1
@@ -1464,7 +1482,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM1++)                        enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myPFBit | myM0Bit)) // // Player 0 and 1 plus Playfield plus Missile 0
@@ -1481,7 +1499,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }  
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myM0Bit | myBLBit | myPFBit)) // // Player 0 and 1 plus Playfield plus Missile 0 plus Ball
@@ -1500,7 +1518,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                   if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
                   if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
                   if(*mM0++)                        enabled |= myM0Bit;
-                  HANDLE_COLOR;
+                  HANDLE_COLOR_AND_COLLISIONS;
                 }
           }
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myM0Bit | myM1Bit | myBLBit)) // Player 0/1 plus Missile 0/1 plus Ball enabled...
@@ -1520,7 +1538,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mM1++)                        enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myBLBit)) // // Player 0 and 1 plus Ball
@@ -1536,7 +1554,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                   if(*mBL++)                        enabled |= myBLBit;
                   if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
                   if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-                  HANDLE_COLOR;
+                  HANDLE_COLOR_AND_COLLISIONS;
                 }
           }
           else if (myEnabledObjects == (myP0Bit | myP1Bit | myPFBit | myM0Bit | myM1Bit)) // // Playfield plus M0, M1, P0, P1
@@ -1555,7 +1573,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                   if(*mM1++)                        enabled |= myM1Bit;
                   if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
                   if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
-                  HANDLE_COLOR;
+                  HANDLE_COLOR_AND_COLLISIONS;
                 }
           }
           else if (myEnabledObjects == (myP0Bit | myM0Bit | myP1Bit)) // Player 0 and Missile 0 and Missile 1 are enabled
@@ -1571,7 +1589,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else // Unsure... need to check them all... this is slow.
@@ -1595,7 +1613,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(meo2 && *mM1++)                enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(meo3 && *mM0++)                enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
       }
@@ -1661,7 +1679,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                 {
                   uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                   if(meo3 && *mM0++)                enabled |= myM0Bit;
-                  HANDLE_COLOR;
+                  HANDLE_COLOR_AND_COLLISIONS;
                 }
           }
           else if (myEnabledObjects == (myPFBit | myP0Bit)) // Playfield and Player 0 are enabled 
@@ -1778,7 +1796,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }      
           else if (myEnabledObjects == (myPFBit | myP0Bit | myM0Bit)) // Playfield and Player 0 and Missile 0 are enabled 
@@ -1793,7 +1811,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myM1Bit | myM0Bit)) // Playfield, Missile 1, Missile 0
@@ -1808,7 +1826,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mM1++)                        enabled |= myM1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myM1Bit)) // Playfield, Missile 1
@@ -1821,7 +1839,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
             {
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myM1Bit | myP1Bit)) // Playfield, Missile 1, Player 1
@@ -1836,7 +1854,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
               if(*mM1++)                        enabled |= myM1Bit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myM1Bit | myM0Bit | myP0Bit)) // Playfield, Missile 0, Missile 1, Player 1
@@ -1853,7 +1871,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mM1++)                        enabled |= myM1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myPFBit | myM1Bit | myM0Bit | myP1Bit)) // Playfield, Missile 0, Missile 1, Player 1
@@ -1870,7 +1888,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mM1++)                        enabled |= myM1Bit;
               if(*mM0++)                        enabled |= myM0Bit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else // Catch-all
@@ -1894,7 +1912,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(meo2 && *mM1++)                enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(meo3 && *mM0++)                enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           } 
       }
@@ -1932,7 +1950,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                   uInt8 enabled = myPlayfieldPriorityAndScore;
                   if(*mBL++)                        enabled |= myBLBit;
                   if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
-                  HANDLE_COLOR;
+                  HANDLE_COLOR_AND_COLLISIONS;
                 }
           }
           else if (myEnabledObjects == (myBLBit | myP0Bit | myM0Bit)) // Ball plus Player 0 and Missile 0 are enabled
@@ -1948,7 +1966,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(*mM0++)                        enabled |= myM0Bit;
               if(*mBL++)                        enabled |= myBLBit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }
           else if (myEnabledObjects == (myBLBit | myM0Bit)) // Ball and Missle 0 are enabled
@@ -2009,8 +2027,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 
                 while(myFramePointer < ending)
                 {
-                  if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && 
-                      !*(uInt32*)mM1)
+                  if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
                   {
                     *(uInt32*)myFramePointer = myColor[MYCOLUBK];
                     mBL += 4; mM1 += 4; myFramePointer += 4;
@@ -2033,8 +2050,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 
                 while(myFramePointer < ending)
                 {
-                  if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && 
-                      !*(uInt32*)mM1)
+                  if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
                   {
                     *(uInt32*)myFramePointer = myColor[MYCOLUBK];
                     mBL += 4; mM1 += 4; myFramePointer += 4;
@@ -2115,7 +2131,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                        enabled |= myBLBit;
               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
               if(*mM1++)                        enabled |= myM1Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else if (myEnabledObjects == (myBLBit | myM0Bit | myM1Bit)) // Ball + Missile 0/1
@@ -2131,7 +2147,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(*mBL++)                enabled |= myBLBit;
               if(*mM1++)                enabled |= myM1Bit;
               if(*mM0++)                enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           }          
           else // Catch-all
@@ -2155,7 +2171,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
               if(meo2 && *mM1++)                enabled |= myM1Bit;
               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
               if(meo3 && *mM0++)                enabled |= myM0Bit;
-              HANDLE_COLOR;
+              HANDLE_COLOR_AND_COLLISIONS;
             }
           } 
       }
@@ -2245,7 +2261,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
           uInt8 enabled = myPlayfieldPriorityAndScore;
           if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
           if(*mM0++)                        enabled |= myM0Bit;
-          HANDLE_COLOR;
+          HANDLE_COLOR_AND_COLLISIONS;
         }
       }
       else if (myEnabledObjects == (myM0Bit | myM1Bit)) // Missile 0 and 1 is enabled
@@ -2282,7 +2298,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
           uInt8 enabled = myPlayfieldPriorityAndScore;
           if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
           if(*mM1++)                        enabled |= myM1Bit;
-          HANDLE_COLOR;
+          HANDLE_COLOR_AND_COLLISIONS;
         }
       }
       else // Catch-all... this is a bit slow so do this only if no matches above...
@@ -2306,7 +2322,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
           if(meo2 && *mM1++)                enabled |= myM1Bit;
           if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
           if(meo3 && *mM0++)                enabled |= myM0Bit;
-          HANDLE_COLOR;
+          HANDLE_COLOR_AND_COLLISIONS;
         }
       }        
       myFramePointer = ending;
@@ -2317,9 +2333,11 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void TIA::updateFrame(Int32 clock)
 {
+  // ---------------------------------------------------------------
   // See if we're in the nondisplayable portion of the screen or if
   // we've already updated this portion of the screen
   // We do these in the order of "most likely"
+  // ---------------------------------------------------------------
   if (clock < myClockStartDisplay)               return;
   if (myClockAtLastUpdate >= myClockStopDisplay) return;
   if (myClockAtLastUpdate >= clock)              return;
@@ -2379,14 +2397,17 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     handleObjectsAndCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
 
     // Handle HMOVE blanks if they are enabled
-    if(myHMOVEBlankEnabled && (clocksFromStartOfScanLine < (HBLANK + 8)))
+    if(myHMOVEBlankEnabled)
     {
         Int32 blanks = (HBLANK + 8) - clocksFromStartOfScanLine;
-        memset(oldFramePointer, 0, blanks);
-
-        if((clocksToUpdate + clocksFromStartOfScanLine) >= (HBLANK + 8))
+        if (blanks > 0)
         {
-            myHMOVEBlankEnabled = false;
+            memset(oldFramePointer, 0, blanks);
+
+            if((clocksToUpdate + clocksFromStartOfScanLine) >= (HBLANK + 8))
+            {
+                myHMOVEBlankEnabled = false;
+            }
         }
     }
       
@@ -2507,7 +2528,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
     uInt8 noise;
-    if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for games like Conquest of Mars which incorrectly assume the lower bits]
+    if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for Conquest of Mars which incorrectly assume the lower bits]
     else noise = myDataBusState & 0x3F; 
     
     addr &= 0x000F;
@@ -2774,33 +2795,36 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x04:    // Number-size of player-missle 0
     {
-      myNUSIZ0 = value;
+        if (value != myNUSIZ0)
+        {
+          myNUSIZ0 = value;
 
-      // TODO: Technically the "enable" part, [0], should depend on the current
-      // enabled or disabled state.  This mean we probably need a data member
-      // to maintain that state (01/21/99).
-      myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-          [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+          // TODO: Technically the "enable" part, [0], should depend on the current
+          // enabled or disabled state.  This mean we probably need a data member
+          // to maintain that state (01/21/99).
+          myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
+              [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
 
-      myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-          [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
-
+          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
+              [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+        }
       break;
     }
 
     case 0x05:    // Number-size of player-missle 1
     {
-      myNUSIZ1 = value;
+        if (value != myNUSIZ1)
+        {
+            myNUSIZ1 = value;
+          // TODO: Technically the "enable" part, [0], should depend on the current
+          // enabled or disabled state.  This mean we probably need a data member
+          // to maintain that state (01/21/99).
+          myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
+              [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
 
-      // TODO: Technically the "enable" part, [0], should depend on the current
-      // enabled or disabled state.  This mean we probably need a data member
-      // to maintain that state (01/21/99).
-      myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-          [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-
-      myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-          [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
-
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
+              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+        }
       break;
     }
 
@@ -2830,30 +2854,32 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x0A:    // Control Playfield, Ball size, Collisions
     {
-      myCTRLPF = value;
+        if (myCTRLPF != value)
+        {
+          myCTRLPF = value;
 
-      // The playfield priority and score bits from the control register
-      // are accessed when the frame is being drawn.  We precompute the 
-      // necessary value here so we can save time while drawing.
-      myPlayfieldPriorityAndScore = ((myCTRLPF & 0x06) << 5);
+          // The playfield priority and score bits from the control register
+          // are accessed when the frame is being drawn.  We precompute the 
+          // necessary value here so we can save time while drawing.
+          myPlayfieldPriorityAndScore = ((myCTRLPF & 0x06) << 5);
 
-      // Update the playfield mask based on reflection state if 
-      // we're still on the left hand side of the playfield
-      if(((delta_clock) % 228) < (68 + 79))
-      {
-        myCurrentPFMask = ourPlayfieldTable[myCTRLPF & 0x01];
-      }
+          myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
+              [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
+        }
 
-      myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
-          [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
-
+        // Update the playfield mask based on reflection state if 
+        // we're still on the left hand side of the playfield
+        if(((delta_clock) % 228) < (HBLANK + 79))
+        {
+            myCurrentPFMask = ourPlayfieldTable[myCTRLPF & 0x01];
+        }
       break;
     }
 
     case 0x0B:    // Reflect Player 0
     {
       // See if the reflection state of the player is being changed
-      if(((value & 0x08) && !myREFP0) || (!(value & 0x08) && myREFP0))
+      if ((value ^ myREFP0) & 0x08)
       {
         myREFP0 = (value & 0x08);
         myCurrentGRP0 = ourPlayerReflectTable[myCurrentGRP0];
@@ -2864,7 +2890,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     case 0x0C:    // Reflect Player 1
     {
       // See if the reflection state of the player is being changed
-      if(((value & 0x08) && !myREFP1) || (!(value & 0x08) && myREFP1))
+      if ((value ^ myREFP1) & 0x08)
       {
         myREFP1 = (value & 0x08);
         myCurrentGRP1 = ourPlayerReflectTable[myCurrentGRP1];
@@ -3381,56 +3407,62 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           myHMOVEBlankEnabled = ourHMOVEBlankEnableCycles[x];
       }
+      
+      Int8 motion = ourCompleteMotionTable[x][myHMP0];
+      if (motion != 0)
+      {
+          myPOSP0 += motion;
+          if(myPOSP0 >= 160) myPOSP0 -= 160;
+          else if(myPOSP0 < 0) myPOSP0 += 160;
+          myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
+              [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+      }
 
-      myPOSP0 += ourCompleteMotionTable[x][myHMP0];
-      myPOSP1 += ourCompleteMotionTable[x][myHMP1];
-      myPOSM0 += ourCompleteMotionTable[x][myHMM0];
-      myPOSM1 += ourCompleteMotionTable[x][myHMM1];
-      myPOSBL += ourCompleteMotionTable[x][myHMBL];
-
-      if(myPOSP0 >= 160)
-        myPOSP0 -= 160;
-      else if(myPOSP0 < 0)
-        myPOSP0 += 160;
-
-      if(myPOSP1 >= 160)
-        myPOSP1 -= 160;
-      else if(myPOSP1 < 0)
-        myPOSP1 += 160;
-
-      if(myPOSM0 >= 160)
-        myPOSM0 -= 160;
-      else if(myPOSM0 < 0)
-        myPOSM0 += 160;
-
-      if(myPOSM1 >= 160)
-        myPOSM1 -= 160;
-      else if(myPOSM1 < 0)
-        myPOSM1 += 160;
-
-      if(myPOSBL >= 160)
-        myPOSBL -= 160;
-      else if(myPOSBL < 0)
-        myPOSBL += 160;
-
-      myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
-          [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
-
-      myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-          [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
-      myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-          [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-
-      myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-          [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
-      myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-          [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+      motion = ourCompleteMotionTable[x][myHMP1];
+      if (motion != 0)
+      {
+          myPOSP1 += motion;
+          if(myPOSP1 >= 160) myPOSP1 -= 160;
+          else if(myPOSP1 < 0) myPOSP1 += 160;
+          myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
+              [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+      }
+      
+      motion = ourCompleteMotionTable[x][myHMM0];
+      if (motion != 0)
+      {
+          myPOSM0 += motion;
+          if(myPOSM0 >= 160) myPOSM0 -= 160;
+          else if(myPOSM0 < 0) myPOSM0 += 160;
+          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
+              [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+          // Disable TIA M0 "bug" used for stars in Cosmic ark
+          myM0CosmicArkMotionEnabled = false;
+      }
+        
+      motion = ourCompleteMotionTable[x][myHMM1];
+      if (motion != 0)
+      {
+          myPOSM1 += motion;
+          if(myPOSM1 >= 160) myPOSM1 -= 160;
+          else if(myPOSM1 < 0) myPOSM1 += 160;
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
+              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+      }
+        
+      motion = ourCompleteMotionTable[x][myHMBL];
+      if (motion != 0)
+      {
+          myPOSBL += motion;
+          if(myPOSBL >= 160) myPOSBL -= 160;
+          else if(myPOSBL < 0) myPOSBL += 160;
+          myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
+              [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
+      }
 
       // Remember what clock HMOVE occured at
       myLastHMOVEClock = clock;
 
-      // Disable TIA M0 "bug" used for stars in Cosmic ark
-      myM0CosmicArkMotionEnabled = false;
       break;
     }
 

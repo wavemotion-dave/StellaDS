@@ -1340,8 +1340,8 @@ static const CartInfo table[] =
     {"de61a0b171e909a5a4cfcf81d146dbcb",  "PITFAL", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   4, 12},    // Pitfall! (1982) (PAL).bin
     {"55ef6ab2321ca0c3d369e63d59c059c8",  "PITFAL", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   34,    210,   100,   4, 30},    // Pitfall! (1982) (PAL).bin
     {"90369a64007a375bac633d85f1e02fcc",  "PITFAL", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  6},    // Pitfall 256 v1.20 (2017) (Thomas Jentzsch) (NTSC).bin
-    {"6d842c96d5a01967be9680080dd5be54",  "PITFA2", "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    202,   100,   5,  3},    // Pitfall II - Lost Caverns (1983).bin
-    {"490eed07d4691b27f473953fbea6541a",  "PITFA2", "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    202,   100,   5,  3},    // Pitfall II - Lost Caverns (1983).bin
+    {"6d842c96d5a01967be9680080dd5be54",  "PITFA2", "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
+    {"490eed07d4691b27f473953fbea6541a",  "PITFA2", "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
     {"e34c236630c945089fcdef088c4b6e06",  "PITFA2", "DPC",  CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  PAL,   61,    240,   100,   5,  0},    // Pitfall II - Lost Caverns (1983) (PAL).bin
     {"17e5bddc16d520b62ea465b5c1057755",  "??????", "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  31,    202,   100,   0,  0},    // PITKATNTS.bin
     {"d9fbf1113114fb3a3c97550a0689f10f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Pizza Chef (1983).bin
@@ -2022,10 +2022,10 @@ static const CartInfo table[] =
     {"497f3d2970c43e5224be99f75e97cbbb",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Life (1981).bin
     {"60e0ea3cbe0913d39803477945e9e5ec",  "??????", "2K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Olympics (1977).bin
     {"77d0a577636e1c9212aeccde9d0baa4b",  "??????", "2K",   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   56,    245,    92,   0,  0},    // Video Olympics (1977) (PAL).bin
-    {"107cc025334211e6d29da0b6be46aec7",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Pinball (1981).bin
-    {"6e59dd52f88c00d5060eac56c1a0b0d3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   56,    240,    75,   0,  2},    // Video Pinball (1981) (PAL).bin
-    {"a2424c1a0c783d7585d701b1c71b5fdc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   56,    240,   100,   0,  0},    // Video Pinball (1981) (PAL).bin
-    {"5a2f2dcd775207536d9299e768bcd2df",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   56,    240,   100,   0,  0},    // Video Pinball (1981) (PAL).bin
+    {"107cc025334211e6d29da0b6be46aec7",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Pinball (1981).bin
+    {"6e59dd52f88c00d5060eac56c1a0b0d3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  PAL,   56,    240,    75,   0,  2},    // Video Pinball (1981) (PAL).bin
+    {"a2424c1a0c783d7585d701b1c71b5fdc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  PAL,   56,    240,   100,   0,  0},    // Video Pinball (1981) (PAL).bin
+    {"5a2f2dcd775207536d9299e768bcd2df",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_BLACK,1,  1,  ANA1_0,  PAL,   56,    240,   100,   0,  0},    // Video Pinball (1981) (PAL).bin
     {"ee659ae50e9df886ac4f8d7ad10d046a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Reflex (1983).bin
     {"297236cb9156be35679f83c4e38ee169",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Reflex (1983).bin
     {"6c128bc950fcbdbcaf0d99935da70156",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Volleyball (1983).bin
@@ -2082,7 +2082,8 @@ static const CartInfo table[] =
     {"37527966823ee9243d34c7da8302774f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Word Zapper (1982) (PAL).bin
     {"1b59db76ba41dab70813813f189bc32c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Words Attack.bin
     {"2facd460a6828e0e476d3ac4b8c5f4f7",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   55,    245,    76,   0, -1},    // Words Attack (PAL).bin
-    {"e62e60a3e6cb5563f72982fcd83de25a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // World End (unknown).bin
+    {"e62e60a3e6cb5563f72982fcd83de25a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  44,    230,    60,   0,  0},    // World End (unknown).bin
+    {"745820765bd159c5bf5222fb859769d8",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  44,    230,    60,   0,  0},    // World End / Laser Blaster (BitCorp).bin
     {"87f020daa98d0132e98e43db7d8fea7e",  "WORMW1", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Worm War I (1982).bin
     {"007d18dedc1f0565f09c42aa61a6f585",  "WORMW1", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Worm War I (1982).bin
     {"fb531febf8e155328ec0cd39ef77a122",  "WORMW1", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   55,    245,   100,   0, -9},    // Worm War I (1982) (PAL).bin
@@ -2112,9 +2113,6 @@ static const CartInfo table[] =
     {"05eede12c66e261dd18ee62faf4cdfdb",  "??????", "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Zookeeper_20200308_demo2_NTSC.bin
 
     // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // End of list...
 };
