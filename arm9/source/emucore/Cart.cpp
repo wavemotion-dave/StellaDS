@@ -104,7 +104,8 @@ static const CartInfo table[] =
     {"a4f741910a8dade004e61be5d5ef5d8b",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // AlienAttack4-8-20.bin
     {"e1a51690792838c5c687da80cd764d78",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator People (1983).bin
     {"3aa47765f6184e64c41d1fa2b0b16ddc",  "??????", "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator32.bin
-    {"9e01f7f95cb8596765e03b9a36e8e33c",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam with Ernie (1983).bin
+    {"9e01f7f95cb8596765e03b9a36e8e33c",  "??????", "F8",   CTR_LJOY,      SPEC_ALPHABM,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam with Ernie (1983).bin (patched joystick use)
+    {"a5d82e469a499a41cfb6e459eba89ad0",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam With Ernie (joystick).bin
     {"df95e4af466c809619299f49ece92365",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
     {"f2d40c70cf3e1d03bc112796315888d9",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
     {"acb7750b4d0c4bd34969802a7deb2990",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Amidar (1982).bin
@@ -225,7 +226,8 @@ static const CartInfo table[] =
     {"4b205ef73a5779acc5759bde3f6d33ed",  "BERZRK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   59,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
     {"be41463cd918daef107d249f8cde3409",  "BERZRK", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk-VE.bin
     {"1badbf0d3cb5abf7cf29233120dc14cc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // BiFrost (RC).bin
-    {"1802cc46b879b229272501998c5de04f",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin
+    {"1802cc46b879b229272501998c5de04f",  "??????", "F8",   CTR_LJOY,      SPEC_BIGBIRD,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin (patched for joystick)
+    {"d22a401f0b20808196f538cc43786459",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (joystick).bin
     {"f283cc294ece520c2badf9da20cfc025",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Big Bird's Egg Catch (1983) (PAL).bin
     {"ffcb629e39e0455b37626ca1cf360db2",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // BirdandbeansV2.1.bin
     {"a6239810564638de7e4c54e66b3014e4",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Birthday Mania.bin
@@ -295,9 +297,9 @@ static const CartInfo table[] =
     {"ab2cfcaad3daaf673b2b14fdbb8dac33",  "??????", "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bump 'n' Jump (1983).bin
     {"d6d7e829221a452792937acd9fda8b81",  "??????", "E7",   CTR_GENESIS,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bump 'n' Jump (2 Button Hack).bin
     {"9295570a141cdec18074c55dc7229d08",  "??????", "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  4},    // Bump 'n' Jump (1983) (PAL).bin
-    {"aa1c41f86ec44c0a44eb64c332ce08af",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Bumper Bash (1983).bin
-    {"16ee443c990215f61f7dd1e55a0d2256",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   81,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
-    {"1bf503c724001b09be79c515ecfcbd03",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   79,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
+    {"aa1c41f86ec44c0a44eb64c332ce08af",  "??????", "4K",   CTR_BUMPBASH,  SPEC_BUMPBASH,  MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Bumper Bash (1983).bin
+    {"16ee443c990215f61f7dd1e55a0d2256",  "??????", "4K",   CTR_BUMPBASH,  SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   81,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
+    {"1bf503c724001b09be79c515ecfcbd03",  "??????", "4K",   CTR_BUMPBASH,  SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   79,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
     {"0443cfa9872cdb49069186413275fa21",  "??????", "E7",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // BurgerTime (1983).bin
     {"19d6956ff17a959c48fcd8f4706a848d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,    95,   0,  1},    // Burning Desire (1982).bin
     {"b42df8d92e3118dc594cecd575f515d7",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,    95,   0,  5},    // Burning Desire (1982) (PAL).bin
@@ -422,7 +424,8 @@ static const CartInfo table[] =
     {"335a7c5cfa6fee0f35f5824d1fa09aed",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   70,    245,   100,   0,  0},    // Congo Bongo (1983) (PAL).bin
     {"50dd164c77c4df579843baf838327469",  "CONMAR", "F6",   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v1).bin
     {"0f604cd4c9d2795cf5746e8af7948064",  "CONMAR", "F6",   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v2).bin
-    {"57c5b351d4de021785cf8ed8191a195c",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin
+    {"57c5b351d4de021785cf8ed8191a195c",  "??????", "F8",   CTR_LJOY,      SPEC_COOKIEM,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin (patched for joystick)
+    {"ba403a44966fd8307aac08214ac73bdd",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (joystick).bin  
     {"798b8921276eec9e332dfcb47a2dbb17",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
     {"a0297c4788f9e91d43e522f4c561b4ad",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
     {"7d903411807704e725cf3fafbeb97255",  "COSARK", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Cosmic Ark (1982) [selectable starfield].bin
@@ -605,6 +608,7 @@ static const CartInfo table[] =
     {"ae881ea7a216955e72ceae78266bf613",  "??????", "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // EggVenture_2600_(NTSC)(2021_ScumSoftware_RC4).bin
     {"8008ec6756631b095b25fd71691aca1d",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_2[NTSC].bin
     {"b4a4f8af361d842beec37ba818911225",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_3[NTSC].bin
+    {"edfdff829f3a50fd66d61c6128c9ab5f",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_4[NTSC].bin
     {"71f8bacfbdca019113f3f0801849057e",  "??????", "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Elevator Action (1983).bin
     {"7657b6373fcc9ad69850a687bee48aa1",  "ELEVAT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    200,   100,   0,  1},    // Elevators Amiss.bin
     {"7d483b702c44ee65cd2df22cbcc8b7ed",  "ELEVAT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    200,   100,   0,  1},    // Elf Adventure (05-25-83) (Atari, Warren Robinett) (Prototype) ~.bin
@@ -848,13 +852,14 @@ static const CartInfo table[] =
     {"f0a6e99f5875891246c3dbecbf2d2cea",  "HAUNTH", "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
     {"4857f8bb88bb63c640d3ea5aac7f5d6d",  "HAUNTH", "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
     {"3ca51b5c08f5a0ecfb17d0c1ec6d0942",  "HAUNTH", "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
-    {"09e1ecf9bd2a3030d5670dba7a65e78d",  "HAUNTH", "4K",   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Haunted House (1982) (PAL).bin
+    {"09e1ecf9bd2a3030d5670dba7a65e78d",  "HAUNTH", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Haunted House (1982) (PAL).bin
     {"2cc640f904e1034bf438075a139548d3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Heartbreak.bin
     {"e4e173eae89f847ffa3610ede9035b55",  "??????", "DPCP", CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // HEIST.bin
     {"260c787e8925bf3649c8aeae5b97dcc0",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Hell Driver (ITT Family Games, Thomas Jentzsch) (NTSC).bin
     {"aab840db22075aa0f6a6b83a597f8890",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   61,    245,   100,   0,  1},    // Hell Driver (ITT Family Games) (PAL).bin
     {"129d6c4cda0cd883faac4ae20499e0c2",  "HELWAY", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Hellway (Final)
     {"c52d9bbdc5530e1ef8e8ba7be692b01e",  "??????", "F8",   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Holey Moley (1984).bin
+    {"078e08c1ddf839067b7bc7b88dc04ac1",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Holey Moley (joystick) Prototype.bin    
     {"0bfabf1e98bdb180643f35f2165995d0",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Home Run - Baseball (1978).bin
     {"328949872e454181223a80389d03c122",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Home Run - Baseball (1978) (PAL).bin
     {"ca7aaebd861a9ef47967d31c5a6c4555",  "??????", "2K",   CTR_RJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Home Run - Baseball (1978) (PAL).bin
@@ -978,7 +983,9 @@ static const CartInfo table[] =
     {"7fcd1766de75c614a3ccc31b25dd5b7a",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Knight on the Town (1982).bin
     {"ed0451010d022b96a464febcba70b9c4",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  3},    // Knight on the Town (1982) (PAL).bin
     {"53888a549cd732abed06a3bcd7318710",  "??????", "F4",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // KO Cruiser - 2009-09-14 - NTSC.bin
-    {"534e23210dd1993c828d944c6ac4d9fb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Kool-Aid Man (1983).bin
+    {"534e23210dd1993c828d944c6ac4d9fb",  "??????", "4K",   CTR_LJOY,      SPEC_KOOLAID,   MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Kool-Aid Man (1983).bin
+    {"a2eb84cfeed55acd7fece7fefdc83fbb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Kool-Aid Man (1983) - collision fix.bin   
+    {"4a7fad7a9a5015e09c3cd00db619b9b6",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Kool-Aid Man (Supercharger compatible - bugfixed).bin
     {"dad7d548930ebc2c52f15c16d2c4eaec",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Kraken Attack.bin
     {"4baada22435320d185c95b7dd2bcdb24",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Krull (1983).bin
     {"00dc28b881989c39a6cf87a892bd3c6b",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Krull (1983).bin
@@ -1032,6 +1039,7 @@ static const CartInfo table[] =
     {"2d76c5d1aad506442b9e9fb67765e051",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Lost Luggage (1981) [no opening scene].bin
     {"7c00e7a205d3fda98eb20da7c9c50a55",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Lost Luggage (1981).bin
     {"d0b26e908370683ad99bc6b52137a784",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   4,  4},    // Lost Luggage (1981) (PAL).bin
+    {"a0f9a076ef9ca7555b051835b6e59970",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // LowResCarJoyRC1.bin
     {"d66e72d4b623551a3779779f33730d36",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Lunokhod (b8).bin
     {"593268a34f1e4d78d94729e1d7ee8367",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Lunokhod.bin
     {"393e41ca8bdd35b52bf6256a968a9b89",  "M.A.D.", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // M.A.D. (Missile Intercept) (1982).bin
@@ -1090,10 +1098,10 @@ static const CartInfo table[] =
     {"345769d085113d57937198262af52298",  "MEGAMA", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   48,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"6604f72a966ca6b2df6a94ee4a68eb82",  "MEGAMA", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"049626cbfb1a5f7a5dc885a0c4bb758e",  "MEGAMA", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
-    {"96e798995af6ed9d8601166d4350f276",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
-    {"2cc3049b7feb8e92f1870f1972629757",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
-    {"6ceb7d6a54e9a5e62d26874d1cc88dbc",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
-    {"5f791d93ac95bdd8a691a65d665fb436",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
+    {"96e798995af6ed9d8601166d4350f276",  "??????", "4K",   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK,1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
+    {"2cc3049b7feb8e92f1870f1972629757",  "??????", "4K",   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK,1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
+    {"6ceb7d6a54e9a5e62d26874d1cc88dbc",  "??????", "4K",   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK,1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
+    {"5f791d93ac95bdd8a691a65d665fb436",  "??????", "4K",   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK,1,  1,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
     {"712924a2c7b692f6e7b009285c2169a7",  "??????", "AR",   CTR_LJOY,      SPEC_AR,        MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Meteoroids (1982).bin
     {"909d01739a22579556b740e933915fd8",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  35,    210,    90,   0,  0},    // Mid Space (v43).bin
     {"f1554569321dc933c87981cf5c239c43",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    200,   100,   0,  0},    // Midnight Magic (1984).bin
@@ -2229,14 +2237,249 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     
   original_flicker_mode = myCartInfo.mode;
   
-  // Handle special situations...
+  // Patch Haunted House to avoid original bug
   if (myCartInfo.special == SPEC_HAUNTED)
   {
       uInt8* imageOffset = (uInt8*)(image+1103);
       // Haunted House needs a fix to work... original programming bug.
       if (*imageOffset == 0xE5) *imageOffset = 0xE9;
   }
+    
+  // Patch Kool-Aid to avoid collision problems
+  if (myCartInfo.special == SPEC_KOOLAID)
+  {
+      uInt8* imagePatch = (uInt8*)(image);
+      imagePatch[0x5B] = 0xAC;
+      imagePatch[0x5C] = 0x00;
+      imagePatch[0x5D] = 0xF0;
+      imagePatch[0x5E] = 0xEA;
+      imagePatch[0x5F] = 0x88;
+      imagePatch[0x60] = 0xD0;
+      imagePatch[0x61] = 0xFC;
+      imagePatch[0x62] = 0xA9;
+      imagePatch[0x63] = 0x00;
+      imagePatch[0x64] = 0x85;
+      imagePatch[0x65] = 0x20;
+      imagePatch[0x66] = 0xA9;
+      imagePatch[0x67] = 0x10;
+      imagePatch[0x68] = 0x85;
+      imagePatch[0x69] = 0x21;
+  }
 
+  // Patch Big Bird Egg Catch for Joystick Use (keypad logic fails emulation)
+  if (myCartInfo.special == SPEC_BIGBIRD)
+  {
+      uInt8* imagePatch = (uInt8*)(image);
+      imagePatch[0x140A] = 0xEA;
+      imagePatch[0x140B] = 0xEA;
+      imagePatch[0x140C] = 0xEA;
+      imagePatch[0x17A9] = 0xAD;
+      imagePatch[0x17AA] = 0x80;
+      imagePatch[0x17AB] = 0x02;
+      imagePatch[0x17AC] = 0x10;
+      imagePatch[0x17AD] = 0x22;
+      imagePatch[0x17AE] = 0x0A;
+      imagePatch[0x17AF] = 0x30;
+  }
+    
+    
+  // Patch Alpha Beam with Ernie (keypad logic fails emulation)
+  if (myCartInfo.special == SPEC_ALPHABM)
+  {
+      uInt8* imagePatch = (uInt8*)(image);
+      imagePatch[0x16A1] = 0xEA;
+      imagePatch[0x16A2] = 0xEA;
+      imagePatch[0x16A3] = 0xEA;
+      imagePatch[0x16A4] = 0xEA;
+      imagePatch[0x16A5] = 0xEA;
+      imagePatch[0x16A6] = 0xEA;
+      imagePatch[0x16A7] = 0xEA;
+      imagePatch[0x16A8] = 0xEA;
+      imagePatch[0x16A9] = 0xEA;
+      imagePatch[0x16AA] = 0xEA;
+      imagePatch[0x16AB] = 0xEA;
+      imagePatch[0x16AC] = 0xEA;
+      imagePatch[0x16AD] = 0xEA;
+      imagePatch[0x16AE] = 0xEA;
+      imagePatch[0x16AF] = 0xEA;
+      imagePatch[0x16B0] = 0xEA;
+      imagePatch[0x16B1] = 0xEA;
+      imagePatch[0x16B2] = 0xEA;
+      imagePatch[0x16B3] = 0xEA;
+      imagePatch[0x16B4] = 0xEA;
+      imagePatch[0x1710] = 0xEA;
+      imagePatch[0x1711] = 0xEA;
+      imagePatch[0x1712] = 0xEA;
+      imagePatch[0x1C08] = 0xAD;
+      imagePatch[0x1C09] = 0x80;
+      imagePatch[0x1C0A] = 0x02;
+      imagePatch[0x1C0B] = 0xA4;
+      imagePatch[0x1C0C] = 0xF8;
+      imagePatch[0x1C0D] = 0xD0;
+      imagePatch[0x1C0E] = 0x22;
+      imagePatch[0x1C0F] = 0x0A;
+      imagePatch[0x1C10] = 0xA0;
+      imagePatch[0x1C11] = 0x04;
+      imagePatch[0x1C12] = 0x90;
+      imagePatch[0x1C13] = 0x10;
+      imagePatch[0x1C14] = 0x0A;
+      imagePatch[0x1C15] = 0xA0;
+      imagePatch[0x1C16] = 0x08;
+      imagePatch[0x1C17] = 0x90;
+      imagePatch[0x1C18] = 0x0B;
+      imagePatch[0x1C19] = 0x0A;
+      imagePatch[0x1C1A] = 0xA0;
+      imagePatch[0x1C1B] = 0x02;
+      imagePatch[0x1C1C] = 0x90;
+      imagePatch[0x1C1D] = 0x06;
+      imagePatch[0x1C1E] = 0x0A;
+      imagePatch[0x1C1F] = 0x88;
+      imagePatch[0x1C20] = 0x90;
+      imagePatch[0x1C21] = 0x02;
+      imagePatch[0x1C22] = 0xB0;
+      imagePatch[0x1C23] = 0x4F;
+      imagePatch[0x1C24] = 0xA5;
+      imagePatch[0x1C25] = 0xD6;
+      imagePatch[0x1C26] = 0x29;
+      imagePatch[0x1C27] = 0xF0;
+      imagePatch[0x1C28] = 0x85;
+      imagePatch[0x1C29] = 0xD6;
+      imagePatch[0x1C2A] = 0x98;
+      imagePatch[0x1C2B] = 0x05;
+      imagePatch[0x1C2C] = 0xD6;
+      imagePatch[0x1C2D] = 0x85;
+      imagePatch[0x1C2E] = 0xD6;
+      imagePatch[0x1C2F] = 0xD0;
+      imagePatch[0x1C30] = 0x42;
+      imagePatch[0x1C31] = 0x24;
+      imagePatch[0x1C32] = 0xA3;
+      imagePatch[0x1C33] = 0x10;
+      imagePatch[0x1C34] = 0x3E;
+      imagePatch[0x1C35] = 0x0A;
+      imagePatch[0x1C36] = 0x0A;
+      imagePatch[0x1C37] = 0x0A;
+      imagePatch[0x1C38] = 0xA0;
+      imagePatch[0x1C39] = 0x04;
+      imagePatch[0x1C3A] = 0x0A;
+      imagePatch[0x1C3B] = 0x10;
+      imagePatch[0x1C3C] = 0x2B;
+      imagePatch[0x1C3D] = 0xA0;
+      imagePatch[0x1C3E] = 0x08;
+      imagePatch[0x1C3F] = 0x0A;
+      imagePatch[0x1C40] = 0x10;
+      imagePatch[0x1C41] = 0x26;
+      imagePatch[0x1C42] = 0xA0;
+      imagePatch[0x1C43] = 0x01;
+      imagePatch[0x1C44] = 0x0A;
+      imagePatch[0x1C45] = 0x10;
+      imagePatch[0x1C46] = 0x21;
+      imagePatch[0x1C47] = 0xC8;
+      imagePatch[0x1C48] = 0x0A;
+      imagePatch[0x1C49] = 0x10;
+      imagePatch[0x1C4A] = 0x1D;
+      imagePatch[0x1C4B] = 0x30;
+      imagePatch[0x1C4C] = 0x26;
+      imagePatch[0x1C4D] = 0xEA;
+      imagePatch[0x1C4E] = 0xEA;
+      imagePatch[0x1C4F] = 0xEA;
+      imagePatch[0x1C50] = 0xEA;
+      imagePatch[0x1C51] = 0xEA;
+      imagePatch[0x1C52] = 0xEA;
+      imagePatch[0x1C53] = 0xEA;
+      imagePatch[0x1C54] = 0xEA;
+      imagePatch[0x1C55] = 0xEA;
+      imagePatch[0x1C56] = 0xEA;
+      imagePatch[0x1C57] = 0xEA;
+      imagePatch[0x1C58] = 0xEA;
+      imagePatch[0x1C59] = 0xEA;
+      imagePatch[0x1C5A] = 0xEA;
+      imagePatch[0x1C5B] = 0xEA;
+      imagePatch[0x1C5C] = 0xEA;
+      imagePatch[0x1C5D] = 0xEA;
+      imagePatch[0x1C5E] = 0xEA;
+      imagePatch[0x1C5F] = 0xEA;
+      imagePatch[0x1C60] = 0xEA;
+      imagePatch[0x1C61] = 0xEA;
+      imagePatch[0x1C62] = 0xEA;
+      imagePatch[0x1C63] = 0xEA;
+      imagePatch[0x1C64] = 0xEA;
+      imagePatch[0x1C65] = 0xEA;
+      imagePatch[0x1C66] = 0xEA;
+      imagePatch[0x1C67] = 0xEA;
+      imagePatch[0x1C68] = 0xA5;
+      imagePatch[0x1C69] = 0xD7;
+      imagePatch[0x1C6A] = 0x29;
+      imagePatch[0x1C6B] = 0xF0;
+      imagePatch[0x1C6C] = 0x85;
+      imagePatch[0x1C6D] = 0xD7;
+      imagePatch[0x1C6E] = 0x98;
+      imagePatch[0x1C6F] = 0x05;
+      imagePatch[0x1C70] = 0xD7;
+  }
+    
+    
+  // Patch Cookie Monster Munch (keypad logic fails emulation)
+  if (myCartInfo.special == SPEC_COOKIEM)
+  {
+      uInt8* imagePatch = (uInt8*)(image);
+      imagePatch[0x100D] = 0xEA;
+      imagePatch[0x100E] = 0xEA;
+      imagePatch[0x100F] = 0xEA;
+      imagePatch[0x19B9] = 0xA0;
+      imagePatch[0x19BA] = 0x05;
+      imagePatch[0x19BB] = 0x24;
+      imagePatch[0x19BC] = 0x3C;
+      imagePatch[0x19BD] = 0x10;
+      imagePatch[0x19BE] = 0x16;
+      imagePatch[0x19BF] = 0xC8;
+      imagePatch[0x19C0] = 0xAD;
+      imagePatch[0x19C1] = 0x80;
+      imagePatch[0x19C2] = 0x02;
+      imagePatch[0x19C4] = 0x10;
+      imagePatch[0x19C5] = 0xA0;
+      imagePatch[0x19C6] = 0x04;
+      imagePatch[0x19C7] = 0x0A;
+      imagePatch[0x19C8] = 0x10;
+      imagePatch[0x19C9] = 0x0B;
+      imagePatch[0x19CA] = 0xA0;
+      imagePatch[0x19CB] = 0x08;
+      imagePatch[0x19CC] = 0x0A;
+      imagePatch[0x19CD] = 0x10;
+      imagePatch[0x19CE] = 0x06;
+      imagePatch[0x19CF] = 0xA0;
+      imagePatch[0x19D0] = 0x02;
+      imagePatch[0x19D1] = 0x0A;
+      imagePatch[0x19D2] = 0x10;
+      imagePatch[0x19D3] = 0x01;
+      imagePatch[0x19D4] = 0x0C;
+      imagePatch[0x19D5] = 0x84;
+      imagePatch[0x19D6] = 0xBD;
+      imagePatch[0x19D7] = 0xEA;
+      imagePatch[0x19D8] = 0xEA;
+      imagePatch[0x19D9] = 0xEA;
+      imagePatch[0x19DA] = 0xA5;
+      imagePatch[0x19DB] = 0xBD;
+      imagePatch[0x19DC] = 0xF0;
+      imagePatch[0x19DD] = 0x08;
+      imagePatch[0x19DE] = 0xC9;
+      imagePatch[0x19DF] = 0x05;
+      imagePatch[0x19E0] = 0xF0;
+      imagePatch[0x19E1] = 0x04;
+      imagePatch[0x19E2] = 0xA9;
+      imagePatch[0x19E3] = 0x00;
+      imagePatch[0x19E4] = 0x85;
+      imagePatch[0x19E5] = 0xBE;
+      imagePatch[0x19E6] = 0xA9;
+      imagePatch[0x19E7] = 0x82;
+      imagePatch[0x19E8] = 0x85;
+      imagePatch[0x19E9] = 0x01;
+      imagePatch[0x19EA] = 0xA9;
+      imagePatch[0x19EB] = 0x02;
+      imagePatch[0x19EC] = 0x85;
+      imagePatch[0x19ED] = 0x01;
+  }
+    
+    
   // If we didn't find the type in the table then guess it based on size
   if(!bFound)
   {

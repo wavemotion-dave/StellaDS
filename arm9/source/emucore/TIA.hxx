@@ -38,6 +38,10 @@ class System;
 #define      ScoreBit      0x40         // Bit for Playfield score mode
 #define      PriorityBit   0x80         // Bit for Playfield priority
 
+
+#define     NUSIZ0          4
+#define     NUSIZ1          5
+
 // Used to set the collision register to the correct value
 extern uInt16 ourCollisionTable[256];
 extern uInt8 myPriorityEncoder[2][256];

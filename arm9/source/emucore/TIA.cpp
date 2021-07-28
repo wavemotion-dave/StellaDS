@@ -104,10 +104,53 @@ uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
-   0,  1,  0,  0,  8,  8,  0,  0,  0,  0,  0,  1,  1, -1, -1, -1,
-   0,  0,  8,  8,  8,  0,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
-   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  0,  // VSYNC
+  1,  // VBLANK (0) / 1
+  0,  // WSYNC
+  0,  // RSYNC
+  8,  // NUSIZ0 (0) / 8    TODO - calculate this instead of hardcoding
+  8,  // NUSIZ1 (0) / 8    TODO - calculate this instead of hardcoding
+  0,  // COLUP0
+  0,  // COLUP1
+  0,  // COLUPF
+  0,  // COLUBK
+  0,  // CTRLPF
+  1,  // REFP0
+  1,  // REFP1
+ -1,  // PF0    (4) / -1
+ -1,  // PF1    (4) / -1
+ -1,  // PF2    (4) / -1
+  0,  // RESP0
+  0,  // RESP1
+  8,  // RESM0  (0) / 8
+  8,  // RESM1  (0) / 8
+  0,  // RESBL
+  0,  // AUDC0  (-1) / 0
+  0,  // AUDC1  (-1) / 0
+  0,  // AUDF0  (-1) / 0
+  0,  // AUDF1  (-1) / 0
+  0,  // AUDV0  (-1) / 0
+  0,  // AUDV1  (-1) / 0
+  1,  // GRP0
+  1,  // GRP1
+  1,  // ENAM0
+  1,  // ENAM1
+  1,  // ENABL
+  0,  // HMP0
+  0,  // HMP1
+  0,  // HMM0
+  0,  // HMM1
+  0,  // HMBL
+  0,  // VDELP0
+  0,  // VDELP1
+  0,  // VDELBL
+  0,  // RESMP0
+  0,  // RESMP1
+  3,  // HMOVE
+  0,  // HMCLR
+  0,  // CXCLR
+      // remaining values are undefined TIA write locations
+  0,  0,  0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -326,6 +369,23 @@ TIA::TIA(const Console& console)
   computePlayerPositionResetWhenTable();
   computePlayerReflectTable();
   computePlayfieldMaskTable();
+          
+          
+  if (myCartInfo.special == SPEC_MELTDOWN)
+  {
+      ourPokeDelayTable[NUSIZ0] = 11; 
+      ourPokeDelayTable[NUSIZ1] = 11; 
+  }
+  else if (myCartInfo.special == SPEC_BUMPBASH)
+  {
+      ourPokeDelayTable[NUSIZ0] = 6; 
+      ourPokeDelayTable[NUSIZ1] = 6; 
+  }
+  else
+  {
+      ourPokeDelayTable[NUSIZ0] = 8; 
+      ourPokeDelayTable[NUSIZ1] = 8; 
+  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3400,7 +3460,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     case 0x2A:    // Apply horizontal motion
     {
       // Figure out what cycle we're at
-      Int32 x = ((clock - myClockWhenFrameStarted) % 228) / 3;
+      //Int32 x = ((clock - myClockWhenFrameStarted) % 228) / 3;
+      Int32 x = (gSystemCycles - myCyclesWhenFrameStarted) % 76;
 
       // See if we need to enable the HMOVE blank bug
       if(myCartInfo.hBlankZero)

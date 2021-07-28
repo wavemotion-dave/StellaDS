@@ -65,15 +65,17 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
 
   M6502* m6502 = new M6502Low(1);
   M6532* m6532 = new M6532(*this);
+  myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
   TIA* tia = new TIA(*this);
-  myCartridge = Cartridge::create(image, size);
   theTIA = tia;
   Tia_sound_init(31400, 22050);
 
   // -------------------------------------------------------------------------------------------
   // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers
   // -------------------------------------------------------------------------------------------
-  if ((myCartInfo.controllerType == CTR_PADDLE0) || (myCartInfo.controllerType == CTR_PADDLE1) || (myCartInfo.controllerType == CTR_PADDLE2) || (myCartInfo.controllerType == CTR_PADDLE3))
+  if ((myCartInfo.controllerType == CTR_PADDLE0) || (myCartInfo.controllerType == CTR_PADDLE1) || 
+      (myCartInfo.controllerType == CTR_PADDLE2) || (myCartInfo.controllerType == CTR_PADDLE3) ||
+      (myCartInfo.controllerType == CTR_BUMPBASH))
   {
       myControllers[0] = new Paddles(Controller::Left, *myEvent);
       myControllers[1] = new Paddles(Controller::Right, *myEvent);

@@ -73,12 +73,19 @@ extern CartInfo myCartInfo;
 #define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
 #define CTR_GENESIS     14     // For Genesis 2-button Controller support
 #define CTR_MCA         15     // For missile command arcade - 3 button support
+#define CTR_BUMPBASH    16     // For bumper bash (both paddle buttons used)
 
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9
 #define SPEC_CONMARS     2     // Conquest of Mars - fix bug for collision detections
 #define SPEC_QUADRUN     3     // Quadrun has some audio artifacts we can't generate so we disable them
 #define SPEC_AR          4     // AR Carts we must track distinct memory access
+#define SPEC_MELTDOWN    5     // Meltdown requires NUSIZ0/1 changes
+#define SPEC_BUMPBASH    6     // Bumper Bash requires NUSIZ0/1 changes
+#define SPEC_KOOLAID     7     // Patch to avoid collisions (2002 original patch)
+#define SPEC_BIGBIRD     8     // Patched for joystick use.
+#define SPEC_ALPHABM     9     // Patched for joystick use.
+#define SPEC_COOKIEM    10     // Patched for joystick use.
 
 #define MODE_NO          0     // Normal Mode
 #define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)

@@ -35,7 +35,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.0"
+#define VERSION "4.1"
 
 //#define WRITE_TWEAKS
 
@@ -77,6 +77,7 @@ int gTotalAtariFrames=0;
 
 unsigned short int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, left_difficulty=0, right_difficulty=0,romSel;
 
+extern Int8 ourPokeDelayTable[64];
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
@@ -1131,6 +1132,11 @@ ITCM_CODE void dsMainLoop(void)
                         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 0);
                     }   
                     break;
+                
+                case CTR_BUMPBASH:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F12, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_R)));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_END, (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_L)));
+                    break;
                     
                 case CTR_PADDLE0:
                 case CTR_PADDLE1:
@@ -1159,6 +1165,7 @@ ITCM_CODE void dsMainLoop(void)
 
                     theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_END:StellaEvent::KCODE_F12), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
                                                                                       (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
+
                     if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
                     {
                         if (!((keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L))))  // We want to still process for L/R shoulder buttons for possible screen scaling...
