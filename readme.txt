@@ -53,7 +53,6 @@ V4.1 :28-July-2021 by Dave Bernazzani (wavemotion)
   * Kool-Aid-Man now plays correctly 
   * Meltdown graphics improvements (but not fixed... but playable).
   * Alpha Beam, Big Bird and Cookie Monster games all work with joystick controls now.
-  * Other minor cleanups and polish.
 
 V4.0 :24-July-2021 by Dave Bernazzani (wavemotion)
   * Found another 3-5% speed up in TIA rendering! Official Frogger now at 60FPS.
