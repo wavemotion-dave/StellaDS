@@ -35,7 +35,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.1a"
+#define VERSION "4.1b"
 
 //#define WRITE_TWEAKS
 
@@ -939,6 +939,7 @@ char fpsbuf[32];
 int iTx,iTy;
 uInt8 mca_dampen_y=0;
 uInt8 mca_dampen_a=0;
+uInt8 rapid_fire = 0;
 ITCM_CODE void dsMainLoop(void)
 {
     static int dampen=0;
@@ -1000,7 +1001,11 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B)) | (keys_pressed & (KEY_Y))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
+                    if (keys_pressed & (KEY_Y))
+                    {
+                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ++rapid_fire & 0x08);
+                    }
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
