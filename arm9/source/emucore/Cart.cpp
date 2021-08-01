@@ -1817,7 +1817,7 @@ static const CartInfo table[] =
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
     {"0b8d3002d8f744a753ba434a4d39249a",  "STELTR", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Stellar Track (1980).bin
-    {"23fad5a125bcd4463701c8ad8a0043a9",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Stone Age (1983).bin
+    {"23fad5a125bcd4463701c8ad8a0043a9",  "??????", "4K",   CTR_RJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Stone Age (1983).bin
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Strategy X (1983).bin
     {"b7345220a0c587f3b0c47af33ebe533c",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
@@ -1931,6 +1931,7 @@ static const CartInfo table[] =
     {"1d7636a157d5aa1880d9cbd88516f45e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  32,    210,   100,   0,  4},    // Thewickedfather-270514.bin
     {"4b90d7d0467269f7b3ee128db491b318",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // The Wicked Father Remix (2012) (Juno).bin    
     {"5fb71cc60e293fe10a5023f11c734e55",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // This Planet Sucks.bin
+    {"b7d0aae399781b3c18679debda6d32b1",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  35,    210,    93,   0,  0},    // Three.s (v1.02).bin    
     {"e63a87c231ee9a506f9599aa4ef7dfb9",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  22,    210,    74,   0,  0},    // Threshold (1982).bin
     {"67684a1d18c85ffa5d82dab48fd1cb51",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   49,    245,    82,   0,  0},    // Threshold (1982) (PAL).bin
     {"de7bca4e569ad9d3fd08ff1395e53d2d",  "??????", "F6",   CTR_BOOSTER,   SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Thrust (V1.22) (Thomas Jentzsch) (Booster Grip).bin

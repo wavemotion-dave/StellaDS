@@ -19,6 +19,7 @@
 #include "bgFileSel.h"
 #include "bgPaddles.h"
 #include "bgKeypad.h"
+#include "bgStarRaiders.h"
 #include "bgInfo.h"
 #include "bgInstructions.h"
 
@@ -298,9 +299,18 @@ void dsShowScreenPaddles(void)
 
 void dsShowScreenKeypad(void) 
 {
-  decompress(bgKeypadTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgKeypadMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgKeypadPal,(u16*) BG_PALETTE_SUB,256*2);
+  if (myCartInfo.controllerType == CTR_STARRAID)
+  {
+    decompress(bgStarRaidersTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+    decompress(bgStarRaidersMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+    dmaCopy((void *) bgStarRaidersPal,(u16*) BG_PALETTE_SUB,256*2);
+  }
+  else
+  {
+    decompress(bgKeypadTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+    decompress(bgKeypadMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+    dmaCopy((void *) bgKeypadPal,(u16*) BG_PALETTE_SUB,256*2);
+  }
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
   swiWaitForVBlank();
