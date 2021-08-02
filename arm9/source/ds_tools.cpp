@@ -36,7 +36,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.1b"
+#define VERSION "4.2"
 
 //#define WRITE_TWEAKS
 

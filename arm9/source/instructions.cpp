@@ -2037,6 +2037,28 @@ const struct instructions_t instructions[] =
                 "Removing a rivet     100 PTS\n"
                 "Smashing barrel      800 PTS\n"
     },        
+    
+
+    {"STRAID",  "STAR RAIDERS (c)1981 ATARI\n"
+                " \n"
+                "Destroy all Krylon Warships\n"
+                "and save the starbase.\n"
+                "Use the Keypad Overlay for\n"
+                "this game.\n"
+                " \n"
+                "DIFF A/A will allow control of\n"
+                "Comp and Shields via Keypad.\n"
+                " \n"
+                "P=PHOTONS, E=ENGINES, S=SHIELDS\n"
+                "C=COMP. YLW=DAMAGED, RED=DEST\n"
+                "T10 = 10 Targets, T20,T30,T40\n"
+                " \n"
+                "Control Panel Color:\n"
+                "RED   Enemy is right behind you\n"
+                "GREEN In front and out of range\n"
+                "BLUE  Visible and within range\n"
+    },        
+    
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  (char*)0},
 };
 

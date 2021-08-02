@@ -47,6 +47,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.2 :02-Aug-2021 by Dave Bernazzani (wavemotion)
+  * New overlay graphic for Star Raiders (plus manual)
+  * A half dozen odd games got their controllers straightened out
+  * About 100 graphical tweaks for various games to make them look as good as possible.
+
 V4.1 :28-July-2021 by Dave Bernazzani (wavemotion)
   * Found another 1-2% speed up in TIA rendering!
   * Bumper Bash now plays correctly (you can use the shoulder buttons too).
