@@ -35,8 +35,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "Cart.hxx"
+#include "System.hxx"
 
-#define SOUND_SIZE (8192)
 
 /* define some data types to keep it platform independent */
 #define int8   char

@@ -89,6 +89,7 @@ class M6502Low : public M6502
     */
     bool execute_AR(uInt16 number);
     inline uInt8 peek(uInt16 address);
+    inline uInt8 peek_PC(uInt16 address);
     inline uInt8 peek_AR(uInt16 address);
 
     /**

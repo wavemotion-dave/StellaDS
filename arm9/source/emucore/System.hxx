@@ -27,6 +27,9 @@ class NullDevice;
 #include "Device.hxx"
 #include "NullDev.hxx"
 
+#define SOUND_SIZE (4096)
+
+
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
 extern Int32 debug[];         // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
 extern uInt8  myDataBusState;  // The current state of the Data Bus

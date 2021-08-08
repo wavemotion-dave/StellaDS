@@ -2127,7 +2127,6 @@ static const CartInfo table[] =
 
     // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // 
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", "XX",   CTR_LJOY,      99,             MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // End of list...
 };
@@ -2240,9 +2239,12 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default...
   {
       myCartInfo.mode = MODE_NO;    
+      original_flicker_mode = MODE_BLACK;
   }
-    
-  original_flicker_mode = myCartInfo.mode;
+  else
+  {
+    original_flicker_mode = myCartInfo.mode;
+  }
   
   // Patch Haunted House to avoid original bug
   if (myCartInfo.special == SPEC_HAUNTED)

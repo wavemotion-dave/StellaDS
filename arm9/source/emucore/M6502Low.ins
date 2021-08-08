@@ -30,7 +30,7 @@
 
 case 0x69:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
@@ -61,7 +61,7 @@ break;
 
 case 0x65:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
@@ -92,7 +92,7 @@ break;
 
 case 0x75:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -126,8 +126,8 @@ break;
 
 case 0x6d:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -159,8 +159,8 @@ break;
 
 case 0x7d:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -194,8 +194,8 @@ break;
 
 case 0x79:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -229,7 +229,7 @@ break;
 
 case 0x61:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -265,7 +265,7 @@ break;
 
 case 0x71:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -302,7 +302,7 @@ break;
 
 case 0x4b:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A &= operand;
@@ -321,7 +321,7 @@ break;
 case 0x0b:
 case 0x2b:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A &= operand;
@@ -334,7 +334,7 @@ break;
 
 case 0x29:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A &= operand;
@@ -345,7 +345,7 @@ break;
 
 case 0x25:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   A &= operand;
@@ -356,7 +356,7 @@ break;
 
 case 0x35:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -370,8 +370,8 @@ break;
 
 case 0x2d:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -383,8 +383,8 @@ break;
 
 case 0x3d:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -398,8 +398,8 @@ break;
 
 case 0x39:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -413,7 +413,7 @@ break;
 
 case 0x21:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -429,7 +429,7 @@ break;
 
 case 0x31:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -446,7 +446,7 @@ break;
 
 case 0x8b:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   // NOTE: The implementation of this instruction is based on
@@ -461,7 +461,7 @@ break;
 
 case 0x6b:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   // NOTE: The implementation of this instruction is based on
@@ -523,7 +523,7 @@ break;
 
 case 0x06:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -541,7 +541,7 @@ break;
 
 case 0x16:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -561,8 +561,8 @@ break;
 
 case 0x0e:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -580,8 +580,8 @@ break;
 
 case 0x1e:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -602,7 +602,7 @@ break;
 
 case 0x90:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(!C)
@@ -612,6 +612,7 @@ case 0x90:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -619,7 +620,7 @@ break;
 
 case 0xb0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(C)
@@ -629,6 +630,7 @@ case 0xb0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -636,7 +638,7 @@ break;
 
 case 0xf0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(!notZ)
@@ -646,6 +648,7 @@ case 0xf0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -653,7 +656,7 @@ break;
 
 case 0x24:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   notZ = (A & operand);
@@ -664,8 +667,8 @@ break;
 
 case 0x2C:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -678,7 +681,7 @@ break;
 
 case 0x30:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(N & 0x80)
@@ -688,6 +691,7 @@ case 0x30:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -695,7 +699,7 @@ break;
 
 case 0xD0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(notZ)
@@ -705,6 +709,7 @@ case 0xD0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -712,7 +717,7 @@ break;
 
 case 0x10:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(!(N & 0x80))
@@ -722,6 +727,7 @@ case 0x10:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -729,7 +735,7 @@ break;
 
 case 0x00:
 {
-  peek(PC++);
+  peek_PC(PC++);
 
   B = true;
 
@@ -741,13 +747,14 @@ case 0x00:
 
   PC = peek(0xfffe);
   PC |= ((uInt16)peek(0xffff) << 8);
+  PC &= MY_ADDR_MASK;
 }
 break;
 
 
 case 0x50:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(!V)
@@ -757,6 +764,7 @@ case 0x50:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -764,7 +772,7 @@ break;
 
 case 0x70:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(V)
@@ -774,6 +782,7 @@ case 0x70:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
+    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -821,7 +830,7 @@ break;
 
 case 0xc9:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   uInt16 value = (uInt16)A - (uInt16)operand;
@@ -834,7 +843,7 @@ break;
 
 case 0xc5:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)A - (uInt16)operand;
@@ -847,7 +856,7 @@ break;
 
 case 0xd5:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -863,8 +872,8 @@ break;
 
 case 0xcd:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -878,8 +887,8 @@ break;
 
 case 0xdd:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -895,8 +904,8 @@ break;
 
 case 0xd9:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -912,7 +921,7 @@ break;
 
 case 0xc1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -930,7 +939,7 @@ break;
 
 case 0xd1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -949,7 +958,7 @@ break;
 
 case 0xe0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   uInt16 value = (uInt16)X - (uInt16)operand;
@@ -962,7 +971,7 @@ break;
 
 case 0xe4:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)X - (uInt16)operand;
@@ -975,8 +984,8 @@ break;
 
 case 0xec:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -991,7 +1000,7 @@ break;
 
 case 0xc0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   uInt16 value = (uInt16)Y - (uInt16)operand;
@@ -1004,7 +1013,7 @@ break;
 
 case 0xc4:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)Y - (uInt16)operand;
@@ -1017,8 +1026,8 @@ break;
 
 case 0xcc:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -1033,8 +1042,8 @@ break;
 
 case 0xcf:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1051,8 +1060,8 @@ break;
 
 case 0xdf:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -1071,8 +1080,8 @@ break;
 
 case 0xdb:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -1091,7 +1100,7 @@ break;
 
 case 0xc7:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1108,7 +1117,7 @@ break;
 
 case 0xd7:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -1127,7 +1136,7 @@ break;
 
 case 0xc3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -1148,7 +1157,7 @@ break;
 
 case 0xd3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -1170,7 +1179,7 @@ break;
 
 case 0xc6:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1185,7 +1194,7 @@ break;
 
 case 0xd6:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -1202,8 +1211,8 @@ break;
 
 case 0xce:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1218,8 +1227,8 @@ break;
 
 case 0xde:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -1263,7 +1272,7 @@ break;
 
 case 0x49:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A ^= operand;
@@ -1274,7 +1283,7 @@ break;
 
 case 0x45:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   A ^= operand;
@@ -1285,7 +1294,7 @@ break;
 
 case 0x55:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -1299,8 +1308,8 @@ break;
 
 case 0x4d:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -1312,8 +1321,8 @@ break;
 
 case 0x5d:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -1327,8 +1336,8 @@ break;
 
 case 0x59:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -1342,7 +1351,7 @@ break;
 
 case 0x41:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -1358,7 +1367,7 @@ break;
 
 case 0x51:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -1375,7 +1384,7 @@ break;
 
 case 0xe6:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1390,7 +1399,7 @@ break;
 
 case 0xf6:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -1407,8 +1416,8 @@ break;
 
 case 0xee:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1423,8 +1432,8 @@ break;
 
 case 0xfe:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -1466,8 +1475,8 @@ break;
 
 case 0xef:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1507,8 +1516,8 @@ break;
 
 case 0xff:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -1551,8 +1560,8 @@ break;
 
 case 0xfb:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -1594,7 +1603,7 @@ break;
 
 case 0xe7:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -1634,7 +1643,7 @@ break;
 
 case 0xf7:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -1676,7 +1685,7 @@ break;
 
 case 0xe3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -1720,7 +1729,7 @@ break;
 
 case 0xf3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -1765,18 +1774,19 @@ break;
 
 case 0x4c:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
   PC = operandAddress;
+  PC &= MY_ADDR_MASK;
 }
 break;
 
 case 0x6c:
 {
-  uInt16 addr = peek(PC++);
-  addr |= ((uInt16)peek(PC++) << 8);
+  uInt16 addr = peek_PC(PC++);
+  addr |= ((uInt16)peek_PC(PC++) << 8);
 
   // Simulate the error in the indirect addressing mode!
   uInt16 high = NOTSAMEPAGE(addr, addr + 1) ? (addr & 0xff00) : (addr + 1);
@@ -1786,13 +1796,14 @@ case 0x6c:
 }
 {
   PC = operandAddress;
+  PC &= MY_ADDR_MASK;
 }
 break;
 
 
 case 0x20:
 {
-  uInt8 low = peek(PC++);
+  uInt8 low = peek_PC(PC++);
   peek(0x0100 + SP);
 
   // It seems that the 650x does not push the address of the next instruction
@@ -1800,16 +1811,17 @@ case 0x20:
   // minus one.  This is compensated for in the RTS instruction
   poke(0x0100 + SP--, PC >> 8);
   poke(0x0100 + SP--, PC & 0xff);
-  uInt16 high = ((uInt16)peek(PC++) << 8); 
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8); 
   PC = low | high;
+  PC &= MY_ADDR_MASK;
 }
 break;
 
 
 case 0xbb:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -1824,8 +1836,8 @@ break;
 
 case 0xaf:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -1838,8 +1850,8 @@ break;
 
 case 0xbf:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -1854,7 +1866,7 @@ break;
 
 case 0xa7:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   A = operand;
@@ -1866,7 +1878,7 @@ break;
 
 case 0xb7:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += Y;
   operand = peek(address); 
@@ -1881,7 +1893,7 @@ break;
 
 case 0xa3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -1898,7 +1910,7 @@ break;
 
 case 0xb3:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -1916,7 +1928,7 @@ break;
 
 case 0xa9:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A = operand;
@@ -1927,7 +1939,7 @@ break;
 
 case 0xa5:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   A = operand;
@@ -1938,7 +1950,7 @@ break;
 
 case 0xb5:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -1952,8 +1964,8 @@ break;
 
 case 0xad:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -1965,8 +1977,8 @@ break;
 
 case 0xbd:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -1980,8 +1992,8 @@ break;
 
 case 0xb9:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -1995,7 +2007,7 @@ break;
 
 case 0xa1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -2011,7 +2023,7 @@ break;
 
 case 0xb1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -2028,7 +2040,7 @@ break;
 
 case 0xa2:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   X = operand;
@@ -2039,7 +2051,7 @@ break;
 
 case 0xa6:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   X = operand;
@@ -2050,7 +2062,7 @@ break;
 
 case 0xb6:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += Y;
   operand = peek(address); 
@@ -2064,8 +2076,8 @@ break;
 
 case 0xae:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -2077,8 +2089,8 @@ break;
 
 case 0xbe:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -2093,7 +2105,7 @@ break;
 
 case 0xa0:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   Y = operand;
@@ -2104,7 +2116,7 @@ break;
 
 case 0xa4:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   Y = operand;
@@ -2115,7 +2127,7 @@ break;
 
 case 0xb4:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -2129,8 +2141,8 @@ break;
 
 case 0xac:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -2142,8 +2154,8 @@ break;
 
 case 0xbc:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -2174,7 +2186,7 @@ break;
 
 case 0x46:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2192,7 +2204,7 @@ break;
 
 case 0x56:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -2212,8 +2224,8 @@ break;
 
 case 0x4e:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2231,8 +2243,8 @@ break;
 
 case 0x5e:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -2253,7 +2265,7 @@ break;
 
 case 0xab:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   // NOTE: The implementation of this instruction is based on
@@ -2286,7 +2298,7 @@ case 0x89:
 case 0xc2:
 case 0xe2:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
 }
@@ -2296,7 +2308,7 @@ case 0x04:
 case 0x44:
 case 0x64:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
 }
@@ -2309,7 +2321,7 @@ case 0x74:
 case 0xd4:
 case 0xf4:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -2320,8 +2332,8 @@ break;
 
 case 0x0c:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -2335,8 +2347,8 @@ case 0x7c:
 case 0xdc:
 case 0xfc:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -2348,7 +2360,7 @@ break;
 
 case 0x09:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   A |= operand;
@@ -2359,7 +2371,7 @@ break;
 
 case 0x05:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   A |= operand;
@@ -2370,7 +2382,7 @@ break;
 
 case 0x15:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -2384,8 +2396,8 @@ break;
 
 case 0x0d:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -2397,8 +2409,8 @@ break;
 
 case 0x1d:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -2412,8 +2424,8 @@ break;
 
 case 0x19:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -2427,7 +2439,7 @@ break;
 
 case 0x01:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -2443,7 +2455,7 @@ break;
 
 case 0x11:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -2504,8 +2516,8 @@ break;
 
 case 0x2f:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2522,8 +2534,8 @@ break;
 
 case 0x3f:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -2542,8 +2554,8 @@ break;
 
 case 0x3b:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -2562,7 +2574,7 @@ break;
 
 case 0x27:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2579,7 +2591,7 @@ break;
 
 case 0x37:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -2598,7 +2610,7 @@ break;
 
 case 0x23:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -2619,7 +2631,7 @@ break;
 
 case 0x33:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -2659,7 +2671,7 @@ break;
 
 case 0x26:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2679,7 +2691,7 @@ break;
 
 case 0x36:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -2701,8 +2713,8 @@ break;
 
 case 0x2e:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2722,8 +2734,8 @@ break;
 
 case 0x3e:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -2763,7 +2775,7 @@ break;
 
 case 0x66:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2783,7 +2795,7 @@ break;
 
 case 0x76:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -2805,8 +2817,8 @@ break;
 
 case 0x6e:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2826,8 +2838,8 @@ break;
 
 case 0x7e:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -2850,8 +2862,8 @@ break;
 
 case 0x6f:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -2891,8 +2903,8 @@ break;
 
 case 0x7f:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -2934,8 +2946,8 @@ break;
 
 case 0x7b:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -2977,7 +2989,7 @@ break;
 
 case 0x67:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -3017,7 +3029,7 @@ break;
 
 case 0x77:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -3059,7 +3071,7 @@ break;
 
 case 0x63:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -3103,7 +3115,7 @@ break;
 
 case 0x73:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -3155,6 +3167,7 @@ case 0x40:
   PS(peek(0x0100 + SP++));
   PC = peek(0x0100 + SP++);
   PC |= ((uInt16)peek(0x0100 + SP) << 8);
+  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -3167,15 +3180,16 @@ case 0x60:
   peek(0x0100 + SP++);
   PC = peek(0x0100 + SP++);
   PC |= ((uInt16)peek(0x0100 + SP) << 8);
-  peek(PC++);
+  PC &= MY_ADDR_MASK;
+  peek_PC(PC++);
 }
 break;
 
 
 case 0x8f:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
   poke(operandAddress, A & X);
@@ -3184,7 +3198,7 @@ break;
 
 case 0x87:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
 }
 {
   poke(operandAddress, A & X);
@@ -3193,7 +3207,7 @@ break;
 
 case 0x97:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + Y) & 0xFF;
 }
@@ -3204,7 +3218,7 @@ break;
 
 case 0x83:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -3219,7 +3233,7 @@ break;
 case 0xe9:
 case 0xeb:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   if(!D)
@@ -3255,7 +3269,7 @@ break;
 
 case 0xe5:
 {
-  operand = peek(peek(PC++));
+  operand = peek(peek_PC(PC++));
 }
 {
   if(!D)
@@ -3291,7 +3305,7 @@ break;
 
 case 0xf5:
 {
-  uInt8 address = peek(PC++);
+  uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
   operand = peek(address); 
@@ -3330,8 +3344,8 @@ break;
 
 case 0xed:
 {
-  uInt16 address = peek(PC++);
-  address |= ((uInt16)peek(PC++) << 8);
+  uInt16 address = peek_PC(PC++);
+  address |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(address);
 }
 {
@@ -3368,8 +3382,8 @@ break;
 
 case 0xfd:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + X));
   if((low + X) > 0xFF)
     operand = peek((high | low) + X);
@@ -3408,8 +3422,8 @@ break;
 
 case 0xf9:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   operand = peek(high | (uInt8)(low + Y));
   if((low + Y) > 0xFF)
     operand = peek((high | low) + Y);
@@ -3448,7 +3462,7 @@ break;
 
 case 0xe1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   uInt16 address = peek(pointer++);
@@ -3489,7 +3503,7 @@ break;
 
 case 0xf1:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   operand = peek(high | (uInt8)(low + Y));
@@ -3531,7 +3545,7 @@ break;
 
 case 0xcb:
 {
-  operand = peek(PC++);
+  operand = peek_PC(PC++);
 }
 {
   uInt16 value = (uInt16)(X & A) - (uInt16)operand;
@@ -3576,8 +3590,8 @@ break;
 
 case 0x9f:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
 }
@@ -3590,7 +3604,7 @@ break;
 
 case 0x93:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -3606,8 +3620,8 @@ break;
 
 case 0x9b:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
 }
@@ -3622,8 +3636,8 @@ break;
 
 case 0x9e:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
 }
@@ -3637,8 +3651,8 @@ break;
 
 case 0x9c:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
 }
@@ -3652,8 +3666,8 @@ break;
 
 case 0x0f:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -3672,8 +3686,8 @@ break;
 
 case 0x1f:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -3694,8 +3708,8 @@ break;
 
 case 0x1b:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -3716,7 +3730,7 @@ break;
 
 case 0x07:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -3735,7 +3749,7 @@ break;
 
 case 0x17:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -3756,7 +3770,7 @@ break;
 
 case 0x03:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -3779,7 +3793,7 @@ break;
 
 case 0x13:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -3803,8 +3817,8 @@ break;
 
 case 0x4f:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -3823,8 +3837,8 @@ break;
 
 case 0x5f:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
@@ -3845,8 +3859,8 @@ break;
 
 case 0x5b:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
@@ -3867,7 +3881,7 @@ break;
 
 case 0x47:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
   poke(operandAddress, operand);
 }
@@ -3886,7 +3900,7 @@ break;
 
 case 0x57:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
@@ -3907,7 +3921,7 @@ break;
 
 case 0x43:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -3930,7 +3944,7 @@ break;
 
 case 0x53:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -3954,7 +3968,7 @@ break;
 
 case 0x85:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
 }
 {
   poke(operandAddress, A);
@@ -3963,7 +3977,7 @@ break;
 
 case 0x95:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
 }
@@ -3974,8 +3988,8 @@ break;
 
 case 0x8d:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
   poke(operandAddress, A);
@@ -3984,8 +3998,8 @@ break;
 
 case 0x9d:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + X));
   operandAddress = (high | low) + X;
 }
@@ -3996,8 +4010,8 @@ break;
 
 case 0x99:
 {
-  uInt16 low = peek(PC++);
-  uInt16 high = ((uInt16)peek(PC++) << 8);
+  uInt16 low = peek_PC(PC++);
+  uInt16 high = ((uInt16)peek_PC(PC++) << 8);
   peek(high | (uInt8)(low + Y));
   operandAddress = (high | low) + Y;
 }
@@ -4008,7 +4022,7 @@ break;
 
 case 0x81:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   peek(pointer);
   pointer += X;
   operandAddress = peek(pointer++);
@@ -4021,7 +4035,7 @@ break;
 
 case 0x91:
 {
-  uInt8 pointer = peek(PC++);
+  uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
   peek(high | (uInt8)(low + Y));
@@ -4035,7 +4049,7 @@ break;
 
 case 0x86:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
 }
 {
   poke(operandAddress, X);
@@ -4044,7 +4058,7 @@ break;
 
 case 0x96:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + Y) & 0xFF;
 }
@@ -4055,8 +4069,8 @@ break;
 
 case 0x8e:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
   poke(operandAddress, X);
@@ -4066,7 +4080,7 @@ break;
 
 case 0x84:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
 }
 {
   poke(operandAddress, Y);
@@ -4075,7 +4089,7 @@ break;
 
 case 0x94:
 {
-  operandAddress = peek(PC++);
+  operandAddress = peek_PC(PC++);
   peek(operandAddress);
   operandAddress = (operandAddress + X) & 0xFF;
 }
@@ -4086,8 +4100,8 @@ break;
 
 case 0x8c:
 {
-  operandAddress = peek(PC++);
-  operandAddress |= ((uInt16)peek(PC++) << 8);
+  operandAddress = peek_PC(PC++);
+  operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
   poke(operandAddress, Y);

@@ -40,7 +40,6 @@
 
 //#define WRITE_TWEAKS
 
-#define SOUND_SIZE (8192)
 extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
 extern uInt8 *psound_buffer;
 

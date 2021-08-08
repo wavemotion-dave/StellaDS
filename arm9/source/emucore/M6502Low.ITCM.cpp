@@ -66,6 +66,17 @@ inline uInt8 M6502Low::peek(uInt16 address)
   return myDataBusState;    
 }
 
+inline uInt8 M6502Low::peek_PC(uInt16 address)
+{
+  gSystemCycles++;
+
+  PageAccess& access = myPageAccessTable[address >> MY_PAGE_SHIFT];
+  if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
+  else myDataBusState = access.device->peek(address);
+
+  return myDataBusState;    
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void M6502Low::poke(uInt16 address, uInt8 value)
@@ -104,7 +115,7 @@ bool M6502Low::execute(uInt16 number)
     {
       // Get the next 6502 instruction - do this the fast way!
       gSystemCycles++;
-      PageAccess& access = myPageAccessTable[(PC & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+      PageAccess& access = myPageAccessTable[PC >> MY_PAGE_SHIFT];
       if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (PC & MY_PAGE_MASK));
       else myDataBusState = access.device->peek(PC);        
       PC++;
@@ -157,6 +168,7 @@ void M6502Low::interruptHandler()
     D = false;	// Set our flags
     I = true;
     PC = (uInt16)mySystem->peek(0xFFFE) | ((uInt16)mySystem->peek(0xFFFF) << 8);	// Grab the address from the interrupt vector
+    PC &= MY_ADDR_MASK;
   }
   else if(myExecutionStatus & NonmaskableInterruptBit)
   {
@@ -166,6 +178,7 @@ void M6502Low::interruptHandler()
     mySystem->poke(0x0100 + SP--, PS() & (~0x10));
     D = false;
     PC = (uInt16)mySystem->peek(0xFFFA) | ((uInt16)mySystem->peek(0xFFFB) << 8);
+    PC &= MY_ADDR_MASK;
   }
 
   // Clear the interrupt bits in myExecutionStatus
@@ -331,8 +344,9 @@ bool M6502Low::execute_AR(uInt16 number)
       switch (myDataBusState)
       {
         // A trick of the light... here we map peek/poke to the "AR" cart versions. Slower but needed for some games...
-        #define peek peek_AR
-        #define poke poke_AR
+        #define peek    peek_AR
+        #define peek_PC peek_AR              
+        #define poke    poke_AR
         #include "M6502Low.ins"        
       }
     }

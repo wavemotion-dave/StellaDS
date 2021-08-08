@@ -2574,10 +2574,10 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           // By using slightly "stale" data, we ensure that we are outputting the right data and not something previously cached.
           // DMA and ARM9 is tricky stuff... I'll admit I don't fully understand it and there is some voodoo... but this works.
           // ------------------------------------------------------------------------------------------------------------------------
-          dma_channel = 1-dma_channel;
-          dmaCopyWordsAsynch(dma_channel, myFramePointer+160, myDSFramePointer, 160);   
+          //dma_channel = 1-dma_channel;
+          dmaCopyWordsAsynch(3, myFramePointer+160, myDSFramePointer, 160);   
       }
-      myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
+      myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes      
     }
   } 
   while(myClockAtLastUpdate < clock);
