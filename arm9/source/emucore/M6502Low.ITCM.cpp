@@ -66,6 +66,7 @@ inline uInt8 M6502Low::peek(uInt16 address)
   return myDataBusState;    
 }
 
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void M6502Low::poke(uInt16 address, uInt8 value)
 {

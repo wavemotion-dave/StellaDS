@@ -2776,14 +2776,15 @@ uInt8 player_reset_pos[] =
 
 ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 {
+  Int32 clock; 
+  Int32 delta_clock;
   addr = addr & 0x003f;
-
-  Int32 clock = (3*gSystemCycles); 
-  Int32 delta_clock = (clock - myClockWhenFrameStarted);
 
   // Update frame to current CPU cycle before we make any changes!
   if (poke_needs_update_display[addr])
   {
+      clock = (3*gSystemCycles); 
+      delta_clock = (clock - myClockWhenFrameStarted);
       Int8 delay = ourPokeDelayTable[addr];
       // See if this is a poke to a PF register
       if(delay == -1)
@@ -2791,6 +2792,11 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
         delay = delay_tab[delta_clock % 228];
       }
       updateFrame(clock + delay);
+  }
+  else
+  {
+      clock = 0; 
+      delta_clock = 0;
   }
     
   switch(addr)
@@ -3363,7 +3369,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
 
-    case 0x25:    // Vertial Delay Player 0
+    case 0x25:    // Vertical Delay Player 0
     {
       myVDELP0 = value & 0x01;
 
@@ -3377,7 +3383,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
 
-    case 0x26:    // Vertial Delay Player 1
+    case 0x26:    // Vertical Delay Player 1
     {
       myVDELP1 = value & 0x01;
 
@@ -3391,7 +3397,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
 
-    case 0x27:    // Vertial Delay Ball
+    case 0x27:    // Vertical Delay Ball
     {
       myVDELBL = value & 0x01;
 

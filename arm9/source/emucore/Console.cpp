@@ -46,6 +46,7 @@ TIA *theTIA = 0;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const uInt8* image, uInt32 size, const char* filename)
 {
+  extern uInt16 mySoundFreq;
   myControllers[0] = 0;
   myControllers[1] = 0;
   myMediaSource = 0;
@@ -68,7 +69,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
   TIA* tia = new TIA(*this);
   theTIA = tia;
-  Tia_sound_init(31400, 22050);
+  Tia_sound_init(31400, mySoundFreq);
 
   // -------------------------------------------------------------------------------------------
   // Depending on the game we will "install" either Joysticks, Paddles or Driving Controllers

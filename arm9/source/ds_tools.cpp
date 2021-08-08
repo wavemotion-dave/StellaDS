@@ -51,6 +51,8 @@ int atari_frames=0;
 
 uInt8 tv_type_requested = NTSC;
 
+uInt16 mySoundFreq = 22050;
+
 #define MAX_DEBUG 8
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
@@ -512,7 +514,7 @@ bool dsLoadGame(char *filename)
 
         psound_buffer=sound_buffer;
         memset(sound_buffer, 0x00, SOUND_SIZE);
-        TIMER2_DATA = TIMER_FREQ(22050);
+        TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         irqSet(IRQ_TIMER2, Tia_process);
         if (bSoundEnabled)
@@ -933,7 +935,7 @@ void dsInstallSoundEmuFIFO(void)
 {
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
-    msg.SoundPlay.freq = 22050;
+    msg.SoundPlay.freq = mySoundFreq;
     msg.SoundPlay.volume = 127;
     msg.SoundPlay.pan = 64;
     msg.SoundPlay.loop = 1;

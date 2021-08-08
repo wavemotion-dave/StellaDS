@@ -9,7 +9,9 @@
 #include "clickNoQuit_wav.h"
 #include "clickQuit_wav.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) 
+{
+  extern uInt16 mySoundFreq;
   // Init sound
   consoleDemoInit();
   soundEnable();
@@ -23,6 +25,10 @@ int main(int argc, char **argv) {
 
   // Init Timer
   dsInitTimer();
+  if (!isDSiMode())
+  {
+      mySoundFreq = 11025;
+  }
   dsInstallSoundEmuFIFO();
 
   // Intro and main screen
