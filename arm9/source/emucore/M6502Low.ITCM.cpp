@@ -66,6 +66,7 @@ inline uInt8 M6502Low::peek(uInt16 address)
   return myDataBusState;    
 }
 
+// We always ensure that the PC is clear of the upper bits (0x1FFF or lower) so we don't have to do the mask there... it buys us a few frames of speed...
 inline uInt8 M6502Low::peek_PC(uInt16 address)
 {
   gSystemCycles++;

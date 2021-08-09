@@ -2537,8 +2537,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           addr += 160;
           uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
           uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
-          // "steal" a bit of VRAM which has no cache write... 
-          uInt32 *fp_blend = (uInt32 *)0x0601E000;
+          uInt32 *fp_blend = (uInt32 *)myDSFramePointer;            // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
           if (myCartInfo.mode == MODE_BACKG)
           {
               for (int i=0; i<40; i++)
@@ -2564,8 +2563,6 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                 *fp_blend++ = *fp1++ | *fp2++;
               }
           }
-          dma_channel = 1-dma_channel;
-          dmaCopyWordsAsynch(dma_channel, (uInt32 *)0x0601E000, myDSFramePointer, 160);
       }
       else
       {
@@ -2574,7 +2571,6 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           // By using slightly "stale" data, we ensure that we are outputting the right data and not something previously cached.
           // DMA and ARM9 is tricky stuff... I'll admit I don't fully understand it and there is some voodoo... but this works.
           // ------------------------------------------------------------------------------------------------------------------------
-          //dma_channel = 1-dma_channel;
           dmaCopyWordsAsynch(3, myFramePointer+160, myDSFramePointer, 160);   
       }
       myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes      
