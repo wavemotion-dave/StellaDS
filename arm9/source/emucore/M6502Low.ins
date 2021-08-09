@@ -612,7 +612,6 @@ case 0x90:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -630,7 +629,6 @@ case 0xb0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -648,7 +646,6 @@ case 0xf0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -691,7 +688,6 @@ case 0x30:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -709,7 +705,6 @@ case 0xD0:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -727,7 +722,6 @@ case 0x10:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -747,7 +741,6 @@ case 0x00:
 
   PC = peek(0xfffe);
   PC |= ((uInt16)peek(0xffff) << 8);
-  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -764,7 +757,6 @@ case 0x50:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -782,7 +774,6 @@ case 0x70:
     if(NOTSAMEPAGE(PC, address))
       peek((PC & 0xFF00) | (address & 0x00FF));
     PC = address;
-    PC &= MY_ADDR_MASK;
   }
 }
 break;
@@ -1779,7 +1770,6 @@ case 0x4c:
 }
 {
   PC = operandAddress;
-  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -1796,7 +1786,6 @@ case 0x6c:
 }
 {
   PC = operandAddress;
-  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -1813,7 +1802,6 @@ case 0x20:
   poke(0x0100 + SP--, PC & 0xff);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8); 
   PC = low | high;
-  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -3167,7 +3155,6 @@ case 0x40:
   PS(peek(0x0100 + SP++));
   PC = peek(0x0100 + SP++);
   PC |= ((uInt16)peek(0x0100 + SP) << 8);
-  PC &= MY_ADDR_MASK;
 }
 break;
 
@@ -3180,7 +3167,6 @@ case 0x60:
   peek(0x0100 + SP++);
   PC = peek(0x0100 + SP++);
   PC |= ((uInt16)peek(0x0100 + SP) << 8);
-  PC &= MY_ADDR_MASK;
   peek_PC(PC++);
 }
 break;
