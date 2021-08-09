@@ -83,6 +83,8 @@ inline uInt8 M6502Low::peek_PC(uInt16 address)
 inline void M6502Low::poke(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
+    
+  // TIA access is common... filter that one out first...
   if (address < 0x80)
   {
       extern TIA *theTIA;
@@ -191,12 +193,9 @@ inline uInt8 M6502Low::peek_NB(uInt16 address)
 inline uInt8 M6502Low::peek_PCNB(uInt16 address)
 {
   gSystemCycles++;
-
   myDataBusState = fast_cart_buffer[address&0xFFF];
-
   return myDataBusState;    
 }
-
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -52,7 +52,7 @@ uInt8 tv_type_requested = NTSC;
 
 uInt16 mySoundFreq = 22050;
 
-#define MAX_DEBUG 8
+#define MAX_DEBUG 16
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128];
