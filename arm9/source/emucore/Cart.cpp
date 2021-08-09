@@ -2220,7 +2220,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
       myCartInfo = table[1];
   else
       myCartInfo = table[0];
-
+    
   // -----------------------------------------------------------------------
   // Take a closer look at the ROM image and try to figure out its type
   // -----------------------------------------------------------------------
@@ -2586,6 +2586,12 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
     
   dsPrintCartType((char*)myCartInfo.type.c_str());
+    
+  extern uInt8 noBanking;
+  if ((myCartInfo.type == "4K") || (myCartInfo.type == "2K"))
+    noBanking = 1;
+  else
+    noBanking = 0;
   
   return myCartInfo.type;
 }

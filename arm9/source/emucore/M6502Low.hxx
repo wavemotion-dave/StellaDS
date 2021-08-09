@@ -91,6 +91,10 @@ class M6502Low : public M6502
     inline uInt8 peek(uInt16 address);
     inline uInt8 peek_PC(uInt16 address);
     inline uInt8 peek_AR(uInt16 address);
+    
+    bool execute_NB(uInt16 number);
+    inline uInt8 peek_NB(uInt16 address);
+    inline uInt8 peek_PCNB(uInt16 address);
 
     /**
       Change the byte at the specified address to the given value
