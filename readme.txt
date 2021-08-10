@@ -1,4 +1,4 @@
-StellaDS - PHOENIX EDITION 
+llaDS - PHOENIX EDITION 
 --------------------------------------------------------------------------------
 StellaDS is an Atari 2600 (VCS) console emulator for your DS/DSi.
 To use this emulator, you must use compatibles rom with a26/bin format. 

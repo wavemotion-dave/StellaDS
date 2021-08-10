@@ -957,21 +957,21 @@ static const CartInfo table[] =
     {"10eae73a07b3da044b72473d8d366267",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Karate (1982) (PAL).bin
     {"dd17711a30ad60109c8beace0d4a76e8",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Karate (1982) (PAL).bin
     {"6805734a0b7bcc8925d9305b071bf147",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Karate (1982) (PAL).bin
-    {"be929419902e21bd7830a7a7d746195d",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"572d0a4633d6a9407d3ba83083536e0f",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"e77f332b71f13884c84771e7a121182d",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"a1770ef47146ab7b12e2c4beccd68806",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"810d8952af5a6036fca8d0c4e1b23db6",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"25f879ff678130fea615ac418e7943f1",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"f28c07767b3e90a2689ade5b5e305874",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"1351c67b42770c1bd758c3e42f553fea",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"f5a3e051730d45fea518f2e8b926565b",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"e558be88eef569f33716e8e330d2f5bc",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"8db152458abaef3cfa7a4e420ddbda59",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"e28113d10c0c14cc3b5f430b0d142fcb",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"4fbe0f10a6327a76f83f83958c3cbeff",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"7187118674ff3c0bb932e049d9dbb379",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
-    {"17bbe288c3855c235950fea91c9504e9",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  0,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"be929419902e21bd7830a7a7d746195d",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"572d0a4633d6a9407d3ba83083536e0f",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"e77f332b71f13884c84771e7a121182d",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"a1770ef47146ab7b12e2c4beccd68806",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"810d8952af5a6036fca8d0c4e1b23db6",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"25f879ff678130fea615ac418e7943f1",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"f28c07767b3e90a2689ade5b5e305874",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"1351c67b42770c1bd758c3e42f553fea",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"f5a3e051730d45fea518f2e8b926565b",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"e558be88eef569f33716e8e330d2f5bc",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"8db152458abaef3cfa7a4e420ddbda59",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"e28113d10c0c14cc3b5f430b0d142fcb",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"4fbe0f10a6327a76f83f83958c3cbeff",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"7187118674ff3c0bb932e049d9dbb379",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
+    {"17bbe288c3855c235950fea91c9504e9",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   3,  3},    // Keystone Kapers (1983).bin
     {"05aedf04803c43eb5e09dfd098d3fd01",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  7},    // Keystone Kapers (1983) (PAL).bin
     {"6c1f3f2e359dbf55df462ccbcdd2f6bf",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  7},    // Keystone Kapers (1983) (PAL).bin
     {"1c5796d277d9e4df3f6648f7012884c4",  "KAPERS", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   3,  7},    // Keystone Kapers (1983) (PAL).bin
