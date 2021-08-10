@@ -1,20 +1,19 @@
 StellaDS - PHOENIX EDITION 
 --------------------------------------------------------------------------------
-StellaDS is an Atari 2600 console emulator for your DS/DSi.
+StellaDS is an Atari 2600 (VCS) console emulator for your DS/DSi.
 To use this emulator, you must use compatibles rom with a26/bin format. 
 Twilight Menu++ wants to see the file extension be .a26 (you can just rename .bin)
-help you. 
 
 Features :
 ----------
  High level of compability to make games playable. Most games you remember fondly
- run nearly full speed on a DSi in native 133MHz mode. For the older DS-LITE and
- DS-PHAT, only the more simple games are going to run close to full speed.
- Paddle and Keypad emulation is included.
+ run full speed on a DSi in native 133MHz mode. For the older DS-LITE and
+ DS-PHAT, many of the simple 4k and 2k games will play perfectly and some of the 8k
+ games will run very close to full speed. More sophisticated bank-switching schemes
+ really require the DSi for the best experience.
 
  See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
- going to be NTSC No-Intro roms (the good ones!). PAL roms may cut off at the bottom
- of the screen and may not run at the right speed.
+ going to be NTSC No-Intro roms (the good ones!). 
  
 PAL vs NTSC:
 ------------
@@ -47,6 +46,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.3 :09-Aug-2021 by Dave Bernazzani (wavemotion)
+  * Massive overhaul of the non-bank-switched engine so now the older DS-Lite
+    and DS-Phat will run many games at full speed.
+
 V4.2 :02-Aug-2021 by Dave Bernazzani (wavemotion)
   * New overlay graphic for Star Raiders (plus manual)
   * A half dozen odd games got their controllers straightened out

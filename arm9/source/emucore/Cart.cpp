@@ -739,11 +739,11 @@ static const CartInfo table[] =
     {"834a2273e97aec3181ee127917b4b269",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   60,    245,   100,   0,  7},    // Frogs and Flies (1982) (PAL).bin
     {"e556e07cc06c803f2955986f53ef63ed",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Front Line (1984).bin
     {"4c8832ed387bbafc055320c05205bc08",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Front Line (1984).bin
-    {"4ca73eb959299471788f0b685c3ba0b5",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Frostbite (1983).bin
-    {"f4469178cd8998cb437fa110a228eaca",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Frostbite (1983).bin
-    {"c225379e7c4fb6f886ef9c8c522275b4",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Frostbite (1983).bin
-    {"c6ae21caceaad734987cb24243793bd5",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Frostbite (1983).bin
-    {"adb79f9ac1a633cdd44954e2eac14774",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Frostbite (1983).bin
+    {"4ca73eb959299471788f0b685c3ba0b5",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    195,   100,   4,  1},    // Frostbite (1983).bin
+    {"f4469178cd8998cb437fa110a228eaca",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    195,   100,   4,  1},    // Frostbite (1983).bin
+    {"c225379e7c4fb6f886ef9c8c522275b4",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    195,   100,   4,  1},    // Frostbite (1983).bin
+    {"c6ae21caceaad734987cb24243793bd5",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    195,   100,   4,  1},    // Frostbite (1983).bin
+    {"adb79f9ac1a633cdd44954e2eac14774",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  38,    195,   100,   4,  1},    // Frostbite (1983).bin
     {"6a9b30ca46b0dba9e719f4cbd340e01c",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   6, 13},    // Frostbite (BitCorp 1983).bin
     {"5a93265095146458df2baf2162014889",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   4,  5},    // Frostbite (1983) (PAL).bin    
     {"25a21c47afe925a3ca0806876a2b4f3f",  "FROSTB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   58,    245,   100,   4,  5},    // Frostbite (1983) (PAL).bin    
@@ -818,10 +818,10 @@ static const CartInfo table[] =
     {"81b3bf17cf01039d311b4cd738ae608e",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Gorf (1982).bin
     {"3e03086da53ecc29d855d8edf10962cb",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,   1,  1,  ANA1_0,  PAL,   42,    245,    88,   0,  1},    // Gorf (1982) (PAL).bin
     {"5a9685c4d51a6c1d6a9544946d9e8dc3",  "??????", "UA",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grandmas Revenge (UA Ltd. Bankswitching) (2010) (Fred Quimby).bin
-    {"2903896d88a341511586d69fcfc20f7d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grand Prix (1982).bin
-    {"e5f84930aa468db33c0d0f7b26dd8293",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grand Prix (1982).bin
-    {"41c4e3d45a06df9d21b7aae6ae7e9912",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grand Prix (1982).bin
-    {"d5d2d44fb73785996ccc24ae3a0f5cef",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grand Prix (1982).bin
+    {"2903896d88a341511586d69fcfc20f7d",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   0,  6},    // Grand Prix (1982).bin
+    {"e5f84930aa468db33c0d0f7b26dd8293",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   0,  6},    // Grand Prix (1982).bin
+    {"41c4e3d45a06df9d21b7aae6ae7e9912",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   0,  6},    // Grand Prix (1982).bin
+    {"d5d2d44fb73785996ccc24ae3a0f5cef",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   0,  1,  ANA1_0,  NTSC,  34,    196,   100,   0,  6},    // Grand Prix (1982).bin
     {"757f529026696e13838364dea382a4ed",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0, 10},    // Grand Prix (1982) (PAL).bin
     {"0f738dc44437557624eb277ed7ad91c9",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   52,    245,   100,   0, 17},    // Grand Prix (1982) (PAL).bin
     {"b4f87ce75f7329c18301a2505fe59cd3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   1,  1,  ANA1_0,  PAL,   63,    245,   100,   3,  0},    // Grand Prix (1982) (PAL).bin
