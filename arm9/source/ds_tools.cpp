@@ -36,7 +36,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.3"
+#define VERSION "4.3A"
 
 //#define WRITE_TWEAKS
 
@@ -180,6 +180,7 @@ inline void ShowStatusLine(void)
 
 
 char bScreenRefresh = 0;
+u16 stretch_x = 0;
 void vblankIntr() 
 {
     if (bScreenRefresh)
@@ -187,6 +188,8 @@ void vblankIntr()
         REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale);
         REG_BG3Y = (myCartInfo.yOffset)<<8;
         REG_BG3X = (myCartInfo.xOffset)<<8;
+        REG_BG3PA = stretch_x;
+        
         bScreenRefresh = 0;
     }
 }
@@ -265,7 +268,8 @@ void dsShowScreenEmu(void)
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
   memset((void*)0x06000000, 0x00, 128*1024);
 
-  REG_BG3PA = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256) ;
+  stretch_x = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256);
+  REG_BG3PA = stretch_x;
   REG_BG3PB = 0; REG_BG3PC = 0;
   REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale) ;
   REG_BG3X = (myCartInfo.xOffset)<<8;
@@ -1357,10 +1361,14 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
-                    // Allow scaling from 51% to 100%
+                    // Allow vertical scaling from 51% to 100%
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 100) myCartInfo.screenScale++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 51) myCartInfo.screenScale--;
 
+                    // Allow horizontal scaling ... not hugely needed but for some games that don't utilize the entire horizontal width this can be used to zoom in a bit
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
+                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
+                    
 #ifdef WRITE_TWEAKS
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  if (myCartInfo.displayStartScanline < 100) myCartInfo.displayStartScanline++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.displayStartScanline > 15) myCartInfo.displayStartScanline--;
