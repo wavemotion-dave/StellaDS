@@ -1,4 +1,4 @@
-llaDS - PHOENIX EDITION 
+StellaDS - PHOENIX EDITION 
 --------------------------------------------------------------------------------
 StellaDS is an Atari 2600 (VCS) console emulator for your DS/DSi.
 To use this emulator, you must use compatibles rom with a26/bin format. 
@@ -14,7 +14,15 @@ Features :
 
  See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
  going to be NTSC No-Intro roms (the good ones!). 
- 
+
+Installation:
+------------
+Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will
+auto patch the game to run so you should be good to go... press on the CART slot
+too pick and load a game (.bin or .a26). For some older launchers or flash-carts
+you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely
+as most launchers will auto-patch when you run the emulator).
+
 PAL vs NTSC:
 ------------
 StellaDS supports PAL games but be warned... in the very early days of video
@@ -46,6 +54,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.4 :22-Aug-2021 by Dave Bernazzani (wavemotion)
+  * Minor cleanups across the board. Improved AR cart speed by ~1FPS.
+  * Added horizontal stretch - use the Left Shoulder + L/R D-Pad.
+  * The Y button is now auto-fire.
+
 V4.3 :09-Aug-2021 by Dave Bernazzani (wavemotion)
   * Massive overhaul of the non-bank-switched engine so now the older DS-Lite
     and DS-Phat will run many games at full speed.
