@@ -6,13 +6,13 @@ Twilight Menu++ wants to see the file extension be .a26 (you can just rename .bi
 
 Features :
 ----------
- High level of compability to make games playable. Most games you remember fondly
+ High level of compatibility to make games playable. Most games you remember fondly
  run full speed on a DSi in native 133MHz mode. For the older DS-LITE and
  DS-PHAT, many of the simple 4k and 2k games will play perfectly and some of the 8k
  games will run very close to full speed. More sophisticated bank-switching schemes
  really require the DSi for the best experience.
 
- See Comatiblity.TXT for a full list of the ROMS supported. Generally these are 
+ See compatibility.txt for a full list of the ROMS supported. Generally these are 
  going to be NTSC No-Intro roms (the good ones!). 
 
 Installation:
