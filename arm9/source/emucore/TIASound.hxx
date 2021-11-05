@@ -36,7 +36,7 @@
 #ifndef _TIASOUND_H
 #define _TIASOUND_H
 
-void Tia_sound_init (unsigned int sample_freq, unsigned int playback_freq);
+void Tia_sound_init (unsigned short sample_freq, unsigned short playback_freq);
 void Update_tia_sound (unsigned char chan);
 void Tia_process (void);
 

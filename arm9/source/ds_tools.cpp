@@ -36,15 +36,14 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.3A"
+#define VERSION "4.5"
 
 //#define WRITE_TWEAKS
 
-extern uInt8 sound_buffer[];  // Can't be placed in fast memory as ARM7 needs to access it...
-extern uInt8 *psound_buffer;
-
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
+
+uInt16 sampleExtender[256] = {0};
 
 int atari_frames=0;
 
@@ -72,6 +71,10 @@ uInt8  filebuffer[MAX_FILE_SIZE];
 int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
+
+uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
+uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
+uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 
 static int bSoundEnabled = 1;
 static int full_speed=0;
@@ -515,7 +518,6 @@ bool dsLoadGame(char *filename)
 
         left_difficulty=0; right_difficulty=0;
 
-        psound_buffer=sound_buffer;
         memset(sound_buffer, 0x00, SOUND_SIZE);
         TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
@@ -936,15 +938,30 @@ ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void)
 {
+    for (int i=0; i<256; i++)
+    {
+        sampleExtender[i] = (i << 8);
+    }
+    
+    if (isDSiMode())
+    {
+        aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
+        bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
+    }
+    else
+    {
+        aptr = (uint16*)((uint32)&sound_buffer[0] + 0x00400000); 
+        bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000); 
+    }
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
-    msg.SoundPlay.freq = mySoundFreq;
+    msg.SoundPlay.freq = 44100;
     msg.SoundPlay.volume = 127;
     msg.SoundPlay.pan = 64;
     msg.SoundPlay.loop = 1;
-    msg.SoundPlay.format = ((1)<<4) | SoundFormat_8Bit;
+    msg.SoundPlay.format = ((1)<<4) | SoundFormat_16Bit;
     msg.SoundPlay.loopPoint = 0;
-    msg.SoundPlay.dataSize = SOUND_SIZE >> 2;
+    msg.SoundPlay.dataSize = 4 >> 2;
     msg.type = EMUARM7_PLAY_SND;
     fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }

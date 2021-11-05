@@ -54,51 +54,54 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V4.4 :22-Aug-2021 by Dave Bernazzani (wavemotion)
+V4.5 : 05-Nov-2021 by Dave Bernazzani (wavemotion)
+  * New sound output core - no more zingers!
+
+V4.4 : 22-Aug-2021 by Dave Bernazzani (wavemotion)
   * Minor cleanups across the board. Improved AR cart speed by ~1FPS.
   * Added horizontal stretch - use the Left Shoulder + L/R D-Pad.
   * The Y button is now auto-fire.
 
-V4.3 :09-Aug-2021 by Dave Bernazzani (wavemotion)
+V4.3 : 09-Aug-2021 by Dave Bernazzani (wavemotion)
   * Massive overhaul of the non-bank-switched engine so now the older DS-Lite
     and DS-Phat will run many games at full speed.
 
-V4.2 :02-Aug-2021 by Dave Bernazzani (wavemotion)
+V4.2 : 02-Aug-2021 by Dave Bernazzani (wavemotion)
   * New overlay graphic for Star Raiders (plus manual)
   * A half dozen odd games got their controllers straightened out
   * About 100 graphical tweaks for various games to make them look as good as possible.
 
-V4.1 :28-July-2021 by Dave Bernazzani (wavemotion)
+V4.1 : 28-July-2021 by Dave Bernazzani (wavemotion)
   * Found another 1-2% speed up in TIA rendering!
   * Bumper Bash now plays correctly (you can use the shoulder buttons too).
   * Kool-Aid-Man now plays correctly 
   * Meltdown graphics improvements (but not fixed... but playable).
   * Alpha Beam, Big Bird and Cookie Monster games all work with joystick controls now.
 
-V4.0 :24-July-2021 by Dave Bernazzani (wavemotion)
+V4.0 : 24-July-2021 by Dave Bernazzani (wavemotion)
   * Found another 3-5% speed up in TIA rendering! Official Frogger now at 60FPS.
   * Press and hold L+R+A to swap LCD screens.
   * Other minor cleanups and polish.
   
-V3.9 :22-July-2021 by Dave Bernazzani (wavemotion)
+V3.9 : 22-July-2021 by Dave Bernazzani (wavemotion)
   * Finally fixed graphical glitches in Rabbit Transit and Dragonstomper.
   * Many cleanups and improvements to the TIA handling.
   * Added UA and FE bankswitching detection schemes.
   * Another 100 games added to the compatibility database.
   
-V3.8 :18-July-2021 by Dave Bernazzani (wavemotion)
+V3.8 : 18-July-2021 by Dave Bernazzani (wavemotion)
   * Massive update to database to support 50+ of the best Atari Hacks.
   * Support for WD bankswitching - Pursuit of the Pink Panther playable.
   * Genesis Controller support for all the awesome games that take advantage of it.
   * 120 Game Manuals!!
 
-V3.7 :12-July-2021 by Dave Bernazzani (wavemotion)
+V3.7 : 12-July-2021 by Dave Bernazzani (wavemotion)
   * 100 Game Manuals!!
   * Fix for Thwocker prototypes.
   * Minor screen tweaks to tighten up some displays.
   * New info graphic.
 
-V3.6 :10-July-2021 by Dave Bernazzani (wavemotion)
+V3.6 : 10-July-2021 by Dave Bernazzani (wavemotion)
   * PAL Support!  PAL games will render in proper 50Hz / 312 Scanlines.
   * Database of known games expanded from 850 to 1900.
   * Long rom filenames now scroll when selecting a game.

@@ -31,6 +31,7 @@
 /* bear this legend.                                                         */
 /*                                                                           */
 /*****************************************************************************/
+#include <nds.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -40,7 +41,7 @@
 
 /* define some data types to keep it platform independent */
 #define int8   char
-#define int16  int
+#define int16  short
 #define int32  long
 #define uint8  unsigned int8 
 #define uint16 unsigned int16
@@ -137,8 +138,9 @@ static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n max
 static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
 static int16  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
-uint8 sound_buffer[SOUND_SIZE];  // Can't be placed in fast memory as ARM7 needs to access it...
-uint8* psound_buffer __attribute__((section(".dtcm"))) = (uint8*)sound_buffer;
+extern uint8 sound_buffer[];
+extern uint16 *aptr;
+extern uint16 *bptr;
 
 /*****************************************************************************/
 /* Module:  Tia_sound_init()                                                 */
@@ -159,7 +161,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 {
    uint8 chan;
    int16 n;
-
+    
    /* fill the 9bit polynomial with random bits */
    for (n=0; n<POLY9_SIZE; n++)
    {
@@ -183,8 +185,6 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
       P5[chan] = 0;
       P9[chan] = 0;
    }
-    
-   psound_buffer = (uint8*)sound_buffer;
 }
 
 /*****************************************************************************/
@@ -261,8 +261,6 @@ void Update_tia_sound (uint8 chan)
 /*****************************************************************************/
 void Tia_process (void)
 {
-    if (++psound_buffer >= &sound_buffer[SOUND_SIZE]) psound_buffer=sound_buffer;
-
     /* loop until the buffer is filled */
     while (1)
     {
@@ -357,14 +355,16 @@ void Tia_process (void)
        /* if the count down has reached zero */
        if (Samp_n_cnt < 256)
        {
+           extern uint16 sampleExtender[];
           /* adjust the sample counter */
           Samp_n_cnt += Samp_n_max;
 
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-            *(psound_buffer) = ((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1;
-           
+            uInt16 sample =  sampleExtender[((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1];
+            *aptr = sample;
+            *bptr = sample;
           /* and done! */
           break;
        }
