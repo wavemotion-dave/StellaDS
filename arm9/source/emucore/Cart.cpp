@@ -209,6 +209,7 @@ static const CartInfo table[] =
     {"d0b9df57bfea66378c0418ec68cfe37f",  "BEANYB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Beany Bopper (1982).bin
     {"6a9e0c72fab92df70084eccd9061fdbd",  "BEANYB", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Beany Bopper (1982).bin
     {"e5340edb08a5c76e9b6d8c36dd845e31",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Beast (Release 21060501)
+    {"8cbb790efcb98010d60207d29fa503ec",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Beast (Release 21082901)
     {"59e96de9628e8373d1c685f5e57dcf10",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Beat 'Em & Eat 'Em (1982).bin
     {"6c25f58fd184632ca76020f589bb3767",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Beat 'Em & Eat 'Em (1982).bin
     {"ca54de69f7cdf4d7996e86f347129892",  "??????", "4K",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Beat 'Em & Eat 'Em (1982).bin
@@ -615,6 +616,7 @@ static const CartInfo table[] =
     {"8008ec6756631b095b25fd71691aca1d",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_2[NTSC].bin
     {"b4a4f8af361d842beec37ba818911225",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_3[NTSC].bin
     {"edfdff829f3a50fd66d61c6128c9ab5f",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBall_Beta_4[NTSC].bin
+    {"cd43a9cc395d8899f85be4e5c5177fc2",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // ElectroBallV1.0[NTSC].bin   
     {"71f8bacfbdca019113f3f0801849057e",  "??????", "F8SC", CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Elevator Action (1983).bin
     {"7657b6373fcc9ad69850a687bee48aa1",  "ELEVAT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  1},    // Elevators Amiss.bin
     {"7d483b702c44ee65cd2df22cbcc8b7ed",  "ELEVAT", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  1},    // Elf Adventure (05-25-83) (Atari, Warren Robinett) (Prototype) ~.bin
@@ -1028,6 +1030,7 @@ static const CartInfo table[] =
     {"7507f70476746d1d9dd8ec0d6b1ca05f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Lawn Mow (2007) (Laura DeMichelis, Daniel Fuller).bin
     {"021dbeb7417cac4e5f8e867393e742d6",  "LEAD01", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Lead (16k).bin
     {"c98ff002205095c8a40f7a537a7e8f01",  "LEAD01", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Lead (8k).bin
+    {"a55e0773d40de38b67d80d2852d7b538",  "??????", "2K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Legendary Spear.bin
     {"5fd4239051c76563eed086f512b4cd48",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  28,    210,    90,   4,  0},    // Lili, Artkaris (Argentina) (NTSC).bin
     {"3947eb7305b0c904256cdbc5c5956c0f",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  53,    210,    81,   4,  0},    // Lilly Adventure.bin
     {"d0cdafcb000b9ae04ac465f17788ad11",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   70,    245,   100,   4,  0},    // Lilly Adventure - Alices Adventure (PAL).bin
@@ -1410,6 +1413,7 @@ static const CartInfo table[] =
     {"ef3a4f64b6494ba770862768caf04b86",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Private Eye (1983).bin
     {"f9cef637ea8e905a10e324e582dd39c2",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Private Eye (1983).bin
     {"1266b3fd632c981f3ef9bdbf9f86ce9a",  "??????", "F8",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   3,  0},    // Private Eye (1983) (PAL).bin
+    {"9c0554b6d355be247883255e0a17a4b4",  "??????", "F6",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Pro Tennis 2.0
     {"dbda26ffc809e072cc734afe8dd89fe2",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    80,   0,  0},    // Pumuckl I (Zoo Fun) (1983) (NTSC).bin
     {"484b0076816a104875e00467d431c2d2",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    96,   0, 10},    // Q-bert (1983).bin
     {"8b40a9ca1cfcd14822e2547eaa9df5c1",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   48,    245,    96,   0,  3},    // Q-bert (1983) (PAL).bin
