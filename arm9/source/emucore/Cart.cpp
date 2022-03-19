@@ -42,6 +42,7 @@
 #include "CartUA.hxx"
 #include "CartWD.hxx"
 #include "CartEF.hxx"
+#include "CartEFSC.hxx"
 #include "MD5.hxx"
 
 extern void dsWarnIncompatibileCart(void);
@@ -2197,7 +2198,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeWD(image, size);
   else if(type == "EF")
     cartridge = new CartridgeEF(image);
-  //else if(type == "EFSC")
+  else if(type == "EFSC")
+    cartridge = new CartridgeEFSC(image);
   else
   {
     // TODO: At some point this should be handled in a better way...
@@ -2566,7 +2568,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
       else
         myCartInfo.type = "F4";
     }
-    else if(size == 65536) // 64K
+    else if (size == 65536) // 64K
     {
       if(isProbably3F(image, size))
         myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
