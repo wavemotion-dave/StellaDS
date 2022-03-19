@@ -13,7 +13,6 @@
 // See the file "license" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //
-// $Id: CartF4.cxx,v 1.2 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
 
 #include <assert.h>
@@ -36,8 +35,7 @@ CartridgeEFSC::CartridgeEFSC(const uInt8* image)
   for(uInt32 i = 0; i < 128; ++i)
   {
     myRAM[i] = random.next();
-  }
-    
+  }    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -66,7 +64,7 @@ void CartridgeEFSC::install(System& system)
   uInt16 mask = mySystem->pageMask();
 
   // Make sure the system we're being installed in has a page size that'll work
-  assert((0x1000 & mask) == 0);
+  assert(((0x1080 & mask) == 0) && ((0x1100 & mask) == 0));
 
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
@@ -82,6 +80,7 @@ void CartridgeEFSC::install(System& system)
   for(uInt32 j = 0x1000; j < 0x1080; j += (1 << shift))
   {
     page_access.directPokeBase = &myRAM[j & 0x007F];
+    page_access.directPeekBase = 0;
     mySystem->setPageAccess(j >> shift, page_access);
   }
 
@@ -141,10 +140,10 @@ void CartridgeEFSC::bank(uInt16 bank)
   myCurrentOffset = bank * 4096;
 
   // Setup the page access methods for the current bank
-  uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
+  uInt32 access_num = 0x1100 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x0000; address < (0x0FEFU & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0100; address < (0x0FE0U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
       page_access.directPeekBase = &myImage[myCurrentOffset + address];
       mySystem->setPageAccess(access_num++, page_access);

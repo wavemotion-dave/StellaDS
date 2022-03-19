@@ -13,7 +13,6 @@
 // See the file "license" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //
-// $Id: CartF4.cxx,v 1.2 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
 
 #include <assert.h>
@@ -110,7 +109,7 @@ void CartridgeEF::bank(uInt16 bank)
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x0000; address < (0x0FEFU & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0000; address < (0x0FE0U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
       page_access.directPeekBase = &myImage[myCurrentOffset + address];
       mySystem->setPageAccess(access_num++, page_access);
