@@ -185,6 +185,11 @@ class Cartridge : public Device
       Returns true if the image is probably a DPC+ bankswitching cartridge
     */
     static bool isProbablyDPCplus(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a EFSC cartridge
+    */
+    static bool isProbablyEFSC(const uInt8* image, uInt32 size);
 
     /**
       Returns true if the image is probably a E0 bankswitching cartridge

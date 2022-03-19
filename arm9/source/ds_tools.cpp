@@ -65,7 +65,7 @@ static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 
-#define MAX_FILE_SIZE   (1024 * 64)
+#define MAX_FILE_SIZE   (1024 * 128)
 uInt8  filebuffer[MAX_FILE_SIZE];
 
 int bg0, bg0b,bg1b;
@@ -506,7 +506,7 @@ bool dsLoadGame(char *filename)
 
     fseek(romfile, 0, SEEK_END);
     buffer_size = ftell(romfile);
-    if (buffer_size < MAX_FILE_SIZE)
+    if (buffer_size <= MAX_FILE_SIZE)
     {
         rewind(romfile);
         fread(filebuffer, buffer_size, 1, romfile);

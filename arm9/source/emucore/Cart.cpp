@@ -41,6 +41,7 @@
 #include "CartCV.hxx"
 #include "CartUA.hxx"
 #include "CartWD.hxx"
+#include "CartEF.hxx"
 #include "MD5.hxx"
 
 extern void dsWarnIncompatibileCart(void);
@@ -1092,6 +1093,7 @@ static const CartInfo table[] =
     {"ed2218b3075d15eaa34e3356025ccca3",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  0},    // Maze Craze (1980) (PAL).bin
     {"35b43b54e83403bb3d71f519739a9549",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // McDonald's - Golden Arches (1983).bin
     {"f7fac15cf54b55c5597718b6742dbec2",  "??????", "F4",   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    90,   0,  0},    // Medieval Mayhem.bin
+    {"b65d4a38d6047735824ee99684f3515e",  "??????", "MB",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   34,    245,   100,   0,  0},    // MegaBoy.bin
     {"daeb54957875c50198a7e616f9cc8144",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mega Force (1982).bin
     {"eb503cc64c3560cd78b7051188b7ba56",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mega Force (1982).bin
     {"bdbaeff1f7132358ea64c7be9e46c1ac",  "??????", "4K",   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Mega Force (1982) (PAL).bin
@@ -2193,6 +2195,9 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeUA(image);
   else if(type == "WD")
     cartridge = new CartridgeWD(image, size);
+  else if(type == "EF")
+    cartridge = new CartridgeEF(image);
+  //else if(type == "EFSC")
   else
   {
     // TODO: At some point this should be handled in a better way...
@@ -2561,19 +2566,15 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
       else
         myCartInfo.type = "F4";
     }
-    else if(size == 65536)
+    else if(size == 65536) // 64K
     {
-      //ALEK type = isProbably3F(image, size) ? "3F" : "MB";
-      // TODO - autodetect 4A50
       if(isProbably3F(image, size))
         myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
-        myCartInfo.type = "MB";
+        myCartInfo.type = ((isProbablyEFSC(image, size)) ? "EFSC" : "EF");      // Gaining popularity in 2020-2022 Homebrews
     }
-    else if(size == 131072)
+    else if(size == 131072) // 128K
     {
-      //ALEK type = isProbably3F(image, size) ? "3F" : "MC";
-      // TODO - autodetect 4A50
       if(isProbably3F(image, size))
         myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
@@ -2772,6 +2773,13 @@ bool Cartridge::isProbablyDPCplus(const uInt8* image, uInt32 size)
   // Note: all Harmony/Melody custom drivers also contain the value
   // 0x10adab1e (LOADABLE) if needed for future improvement
   return searchForBytes4(image, size, 'D', 'P', 'C', '+');
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+bool Cartridge::isProbablyEFSC(const uInt8* image, uInt32 size)
+{
+  // EFSC carts have 'EFSC' in the binary
+  return searchForBytes4(image, size, 'E', 'F', 'S', 'C');
 }
 
 
