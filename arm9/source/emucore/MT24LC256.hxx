@@ -62,6 +62,8 @@ class MT24LC256
       to override this method for devices that remember cycle counts.
     */
     void systemCyclesReset();
+    
+    void WriteEEtoFile(void);
 
   private:
     // I2C access code provided by Supercat

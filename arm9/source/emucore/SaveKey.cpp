@@ -24,6 +24,9 @@
 
 unsigned int myDigitalPinState[9];
 unsigned int myAnalogPinValue[9];
+
+MT24LC256 *gSaveKeyEEprom = NULL;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 SaveKey::SaveKey(Jack jack, const Event& event) : Controller(jack, event),
     myEEPROM(NULL)
@@ -38,14 +41,19 @@ SaveKey::SaveKey(Jack jack, const Event& event) : Controller(jack, event),
         mkdir("/data", 0777);
     }        
   myEEPROM = new MT24LC256("/data/StellaDS.EE");
+        
+  gSaveKeyEEprom = myEEPROM;
 
   myDigitalPinState[One] = myDigitalPinState[Two] = true;
   myAnalogPinValue[Five] = myAnalogPinValue[Nine] = maximumResistance;
+        
+  bUseSaveKey = false;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 SaveKey::~SaveKey()
 {
+  gSaveKeyEEprom = NULL;
   delete myEEPROM;
 }
 
@@ -60,7 +68,7 @@ bool SaveKey::read(DigitalPin pin)
     // Pin 3: EEPROM SDA
     //        input data from the 24LC256 EEPROM using the I2C protocol
     case Three:
-      return (myDigitalPinState[Three] = myEEPROM->readSDA());
+      return (bUseSaveKey ? (myDigitalPinState[Three] = myEEPROM->readSDA()) : 1);
 
     default:
       return 1;
@@ -89,6 +97,7 @@ void SaveKey::write(DigitalPin pin, bool value)
     //        output clock data to the 24LC256 EEPROM using the I2C protocol
     case Four:
       myDigitalPinState[Four] = value;
+      bUseSaveKey = true;
       myEEPROM->writeSCL(value);
       break;
 

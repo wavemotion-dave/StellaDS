@@ -54,6 +54,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.6 : 20-Mar-2022 by Dave Bernazzani (wavemotion)
+  * Added SaveKey support - standard games will have a virtual SaveKey in the right controller 
+    jack and will be auto-backed to a 32K /data/StellaDS.EE file.
+  * Added EF, EFSC, DFSC and SB (SuperBank) support for games as large as 256K!
+  
 V4.5 : 05-Nov-2021 by Dave Bernazzani (wavemotion)
   * New sound output core - no more zingers!
 

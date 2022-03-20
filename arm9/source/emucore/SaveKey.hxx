@@ -22,6 +22,9 @@
 class MT24LC256;
 
 #include "Control.hxx"
+#include "MT24LC256.hxx"
+
+extern MT24LC256 *gSaveKeyEEprom;
 
 /**
   Richard Hutchinson's SaveKey "controller", consisting of a 32KB EEPROM
@@ -86,6 +89,8 @@ class SaveKey : public Controller
   private:
     // The EEPROM used in the SaveKey
     MT24LC256* myEEPROM;
+    
+    bool bUseSaveKey;
 };
 
 #endif

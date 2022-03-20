@@ -37,6 +37,8 @@
   #define JPEE_LOG2(msg,arg1,arg2)
 #endif
 
+extern uInt8 gSaveKeyIsDirty;
+
 /*
   State values for I2C:
     0 - Idle
@@ -83,10 +85,19 @@ MT24LC256::MT24LC256(const string& filename)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 MT24LC256::~MT24LC256()
 {
-    extern uInt8 gSaveKeyEEWritten;
   // Save EEPROM data to external file only when necessary
   if(!myDataFileExists || myDataChanged)
   {
+      WriteEEtoFile();
+  }
+}
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void MT24LC256::WriteEEtoFile(void)
+{
+    extern uInt8 gSaveKeyEEWritten;
+    
     gSaveKeyEEWritten = 1;
     ofstream out;
     out.open(myDataFile.c_str(), ios_base::binary);
@@ -95,9 +106,10 @@ MT24LC256::~MT24LC256()
       out.write((char*)myData, 32768);
       out.close();
     }
-  }
+    myDataChanged = false;
+    gSaveKeyIsDirty = false;
 }
-
+    
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool MT24LC256::readSDA()
 {
@@ -230,6 +242,7 @@ void MT24LC256::jpee_data_stop()
     for (i=3; i<jpee_pptr; i++)
     {
       myDataChanged = true;
+      gSaveKeyIsDirty = true;
       myData[(jpee_address++) & jpee_sizemask] = jpee_packet[i];
       if (!(jpee_address & jpee_pagemask))
         break;  /* Writes can't cross page boundary! */

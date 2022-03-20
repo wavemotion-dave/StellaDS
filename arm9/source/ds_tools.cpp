@@ -27,6 +27,7 @@
 #include "clickQuit_wav.h"
 
 #include "Console.hxx"
+#include "SaveKey.hxx"
 #include "MediaSrc.hxx"
 #include "TIASound.hxx"
 #include "Event.hxx"
@@ -36,7 +37,7 @@
 #include "highscore.h"
 #include "instructions.h"
 
-#define VERSION "4.5"
+#define VERSION "4.6"
 
 //#define WRITE_TWEAKS
 
@@ -50,6 +51,7 @@ int atari_frames=0;
 uInt8 tv_type_requested = NTSC;
 
 uInt8 gSaveKeyEEWritten = false;
+uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 22050;
 
@@ -1449,6 +1451,10 @@ ITCM_CODE void dsMainLoop(void)
                 fpsbuf[2] = '0' + (int)x%10;
                 fpsbuf[3] = 0;
                 dsPrintValue(0,0,0, fpsbuf);
+            }
+            if (gSaveKeyIsDirty)
+            {
+                gSaveKeyEEprom->WriteEEtoFile();
             }
             if (gSaveKeyEEWritten == 2)
             {
