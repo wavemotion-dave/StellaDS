@@ -192,6 +192,11 @@ class Cartridge : public Device
     static bool isProbablyEFSC(const uInt8* image, uInt32 size);
 
     /**
+      Returns true if the image is probably a DFSC cartridge
+    */
+    static bool isProbablyDFSC(const uInt8* image, uInt32 size);
+
+    /**
       Returns true if the image is probably a E0 bankswitching cartridge
     */
     static bool isProbablyE0(const uInt8* image, uInt32 size);

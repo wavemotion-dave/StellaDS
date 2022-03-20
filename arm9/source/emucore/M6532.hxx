@@ -118,12 +118,17 @@ class M6532 : public Device
     // Data Direction Register for Port B
     uInt8 myDDRB;
 
+    // Data Out for Port A
+    uInt8 myOutA;
+    
   private:
     // Copy constructor isn't supported by this class so make it private
     M6532(const M6532&);
  
     // Assignment operator isn't supported by this class so make it private
     M6532& operator = (const M6532&);
+    
+    void setPinState(void);
 };
 #endif
 

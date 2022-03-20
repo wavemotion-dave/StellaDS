@@ -30,6 +30,7 @@
 #include "Genesis.hxx"
 #include "Joystick.hxx"
 #include "Keyboard.hxx"
+#include "SaveKey.hxx"
 #include "M6502Low.hxx"
 #include "M6502Hi.hxx"
 #include "M6532.hxx"
@@ -106,10 +107,10 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
       myControllers[0] = new Joystick(Controller::Left, *myEvent);
       myControllers[1] = new Keyboard(Controller::Right, *myEvent);
   }
-  else  // Most games fall into this category... the venerable Joystick with one red button!
+  else  // Most games fall into this category... the venerable Joystick with one red button! For this type, we place a virtual SaveKey in the right jack.
   {
       myControllers[0] = new Joystick(Controller::Left, *myEvent);
-      myControllers[1] = new Joystick(Controller::Right, *myEvent);
+      myControllers[1] = new SaveKey(Controller::Right, *myEvent);
   }
         
   mySystem->attach(m6502);

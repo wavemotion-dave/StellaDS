@@ -69,6 +69,7 @@ void M6532::reset()
   // Zero the I/O registers
   myDDRA = 0x00;
   myDDRB = 0x00;
+  myOutA = 0x00;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -218,26 +219,44 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
   }
 }
 
+void M6532::setPinState()
+{
+  /*
+    When a bit in the DDR is set as input, +5V is placed on its output
+    pin.  When it's set as output, either +5V or 0V (depending on the
+    contents of SWCHA) will be placed on the output pin.
+    The standard macros for the AtariVox and SaveKey use this fact to
+    send data to the port.  This is represented by the following algorithm:
+
+      if(DDR bit is input)       set output as 1
+      else if(DDR bit is output) set output as bit in ORA
+  */
+    uInt8 a = myOutA | ~myDDRA;
+
+    myConsole.controller(Controller::Left).write(Controller::One,   a & 0x10);
+    myConsole.controller(Controller::Left).write(Controller::Two,   a & 0x20);
+    myConsole.controller(Controller::Left).write(Controller::Three, a & 0x40);
+    myConsole.controller(Controller::Left).write(Controller::Four,  a & 0x80);
+    
+    myConsole.controller(Controller::Right).write(Controller::One,   a & 0x01);
+    myConsole.controller(Controller::Right).write(Controller::Two,   a & 0x02);
+    myConsole.controller(Controller::Right).write(Controller::Three, a & 0x04);
+    myConsole.controller(Controller::Right).write(Controller::Four,  a & 0x08);
+
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void M6532::poke(uInt16 addr, uInt8 value)
 {
   if((addr & 0x07) == 0x00)         // Port A I/O Register (Joystick)
   {
-    uInt8 a = value & myDDRA;
-
-    myConsole.controller(Controller::Left).write(Controller::One, a & 0x10);
-    myConsole.controller(Controller::Left).write(Controller::Two, a & 0x20);
-    myConsole.controller(Controller::Left).write(Controller::Three, a & 0x40);
-    myConsole.controller(Controller::Left).write(Controller::Four, a & 0x80);
-    
-    myConsole.controller(Controller::Right).write(Controller::One, a & 0x01);
-    myConsole.controller(Controller::Right).write(Controller::Two, a & 0x02);
-    myConsole.controller(Controller::Right).write(Controller::Three, a & 0x04);
-    myConsole.controller(Controller::Right).write(Controller::Four, a & 0x08);
+    myOutA = value;
+    setPinState();
   }
   else if((addr & 0x07) == 0x01)    // Port A Data Direction Register 
   {
     myDDRA = value;
+    setPinState();
   }
   else if((addr & 0x07) == 0x02)    // Port B I/O Register (Console switches)
   {
@@ -245,7 +264,7 @@ ITCM_CODE void M6532::poke(uInt16 addr, uInt8 value)
   }
   else if((addr & 0x07) == 0x03)    // Port B Data Direction Register
   {
-//        myDDRB = value;
+    // Fixed Input - can't change it...
     return;
   }
   else if((addr & 0x17) == 0x14)    // Write timer divide by 1 

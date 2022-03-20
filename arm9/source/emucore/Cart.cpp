@@ -43,6 +43,8 @@
 #include "CartWD.hxx"
 #include "CartEF.hxx"
 #include "CartEFSC.hxx"
+#include "CartDFSC.hxx"
+#include "CartSB.hxx"
 #include "MD5.hxx"
 
 extern void dsWarnIncompatibileCart(void);
@@ -2200,6 +2202,10 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeEF(image);
   else if(type == "EFSC")
     cartridge = new CartridgeEFSC(image);
+  else if(type == "DFSC")
+    cartridge = new CartridgeDFSC(image);
+  else if(type == "SB")
+    cartridge = new CartridgeSB(image, size);
   else
   {
     // TODO: At some point this should be handled in a better way...
@@ -2539,10 +2545,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else if(size == 12288)
     {
-      // TODO - this should really be in a method that checks the first
-      // 512 bytes of ROM and finds if either the lower 256 bytes or
-      // higher 256 bytes are all the same.  For now, we assume that
-      // all carts of 12K are CBS RAM Plus/FASC.
+      // For now, we assume that all carts of 12K are CBS RAM Plus/FASC.
       myCartInfo.type = "FASC";
     }
     else if(size == 16384)  // 16K
@@ -2562,7 +2565,7 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if(isProbablySC(image, size))
         myCartInfo.type = "F4SC";
       else if (isProbablyDPCplus(image, size))
-        myCartInfo.type = "DPCP";
+        myCartInfo.type = "DPCP";                                               // Unfortunately, we don't handle DPC+ with the ARM core support needed
       else if(isProbably3F(image, size))
         myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
       else
@@ -2577,10 +2580,11 @@ string Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else if(size == 131072) // 128K
     {
-      if(isProbably3F(image, size))
-        myCartInfo.type = isProbably3E(image, size) ? "3E" : "3F";
-      else
-        myCartInfo.type = "MC";
+        myCartInfo.type = ((isProbablyDFSC(image, size)) ? "DFSC" : "SB");      // 128K games generally use either DFSC or, more commonly SuperBanking
+    }
+    else if(size == 262144) // 256K
+    {
+        myCartInfo.type = "SB";                                                 // We only support Super Banking for games this large
     }
     else  // what else can we do?
     {
@@ -2784,8 +2788,13 @@ bool Cartridge::isProbablyEFSC(const uInt8* image, uInt32 size)
   return searchForBytes4(image, size, 'E', 'F', 'S', 'C');
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+bool Cartridge::isProbablyDFSC(const uInt8* image, uInt32 size)
+{
+  // DFSC carts have 'DFSC' in the binary
+  return searchForBytes4(image, size, 'D', 'F', 'S', 'C');
+}
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyE7(const uInt8* image, uInt32 size)
 {
   // E7 carts map their second 1K block of RAM at addresses

@@ -49,9 +49,11 @@ int atari_frames=0;
 
 uInt8 tv_type_requested = NTSC;
 
+uInt8 gSaveKeyEEWritten = false;
+
 uInt16 mySoundFreq = 22050;
 
-#define MAX_DEBUG 16
+#define MAX_DEBUG 32
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128];
@@ -65,7 +67,7 @@ static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 
-#define MAX_FILE_SIZE   (1024 * 128)
+#define MAX_FILE_SIZE   (1024 * 256)
 uInt8  filebuffer[MAX_FILE_SIZE];
 
 int bg0, bg0b,bg1b;
@@ -1447,6 +1449,16 @@ ITCM_CODE void dsMainLoop(void)
                 fpsbuf[2] = '0' + (int)x%10;
                 fpsbuf[3] = 0;
                 dsPrintValue(0,0,0, fpsbuf);
+            }
+            if (gSaveKeyEEWritten == 2)
+            {
+                dsPrintValue(9,0,0, (char*)"               ");
+                gSaveKeyEEWritten = 0;
+            }
+            else if (gSaveKeyEEWritten == 1)
+            {
+                dsPrintValue(9,0,0, (char*)"SAVEKEY WRITTEN");
+                gSaveKeyEEWritten = 2;
             }
             DumpDebugData();
         }
