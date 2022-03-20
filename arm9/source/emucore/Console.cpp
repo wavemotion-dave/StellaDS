@@ -110,7 +110,10 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   else  // Most games fall into this category... the venerable Joystick with one red button! For this type, we place a virtual SaveKey in the right jack.
   {
       myControllers[0] = new Joystick(Controller::Left, *myEvent);
-      myControllers[1] = new SaveKey(Controller::Right, *myEvent);
+      if (myCartInfo.controllerType == CTR_LJOY)
+        myControllers[1] = new SaveKey(Controller::Right, *myEvent);
+      else
+        myControllers[1] = new Joystick(Controller::Right, *myEvent);
   }
         
   mySystem->attach(m6502);
