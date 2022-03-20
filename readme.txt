@@ -11,6 +11,12 @@ Features :
  DS-PHAT, many of the simple 4k and 2k games will play perfectly and some of the 8k
  games will run very close to full speed. More sophisticated bank-switching schemes
  really require the DSi for the best experience.
+ 
+ A huge number of bankswitching schemes are supported to handle virtually any rom 
+ types (except DPC+ with ARM code support). The newer EF/DF/SB schmes are supported
+ for ROM sizes up to 256K!
+ 
+ SaveKey support is incorporated as well for the games that utilize it.
 
  See compatibility.txt for a full list of the ROMS supported. Generally these are 
  going to be NTSC No-Intro roms (the good ones!). 
