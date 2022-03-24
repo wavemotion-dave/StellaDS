@@ -89,7 +89,7 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
-V4.7 : xx-Mar-2022 by Dave Bernazzani (wavemotion)
+V4.7 : 24-Mar-2022 by Dave Bernazzani (wavemotion)
   * Added per-game configuration settings.
   * Fixed 3E/3F and UA bankswitching schemes.
 
