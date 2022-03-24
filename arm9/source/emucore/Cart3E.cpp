@@ -27,9 +27,6 @@
 Cartridge3E::Cartridge3E(const uInt8* image, uInt32 size)
   : mySize(size)
 {
-  // Allocate array for the ROM image
-  myImage = new uInt8[mySize];
-
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < mySize; ++addr)
   {
@@ -42,12 +39,12 @@ Cartridge3E::Cartridge3E(const uInt8* image, uInt32 size)
   {
     myRam[i] = random.next();
   }
+  debug[5] = 333;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge3E::~Cartridge3E()
 {
-  delete[] myImage;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -74,22 +71,23 @@ void Cartridge3E::install(System& system)
   assert((0x1800 & mask) == 0);
 
   // Set the page accessing methods for the hot spots (for 100% emulation
-  // I would need to chain any accesses below 0x40 to the TIA but for
-  // now I'll just forget about them)
+  // we need to chain any accesses below 0x40 to the TIA. Our poke() method
+  // does this via mySystem->tiaPoke(...), at least until we come up with a
+  // cleaner way to do it).
   for(uInt32 i = 0x00; i < 0x80; i += (1 << shift))
   {
-   page_access.directPeekBase = 0;
-   page_access.directPokeBase = 0;
-   page_access.device = this;
+    page_access.directPeekBase = 0;
+    page_access.directPokeBase = 0;
+    page_access.device = this;
     mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // Setup the second segment to always point to the last ROM slice
   for(uInt32 j = 0x1800; j < 0x2000; j += (1 << shift))
   {
-   page_access.device = this;
-   page_access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
-   page_access.directPokeBase = 0;
+    page_access.device = this;
+    page_access.directPeekBase = &myImage[(mySize - 2048) + (j & 0x07FF)];
+    page_access.directPokeBase = 0;
     mySystem->setPageAccess(j >> shift, page_access);
   }
 
@@ -102,21 +100,23 @@ extern TIA* theTIA; // 3F/3E games are weird... they take over 40h bytes of the 
 uInt8 Cartridge3E::peek(uInt16 address)
 {
   address = address & 0x0FFF;
-
-  if ((address&0xFFF) < 0x80)
+  if (address < 0x80)
   {
-      return theTIA->peek(address);
-  }
-  if(address < 0x0800)
-  {
-    if(myCurrentBank < 256)
-      return myImage[(address & 0x07FF) + myCurrentBank * 2048];
-    else
-      return myRam[(address & 0x03FF) + (myCurrentBank - 256) * 1024];
+     return theTIA->peek(address);   
   }
   else
   {
-    return myImage[(address & 0x07FF) + mySize - 2048];
+      if(address < 0x0800)
+      {
+        if(myCurrentBank < 256)
+          return myImage[(address & 0x07FF) + (myCurrentBank * 2048)];
+        else
+          return myRam[(address & 0x03FF) + ((myCurrentBank - 256) * 1024)];
+      }
+      else
+      {
+        return myImage[(address & 0x07FF) + mySize - 2048];
+      }
   }
 }
 
@@ -127,24 +127,24 @@ void Cartridge3E::poke(uInt16 address, uInt8 value)
 
   // Switch banks if necessary. Armin (Kroko) says there are no mirrored
   // hotspots.
-  if(address == 0x003F)
+  if(address == 0x3F)
   {
     bank(value);
   }
-  else if(address == 0x003E)
+  else if(address == 0x3E)
   {
     bank(value + 256);
   }
-  else theTIA->poke(address, value);    // Pass through to "real" TIA
+  else if (address < 0x80) theTIA->poke(address, value);    // Pass through to "real" TIA
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3E::bank(uInt16 bank)
 { 
-  //if(bankLocked) return;
-
   if(bank < 256)
   {
+    debug[0]++;
+    debug[5] = bank;
     // Make sure the bank they're asking for is reasonable
     if((uInt32)bank * 2048 < mySize)
     {
@@ -161,18 +161,19 @@ void Cartridge3E::bank(uInt16 bank)
     uInt16 shift = mySystem->pageShift();
   
     // Setup the page access methods for the current bank
-   page_access.device = this;
-   page_access.directPokeBase = 0;
+    page_access.device = this;
+    page_access.directPokeBase = 0;
   
     // Map ROM image into the system
     for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
     {
-     page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-      mySystem->setPageAccess(address >> shift, page_access);
+        page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
+        mySystem->setPageAccess(address >> shift, page_access);
     }
   }
   else
   {
+      debug[1]++;
     bank -= 256;
     bank %= 32;
     myCurrentBank = bank + 256;
@@ -182,14 +183,14 @@ void Cartridge3E::bank(uInt16 bank)
     uInt32 address;
   
     // Setup the page access methods for the current bank
-   page_access.device = this;
-   page_access.directPokeBase = 0;
+    page_access.device = this;
+    page_access.directPokeBase = 0;
   
     // Map read-port RAM image into the system
     for(address = 0x1000; address < 0x1400; address += (1 << shift))
     {
-     page_access.directPeekBase = &myRam[offset + (address & 0x03FF)];
-      mySystem->setPageAccess(address >> shift, page_access);
+        page_access.directPeekBase = &myRam[offset + (address & 0x03FF)];
+        mySystem->setPageAccess(address >> shift, page_access);
     }
 
    page_access.directPeekBase = 0;
@@ -197,8 +198,8 @@ void Cartridge3E::bank(uInt16 bank)
     // Map write-port RAM image into the system
     for(address = 0x1400; address < 0x1800; address += (1 << shift))
     {
-     page_access.directPokeBase = &myRam[offset + (address & 0x03FF)];
-      mySystem->setPageAccess(address >> shift, page_access);
+        page_access.directPokeBase = &myRam[offset + (address & 0x03FF)];
+        mySystem->setPageAccess(address >> shift, page_access);
     }
   }
 }

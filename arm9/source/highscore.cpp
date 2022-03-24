@@ -537,7 +537,7 @@ void highscore_display(void)
     // ---------------------------------------------------------------------------------
     // Get the current CART md5 so we can search for it in our High Score database...
     // ---------------------------------------------------------------------------------
-    strcpy(md5, myCartInfo.md5.c_str());
+    strcpy(md5, myCartInfo.md5);
     for (int i=0; i<MAX_HS_GAMES; i++)
     {
         if (firstBlank == -1)

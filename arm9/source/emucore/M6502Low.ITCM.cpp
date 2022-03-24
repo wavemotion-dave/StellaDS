@@ -84,18 +84,9 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
     
-  // TIA access is common... filter that one out first...
-  if (address < 0x80)
-  {
-      extern TIA *theTIA;
-      theTIA->poke(address, value);
-  }
-  else
-  {
-      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
-      if(access.directPokeBase != 0) *(access.directPokeBase + (address & MY_PAGE_MASK)) = value;
-      else access.device->poke(address, value);
-  }
+  PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+  if(access.directPokeBase != 0) *(access.directPokeBase + (address & MY_PAGE_MASK)) = value;
+  else access.device->poke(address, value);
     
   myDataBusState = value;    
 }

@@ -5,6 +5,9 @@
 
 #include "Console.hxx"
 
+#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
+
+
 #define STELLADS_MENUINIT 0x01
 #define STELLADS_MENUSHOW 0x02
 #define STELLADS_PLAYINIT 0x03 

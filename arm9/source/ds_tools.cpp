@@ -35,9 +35,10 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 #include "highscore.h"
+#include "config.h"
 #include "instructions.h"
 
-#define VERSION "4.6"
+#define VERSION "4.7"
 
 //#define WRITE_TWEAKS
 
@@ -48,6 +49,8 @@ uInt16 sampleExtender[256] = {0};
 
 int atari_frames=0;
 
+uInt8 bInitialDiffSet = 0;
+
 uInt8 tv_type_requested = NTSC;
 
 uInt8 gSaveKeyEEWritten = false;
@@ -55,7 +58,7 @@ uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 22050;
 
-#define MAX_DEBUG 32
+#define MAX_DEBUG 16
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128];
@@ -80,15 +83,12 @@ uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't b
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 
-static int bSoundEnabled = 1;
 static int full_speed=0;
 int gTotalAtariFrames=0;
 
-unsigned short int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, left_difficulty=0, right_difficulty=0,romSel;
+unsigned short int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, romSel;
 
 extern Int8 ourPokeDelayTable[64];
-
-#define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
 static void DumpDebugData(void)
 {
@@ -98,12 +98,12 @@ static void DumpDebugData(void)
         int idx=0;
         int val=0;
 
-        sprintf(dbgbuf, "%32s", myCartInfo.md5.c_str());                            dsPrintValue(0,2,0, dbgbuf);
+        sprintf(dbgbuf, "%32s", myCartInfo.md5);                                    dsPrintValue(0,2,0, dbgbuf);
         sprintf(dbgbuf, "Cart.Scale:     %03d", myCartInfo.screenScale);            dsPrintValue(1,3,0, dbgbuf);
         sprintf(dbgbuf, "Cart.xOffset:   %03d", myCartInfo.xOffset);                dsPrintValue(1,4,0, dbgbuf);
         sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
         sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayStopScanline);    dsPrintValue(1,7,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayNumScalines);    dsPrintValue(1,7,0, dbgbuf);
         
         for (int i=0; i<MAX_DEBUG; i++)
         {
@@ -256,7 +256,7 @@ ITCM_CODE void dsWriteTweaks(void)
     if (fp != NULL)
     {
         fprintf(fp, "%-32s %4s %2s    %3d  %3d  %3d  %3d  %3d  %s\n", myCartInfo.md5.c_str(), myCartInfo.type.c_str(), 
-                (myCartInfo.mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayStopScanline, 
+                (myCartInfo.frame_mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayStopScanline, 
                 myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset, my_filename);
         fflush(fp);
         fclose(fp);
@@ -473,10 +473,8 @@ void dsShowScreenMain(bool bFull)
   REG_BLDCNT=0; REG_BLDCNT_SUB=0; REG_BLDY=0; REG_BLDY_SUB=0;
     
   dsDisplayButton(3-console_color);
-  dsDisplayButton(10+left_difficulty);
-  dsDisplayButton(12+right_difficulty);
-  dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
-  dsDisplayButton(16+bSoundEnabled);
+  dsDisplayButton(10+myCartInfo.left_difficulty);
+  dsDisplayButton(12+myCartInfo.right_difficulty);
   ShowStatusLine();    
 
   swiWaitForVBlank();
@@ -504,6 +502,9 @@ bool dsLoadGame(char *filename)
   {
     // Free buffer if needed
     TIMER2_CR=0; irqDisable(IRQ_TIMER2);
+    
+    // Clear out debug information for new game
+    memset(debug, 0x00, sizeof(debug));      
 
     if (theConsole)
       delete theConsole;
@@ -520,21 +521,19 @@ bool dsLoadGame(char *filename)
         theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname");
         dsInitPalette();
 
-        left_difficulty=0; right_difficulty=0;
-
         memset(sound_buffer, 0x00, SOUND_SIZE);
         TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         irqSet(IRQ_TIMER2, Tia_process);
-        if (bSoundEnabled)
-        {
-            irqEnable(IRQ_TIMER2);
-            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
-        }
-        else
+        if (myCartInfo.sound_mute)
         {
             irqDisable(IRQ_TIMER2);
             fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
+        }
+        else
+        {
+            irqEnable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
         }
 
         // Center all paddles...
@@ -543,11 +542,13 @@ bool dsLoadGame(char *filename)
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11,    theConsole->fakePaddleResistance);
         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F9,     theConsole->fakePaddleResistance);
         
+        // Make sure the difficulty switches are set right on loding
+        bInitialDiffSet = true;
+        
         TIMER0_CR=0;
         TIMER0_DATA=0;
         TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
         atari_frames=0;
-        memset(debug, 0x00, sizeof(debug));
         
         return true;
     }
@@ -976,6 +977,12 @@ int iTx,iTy;
 uInt8 mca_dampen_y=0;
 uInt8 mca_dampen_a=0;
 uInt8 rapid_fire = 0;
+uInt8 button_fire  = false;
+uInt8 button_up    = false;
+uInt8 button_down  = false;
+uInt8 button_left  = false;
+uInt8 button_right = false;
+
 ITCM_CODE void dsMainLoop(void)
 {
     static int dampen=0;
@@ -1007,7 +1014,7 @@ ITCM_CODE void dsMainLoop(void)
 
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
-            dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
+            //dsDisplayButton(14+(myCartInfo.frame_mode == MODE_NO ? 1:0));
             etatEmu = STELLADS_PLAYGAME;
             break;
 
@@ -1037,15 +1044,97 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
-                    if (keys_pressed & (KEY_Y))
-                    {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ++rapid_fire & 0x08);
-                    }
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    button_fire  = false;
+                    button_up    = false;
+                    button_down  = false;
+                    button_left  = false;
+                    button_right = false;
+                    
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    
+                    if (keys_pressed & (KEY_UP))                                            button_up    = true;
+                    if (keys_pressed & (KEY_DOWN))                                          button_down  = true;
+                    if (keys_pressed & (KEY_LEFT))                                          button_left  = true;
+                    if (keys_pressed & (KEY_RIGHT))                                         button_right = true;
+                    
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, button_fire);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    button_up);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  button_down);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  button_left);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, button_right);
+                    break;
+                    
+                case CTR_RJOY:
+                    button_fire  = false;
+                    button_up    = false;
+                    button_down  = false;
+                    button_left  = false;
+                    button_right = false;
+                    
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
+                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    
+                    if (keys_pressed & (KEY_UP))                                            button_up    = true;
+                    if (keys_pressed & (KEY_DOWN))                                          button_down  = true;
+                    if (keys_pressed & (KEY_LEFT))                                          button_left  = true;
+                    if (keys_pressed & (KEY_RIGHT))                                         button_right = true;
+                    
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,    button_fire);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    button_up);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h,    button_down);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g,    button_left);
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j,    button_right);
                     break;
                     
                 case CTR_MCA:
@@ -1088,26 +1177,21 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     break;
                     
-                case CTR_RJOY:
                 case CTR_RAIDERS:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_A));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, keys_pressed & (KEY_LEFT));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
 
-                    // For Raiders of the Lost Ark!
-                    if (myCartInfo.controllerType == CTR_RAIDERS)
-                    {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_B));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,     keys_pressed & (KEY_A));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_B));
 
-                        // Unfortunately for Raiders, we can't use these keys for UI handling below...
-                        if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
-                        {
-                            keys_pressed = 0;
-                        }
+                    // Unfortunately for Raiders, we can't use these keys for UI handling below...
+                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
+                    {
+                        keys_pressed = 0;
                     }
                     break;
                     
@@ -1371,6 +1455,16 @@ ITCM_CODE void dsMainLoop(void)
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F6, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F7, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F8, 0);
+                
+                if (bInitialDiffSet)
+                {
+                    bInitialDiffSet = false;
+                    // Make sure the difficulty switches are correct...
+                    theConsole->eventHandler().sendKeyEvent(myCartInfo.left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
+                    dsDisplayButton(10+myCartInfo.left_difficulty);
+                    theConsole->eventHandler().sendKeyEvent(myCartInfo.right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
+                    dsDisplayButton(12+myCartInfo.right_difficulty);        
+                }                    
 
                 // -----------------------------------------------------------------------
                 // Check the UI keys... full speed, FSP display, offset/scale shift, etc.
@@ -1396,7 +1490,7 @@ ITCM_CODE void dsMainLoop(void)
                     extern uInt32 myStartDisplayOffset;
                     extern uInt32 myStopDisplayOffset;
                     myStartDisplayOffset = 228 * myCartInfo.displayStartScanline;                              // Allow for some underscan lines on a per-cart basis
-                    myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayStopScanline));     // Allow for some overscan lines on a per-cart basis
+                    myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayNumScalines));      // Allow for some overscan lines on a per-cart basis
                         
 #endif              
                     bScreenRefresh = 1;
@@ -1409,19 +1503,6 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         if (keys_pressed & KEY_A)   {lcdSwap();}                        
                         dsWriteTweaks();
-                    }
-                    else if (keys_pressed & KEY_X)
-                    {
-                        fpsDisplay = !fpsDisplay;
-                        if (!fpsDisplay)
-                        {
-                            fpsbuf[0] = ' ';
-                            fpsbuf[1] = ' ';
-                            fpsbuf[2] = ' ';
-                            fpsbuf[3] = 0;
-                            dsPrintValue(0,0,0, fpsbuf);
-                        }
-                        else gTotalAtariFrames=0;
                     }
                     last_keys_pressed = keys_pressed;
                 }
@@ -1510,6 +1591,20 @@ ITCM_CODE void dsMainLoop(void)
                     full_speed = 1-full_speed; 
                     ShowStatusLine();
                 }                
+                else if ((iTx>0) && (iTx<20) && (iTy>0) && (iTy<20))  
+                { // FPS Toggle ... upper corner...
+                    fpsDisplay = 1-fpsDisplay;
+                    if (!fpsDisplay)
+                    {
+                        fpsbuf[0] = ' ';
+                        fpsbuf[1] = ' ';
+                        fpsbuf[2] = ' ';
+                        fpsbuf[3] = 0;
+                        dsPrintValue(0,0,0, fpsbuf);
+                    }
+                    else gTotalAtariFrames=0;                    
+                    ShowStatusLine();
+                }                
                 else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) 
                 { // tv type
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
@@ -1521,18 +1616,18 @@ ITCM_CODE void dsMainLoop(void)
                 else if ((iTx>100) && (iTx<125) && (iTy>26) && (iTy<65)) 
                 { // Left Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    left_difficulty=1-left_difficulty;
-                    theConsole->eventHandler().sendKeyEvent(left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
+                    myCartInfo.left_difficulty=1-myCartInfo.left_difficulty;
+                    theConsole->eventHandler().sendKeyEvent(myCartInfo.left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
                     dampen=5;
-                    dsDisplayButton(10+left_difficulty);
+                    dsDisplayButton(10+myCartInfo.left_difficulty);
                 }
                 else if ((iTx>135) && (iTx<160) && (iTy>26) && (iTy<65)) 
                 { // Right Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    right_difficulty=1-right_difficulty;
-                    theConsole->eventHandler().sendKeyEvent(right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
+                    myCartInfo.right_difficulty=1-myCartInfo.right_difficulty;
+                    theConsole->eventHandler().sendKeyEvent(myCartInfo.right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
                     dampen=5;
-                    dsDisplayButton(12+right_difficulty);
+                    dsDisplayButton(12+myCartInfo.right_difficulty);
                 }
                 else if ((iTx>170) && (iTx<203) && (iTy>26) && (iTy<70)) 
                 { // game select
@@ -1561,50 +1656,32 @@ ITCM_CODE void dsMainLoop(void)
                         etatEmu=STELLADS_PLAYINIT;
                         dsLoadGame(vcsromlist[ucFicAct].filename);
                         dsDisplayButton(3-console_color);
-                        dsDisplayButton(10+left_difficulty);
-                        dsDisplayButton(12+right_difficulty);
-                        dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
-                        dsDisplayButton(16+bSoundEnabled);
+                        dsDisplayButton(10+myCartInfo.left_difficulty);
+                        dsDisplayButton(12+myCartInfo.right_difficulty);
                         ShowStatusLine();
                     }
                     else 
                     { 
-                        if (bSoundEnabled)
+                        if (!myCartInfo.sound_mute)
                         {
                             irqEnable(IRQ_TIMER2);
                             fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                         }
                     }
                 }
-                else if ((iTx>210) && (iTx<250) && (iTy>170) && (iTy<200))  // Fast vs Flicker-Free Mode
+                else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<200))  // Configuration
                 {
-                    soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    if (myCartInfo.mode == MODE_NO)
+                    irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
+                    ShowConfig();
+                    dsShowScreenMain(false);
+                    for (int i=0; i<6; i++)
                     {
-                        extern uint8 original_flicker_mode;
-                        myCartInfo.mode = (original_flicker_mode == MODE_NO ? MODE_FF:original_flicker_mode);
+                        WAITVBL;
                     }
-                    else
+                    if (!myCartInfo.sound_mute)
                     {
-                        myCartInfo.mode = MODE_NO;
+                        irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
-                    dsDisplayButton(14+(myCartInfo.mode == MODE_NO ? 1:0));
-                }
-                else if ((iTx>210) && (iTx<250) && (iTy>140) && (iTy<170))  // Sound ON/OFF
-                {
-                    soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    bSoundEnabled = 1-bSoundEnabled;
-                    if (bSoundEnabled)
-                    {
-                        irqEnable(IRQ_TIMER2);
-                        fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
-                    }
-                    else
-                    {
-                        irqDisable(IRQ_TIMER2);
-                        fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
-                    }
-                    dsDisplayButton(16+bSoundEnabled);
                 }
                 else if ((iTx>5) && (iTx<35) && (iTy>150) && (iTy<200)) 
                 { // Show Info Mode!
@@ -1657,8 +1734,7 @@ ITCM_CODE void dsMainLoop(void)
                         WAITVBL;
                     }
                     
-                    
-                    if (bSoundEnabled)
+                    if (!myCartInfo.sound_mute)
                     {
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }

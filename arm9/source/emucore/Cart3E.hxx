@@ -19,7 +19,7 @@
 #ifndef CARTRIDGE3E_HXX
 #define CARTRIDGE3E_HXX
 
-class Cartridge3F;
+class Cartridge3E;
 
 #include "bspf.hxx"
 #include "Cart.hxx"
@@ -46,7 +46,7 @@ class Cartridge3F;
   instead, store the RAM bank number into $3E.
 
   This implementation of 3E bankswitching numbers the ROM banks 0 to
-  256, and the RAM banks 256 to 287. This is done because the public
+  255, and the RAM banks 256 to 287. This is done because the public
   bankswitching interface requires us to use one bank number, not one
   bank number plus the knowledge of whether it's RAM or ROM.
 
@@ -124,11 +124,11 @@ class Cartridge3E : public Cartridge
     // Indicates which bank is currently active for the first segment
     uInt16 myCurrentBank;
 
-    // Pointer to a dynamically allocated ROM image of the cartridge
-    uInt8* myImage;
-
     // RAM contents. For now every ROM gets all 32K of potential RAM
     uInt8 myRam[32768];
+    
+    // ROM contents ... up to 256K
+    uInt8 myImage[256*1024];
     
     // Size of the ROM image
     uInt32 mySize;

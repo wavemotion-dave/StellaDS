@@ -27,7 +27,7 @@ static int display_options_list(bool bFullDisplay);
 
 // ---------------------------------------------------------------------------
 // Write out the StellaDS.DAT configuration file to capture the settings for
-// each game.  This one file contains global settings + 300 game settings.
+// each game.  We can store more than 1500 game settings!
 // ---------------------------------------------------------------------------
 void SaveConfig(bool bShow)
 {
@@ -90,7 +90,7 @@ void SaveConfig(bool bShow)
 
 // -------------------------------------------------------------------------------------------------
 // After settings hae changed, we call this to apply the new options to the game being played.
-// This is also called when loading a game and after the configuration if read from NINTV-DS.DAT
+// This is also called when loading a game and after the configuration if read from StelaDS.DAT
 // -------------------------------------------------------------------------------------------------
 static void ApplyOptions(void)
 {
@@ -159,8 +159,8 @@ void LoadConfig(void)
 // ------------------------------------------------------------------------------
 // Options are handled here... we have a number of things the user can tweak
 // and these options are applied immediately. The user can also save off 
-// their option choices for the currently running game into the NINTV-DS.DAT
-// configuration database. When games are loaded back up, NINTV-DS.DAT is read
+// their option choices for the currently running game into the StellaDS.DAT
+// configuration database. When games are loaded back up, StellaDS.DAT is read
 // to see if we have a match and the user settings can be restored for the game.
 // ------------------------------------------------------------------------------
 struct options_t

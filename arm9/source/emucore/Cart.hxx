@@ -38,38 +38,52 @@ extern uInt16 myCurrentOffset;
 // The following is a simple table mapping games to type's using MD5 values
 struct CartInfo
 {
-  string md5;
-  string gameID;
-  string type;
-  Int8  controllerType;
-  Int8  special;
-  Int8  mode;
-  Int8  vblankZero;
-  Int8  hBlankZero;
-  Int8  analogSensitivity;      // 10=1.0
-  uInt8 tv_type;                // NTSC or PAL
-  uInt8 displayStartScanline;   
-  uInt8 displayStopScanline;  
+  char  md5[33];
+  char  gameID[7];
+  uInt8 banking;
+  uInt8  controllerType;
+  uInt8  special;
+  uInt8  frame_mode;
+  uInt8  vblankZero;
+  uInt8  hBlankZero;
+  uInt8  analogSensitivity;      // 10=1.0
+  uInt8  tv_type;                // NTSC or PAL
+  uInt8  displayStartScanline;   
+  uInt8  displayNumScalines;  
   uInt8 screenScale;            // 100 = 100% (smaller numbers squish screen to fit)
   Int8  xOffset;
   Int8  yOffset;
+  uInt8 aButton;
+  uInt8 bButton;
+  uInt8 xButton;
+  uInt8 yButton;
+  uInt8 sound_mute;
+  uInt8 left_difficulty;
+  uInt8 right_difficulty;
+  uInt8 spare1;
+  uInt8 spare2;
 };
 
 extern CartInfo myCartInfo;
 
-#define CTR_LJOY         0     // Left Joystick is used for player 1 (default)
+// Difficulty Switch defines
+#define DIFF_B           0
+#define DIFF_A           1
+
+// Controller defines
+#define CTR_LJOY         0     // Left Joystick is used for player 1 (default) + Save Key in Right Jack
 #define CTR_RJOY         1     // Right Joystick is used for player 1
-#define CTR_RAIDERS      2     // Special 2 joystick setup for Raiders of the Lost Ark
-#define CTR_PADDLE0      3     // For Paddle Games like Breakout and Kaboom
-#define CTR_PADDLE1      4     // A few odd games use the OTHER paddle...sigh...
-#define CTR_DRIVING      5     // For Driving Controller games like Indy500
-#define CTR_KEYBOARD0    6     // For keyboard games like Codebreaker
-#define CTR_STARRAID     7     // Star raiders has Left Joystick and Right Keypad
-#define CTR_BOOSTER      8     // Omega Race and Thrust+
-#define CTR_PADDLE2      9     // Paddle in right port
-#define CTR_PADDLE3     10     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
-#define CTR_STARGATE    11     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
-#define CTR_KEYBOARD1   12     // For keyboard games - second port
+#define CTR_PADDLE0      2     // For Paddle Games like Breakout and Kaboom
+#define CTR_PADDLE1      3     // A few odd games use the OTHER paddle...sigh...
+#define CTR_PADDLE2      4     // Paddle in right port
+#define CTR_PADDLE3      5     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
+#define CTR_DRIVING      6     // For Driving Controller games like Indy500
+#define CTR_KEYBOARD0    7     // For keyboard games like Codebreaker
+#define CTR_KEYBOARD1    8     // For keyboard games - second port
+#define CTR_BOOSTER      9     // Omega Race and Thrust+
+#define CTR_RAIDERS     10     // Special 2 joystick setup for Raiders of the Lost Ark
+#define CTR_STARRAID    11     // Star raiders has Left Joystick and Right Keypad
+#define CTR_STARGATE    12     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
 #define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
 #define CTR_GENESIS     14     // For Genesis 2-button Controller support
 #define CTR_MCA         15     // For missile command arcade - 3 button support
@@ -87,11 +101,41 @@ extern CartInfo myCartInfo;
 #define SPEC_ALPHABM     9     // Patched for joystick use.
 #define SPEC_COOKIEM    10     // Patched for joystick use.
 
+// Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode
 #define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)
 #define MODE_BACKG       2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
 #define MODE_BLACK       3     // Ficker Reduce (using Black background improvement only)
 
+// All of the supported bankswitching schemes
+#define BANK_2K          0
+#define BANK_4K          1
+#define BANK_F4          2
+#define BANK_F4SC        3
+#define BANK_F6          4
+#define BANK_F6SC        5
+#define BANK_F8          6
+#define BANK_F8SC        7
+#define BANK_AR          8
+#define BANK_DPC         9
+#define BANK_DPCP       10
+#define BANK_3E         11
+#define BANK_3F         12
+#define BANK_E0         13
+#define BANK_E7         14
+#define BANK_FASC       15
+#define BANK_FE         16
+#define BANK_MC         17
+#define BANK_MB         18
+#define BANK_CV         19
+#define BANK_UA         20
+#define BANK_WD         21
+#define BANK_EF         22
+#define BANK_EFSC       23
+#define BANK_BF         24
+#define BANK_BFSC       25
+#define BANK_DFSC       26
+#define BANK_SB         27
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7
@@ -109,6 +153,15 @@ extern CartInfo myCartInfo;
 #define ANA1_9       19
 #define ANA2_0       20
 #define ANA2_5       25
+
+
+// Some button mapping defines...
+#define BUTTON_FIRE         0
+#define BUTTON_JOY_UP       1
+#define BUTTON_JOY_DOWN     2
+#define BUTTON_JOY_LEFT     3
+#define BUTTON_JOY_RIGHT    4
+#define BUTTON_AUTOFIRE     5
 
 /**
   A cartridge is a device which contains the machine code for a 
@@ -150,7 +203,7 @@ class Cartridge : public Device
       @param size The size of the ROM image 
       @return The "best guess" for the cartridge type
     */
-    static string autodetectType(const uInt8* image, uInt32 size);
+    static uInt8 autodetectType(const uInt8* image, uInt32 size);
 
     /**
       Utility method used by isProbably3F and isProbably3E
@@ -195,6 +248,12 @@ class Cartridge : public Device
       Returns true if the image is probably a DFSC cartridge
     */
     static bool isProbablyDFSC(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a BFSC cartridge
+    */
+    static bool isProbablyBFSC(const uInt8* image, uInt32 size);
+    
 
     /**
       Returns true if the image is probably a E0 bankswitching cartridge

@@ -418,7 +418,7 @@ void TIA::reset()
 
   // Calculate color clock offsets for starting and stoping frame drawing
   myStartDisplayOffset = 228 * myCartInfo.displayStartScanline;                              // Allow for some underscan lines on a per-cart basis
-  myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayStopScanline));     // Allow for some overscan lines on a per-cart basis
+  myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayNumScalines));      // Allow for some overscan lines on a per-cart basis
 
   // Reasonable values to start and stop the current frame drawing
   myCyclesWhenFrameStarted = gSystemCycles;
@@ -2531,14 +2531,14 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       // if the cart info says we are any sort of flicker-free or flicker-reduce
       // and blend the frames... this is a bit slow so use with caution.
       // --------------------------------------------------------------------------
-      if (myCartInfo.mode != MODE_NO)
+      if (myCartInfo.frame_mode != MODE_NO)
       {
           int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
           addr += 160;
           uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
           uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
           uInt32 *fp_blend = (uInt32 *)myDSFramePointer;            // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
-          if (myCartInfo.mode == MODE_BACKG)
+          if (myCartInfo.frame_mode == MODE_BACKG)
           {
               for (int i=0; i<40; i++)
               {
@@ -2547,7 +2547,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                 fp1++;fp2++;
               }
           }
-          else if (myCartInfo.mode == MODE_BLACK)
+          else if (myCartInfo.frame_mode == MODE_BLACK)
           {
               for (int i=0; i<40; i++)
               {
