@@ -29,6 +29,35 @@ too pick and load a game (.bin or .a26). For some older launchers or flash-carts
 you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely
 as most launchers will auto-patch when you run the emulator).
 
+Configuration:
+---------------
+The gear icon on the main screen allows you to set a number of configuration 
+parameters related specifically to the game you are running. In addition to
+the parameters shown, the difficulty switches (Left/Right A/B) are also saved
+on a per-game basis.  If you change any configuration settings, you really 
+should re-load the game after saving out your configuration - some settings
+such as Bank Switching and NTSC vs PAL are only applied when the game is first
+loaded.
+
+Here is a description of the configuration items you can adjust. Be sure to 
+press the START button to save out your configuration after making changes:
+
+Controller:      Most games use the Left-Joystick but you can change this.
+Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
+Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. 
+                 You can also try Flicker Reduce Background/Black which is mid-ground.
+TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
+Sound:           Normally ON. Can be turned OFF which will render screen faster.
+ABXY Button:     Default to FIRE button but you can change this.
+HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk 
+                 (it will speed up emulation which helps with older DS-LITE)
+VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk 
+                 (it will speed up emulation which helps with older DS-LITE)
+Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
+Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
+Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
+Offset/Scale:    You can ajust the screen scaling and offset positions for the game. 
+
 PAL vs NTSC:
 ------------
 StellaDS supports PAL games but be warned... in the very early days of video
@@ -60,6 +89,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.7 : xx-Mar-2022 by Dave Bernazzani (wavemotion)
+  * Added per-game configuration settings.
+  * Fixed 3E/3F and UA bankswitching schemes.
+
 V4.6 : 20-Mar-2022 by Dave Bernazzani (wavemotion)
   * Added SaveKey support - standard games will have a virtual SaveKey in the right controller 
     jack and will be auto-backed to a 32K /data/StellaDS.EE file.
