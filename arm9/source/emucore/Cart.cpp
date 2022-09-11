@@ -60,8 +60,8 @@ uInt8 original_banking_detect = 0;
 
 
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger BANK_AR carts
-uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
-CartInfo myCartInfo __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
+uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
+CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
 uInt16 myCurrentOffset __attribute__((section(".dtcm")));
 uint8 original_flicker_mode = 0;
@@ -1851,8 +1851,8 @@ const CartInfo table[] =
     {"807a8ff6216b00d52aba2dfea5d8d860",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // StratOGemsDeluxe.bin
     {"e10d2c785aadb42c06390fae0d92f282",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    72,   0,  0},    // Strawberry Shortcake (1983).bin
     {"516ffd008057a1d78d007c851e6eff37",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   51,    245,    72,   0,  0},    // Strawberry Shortcake (1983) (PAL).bin
-    {"396f7bc90ab4fa4975f8c74abe4e81f0",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Street Racer (1977).bin
-    {"e12e32dee68201b6765fcd0ed54d6646",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   36,    245,    51,   0,  0},    // Street Racer (1977) (PAL).bin
+    {"396f7bc90ab4fa4975f8c74abe4e81f0",  "??????", BANK_2K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Street Racer (1977).bin
+    {"e12e32dee68201b6765fcd0ed54d6646",  "??????", BANK_2K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   36,    245,    51,   0,  0},    // Street Racer (1977) (PAL).bin
     {"8b2926c0716ecf062c27275467130573",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Strip Off (2009) (John A. Reder).bin
     {"7b3cf0256e1fa0fdc538caf3d5d86337",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Stronghold (1983).bin
     {"c3bbc673acf2701b5275e85d9372facf",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Stunt Cycle (1980).bin

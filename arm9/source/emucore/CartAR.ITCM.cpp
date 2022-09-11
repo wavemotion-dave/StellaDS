@@ -149,19 +149,19 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
   //    to happen.  0 = disabled, and the cart acts like ROM.)
   //  p = ROM Power (0 = enabled, 1 = off.)  Only power the ROM if you're
   //    wanting to access the ROM for multiloads.  Otherwise set to 1.
-
-  myCurrentBank = configuration & 0x1f; // remember for the bank() method
-
+   
+  //myCurrentBank = configuration & 0x1f; // remember for the bank() method
+    
   myWriteEnabled = configuration & 0x02;
-
+    
   switch((configuration >> 2) & 0x07)
   {
     case 0:
     {
       bPossibleLoad = 1;
       myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (3 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -169,8 +169,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 1;
       myImage0 = myImage + (0 * 2048);
-      myImage1 = myImage + (3 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -178,8 +178,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 0;
       myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (0 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -187,8 +187,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 0;
       myImage0 = myImage + (0 * 2048);
-      myImage1 = myImage + (2 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -196,8 +196,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 1;
       myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (3 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -205,8 +205,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 1;
       myImage0 = myImage + (1 * 2048);
-      myImage1 = myImage + (3 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -214,8 +214,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 0;
       myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (1 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
 
@@ -223,8 +223,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     {
       bPossibleLoad = 0;
       myImage0 = myImage + (1 * 2048);
-      myImage1 = myImage + (2 * 2048);
-      myImage1 -= 2048;
+      myImage1 = myImage + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImage1 -= 2048;
       break;
     }
   }

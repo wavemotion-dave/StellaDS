@@ -38,7 +38,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "4.7"
+#define VERSION "4.8"
 
 //#define WRITE_TWEAKS
 
@@ -103,7 +103,7 @@ static void DumpDebugData(void)
         sprintf(dbgbuf, "Cart.xOffset:   %03d", myCartInfo.xOffset);                dsPrintValue(1,4,0, dbgbuf);
         sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
         sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayNumScalines);    dsPrintValue(1,7,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayNumScalines);     dsPrintValue(1,7,0, dbgbuf);
         
         for (int i=0; i<MAX_DEBUG; i++)
         {

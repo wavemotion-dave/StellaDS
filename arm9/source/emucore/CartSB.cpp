@@ -46,8 +46,9 @@ const char* CartridgeSB::name() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeSB::reset()
 {
-  // Upon reset we switch to bank 1
-  bank(1);
+  sbLastBank = 999;
+  // Upon reset we switch to the last bank
+  bank(myRomBankCount-1);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,26 +56,19 @@ void CartridgeSB::install(System& system)
 {
   mySystem = &system;
   uInt16 shift = mySystem->pageShift();
-  uInt16 mask = mySystem->pageMask();
     
   // Get the page accessing methods for the hot spots since they overlap
   // areas within the TIA we'll need to forward requests to the TIA
-  myHotSpotPageAccess = mySystem->getPageAccess(0x0220 >> shift);
+  myHotSpotPageAccess = mySystem->getPageAccess(0x0800 >> shift);
 
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
   page_access.device = this;
   
   // Set the page accessing methods for the hot spots
-  for(uInt32 i = (0x0800 & ~mask); i < 0x0FFF; i += (1 << shift))
-  {
-    mySystem->setPageAccess(i >> shift, page_access);
-  }
+  mySystem->setPageAccess(0x0800 >> shift, page_access);
     
-  // Leave these at zero for faster bank switch
-  page_access.directPeekBase = 0;
-  page_access.directPokeBase = 0;
-
+  sbLastBank = 999;
   // Install pages for the last bank
   bank(myRomBankCount-1);
 }
@@ -85,7 +79,7 @@ bool CartridgeSB::checkSwitchBank(uInt16 address)
   // Switch banks if necessary
   if((address & 0x1800) == 0x0800)
   {
-    bank(address & (myRomBankCount - 1));
+    bank(address & (myRomBankCount-1));
     return true;
   }
   return false;
@@ -94,14 +88,14 @@ bool CartridgeSB::checkSwitchBank(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeSB::peek(uInt16 address)
 {
-  address &= (0x17FF + myRomBankCount);
+  address &= 0x1FFF;
 
   checkSwitchBank(address);
 
   if(!(address & 0x1000))
   {
     // Because of the way we've set up accessing above, we can only
-    // get here when the addresses are from 0x800 - 0xFFF
+    // get here when the addresses are from 0x800 - 0x87F
     return myHotSpotPageAccess.device->peek(address);
   }
 
@@ -111,14 +105,14 @@ uInt8 CartridgeSB::peek(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeSB::poke(uInt16 address, uInt8 value)
 {
-  address &= (0x17FF + myRomBankCount);
+  address &= 0x1FFF;
 
   checkSwitchBank(address);
 
   if(!(address & 0x1000))
   {
     // Because of the way we've set up accessing above, we can only
-    // get here when the addresses are from 0x800 - 0xFFF
+    // get here when the addresses are from 0x800 - 0x87F
     myHotSpotPageAccess.device->poke(address, value);
   }
 }
@@ -129,13 +123,17 @@ void CartridgeSB::bank(uInt16 bank)
   // Remember what bank we're in
   myCurrentOffset32 = bank * 4096;
 
-  // Setup the page access methods for the current bank
-  uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
-
-  // Map ROM image into the system
-  for(uInt32 address = 0x1000; address < (0x2000 & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  if (bank != sbLastBank)
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset32 + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      // Setup the page access methods for the current bank
+      uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
+
+      // Map ROM image into the system
+      for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))
+      {
+          page_access.directPeekBase = &myImage[myCurrentOffset32 + (address & 0xFFF)];
+          mySystem->setPageAccess(access_num++, page_access);
+      }
+      sbLastBank = bank;
   }
 }
