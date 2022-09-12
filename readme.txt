@@ -14,7 +14,7 @@ Features :
  
  A huge number of bankswitching schemes are supported to handle virtually any rom 
  types (except DPC+ with ARM code support). The newer EF/DF/SB schmes are supported
- for ROM sizes up to 256K!
+ for ROM sizes up to 256K and 3E and 3F schemes up to 512K.
  
  SaveKey support is incorporated as well for the games that utilize it.
 
@@ -77,6 +77,7 @@ Missing :
 ---------
  DPC+ games can't be emulated - that requires a coprocessor running at 70MHz (more 
  than the speed of an original DS!).
+ Similarly CDFJ/CDFJ+ games are not emulated as those require the same ARM co-processor.
 
 Check updates here: https://github.com/wavemotion-dave/StellaDS
 
