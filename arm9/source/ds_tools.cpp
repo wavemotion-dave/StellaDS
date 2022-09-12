@@ -72,7 +72,7 @@ static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 
-#define MAX_FILE_SIZE   (1024 * 256)
+#define MAX_FILE_SIZE   (1024 * 512)
 uInt8  filebuffer[MAX_FILE_SIZE];
 
 int bg0, bg0b,bg1b;

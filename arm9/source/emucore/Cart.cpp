@@ -47,13 +47,14 @@
 #include "CartBFSC.hxx"
 #include "CartDFSC.hxx"
 #include "CartSB.hxx"
+#include "CartFA2.hxx"
 #include "MD5.hxx"
 #include "../config.h"
 
 extern void dsWarnIncompatibileCart(void);
 extern void dsPrintCartType(char *);
 
-const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB"};       
+const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB", "FA2"};       
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
@@ -2218,6 +2219,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeDFSC(image);
   else if(banking == BANK_SB)
     cartridge = new CartridgeSB(image, size);
+  else if(banking == BANK_FA2)
+    cartridge = new CartridgeFA2(image, size);
   else
   {
     // TODO: At some point this should be handled in a better way...
@@ -2594,6 +2597,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else
         myCartInfo.banking = BANK_F6;
+    }
+    else if(size == 28672) // 28K
+    {
+        myCartInfo.banking = BANK_FA2;  // 28K is probably FA2 (Star CAstle)
     }
     else if(size == 32768)  // 32K 
     {

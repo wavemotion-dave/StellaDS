@@ -127,8 +127,8 @@ class Cartridge3E : public Cartridge
     // RAM contents. For now every ROM gets all 32K of potential RAM
     uInt8 myRam[32768];
     
-    // ROM contents ... up to 256K
-    uInt8 myImage[256*1024];
+    // ROM contents ... up to 512K
+    uInt8 *myImage;
     
     // Size of the ROM image
     uInt32 mySize;

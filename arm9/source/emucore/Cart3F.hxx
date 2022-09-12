@@ -102,7 +102,7 @@ class Cartridge3F : public Cartridge
     // Indicates which bank is currently active for the first segment
     uInt16 myCurrentBank;
 
-    // Pointer to a dynamically allocated ROM image of the cartridge
+    // Pointer to a ROM image of the cartridge
     uInt8* myImage;
 
     // Size of the ROM image

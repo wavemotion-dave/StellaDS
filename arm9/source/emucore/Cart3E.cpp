@@ -27,11 +27,8 @@
 Cartridge3E::Cartridge3E(const uInt8* image, uInt32 size)
   : mySize(size)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < mySize; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Copy the ROM image into my buffer - just reuse the existing buffer
+  myImage = (uInt8 *)image;
 
   // Initialize RAM with random values
   class Random random;
@@ -39,7 +36,6 @@ Cartridge3E::Cartridge3E(const uInt8* image, uInt32 size)
   {
     myRam[i] = random.next();
   }
-  debug[5] = 333;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -143,8 +139,6 @@ void Cartridge3E::bank(uInt16 bank)
 { 
   if(bank < 256)
   {
-    debug[0]++;
-    debug[5] = bank;
     // Make sure the bank they're asking for is reasonable
     if((uInt32)bank * 2048 < mySize)
     {
@@ -173,7 +167,6 @@ void Cartridge3E::bank(uInt16 bank)
   }
   else
   {
-      debug[1]++;
     bank -= 256;
     bank %= 32;
     myCurrentBank = bank + 256;
