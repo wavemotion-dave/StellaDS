@@ -167,7 +167,7 @@ struct options_t
 {
     const char  *label;
     uInt8 isNumeric;            // 0=String List, 1=Positive 8-bit, 2=Negative 8-bit
-    const char  *option[30];
+    const char  *option[32];
     uInt8 *option_val;
     uInt8 option_max;
 };
@@ -175,7 +175,7 @@ struct options_t
 const struct options_t Game_Option_Table[] =
 {
     {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "KEYBOARD 0", "KEYBOARD 1", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS", "MC ARCADE", "BUMP BASH"},    &myCartInfo.controllerType,   17},
-    {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB","FA2"}, &myCartInfo.banking,       29},
+    {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB","FA2","TVBOY", "UASW", "0840"}, &myCartInfo.banking,       32},
     {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY"},                                                                                                   &myCartInfo.frame_mode,          4},
     {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
     {"SOUND",       0, {"ON", "OFF (MUTE)"},                                                                                                                                           &myCartInfo.sound_mute,          2},

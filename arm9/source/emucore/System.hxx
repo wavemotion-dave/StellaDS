@@ -62,7 +62,7 @@ struct PageAccess
   Device* device;
 };
 
-extern PageAccess myPageAccessTable[128];
+extern PageAccess myPageAccessTable[64];
 
 #define MY_PAGE_SHIFT   7
 #define MY_PAGE_MASK    0x7F

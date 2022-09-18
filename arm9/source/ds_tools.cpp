@@ -38,7 +38,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "4.8"
+#define VERSION "4.9"
 
 //#define WRITE_TWEAKS
 
@@ -61,7 +61,7 @@ uInt16 mySoundFreq = 22050;
 #define MAX_DEBUG 16
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
-char my_filename[128];
+char my_filename[128] = {0};
 
 FICA2600 vcsromlist[1200];
 unsigned short int countvcs=0, ucFicAct=0;
@@ -103,7 +103,7 @@ static void DumpDebugData(void)
         sprintf(dbgbuf, "Cart.xOffset:   %03d", myCartInfo.xOffset);                dsPrintValue(1,4,0, dbgbuf);
         sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
         sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.stopDisp:  %03d", myCartInfo.displayNumScalines);     dsPrintValue(1,7,0, dbgbuf);
+        sprintf(dbgbuf, "Cart.numLines:  %03d", myCartInfo.displayNumScalines);     dsPrintValue(1,7,0, dbgbuf);
         
         for (int i=0; i<MAX_DEBUG; i++)
         {
@@ -255,8 +255,8 @@ ITCM_CODE void dsWriteTweaks(void)
     fp = fopen("../StellaDS.txt", "a+");
     if (fp != NULL)
     {
-        fprintf(fp, "%-32s %4s %2s    %3d  %3d  %3d  %3d  %3d  %s\n", myCartInfo.md5.c_str(), myCartInfo.type.c_str(), 
-                (myCartInfo.frame_mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayStopScanline, 
+        fprintf(fp, "%-32s %4s %2s    %3d  %3d  %3d  %3d  %3d  %s\n", myCartInfo.md5, (myCartInfo.tv_type == 1 ? "PAL":"NTSC"), 
+                (myCartInfo.frame_mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayNumScalines, 
                 myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset, my_filename);
         fflush(fp);
         fclose(fp);
@@ -497,7 +497,7 @@ bool dsLoadGame(char *filename)
   my_filename[127] = 0;
     
   // Load the file
-  FILE *romfile = fopen(filename, "r");
+  FILE *romfile = fopen(filename, "rb");
   if (romfile != NULL)
   {
     // Free buffer if needed

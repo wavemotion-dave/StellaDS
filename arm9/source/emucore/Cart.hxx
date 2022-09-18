@@ -137,6 +137,9 @@ extern CartInfo myCartInfo;
 #define BANK_DFSC       26
 #define BANK_SB         27
 #define BANK_FA2        28
+#define BANK_TV         29
+#define BANK_UASW       30
+#define BANK_0840       31
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7

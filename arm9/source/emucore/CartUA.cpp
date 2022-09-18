@@ -22,13 +22,15 @@
 #include "System.hxx"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-CartridgeUA::CartridgeUA(const uInt8* image)
+CartridgeUA::CartridgeUA(const uInt8* image, uInt8 bSwap)
 {
+  myImage = fast_cart_buffer;
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 8192; ++addr)
   {
     myImage[addr] = image[addr];
   }
+  bUAswapped = bSwap;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -46,7 +48,7 @@ const char* CartridgeUA::name() const
 void CartridgeUA::reset()
 {
   // Upon reset we switch to bank 0
-  bank(0);
+  bank(bUAswapped ? 1:0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -61,17 +63,20 @@ void CartridgeUA::install(System& system)
 
   // Get the page accessing methods for the hot spots since they overlap
   // areas within the TIA we'll need to forward requests to the TIA
-  myHotSpotPageAccess = mySystem->getPageAccess(0x0220 >> shift);
+  myHotSpotPageAccess  = mySystem->getPageAccess(0x0220 >> shift);
+  myHotSpotPageAccess2 = mySystem->getPageAccess(0x02A0 >> shift);
 
   // Set the page accessing methods for the hot spots
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
   page_access.device = this;
-  mySystem->setPageAccess(0x0220 >> shift, page_access);
+  mySystem->setPageAccess(0x0220 >> shift, page_access);    // Normal hotspot
   mySystem->setPageAccess(0x0240 >> shift, page_access);
+  mySystem->setPageAccess(0x02A0 >> shift, page_access);    // Brazillian hotspot
+  mySystem->setPageAccess(0x02C0 >> shift, page_access);
 
   // Install pages for bank 0
-  bank(0);
+  bank(bUAswapped ? 1:0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,13 +88,15 @@ uInt8 CartridgeUA::peek(uInt16 address)
   switch(address)
   {
     case 0x0220:
+    case 0x02A0:
       // Set the current bank to the lower 4k bank
-      bank(0);
+      bank(bUAswapped ? 1:0);
       break;
 
     case 0x0240:
+    case 0x02C0:
       // Set the current bank to the upper 4k bank
-      bank(1);
+      bank(bUAswapped ? 0:1);
       break;
 
     default:
@@ -98,7 +105,10 @@ uInt8 CartridgeUA::peek(uInt16 address)
 
   if(!(address & 0x1000))
   {
-    return myHotSpotPageAccess.device->peek(address);
+      if (address & 0x80)
+          return myHotSpotPageAccess2.device->peek(address);
+      else
+          return myHotSpotPageAccess.device->peek(address);
   }
   else
   {
@@ -115,13 +125,15 @@ void CartridgeUA::poke(uInt16 address, uInt8 value)
   switch(address)
   {
     case 0x0220:
+    case 0x02A0:
       // Set the current bank to the lower 4k bank
-      bank(0);
+      bank(bUAswapped ? 1:0);
       break;
 
     case 0x0240:
+    case 0x02C0:
       // Set the current bank to the upper 4k bank
-      bank(1);
+      bank(bUAswapped ? 0:1);
       break;
 
     default:
@@ -130,7 +142,10 @@ void CartridgeUA::poke(uInt16 address, uInt8 value)
 
   if(!(address & 0x1000))
   {
-    myHotSpotPageAccess.device->poke(address, value);
+      if (address & 0x80)
+          myHotSpotPageAccess2.device->poke(address, value);
+      else
+          myHotSpotPageAccess.device->poke(address, value);
   }
 }
 

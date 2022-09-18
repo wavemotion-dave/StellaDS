@@ -90,6 +90,10 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V4.9 : 18-Sep-2022 by Dave Bernazzani (wavemotion)
+  * Added new bankswitching schemes:  TVBOY, UASW and 0840 (Econobanking)
+  * Fixed UA bankswitching scheme to allow more games to run
+
 V4.8 : 11-Sep-2022 by Dave Bernazzani (wavemotion)
   * Fixed Super Bank (SB) scheme.
 

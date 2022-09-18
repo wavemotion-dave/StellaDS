@@ -87,6 +87,7 @@ class CartridgeFA2 : public Cartridge
       @param bank The bank that should be installed in the system
     */
     void bank(uInt16 bank);
+    void handle_fa2_flash_backing(void);
 
   private:
     // Indicates which bank is currently active

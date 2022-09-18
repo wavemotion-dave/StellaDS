@@ -37,7 +37,7 @@ uInt8  myDataBusState  __attribute__ ((aligned (4))) __attribute__((section(".dt
 // to optiize access as the memory will be known at compile time. Again, not
 // overly proud of making these things global but speed is critical on the DS.
 // -----------------------------------------------------------------------------
-PageAccess myPageAccessTable[128] __attribute__ ((aligned (32))); 
+PageAccess myPageAccessTable[64] __attribute__ ((aligned (32))); 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)

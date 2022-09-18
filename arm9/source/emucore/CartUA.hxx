@@ -40,7 +40,7 @@ class CartridgeUA : public Cartridge
 
       @param image Pointer to the ROM image
     */
-    CartridgeUA(const uInt8* image);
+    CartridgeUA(const uInt8* image, uInt8 bSwap);
  
     /**
       Destructor
@@ -95,12 +95,16 @@ class CartridgeUA : public Cartridge
   private:
     // Indicates which bank is currently active
     uInt16 myCurrentBank;
+    
+    // Some UA carts swap the bank hotspots
+    uInt8 bUAswapped;
 
     // The 8K ROM image of the cartridge
-    uInt8 myImage[8192];
+    uInt8 *myImage;
    
     // Previous Device's page access
     PageAccess myHotSpotPageAccess;
+    PageAccess myHotSpotPageAccess2;
 };
 #endif
 
