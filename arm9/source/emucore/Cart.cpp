@@ -865,11 +865,11 @@ const CartInfo table[] =
     {"b311ab95e85bc0162308390728a7361d",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  39,    210,   100,   0,  0},    // Gyruss (1984).bin
     {"e600f5e98a20fafa47676198efe6834d",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,    98,   0, 11},    // Gyruss (1984) (PAL).bin
     {"378054896d57cf0a87f8012378466eb1",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Gyvolver_ntsc_2019y_05m_17d_1753t.bin    
-    {"fca4a5be1251927027f2c24774a02160",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
-    {"1d284d6a3f850bafb25635a12b316f3d",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
-    {"bdf1996e2dd64baf8eff5511811ca6ca",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
-    {"abdad00a325e4374f76ac9a7dbcf61c0",  "??????", BANK_F8,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (2 Button Hack).bin
-    {"d9b49f0678776e04916fa5478685a819",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   49,    245,   100,   3, 16},    // H.E.R.O. (1984) (PAL).bin
+    {"fca4a5be1251927027f2c24774a02160",  "HEROAV", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
+    {"1d284d6a3f850bafb25635a12b316f3d",  "HEROAV", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
+    {"bdf1996e2dd64baf8eff5511811ca6ca",  "HEROAV", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (1984).bin
+    {"abdad00a325e4374f76ac9a7dbcf61c0",  "HEROAV", BANK_F8,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // H.E.R.O. (2 Button Hack).bin
+    {"d9b49f0678776e04916fa5478685a819",  "HEROAV", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   49,    245,   100,   3, 16},    // H.E.R.O. (1984) (PAL).bin
     {"09195a823d673e8698705542049385c5",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  40,    210,    95,   0,  8},    // Hack'em_HanglyMan.bin
     {"30516cfbaa1bc3b5335ee53ad811f17a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Halloween (1983).bin
     {"e04f1c1e4401d584d3f4343410a5bcc4",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Halloween (1983).bin
@@ -1434,9 +1434,9 @@ const CartInfo table[] =
     {"e9cb18770a41a16de63b124c1e8bd493",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   51,    245,    96,   0,  0},    // Popeye (1983) (PAL).bin
     {"f93d7fee92717e161e6763a88a293ffa",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  39,    210,   100,   0,  4},    // Porky's (1983).bin
     {"3ad3dc799211ccd424d7c6d454401436",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Power Lords (1983) (Probe 2000 - NAP).bin
-    {"97d079315c09796ff6d95a06e4b70171",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   3,  5},    // Pressure Cooker (1983).bin
-    {"525ea747d746f3e80e3027720e1fa7ac",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    230,   100,   3,  5},    // Pressure Cooker (1983) (PAL).bin
-    {"027a59a575b78860aed780b2ae7d001d",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pressure Cooker (1983) (PAL).bin
+    {"97d079315c09796ff6d95a06e4b70171",  "PRCOOK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   3,  5},    // Pressure Cooker (1983).bin
+    {"525ea747d746f3e80e3027720e1fa7ac",  "PRCOOK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    230,   100,   3,  5},    // Pressure Cooker (1983) (PAL).bin
+    {"027a59a575b78860aed780b2ae7d001d",  "PRCOOK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pressure Cooker (1983) (PAL).bin
     {"de1a636d098349be11bbc2d090f4e9cf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pressure gauge.bin
     {"8e9544bbcf9b874f7c8b0c3f09925952",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Primate14.txt.bin
     {"104468e44898b8e9fa4a1500fde8d4cb",  "??????", BANK_F4,   CTR_GENESIS,   SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // PrincessRescue_Final_NTSC.bin
@@ -2698,6 +2698,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // ---------------------------------------------------------------------------------
       if (strcmp(myCartInfo.gameID, "ASTERD") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "ASTRIX") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "BAZONE") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "BEAMRI") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "BLUEPR") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "BUCKRO") == 0) noBanking = 2;
@@ -2706,20 +2707,24 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "COLONY") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "EXTRAT") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "FATHOM") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "FRONTL") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "GALAXY") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "GOFISH") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "HEROAV") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "JOUST_") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MARIOB") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MOONPA") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MOONSW") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MSPACM") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "PHOENX") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "PIGSIN") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "RAIDER") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "POLEPO") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "PRCOOK") == 0) noBanking = 2;      
       if (strcmp(myCartInfo.gameID, "STARTR") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "VANGRD") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) noBanking = 2;      
   }
   else
   {
