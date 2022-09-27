@@ -90,6 +90,12 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V5.0 : 27-Sep-2022 by Dave Bernazzani (wavemotion)
+  * Added new bankswitching scheme:  X07 (Stella's Stocking).
+  * Improved 4K/2K driver to squeese out a couple more frames of performance.
+  * New special F8 driver to support more 8K games on the DS-Lite.
+  * Lots of cleanup across the board in the database to make more games playable.
+
 V4.9 : 18-Sep-2022 by Dave Bernazzani (wavemotion)
   * Added new bankswitching schemes:  TVBOY, UASW and 0840 (Econobanking)
   * Fixed UA bankswitching scheme to allow more games to run

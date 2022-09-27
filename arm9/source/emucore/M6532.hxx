@@ -97,30 +97,7 @@ class M6532 : public Device
     // Reference to the console
     const Console& myConsole;
 
-    // Current value of my Timer
-    uInt32 myTimer;
-
-    // Log base 2 of the number of cycles in a timer interval
-    uInt32 myIntervalShift;
-
-    // Indicates the number of cycles when the timer was last set
-    Int32 myCyclesWhenTimerSet;
-
-    // Indicates when the timer was read after timer interrupt occured
-    Int32 myCyclesWhenInterruptReset;
-
-    // Indicates if a read from timer has taken place after interrupt occured
-    bool myTimerReadAfterInterrupt;
-
-    // Data Direction Register for Port A
-    uInt8 myDDRA;
-
-    // Data Direction Register for Port B
-    uInt8 myDDRB;
-
-    // Data Out for Port A
-    uInt8 myOutA;
-    
+   
   private:
     // Copy constructor isn't supported by this class so make it private
     M6532(const M6532&);

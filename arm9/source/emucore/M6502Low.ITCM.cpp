@@ -15,10 +15,12 @@
 //
 // $Id: M6502Low.cxx,v 1.2 2002/05/13 19:10:25 stephena Exp $
 //============================================================================
+#include <nds.h>
 #include "Cart.hxx"
 #include "CartAR.hxx"
 #include "M6502Low.hxx"
 #include "TIA.hxx"
+#include "M6532.hxx"
 
 uInt16 PC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));   // Program Counter
 uInt8 A                                 __attribute__((section(".dtcm")));   // Accumulator
@@ -36,6 +38,7 @@ uInt8 C                                 __attribute__((section(".dtcm")));   // 
         
 uInt32 NumberOfDistinctAccesses         __attribute__((section(".dtcm")));   // For AR cart use only - track the # of distince PC accesses
 uInt8 noBanking                         __attribute__((section(".dtcm")))=0; // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
+uInt16 f8_bankbit                       __attribute__((section(".dtcm"))) = 0x1FFF;
 
 extern CartridgeAR *myAR;
 
@@ -94,6 +97,16 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool M6502Low::execute(uInt16 number)
 {
+  // --------------------------------------------------------------------
+  // For games that can be specially executed for speed... do so here.
+  // --------------------------------------------------------------------
+  if (noBanking)
+  {
+      if (noBanking == 2)
+          return execute_F8(number);    // If we are F8
+      else
+          return execute_NB(number);    // If we are 2K or 4K (non-banked), we can run faster here...
+  }
   // ----------------------------------------------------------------
   // For Starpath Supercharger games, we must track distinct memory
   // access. This takes time so we don't do it for other game types...
@@ -101,10 +114,6 @@ bool M6502Low::execute(uInt16 number)
   if (myCartInfo.special == SPEC_AR)
   {
     return execute_AR(number);      // To optimize the complicated AR memory handling
-  }
-  else if (noBanking)
-  {
-      return execute_NB(number);    // If we are 2K or 4K (non-banked), we can run faster here...
   }
       
   uInt16 fast_loop = number;
@@ -203,30 +212,43 @@ const char* M6502Low::name() const
 // This gets us about 15% speed boost on these games and makes them playable 
 // on the older/slower DS-LITE/PHAT hardware.
 // ==============================================================================
+extern TIA   *theTIA;
+extern M6532 *theM6532;
+
+inline uInt8 M6502Low::peek_PCNB(uInt16 address)
+{
+  gSystemCycles++;
+  myDataBusState = fast_cart_buffer[address & 0xFFF];
+  return myDataBusState;    
+}
+
 
 inline uInt8 M6502Low::peek_NB(uInt16 address)
 {
   gSystemCycles++;
 
-  if (address < 0x1000)
+  if (address & 0xF000)
   {
-      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
-      if (access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
-      else myDataBusState = access.device->peek(address);
+      myDataBusState = fast_cart_buffer[address & 0xFFF];    
   }
   else
   {
-    myDataBusState = fast_cart_buffer[address&0xFFF];    
+      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
+      else if (address & 0x200) return theM6532->peek(address);
+      else return theTIA->peek(address);
   }
 
   return myDataBusState;    
 }
 
-inline uInt8 M6502Low::peek_PCNB(uInt16 address)
+
+inline void M6502Low::poke_NB(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
-  myDataBusState = fast_cart_buffer[address&0xFFF];
-  return myDataBusState;    
+  
+  if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
+  else if (address & 0x200) theM6532->poke(address, value);
+  else theTIA->poke(address, value);
 }
 
 
@@ -254,9 +276,11 @@ bool M6502Low::execute_NB(uInt16 number)
         // A trick of the light... here we map peek/poke to the "NB" cart versions. This improves speed for non-bank-switched carts.
         #define peek    peek_NB
         #define peek_PC peek_PCNB              
+        #define poke    poke_NB
         #include "M6502Low.ins"        
         #undef peek   
         #undef peek_PC
+        #undef poke 
       }
     }
       
@@ -287,6 +311,112 @@ bool M6502Low::execute_NB(uInt16 number)
   }
 }
 
+
+inline uInt8 M6502Low::peek_PCF8(uInt16 address)
+{
+  gSystemCycles++;
+  myDataBusState = fast_cart_buffer[address & f8_bankbit];
+  return myDataBusState;    
+}
+
+
+inline uInt8 M6502Low::peek_F8(uInt16 address)
+{
+  gSystemCycles++;
+
+  if (address & 0xF000)
+  {
+      if (address == 0xFFF8) f8_bankbit=0x0FFF;
+      else if (address == 0xFFF9) f8_bankbit=0x1FFF;
+      myDataBusState = fast_cart_buffer[address & f8_bankbit];
+  }
+  else
+  {
+      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
+      else if (address & 0x200) return theM6532->peek(address);
+      else return theTIA->peek(address);
+  }
+
+  return myDataBusState;    
+}
+
+
+inline void M6502Low::poke_F8(uInt16 address, uInt8 value)
+{
+  gSystemCycles++;
+  
+  if (address & 0xF000)
+  {
+      if (address == 0xFFF8) f8_bankbit=0x0FFF;
+      else if (address == 0xFFF9) f8_bankbit=0x1FFF;
+  }
+  else
+  {
+      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
+      else if (address & 0x200) theM6532->poke(address, value);
+      else theTIA->poke(address, value);
+  }
+}
+
+
+bool M6502Low::execute_F8(uInt16 number)
+{
+  uInt16 fast_loop = number;
+  // Clear all of the execution status bits except for the fatal error bit
+  myExecutionStatus &= FatalErrorBit;
+
+  // Loop until execution is stopped or a fatal error occurs
+  for(;;)
+  {
+    uInt16 operandAddress=0;
+    uInt8 operand=0;
+    for(; !myExecutionStatus && (fast_loop != 0); --fast_loop)
+    {
+      // Get the next 6502 instruction - do this the fast way!
+      gSystemCycles++;
+      myDataBusState = fast_cart_buffer[PC & f8_bankbit];
+      PC++;
+
+      // 6502 instruction emulation is generated by an M4 macro file
+      switch (myDataBusState)
+      {
+        // A trick of the light... here we map peek/poke to the "NB" cart versions. This improves speed for non-bank-switched carts.
+        #define peek    peek_F8
+        #define peek_PC peek_PCF8              
+        #define poke    poke_F8
+        #include "M6502Low.ins"        
+        #undef peek   
+        #undef peek_PC
+        #undef poke 
+      }
+    }
+      
+    if (myExecutionStatus)
+    {
+        // See if we need to handle an interrupt
+        if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
+        {
+          // Yes, so handle the interrupt
+          interruptHandler();
+        }
+
+        // See if execution has been stopped
+        if(myExecutionStatus & StopExecutionBit)
+        {
+          // Yes, so answer that everything finished fine
+          return true;
+        }
+        else
+        // See if a fatal error has occured
+        if(myExecutionStatus & FatalErrorBit)
+        {
+          // Yes, so answer that something when wrong
+          return false;
+        }
+    }
+    else return true;  // we've executed the specified number of instructions
+  }
+}
 
 
 // ==============================================================================

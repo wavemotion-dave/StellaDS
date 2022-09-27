@@ -42,7 +42,8 @@
 #include "TIA.hxx"
 #include "TIASound.hxx"
 
-TIA *theTIA = 0;
+TIA *theTIA     __attribute__((section(".dtcm"))) = 0;
+M6532 *theM6532 __attribute__((section(".dtcm"))) = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const uInt8* image, uInt32 size, const char* filename)
@@ -66,7 +67,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT);
 
   M6502* m6502 = new M6502Low(1);
-  M6532* m6532 = new M6532(*this);
+  theM6532 = new M6532(*this);
   myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
   TIA* tia = new TIA(*this);
   theTIA = tia;
@@ -117,7 +118,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   }
         
   mySystem->attach(m6502);
-  mySystem->attach(m6532);
+  mySystem->attach(theM6532);
   mySystem->attach(tia);
   mySystem->attach(myCartridge);
 

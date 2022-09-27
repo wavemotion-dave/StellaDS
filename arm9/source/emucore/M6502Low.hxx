@@ -95,6 +95,12 @@ class M6502Low : public M6502
     bool execute_NB(uInt16 number);
     inline uInt8 peek_NB(uInt16 address);
     inline uInt8 peek_PCNB(uInt16 address);
+    inline void poke_NB(uInt16 address, uInt8 value);
+
+    bool execute_F8(uInt16 number);
+    inline uInt8 peek_F8(uInt16 address);
+    inline uInt8 peek_PCF8(uInt16 address);
+    inline void poke_F8(uInt16 address, uInt8 value);
 
     /**
       Change the byte at the specified address to the given value

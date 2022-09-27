@@ -259,7 +259,7 @@ void Update_tia_sound (uint8 chan)
 /* Outputs: the buffer will be filled with n bytes of audio - no return val  */
 /*                                                                           */
 /*****************************************************************************/
-void Tia_process (void)
+ITCM_CODE void Tia_process (void)
 {
     /* loop until the buffer is filled */
     while (1)

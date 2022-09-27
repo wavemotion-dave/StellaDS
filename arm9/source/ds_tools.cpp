@@ -38,9 +38,9 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "4.9"
+#define VERSION "5.0"
 
-//#define WRITE_TWEAKS
+#define WRITE_TWEAKS
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000

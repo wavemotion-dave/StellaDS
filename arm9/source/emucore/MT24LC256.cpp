@@ -237,7 +237,6 @@ void MT24LC256::jpee_data_stop()
       jpee_pptr = 4+jpee_pagemask-(jpee_address & jpee_pagemask);
       JPEE_LOG1("I2C_WARNING PAGECROSSING!(Truncate to %d bytes)",jpee_pptr-3);
     }
-    debug[10]++;
 
     for (i=3; i<jpee_pptr; i++)
     {

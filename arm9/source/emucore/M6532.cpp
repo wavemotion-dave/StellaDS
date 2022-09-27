@@ -28,6 +28,30 @@
 // An amazing 128 bytes of RAM
 uInt8 myRAM[128] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 
+// Current value of my Timer
+uInt32 myTimer __attribute__((section(".dtcm")));
+
+// Log base 2 of the number of cycles in a timer interval
+uInt8 myIntervalShift __attribute__((section(".dtcm")));
+
+// Indicates the number of cycles when the timer was last set
+Int32 myCyclesWhenTimerSet __attribute__((section(".dtcm")));
+
+// Indicates when the timer was read after timer interrupt occured
+Int32 myCyclesWhenInterruptReset __attribute__((section(".dtcm")));
+
+// Indicates if a read from timer has taken place after interrupt occured
+uInt8 myTimerReadAfterInterrupt __attribute__((section(".dtcm")));
+
+// Data Direction Register for Port A
+uInt8 myDDRA __attribute__((section(".dtcm")));
+
+// Data Direction Register for Port B
+uInt8 myDDRB __attribute__((section(".dtcm"))); 
+
+// Data Out for Port A
+uInt8 myOutA __attribute__((section(".dtcm")));
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6532::M6532(const Console& console)
     : myConsole(console)

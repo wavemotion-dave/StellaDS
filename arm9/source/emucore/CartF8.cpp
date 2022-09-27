@@ -21,6 +21,7 @@
 #include "System.hxx"
 #include <iostream>
 
+extern uInt16 f8_bankbit;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
@@ -31,6 +32,7 @@ CartridgeF8::CartridgeF8(const uInt8* image)
   {
     myImage[addr] = image[addr];
   }
+  f8_bankbit = 0x1FFF;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,6 +50,7 @@ const char* CartridgeF8::name() const
 void CartridgeF8::reset()
 {
   // Upon reset we switch to bank 1
+  f8_bankbit = 0x1FFF;
   bank(1);
 }
 
