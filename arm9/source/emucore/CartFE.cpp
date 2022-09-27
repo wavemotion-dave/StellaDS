@@ -24,6 +24,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeFE::CartridgeFE(const uInt8* image)
 {
+  myImage = fast_cart_buffer;    
+    
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 8192; ++addr)
   {
@@ -71,7 +73,10 @@ void CartridgeFE::install(System& system)
 uInt8 CartridgeFE::peek(uInt16 address)
 {
   // The bank is determined by A13 of the processor
-  return myImage[(address & 0x0FFF) + (((address & 0x2000) == 0) ? 4096 : 0)];
+  if (address & 0x2000)
+    return fast_cart_buffer[(address & 0x0FFF)];
+  else
+    return fast_cart_buffer[(address & 0x1FFF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -80,6 +80,7 @@ class M6502Low : public M6502
       Called after an interrupt has be requested using irq() or nmi()
     */
     void interruptHandler();
+    void interruptHandlerNB();
     void interruptHandlerF8();
 
   protected:

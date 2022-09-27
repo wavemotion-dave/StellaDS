@@ -97,7 +97,7 @@ class CartridgeFE : public Cartridge
 
   private:
     // The 8K ROM image of the cartridge
-    uInt8 myImage[8192];
+    uInt8 *myImage;
 };
 #endif
 
