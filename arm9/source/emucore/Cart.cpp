@@ -1324,7 +1324,7 @@ const CartInfo table[] =
     {"fc2233fc116faef0d3c31541717ca2db",  "PACMAN", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  PAL,   52,    245,   97,    1,  0},    // Pac-Man (1982) (PAL).bin
     {"c2410d03820e0ff0a449fa6170f51211",  "PACMAN", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   1,  0},    // Pac-Man (1982) (PAL).bin
     {"880e45b99c785e9910450b88e69c49eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Pac-Man 4k.bin
-    {"98d41ef327c58812ecc75bf1611ddced",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    204,    92,   0,  1},    // Pac-Man 8k.bin
+    {"98d41ef327c58812ecc75bf1611ddced",  "PACM8K", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    204,    92,   0,  1},    // Pac-Man 8k.bin
     {"6e88da2b704916eb04a998fed9e23a3e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Pac-Man_4k (debro).bin
     {"82bf0dff20cee6a1ed4bb834b00074e6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    80,   4,  1},    // Panda Chase (PAL).bin
     {"0e713d4e272ea7322c5b27d645f56dd0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    80,   4,  1},    // Panda Chase (PAL).bin
@@ -2180,6 +2180,7 @@ const CartInfo table[] =
     // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2718,6 +2719,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "RAIDER") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "STARTR") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "VANGRD") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) noBanking = 2;      
   }
   else
   {

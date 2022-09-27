@@ -324,10 +324,10 @@ inline uInt8 M6502Low::peek_F8(uInt16 address)
 {
   gSystemCycles++;
 
-  if (address & 0xF000)
+  if (address & 0x1000)
   {
-      if (address == 0xFFF8) f8_bankbit=0x0FFF;
-      else if (address == 0xFFF9) f8_bankbit=0x1FFF;
+      if ((address & 0x0FFF) == 0x0FF8) f8_bankbit=0x0FFF;
+      else if ((address & 0x0FFF) == 0x0FF9) f8_bankbit=0x1FFF;
       myDataBusState = fast_cart_buffer[address & f8_bankbit];
   }
   else
@@ -345,10 +345,10 @@ inline void M6502Low::poke_F8(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
   
-  if (address & 0xF000)
+  if (address & 0x1000)
   {
-      if (address == 0xFFF8) f8_bankbit=0x0FFF;
-      else if (address == 0xFFF9) f8_bankbit=0x1FFF;
+      if ((address & 0x0FFF) == 0x0FF8) f8_bankbit=0x0FFF;
+      else if ((address & 0x0FFF)) f8_bankbit=0x1FFF;
   }
   else
   {
@@ -358,6 +358,33 @@ inline void M6502Low::poke_F8(uInt16 address, uInt8 value)
   }
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void M6502Low::interruptHandlerF8()
+{
+  // Handle the interrupt
+  if((myExecutionStatus & MaskableInterruptBit) && !I)
+  {
+    gSystemCycles += 7; // 7 cycle operation
+    poke_F8(0x0100 + SP--, (PC - 1) >> 8);		// The high byte of the return address
+    poke_F8(0x0100 + SP--, (PC - 1) & 0x00ff);	// The low byte of the return address
+    poke_F8(0x0100 + SP--, PS() & (~0x10));	// The status byte from the processor status register
+    D = false;	// Set our flags
+    I = true;
+    PC = (uInt16)peek_F8(0xFFFE) | ((uInt16)peek_F8(0xFFFF) << 8);	// Grab the address from the interrupt vector
+  }
+  else if(myExecutionStatus & NonmaskableInterruptBit)
+  {
+    gSystemCycles += 7; // 7 cycle operation
+    poke_F8(0x0100 + SP--, (PC - 1) >> 8);
+    poke_F8(0x0100 + SP--, (PC - 1) & 0x00ff);
+    poke_F8(0x0100 + SP--, PS() & (~0x10));
+    D = false;
+    PC = (uInt16)peek_F8(0xFFFA) | ((uInt16)peek_F8(0xFFFB) << 8);
+  }
+
+  // Clear the interrupt bits in myExecutionStatus
+  myExecutionStatus &= ~(MaskableInterruptBit | NonmaskableInterruptBit);
+}
 
 bool M6502Low::execute_F8(uInt16 number)
 {
@@ -397,7 +424,7 @@ bool M6502Low::execute_F8(uInt16 number)
         if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
         {
           // Yes, so handle the interrupt
-          interruptHandler();
+          interruptHandlerF8();
         }
 
         // See if execution has been stopped
