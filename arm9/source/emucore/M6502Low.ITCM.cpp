@@ -262,7 +262,7 @@ void M6502Low::interruptHandlerNB()
     poke_NB(0x0100 + SP--, PS() & (~0x10));	// The status byte from the processor status register
     D = false;	// Set our flags
     I = true;
-    PC = (uInt16)peek_NB(0xFFFE) | ((uInt16)peek_NB(0xFFFF) << 8);	// Grab the address from the interrupt vector
+    PC = (uInt16)peek_PCNB(0xFFFE) | ((uInt16)peek_PCNB(0xFFFF) << 8);	// Grab the address from the interrupt vector
   }
   else if(myExecutionStatus & NonmaskableInterruptBit)
   {
@@ -271,7 +271,7 @@ void M6502Low::interruptHandlerNB()
     poke_NB(0x0100 + SP--, (PC - 1) & 0x00ff);
     poke_NB(0x0100 + SP--, PS() & (~0x10));
     D = false;
-    PC = (uInt16)peek_NB(0xFFFA) | ((uInt16)peek_NB(0xFFFB) << 8);
+    PC = (uInt16)peek_PCNB(0xFFFA) | ((uInt16)peek_PCNB(0xFFFB) << 8);
   }
 
   // Clear the interrupt bits in myExecutionStatus
@@ -396,7 +396,7 @@ void M6502Low::interruptHandlerF8()
     poke_F8(0x0100 + SP--, PS() & (~0x10));	// The status byte from the processor status register
     D = false;	// Set our flags
     I = true;
-    PC = (uInt16)peek_F8(0xFFFE) | ((uInt16)peek_F8(0xFFFF) << 8);	// Grab the address from the interrupt vector
+    PC = (uInt16)peek_PCF8(0xFFFE) | ((uInt16)peek_PCF8(0xFFFF) << 8);	// Grab the address from the interrupt vector
   }
   else if(myExecutionStatus & NonmaskableInterruptBit)
   {
@@ -405,7 +405,7 @@ void M6502Low::interruptHandlerF8()
     poke_F8(0x0100 + SP--, (PC - 1) & 0x00ff);
     poke_F8(0x0100 + SP--, PS() & (~0x10));
     D = false;
-    PC = (uInt16)peek_F8(0xFFFA) | ((uInt16)peek_F8(0xFFFB) << 8);
+    PC = (uInt16)peek_PCF8(0xFFFA) | ((uInt16)peek_PCF8(0xFFFB) << 8);
   }
 
   // Clear the interrupt bits in myExecutionStatus
