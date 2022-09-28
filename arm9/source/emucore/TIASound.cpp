@@ -204,7 +204,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 /*                                                                           */
 /*****************************************************************************/
 
-void Update_tia_sound (uint8 chan)
+ITCM_CODE void Update_tia_sound (uint8 chan)
 {
     uint16 new_val;
     

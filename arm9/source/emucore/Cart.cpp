@@ -679,7 +679,7 @@ const CartInfo table[] =
     {"7ac4f4fb425db38288fa07fb8ff4b21d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   35,    245,    63,   0,  0},    // Exocet (1983) (PAL).bin
     {"ebd2488dcace40474c1a78fa53ebfadf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Extra Terrestrials.bin   
     {"8f459512fa21f8af59c3df8020be5b9d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // F-4 Supercharger (2006) (David Weavil).bin
-    {"76181e047c0507b2779b4bcbf032c9d5",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Fall Down.bin
+    {"76181e047c0507b2779b4bcbf032c9d5",  "FALLDN", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Fall Down.bin
     {"78f788e8d0288069b97a887990e2123f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Fallout (Chain Reaction) (2005) (Colman Bryant, Jill Donnely, April Headen).bin
     {"b80d50ecee73919a507498d0a4d922ae",  "FANVOY", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Fantastic Voyage (1982).bin
     {"fab7b04b9f42df761eb6f2bc445eaa99",  "FANVOY", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Fantastic Voyage (1982).bin
@@ -2706,6 +2706,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "COLONY") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "EXTRAT") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "FALLDN") == 0) noBanking = 2;      
       if (strcmp(myCartInfo.gameID, "FATHOM") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "FRONTL") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "GALAXY") == 0) noBanking = 2;
@@ -2713,6 +2714,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "HEROAV") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "JOUST_") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "LEAD01") == 0) noBanking = 2;      
       if (strcmp(myCartInfo.gameID, "MARIOB") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MOONPA") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "MOONSW") == 0) noBanking = 2;

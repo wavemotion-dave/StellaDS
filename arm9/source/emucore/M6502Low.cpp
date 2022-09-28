@@ -18,6 +18,7 @@
 #include <nds.h>
 #include "Cart.hxx"
 #include "CartAR.hxx"
+#include "System.hxx"
 #include "M6502Low.hxx"
 #include "TIA.hxx"
 #include "M6532.hxx"
@@ -171,7 +172,7 @@ bool M6502Low::execute(uInt16 number)
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6502Low::interruptHandler()
+ITCM_CODE void M6502Low::interruptHandler()
 {
   // Handle the interrupt
   if((myExecutionStatus & MaskableInterruptBit) && !I)
@@ -251,7 +252,7 @@ inline void M6502Low::poke_NB(uInt16 address, uInt8 value)
   else theTIA->poke(address, value);
 }
 
-void M6502Low::interruptHandlerNB()
+ITCM_CODE void M6502Low::interruptHandlerNB()
 {
   // Handle the interrupt
   if((myExecutionStatus & MaskableInterruptBit) && !I)
@@ -385,7 +386,7 @@ inline void M6502Low::poke_F8(uInt16 address, uInt8 value)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6502Low::interruptHandlerF8()
+ITCM_CODE void M6502Low::interruptHandlerF8()
 {
   // Handle the interrupt
   if((myExecutionStatus & MaskableInterruptBit) && !I)
@@ -483,7 +484,7 @@ bool M6502Low::execute_F8(uInt16 number)
 
 #define DISTINCT_THRESHOLD  5
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 M6502Low::peek_AR(uInt16 address)
+ITCM_CODE uInt8 M6502Low::peek_AR(uInt16 address)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;
@@ -556,7 +557,7 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
+ITCM_CODE void M6502Low::poke_AR(uInt16 address, uInt8 value)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;  

@@ -15,7 +15,7 @@
 //
 // $Id: Event.cxx,v 1.1.1.1 2001/12/27 19:54:21 bwmott Exp $
 //============================================================================
-
+#include <nds.h>
 #include "Event.hxx"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -35,13 +35,13 @@ Event::~Event()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int32 Event::get(Type type) const
+ITCM_CODE Int32 Event::get(Type type) const
 {
   return myValues[type];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Event::set(Type type, Int32 value)
+ITCM_CODE void Event::set(Type type, Int32 value)
 {
   myValues[type] = value;
 }

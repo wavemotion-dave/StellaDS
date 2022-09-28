@@ -15,6 +15,7 @@
 //
 // $Id: EventHandler.cxx,v 1.30 2005/02/18 21:26:31 stephena Exp $
 //============================================================================
+#include <nds.h>
 
 #include <algorithm>
 #include <sstream>
@@ -75,21 +76,21 @@ Event* EventHandler::event()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
+ITCM_CODE void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
 {
   // Determine where the event should be sent
     sendEvent(myKeyTable[key], state);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::sendJoyEvent(StellaEvent::JoyStick stick,
+ITCM_CODE void EventHandler::sendJoyEvent(StellaEvent::JoyStick stick,
      StellaEvent::JoyCode code, Int32 state)
 {
     sendEvent(myJoyTable[stick*StellaEvent::LastJCODE + code], state);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::sendEvent(Event::Type event, Int32 state)
+ITCM_CODE void EventHandler::sendEvent(Event::Type event, Int32 state)
 {
   // Ignore unmapped events
   if(event == Event::NoType)

@@ -15,7 +15,7 @@
 //
 // $Id: CartE0.cxx,v 1.4 2005/02/13 19:17:02 stephena Exp $
 //============================================================================
-
+#include <nds.h>
 #include <assert.h>
 #include "CartE0.hxx"
 #include "System.hxx"
@@ -96,7 +96,7 @@ void CartridgeE0::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeE0::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeE0::peek(uInt16 address)
 {
   // Switch banks if necessary
   if ((address & 0x0FF8) == 0xFE0)
@@ -116,7 +116,7 @@ uInt8 CartridgeE0::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeE0::poke(uInt16 address, uInt8)
+ITCM_CODE void CartridgeE0::poke(uInt16 address, uInt8)
 {
   // Switch banks if necessary
   if ((address & 0x0FF8) == 0xFE0)
@@ -134,7 +134,7 @@ void CartridgeE0::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeE0::segmentZero(uInt16 slice)
+ITCM_CODE void CartridgeE0::segmentZero(uInt16 slice)
 { 
     uInt16 offset = (slice << 10);
 
@@ -150,7 +150,7 @@ void CartridgeE0::segmentZero(uInt16 slice)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeE0::segmentOne(uInt16 slice)
+ITCM_CODE void CartridgeE0::segmentOne(uInt16 slice)
 { 
     uInt16 offset = (slice << 10);
 
@@ -166,7 +166,7 @@ void CartridgeE0::segmentOne(uInt16 slice)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeE0::segmentTwo(uInt16 slice)
+ITCM_CODE void CartridgeE0::segmentTwo(uInt16 slice)
 { 
     uInt16 offset = (slice << 10);
 

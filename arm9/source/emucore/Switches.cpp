@@ -15,7 +15,7 @@
 //
 // $Id: Switches.cxx,v 1.2 2002/12/16 06:24:18 bwmott Exp $
 //============================================================================
-
+#include <nds.h>
 #include "Event.hxx"
 #include "Switches.hxx"
 
@@ -33,7 +33,7 @@ Switches::~Switches()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-uInt8 Switches::read()
+ITCM_CODE uInt8 Switches::read()
 {
 	if(myEvent.get(Event::ConsoleColor) != 0)
 	{
