@@ -24,6 +24,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeE0::CartridgeE0(const uInt8* image)
 {
+  myImage = (uInt8 *)fast_cart_buffer;
+    
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 8192; ++addr)
   {
@@ -70,7 +72,6 @@ void CartridgeE0::install(System& system)
     page_access.directPeekBase = &myImage[7168 + (i & 0x03FF)];
     mySystem->setPageAccess(i >> shift, page_access);
   }
-  myCurrentSlice[3] = 7;
 
   // Set the page accessing methods for the hot spots in the last segment
   page_access.directPeekBase = 0;
@@ -81,6 +82,13 @@ void CartridgeE0::install(System& system)
     mySystem->setPageAccess(j >> shift, page_access);
   }
 
+  // Just something so we have the right device
+  for(uInt32 i = 0x1000; i < 0x1C00; i += (1 << shift))
+  {
+    page_access.directPeekBase = &myImage[(i & 0x0FFF)];
+    mySystem->setPageAccess(i >> shift, page_access);
+  }
+    
   // Install some default slices for the other segments
   segmentZero(4);
   segmentOne(5);
@@ -90,40 +98,36 @@ void CartridgeE0::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeE0::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
-
   // Switch banks if necessary
-  if((address >= 0x0FE0) && (address <= 0x0FE7))
+  if ((address & 0x0FF8) == 0xFE0)
   {
     segmentZero(address & 0x0007);
   }
-  else if((address >= 0x0FE8) && (address <= 0x0FEF))
+  else if ((address & 0x0FF8) == 0xFE8)
   {
     segmentOne(address & 0x0007);
   }
-  else if((address >= 0x0FF0) && (address <= 0x0FF7))
+  else if ((address & 0x0FF8) == 0xFF0)
   {
     segmentTwo(address & 0x0007);
   }
 
-  return myImage[(myCurrentSlice[address >> 10] << 10) + (address & 0x03FF)];
+  return fast_cart_buffer[(7168 + (address & 0x03FF))];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeE0::poke(uInt16 address, uInt8)
 {
-  address = address & 0x0FFF;
-
   // Switch banks if necessary
-  if((address >= 0x0FE0) && (address <= 0x0FE7))
+  if ((address & 0x0FF8) == 0xFE0)
   {
     segmentZero(address & 0x0007);
   }
-  else if((address >= 0x0FE8) && (address <= 0x0FEF))
+  else if ((address & 0x0FF8) == 0xFE8)
   {
     segmentOne(address & 0x0007);
   }
-  else if((address >= 0x0FF0) && (address <= 0x0FF7))
+  else if ((address & 0x0FF8) == 0xFF0)
   {
     segmentTwo(address & 0x0007);
   }
@@ -132,53 +136,47 @@ void CartridgeE0::poke(uInt16 address, uInt8)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeE0::segmentZero(uInt16 slice)
 { 
-  // Remember the new slice
-  myCurrentSlice[0] = slice;
-  uInt16 offset = slice << 10;
-  uInt16 shift = mySystem->pageShift();
+    uInt16 offset = (slice << 10);
 
-  // Setup the page access methods for the current bank
-  page_access.directPokeBase = 0;
-
-  for(uInt32 address = 0x1000; address < 0x1400; address += (1 << shift))
-  {
-    page_access.directPeekBase = &myImage[offset + (address & 0x03FF)];
-    mySystem->setPageAccess(address >> shift, page_access);
-  }
+    // Setup the page access methods for the current bank - this is as fast as we can do it...
+    myPageAccessTable[0x20].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x21].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x22].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x23].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x24].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x25].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x26].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x27].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeE0::segmentOne(uInt16 slice)
 { 
-  // Remember the new slice
-  myCurrentSlice[1] = slice;
-  uInt16 offset = slice << 10;
-  uInt16 shift = mySystem->pageShift();
+    uInt16 offset = (slice << 10);
 
-  // Setup the page access methods for the current bank
-  page_access.directPokeBase = 0;
-
-  for(uInt32 address = 0x1400; address < 0x1800; address += (1 << shift))
-  {
-    page_access.directPeekBase = &myImage[offset + (address & 0x03FF)];
-    mySystem->setPageAccess(address >> shift, page_access);
-  }
+    // Setup the page access methods for the current bank - this is as fast as we can do it...
+    myPageAccessTable[0x28].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x29].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2A].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2B].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2C].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2D].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2E].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x2F].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeE0::segmentTwo(uInt16 slice)
 { 
-  // Remember the new slice
-  myCurrentSlice[2] = slice;
-  uInt16 offset = slice << 10;
-  uInt16 shift = mySystem->pageShift();
+    uInt16 offset = (slice << 10);
 
-  // Setup the page access methods for the current bank
-  page_access.directPokeBase = 0;
-
-  for(uInt32 address = 0x1800; address < 0x1C00; address += (1 << shift))
-  {
-    page_access.directPeekBase = &myImage[offset + (address & 0x03FF)];
-    mySystem->setPageAccess(address >> shift, page_access);
-  }
+    // Setup the page access methods for the current bank - this is as fast as we can do it...
+    myPageAccessTable[0x30].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x31].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x32].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x33].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x34].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x35].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x36].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x37].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
 }

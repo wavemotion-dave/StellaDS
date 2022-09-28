@@ -258,10 +258,10 @@ class System
     const uInt16 myNumberOfPages;
 
     // Array of all the devices attached to the system
-    Device* myDevices[100];
+    Device* myDevices[32];
 
     // Number of devices attached to the system
-    uInt32 myNumberOfDevices;
+    uInt16 myNumberOfDevices;
 
     // 6502 processor attached to the system or the null pointer
     M6502* myM6502;

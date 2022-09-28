@@ -262,12 +262,6 @@ class TIA : public Device , public MediaSource
     const Console& myConsole;
 
   private:
-    // Indicates if color loss should be enabled or disabled.  Color loss
-    // occurs on PAL (and maybe SECAM) systems when the previous frame
-    // contains an odd number of scanlines.
-    bool myColorLossEnabled;
-
-  private:
     // Indicates when the dump for paddles was last set
     Int32 myDumpDisabledCycle;
 

@@ -306,8 +306,7 @@ uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 TIA::TIA(const Console& console)
-    : myConsole(console),
-      myColorLossEnabled(false)
+    : myConsole(console)
 {
   myMaximumNumberOfScanlines = ((myCartInfo.tv_type == PAL) ? 312:262); 
   // --------------------------------------------------------------------------------------
@@ -489,8 +488,6 @@ void TIA::reset()
 
   myDumpEnabled = false;
   myDumpDisabledCycle = 0;
-
-  myColorLossEnabled = false;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

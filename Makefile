@@ -14,7 +14,7 @@ include $(DEVKITARM)/ds_rules
 
 export TARGET		:=	StellaDS
 export TOPDIR		:=	$(CURDIR)
-export VERSION		:=  5.0c
+export VERSION		:=  5.0d
 
 ICON 		:= -b $(CURDIR)/logo.bmp "StellaDS $(VERSION);wavemotion-dave;https://github.com/wavemotion-dave/StellaDS"
 

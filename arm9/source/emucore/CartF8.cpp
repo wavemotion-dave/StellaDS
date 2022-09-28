@@ -73,6 +73,11 @@ void CartridgeF8::install(System& system)
   {
     mySystem->setPageAccess(i >> shift, page_access);
   }
+    
+  for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
+  {
+      mySystem->setPageAccess(address >> shift, page_access);
+  }
 
   // Install pages for bank 1
   bank(1);
@@ -135,8 +140,10 @@ void CartridgeF8::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0000; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
+      
+      //page_access.directPeekBase = &myImage[myCurrentOffset + address];
+      //mySystem->setPageAccess(access_num++, page_access);
   }
 }
 

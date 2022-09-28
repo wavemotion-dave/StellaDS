@@ -23,8 +23,8 @@ typedef enum {
 } FifoMesType;
 
 typedef struct FICtoLoad {
-  char filename[255];
-  bool directory;
+  char  filename[127];
+  uInt8 directory;
 } FICA2600;
 
 extern Console* theConsole;

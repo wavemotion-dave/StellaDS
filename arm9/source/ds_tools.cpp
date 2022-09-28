@@ -621,8 +621,8 @@ bool dsWaitOnQuit(void)
   return bRet;
 }
 
-char szName[256];
-char szName2[256];
+char szName[128];
+char szName2[128];
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 {
   unsigned int ucBcl,ucGame;

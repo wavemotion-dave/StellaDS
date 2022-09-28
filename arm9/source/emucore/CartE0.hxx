@@ -111,11 +111,8 @@ class CartridgeE0 : public Cartridge
     void segmentTwo(uInt16 slice);
 
   private:
-    // Indicates the slice mapped into each of the four segments
-    uInt16 myCurrentSlice[4];
-
     // The 8K ROM image of the cartridge
-    uInt8 myImage[8192];
+    uInt8 *myImage;
 };
 #endif
 
