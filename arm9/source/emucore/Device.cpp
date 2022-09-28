@@ -1,19 +1,23 @@
 //============================================================================
 //
-// MM     MM  6666  555555  0000   2222
-// MMMM MMMM 66  66 55     00  00 22  22
-// MM MMM MM 66     55     00  00     22
-// MM  M  MM 66666  55555  00  00  22222  --  "A 6502 Microprocessor Emulator"
-// MM     MM 66  66     55 00  00 22
-// MM     MM 66  66 55  55 00  00 22
-// MM     MM  6666   5555   0000  222222
+//   SSSS    tt          lll  lll
+//  SS  SS   tt           ll   ll
+//  SS     tttttt  eeee   ll   ll   aaaa
+//   SSSS    tt   ee  ee  ll   ll      aa
+//      SS   tt   eeeeee  ll   ll   aaaaa  --  "An Atari 2600 VCS Emulator"
+//  SS  SS   tt   ee      ll   ll  aa  aa
+//   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-1998 by Bradford W. Mott
+// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// and the Stella Team
 //
-// See the file "license" for information on usage and redistribution of
+// This file has been modified by Dave Bernazzani (wavemotion-dave)
+// for optimized execution on the DS/DSi platform. Please seek the
+// official Stella source distribution which is far cleaner, newer,
+// and better maintained.
+//
+// See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
-//
-// $Id: Device.cxx,v 1.1.1.1 2001/12/27 19:54:29 bwmott Exp $
 //============================================================================
 
 #include "Device.hxx"

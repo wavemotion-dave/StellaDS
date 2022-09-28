@@ -1,20 +1,25 @@
 //============================================================================
 //
-// MM     MM  6666  555555  0000   2222
-// MMMM MMMM 66  66 55     00  00 22  22
-// MM MMM MM 66     55     00  00     22
-// MM  M  MM 66666  55555  00  00  22222  --  "A 6502 Microprocessor Emulator"
-// MM     MM 66  66     55 00  00 22
-// MM     MM 66  66 55  55 00  00 22
-// MM     MM  6666   5555   0000  222222
+//   SSSS    tt          lll  lll
+//  SS  SS   tt           ll   ll
+//  SS     tttttt  eeee   ll   ll   aaaa
+//   SSSS    tt   ee  ee  ll   ll      aa
+//      SS   tt   eeeeee  ll   ll   aaaaa  --  "An Atari 2600 VCS Emulator"
+//  SS  SS   tt   ee      ll   ll  aa  aa
+//   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-1998 by Bradford W. Mott
+// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// and the Stella Team
 //
-// See the file "license" for information on usage and redistribution of
+// This file has been modified by Dave Bernazzani (wavemotion-dave)
+// for optimized execution on the DS/DSi platform. Please seek the
+// official Stella source distribution which is far cleaner, newer,
+// and better maintained.
+//
+// See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
-//
-// $Id: M6502Low.cxx,v 1.2 2002/05/13 19:10:25 stephena Exp $
 //============================================================================
+
 #include <nds.h>
 #include "Cart.hxx"
 #include "CartAR.hxx"
@@ -488,7 +493,7 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;
-    
+  
   if (address & 0xF000)
   {
       uInt16 addr = address & 0x0FFF;     // Map down to 4k...
@@ -549,10 +554,10 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
   }
   else
   {
-      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
-      if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
-      else myDataBusState = access.device->peek(address);        
-      return myDataBusState; 
+      if ((address & 0x280) == 0x80) myDataBusState = myRAM[address & 0x7F];
+      else if (address & 0x200) myDataBusState = theM6532->peek(address);
+      else myDataBusState = theTIA->peek(address);
+      return myDataBusState;       
   }
 }
 
@@ -569,7 +574,7 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
       theTIA->poke(address, value);
       return;
   }
-
+    
   // --------------------------------------------------------------------
   // If not TIA access, we check if we are in the code area...
   // --------------------------------------------------------------------
@@ -606,9 +611,10 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
   }
   else  // Otherwise let the system handle it...
   {
-      PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
-      if(access.directPokeBase != 0) *(access.directPokeBase + (address & MY_PAGE_MASK)) = value;
-      else access.device->poke(address, value);
+      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
+      else if (address & 0x200) theM6532->poke(address, value);
+      else theTIA->poke(address, value);
+
       myDataBusState = value;
   }
 }

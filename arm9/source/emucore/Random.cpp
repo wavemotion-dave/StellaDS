@@ -8,12 +8,16 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-1998 by Bradford W. Mott
+// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// and the Stella Team
 //
-// See the file "license" for information on usage and redistribution of
+// This file has been modified by Dave Bernazzani (wavemotion-dave)
+// for optimized execution on the DS/DSi platform. Please seek the
+// official Stella source distribution which is far cleaner, newer,
+// and better maintained.
+//
+// See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
-//
-// $Id: Random.cxx,v 1.1.1.1 2001/12/27 19:54:23 bwmott Exp $
 //============================================================================
 
 #include "Random.hxx"
