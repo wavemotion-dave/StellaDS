@@ -36,13 +36,11 @@ CartridgeE7::CartridgeE7(const uInt8* image)
     myImage[addr] = image[addr];
   }
 
-  myRAM = fast_cart_buffer;
-    
   // Initialize RAM with random values
   Random random;
   for(uInt32 i = 0; i < 2048; ++i)
   {
-    myRAM[i] = random.next();
+    fast_cart_buffer[i] = random.next();
   }
 }
 
@@ -176,7 +174,7 @@ void CartridgeE7::bank(uInt16 slice)
     page_access.directPeekBase = 0;
     for(uInt32 j = 0x0000; j < 0x0400; j += (1 << MY_PAGE_SHIFT))
     {
-      page_access.directPokeBase = &myRAM[j];
+      page_access.directPokeBase = &fast_cart_buffer[j];
       mySystem->setPageAccess(access_num++, page_access);
     }
 
@@ -184,7 +182,7 @@ void CartridgeE7::bank(uInt16 slice)
     page_access.directPokeBase = 0;
     for(uInt32 k = 0x0000; k < 0x0400; k += (1 << MY_PAGE_SHIFT))
     {
-      page_access.directPeekBase = &myRAM[k];
+      page_access.directPeekBase = &fast_cart_buffer[k];
       mySystem->setPageAccess(access_num++, page_access);
     }
   }
@@ -201,7 +199,7 @@ void CartridgeE7::bankRAM(uInt16 bank)
   uInt32 access_num = 0x1800 >> MY_PAGE_SHIFT;
   for(uInt32 j = 0x0000; j < 0x0100; j += (1 << MY_PAGE_SHIFT))
   {
-    page_access.directPokeBase = &myRAM[offset + j];
+    page_access.directPokeBase = &fast_cart_buffer[offset + j];
     mySystem->setPageAccess(access_num++, page_access);
   }
 
@@ -209,7 +207,7 @@ void CartridgeE7::bankRAM(uInt16 bank)
   page_access.directPokeBase = 0;
   for(uInt32 k = 0x0000; k < 0x0100; k += (1 << MY_PAGE_SHIFT))
   {
-    page_access.directPeekBase = &myRAM[offset + k];
+    page_access.directPeekBase = &fast_cart_buffer[offset + k];
     mySystem->setPageAccess(access_num++, page_access);
   }
 }

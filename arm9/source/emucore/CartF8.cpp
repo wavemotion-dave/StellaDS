@@ -77,7 +77,8 @@ void CartridgeF8::install(System& system)
   {
     mySystem->setPageAccess(i >> shift, page_access);
   }
-    
+  
+  // And setup for this system without any direct peek/poke until we switch banks
   for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
   {
       mySystem->setPageAccess(address >> shift, page_access);

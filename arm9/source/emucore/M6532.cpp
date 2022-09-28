@@ -30,8 +30,8 @@
 #include "System.hxx"
 #include <iostream>
 
-// An amazing 128 bytes of RAM
-uInt8 myRAM[128] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
+// An amazing 128 bytes of RAM... plus 128 more for the Super Carts (SC)
+uInt8 myRAM[256] __attribute__ ((aligned (16))) __attribute__((section(".dtcm")));
 
 // Current value of my Timer
 uInt32 myTimer __attribute__((section(".dtcm")));

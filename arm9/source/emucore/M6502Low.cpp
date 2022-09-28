@@ -224,8 +224,7 @@ extern M6532 *theM6532;
 inline uInt8 M6502Low::peek_PCNB(uInt16 address)
 {
   gSystemCycles++;
-  myDataBusState = fast_cart_buffer[address & 0xFFF];
-  return myDataBusState;    
+  return fast_cart_buffer[address & 0xFFF];
 }
 
 
@@ -233,9 +232,9 @@ inline uInt8 M6502Low::peek_NB(uInt16 address)
 {
   gSystemCycles++;
 
-  if (address & 0xF000)
+  if (address & 0x1000)
   {
-      myDataBusState = fast_cart_buffer[address & 0xFFF];    
+      return fast_cart_buffer[address & 0xFFF];    
   }
   else
   {
@@ -243,8 +242,6 @@ inline uInt8 M6502Low::peek_NB(uInt16 address)
       else if (address & 0x200) return theM6532->peek(address);
       else return theTIA->peek(address);
   }
-
-  return myDataBusState;    
 }
 
 

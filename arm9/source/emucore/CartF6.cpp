@@ -33,6 +33,12 @@ CartridgeF6::CartridgeF6(const uInt8* image)
   {
     myImage[addr] = image[addr];
   }
+    
+  // Copy half the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
+  for(uInt32 addr = 0; addr < 8192; ++addr)
+  {
+    fast_cart_buffer[addr] = image[addr];
+  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -72,9 +78,16 @@ void CartridgeF6::install(System& system)
     mySystem->setPageAccess(i >> shift, page_access);
   }
 
+  // And setup for this system without any direct peek/poke until we switch banks
+  for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
+  {
+      mySystem->setPageAccess(address >> shift, page_access);
+  }
+    
   // Upon install we'll setup bank 0
   bank(0);
 }
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeF6::peek(uInt16 address)
@@ -86,21 +99,25 @@ uInt8 CartridgeF6::peek(uInt16 address)
   {
     case 0x0FF6:
       // Set the current bank to the first 4k bank
+      myCurrentOffset = 0 * 4096;
       bank(0);
       break;
 
     case 0x0FF7:
       // Set the current bank to the second 4k bank
+      myCurrentOffset = 1 * 4096;
       bank(1);
       break;
 
     case 0x0FF8:
       // Set the current bank to the third 4k bank
+      myCurrentOffset = 2 * 4096;
       bank(2);
       break;
 
     case 0x0FF9:
       // Set the current bank to the forth 4k bank
+      myCurrentOffset = 3 * 4096;
       bank(3);
       break;
   }
@@ -118,21 +135,25 @@ void CartridgeF6::poke(uInt16 address, uInt8)
   {
     case 0x0FF6:
       // Set the current bank to the first 4k bank
+      myCurrentOffset = 0 * 4096;
       bank(0);
       break;
 
     case 0x0FF7:
       // Set the current bank to the second 4k bank
+      myCurrentOffset = 1 * 4096;
       bank(1);
       break;
 
     case 0x0FF8:
       // Set the current bank to the third 4k bank
+      myCurrentOffset = 2 * 4096;
       bank(2);
       break;
 
     case 0x0FF9:
       // Set the current bank to the forth 4k bank
+      myCurrentOffset = 3 * 4096;
       bank(3);
       break;
   }
@@ -141,17 +162,13 @@ void CartridgeF6::poke(uInt16 address, uInt8)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeF6::bank(uInt16 bank)
 { 
-  // Remember what bank we're in
-  myCurrentOffset = bank * 4096;
-
   // Setup the page access methods for the current bank
-  uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
+  uInt16 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x0000; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0000; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      myPageAccessTable[access_num++].directPeekBase = (bank < 2) ? &fast_cart_buffer[myCurrentOffset + address] : &myImage[myCurrentOffset + address];
   }
 }
 

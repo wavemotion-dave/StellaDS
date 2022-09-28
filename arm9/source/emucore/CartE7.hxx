@@ -127,8 +127,7 @@ class CartridgeE7 : public Cartridge
     // The 16K ROM image of the cartridge
     uInt8 myImage[16384];
 
-    // The 2048 bytes of RAM
-    uInt8 *myRAM;
+    // The 2048 bytes of RAM will use fast_cart_buffer[]    
 };
 #endif
 

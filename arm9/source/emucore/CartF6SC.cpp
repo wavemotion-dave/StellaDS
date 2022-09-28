@@ -34,12 +34,25 @@ CartridgeF6SC::CartridgeF6SC(const uInt8* image)
   {
     myImage[addr] = image[addr];
   }
+    
+  // Copy half the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
+  for(uInt32 addr = 0; addr < 8192; ++addr)
+  {
+    fast_cart_buffer[addr] = image[addr];
+  }
+    
+  // Copy half the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
+  for(uInt32 addr = 0; addr < 8192; ++addr)
+  {
+    fast_cart_buffer[addr] = image[addr];
+  }
 
-  // Initialize RAM with random values
+  // Initialize RAM with random values 
+  // We steal the fast_cart_buffer here
   Random random;
   for(uInt32 i = 0; i < 128; ++i)
   {
-    myRAM[i] = random.next();
+    myRAM[128+i] = random.next();
   }
 }
 
@@ -84,7 +97,7 @@ void CartridgeF6SC::install(System& system)
   {
     page_access.device = this;
     page_access.directPeekBase = 0;
-    page_access.directPokeBase = &myRAM[j & 0x007F];
+    page_access.directPokeBase = &myRAM[128 + (j & 0x007F)];
     mySystem->setPageAccess(j >> shift, page_access);
   }
 
@@ -92,10 +105,20 @@ void CartridgeF6SC::install(System& system)
   for(uInt32 k = 0x1080; k < 0x1100; k += (1 << shift))
   {
     page_access.device = this;
-    page_access.directPeekBase = &myRAM[k & 0x007F];
+    page_access.directPeekBase = &myRAM[128 + (k & 0x007F)];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(k >> shift, page_access);
   }
+    
+  // Leave these at zero for faster bank switch
+  page_access.directPeekBase = 0;
+  page_access.directPokeBase = 0;
+    
+  // And setup for this system without any direct peek/poke until we switch banks
+  for(uInt32 address = 0x1100; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
+  {
+      mySystem->setPageAccess(address >> shift, page_access);
+  }    
 
   // Install pages for bank 0
   bank(0);
@@ -177,18 +200,17 @@ void CartridgeF6SC::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeF6SC::bank(uInt16 bank)
+inline void CartridgeF6SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;
 
   // Setup the page access methods for the current bank
-  uInt32 access_num = 0x1100 >> MY_PAGE_SHIFT;
+  uInt16 access_num = 0x1100 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x0100; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0100; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      myPageAccessTable[access_num++].directPeekBase = (bank < 2) ? &fast_cart_buffer[myCurrentOffset + address] : &myImage[myCurrentOffset + address];
   }
 }

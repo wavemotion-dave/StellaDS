@@ -30,7 +30,7 @@ class System;
 #include "Device.hxx"
 
 // An amazing 128 bytes of RAM
-extern uInt8 myRAM[128];
+extern uInt8 myRAM[256];
 
 /**
   RIOT

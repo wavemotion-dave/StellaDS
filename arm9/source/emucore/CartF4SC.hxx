@@ -102,8 +102,7 @@ class CartridgeF4SC : public Cartridge
     // The 16K ROM image of the cartridge
     uInt8 myImage[32768];
 
-    // The 128 bytes of RAM
-    uInt8 myRAM[128];
+    // The 128 bytes of RAM will use fast_cart_buffer[]
 };
 #endif
 
