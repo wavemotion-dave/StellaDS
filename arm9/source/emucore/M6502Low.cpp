@@ -484,7 +484,7 @@ bool M6502Low::execute_F8(uInt16 number)
 
 #define DISTINCT_THRESHOLD  5
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 M6502Low::peek_AR(uInt16 address)
+inline uInt8 M6502Low::peek_AR(uInt16 address)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;
@@ -557,7 +557,7 @@ ITCM_CODE uInt8 M6502Low::peek_AR(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void M6502Low::poke_AR(uInt16 address, uInt8 value)
+inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;  

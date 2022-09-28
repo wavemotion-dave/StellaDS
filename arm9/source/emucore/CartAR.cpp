@@ -130,7 +130,7 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeAR::bankConfiguration(uInt8 configuration)
+ITCM_CODE void CartridgeAR::bankConfiguration(uInt8 configuration)
 {
   // D7-D5 of this byte: Write Pulse Delay (n/a for emulator)
   //
@@ -159,8 +159,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 0:
     {
       bPossibleLoad = 1;
-      myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (2 * 2048);
+      myImage1 = fast_cart_buffer + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -168,8 +168,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 1:
     {
       bPossibleLoad = 1;
-      myImage0 = myImage + (0 * 2048);
-      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (0 * 2048);
+      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -177,8 +177,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 2:
     {
       bPossibleLoad = 0;
-      myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (2 * 2048);
+      myImage1 = fast_cart_buffer + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -186,8 +186,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 3:
     {
       bPossibleLoad = 0;
-      myImage0 = myImage + (0 * 2048);
-      myImage1 = myImage + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (0 * 2048);
+      myImage1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -195,8 +195,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 4:
     {
       bPossibleLoad = 1;
-      myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (2 * 2048);
+      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -204,8 +204,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 5:
     {
       bPossibleLoad = 1;
-      myImage0 = myImage + (1 * 2048);
-      myImage1 = myImage + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (1 * 2048);
+      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -213,8 +213,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 6:
     {
       bPossibleLoad = 0;
-      myImage0 = myImage + (2 * 2048);
-      myImage1 = myImage + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (2 * 2048);
+      myImage1 = fast_cart_buffer + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -222,8 +222,8 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
     case 7:
     {
       bPossibleLoad = 0;
-      myImage0 = myImage + (1 * 2048);
-      myImage1 = myImage + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      myImage0 = fast_cart_buffer + (1 * 2048);
+      myImage1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImage1 -= 2048;
       break;
     }
@@ -311,7 +311,7 @@ uInt8 CartridgeAR::checksum(uInt8* s, uInt16 length)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeAR::loadIntoRAM(uInt8 load)
+ITCM_CODE void CartridgeAR::loadIntoRAM(uInt8 load)
 {
   uInt16 image;
 

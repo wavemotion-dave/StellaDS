@@ -89,9 +89,13 @@ class M6502Low : public M6502
 
       @return The byte at the specified address
     */
-    bool execute_AR(uInt16 number);
+    
     inline uInt8 peek(uInt16 address);
     inline uInt8 peek_PC(uInt16 address);
+    
+    bool execute_AR(uInt16 number);
+    inline void poke_AR(uInt16 address, uInt8 value);
+    inline uInt8 peek_AR(uInt16 address);    
     
     bool execute_NB(uInt16 number);
     inline uInt8 peek_NB(uInt16 address);
@@ -110,8 +114,6 @@ class M6502Low : public M6502
       @param value The value to be stored at the address
     */
     void poke(uInt16 address, uInt8 value);
-    void poke_AR(uInt16 address, uInt8 value);
-    uInt8 peek_AR(uInt16 address);
 
 };
 #endif
