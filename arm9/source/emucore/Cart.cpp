@@ -2743,8 +2743,13 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
       // ------------------------------------------------------------------------------------
       noBanking = 3;
-      if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {myCartInfo.hBlankZero = 0; myCartInfo.vblankZero = 0;} // Small speed-up
-      if (strcmp(myCartInfo.gameID, "MANGOS") == 0) {myCartInfo.hBlankZero = 0; myCartInfo.vblankZero = 0;} // Small speed-up
+      // A few games just need a tiny bit more... ooomff!
+      if ((strcmp(myCartInfo.gameID, "CONMAR") == 0) || (strcmp(myCartInfo.gameID, "MANGOS") == 0) || (strcmp(myCartInfo.gameID, "FROSTY") == 0))
+      {
+          // Small speed-up
+          myCartInfo.hBlankZero = 0; 
+          myCartInfo.vblankZero = 0;
+      } 
   }
   else // Use the normal drivers....
   {

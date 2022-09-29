@@ -90,6 +90,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V5.1 : 29-Sep-2022 by Dave Bernazzani (wavemotion)
+  * Improved all bankswitching for more speed and greater copatibility.
+  * New F6 driver for DS-LITE to support 16K games - many at full speed!
+  * Cleanups across the board.
+
 V5.0 : 27-Sep-2022 by Dave Bernazzani (wavemotion)
   * Added new bankswitching scheme:  X07 (Stella's Stocking).
   * Improved 4K/2K driver to squeese out a couple more frames of performance.
