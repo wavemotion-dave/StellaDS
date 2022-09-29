@@ -72,9 +72,6 @@ static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 
-#define MAX_FILE_SIZE   (1024 * 512)
-uInt8  filebuffer[MAX_FILE_SIZE];
-
 int bg0, bg0b,bg1b;
 unsigned int etatEmu;
 bool fpsDisplay = false;
@@ -514,11 +511,11 @@ bool dsLoadGame(char *filename)
     if (buffer_size <= MAX_FILE_SIZE)
     {
         rewind(romfile);
-        fread(filebuffer, buffer_size, 1, romfile);
+        fread(cart_buffer, buffer_size, 1, romfile);
         fclose(romfile);
 
         // Init the emulation
-        theConsole = new Console((const uInt8*) filebuffer, buffer_size, "noname");
+        theConsole = new Console((const uInt8*) cart_buffer, buffer_size, "noname");
         dsInitPalette();
 
         memset(sound_buffer, 0x00, SOUND_SIZE);

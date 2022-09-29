@@ -33,6 +33,7 @@ extern uInt8 fast_cart_buffer[];
 
 extern PageAccess page_access;
 extern uInt16 myCurrentOffset;
+extern uInt8 noBanking;
 
 #define NTSC    0
 #define PAL     1
@@ -68,6 +69,9 @@ struct CartInfo
 };
 
 extern CartInfo myCartInfo;
+
+#define MAX_FILE_SIZE   (1024 * 512)
+extern uInt8  cart_buffer[MAX_FILE_SIZE];
 
 // Difficulty Switch defines
 #define DIFF_B           0

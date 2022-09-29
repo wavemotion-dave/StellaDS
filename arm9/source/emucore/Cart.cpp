@@ -73,6 +73,9 @@ PageAccess page_access __attribute__((section(".dtcm")));
 uInt16 myCurrentOffset __attribute__((section(".dtcm")));
 uint8 original_flicker_mode = 0;
 
+// Our cart buffer memory - this can store game ROMs up to 512k
+uInt8  cart_buffer[MAX_FILE_SIZE];
+
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
 
@@ -843,9 +846,9 @@ const CartInfo table[] =
     {"06db908011065e5ebb37f4e253c2a0b0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    245,   100,   0, 11},    // Gopher (1982) (PAL).bin
     {"a56b642a3d3ab9bbeee63cd44eb73216",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   54,    245,   100,   0, 11},    // Gopher (1982) (PAL).bin
     {"31df1c50c4351e144c9a378adb8c10ba",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    245,   100,   0, 11},    // Gopher (1982) (PAL).bin
-    {"81b3bf17cf01039d311b4cd738ae608e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Gorf (1982).bin
-    {"c1f9f70ae527093b6af3b6531860e75d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Gorf (1982).bin (prototype)
-    {"3e03086da53ecc29d855d8edf10962cb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   42,    245,    88,   0,  1},    // Gorf (1982) (PAL).bin
+    {"81b3bf17cf01039d311b4cd738ae608e",  "GORFxx", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Gorf (1982).bin
+    {"c1f9f70ae527093b6af3b6531860e75d",  "GORFxx", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Gorf (1982).bin (prototype)
+    {"3e03086da53ecc29d855d8edf10962cb",  "GORFxx", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   42,    245,    88,   0,  1},    // Gorf (1982) (PAL).bin
     {"5a9685c4d51a6c1d6a9544946d9e8dc3",  "??????", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Grandmas Revenge (UA Ltd. Bankswitching) (2010) (Fred Quimby).bin
     {"2903896d88a341511586d69fcfc20f7d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  6},    // Grand Prix (1982).bin
     {"e5f84930aa468db33c0d0f7b26dd8293",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  6},    // Grand Prix (1982).bin
@@ -1091,7 +1094,7 @@ const CartInfo table[] =
     {"65ba1a4c643d1ab44481bdddeb403827",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    95,   4, 10},    // M.A.S.H (1983) (PAL).bin
     {"cddabfd68363a76cd30bee4e8094c646",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // MagiCard (1981).bin
     {"ccb5fa954fb76f09caae9a8c66462190",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Malagai (1983).bin
-    {"402d876ec4a73f9e3133f8f7f7992a1e",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Man Goes Down.bin
+    {"402d876ec4a73f9e3133f8f7f7992a1e",  "MANGOS", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Man Goes Down.bin
     {"54a1c1255ed45eb8f71414dadb1cf669",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mangia' (1983).bin
     {"d8295eff5dcc43360afa87221ea6021f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    89,   0, 14},    // Mangia' (1983) (PAL).bin
     {"9104ffc48c5eebd2164ec8aeb0927b91",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Mappy.bin
@@ -2346,6 +2349,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "ASTERD") == 0) myCartInfo.frame_mode = MODE_FF;
       if (strcmp(myCartInfo.gameID, "DEMONA") == 0) myCartInfo.frame_mode = MODE_FF;
       if (strcmp(myCartInfo.gameID, "DEFEND") == 0) myCartInfo.frame_mode = MODE_FF;
+      if (strcmp(myCartInfo.gameID, "GORFxx") == 0) myCartInfo.frame_mode = MODE_FF;      
       if (strcmp(myCartInfo.gameID, "MISCOM") == 0) myCartInfo.frame_mode = MODE_FF;
       if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_FF;
       if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_FF;
@@ -2690,7 +2694,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     
   dsPrintCartType((char*)BANKING_STR[myCartInfo.banking]);
     
-  extern uInt8 noBanking;
   if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
       noBanking = 1;
@@ -2734,7 +2737,16 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "STARTR") == 0) noBanking = 2;
       if (strcmp(myCartInfo.gameID, "VANGRD") == 0) noBanking = 2;
   }
-  else
+  else if ((myCartInfo.banking == BANK_F6) && !isDSiMode())
+  {
+      // ------------------------------------------------------------------------------------
+      // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
+      // ------------------------------------------------------------------------------------
+      noBanking = 3;
+      if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {myCartInfo.hBlankZero = 0; myCartInfo.vblankZero = 0;} // Small speed-up
+      if (strcmp(myCartInfo.gameID, "MANGOS") == 0) {myCartInfo.hBlankZero = 0; myCartInfo.vblankZero = 0;} // Small speed-up
+  }
+  else // Use the normal drivers....
   {
       noBanking = 0;
   }

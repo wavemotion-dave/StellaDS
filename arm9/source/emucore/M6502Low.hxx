@@ -86,6 +86,7 @@ class M6502Low : public M6502
     void interruptHandler();
     void interruptHandlerNB();
     void interruptHandlerF8();
+    void interruptHandlerF6();
 
   protected:
     /*
@@ -110,6 +111,11 @@ class M6502Low : public M6502
     inline uInt8 peek_F8(uInt16 address);
     inline uInt8 peek_PCF8(uInt16 address);
     inline void poke_F8(uInt16 address, uInt8 value);
+
+    bool execute_F6(uInt16 number);
+    inline uInt8 peek_F6(uInt16 address);
+    inline uInt8 peek_PCF6(uInt16 address);
+    inline void poke_F6(uInt16 address, uInt8 value);
 
     /**
       Change the byte at the specified address to the given value
