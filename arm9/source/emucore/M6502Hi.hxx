@@ -64,7 +64,11 @@ class M6502High : public M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual bool execute(uInt16 number);
+    virtual void execute(uInt16 number);
+    virtual void execute_NB(uInt16 number);
+    virtual void execute_F8(uInt16 number);
+    virtual void execute_F6(uInt16 number);
+    virtual void execute_AR(uInt16 number);
 
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")

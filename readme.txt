@@ -90,6 +90,11 @@ To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 --------------------------------------------------------------------------------
 History :
 --------------------------------------------------------------------------------
+V5.2 : 30-Sep-2022 by Dave Bernazzani (wavemotion)
+  * Fixed goof in F6, F4 and related F6SC and F4SC drivers! 
+  * Another frame of increased performance
+  * More accurate AR cart handling for Supercharger games
+
 V5.1 : 29-Sep-2022 by Dave Bernazzani (wavemotion)
   * Improved all bankswitching for more speed and greater copatibility.
   * New F6 driver for DS-LITE to support 16K games - many at full speed!

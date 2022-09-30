@@ -70,7 +70,11 @@ class M6502Low : public M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual bool execute(uInt16 number);
+    virtual void execute(uInt16 number);
+    virtual void execute_NB(uInt16 number);
+    virtual void execute_F8(uInt16 number);
+    virtual void execute_F6(uInt16 number);
+    virtual void execute_AR(uInt16 number);
 
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
@@ -87,6 +91,7 @@ class M6502Low : public M6502
     void interruptHandlerNB();
     void interruptHandlerF8();
     void interruptHandlerF6();
+    void interruptHandlerAR();
 
   protected:
     /*
@@ -98,21 +103,17 @@ class M6502Low : public M6502
     inline uInt8 peek(uInt16 address);
     inline uInt8 peek_PC(uInt16 address);
     
-    bool execute_AR(uInt16 number);
     inline void poke_AR(uInt16 address, uInt8 value);
     inline uInt8 peek_AR(uInt16 address);
     
-    bool execute_NB(uInt16 number);
     inline uInt8 peek_NB(uInt16 address);
     inline uInt8 peek_PCNB(uInt16 address);
     inline void poke_NB(uInt16 address, uInt8 value);
 
-    bool execute_F8(uInt16 number);
     inline uInt8 peek_F8(uInt16 address);
     inline uInt8 peek_PCF8(uInt16 address);
     inline void poke_F8(uInt16 address, uInt8 value);
 
-    bool execute_F6(uInt16 number);
     inline uInt8 peek_F6(uInt16 address);
     inline uInt8 peek_PCF6(uInt16 address);
     inline void poke_F6(uInt16 address, uInt8 value);

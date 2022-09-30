@@ -373,23 +373,6 @@ TIA::TIA(const Console& console)
   computePlayerPositionResetWhenTable();
   computePlayerReflectTable();
   computePlayfieldMaskTable();
-          
-          
-  if (myCartInfo.special == SPEC_MELTDOWN)
-  {
-      ourPokeDelayTable[NUSIZ0] = 11; 
-      ourPokeDelayTable[NUSIZ1] = 11; 
-  }
-  else if (myCartInfo.special == SPEC_BUMPBASH)
-  {
-      ourPokeDelayTable[NUSIZ0] = 6; 
-      ourPokeDelayTable[NUSIZ1] = 6; 
-  }
-  else
-  {
-      ourPokeDelayTable[NUSIZ0] = 8; 
-      ourPokeDelayTable[NUSIZ1] = 8; 
-  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -415,6 +398,24 @@ void TIA::reset()
   }
   myCurrentFrame = 0;
   dma_channel = 0;    
+
+  
+  if (myCartInfo.special == SPEC_MELTDOWN)
+  {
+      ourPokeDelayTable[NUSIZ0] = 11; 
+      ourPokeDelayTable[NUSIZ1] = 11; 
+  }
+  else if (myCartInfo.special == SPEC_BUMPBASH)
+  {
+      ourPokeDelayTable[NUSIZ0] = 6; 
+      ourPokeDelayTable[NUSIZ1] = 6; 
+  }
+  else
+  {
+      ourPokeDelayTable[NUSIZ0] = 8; 
+      ourPokeDelayTable[NUSIZ1] = 8; 
+  }
+    
 
   // Reset pixel pointer and drawing flag
   myFramePointer = myCurrentFrameBuffer[0];
@@ -572,7 +573,17 @@ ITCM_CODE void TIA::update()
   myDSFramePointer = BG_GFX;
 
   // Execute instructions until frame is finished
-  mySystem->m6502().execute(25000);
+  // --------------------------------------------------------------------
+  // For games that can be specially executed for speed... do so here.
+  // --------------------------------------------------------------------
+  switch (noBanking)
+  {
+      case 1: mySystem->m6502().execute_NB(25000); break;   // If we are 2K or 4K (non-banked), we can run faster here...
+      case 2: mySystem->m6502().execute_F8(25000); break;   // If we are F8, we can run faster here...
+      case 3: mySystem->m6502().execute_F6(25000); break;   // If we are F6, we can run faster here...
+      case 4: mySystem->m6502().execute_AR(25000); break;   // If we are AR, we can run faster here...
+      default:mySystem->m6502().execute(25000);    break;   // Otherwise the normal execute driver
+  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

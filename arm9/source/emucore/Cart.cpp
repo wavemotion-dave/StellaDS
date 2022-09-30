@@ -2186,7 +2186,6 @@ const CartInfo table[] =
     
     // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2694,7 +2693,15 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     
   dsPrintCartType((char*)BANKING_STR[myCartInfo.banking]);
     
-  if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
+  // ----------------------------------------------------------------
+  // For Starpath Supercharger games, we must track distinct memory
+  // access. This takes time so we don't do it for other game types...
+  // ----------------------------------------------------------------
+  if (myCartInfo.special == SPEC_AR)
+  {
+      noBanking = 4;   
+  }
+  else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
       noBanking = 1;
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) noBanking = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver

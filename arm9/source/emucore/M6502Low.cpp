@@ -101,29 +101,8 @@ inline void M6502Low::poke(uInt16 address, uInt8 value)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-bool M6502Low::execute(uInt16 number)
+void M6502Low::execute(uInt16 number)
 {
-  // --------------------------------------------------------------------
-  // For games that can be specially executed for speed... do so here.
-  // --------------------------------------------------------------------
-  if (noBanking)
-  {
-      if (noBanking == 3)
-          return execute_F6(number);    // If we are F6
-      else if (noBanking == 2)
-          return execute_F8(number);    // If we are F8
-      else
-          return execute_NB(number);    // If we are 2K or 4K (non-banked), we can run faster here...
-  }
-  // ----------------------------------------------------------------
-  // For Starpath Supercharger games, we must track distinct memory
-  // access. This takes time so we don't do it for other game types...
-  // ----------------------------------------------------------------
-  else if (myCartInfo.special == SPEC_AR)
-  {
-    return execute_AR(number);      // To optimize the complicated AR memory handling
-  }
-      
   uInt16 fast_loop = number;
   // Clear all of the execution status bits except for the fatal error bit
   myExecutionStatus &= FatalErrorBit;
@@ -158,22 +137,8 @@ bool M6502Low::execute(uInt16 number)
           // Yes, so handle the interrupt
           interruptHandler();
         }
-
-        // See if execution has been stopped
-        if(myExecutionStatus & StopExecutionBit)
-        {
-          // Yes, so answer that everything finished fine
-          return true;
-        }
-        else
-        // See if a fatal error has occured
-        if(myExecutionStatus & FatalErrorBit)
-        {
-          // Yes, so answer that something when wrong
-          return false;
-        }
+        return;
     }
-    else return true;  // we've executed the specified number of instructions
   }
 }
 
@@ -283,7 +248,7 @@ ITCM_CODE void M6502Low::interruptHandlerNB()
   myExecutionStatus &= ~(MaskableInterruptBit | NonmaskableInterruptBit);
 }
 
-bool M6502Low::execute_NB(uInt16 number)
+void M6502Low::execute_NB(uInt16 number)
 {
   uInt16 fast_loop = number;
   // Clear all of the execution status bits except for the fatal error bit
@@ -323,22 +288,8 @@ bool M6502Low::execute_NB(uInt16 number)
           // Yes, so handle the interrupt
           interruptHandlerNB();
         }
-
-        // See if execution has been stopped
-        if(myExecutionStatus & StopExecutionBit)
-        {
-          // Yes, so answer that everything finished fine
-          return true;
-        }
-        else
-        // See if a fatal error has occured
-        if(myExecutionStatus & FatalErrorBit)
-        {
-          // Yes, so answer that something when wrong
-          return false;
-        }
+        return;
     }
-    else return true;  // we've executed the specified number of instructions
   }
 }
 
@@ -422,7 +373,7 @@ ITCM_CODE void M6502Low::interruptHandlerF8()
   myExecutionStatus &= ~(MaskableInterruptBit | NonmaskableInterruptBit);
 }
 
-bool M6502Low::execute_F8(uInt16 number)
+void M6502Low::execute_F8(uInt16 number)
 {
   uInt16 fast_loop = number;
   // Clear all of the execution status bits except for the fatal error bit
@@ -462,22 +413,8 @@ bool M6502Low::execute_F8(uInt16 number)
           // Yes, so handle the interrupt
           interruptHandlerF8();
         }
-
-        // See if execution has been stopped
-        if(myExecutionStatus & StopExecutionBit)
-        {
-          // Yes, so answer that everything finished fine
-          return true;
-        }
-        else
-        // See if a fatal error has occured
-        if(myExecutionStatus & FatalErrorBit)
-        {
-          // Yes, so answer that something when wrong
-          return false;
-        }
+        return;
     }
-    else return true;  // we've executed the specified number of instructions
   }
 }
 
@@ -568,7 +505,7 @@ ITCM_CODE void M6502Low::interruptHandlerF6()
   myExecutionStatus &= ~(MaskableInterruptBit | NonmaskableInterruptBit);
 }
 
-bool M6502Low::execute_F6(uInt16 number)
+void M6502Low::execute_F6(uInt16 number)
 {
   uInt16 fast_loop = number;
   // Clear all of the execution status bits except for the fatal error bit
@@ -614,22 +551,8 @@ bool M6502Low::execute_F6(uInt16 number)
           // Yes, so handle the interrupt
           interruptHandlerF6();
         }
-
-        // See if execution has been stopped
-        if(myExecutionStatus & StopExecutionBit)
-        {
-          // Yes, so answer that everything finished fine
-          return true;
-        }
-        else
-        // See if a fatal error has occured
-        if(myExecutionStatus & FatalErrorBit)
-        {
-          // Yes, so answer that something when wrong
-          return false;
-        }
+        return;
     }
-    else return true;  // we've executed the specified number of instructions
   }
 }
 
@@ -662,8 +585,6 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
 
             // Read the specified load into RAM
             myAR->loadIntoRAM(load);
-
-            return myImage1[addr];
           }
           // Is the bank configuration hotspot being accessed?
           else if(addr == 0x0FF8)
@@ -677,8 +598,8 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
           {
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
-                  if(!bPossibleLoad)    // Can't poke to ROM :-)
-                     myImage1[addr] = myDataHoldRegister;
+                  //if(!bPossibleLoad)    // Can't poke to ROM :-) -- but we're looking for speed so...
+                  myImage1[addr] = myDataHoldRegister;
                   myWritePending = false;
               }
           }
@@ -687,15 +608,8 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
       }
       else // WE are in the lower bank
       {
-          // Is the data hold register being set?
-          if((!(addr & 0x0F00)) && (!myWritePending))
-          {
-            myDataHoldRegister = addr;
-            NumberOfDistinctAccesses = 0;
-            if (myWriteEnabled) myWritePending = true;
-          }
           // Handle poke if writing enabled
-          else if (myWritePending)
+          if (myWritePending)
           {
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
@@ -703,8 +617,15 @@ inline uInt8 M6502Low::peek_AR(uInt16 address)
                   myWritePending = false;
               }
           }
+          // Is the data hold register being set?
+          else if (addr < 0x100)
+          {
+            myDataHoldRegister = addr;
+            NumberOfDistinctAccesses = 0;
+            if (myWriteEnabled) myWritePending = true;
+          }
 
-         return myImage0[addr];
+          return myImage0[addr];
       }
   }
   else
@@ -774,8 +695,36 @@ inline void M6502Low::poke_AR(uInt16 address, uInt8 value)
   }
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ITCM_CODE void M6502Low::interruptHandlerAR()
+{
+  // Handle the interrupt
+  if((myExecutionStatus & MaskableInterruptBit) && !I)
+  {
+    gSystemCycles += 7; // 7 cycle operation
+    poke_AR(0x0100 + SP--, (PC - 1) >> 8);		// The high byte of the return address
+    poke_AR(0x0100 + SP--, (PC - 1) & 0x00ff);	// The low byte of the return address
+    poke_AR(0x0100 + SP--, PS() & (~0x10));	// The status byte from the processor status register
+    D = false;	// Set our flags
+    I = true;
+    PC = (uInt16)peek_AR(0xFFFE) | ((uInt16)peek_AR(0xFFFF) << 8);	// Grab the address from the interrupt vector
+  }
+  else if(myExecutionStatus & NonmaskableInterruptBit)
+  {
+    gSystemCycles += 7; // 7 cycle operation
+    poke_AR(0x0100 + SP--, (PC - 1) >> 8);
+    poke_AR(0x0100 + SP--, (PC - 1) & 0x00ff);
+    poke_AR(0x0100 + SP--, PS() & (~0x10));
+    D = false;
+    PC = (uInt16)peek_AR(0xFFFA) | ((uInt16)peek_AR(0xFFFB) << 8);
+  }
 
-bool M6502Low::execute_AR(uInt16 number)
+  // Clear the interrupt bits in myExecutionStatus
+  myExecutionStatus &= ~(MaskableInterruptBit | NonmaskableInterruptBit);
+}
+
+
+void M6502Low::execute_AR(uInt16 number)
 {
   uInt16 fast_loop = number;
     
@@ -813,24 +762,10 @@ bool M6502Low::execute_AR(uInt16 number)
         if(myExecutionStatus & (MaskableInterruptBit | NonmaskableInterruptBit))
         {
           // Yes, so handle the interrupt
-          interruptHandler();
+          interruptHandlerAR();
         }
-
-        // See if execution has been stopped
-        if(myExecutionStatus & StopExecutionBit)
-        {
-          // Yes, so answer that everything finished fine
-          return true;
-        }
-        else
-        // See if a fatal error has occured
-        if(myExecutionStatus & FatalErrorBit)
-        {
-          // Yes, so answer that something when wrong
-          return false;
-        }
+        return;
     } 
-    else return true;  // we've executed the specified number of instructions
   }
 }
 

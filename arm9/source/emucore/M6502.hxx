@@ -128,7 +128,11 @@ class M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual bool execute(uInt16 number) = 0;
+    virtual void execute(uInt16 number) = 0;
+    virtual void execute_NB(uInt16 number) = 0;
+    virtual void execute_F8(uInt16 number) = 0;
+    virtual void execute_F6(uInt16 number) = 0;
+    virtual void execute_AR(uInt16 number) = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 
