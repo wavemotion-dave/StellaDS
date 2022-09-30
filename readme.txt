@@ -96,7 +96,7 @@ V5.2 : 30-Sep-2022 by Dave Bernazzani (wavemotion)
   * More accurate AR cart handling for Supercharger games
 
 V5.1 : 29-Sep-2022 by Dave Bernazzani (wavemotion)
-  * Improved all bankswitching for more speed and greater copatibility.
+  * Improved all bankswitching for more speed and greater compatibility.
   * New F6 driver for DS-LITE to support 16K games - many at full speed!
   * Cleanups across the board.
 
