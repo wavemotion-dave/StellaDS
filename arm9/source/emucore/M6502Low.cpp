@@ -139,6 +139,7 @@ void M6502Low::execute(uInt16 number)
         }
         return;
     }
+    return;
   }
 }
 
@@ -290,6 +291,7 @@ void M6502Low::execute_NB(uInt16 number)
         }
         return;
     }
+    return;
   }
 }
 
@@ -415,6 +417,7 @@ void M6502Low::execute_F8(uInt16 number)
         }
         return;
     }
+    return;
   }
 }
 
@@ -553,6 +556,7 @@ void M6502Low::execute_F6(uInt16 number)
         }
         return;
     }
+    return;
   }
 }
 
@@ -766,6 +770,7 @@ void M6502Low::execute_AR(uInt16 number)
         }
         return;
     } 
+    return;
   }
 }
 
