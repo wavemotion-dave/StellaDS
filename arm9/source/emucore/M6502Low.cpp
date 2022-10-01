@@ -42,8 +42,8 @@ uInt8 I                                 __attribute__((section(".dtcm")));   // 
 uInt8 notZ                              __attribute__((section(".dtcm")));   // Z flag complement for processor status register
 uInt8 C                                 __attribute__((section(".dtcm")));   // C flag for processor status register
         
-uInt32 NumberOfDistinctAccesses         __attribute__((section(".dtcm")));   // For AR cart use only - track the # of distince PC accesses
-uInt8 noBanking                         __attribute__((section(".dtcm")))=0; // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
+uInt32 NumberOfDistinctAccesses         __attribute__((section(".dtcm")));     // For AR cart use only - track the # of distince PC accesses
+uInt8  cartDriver                       __attribute__((section(".dtcm"))) = 0; // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
 uInt16 f8_bankbit                       __attribute__((section(".dtcm"))) = 0x1FFF;
 
 extern CartridgeAR *myAR;

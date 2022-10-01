@@ -576,7 +576,7 @@ ITCM_CODE void TIA::update()
   // --------------------------------------------------------------------
   // For games that can be specially executed for speed... do so here.
   // --------------------------------------------------------------------
-  switch (noBanking)
+  switch (cartDriver)
   {
       case 1: mySystem->m6502().execute_NB(25000); break;   // If we are 2K or 4K (non-banked), we can run faster here...
       case 2: mySystem->m6502().execute_F8(25000); break;   // If we are F8, we can run faster here...

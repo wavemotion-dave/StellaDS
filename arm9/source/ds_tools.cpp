@@ -58,7 +58,7 @@ uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 22050;
 
-#define MAX_DEBUG 16
+#define MAX_DEBUG 39
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128] = {0};
@@ -105,7 +105,8 @@ static void DumpDebugData(void)
         for (int i=0; i<MAX_DEBUG; i++)
         {
             idx=0;
-            val = debug[i];
+            //val = debug[i];
+            val = fast_cart_buffer[(8192-35)+i];
             dbgbuf[idx++] = 'R';
             dbgbuf[idx++] = '0' + (i / 10);
             dbgbuf[idx++] = '0' + (i % 10);
@@ -130,10 +131,10 @@ static void DumpDebugData(void)
             dbgbuf[idx++] = '0' + (int)val%10;
             dbgbuf[idx++] = 0;
 
-            if (i > 22)
-                dsPrintValue(22,9+(i-23),0, dbgbuf);
-            else if (i > 11)
-                dsPrintValue(11,9+(i-12),0, dbgbuf);
+            if (i > 25)
+                dsPrintValue(22,9+(i-26),0, dbgbuf);
+            else if (i > 12)
+                dsPrintValue(11,9+(i-13),0, dbgbuf);
             else dsPrintValue(0,9+i,0, dbgbuf);
         }
     }

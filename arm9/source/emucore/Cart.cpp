@@ -742,7 +742,7 @@ const CartInfo table[] =
     {"7608abdfd9b26f4a0ecec18b232bea54",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0, 12},    // Football (1979)(PAL).bin
     {"e275cbe7d4e11e62c3bfcfb38fca3d49",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   4,  2},    // Football (AKA Super Challenge Football) (1989).bin
     {"5f9b62350b31be8bd270d9a241cbd50e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,    92,   4,  0},    // Football (AKA Super Challenge Football) (1989) (PAL).bin
-    {"5926ab1a9d1d34fb7c3bfd5afff6bc80",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Four Play.bin
+    {"5926ab1a9d1d34fb7c3bfd5afff6bc80",  "FOURPL", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Four Play.bin
     {"213e5e82ecb42af237cfed8612c128ac",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   59,    245,   95,    3,  0},    // Forest (1983) (PAL).bin
     {"15dd21c2608e0d7d9f54c0d3f08cca1f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Frankenstein's Monster (1983).bin
     {"7d0b49ea4fe3a5f1e119a6d14843db17",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   46,    245,    80,   0,  0},    // Frankenstein's Monster (1983) (PAL).bin
@@ -1147,8 +1147,8 @@ const CartInfo table[] =
     {"5f791d93ac95bdd8a691a65d665fb436",  "??????", BANK_4K,   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Atom Smasher) (1983).bin
     {"712924a2c7b692f6e7b009285c2169a7",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Meteoroids (1982).bin
     {"909d01739a22579556b740e933915fd8",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  35,    210,    90,   0,  0},    // Mid Space (v43).bin
-    {"f1554569321dc933c87981cf5c239c43",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  38,    200,   100,   0,  0},    // Midnight Magic (1984).bin
-    {"da732c57697ad7d7af414998fa527e75",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  PAL,   63,    230,   100,   0,  1},    // Midnight Magic (1984) (PAL).bin
+    {"f1554569321dc933c87981cf5c239c43",  "MIDMAG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  38,    200,   100,   0,  0},    // Midnight Magic (1984).bin
+    {"da732c57697ad7d7af414998fa527e75",  "MIDMAG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  PAL,   63,    230,   100,   0,  1},    // Midnight Magic (1984) (PAL).bin
     {"3c57748c8286cf9e821ecd064f21aaa9",  "??????", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Millipede (1984).bin
     {"11bcf5c752088b5aaf86d6c7a6a11e8d",  "??????", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Millipede (1984).bin
     {"0bf19e40d5cd8aa5afb33b16569313e6",  "??????", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Millipede (1984).bin
@@ -1509,12 +1509,12 @@ const CartInfo table[] =
     {"2447e17a4e18e6b609de498fe4ab52ba",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // RealSports Soccer (1983).bin
     {"0e7e73421606873b544e858c59dc283e",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // RealSports Soccer (1983).bin
     {"b9336ed6d94a5cc81a16483b0a946a73",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   54,    245,    72,   0, 10},    // RealSports Soccer (1983) (PAL).bin
-    {"dac5c0fe74531f077c105b396874a9f1",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"3e7d10d0a911afc4b492d06c99863e65",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"53b66f11f67c3b53b2995e0e02017bd7",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"517923e655755086a3b72c0b17b430e6",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"dac5c0fe74531f077c105b396874a9f1",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"4e66c8e7c670532569c70d205f615dad",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,    94,   0,  0},    // RealSports Tennis (1983) (PAL).bin
+    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"3e7d10d0a911afc4b492d06c99863e65",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"53b66f11f67c3b53b2995e0e02017bd7",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"517923e655755086a3b72c0b17b430e6",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"4e66c8e7c670532569c70d205f615dad",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,    94,   0,  0},    // RealSports Tennis (1983) (PAL).bin
     {"aed0b7bd64cc384f85fdea33e28daf3b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // RealSports Volleyball (1982).bin
     {"cbc373fbcb1653b4c56bfabba33ea50d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // RealSports Volleyball (1982).bin
     {"6c128bc950fcbdbcaf0d99935da70156",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // RealSports Volleyball (1982).bin
@@ -2698,57 +2698,57 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // ----------------------------------------------------------------
   if (myCartInfo.special == SPEC_AR)
   {
-      noBanking = 4;   
+      cartDriver = 4;   
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
-      noBanking = 1;
-      if (strcmp(myCartInfo.gameID, "SPACX7") == 0) noBanking = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
+      cartDriver = 1;
+      if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
   }  
   else if (myCartInfo.banking == BANK_F8 && !isDSiMode())
   {
-      noBanking = 0;
-      
+      cartDriver = 0;
+          
       // ---------------------------------------------------------------------------------
       // For a handful of F8 games, we can turn on special speed-hack banking handling...
       // ---------------------------------------------------------------------------------
-      if (strcmp(myCartInfo.gameID, "ASTERD") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "ASTRIX") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "BAZONE") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "BEAMRI") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "BLUEPR") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "BUCKRO") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "CABAGE") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "CENTIP") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "COLONY") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "FALLDN") == 0) noBanking = 2;      
-      if (strcmp(myCartInfo.gameID, "FATHOM") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "FRONTL") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "GALAXY") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "GOFISH") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "HEROAV") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "JOUST_") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "LEAD01") == 0) noBanking = 2;      
-      if (strcmp(myCartInfo.gameID, "MARIOB") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "MOONPA") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "MOONSW") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "MSPACM") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "PHOENX") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "PIGSIN") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "POLEPO") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "PRCOOK") == 0) noBanking = 2;      
-      if (strcmp(myCartInfo.gameID, "STARTR") == 0) noBanking = 2;
-      if (strcmp(myCartInfo.gameID, "VANGRD") == 0) noBanking = 2;
+      if (strcmp(myCartInfo.gameID, "ASTERD") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "ASTRIX") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "BAZONE") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "BEAMRI") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "BLUEPR") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "BUCKRO") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "CABAGE") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "CENTIP") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "COLONY") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "FALLDN") == 0) cartDriver = 2;      
+      if (strcmp(myCartInfo.gameID, "FATHOM") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "FRONTL") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "GALAXY") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "GOFISH") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "HEROAV") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "JOUST_") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "LEAD01") == 0) cartDriver = 2;      
+      if (strcmp(myCartInfo.gameID, "MARIOB") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "MOONPA") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "MOONSW") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "MSPACM") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "PHOENX") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "PIGSIN") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "POLEPO") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "PRCOOK") == 0) cartDriver = 2;      
+      if (strcmp(myCartInfo.gameID, "STARTR") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "VANGRD") == 0) cartDriver = 2;
   }
   else if ((myCartInfo.banking == BANK_F6) && !isDSiMode())
   {
       // ------------------------------------------------------------------------------------
       // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
       // ------------------------------------------------------------------------------------
-      noBanking = 3;
+      cartDriver = 3;
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "CONMAR") == 0) || (strcmp(myCartInfo.gameID, "MANGOS") == 0) || (strcmp(myCartInfo.gameID, "FROSTY") == 0))
       {
@@ -2759,8 +2759,12 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else // Use the normal drivers....
   {
-      noBanking = 0;
+      cartDriver = 0;
   }
+      
+  if (strcmp(myCartInfo.gameID, "REALTE") == 0) cartDriver = 2;
+  if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;
+    
   original_banking_detect = myCartInfo.banking;
   return myCartInfo.banking;
 }

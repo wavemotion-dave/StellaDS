@@ -41,12 +41,6 @@ CartridgeF6SC::CartridgeF6SC(const uInt8* image)
     fast_cart_buffer[addr] = image[addr];
   }
     
-  // Copy half the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
-  for(uInt32 addr = 0; addr < 8192; ++addr)
-  {
-    fast_cart_buffer[addr] = image[addr];
-  }
-
   // Initialize RAM with random values 
   // We steal the fast_cart_buffer here
   Random random;

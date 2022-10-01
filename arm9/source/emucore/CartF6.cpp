@@ -56,6 +56,7 @@ const char* CartridgeF6::name() const
 void CartridgeF6::reset()
 {
   // Upon reset we switch to bank 0
+  myCurrentOffset = 0 * 4096;
   bank(0);
 }
 
@@ -83,8 +84,9 @@ void CartridgeF6::install(System& system)
   {
       mySystem->setPageAccess(address >> shift, page_access);
   }
-    
+  
   // Upon install we'll setup bank 0
+  myCurrentOffset = 0 * 4096;
   bank(0);
 }
 
@@ -165,10 +167,21 @@ inline void CartridgeF6::bank(uInt16 bank)
   // Setup the page access methods for the current bank
   uInt16 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
-  // Map ROM image into the system
-  for(uInt32 address = 0x0000; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  if (bank < 2)
   {
-      myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
+      // Map ROM image into the system - here we can use the fast_cart_buffer[]
+      for(uInt32 address = 0x0000; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+      {
+          myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
+      }
+  }
+  else
+  {
+      // Map ROM image into the system - here we use the normal cart_buffer[]
+      for(uInt32 address = 0x0000; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+      {
+          myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
+      }
   }
 }
 
