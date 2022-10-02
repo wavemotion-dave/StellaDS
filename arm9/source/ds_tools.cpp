@@ -1,7 +1,14 @@
 // =====================================================================================================
-// Stella DSi - Improved Version by Dave Bernazzani (wavemotion)
+// Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
 //
-// See readme.txt for a list of everything that has changed in the baseline 1.0 code.
+// Copyright (c) 2020-2022 by Dave Bernazzani
+//
+// Copying and distribution of this emulator, it's source code and associated 
+// readme files, with or without modification, are permitted in any medium without 
+// royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition),
+// Alekmaul (original port) are thanked profusely along with the entire Stella Team.
+//
+// The ColecoDS emulator is offered as-is, without any warranty.
 // =====================================================================================================
 #include <nds.h>
 #include <nds/fifomessages.h>
@@ -40,14 +47,14 @@
 
 #define VERSION "5.2"
 
-#define WRITE_TWEAKS
+//#define WRITE_TWEAKS
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
 
 uInt16 sampleExtender[256] = {0};
 
-int atari_frames=0;
+uInt16 atari_frames=0;
 
 uInt8 bInitialDiffSet = 0;
 
@@ -63,8 +70,8 @@ Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[128] = {0};
 
-FICA2600 vcsromlist[1200];
-unsigned short int countvcs=0, ucFicAct=0;
+FICA2600 vcsromlist[MAX_ROMS_PER_DIRECTORY];
+uInt16 countvcs=0, ucFicAct=0;
 
 static short bShowKeyboard = false;
 static short bShowPaddles = false;
@@ -72,20 +79,18 @@ static short bShowInfo = false;
 
 Console* theConsole = (Console*) NULL;
 
-int bg0, bg0b,bg1b;
-unsigned int etatEmu;
-bool fpsDisplay = false;
+int bg0, bg0b, bg1b;
+uInt16 etatEmu;
+uInt8 fpsDisplay = false;
 
 uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 
-static int full_speed=0;
-int gTotalAtariFrames=0;
+static uInt8 full_speed=0;
+uInt16 gTotalAtariFrames=0;
 
-unsigned short int keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, romSel;
-
-extern Int8 ourPokeDelayTable[64];
+uInt16 keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, romSel;
 
 static void DumpDebugData(void)
 {
@@ -105,8 +110,7 @@ static void DumpDebugData(void)
         for (int i=0; i<MAX_DEBUG; i++)
         {
             idx=0;
-            //val = debug[i];
-            val = fast_cart_buffer[(8192-35)+i];
+            val = debug[i];
             dbgbuf[idx++] = 'R';
             dbgbuf[idx++] = '0' + (i / 10);
             dbgbuf[idx++] = '0' + (i % 10);
@@ -216,7 +220,7 @@ ITCM_CODE void dsInitTimer(void)
     TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
 }
 
-ITCM_CODE void dsInitPalette(void) 
+void dsInitPalette(void) 
 {
     // Init DS Specific palette
     const uInt32* gamePalette = theConsole->myMediaSource->palette();
@@ -232,12 +236,12 @@ ITCM_CODE void dsInitPalette(void)
     }
 }
 
-ITCM_CODE void dsWarnIncompatibileCart(void)
+void dsWarnIncompatibileCart(void)
 {
     dsPrintValue(5,0,0, (char*)"DPC+ CART NOT SUPPORTED");
 }
 
-ITCM_CODE void dsPrintCartType(char * type)
+void dsPrintCartType(char * type)
 {
     if (DEBUG_DUMP)
     {
@@ -245,7 +249,7 @@ ITCM_CODE void dsPrintCartType(char * type)
     }
 }
 
-ITCM_CODE void dsWriteTweaks(void)
+void dsWriteTweaks(void)
 {
 #ifdef WRITE_TWEAKS
     FILE *fp;
@@ -623,7 +627,7 @@ char szName[128];
 char szName2[128];
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 {
-  unsigned int ucBcl,ucGame;
+  u16 ucBcl,ucGame;
 
   // Display all games if possible
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
@@ -659,8 +663,8 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 unsigned int dsWaitForRom(void)
 {
   bool bDone=false, bRet=false;
-  u32 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
-  u32 uLenFic=0, ucFlip=0, ucFlop=0;
+  u16 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
+  u16 uLenFic=0, ucFlip=0, ucFlop=0;
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -845,7 +849,7 @@ unsigned int dsWaitForRom(void)
       {
         ucFlip = 0;
         uLenFic++;
-        if ((uLenFic+29)>strlen(vcsromlist[ucFicAct].filename)) 
+        if ((uLenFic+29)>(u16)strlen(vcsromlist[ucFicAct].filename)) 
         {
           ucFlop++;
           if (ucFlop >= 15) 
@@ -970,8 +974,8 @@ void dsInstallSoundEmuFIFO(void)
 }
 
 
-char fpsbuf[32];
-int iTx,iTy;
+char fpsbuf[8];
+short int iTx,iTy;
 uInt8 mca_dampen_y=0;
 uInt8 mca_dampen_a=0;
 uInt8 rapid_fire = 0;
@@ -983,8 +987,8 @@ uInt8 button_right = false;
 
 ITCM_CODE void dsMainLoop(void)
 {
-    static int dampen=0;
-    static int info_dampen=0;
+    static u16 dampen=0;
+    static u16 info_dampen=0;
 
     last_keys_pressed = -1;
     full_speed = 0;
@@ -1785,7 +1789,7 @@ int a26Filescmp (const void *c1, const void *c2)
   return strcasecmp (p1->filename, p2->filename);    
 }
 
-static char filenametmp[255];
+static char filenametmp[MAX_FILE_NAME_LEN+1];
 void vcsFindFiles(void) 
 {
   DIR *pdir;
@@ -1799,7 +1803,16 @@ void vcsFindFiles(void)
 
     while (((pent=readdir(pdir))!=NULL)) 
     {
-      strcpy(filenametmp,pent->d_name);
+      if (countvcs >= MAX_ROMS_PER_DIRECTORY)
+      {
+          break;    // That's it... no more room to display
+      }
+      if (strlen(pent->d_name) > MAX_FILE_NAME_LEN)
+      {
+          continue; // Name is too long... skip it
+      }
+      strncpy(filenametmp,pent->d_name, MAX_FILE_NAME_LEN);
+      filenametmp[MAX_FILE_NAME_LEN-1] = 0;
       if (pent->d_type == DT_DIR)
       {
         if (!( (filenametmp[0] == '.') && (strlen(filenametmp) == 1))) {
@@ -1826,7 +1839,9 @@ void vcsFindFiles(void)
     closedir(pdir);
   }
   if (countvcs)
+  {
     qsort (vcsromlist, countvcs, sizeof (FICA2600), a26Filescmp);
+  }
 }
 
 // End of file

@@ -26,9 +26,6 @@
 #include "System.hxx"
 #include "SaveKey.hxx"
 
-unsigned int myDigitalPinState[9];
-unsigned int myAnalogPinValue[9];
-
 MT24LC256 *gSaveKeyEEprom = NULL;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -48,9 +45,6 @@ SaveKey::SaveKey(Jack jack, const Event& event) : Controller(jack, event),
         
   gSaveKeyEEprom = myEEPROM;
 
-  myDigitalPinState[One] = myDigitalPinState[Two] = true;
-  myAnalogPinValue[Five] = myAnalogPinValue[Nine] = maximumResistance;
-        
   bUseSaveKey = false;
 }
 
@@ -72,7 +66,7 @@ bool SaveKey::read(DigitalPin pin)
     // Pin 3: EEPROM SDA
     //        input data from the 24LC256 EEPROM using the I2C protocol
     case Three:
-      return (bUseSaveKey ? (myDigitalPinState[Three] = myEEPROM->readSDA()) : 1);
+      return (bUseSaveKey ? (myEEPROM->readSDA()) : 1);
 
     default:
       return 1;
@@ -93,14 +87,12 @@ void SaveKey::write(DigitalPin pin, bool value)
     // Pin 3: EEPROM SDA
     //        output data to the 24LC256 EEPROM using the I2C protocol
     case Three:
-      myDigitalPinState[Three] = value;
       myEEPROM->writeSDA(value);
       break;
 
     // Pin 4: EEPROM SCL
     //        output clock data to the 24LC256 EEPROM using the I2C protocol
     case Four:
-      myDigitalPinState[Four] = value;
       bUseSaveKey = true;
       myEEPROM->writeSCL(value);
       break;

@@ -7,14 +7,11 @@
 
 #define WAITVBL swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank(); swiWaitForVBlank();
 
-
 #define STELLADS_MENUINIT 0x01
 #define STELLADS_MENUSHOW 0x02
 #define STELLADS_PLAYINIT 0x03 
 #define STELLADS_PLAYGAME 0x04 
 #define STELLADS_QUITSTDS 0x05
-
-extern unsigned int etatEmu;
 
 typedef enum {
   EMUARM7_INIT_SND = 0x123C,
@@ -22,20 +19,20 @@ typedef enum {
   EMUARM7_PLAY_SND = 0x123E,
 } FifoMesType;
 
+#define MAX_ROMS_PER_DIRECTORY  1200
+#define MAX_FILE_NAME_LEN       167
+
 typedef struct FICtoLoad {
-  char  filename[127];
+  char  filename[MAX_FILE_NAME_LEN];
   uInt8 directory;
 } FICA2600;
+
 
 extern Console* theConsole;
 extern Sound* theSound;
 
-extern unsigned int etatEmu;
+extern unsigned short int etatEmu;
 extern FICA2600 vcsromlist[];
-
-extern volatile u32 emuFps;
-extern volatile u32 emuActFrames;
-extern volatile u16 g_framePending;
 
 #define ds_GetTicks() (TIMER0_DATA)
 

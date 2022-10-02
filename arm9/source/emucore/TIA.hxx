@@ -52,34 +52,32 @@ extern uInt8 myPriorityEncoder[2][256];
 
 extern    uInt16 myCollision;    // Collision register
 
-    // Note that these position registers contain the color clock 
-    // on which the object's serial output should begin (0 to 159)
+// Note that these position registers contain the color clock 
+// on which the object's serial output should begin (0 to 159)
 extern    Int16 myPOSP0;         // Player 0 position register
 extern    Int16 myPOSP1;         // Player 1 position register
 extern    Int16 myPOSM0;         // Missle 0 position register
 extern    Int16 myPOSM1;         // Missle 1 position register
 extern    Int16 myPOSBL;         // Ball position register
-
-extern uInt8 myPlayfieldPriorityAndScore;
-extern uInt32 myColor[4];
-
-extern    uInt8 myCTRLPF;       // Playfield control register
+extern    uInt8 myPlayfieldPriorityAndScore;
+extern    uInt32 myColor[4];     // The 4 types of colors (foreground, background,etc) that need to addressed quickly
+extern    uInt8 myCTRLPF;        // Playfield control register
 extern    uInt8 myREFP0;         // Indicates if player 0 is being reflected
 extern    uInt8 myREFP1;         // Indicates if player 1 is being reflected
-extern    uInt32 myPF;          // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
-extern    uInt8 myGRP0;         // Player 0 graphics register
-extern    uInt8 myGRP1;         // Player 1 graphics register
-extern    uInt8 myDGRP0;        // Player 0 delayed graphics register
-extern    uInt8 myDGRP1;        // Player 1 delayed graphics register
+extern    uInt32 myPF;           // Playfield graphics (19-12:PF2 11-4:PF1 3-0:PF0)
+extern    uInt8 myGRP0;          // Player 0 graphics register
+extern    uInt8 myGRP1;          // Player 1 graphics register
+extern    uInt8 myDGRP0;         // Player 0 delayed graphics register
+extern    uInt8 myDGRP1;         // Player 1 delayed graphics register
 extern    uInt8 myENAM0;         // Indicates if missle 0 is enabled
 extern    uInt8 myENAM1;         // Indicates if missle 0 is enabled
 extern    uInt8 myENABL;         // Indicates if the ball is enabled
 extern    uInt8 myDENABL;        // Indicates if the virtically delayed ball is enabled
-extern    Int8 myHMP0;          // Player 0 horizontal motion register
-extern    Int8 myHMP1;          // Player 1 horizontal motion register
-extern    Int8 myHMM0;          // Missle 0 horizontal motion register
-extern    Int8 myHMM1;          // Missle 1 horizontal motion register
-extern    Int8 myHMBL;          // Ball horizontal motion register
+extern    Int8 myHMP0;           // Player 0 horizontal motion register
+extern    Int8 myHMP1;           // Player 1 horizontal motion register
+extern    Int8 myHMM0;           // Missle 0 horizontal motion register
+extern    Int8 myHMM1;           // Missle 1 horizontal motion register
+extern    Int8 myHMBL;           // Ball horizontal motion register
 extern    uInt8 myVDELP0;        // Indicates if player 0 is being virtically delayed
 extern    uInt8 myVDELP1;        // Indicates if player 1 is being virtically delayed
 extern    uInt8 myVDELBL;        // Indicates if the ball is being virtically delayed
@@ -107,7 +105,7 @@ extern    Int32 myLastHMOVEClock;
 extern    uInt8 myHMOVEBlankEnabled;
 extern    uInt8 myAllowHMOVEBlanks;
 extern    uInt8 myM0CosmicArkMotionEnabled;
-extern    uInt32 myM0CosmicArkCounter;
+extern    uInt8 myM0CosmicArkCounter;
 extern    uInt8 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.
 extern    uInt8 myCurrentGRP1;                  // Graphics for Player 1 that should be displayed.  This will be reflected if the player is being reflected.
 
