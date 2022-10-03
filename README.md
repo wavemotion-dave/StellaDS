@@ -15,7 +15,9 @@ See compatibility.txt for a full list of the ROMS supported. Generally these are
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
 * Most popular bankswitching is supported up to 256K EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
-* DPC+ and CDFJ/CDFJ schemes do not support ARM-assisted games (the ARM core on a Harmony cart runs at 70MHz... more than the speed of the original DS hardware!)
+* High score support with up to 10 scores for each game
+* Manuals for more than 100 of the common games included
+* Keypad overlay for Star Raiders
 
 Copyright :
 -----------------------
@@ -30,6 +32,7 @@ Known Issues :
 * DPC+ and CDFJ/CDFJ+ games can't be emulated - that requires a coprocessor running at 70MHz (more   than the speed of an original DS!).
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
+* The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will runfine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.
 
 Installation:
 -----------------------
@@ -82,9 +85,9 @@ NTSC roms.
 
 Thanks :
 -----------------------
-To Bradford W. Mott and Stephen Anthony and various contributors for Stella.
-To Alekmaul for porting Stella to the DS.
-To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
+* To Bradford W. Mott and Stephen Anthony and various contributors for Stella.
+* To Alekmaul for porting Stella to the DS.
+* To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 
 Version History:
 -----------------------
