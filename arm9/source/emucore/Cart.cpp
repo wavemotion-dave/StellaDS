@@ -1732,7 +1732,7 @@ const CartInfo table[] =
     {"5f7ae9a7f8d79a3b37e8fc841f65643a",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sorcerer's Apprentice (1983).bin
     {"d214c7a734e133a5c18e93229435b57a",  "??????", BANK_UASW, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sorcerer's Apprentice (1983).bin (UA Swapped Banks)
     {"2e82a1628ef6c735c0ab8fa92927e9b0",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Sorcerer's Apprentice (1983) (PAL).bin
-    {"25c97848ae6499e569b832b686a84bb2",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  2},    // Sp+.bin
+    {"25c97848ae6499e569b832b686a84bb2",  "SPPLUS", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  2},    // Sp+.bin
     {"17badbb3f54d1fc01ee68726882f26a6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Space Attack (1982).bin
     {"abb741c83f665d73c86d90a7d9292a9b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Space Attack (1982) (PAL).bin
     {"9f81edee8b4b5afbde0e49a6fe8da0de",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // Space Battle (NTSC).bin    
@@ -2710,6 +2710,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
       cartDriver = 1;
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
+      if (strcmp(myCartInfo.gameID, "SPPLUS") == 0) cartDriver = 0;  // SP+
   }  
   else if (myCartInfo.banking == BANK_F8 && !isDSiMode())
   {
