@@ -52,8 +52,6 @@
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
 
-uInt16 sampleExtender[256] = {0};
-
 uInt16 atari_frames=0;
 
 uInt8 bInitialDiffSet = 0;
@@ -68,7 +66,7 @@ uInt16 mySoundFreq = 22050;
 #define MAX_DEBUG 39
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
-char my_filename[128] = {0};
+char my_filename[MAX_FILE_NAME_LEN+1] = {0};
 
 FICA2600 vcsromlist[MAX_ROMS_PER_DIRECTORY];
 uInt16 countvcs=0, ucFicAct=0;
@@ -210,7 +208,8 @@ void dsInitScreenMain(void)
     SetYtrigger(190); //trigger 2 lines before vsync
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
-    vramSetBankE(VRAM_E_LCD );                // Not using this for video but 64K of faster RAM always useful! Mapped at 0x06880000
+    vramSetBankE(VRAM_E_LCD);                // Not using this for video but 64K of faster RAM always useful! Mapped at 0x06880000
+    vramSetBankI(VRAM_I_LCD);                // Not using this for video but 16K of faster RAM always useful! Mapped at 0x068A0000
     WAITVBL;
 }
 
@@ -495,8 +494,8 @@ void dsFreeEmu(void)
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
-  strncpy(my_filename, filename, 127);
-  my_filename[127] = 0;
+  strncpy(my_filename, filename, MAX_FILE_NAME_LEN);
+  my_filename[MAX_FILE_NAME_LEN] = 0;
     
   // Load the file
   FILE *romfile = fopen(filename, "rb");
@@ -623,8 +622,8 @@ bool dsWaitOnQuit(void)
   return bRet;
 }
 
-char szName[128];
-char szName2[128];
+char szName[MAX_FILE_NAME_LEN+1];
+char szName2[MAX_FILE_NAME_LEN+1];
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 {
   u16 ucBcl,ucGame;
@@ -662,9 +661,9 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 
 unsigned int dsWaitForRom(void)
 {
-  bool bDone=false, bRet=false;
+  u8 bDone=false, bRet=false;
   u16 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
-  u16 uLenFic=0, ucFlip=0, ucFlop=0;
+  u8 uLenFic=0, ucFlip=0, ucFlop=0;
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -876,10 +875,10 @@ unsigned int dsWaitForRom(void)
 
 unsigned int dsWaitOnMenu(unsigned int actState)
 {
-  unsigned int uState=STELLADS_PLAYINIT;
-  unsigned int keys_pressed;
-  bool bDone=false, romSel;
-  int iTx,iTy;
+  unsigned short int uState=STELLADS_PLAYINIT;
+  unsigned short int keys_pressed;
+  u8 bDone=false, romSel;
+  short int iTx,iTy;
 
   while (!bDone)
   {
@@ -945,21 +944,19 @@ ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void)
 {
-    for (int i=0; i<256; i++)
-    {
-        sampleExtender[i] = (i << 8);
-    }
-    
     if (isDSiMode())
     {
         aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
+        mySoundFreq = 22100;
     }
     else
     {
         aptr = (uint16*)((uint32)&sound_buffer[0] + 0x00400000); 
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000); 
+        mySoundFreq = 11025;
     }
+    
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
     msg.SoundPlay.freq = 44100;
@@ -976,19 +973,18 @@ void dsInstallSoundEmuFIFO(void)
 
 char fpsbuf[8];
 short int iTx,iTy;
-uInt8 mca_dampen_y=0;
-uInt8 mca_dampen_a=0;
-uInt8 rapid_fire = 0;
-uInt8 button_fire  = false;
-uInt8 button_up    = false;
-uInt8 button_down  = false;
-uInt8 button_left  = false;
-uInt8 button_right = false;
+static u16 dampen=0;
+static u16 info_dampen=0;
+static u16 driving_dampen = 0;
 
 ITCM_CODE void dsMainLoop(void)
 {
-    static u16 dampen=0;
-    static u16 info_dampen=0;
+    uInt8 rapid_fire   = 0;
+    uInt8 button_fire  = false;
+    uInt8 button_up    = false;
+    uInt8 button_down  = false;
+    uInt8 button_left  = false;
+    uInt8 button_right = false;
 
     last_keys_pressed = -1;
     full_speed = 0;
@@ -1052,38 +1048,50 @@ ITCM_CODE void dsMainLoop(void)
                     button_left  = false;
                     button_right = false;
                     
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_A))
+                    {
+                        if ((myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_B))
+                    {
+                        if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_X))
+                    {
+                        if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_Y))
+                    {
+                        if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
                     
-                    if (keys_pressed & (KEY_UP))                                            button_up    = true;
-                    if (keys_pressed & (KEY_DOWN))                                          button_down  = true;
-                    if (keys_pressed & (KEY_LEFT))                                          button_left  = true;
-                    if (keys_pressed & (KEY_RIGHT))                                         button_right = true;
+                    if (keys_pressed & (KEY_UP))                      button_up    = true;
+                    if (keys_pressed & (KEY_DOWN))                    button_down  = true;
+                    if (keys_pressed & (KEY_LEFT))                    button_left  = true;
+                    if (keys_pressed & (KEY_RIGHT))                   button_right = true;
                     
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, button_fire);
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    button_up);
@@ -1099,38 +1107,50 @@ ITCM_CODE void dsMainLoop(void)
                     button_left  = false;
                     button_right = false;
                     
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_A) && (myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_A))
+                    {
+                        if ((myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_B) && (myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_B))
+                    {
+                        if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_X) && (myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_X))
+                    {
+                        if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
 
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
-                    if (keys_pressed & (KEY_Y) && (myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    if (keys_pressed & (KEY_Y))
+                    {
+                        if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                    }
                     
-                    if (keys_pressed & (KEY_UP))                                            button_up    = true;
-                    if (keys_pressed & (KEY_DOWN))                                          button_down  = true;
-                    if (keys_pressed & (KEY_LEFT))                                          button_left  = true;
-                    if (keys_pressed & (KEY_RIGHT))                                         button_right = true;
+                    if (keys_pressed & (KEY_UP))                      button_up    = true;
+                    if (keys_pressed & (KEY_DOWN))                    button_down  = true;
+                    if (keys_pressed & (KEY_LEFT))                    button_left  = true;
+                    if (keys_pressed & (KEY_RIGHT))                   button_right = true;
                     
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,    button_fire);
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    button_up);
@@ -1339,7 +1359,6 @@ ITCM_CODE void dsMainLoop(void)
                     break;
                     
                 case CTR_DRIVING:
-                    static int driving_dampen = 0;
                     if (++driving_dampen % 2)
                     {
                         theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_INSERT, keys_pressed & (KEY_LEFT));

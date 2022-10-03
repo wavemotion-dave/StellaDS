@@ -224,13 +224,6 @@ class TIA : public Device , public MediaSource
     */
     uInt32 width() const;
 
-
-    /**
-      Toggle between the available palettes.  The frontends will need to
-      reload their palette.
-    */
-    virtual void togglePalette();
-    
   private:
     // Compute the ball mask table
     void computeBallMaskTable();

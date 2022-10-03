@@ -297,8 +297,6 @@ Int8 ourCompleteMotionTable[76][16] = {
   { 0, -1, -2, -3, -4, -5, -6, -7,  8,  7,  6,  5,  4,  3,  2,  1}  // HBLANK
 };
 
-
-
 // -----------------------------------------------------------
 // These two big buffers are our ping-pong video memory...
 // -----------------------------------------------------------
@@ -3563,11 +3561,6 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
   }
-}
-
-void TIA::togglePalette()
-{
-  // Only NTSC available...
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

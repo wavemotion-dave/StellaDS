@@ -25,10 +25,11 @@
 #include "CartFA2.hxx"
 #include "Random.hxx"
 #include "System.hxx"
+#include "../ds_tools.h"
 #include <iostream>
 
-extern char my_filename[128];
-char flash_filename[128+5];
+extern char my_filename[MAX_FILE_NAME_LEN+1];
+char flash_filename[MAX_FILE_NAME_LEN+5];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeFA2::CartridgeFA2(const uInt8* image, uInt32 size)
@@ -51,9 +52,8 @@ CartridgeFA2::CartridgeFA2(const uInt8* image, uInt32 size)
   }
     
   // Save the Flash backing filename for the extra RAM
-  //strncpy(flash_filename, myCartInfo.md5, 127);
-    strncpy(flash_filename,my_filename, 127);
-  flash_filename[127] = 0;
+  strncpy(flash_filename,my_filename, MAX_FILE_NAME_LEN);
+  flash_filename[MAX_FILE_NAME_LEN] = 0;
   strcat(flash_filename, ".fla");
 }
  

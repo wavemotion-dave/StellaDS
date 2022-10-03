@@ -12,7 +12,6 @@
 
 int main(int argc, char **argv) 
 {
-  extern uInt16 mySoundFreq;
   // Init sound
   consoleDemoInit();
   soundEnable();
@@ -29,10 +28,8 @@ int main(int argc, char **argv)
     
   // Init Timer
   dsInitTimer();
-  if (!isDSiMode())
-  {
-      mySoundFreq = 11025;
-  }
+  
+  // Init sound emulation
   dsInstallSoundEmuFIFO();
     
   // Intro and main screen
@@ -61,6 +58,6 @@ int main(int argc, char **argv)
   // Free memory to be correct 
   dsFreeEmu();
  
-	return 0;
+  return 0;
 }
 

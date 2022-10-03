@@ -101,7 +101,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   else if (myCartInfo.controllerType == CTR_GENESIS)
   {
       myControllers[0] = new Genesis(Controller::Left, *myEvent);
-      myControllers[1] = new Genesis(Controller::Right, *myEvent);
+      myControllers[1] = new SaveKey(Controller::Right, *myEvent);  // For the Genesis pad, we will allow a Save Key
   }
   else if ((myCartInfo.controllerType == CTR_KEYBOARD0) || (myCartInfo.controllerType == CTR_KEYBOARD1))
   {
@@ -117,7 +117,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   {
       myControllers[0] = new Joystick(Controller::Left, *myEvent);
       if (myCartInfo.controllerType == CTR_LJOY)
-        myControllers[1] = new SaveKey(Controller::Right, *myEvent);
+        myControllers[1] = new SaveKey(Controller::Right, *myEvent);    // If we are a Left Joystick, we can support a Save Key in the right port
       else
         myControllers[1] = new Joystick(Controller::Right, *myEvent);
   }
@@ -167,20 +167,3 @@ Console& Console::operator = (const Console&)
   return *this;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Console::toggleFormat()
-{
-;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Console::togglePalette()
-{
-	myMediaSource->togglePalette();
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Console::saveProperties(string filename, bool merge)
-{
-;
-}

@@ -56,12 +56,6 @@ class MediaSource
       samples.
     */
     virtual void update() = 0;
-
-    /**
-      Toggle between the available palettes.  The frontends will need to
-      reload their palette.
-    */
-    virtual void togglePalette() = 0;
     
   public:
     /**

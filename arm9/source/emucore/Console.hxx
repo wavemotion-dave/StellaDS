@@ -130,27 +130,6 @@ class Console
 
   public:
 
-    /**
-      Toggle between NTSC and PAL mode.  The frontends will need to
-      reload their palette.
-    */
-    void toggleFormat();
-
-    /**
-      Toggle between the available palettes.  The frontends will need to
-      reload their palette.
-    */
-    void togglePalette();
-
-    /**
-      Save a copy of the current properties after any changes.
-
-      @param filename Filename to save the properties into.
-      @param merge Whether or not to merge the changes into the
-                   main properties file.
-    */
-    void saveProperties(string filename, bool merge = false);
-
     // Pointer to the media source object 
    MediaSource* myMediaSource;
   

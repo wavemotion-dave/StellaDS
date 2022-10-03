@@ -55,13 +55,14 @@
 #include "CartTV.hxx"
 #include "Cart0840.hxx"
 #include "CartX07.hxx"
+#include "CartCTY.hxx"
 #include "MD5.hxx"
 #include "../config.h"
 
 extern void dsWarnIncompatibileCart(void);
 extern void dsPrintCartType(char *);
 
-const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07"};
+const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07", "CTY"};
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
@@ -388,7 +389,9 @@ const CartInfo table[] =
     {"3d7749fb9c2f91a276dfe494495234c5",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   6,  2},    // Checkers (1980).bin
     {"191ac4eec767358ee3ec3756c120423a",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,  10,  4},    // Checkers (1980) (PAL).bin
     {"bce93984b920e9b56cf24064f740fe78",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,  10,  4},    // Checkers (1980) (PAL).bin
-    {"bfbdeafbe085d23d2b143580014a469d",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    82,   0,  1},    // Chetiry_NOEEPROM_NTSC.bin    
+    {"bfbdeafbe085d23d2b143580014a469d",  "CHETRY", BANK_CTY,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    82,   0,  1},    // Chetiry_NOEEPROM_NTSC.bin    
+    {"3b48bc3cec29b63b2f4429f6263d55e8",  "CHETRY", BANK_CTY,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    82,   0,  1},    // Chetiry_NTSC.bin    
+    {"9784290f422e7aeeab4d542318bd9a1f",  "CHETRY", BANK_CTY,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    82,   0,  1},    // Chetiry_NTSC_Stella.bin    
     {"749fec9918160921576f850b2375b516",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  31,    210,    80,   0,  0},    // China Syndrome (1982).bin
     {"e150f0d14f013a104b032305c0ce23ef",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   50,    245,    80,   0,  2},    // China Syndrome (1982) (PAL).bin
     {"c1cb228470a87beb5f36e90ac745da26",  "CHOPER", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    197,   100,   4,  5},    // Chopper Command (1982).bin
@@ -2184,7 +2187,8 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)    
     
-    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2266,6 +2270,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new Cartridge0840(image);
   else if (banking == BANK_X07)
     cartridge = new CartridgeX07(image);
+  else if (banking == BANK_CTY)
+    cartridge = new CartridgeCTY(image, size);
   else
   {
     // TODO: At some point this should be handled in a better way...

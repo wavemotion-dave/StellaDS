@@ -138,6 +138,8 @@ static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n max
 static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
 static int16  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
+uInt16 *sampleExtender  __attribute__((section(".dtcm"))) = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
+
 extern uint8 sound_buffer[];
 extern uint16 *aptr;
 extern uint16 *bptr;
@@ -185,6 +187,13 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
       P5[chan] = 0;
       P9[chan] = 0;
    }
+
+    // A bit of speed-up to have this pre-computed
+    for (uInt16 i=0; i<256; i++)
+    {
+        sampleExtender[i] = (uInt16) ((i << 8) / 2);
+        sampleExtender[256+i] = (uInt16) ((i << 8));
+    }    
 }
 
 /*****************************************************************************/
@@ -355,14 +364,13 @@ ITCM_CODE void Tia_process (void)
        /* if the count down has reached zero */
        if (Samp_n_cnt < 256)
        {
-           extern uint16 sampleExtender[];
           /* adjust the sample counter */
           Samp_n_cnt += Samp_n_max;
 
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-            uInt16 sample =  sampleExtender[((uint8) ( (uint32)Outvol[0] + (uint32) Outvol[1])) >> 1];
+            uInt16 sample =  sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
             *aptr = sample;
             *bptr = sample;
           /* and done! */

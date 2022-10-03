@@ -7,7 +7,7 @@
 #include "pdev_tbg0.h"
 #include "pdev_bg0.h"
 
-volatile unsigned int vusCptVBL;
+volatile u16 vusCptVBL;
 
 void vblankIntro() {
   vusCptVBL++;
@@ -15,8 +15,8 @@ void vblankIntro() {
 
 // Intro with portabledev logo
 void intro_logo(void) {
-  int soundId=-1; 
-  bool bOK;
+  short int soundId=-1; 
+  u8 bOK;
 
   // Init graphics
   videoSetMode(MODE_0_2D | DISPLAY_BG0_ACTIVE );
