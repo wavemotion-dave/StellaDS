@@ -102,17 +102,13 @@ to select a file, then use A to load it.
 
 Controls :
  * D-Pad   : the Joystick
- * A or B  : Fire button
+ * A,B,X,Y : Fire button (configurable)
  * SELECT  : SELECT switch
  * START   : START switch
- * X       : Show FPS (Frames per Second)
- * Y       : Toggle Full Speed (no trottle to 60FPS)
-
  * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
- * L-Trig + R-Trig + A:  Swap LCD top/bottom.
- 
- * Use stylus on buttons for other actions on bottom screen.
+ * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
+ * Use stylus on buttons for other icon-based actions on bottom screen.
 
 Older Credits and links:
 ----------------------------
