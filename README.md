@@ -52,21 +52,18 @@ loaded.
 Here is a description of the configuration items you can adjust. Be sure to 
 press the START button to save out your configuration after making changes:
 
-Controller:      Most games use the Left-Joystick but you can change this.
-Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
-Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. 
-                 You can also try Flicker Reduce Background/Black which is mid-ground.
-TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
-Sound:           Normally ON. Can be turned OFF which will render screen faster.
-ABXY Button:     Default to FIRE button but you can change this.
-HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk 
-                 (it will speed up emulation which helps with older DS-LITE)
-VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk 
-                 (it will speed up emulation which helps with older DS-LITE)
-Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
-Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
-Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
-Offset/Scale:    You can ajust the screen scaling and offset positions for the game. 
+* Controller:      Most games use the Left-Joystick but you can change this.
+* Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
+* Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground.
+* TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
+* Sound:           Normally ON. Can be turned OFF which will render screen faster.
+* ABXY Button:     Default to FIRE button but you can change this.
+* HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
+* VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
+* Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
+* Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
+* Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
+* Offset/Scale:    You can ajust the screen scaling and offset positions for the game. 
 
 PAL vs NTSC:
 -----------------------
@@ -82,7 +79,6 @@ DS only has 192 pixel rows... so with PAL we must compress the image and
 that results in missing pixel rows. All of this to say: while PAL is supported
 you are generally going to get the most genuine Atari 2600 experience with
 NTSC roms. 
-
 
 Thanks :
 -----------------------
