@@ -125,7 +125,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BANK_F8SC        7
 #define BANK_AR          8
 #define BANK_DPC         9
-#define BANK_DPCP       10
+#define BANK_ARMP       10  // DPC+ or CDFJ or CDFJ+ are not supported... 
 #define BANK_3E         11
 #define BANK_3F         12
 #define BANK_E0         13
@@ -251,6 +251,12 @@ class Cartridge : public Device
       Returns true if the image is probably a DPC+ bankswitching cartridge
     */
     static bool isProbablyDPCplus(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a CDF/CDFJ/CDFJ+ bankswitching cartridge
+    */
+    static bool isProbablyCDF(const uInt8* image, uInt32 size);
+    
     
     /**
       Returns true if the image is probably a EFSC cartridge

@@ -84,6 +84,7 @@ uInt8 fpsDisplay = false;
 uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
+uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
 
 static uInt8 full_speed=0;
 uInt16 gTotalAtariFrames=0;
@@ -237,7 +238,8 @@ void dsInitPalette(void)
 
 void dsWarnIncompatibileCart(void)
 {
-    dsPrintValue(5,0,0, (char*)"DPC+ CART NOT SUPPORTED");
+    dsPrintValue(0,0,0, (char*)"ARM ASSIST CART NOT SUPPORTED");
+    bHaltEmulation = 1;
 }
 
 void dsPrintCartType(char * type)
@@ -635,7 +637,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
   dsPrintValue(16-strlen(szName)/2,2,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
-  sprintf(szName,"%s %s","A=CHOOSE Y=PAL B=BACK  VER:", VERSION);
+  sprintf(szName,"%s %s","A=CHOOSE Y=HALT B=BACK  VER:", VERSION);
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
   for (ucBcl=0;ucBcl<17; ucBcl++) {
     ucGame= ucBcl+NoDebGame;
@@ -800,10 +802,10 @@ unsigned int dsWaitForRom(void)
       {
         bRet=true;
         bDone=true;
+        bHaltEmulation = 0;
         if (keysCurrent() & KEY_Y) 
         {
-            tv_type_requested = PAL;
-            myCartInfo.tv_type = PAL;
+           bHaltEmulation = 1;
         }
         else
         {
@@ -1784,7 +1786,7 @@ ITCM_CODE void dsMainLoop(void)
         // -------------------------------------------------------------
         // Now, here, at the bottom of the world - update the frame! 
         // -------------------------------------------------------------
-        theConsole->update();
+        if (!bHaltEmulation) theConsole->update();
         break;
         }
     }
