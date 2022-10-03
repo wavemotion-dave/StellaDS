@@ -46,6 +46,19 @@ too pick and load a game (.bin or .a26). For some older launchers or flash-carts
 you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely
 as most launchers will auto-patch when you run the emulator).
 
+Game Autodetection:
+-----------------------
+The Atari 2600 utilizes a growing number of bankswitching scheme. StellaDS 
+currently supports 34 differnet bank switching schemes - and it usually will
+auto-detect the right one. If for some reason it does not, you can go into
+the configuration (gear icon) and manually select a new scheme. Be sure to hit 
+START to save your config and then try re-loading the game (the bank switching
+requires a reload of the game). In the catestrophic event that the detected
+bankswitching scheme causes the emulation to crash, you can try loading the
+game using the Y (instead of A) button which will load the game but NOT start
+it running... this should let you go in and adjust the back switching scheme
+and other settings (PAL vs NTSC, etc).
+
 Configuration:
 -----------------------
 The gear icon on the main screen allows you to set a number of configuration 
