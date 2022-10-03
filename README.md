@@ -89,6 +89,38 @@ Thanks :
 * To Alekmaul for porting Stella to the DS.
 * To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
 
+How to use StellaDS :
+---------------------
+Put the a26/bin files where you want on your SD or flashcard. 
+
+Place StellaDS.NDS on your SD or flashcard.
+
+That's all, StellaDS can be use now :) !
+
+When the emulator starts, click on the cartridge slot to choose a file. you are use Up/Down 
+to select a file, then use A to load it.
+
+Controls :
+ * D-Pad   : the Joystick
+ * A or B  : Fire button
+ * SELECT  : SELECT switch
+ * START   : START switch
+ * X       : Show FPS (Frames per Second)
+ * Y       : Toggle Full Speed (no trottle to 60FPS)
+
+ * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
+ * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
+ * L-Trig + R-Trig + A:  Swap LCD top/bottom.
+ 
+ * Use stylus on buttons for other actions on bottom screen.
+
+Older Credits and links:
+----------------------------
+Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).
+Thanks TheChucksters to understand how Stella emulator works with the release of
+his source code conversion (http://www.charlesmoyes.com/drupal/)
+Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
+
 Version History:
 -----------------------
 
@@ -364,8 +396,7 @@ V1.1c : 25-Nov-2020 by Dave Bernazzani (wavemotion)
   * Fixed the ROM loading problems when the filenames were > 29 characters long.
   * Other minor improvements as time allowed...
 
-
-V1.0 : 20/05/2011
+V1.0 : 20/05/2011 (Alek Maul)
   * Initial release based on Stella 1.4.2 
   * Compiled with last version of Devkitpro/libnds, so DSi compatible \o/
   * Sound engine written from scratch
@@ -376,35 +407,3 @@ V1.0 : 20/05/2011
   * Add support for more cards recognition (3E)
   * Add support for PAL/NTSC palette
   
---------------------------------------------------------------------------------
-How to use StellaDS :
---------------------------------------------------------------------------------
-Put the a26/bin files where you want on your SD or flashcard. 
-
-Place StellaDS.NDS on your SD or flashcard.
-
-That's all, StellaDS can be use now :) !
-
-When the emulator starts, click on the cartridge slot to choose a file. you are use Up/Down 
-to select a file, then use A to load it.
-
-Controls :
- * D-Pad   : the Joystick
- * A or B  : Fire button
- * SELECT  : SELECT switch
- * START   : START switch
- * X       : Show FPS (Frames per Second)
- * Y       : Toggle Full Speed (no trottle to 60FPS)
-
- * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
- * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
- * L-Trig + R-Trig + A:  Swap LCD top/bottom.
- 
- Use stylus on buttons for other actions on bottom screen.
---------------------------------------------------------------------------------
-Older Credits:
---------------------------------------------------------------------------------
-Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).
-Thanks TheChucksters to understand how Stella emulator works with the release of
-his source code conversion (http://www.charlesmoyes.com/drupal/)
-Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
