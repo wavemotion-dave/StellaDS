@@ -112,10 +112,9 @@ Controls :
 
 Older Credits and links:
 ----------------------------
-Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).
-Thanks TheChucksters to understand how Stella emulator works with the release of
-his source code conversion (http://www.charlesmoyes.com/drupal/)
-Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
+Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).  
+Thanks TheChucksters to understand how Stella emulator works with the release of his source code conversion (http://www.charlesmoyes.com/drupal/).  
+Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).  
 
 Version History:
 -----------------------
