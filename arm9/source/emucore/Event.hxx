@@ -27,8 +27,6 @@ class Event;
 
 #include "bspf.hxx"
 
-extern Int16 myValues[];
-
 /**
   @author  Bradford W. Mott
   @version $Id: Event.hxx,v 1.5 2004/06/04 12:22:12 stephena Exp $
@@ -95,22 +93,27 @@ class Event
     /**
       Get the value associated with the event of the specified type
     */
-    virtual Int16 get(Type type) const;
+    virtual Int32 get(Type type) const;
 
     /**
       Set the value associated with the event of the specified type
     */
-    virtual void set(Type type, Int16 value);
+    virtual void set(Type type, Int32 value);
+    
+  protected:
+    // Array of values associated with each event type
+    Int32 myValues[LastType];
+
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline Int16 Event::get(Type type) const
+inline Int32 Event::get(Type type) const
 {
   return myValues[type];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void Event::set(Type type, Int16 value)
+inline void Event::set(Type type, Int32 value)
 {
   myValues[type] = value;
 }

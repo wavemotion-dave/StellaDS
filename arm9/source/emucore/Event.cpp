@@ -23,9 +23,6 @@
 #include <nds.h>
 #include "Event.hxx"
 
-// Array of values associated with each event type
-Int16 myValues[Event::LastType] __attribute__((section(".dtcm")));
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Event::Event()
 {
