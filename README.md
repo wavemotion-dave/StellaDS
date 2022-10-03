@@ -135,6 +135,11 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.3 : 03-Oct-2022 by Dave Bernazzani (wavemotion)
+  * Added Chetiry (CTY) bank switching scheme with EEPROM support (but no music fetchers).
+  * Improved memory handling across the board for another frame of performance.
+  * Fixed SP+ so it runs properly again.
+  * Improved driver for Midnight Magic and Realsports Tennis so both now run at 60FPS!
 
 V5.2 : 30-Sep-2022 by Dave Bernazzani (wavemotion)
   * Fixed goof in F6, F4 and related F6SC and F4SC drivers! 

@@ -75,43 +75,13 @@ class EventHandler
     void sendKeyEvent(StellaEvent::KeyCode code, Int32 state);
 
     /**
-      Send a joystick button event to the handler.
-
-      @param stick The joystick activated
-      @param code  The StellaEvent joystick code
-      @param state The StellaEvent state
-    */
-    void sendJoyEvent(StellaEvent::JoyStick stick, StellaEvent::JoyCode code,
-         Int32 state);
-
-    /**
       Send an event directly to the event handler.
       These events cannot be remapped.
 
       @param type  The event
       @param value The value for the event
     */
-    void sendEvent(Event::Type type, Int32 value);
-	
-    /**
-      Enable/disable remapping mode.
-
-      @param status  The toggle for enable/disable
-    */
-    void enableRemapping(bool status) { myRemapEnabledFlag = status; }
-
-    /**
-      This method indicates whether a pause event has been received.
-    */
-    bool doPause() { return myPauseStatus; }
-
-    /**
-      This method indicates whether a quit event has been received.
-    */
-    bool doQuit() { return myQuitStatus; }
-
     void getKeymapArray(Event::Type** array, uInt32* size);
-    void getJoymapArray(Event::Type** array, uInt32* size);
 
   private:
     void setKeymap();
@@ -119,47 +89,15 @@ class EventHandler
 
     bool isValidList(string list, uInt32 length);
 
-    void saveState();
-    void changeState();
-    void loadState();
-    void takeSnapshot();
-
   private:
     // Array of key events
     Event::Type myKeyTable[StellaEvent::LastKCODE];
-
-    // Array of joystick events
-    Event::Type myJoyTable[StellaEvent::LastJSTICK*StellaEvent::LastJCODE];
-
-    // Array of messages for each Event
-    string ourMessageTable[Event::LastType];
 
     // Global Console object
     Console* myConsole;
 
     // Global Event object
     Event* myEvent;
-
-    // Indicates the current state to use for state loading/saving
-    uInt32 myCurrentState;
-
-    // Indicates the current pause status
-    bool myPauseStatus;
-
-    // Indicates the current quit status
-    bool myQuitStatus;
-
-    // The current keymap in string form
-    string myKeymapString;
-
-    // The current joymap in string form
-    string myJoymapString;
-
-    // Indicates that the main menu is being entered
-    bool myMenuStatus;
-
-    // Indicates that remapping mode is enabled
-    bool myRemapEnabledFlag;
 };
 
 #endif

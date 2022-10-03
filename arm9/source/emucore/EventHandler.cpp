@@ -34,12 +34,7 @@
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 EventHandler::EventHandler(Console* console)
-    : myConsole(console),
-      myCurrentState(0),
-      myPauseStatus(false),
-      myQuitStatus(false),
-      myMenuStatus(false),
-      myRemapEnabledFlag(true)
+    : myConsole(console)
 {
   // Create the event object which will be used for this handler
   myEvent = new Event();
@@ -47,22 +42,6 @@ EventHandler::EventHandler(Console* console)
   // Erase the KeyEvent array 
   for(Int32 i = 0; i < StellaEvent::LastKCODE; ++i)
     myKeyTable[i] = Event::NoType;
-
-  // Erase the JoyEvent array
-  for(Int32 i = 0; i < StellaEvent::LastJSTICK*StellaEvent::LastJCODE; ++i)
-    myJoyTable[i] = Event::NoType;
-
-  // Erase the Message array 
-  for(Int32 i = 0; i < Event::LastType; ++i)
-    ourMessageTable[i] = "";
-
-  // Set unchanging messages
-  ourMessageTable[Event::ConsoleColor]            = "Color Mode";
-  ourMessageTable[Event::ConsoleBlackWhite]       = "BW Mode";
-  ourMessageTable[Event::ConsoleLeftDifficultyA]  = "Left Difficulty A";
-  ourMessageTable[Event::ConsoleLeftDifficultyB]  = "Left Difficulty B";
-  ourMessageTable[Event::ConsoleRightDifficultyA] = "Right Difficulty A";
-  ourMessageTable[Event::ConsoleRightDifficultyB] = "Right Difficulty B";
 
   setKeymap();
 }
@@ -83,26 +62,8 @@ Event* EventHandler::event()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
 {
-  // Determine where the event should be sent
-    sendEvent(myKeyTable[key], state);
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void EventHandler::sendJoyEvent(StellaEvent::JoyStick stick,
-     StellaEvent::JoyCode code, Int32 state)
-{
-    sendEvent(myJoyTable[stick*StellaEvent::LastJCODE + code], state);
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void EventHandler::sendEvent(Event::Type event, Int32 state)
-{
-  // Ignore unmapped events
-  if(event == Event::NoType)
-    return;
-
-  // Otherwise, pass it to the emulation core
-  myEvent->set(event, state);
+    // Determine where the event should be sent
+    if (myKeyTable[key] != Event::NoType) myEvent->set(myKeyTable[key], state);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -134,13 +95,6 @@ void EventHandler::getKeymapArray(Event::Type** array, uInt32* size)
 {
   *array = myKeyTable;
   *size  = StellaEvent::LastKCODE;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::getJoymapArray(Event::Type** array, uInt32* size)
-{
-  *array = myJoyTable;
-  *size  = StellaEvent::LastJSTICK * StellaEvent::LastJCODE;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -227,26 +181,3 @@ bool EventHandler::isValidList(string list, uInt32 length)
   return (i == length);
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::saveState()
-{
-;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::changeState()
-{
-;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::loadState()
-{
-;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void EventHandler::takeSnapshot()
-{
-	;
-}

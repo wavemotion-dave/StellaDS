@@ -23,12 +23,14 @@
 #include <nds.h>
 #include "Event.hxx"
 
+// Array of values associated with each event type
+Int16 myValues[Event::LastType] __attribute__((section(".dtcm")));
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Event::Event()
-    : myNumberOfTypes(Event::LastType)
 {
   // Set all of the events to 0 / false to start with
-  for(int i = 0; i < myNumberOfTypes; ++i)
+  for(int i = 0; i < (int)Event::LastType; ++i)
   {
     myValues[i] = 0;
   }
@@ -37,17 +39,5 @@ Event::Event()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Event::~Event()
 {
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE Int32 Event::get(Type type) const
-{
-  return myValues[type];
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void Event::set(Type type, Int32 value)
-{
-  myValues[type] = value;
 }
 

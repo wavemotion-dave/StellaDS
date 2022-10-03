@@ -370,7 +370,7 @@ ITCM_CODE void Tia_process (void)
           /* calculate the latest output value and place in buffer
              scale the volume by 128, since this is the default silence value
              when using unsigned 8-bit samples in SDL */
-            uInt16 sample =  sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+            uInt16 sample =  *((uInt16 *)0x068A0000 + ((uint16)Outvol[0] + (uint16)Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
             *aptr = sample;
             *bptr = sample;
           /* and done! */

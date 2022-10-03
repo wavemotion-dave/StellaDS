@@ -96,18 +96,6 @@ static void ApplyOptions(void)
 {
     extern u8 bScreenRefresh;
     bScreenRefresh = 1;
-#if 0    
-    if (bSoundEnabled)
-    {
-        irqEnable(IRQ_TIMER2);
-        fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
-    }
-    else
-    {
-        irqDisable(IRQ_TIMER2);
-        fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
-    }
-#endif    
 }
 
 

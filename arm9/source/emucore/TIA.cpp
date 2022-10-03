@@ -168,42 +168,7 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
    
-// This 1k table is not worth putting in FAST memory - doesn't buy us much and is rather large...
-uInt32 __attribute__ ((aligned (4))) color_repeat_table[]  = {
-        0x00000000,  0x00000000,  0x02020202,  0x02020202,  0x04040404,  0x04040404,  0x06060606,  0x06060606,  
-        0x08080808,  0x08080808,  0x0A0A0A0A,  0x0A0A0A0A,  0x0C0C0C0C,  0x0C0C0C0C,  0x0E0E0E0E,  0x0E0E0E0E,  
-        0x10101010,  0x10101010,  0x12121212,  0x12121212,  0x14141414,  0x14141414,  0x16161616,  0x16161616,  
-        0x18181818,  0x18181818,  0x1A1A1A1A,  0x1A1A1A1A,  0x1C1C1C1C,  0x1C1C1C1C,  0x1E1E1E1E,  0x1E1E1E1E,  
-        0x20202020,  0x20202020,  0x22222222,  0x22222222,  0x24242424,  0x24242424,  0x26262626,  0x26262626,  
-        0x28282828,  0x28282828,  0x2A2A2A2A,  0x2A2A2A2A,  0x2C2C2C2C,  0x2C2C2C2C,  0x2E2E2E2E,  0x2E2E2E2E,  
-        0x30303030,  0x30303030,  0x32323232,  0x32323232,  0x34343434,  0x34343434,  0x36363636,  0x36363636,  
-        0x38383838,  0x38383838,  0x3A3A3A3A,  0x3A3A3A3A,  0x3C3C3C3C,  0x3C3C3C3C,  0x3E3E3E3E,  0x3E3E3E3E,  
-        0x40404040,  0x40404040,  0x42424242,  0x42424242,  0x44444444,  0x44444444,  0x46464646,  0x46464646,  
-        0x48484848,  0x48484848,  0x4A4A4A4A,  0x4A4A4A4A,  0x4C4C4C4C,  0x4C4C4C4C,  0x4E4E4E4E,  0x4E4E4E4E,  
-        0x50505050,  0x50505050,  0x52525252,  0x52525252,  0x54545454,  0x54545454,  0x56565656,  0x56565656,  
-        0x58585858,  0x58585858,  0x5A5A5A5A,  0x5A5A5A5A,  0x5C5C5C5C,  0x5C5C5C5C,  0x5E5E5E5E,  0x5E5E5E5E,  
-        0x60606060,  0x60606060,  0x62626262,  0x62626262,  0x64646464,  0x64646464,  0x66666666,  0x66666666,  
-        0x68686868,  0x68686868,  0x6A6A6A6A,  0x6A6A6A6A,  0x6C6C6C6C,  0x6C6C6C6C,  0x6E6E6E6E,  0x6E6E6E6E,  
-        0x70707070,  0x70707070,  0x72727272,  0x72727272,  0x74747474,  0x74747474,  0x76767676,  0x76767676,  
-        0x78787878,  0x78787878,  0x7A7A7A7A,  0x7A7A7A7A,  0x7C7C7C7C,  0x7C7C7C7C,  0x7E7E7E7E,  0x7E7E7E7E,  
-        0x80808080,  0x80808080,  0x82828282,  0x82828282,  0x84848484,  0x84848484,  0x86868686,  0x86868686,  
-        0x88888888,  0x88888888,  0x8A8A8A8A,  0x8A8A8A8A,  0x8C8C8C8C,  0x8C8C8C8C,  0x8E8E8E8E,  0x8E8E8E8E,  
-        0x90909090,  0x90909090,  0x92929292,  0x92929292,  0x94949494,  0x94949494,  0x96969696,  0x96969696,  
-        0x98989898,  0x98989898,  0x9A9A9A9A,  0x9A9A9A9A,  0x9C9C9C9C,  0x9C9C9C9C,  0x9E9E9E9E,  0x9E9E9E9E,  
-        0xA0A0A0A0,  0xA0A0A0A0,  0xA2A2A2A2,  0xA2A2A2A2,  0xA4A4A4A4,  0xA4A4A4A4,  0xA6A6A6A6,  0xA6A6A6A6,  
-        0xA8A8A8A8,  0xA8A8A8A8,  0xAAAAAAAA,  0xAAAAAAAA,  0xACACACAC,  0xACACACAC,  0xAEAEAEAE,  0xAEAEAEAE,  
-        0xB0B0B0B0,  0xB0B0B0B0,  0xB2B2B2B2,  0xB2B2B2B2,  0xB4B4B4B4,  0xB4B4B4B4,  0xB6B6B6B6,  0xB6B6B6B6,  
-        0xB8B8B8B8,  0xB8B8B8B8,  0xBABABABA,  0xBABABABA,  0xBCBCBCBC,  0xBCBCBCBC,  0xBEBEBEBE,  0xBEBEBEBE,  
-        0xC0C0C0C0,  0xC0C0C0C0,  0xC2C2C2C2,  0xC2C2C2C2,  0xC4C4C4C4,  0xC4C4C4C4,  0xC6C6C6C6,  0xC6C6C6C6,  
-        0xC8C8C8C8,  0xC8C8C8C8,  0xCACACACA,  0xCACACACA,  0xCCCCCCCC,  0xCCCCCCCC,  0xCECECECE,  0xCECECECE,  
-        0xD0D0D0D0,  0xD0D0D0D0,  0xD2D2D2D2,  0xD2D2D2D2,  0xD4D4D4D4,  0xD4D4D4D4,  0xD6D6D6D6,  0xD6D6D6D6,  
-        0xD8D8D8D8,  0xD8D8D8D8,  0xDADADADA,  0xDADADADA,  0xDCDCDCDC,  0xDCDCDCDC,  0xDEDEDEDE,  0xDEDEDEDE,  
-        0xE0E0E0E0,  0xE0E0E0E0,  0xE2E2E2E2,  0xE2E2E2E2,  0xE4E4E4E4,  0xE4E4E4E4,  0xE6E6E6E6,  0xE6E6E6E6,  
-        0xE8E8E8E8,  0xE8E8E8E8,  0xEAEAEAEA,  0xEAEAEAEA,  0xECECECEC,  0xECECECEC,  0xEEEEEEEE,  0xEEEEEEEE,  
-        0xF0F0F0F0,  0xF0F0F0F0,  0xF2F2F2F2,  0xF2F2F2F2,  0xF4F4F4F4,  0xF4F4F4F4,  0xF6F6F6F6,  0xF6F6F6F6,  
-        0xF8F8F8F8,  0xF8F8F8F8,  0xFAFAFAFA,  0xFAFAFAFA,  0xFCFCFCFC,  0xFCFCFCFC,  0xFEFEFEFE,  0xFEFEFEFE  
-};
-
+uInt32  *color_repeat_table __attribute__((section(".dtcm"))) = (uInt32 *) 0x068A1000;    // 1K in size and stored in VRAM to give a little performance boost.
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
@@ -361,6 +326,12 @@ TIA::TIA(const Console& console)
   for(uInt32 i = 0; i < 640; ++i)
   {
     ourDisabledMaskTable[i] = 0;
+  }
+      
+  for (uInt32 i=0; i<256; i += 2)
+  {
+      color_repeat_table[i]   = (uInt32)(i<<24) | (uInt32)(i<<16) | (uInt32)(i<<8) | (uInt32)i;
+      color_repeat_table[i+1] = (uInt32)(i<<24) | (uInt32)(i<<16) | (uInt32)(i<<8) | (uInt32)i;
   }
 
   // Compute all of the mask tables
@@ -1122,14 +1093,13 @@ void TIA::computePlayfieldMaskTable()
                   if (hpos < 80)  \
                   {  \
                       last_color = myColor[myPriorityEncoder[0][enabled]];  \
-                      *myFramePointer = last_color;  \
                       hpos++;  \
                   }  \
                   else  \
                   {  \
                       last_color = myColor[myPriorityEncoder[1][enabled]];  \
-                      *myFramePointer = last_color;  \
                   }  \
+                  *myFramePointer = last_color;  \
                   last_enabled = enabled;  \
               } 
 
@@ -2903,25 +2873,25 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x06:    // Color-Luminance Player 0
     {
-      myColor[MYCOLUP0] = color_repeat_table[value];
+      myColor[MYCOLUP0] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
       break;
     }
 
     case 0x07:    // Color-Luminance Player 1
     {
-      myColor[MYCOLUP1] = color_repeat_table[value];
+      myColor[MYCOLUP1] = *((uInt32 *)0x068A1000 + value);
       break;
     }
 
     case 0x08:    // Color-Luminance Playfield
     {
-      myColor[MYCOLUPF] = color_repeat_table[value];
+      myColor[MYCOLUPF] = *((uInt32 *)0x068A1000 + value);
       break;
     }
 
     case 0x09:    // Color-Luminance Background
     {
-      myColor[MYCOLUBK] = color_repeat_table[value];
+      myColor[MYCOLUBK] = *((uInt32 *)0x068A1000 + value);
       break;
     }
 

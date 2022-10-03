@@ -45,7 +45,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "5.2"
+#define VERSION "5.3"
 
 //#define WRITE_TWEAKS
 
@@ -950,7 +950,7 @@ void dsInstallSoundEmuFIFO(void)
     {
         aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
-        mySoundFreq = 22100;
+        mySoundFreq = 22050;
     }
     else
     {
@@ -1602,11 +1602,16 @@ ITCM_CODE void dsMainLoop(void)
 
                 if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) 
                 { // quit
+                    irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     dsDisplayButton(1);
                     if (dsWaitOnQuit()) etatEmu=STELLADS_QUITSTDS;
                     else
                     {
                         WAITVBL;
+                    }
+                    if (!myCartInfo.sound_mute)
+                    {
+                        irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                 }
                 else if ((iTx>240) && (iTx<256) && (iTy>0) && (iTy<20))  
