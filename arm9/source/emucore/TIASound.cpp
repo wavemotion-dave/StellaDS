@@ -138,7 +138,7 @@ static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n max
 static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
 static int16  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
-uInt16 *sampleExtender  __attribute__((section(".dtcm"))) = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
+uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
 extern uint8 sound_buffer[];
 extern uint16 *aptr;

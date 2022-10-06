@@ -68,6 +68,7 @@ class M6502High : public M6502
     virtual void execute_NB(uInt16 number);
     virtual void execute_F8(uInt16 number);
     virtual void execute_F6(uInt16 number);
+    virtual void execute_F4(uInt16 number);
     virtual void execute_AR(uInt16 number);
 
     /**

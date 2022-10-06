@@ -45,7 +45,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "5.3"
+#define VERSION "5.4"
 
 //#define WRITE_TWEAKS
 
@@ -189,7 +189,7 @@ inline void ShowStatusLine(void)
 
 char bScreenRefresh = 0;
 u16 stretch_x = 0;
-void vblankIntr() 
+ITCM_CODE void vblankIntr() 
 {
     if (bScreenRefresh)
     {
@@ -239,7 +239,7 @@ void dsInitPalette(void)
 void dsWarnIncompatibileCart(void)
 {
     dsPrintValue(0,0,0, (char*)"ARM ASSIST CART NOT SUPPORTED");
-    bHaltEmulation = 1;
+    bHaltEmulation = 1; // And force the game to not run 
 }
 
 void dsPrintCartType(char * type)
@@ -1471,7 +1471,7 @@ ITCM_CODE void dsMainLoop(void)
                 {
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
                 }
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2,  keys_pressed & (KEY_START));
+                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, keys_pressed & (KEY_START));
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F3, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F4, 0);
                 theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F5, 0);

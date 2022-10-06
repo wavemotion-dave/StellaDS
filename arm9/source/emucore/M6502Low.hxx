@@ -74,6 +74,7 @@ class M6502Low : public M6502
     virtual void execute_NB(uInt16 number);
     virtual void execute_F8(uInt16 number);
     virtual void execute_F6(uInt16 number);
+    virtual void execute_F4(uInt16 number);
     virtual void execute_AR(uInt16 number);
 
     /**
@@ -83,16 +84,6 @@ class M6502Low : public M6502
     */
     virtual const char* name() const;
     
-  protected:
-    /**
-      Called after an interrupt has be requested using irq() or nmi()
-    */
-    void interruptHandler();
-    void interruptHandlerNB();
-    void interruptHandlerF8();
-    void interruptHandlerF6();
-    void interruptHandlerAR();
-
   protected:
     /*
       Get the byte at the specified address 
@@ -117,6 +108,10 @@ class M6502Low : public M6502
     inline uInt8 peek_F6(uInt16 address);
     inline uInt8 peek_PCF6(uInt16 address);
     inline void poke_F6(uInt16 address, uInt8 value);
+
+    inline uInt8 peek_F4(uInt16 address);
+    inline uInt8 peek_PCF4(uInt16 address);
+    inline void poke_F4(uInt16 address, uInt8 value);
 
     /**
       Change the byte at the specified address to the given value

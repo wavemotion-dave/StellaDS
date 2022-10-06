@@ -99,7 +99,7 @@ uInt8   myVDELP1                    __attribute__((section(".dtcm")));
 uInt8   myVDELBL                    __attribute__((section(".dtcm")));
 uInt8   myRESMP0                    __attribute__((section(".dtcm")));
 uInt8   myRESMP1                    __attribute__((section(".dtcm")));
-uInt8   myEnabledObjects            __attribute__((section(".dtcm")));
+uInt32  myEnabledObjects            __attribute__((section(".dtcm")));
 uInt8   myCurrentGRP0               __attribute__((section(".dtcm")));
 uInt8   myCurrentGRP1               __attribute__((section(".dtcm")));
 uInt8   myVSYNC                     __attribute__((section(".dtcm")));
@@ -550,7 +550,8 @@ ITCM_CODE void TIA::update()
       case 1: mySystem->m6502().execute_NB(25000); break;   // If we are 2K or 4K (non-banked), we can run faster here...
       case 2: mySystem->m6502().execute_F8(25000); break;   // If we are F8, we can run faster here...
       case 3: mySystem->m6502().execute_F6(25000); break;   // If we are F6, we can run faster here...
-      case 4: mySystem->m6502().execute_AR(25000); break;   // If we are AR, we can run faster here...
+      case 4: mySystem->m6502().execute_F4(25000); break;   // If we are F4, we can run faster here...
+      case 5: mySystem->m6502().execute_AR(25000); break;   // If we are AR, we can run faster here...
       default:mySystem->m6502().execute(25000);    break;   // Otherwise the normal execute driver
   }
 }
@@ -2564,9 +2565,14 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
-    uInt8 noise;
-    if (myCartInfo.special == SPEC_CONMARS) noise = 0x02; //  [fix for Conquest of Mars which incorrectly assume the lower bits]
-    else noise = myDataBusState & 0x3F; 
+    // ----------------------------------------------------------------
+    // The undriven bits of the TIA are usually waht's last on the bus 
+    // so we do a poor-man's emulation of that by setting the noise to 
+    // the lower 6 bits of the address... good enough to make buggy
+    // games like Warlords or Haunted House play correctly. Conquest
+    // of Mars is a special case... 
+    // ----------------------------------------------------------------
+    uInt8 noise = (myCartInfo.special == SPEC_CONMARS) ? 0x02: (addr & 0x3F);
     
     addr &= 0x000F;
     

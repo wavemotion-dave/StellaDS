@@ -99,9 +99,6 @@ class CartridgeF8SC : public Cartridge
 
     // The 8K ROM image of the cartridge
     uInt8 *myImage;
-
-    // The 128 bytes of RAM
-    uInt8 myRAM[128];
 };
 #endif
 

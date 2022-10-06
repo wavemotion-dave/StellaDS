@@ -24,8 +24,7 @@
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
-    : myExecutionStatus(0),
-      mySystem(0)
+    : mySystem(0)
 {
   uInt16 t;
 
@@ -63,18 +62,6 @@ void M6502::reset()
   // Load PC from the reset vector
   PC = (uInt16)mySystem->peek(0xfffc) | ((uInt16)mySystem->peek(0xfffd) << 8);
   PC &= MY_ADDR_MASK;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6502::irq()
-{
-  myExecutionStatus |= MaskableInterruptBit;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6502::nmi()
-{
-  myExecutionStatus |= NonmaskableInterruptBit;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

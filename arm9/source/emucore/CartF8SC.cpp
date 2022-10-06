@@ -41,7 +41,7 @@ CartridgeF8SC::CartridgeF8SC(const uInt8* image)
   Random random;
   for(uInt32 i = 0; i < 128; ++i)
   {
-    myRAM[i] = random.next();
+    myRAM[128+i] = random.next();
   }
 }
 
@@ -88,7 +88,7 @@ void CartridgeF8SC::install(System& system)
   {
     page_access.device = this;
     page_access.directPeekBase = 0;
-    page_access.directPokeBase = &myRAM[j & 0x007F];
+    page_access.directPokeBase = &myRAM[128+(j & 0x007F)];
     mySystem->setPageAccess(j >> shift, page_access);
   }
  
@@ -96,7 +96,7 @@ void CartridgeF8SC::install(System& system)
   for(uInt32 k = 0x1080; k < 0x1100; k += (1 << shift))
   {
     page_access.device = this;
-    page_access.directPeekBase = &myRAM[k & 0x007F];
+    page_access.directPeekBase = &myRAM[128+(k & 0x007F)];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(k >> shift, page_access);
   }
@@ -104,6 +104,12 @@ void CartridgeF8SC::install(System& system)
   // Leave these as direct access of 0 for use in bank switching...
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
+  // And setup for this system without any direct peek/poke until we switch banks
+  for(uInt32 address = 0x1100; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
+  {
+      mySystem->setPageAccess(address >> shift, page_access);
+  }    
+    
   // Install pages for bank 1
   bank(1);
 }
@@ -130,7 +136,7 @@ uInt8 CartridgeF8SC::peek(uInt16 address)
   // NOTE: This does not handle accessing RAM, however, this function
   // should never be called for RAM because of the way page accessing
   // has been setup
-  return myImage[myCurrentOffset + address];
+  return fast_cart_buffer[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -169,7 +175,6 @@ void CartridgeF8SC::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0100; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
   }
 }

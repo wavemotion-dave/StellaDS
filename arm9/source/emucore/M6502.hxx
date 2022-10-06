@@ -103,16 +103,6 @@ class M6502
     virtual void reset();
 
     /**
-      Request a maskable interrupt
-    */
-    virtual void irq();
-
-    /**
-      Request a non-maskable interrupt
-    */
-    virtual void nmi();
-
-    /**
       Get a null terminated string which is the processor's name (i.e. "M6532")
 
       @return The name of the device
@@ -132,6 +122,7 @@ class M6502
     virtual void execute_NB(uInt16 number) = 0;
     virtual void execute_F8(uInt16 number) = 0;
     virtual void execute_F6(uInt16 number) = 0;
+    virtual void execute_F4(uInt16 number) = 0;
     virtual void execute_AR(uInt16 number) = 0;
 
     /**

@@ -34,7 +34,6 @@
 // even more games up to 60 FPS. Sometimes the ends justify the means.
 // ---------------------------------------------------------------------------
 Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
-uInt8  myDataBusState  __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 
 // -----------------------------------------------------------------------------
 // Allocate page table - since this is in main RAM, the compiler will be able
@@ -52,8 +51,6 @@ System::System(uInt16 n, uInt16 m)
       myNumberOfDevices(0),
       myM6502(0)
 {
-  myDataBusState = 0;
-          
   // Make sure the arguments are reasonable
   assert((1 <= m) && (m <= n) && (n <= 16));
 

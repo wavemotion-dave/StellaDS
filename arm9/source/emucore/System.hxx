@@ -36,7 +36,6 @@ class NullDevice;
 
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
 extern Int32 debug[];          // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
-extern uInt8  myDataBusState;  // The current state of the Data Bus
 extern uInt8 myRAM[];          // The Atari 128 bytes of RAM plus another 128 for the SC (Super Carts)
 
 /**
@@ -291,14 +290,12 @@ inline uInt8 System::peek_pc(void)
   // See if this page uses direct accessing or not 
   if(access.directPeekBase != 0)
   {
-    myDataBusState = *(access.directPeekBase + (PC & MY_PAGE_MASK));
+    return *(access.directPeekBase + (PC & MY_PAGE_MASK));
   }
   else
   {
-    myDataBusState = access.device->peek(PC);
+    return access.device->peek(PC);
   }
-
-  return myDataBusState;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -309,14 +306,12 @@ inline uInt8 System::peek(uInt16 addr)
   // See if this page uses direct accessing or not 
   if(access.directPeekBase != 0)
   {
-    myDataBusState = *(access.directPeekBase + (addr & MY_PAGE_MASK));
+    return *(access.directPeekBase + (addr & MY_PAGE_MASK));
   }
   else
   {
-    myDataBusState = access.device->peek(addr);
+    return access.device->peek(addr);
   }
-
-  return myDataBusState;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -333,7 +328,5 @@ inline void System::poke(uInt16 addr, uInt8 value)
   {
     access.device->poke(addr, value);
   }
-
-  myDataBusState = value;
 }
 #endif
