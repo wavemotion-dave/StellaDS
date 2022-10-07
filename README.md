@@ -133,11 +133,9 @@ DFSC        128K        128B
 SB          128K-256K   --
 BF          256K    
 BFSC        256K        128B
-3F          256K        --
-Tigervision 256K        --
+TV Boy      256K        --
+3F          512K        --
 3E          512K        32K
-TV Boy      512K        -- </pre>
-
 
 Thanks :
 -----------------------
