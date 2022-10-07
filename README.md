@@ -15,7 +15,7 @@ See compatibility.txt for a full list of the ROMS supported. Generally these are
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
-* Most popular bankswitching is supported up to 256K EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
+* Most popular bankswitching is supported up to 128K/256K BF/EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
 * High score support with up to 10 scores for each game
 * Manuals for more than 100 of the common games included
 * Keypad overlay for Star Raiders
@@ -135,6 +135,12 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.4 : 07-Oct-2022 by Dave Bernazzani (wavemotion)
+  * Added DF bankswitching scheme (missed when DFSC was added).
+  * New core execution loop that gives us another 2 frames of performance.
+  * Optmized F4 driver to make some of the 32K games playable on DS-Lite.
+  * Cleanup across the board.
+  
 V5.3 : 03-Oct-2022 by Dave Bernazzani (wavemotion)
   * Added Chetiry (CTY) bank switching scheme with EEPROM support (but no music fetchers).
   * Improved memory handling across the board for another frame of performance.

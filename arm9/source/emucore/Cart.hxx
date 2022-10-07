@@ -141,14 +141,15 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BANK_EFSC       23
 #define BANK_BF         24
 #define BANK_BFSC       25
-#define BANK_DFSC       26
-#define BANK_SB         27
-#define BANK_FA2        28
-#define BANK_TV         29
-#define BANK_UASW       30
-#define BANK_0840       31
-#define BANK_X07        32
-#define BANK_CTY        33
+#define BANK_DF         26
+#define BANK_DFSC       27
+#define BANK_SB         28
+#define BANK_FA2        29
+#define BANK_TV         30
+#define BANK_UASW       31
+#define BANK_0840       32
+#define BANK_X07        33
+#define BANK_CTY        34
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7
@@ -257,7 +258,6 @@ class Cartridge : public Device
     */
     static bool isProbablyCDF(const uInt8* image, uInt32 size);
     
-    
     /**
       Returns true if the image is probably a EFSC cartridge
     */
@@ -269,10 +269,14 @@ class Cartridge : public Device
     static bool isProbablyDFSC(const uInt8* image, uInt32 size);
     
     /**
+      Returns true if the image is probably a DF cartridge
+    */
+    static bool isProbablyDF(const uInt8* image, uInt32 size);
+    
+    /**
       Returns true if the image is probably a BFSC cartridge
     */
     static bool isProbablyBFSC(const uInt8* image, uInt32 size);
-    
 
     /**
       Returns true if the image is probably a E0 bankswitching cartridge

@@ -49,6 +49,7 @@
 #include "CartEFSC.hxx"
 #include "CartBF.hxx"
 #include "CartBFSC.hxx"
+#include "CartDF.hxx"
 #include "CartDFSC.hxx"
 #include "CartSB.hxx"
 #include "CartFA2.hxx"
@@ -62,7 +63,7 @@
 extern void dsWarnIncompatibileCart(void);
 extern void dsPrintCartType(char *);
 
-const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP/CDFJ","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07", "CTY"};
+const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPCP/CDFJ","3E","3F","E0","E7","FASC","FE","MC","MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07", "CTY"};
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
@@ -1177,12 +1178,12 @@ const CartInfo table[] =
     {"4181087389a79c7f59611fb51c263137",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  25,    210,    93,   0,  0},    // Miss Piggy's Wedding (1983).bin
     {"25e73efb9a6edf119114718bd2f646ba",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  25,    210,    93,   0,  0},    // Miss Piggy's Wedding (1983).bin
     {"855a42078b14714bcfd490d2cf57e68d",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  25,    210,    93,   0,  0},    // Miss Piggy's Wedding (1983).bin
-    {"1a8204a2bcd793f539168773d9ad6230",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  4},    // Missile Command (1981) [no initials].bin
-    {"3a2e2d0c6892aa14544083dfb7762782",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  4},    // Missile Command (1981).bin
-    {"7cedffa0db65d610568b90aeca705ac6",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,    91,   0,  2},    // Missile Command (1981).bin
-    {"5ced13931c21ef4fc77d3fe801a1cbfa",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  4},    // Missile Command (1981).bin
-    {"d1ca47b262f952413c1234117c4e4e21",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  4},    // Missile Command (1981).bin
-    {"9364ad51c321e0f15c96a8c0aff47ceb",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  PAL,   47,    245,    51,   0,  0},    // Missile Command (1981) (PAL).bin
+    {"1a8204a2bcd793f539168773d9ad6230",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  NTSC,  34,    205,    94,   0,  4},    // Missile Command (1981) [no initials].bin
+    {"3a2e2d0c6892aa14544083dfb7762782",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  NTSC,  34,    205,    94,   0,  4},    // Missile Command (1981).bin
+    {"7cedffa0db65d610568b90aeca705ac6",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  2},    // Missile Command (1981).bin
+    {"5ced13931c21ef4fc77d3fe801a1cbfa",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  NTSC,  34,    205,    94,   0,  4},    // Missile Command (1981).bin
+    {"d1ca47b262f952413c1234117c4e4e21",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  NTSC,  34,    205,    94,   0,  4},    // Missile Command (1981).bin
+    {"9364ad51c321e0f15c96a8c0aff47ceb",  "MISCOM", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG,!VB,   HB,  ANA1_0,  PAL,   47,    245,    51,   0,  0},    // Missile Command (1981) (PAL).bin
     {"6e51fe2c2007687308d47ea9ce45432e",  "MISCOM", BANK_F8,   CTR_MCA,       SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    91,   0,  5},    // Missile_command_arcade.bin
     {"e6e5bb0e4f4350da573023256268313d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  35,    210,   100,   0, 12},    // Missile Control (AKA Raketen-Angriff) (Ariola, Thomas Jentzsch).bin
     {"0b577e63b0c64f9779f315dca8967587",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   64,    245,   100,   0,  0},    // Missile Control (AKA Raketen-Angriff) (PAL).bin
@@ -2261,6 +2262,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
     cartridge = new CartridgeBF(image);
   else if (banking == BANK_BFSC)
     cartridge = new CartridgeBFSC(image);
+  else if (banking == BANK_DF)
+    cartridge = new CartridgeDF(image);
   else if (banking == BANK_DFSC)
     cartridge = new CartridgeDFSC(image);
   else if (banking == BANK_SB)
@@ -2703,24 +2706,29 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       else
         myCartInfo.banking = ((isProbablyEFSC(image, size)) ? BANK_EFSC : BANK_EF);      // Gaining popularity in 2020-2022 Homebrews
     }
-    else if(size == 131072) // 128K
+    else if(size == (128*1024)) // 128K
     {
         if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_ARMP;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
-        else myCartInfo.banking = ((isProbablyDFSC(image, size)) ? BANK_DFSC : BANK_SB);      // 128K games generally use either DFSC or, more commonly SuperBanking
+        else if (isProbablyDFSC(image, size)) myCartInfo.banking = BANK_DFSC;
+        else myCartInfo.banking = ((isProbablyDF(image, size)) ? BANK_DF : BANK_SB);      // 128K games generally use either DFSC or, more commonly SuperBanking
     }
-    else if(size == 262144) // 256K
+    else if(size == (256*1024)) // 256K
     {
         if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_ARMP;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
         else myCartInfo.banking = ((isProbablyBFSC(image,size)) ? BANK_BFSC : BANK_SB);       // 256K games are either BFSC or, more commonly SuperBanking
     }
-    else  // what else can we do?
+    else if(size == (512*1024)) // 512K
     {
       if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_ARMP;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
       else if(isProbably3F(image, size))    
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;                 // Many games > 256K are 3E or 3F
       else
+        myCartInfo.banking = BANK_3F;  // Best guess...
+    }
+    else  // what else can we do?
+    {
         myCartInfo.banking = BANK_4K;  // Most common bankswitching type
-    }  
+    }
   }
     
   dsPrintCartType((char*)BANKING_STR[myCartInfo.banking]);
@@ -3046,9 +3054,16 @@ bool Cartridge::isProbablyDFSC(const uInt8* image, uInt32 size)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+bool Cartridge::isProbablyDF(const uInt8* image, uInt32 size)
+{
+  // DF carts have 'DFDF' in the binary
+  return searchForBytes4(image, size, 'D', 'F', 'D', 'F');
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyBFSC(const uInt8* image, uInt32 size)
 {
-  // DFSC carts have 'DFSC' in the binary
+  // BFSC carts have 'BFSC' in the binary
   return searchForBytes4(image, size, 'B', 'F', 'S', 'C');
 }
 
