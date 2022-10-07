@@ -2717,17 +2717,17 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
         if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_ARMP;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
         else myCartInfo.banking = ((isProbablyBFSC(image,size)) ? BANK_BFSC : BANK_SB);       // 256K games are either BFSC or, more commonly SuperBanking
     }
-    else if(size == (512*1024)) // 512K
+    else if(size == (480*1024)) // 480K
+    {
+        myCartInfo.banking = BANK_3E;                                                       // Most games at 480K are 3E
+    }
+    else // 512K or some odd-size...
     {
       if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_ARMP;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
       else if(isProbably3F(image, size))    
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;                 // Many games > 256K are 3E or 3F
       else
         myCartInfo.banking = BANK_3F;  // Best guess...
-    }
-    else  // what else can we do?
-    {
-        myCartInfo.banking = BANK_4K;  // Most common bankswitching type
     }
   }
     
