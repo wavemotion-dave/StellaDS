@@ -102,7 +102,7 @@ NTSC roms.
 
 Bank Switching Supported:
 -----------------------
-Name        ROM         RAM
+<pre>**Name        ROM         RAM**
 2K          2K          --
 CV          2K          1K
 4K          4K          --
@@ -135,7 +135,7 @@ BFSC        256K        128B
 3F          256K        --
 Tigervision 256K        --
 3E          512K        32K
-TV Boy      512K        --
+TV Boy      512K        -- </pre>
 
 
 Thanks :
