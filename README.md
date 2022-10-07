@@ -102,7 +102,8 @@ NTSC roms.
 
 Bank Switching Supported:
 -----------------------
-<pre>**Name        ROM         RAM**
+<pre>
+Name        ROM         RAM
 2K          2K          --
 CV          2K          1K
 4K          4K          --
