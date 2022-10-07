@@ -131,7 +131,7 @@ X07         64K         --
 DF          128K        --
 DFSC        128K        128B
 SB          128K-256K   --
-BF          256K    
+BF          256K        --
 BFSC        256K        128B
 TV Boy      256K        --
 3F          512K        --
