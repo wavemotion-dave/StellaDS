@@ -120,8 +120,8 @@ FA          12K         256 bytes
 E7          16K         1K + (4) 256 byte pages
 F6          16K         -- 
 F6SC        16K         128B
-CTY         28K         64B
-FA2         29K (+256 EEPROM)
+CTY         28K         64B  (+256 EEPROM)
+FA2         29K         256B (+256 EEPROM)
 F4          32K         --
 F4SC        32K         128B
 EF          64K         --
