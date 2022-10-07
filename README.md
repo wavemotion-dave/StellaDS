@@ -100,6 +100,44 @@ that results in missing pixel rows. All of this to say: while PAL is supported
 you are generally going to get the most genuine Atari 2600 experience with
 NTSC roms. 
 
+Bank Switching Supported:
+-----------------------
+Name        ROM         RAM
+2K          2K          --
+CV          2K          1K
+4K          4K          --
+0840        8K          --
+UA          8K          --
+WD          8K          64B
+F8          8K          --
+F8SC        8K          128B
+FE/SCABS    8K          --
+AR          2K          6K
+DPC         8K (+ 2K Display Data)  
+E0          8K          --
+FA          12K         256 bytes
+E7          16K         1K + (4) 256 byte pages
+F6          16K         -- 
+F6SC        16K         128B
+CTY         28K         64B
+FA2         29K (+256 EEPROM)
+F4          32K         --
+F4SC        32K         128B
+EF          64K         --
+EFSC        64K         128B
+F0/MB       64K         --
+X07         64K         --
+DF          128K        --
+DFSC        128K        128B
+SB          128K-256K   --
+BF          256K    
+BFSC        256K        128B
+3F          256K        --
+Tigervision 256K        --
+3E          512K        32K
+TV Boy      512K        --
+
+
 Thanks :
 -----------------------
 * To Bradford W. Mott and Stephen Anthony and various contributors for Stella.
