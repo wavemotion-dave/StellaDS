@@ -72,11 +72,10 @@ uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((sec
 CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
 uInt16 myCurrentOffset __attribute__((section(".dtcm")));
-uInt8  myDataBusState  __attribute__((section(".dtcm"))) = 0;
 uint8 original_flicker_mode = 0;
 
 // Our cart buffer memory - this can store game ROMs up to 512k
-uInt8  cart_buffer[MAX_FILE_SIZE];
+uInt8  cart_buffer[MAX_FILE_SIZE] __attribute__ ((aligned (32)));
 
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
@@ -2189,7 +2188,10 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)    
     
-//    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };

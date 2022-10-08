@@ -168,7 +168,7 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
    
-uInt32  *color_repeat_table __attribute__((section(".dtcm"))) = (uInt32 *) 0x068A1000;    // 1K in size and stored in VRAM to give a little performance boost.
+uInt32  *color_repeat_table = (uInt32 *) 0x068A1000;    // 1K in size and stored in VRAM to give a little performance boost.
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
