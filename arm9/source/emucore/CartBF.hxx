@@ -92,7 +92,7 @@ class CartridgeBF : public Cartridge
 
   private:
     // The 256K ROM image of the cartridge
-    uInt8 myImage[256*1024];
+    uInt8 *myImage;
     
     uInt32 myCurrentOffset32;
 };

@@ -35,9 +35,6 @@ CartridgeMC::CartridgeMC(const uInt8* image, uInt32 size)
   // Make sure size is reasonable
   assert(size <= 128 * 1024);
 
-  // Allocate array for the cart's RAM
-  myRAM = new uInt8[32 * 1024];
-
   // Initialize RAM with random values
   Random random;
   for(i = 0; i < 32 * 1024; ++i)
@@ -64,7 +61,6 @@ CartridgeMC::CartridgeMC(const uInt8* image, uInt32 size)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeMC::~CartridgeMC()
 {
-  delete[] myRAM;
   delete[] myImage;
 }
 

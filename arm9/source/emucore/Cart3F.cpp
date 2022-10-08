@@ -32,19 +32,13 @@ Cartridge3F::Cartridge3F(const uInt8* image, uInt32 size)
   // Copy the ROM image into my buffer - just reuse the existing buffer
   myImage = (uInt8 *)image;
 
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < mySize; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
-        
   myBankMod = mySize / 2048;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge3F::~Cartridge3F()
 {
-  delete[] myImage;
+
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

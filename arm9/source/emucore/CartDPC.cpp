@@ -25,11 +25,10 @@
 #include "CartDPC.hxx"
 #include "System.hxx"
 
-// The 8K program ROM image of the cartridge
-uInt8 *myProgramImage __attribute__((section(".dtcm")));
-
 // The 2K display ROM image of the cartridge
-uInt8 myDisplayImage[2048];
+//uInt8 myDisplayImage[2048];
+
+uInt16 *myDisplayImage = (uInt16*)0x068A2000;   // Use some of the unused VRAM to speed things up sightly. We use 4K here (2048 x 16-bit)
 
 // The top registers for the data fetchers
 uInt8 myTops[8];
@@ -41,10 +40,7 @@ uInt8 myBottoms[8];
 uInt16 myCounters[8] __attribute__((section(".dtcm")));
 
 // The flag registers for the data fetchers
-uInt8 myFlags[8];
-
-// The music mode DF5, DF6, & DF7 enabled flags
-uInt8 myMusicMode[3];
+uInt16 myFlags[8];
 
 // The random number generator register
 uInt8 myRandomNumber;
@@ -57,17 +53,16 @@ CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
 {
   uInt32 addr;
 
-  myProgramImage = fast_cart_buffer;    
   // Copy the program ROM image into my buffer
   for(addr = 0; addr < 8192; ++addr)
   {
-    myProgramImage[addr] = image[addr];
+    fast_cart_buffer[addr] = image[addr];
   }
 
   // Copy the display ROM image into my buffer
   for(addr = 0; addr < 2048; ++addr)
   {
-    myDisplayImage[addr] = image[8192+2047 - addr]; // Yes, load it in backwards - it helps with speed when indexing later...
+    myDisplayImage[addr] = (uInt16)image[8192+2047 - addr]; // Yes, load it in backwards - it helps with speed when indexing later...
   }
 
   // Initialize the DPC data fetcher registers
@@ -75,9 +70,6 @@ CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
   {
     myTops[i] = myBottoms[i] = myCounters[i] = myFlags[i] = 0;
   }
-
-  // None of the data fetchers are in music mode
-  myMusicMode[0] = myMusicMode[1] = myMusicMode[2] = false;
 
   // Initialize the DPC's random number generator register (must be non-zero)
   myRandomNumber = 1;
@@ -156,7 +148,7 @@ inline void CartridgeDPC::bank(uInt16 bank)
   // Map Program ROM image into the system
   for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-    myPageAccessTable[access_num++].directPeekBase = &myProgramImage[myCurrentOffset + address];
+    myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
   }
 }
 
@@ -188,21 +180,20 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
     switch(function)
     {
       case 0x00:
-        if (index < 4) result = myRandomNumber; // Not really random but good enough as it's only to flash the 'eel' in Pitfall II
-        myRandomNumber++;
+        if (index < 4) result = myRandomNumber++; // Not really random but good enough as it's only to flash the 'eel' in Pitfall II
         break;
             
       // DFx display data read
       case 0x01:
       {
-        result = myDisplayImage[myCounters[index]];
+        result = *((uInt16*)0x068A2000+myCounters[index]); //myDisplayImage[myCounters[index]];
         break;
       }
 
       // DFx display data read AND'd w/flag
       case 0x02:
       {
-        result = myDisplayImage[myCounters[index]] & myFlags[index];
+        result = *((uInt16*)0x068A2000+myCounters[index]) & myFlags[index]; //myDisplayImage[myCounters[index]] & myFlags[index];
         break;
       } 
 
@@ -224,7 +215,7 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
     // Switch banks if necessary
     if (address == 0x0FF8) {  myCurrentOffset = 0; bank(0);}
     else if (address == 0x0FF9) {  myCurrentOffset = 4096;bank(1);}
-    return myProgramImage[myCurrentOffset + address];
+    return fast_cart_buffer[myCurrentOffset + address];
   }
 }
 

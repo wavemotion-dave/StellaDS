@@ -28,11 +28,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeBFSC::CartridgeBFSC(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < (256*1024); ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Copy the ROM image into my buffer - just reuse the existing buffer
+  myImage = (uInt8 *)image;
     
   // Initialize RAM with random values
   Random random;

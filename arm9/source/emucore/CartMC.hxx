@@ -202,7 +202,7 @@ class CartridgeMC : public Cartridge
     bool mySlot3Locked;
 
     // Pointer to the 32K bytes of RAM for the cartridge
-    uInt8* myRAM;
+    uInt8 myRAM[32 * 1024];
 
     // Pointer to the 128K bytes of ROM for the cartridge
     uInt8* myImage;

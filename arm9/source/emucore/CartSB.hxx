@@ -101,7 +101,7 @@ class CartridgeSB : public Cartridge
     uInt16 sbLastBank;
     
     // The 128K or 256K ROM image of the cartridge
-    uInt8 myImage[256*1024];
+    uInt8 *myImage;
     
     // Previous Device's page access
     PageAccess myHotSpotPageAccess;

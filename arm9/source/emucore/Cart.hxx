@@ -132,7 +132,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BANK_E7         14
 #define BANK_FASC       15
 #define BANK_FE         16
-#define BANK_MC         17
+#define BANK_UNUSED     17
 #define BANK_MB         18
 #define BANK_CV         19
 #define BANK_UA         20
@@ -259,6 +259,11 @@ class Cartridge : public Device
     static bool isProbablyCDF(const uInt8* image, uInt32 size);
     
     /**
+      Returns true if the image is probably a EF cartridge
+    */
+    static bool isProbablyEF(const uInt8* image, uInt32 size);
+
+    /**
       Returns true if the image is probably a EFSC cartridge
     */
     static bool isProbablyEFSC(const uInt8* image, uInt32 size);
@@ -279,6 +284,11 @@ class Cartridge : public Device
     static bool isProbablyBFSC(const uInt8* image, uInt32 size);
 
     /**
+      Returns true if the image is probably a BF cartridge
+    */
+    static bool isProbablyBF(const uInt8* image, uInt32 size);
+
+    /**
       Returns true if the image is probably a E0 bankswitching cartridge
     */
     static bool isProbablyE0(const uInt8* image, uInt32 size);
@@ -287,6 +297,17 @@ class Cartridge : public Device
       Returns true if the image is probably a E7 bankswitching cartridge
     */
     static bool isProbablyE7(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a 0840 Econobanking cartridge
+    */
+    static bool isProbably0840(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably an FA2 cartridge (32K only)
+    */
+    static bool isProbablyFA2(const uInt8* image, uInt32 size);    
+    
 
   private:
     // Copy constructor isn't supported by cartridges so make it private

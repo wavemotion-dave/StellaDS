@@ -242,11 +242,13 @@ void dsWarnIncompatibileCart(void)
     bHaltEmulation = 1; // And force the game to not run 
 }
 
-void dsPrintCartType(char * type)
+void dsPrintCartType(char *type, int size)
 {
     if (DEBUG_DUMP)
     {
-        dsPrintValue(16-(strlen(type)/2),0,0, (char*)type);
+        char buf[16];
+        sprintf(buf, "%s %dK", type, size/1024);
+        dsPrintValue(16-(strlen(buf)/2),0,0, (char*)buf);
     }
 }
 

@@ -92,7 +92,7 @@ class CartridgeBFSC : public Cartridge
 
   private:
     // The 256K ROM image of the cartridge
-    uInt8 myImage[256*1024];
+    uInt8 *myImage;
     
     // The 128 bytes of RAM
     uInt8 myRAM[128];
