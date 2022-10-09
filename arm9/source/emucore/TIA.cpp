@@ -37,6 +37,8 @@
 
 #define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
+extern uInt16 gTotalAtariFrames;
+
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
@@ -515,7 +517,6 @@ void TIA::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void TIA::update()
 {
-  extern uInt16 gTotalAtariFrames;
   // We have processed another frame... used for true FPS indication
   gTotalAtariFrames++;
     
@@ -547,12 +548,14 @@ ITCM_CODE void TIA::update()
   // --------------------------------------------------------------------
   switch (cartDriver)
   {
-      case 1: mySystem->m6502().execute_NB(25000); break;   // If we are 2K or 4K (non-banked), we can run faster here...
-      case 2: mySystem->m6502().execute_F8(25000); break;   // If we are F8, we can run faster here...
-      case 3: mySystem->m6502().execute_F6(25000); break;   // If we are F6, we can run faster here...
-      case 4: mySystem->m6502().execute_F4(25000); break;   // If we are F4, we can run faster here...
-      case 5: mySystem->m6502().execute_AR(25000); break;   // If we are AR, we can run faster here...
-      default:mySystem->m6502().execute(25000);    break;   // Otherwise the normal execute driver
+      case 1: mySystem->m6502().execute_NB(25000);   break;   // If we are 2K or 4K (non-banked), we can run faster here...
+      case 2: mySystem->m6502().execute_F8(25000);   break;   // If we are F8, we can run faster here...
+      case 3: mySystem->m6502().execute_F6(25000);   break;   // If we are F6, we can run faster here...
+      case 4: mySystem->m6502().execute_F4(25000);   break;   // If we are F4, we can run faster here...
+      case 5: mySystem->m6502().execute_AR(25000);   break;   // If we are AR, we can run faster here...
+      case 6: mySystem->m6502().execute_F8SC(25000); break;   // If we are F8SC, we can run faster here...
+      case 7: mySystem->m6502().execute_F6SC(25000); break;   // If we are F6SC, we can run faster here...
+      default:mySystem->m6502().execute(25000);      break;   // Otherwise the normal execute driver
   }
 }
 
@@ -2536,6 +2539,16 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                 if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
                 else *fp_blend++ = *fp1;                            // Use current frame 
                 fp1++;fp2++;
+              }
+          }
+          else if (myCartInfo.frame_mode == MODE_HALF)              // Same as simple blending except we do it only on every other frame... looks just about as good but is 2x faster
+          {
+              if (gTotalAtariFrames & 1)
+              {
+                  for (int i=0; i<40; i++)
+                  {
+                    *fp_blend++ = *fp1++ | *fp2++;
+                  }
               }
           }
           else  // Simple blending

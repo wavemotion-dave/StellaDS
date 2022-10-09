@@ -140,47 +140,47 @@ ITCM_CODE void CartridgeE0::poke(uInt16 address, uInt8)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeE0::segmentZero(uInt16 slice)
 { 
-    uInt16 offset = (slice << 10);
-
+    uInt32 offset = (slice << 10);
+    
     // Setup the page access methods for the current bank - this is as fast as we can do it...
-    myPageAccessTable[0x20].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x21].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x22].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x23].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x24].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x25].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x26].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x27].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x20].directPeekBase = &fast_cart_buffer[offset | 0x0000];
+    myPageAccessTable[0x21].directPeekBase = &fast_cart_buffer[offset | 0x0080];
+    myPageAccessTable[0x22].directPeekBase = &fast_cart_buffer[offset | 0x0100];
+    myPageAccessTable[0x23].directPeekBase = &fast_cart_buffer[offset | 0x0180];
+    myPageAccessTable[0x24].directPeekBase = &fast_cart_buffer[offset | 0x0200];
+    myPageAccessTable[0x25].directPeekBase = &fast_cart_buffer[offset | 0x0280];
+    myPageAccessTable[0x26].directPeekBase = &fast_cart_buffer[offset | 0x0300];
+    myPageAccessTable[0x27].directPeekBase = &fast_cart_buffer[offset | 0x0380];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeE0::segmentOne(uInt16 slice)
 { 
-    uInt16 offset = (slice << 10);
+    uInt32 offset = (slice << 10);
 
     // Setup the page access methods for the current bank - this is as fast as we can do it...
-    myPageAccessTable[0x28].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x29].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2A].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2B].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2C].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2D].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2E].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x2F].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x28].directPeekBase = &fast_cart_buffer[offset | 0x0000];
+    myPageAccessTable[0x29].directPeekBase = &fast_cart_buffer[offset | 0x0080];
+    myPageAccessTable[0x2A].directPeekBase = &fast_cart_buffer[offset | 0x0100];
+    myPageAccessTable[0x2B].directPeekBase = &fast_cart_buffer[offset | 0x0180];
+    myPageAccessTable[0x2C].directPeekBase = &fast_cart_buffer[offset | 0x0200];
+    myPageAccessTable[0x2D].directPeekBase = &fast_cart_buffer[offset | 0x0280];
+    myPageAccessTable[0x2E].directPeekBase = &fast_cart_buffer[offset | 0x0300];
+    myPageAccessTable[0x2F].directPeekBase = &fast_cart_buffer[offset | 0x0380];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeE0::segmentTwo(uInt16 slice)
 { 
-    uInt16 offset = (slice << 10);
-
+    uInt32 offset = (slice << 10);
+    
     // Setup the page access methods for the current bank - this is as fast as we can do it...
-    myPageAccessTable[0x30].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x31].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x32].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x33].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x34].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x35].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x36].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
-    myPageAccessTable[0x37].directPeekBase = &fast_cart_buffer[offset]; offset += (1 << MY_PAGE_SHIFT);
+    myPageAccessTable[0x30].directPeekBase = &fast_cart_buffer[offset | 0x0000];
+    myPageAccessTable[0x31].directPeekBase = &fast_cart_buffer[offset | 0x0080];
+    myPageAccessTable[0x32].directPeekBase = &fast_cart_buffer[offset | 0x0100];
+    myPageAccessTable[0x33].directPeekBase = &fast_cart_buffer[offset | 0x0180];
+    myPageAccessTable[0x34].directPeekBase = &fast_cart_buffer[offset | 0x0200];
+    myPageAccessTable[0x35].directPeekBase = &fast_cart_buffer[offset | 0x0280];
+    myPageAccessTable[0x36].directPeekBase = &fast_cart_buffer[offset | 0x0300];
+    myPageAccessTable[0x37].directPeekBase = &fast_cart_buffer[offset | 0x0380];
 }

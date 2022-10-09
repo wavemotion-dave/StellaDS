@@ -113,6 +113,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)
 #define MODE_BACKG       2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
 #define MODE_BLACK       3     // Ficker Reduce (using Black background improvement only)
+#define MODE_HALF        4     // Ficker Free - blend 2 frames but skip every other frame (Faster)
 
 // All of the supported bankswitching schemes
 #define BANK_2K          0

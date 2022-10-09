@@ -137,7 +137,7 @@ void CartridgeF8::bank(uInt16 bank)
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;
     
-  f8_bankbit= (bank ? 0x1FFF:0x0FFF);
+  f8_bankbit = (bank ? 0x1FFF:0x0FFF);
 
   // Setup the page access methods for the current bank
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;

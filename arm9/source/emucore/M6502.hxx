@@ -124,6 +124,8 @@ class M6502
     virtual void execute_F6(uInt16 number) = 0;
     virtual void execute_F4(uInt16 number) = 0;
     virtual void execute_AR(uInt16 number) = 0;
+    virtual void execute_F8SC(uInt16 number) = 0;
+    virtual void execute_F6SC(uInt16 number) = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 
