@@ -124,7 +124,7 @@ uInt8 CartridgeF6::peek(uInt16 address)
       break;
   }
 
-  return myImage[myCurrentOffset + address];
+  return myImage[myCurrentOffset | address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

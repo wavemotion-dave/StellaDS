@@ -34,15 +34,8 @@ CartridgeF6SC::CartridgeF6SC(const uInt8* image)
   {
     myImage[addr] = image[addr];
   }
-    
-  // Copy half the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
-  for(uInt32 addr = 0; addr < 8192; ++addr)
-  {
-    fast_cart_buffer[addr] = image[addr];
-  }
-    
+
   // Initialize RAM with random values 
-  // We steal the fast_cart_buffer here
   Random random;
   for(uInt32 i = 0; i < 128; ++i)
   {
@@ -153,7 +146,7 @@ uInt8 CartridgeF6SC::peek(uInt16 address)
   // NOTE: This does not handle accessing RAM, however, this function
   // should never be called for RAM because of the way page accessing
   // has been setup
-  return myImage[myCurrentOffset + address];
+  return myImage[myCurrentOffset | address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -205,7 +198,6 @@ inline void CartridgeF6SC::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0100; address < (0x0FF6U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      //myPageAccessTable[access_num++].directPeekBase = (bank < 2) ? &fast_cart_buffer[myCurrentOffset + address] : &myImage[myCurrentOffset + address];
       myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
   }
 }

@@ -88,7 +88,7 @@ const CartInfo table[] =
     {"0db4f4150fecf77e4ce72ca4d04c052f",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // 3-D Tic-Tac-Toe (1980).bin    
     {"e3600be9eb98146adafdc12d91323d0f",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   33,    245,    69,   0,  8},    // 3-D Tic-Tac-Toe (1980)(PAL).bin
     {"7b5207e68ee85b16998bea861987c690",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    93,   0,  8},    // 3-D Tic-Tac-Toe (1980)(PAL).bin
-    {"8dc78243950eaf1b26fe42a732ea0c85",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -5},    // 50celery67.bin
+    {"8dc78243950eaf1b26fe42a732ea0c85",  "CELERY", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -5},    // 50celery67.bin
     {"c50fbee08681f15d2d40dbc693d3a837",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A Star.bin
     {"cd5af682685cfecbc25a983e16b9d833",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A-Team (AKA Saboteur) (1984).bin
     {"c00734a2233ef683d9b6e622ac97a5c8",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A-Team (AKA Saboteur) (1984).bin
@@ -2835,6 +2835,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "PINATA") == 0) cartDriver = 4;
       if (strcmp(myCartInfo.gameID, "UPPLUS") == 0) cartDriver = 4;
       if (strcmp(myCartInfo.gameID, "PRIRES") == 0) cartDriver = 4;
+      if (strcmp(myCartInfo.gameID, "CELERY") == 0) cartDriver = 4;
       
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "JUNOST") == 0) || (strcmp(myCartInfo.gameID, "SLIDEB") == 0) || (strcmp(myCartInfo.gameID, "NINJAG") == 0) || 
