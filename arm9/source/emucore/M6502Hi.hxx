@@ -70,8 +70,9 @@ class M6502High : public M6502
     virtual void execute_F6(uInt16 number);
     virtual void execute_F4(uInt16 number);
     virtual void execute_AR(uInt16 number);
-    virtual void execute_F8SC(uInt16 number) = 0;
-    virtual void execute_F6SC(uInt16 number) = 0;
+    virtual void execute_F8SC(uInt16 number);
+    virtual void execute_F6SC(uInt16 number);
+    virtual void execute_DPCP(uInt16 number);
 
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")

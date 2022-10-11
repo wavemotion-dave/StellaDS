@@ -238,7 +238,7 @@ void dsInitPalette(void)
 
 void dsWarnIncompatibileCart(void)
 {
-    dsPrintValue(0,0,0, (char*)"ARM ASSIST CART NOT SUPPORTED");
+    dsPrintValue(5,0,0, (char*)"CDFJ CART NOT SUPPORTED");
     bHaltEmulation = 1; // And force the game to not run 
 }
 
@@ -527,6 +527,8 @@ bool dsLoadGame(char *filename)
         dsInitPalette();
 
         memset(sound_buffer, 0x00, SOUND_SIZE);
+        if (myCartInfo.banking == BANK_DPCP) mySoundFreq = 11025; else mySoundFreq = (isDSiMode() ? 22100 :11025);
+        
         TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         irqSet(IRQ_TIMER2, Tia_process);

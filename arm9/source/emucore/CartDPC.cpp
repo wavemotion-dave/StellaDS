@@ -31,13 +31,12 @@
 uInt16 *myDisplayImage = (uInt16*)0x068A2000;   // Use some of the unused VRAM to speed things up sightly. We use 4K here (2048 x 16-bit)
 
 // The top registers for the data fetchers
-uInt8 myTops[8];
+extern uInt32 myTops[8];
 
 // The bottom registers for the data fetchers
-uInt8 myBottoms[8];
+extern uInt32 myBottoms[8];
 
-// The counter registers for the data fetchers
-uInt16 myCounters[8] __attribute__((section(".dtcm")));
+extern uInt32 myCounters[8];
 
 // The flag registers for the data fetchers
 uInt16 myFlags[8];

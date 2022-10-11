@@ -152,10 +152,6 @@ uInt8 CartridgeCTY::peek(uInt16 address)
 
   if (address < 0x80)  // Are we reading the extra RAM?
   {
-      if ((address & 0x3F) == 0) debug[0]++;
-      if ((address & 0x3F) == 1) debug[1]++;
-      if ((address & 0x3F) == 2) debug[2]++;
-      if ((address & 0x3F) == 3) debug[3]++;
       return myRAM[address & 0x3F];
   }
   else if (address >= 0x0FF5 && address <= 0x0FFB)  // Switch banks if necessary

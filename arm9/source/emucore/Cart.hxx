@@ -107,6 +107,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define SPEC_BIGBIRD     8     // Patched for joystick use.
 #define SPEC_ALPHABM     9     // Patched for joystick use.
 #define SPEC_COOKIEM    10     // Patched for joystick use.
+#define SPEC_OLDDPCP    11     // For special "older" DPC+ handling
 
 // Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode
@@ -126,14 +127,14 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BANK_F8SC        7
 #define BANK_AR          8
 #define BANK_DPC         9
-#define BANK_ARMP       10  // DPC+ or CDFJ or CDFJ+ are not supported... 
+#define BANK_DPCP       10
 #define BANK_3E         11
 #define BANK_3F         12
 #define BANK_E0         13
 #define BANK_E7         14
 #define BANK_FASC       15
 #define BANK_FE         16
-#define BANK_UNUSED     17
+#define BANK_CDFJ       17
 #define BANK_MB         18
 #define BANK_CV         19
 #define BANK_UA         20
