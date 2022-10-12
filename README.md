@@ -31,7 +31,8 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Known Issues :
 -----------------------
-* DPC+ and CDFJ/CDFJ+ games can't be emulated - that requires a coprocessor running at 70MHz (more   than the speed of an original DS!).
+* CDFJ/CDFJ+ games are not emulated due to the complexities in emulating such a complex scheme that requires ARM assisted code.
+* DPC+ games are supported but are complex enough and most use ARM assisted code so you won't get full speed on most of them even with the DSi.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
@@ -115,6 +116,7 @@ F8SC        8K          128B
 FE/SCABS    8K          --
 AR          2K          6K
 DPC         8K (+ 2K Display Data)  
+DPC+        24K         8K (ARM assisted)
 E0          8K          --
 FA          12K         256 bytes
 E7          16K         1K + (4) 256 byte pages
@@ -173,6 +175,10 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.5 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
+  * Added DPC+ with ARM Thumbulator to provide some preliminary support for ARM-assisted games.
+  * Improved execution speed of the emulator and improved the frame blending algorithm.
+
 V5.4 : 07-Oct-2022 by Dave Bernazzani (wavemotion)
   * Added DF bankswitching scheme (missed when DFSC was added).
   * New core execution loop that gives us another 2 frames of performance.
