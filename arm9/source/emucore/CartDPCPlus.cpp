@@ -56,6 +56,8 @@ extern uInt32 myCounters[8];
 
 uInt8 myDPC[24*1024];
 
+uInt8 *myDPCptr __attribute__((section(".dtcm")));
+
 CartridgeDPCPlus *myCartDPC __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -290,7 +292,7 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
 ITCM_CODE uInt8 CartridgeDPCPlus::peek(uInt16 address)  
 {
     address &= 0x0FFF;
-    return myDPC[myCurrentOffset | address];        // This will only get called twice at the reset of the world... after that the driver in M6502Low.cpp will be used
+    return myDPCptr[address];        // This will only get called twice at the reset of the world... after that the driver in M6502Low.cpp will be used
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -350,10 +352,6 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
 
           case 0x02:  // CALLFUNCTION
             callFunction(value);
-            break;
-
-          case 0x03:  // reserved
-          case 0x04:  // reserved
             break;
 
           case 0x05:  // WAVEFORM0
@@ -426,8 +424,7 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
       // DFxWRITE - write into data bank
       case 0x78:
       {
-        myDisplayImageDPCP[myCounters[index]] = value;
-        myCounters[index] = (myCounters[index] + 0x1) & 0x0fff;
+        myDisplayImageDPCP[myCounters[index]++] = value;
         break;
       }
 
@@ -442,6 +439,7 @@ void CartridgeDPCPlus::bank(uInt16 bank)
 {
     // Remember what bank we're in
   myCurrentOffset = bank << 12;
+  myDPCptr = &myDPC[myCurrentOffset];
 }
 
 

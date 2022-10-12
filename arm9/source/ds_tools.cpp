@@ -800,13 +800,18 @@ unsigned int dsWaitForRom(void)
       while (keysCurrent() & KEY_B);
     }
 
-    if (keysCurrent() & KEY_A || keysCurrent() & KEY_Y)
+    if (keysCurrent() & KEY_A || keysCurrent() & KEY_Y || keysCurrent() & KEY_SELECT)
     {
       if (!vcsromlist[ucFicAct].directory)
       {
         bRet=true;
         bDone=true;
         bHaltEmulation = 0;
+        if (keysCurrent() & KEY_SELECT)
+        {
+            full_speed = 1;
+            fpsDisplay = 1;
+        }
         if (keysCurrent() & KEY_Y) 
         {
            bHaltEmulation = 1;

@@ -80,6 +80,8 @@ class Thumbulator
     void  write_register ( uInt32 reg, uInt32 data );
     uInt32 read16 ( uInt32 addr );
     uInt32 read32 ( uInt32 );
+    uInt32 readRAM32 ( uInt32 );
+    uInt32 readROM32 ( uInt32 );
     void write16 ( uInt32 addr, uInt32 data );
     void write32 ( uInt32 addr, uInt32 data );
 

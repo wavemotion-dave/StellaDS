@@ -148,9 +148,6 @@ class CartridgeDPCPlus : public Cartridge
     // Pointer to the 1K frequency table
     uInt8* myFrequencyImage;
 
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-  
     // Parameter for special functions
     uInt8 myParameter[8];
 
