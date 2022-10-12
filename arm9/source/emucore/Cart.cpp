@@ -530,6 +530,7 @@ const CartInfo table[] =
     {"f48735115ec302ba8bb2d2f3a442e814",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Dancing Plate (1982) (PAL).bin
     {"929e8a84ed50601d9af8c49b0425c7ea",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Dancing Plate (1982) (PAL).bin
     {"203b1efc6101d4b9d83bb6cc1c71f67f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Dancing Plate (1982) (PAL).bin
+    {"4f1dd311816cca397ff318bcbbcd4646",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    204,   100,   0,  0},    // Dare Devil RC1.bin
     {"a422194290c64ef9d444da9d6a207807",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   3,  3},    // Dark Cavern (1982).bin
     {"bd39598f067a1193ae81bd6182e756d1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,    97,   3,  1},    // Dark Cavern (Night Stalker) (1982) (PAL).bin
     {"106855474c69d08c8ffa308d47337269",  "??????", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Dark Chambers (1988).bin
@@ -680,7 +681,7 @@ const CartInfo table[] =
     {"2b27eb194e13f3b38d23c879cc1e3abf",  "ENDURO", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   4,  0},    // Enduro (1983) (PAL).bin
     {"9f5096a6f1a5049df87798eb59707583",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    96,   0,  0},    // Entity (1983).bin
     {"6b683be69f92958abe0e2a9945157ad5",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  2},    // Entombed (1982).bin
-    {"7e6a1375ee356f5a682f643bb8b7090c",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_OLDDPCP,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Epic Adventure v28.bin
+    {"7e6a1375ee356f5a682f643bb8b7090c",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_OLDDPCP,   MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Epic Adventure v28.bin
     {"81f4f0285f651399a12ff2e2f35bab77",  "MINDMA", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   2,  0},    // Escape from the Mindmaster (1982).bin
     {"c9e721eb29c940c2e743485b044c0a3f",  "MINDMA", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,   !VB,   HB,  ANA1_0,  PAL,   58,    230,   100,   0,  0},    // Escape from the Mindmaster (1982) (PAL).bin
     {"8334075902fa9f3471905a30fc84e706",  "??????", BANK_F8SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Escape It (2009) (Alan W. Smith).bin
@@ -688,7 +689,7 @@ const CartInfo table[] =
     {"f7a138eed69665b5cd1bfa796a550b01",  "??????", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Espial (1984) (PAL).bin
     {"63685b372bf33967a8aa2be0bb01d1bd",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Espionage (2007) (Jessica Raboud, Matthew Remmele, Richard Shemaka).bin
     {"6205855cc848d1f6c4551391b9bfa279",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Euchre.bin
-    {"033d4d269f5f7053e3c9863fae9afbf5",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Evil Magician Returns II.bin
+    {"033d4d269f5f7053e3c9863fae9afbf5",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Evil Magician Returns II.bin
     {"e04c8ecae485b6970d680c202e58f843",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Evil Magician Returns.bin
     {"6362396c8344eec3e86731a700b13abf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
     {"74f623833429d35341b7a84bc09793c0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
@@ -1742,7 +1743,7 @@ const CartInfo table[] =
     {"17badbb3f54d1fc01ee68726882f26a6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Space Attack (1982).bin
     {"abb741c83f665d73c86d90a7d9292a9b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Space Attack (1982) (PAL).bin
     {"9f81edee8b4b5afbde0e49a6fe8da0de",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // Space Battle (NTSC).bin    
-    {"0efc91e45f61023cda9d086a7d3c402f",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Space Cactus Canyon FINAL.bin
+    {"0efc91e45f61023cda9d086a7d3c402f",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Space Cactus Canyon FINAL.bin
     {"df6a28a89600affe36d94394ef597214",  "SPACAV", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Space Cavern (1981).bin
     {"559317712f989f097ea464517f1a8318",  "SPACAV", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Space Cavern (1981).bin
     {"d9548ad44e67edec202d1b8b325e5adf",  "SPACAV", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Space Cavern (1981) (PAL).bin
@@ -1768,9 +1769,9 @@ const CartInfo table[] =
     {"82e7aab602c378cffdd8186a099e807e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"1bef389e3dd2d4ca4f2f60d42c932509",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  2},    // Space Robot (Dimax - Sinmax) (PAL).bin
     {"c4d888bcf532e7c9c5fdeafbb145266a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Space Robot (Dimax - Sinmax) (PAL).bin
-    {"03db2942cfbea51633726853c81a7b17",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Space Rocks - Encore.bin
-    {"6fce528556f11a1721db8cfc95d5547a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Space Rocks - TE Encore.bin 
-    {"fe395b292e802ea16b3b5782b21ee686",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Space Rocks.bin
+    {"03db2942cfbea51633726853c81a7b17",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks - Encore.bin
+    {"6fce528556f11a1721db8cfc95d5547a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks - TE Encore.bin 
+    {"fe395b292e802ea16b3b5782b21ee686",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks.bin
     {"898143773824663efe88d0a3a0bb1ba4",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983).bin
     {"4f6702c3ba6e0ee2e2868d054b00c064",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    92,   0,  0},    // Space Shuttle (1983) (PAL).bin
@@ -1992,7 +1993,7 @@ const CartInfo table[] =
     {"a5c96b046d5f8b7c96daaa12f925bef8",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,   100,   4,  9},    // Tennis (1981) (PAL).bin
     {"053d1e12003c6a5155a1a4b4c8d199b2",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0, -4},    // Terrance and Phillip - Asses Of Fire (2008) (Chris Read).bin
     {"5eeb81292992e057b290a5cd196f155d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   4,  6},    // Texas Chainsaw Massacre (1983).bin
-    {"f7ebf3dfbd6a3ff5ebc2709c4139a53a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // The End NTSC - RC6.bin
+    {"f7ebf3dfbd6a3ff5ebc2709c4139a53a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    204,   100,   0,  2},    // The End NTSC - RC6.bin
     {"7d3730b7c3199a49cb4189926179653e",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -3},    // TheHorde.bin
     {"32ee2063bbec93a159d99b64db2285f9",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // The Stacks (2011) (Mike Mika, Kevin Wilson).bin
     {"1d7636a157d5aa1880d9cbd88516f45e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  4},    // Thewickedfather-270514.bin
@@ -2064,7 +2065,7 @@ const CartInfo table[] =
     {"085322bae40d904f53bdcc56df0593fc",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  42,    210,   100,   0,  2},    // Tutankham (1983).bin
     {"66c2380c71709efa7b166621e5bb4558",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   54,    245,   100,   0,  0},    // Tutankham (1983) (PAL).bin
     {"00655e50cf62004b1127cfc42a74cac6",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Twisty Passages.bin
-    {"d4a18df0f55a1a5090318c75fce9ff7f",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Tyre_Trax_ntsc_v273.bin
+    {"d4a18df0f55a1a5090318c75fce9ff7f",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    204,   100,   0,  0},    // Tyre_Trax_ntsc_v273.bin
     {"137373599e9b7bf2cf162a102eb5927f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Ultra SCSICide.bin
     {"81a010abdba1a640f7adf7f84e13d307",  "UCHAOS", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Universal Chaos (1989).bin
     {"e020f612255e266a8a6a9795a4df0c0f",  "UCHAOS", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   58,    245,   100,   0,  0},    // Universal Chaos (1989) (PAL).bin
@@ -2194,6 +2195,10 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)    
     
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
