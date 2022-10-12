@@ -75,7 +75,6 @@ Int16   myPOSM1                     __attribute__((section(".dtcm")));
 Int16   myPOSBL                     __attribute__((section(".dtcm")));       
 uInt8   myM0CosmicArkCounter        __attribute__((section(".dtcm")));
 uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
-uInt8   dma_channel                 __attribute__((section(".dtcm")));
 uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
 uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
 uInt8   myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
@@ -368,7 +367,6 @@ void TIA::reset()
     myCurrentFrameBuffer[1][i] = 0;
   }
   myCurrentFrame = 0;
-  dma_channel = 0;    
 
   
   if (myCartInfo.special == SPEC_MELTDOWN)

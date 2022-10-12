@@ -717,14 +717,12 @@ void M6502Low::execute_AR(uInt16 number)
     }
 }
 
-extern uInt8 myLDAimmediate;
 extern uInt8 myDPC[];
 extern CartridgeDPCPlus *myCartDPC;
-
 extern uInt32 myCounters[];
 extern uInt8 *myDisplayImageDPCP;
 extern uInt32 myFractionalCounters[];
-extern uInt8 myFractionalIncrements[];
+extern uInt32 myFractionalIncrements[];
 extern uInt32 myTops[];
 extern uInt32 myBottoms[];
 extern uInt8 *myDPCptr;
@@ -796,34 +794,42 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
     case 0x0018:
         result = myDisplayImageDPCP[myFractionalCounters[0] >> 8];
         myFractionalCounters[0] = (myFractionalCounters[0] + myFractionalIncrements[0]);// & 0x0fffff;
+        return result;
         break;
     case 0x0019:
         result = myDisplayImageDPCP[myFractionalCounters[1] >> 8];
         myFractionalCounters[1] = (myFractionalCounters[1] + myFractionalIncrements[1]);// & 0x0fffff;
+        return result;
         break;
     case 0x001A:
         result = myDisplayImageDPCP[myFractionalCounters[2] >> 8];
         myFractionalCounters[2] = (myFractionalCounters[2] + myFractionalIncrements[2]);// & 0x0fffff;
+        return result;
         break;
     case 0x001B:
         result = myDisplayImageDPCP[myFractionalCounters[3] >> 8];
         myFractionalCounters[3] = (myFractionalCounters[3] + myFractionalIncrements[3]);// & 0x0fffff;
+        return result;
         break;
     case 0x001C:
         result = myDisplayImageDPCP[myFractionalCounters[4] >> 8];
         myFractionalCounters[4] = (myFractionalCounters[4] + myFractionalIncrements[4]);// & 0x0fffff;
+        return result;
         break;
     case 0x001D:
         result = myDisplayImageDPCP[myFractionalCounters[5] >> 8];
         myFractionalCounters[5] = (myFractionalCounters[5] + myFractionalIncrements[5]);// & 0x0fffff;
+        return result;
         break;
     case 0x001E:
         result = myDisplayImageDPCP[myFractionalCounters[6] >> 8];
         myFractionalCounters[6] = (myFractionalCounters[6] + myFractionalIncrements[6]);// & 0x0fffff;
+        return result;
         break;
     case 0x001F:
         result = myDisplayImageDPCP[myFractionalCounters[7] >> 8];
         myFractionalCounters[7] = (myFractionalCounters[7] + myFractionalIncrements[7]);// & 0x0fffff;
+        return result;
         break;
           
     case 0x0020:
@@ -833,7 +839,7 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
         return (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > ((myTops[1]-myBottoms[1]) & 0xFF)) ? 0xFF : 0;
         break;
     case 0x0022:
-        result = (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > ((myTops[2]-myBottoms[2]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > ((myTops[2]-myBottoms[2]) & 0xFF)) ? 0xFF : 0;
         break;
     case 0x0023:
         return (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > ((myTops[3]-myBottoms[3]) & 0xFF)) ? 0xFF : 0;
@@ -861,7 +867,7 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 M6502Low::peek_DPCP(uInt16 address)
 {
-  gSystemCycles++;
+  ++gSystemCycles;
   
   if (address & 0x1000)
   {
@@ -895,14 +901,14 @@ ITCM_CODE uInt8 M6502Low::peek_DPCP(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 M6502Low::peek_DPCPPC(uInt16 address)
 {
-  gSystemCycles++;
+  ++gSystemCycles;
   return myDPCptr[(address & 0xFFF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void M6502Low::poke_DPCP(uInt16 address, uInt8 value)
 {
-  gSystemCycles++;
+  ++gSystemCycles;
   
   if (address & 0x1000)
   {

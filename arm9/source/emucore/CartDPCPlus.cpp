@@ -36,15 +36,14 @@ uInt16 myStartBank = 5;
 Thumbulator *myThumbEmulator = NULL;
 
 // The counter registers for the data fetchers
-uInt8 myLDAimmediate __attribute__((section(".dtcm"))) = 0;
-uInt8 myFastFetch __attribute__((section(".dtcm"))) = 0;
+bool   myFastFetch        __attribute__((section(".dtcm"))) = 0;
 uInt8* myDisplayImageDPCP __attribute__((section(".dtcm")));  // Pointer to the 4K display ROM image of the cartridge
 
 // The counter registers for the fractional data fetchers
 uInt32 myFractionalCounters[8] __attribute__((section(".dtcm")));
 
 // The fractional increments for the data fetchers
-uInt8 myFractionalIncrements[8] __attribute__((section(".dtcm")));
+uInt32 myFractionalIncrements[8] __attribute__((section(".dtcm")));
 
 // The top registers for the data fetchers
 uInt32 myTops[8] __attribute__((section(".dtcm")));
@@ -97,7 +96,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   // DPC+ always starts in bank 5
   myStartBank = 5;
       
-  myFastFetch = myLDAimmediate = false;
+  myFastFetch = false;
 
   // Create Thumbulator ARM emulator
   myThumbEmulator = new Thumbulator((uInt16*)(myProgramImage-0xC00), (uInt16*)fast_cart_buffer);  
