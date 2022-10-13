@@ -3000,6 +3000,12 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       uInt8 hpos = (delta_clock) % 228;
       uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
 
+      // TODO: Remove the following special hack for Space Rocks
+      if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
+      {
+          newx = 11;
+      }
+        
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ0 & 7][myPOSP0][newx];
 
@@ -3043,6 +3049,12 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228;
       uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
+      
+      // TODO: Remove the following special hack for Space Rocks
+      if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
+      {
+          newx = 11;
+      }
         
       // TODO: Remove the following special hack for Rabbit Transit
       // and Dragon Stomper (Excalibur) by StarPath/ARcadia

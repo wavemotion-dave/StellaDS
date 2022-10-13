@@ -981,7 +981,6 @@ void dsInstallSoundEmuFIFO(void)
     fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }
 
-
 char fpsbuf[8];
 short int iTx,iTy;
 static u16 dampen=0;
