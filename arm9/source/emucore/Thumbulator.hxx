@@ -62,7 +62,7 @@
 class Thumbulator
 {
   public:
-    Thumbulator(uInt16* rom, uInt16* ram);
+    Thumbulator(uInt16* rom);
     ~Thumbulator();
 
     /**
@@ -76,30 +76,24 @@ class Thumbulator
     void run();
 
   private:
-    uInt32 read_register ( uInt32 reg );
-    void  write_register ( uInt32 reg, uInt32 data );
-    uInt32 read16 ( uInt32 addr );
-    uInt32 read32 ( uInt32 );
-    uInt32 readRAM32 ( uInt32 );
-    uInt32 readROM32 ( uInt32 );
-    void write16 ( uInt32 addr, uInt32 data );
-    void write32 ( uInt32 addr, uInt32 data );
+    inline uInt32 read16 ( uInt32 addr );
+    inline uInt32 read32 ( uInt32 );
+    inline uInt32 readRAM32 ( uInt32 );
+    inline uInt32 readROM32 ( uInt32 );
+    inline void write16 ( uInt32 addr, uInt32 data );
+    inline void write32 ( uInt32 addr, uInt32 data );
 
-    void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
-    void do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c );
-    void do_add_vflag ( uInt32 a, uInt32 b, uInt32 c );
-    void do_cflag_bit ( uInt32 x );
-    void do_vflag_bit ( uInt32 x );
+    inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
+    inline void do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c );
+    inline void do_add_vflag ( uInt32 a, uInt32 b, uInt32 c );
+    inline void do_cflag_bit ( uInt32 x );
+    inline void do_vflag_bit ( uInt32 x );
 
     void execute ( void );
     int reset ( void );
 
   private:
-    uInt16* ram;
     uInt32 halfadd;
-    uInt32 mamcr;
-
-    ostringstream statusMsg;
 };
 
 #endif

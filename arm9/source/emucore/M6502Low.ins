@@ -37,11 +37,11 @@ case 0x69:
   operand = peek_PC(PC++);
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -52,7 +52,7 @@ case 0x69:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -68,11 +68,11 @@ case 0x65:
   operand = peek(peek_PC(PC++));
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -83,7 +83,7 @@ case 0x65:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -102,11 +102,11 @@ case 0x75:
   operand = peek(address); 
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -117,7 +117,7 @@ case 0x75:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -135,11 +135,11 @@ case 0x6d:
   operand = peek(address);
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -150,7 +150,7 @@ case 0x6d:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -171,11 +171,11 @@ case 0x7d:
 }
 {
   uInt8 oldA = A;
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -185,7 +185,7 @@ case 0x7d:
   }
   else
   {
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -205,11 +205,11 @@ case 0x79:
     operand = peek((high | low) + Y);
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -220,7 +220,7 @@ case 0x79:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -241,11 +241,11 @@ case 0x61:
   operand = peek(address);
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -256,7 +256,7 @@ case 0x61:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -277,11 +277,11 @@ case 0x71:
     operand = peek((high | low) + Y);
 }
 {
-  Int16 nonBCDSum = (Int16)A + (Int16)operand + (C);
+  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     A = nonBCDSum;
@@ -292,7 +292,7 @@ case 0x71:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
     C = (sum > 99);
@@ -2877,7 +2877,7 @@ case 0x6f:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -2889,7 +2889,7 @@ case 0x6f:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -2920,7 +2920,7 @@ case 0x7f:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -2932,7 +2932,7 @@ case 0x7f:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -2963,7 +2963,7 @@ case 0x7b:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -2975,7 +2975,7 @@ case 0x7b:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -3003,7 +3003,7 @@ case 0x67:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -3015,7 +3015,7 @@ case 0x67:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -3045,7 +3045,7 @@ case 0x77:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -3057,7 +3057,7 @@ case 0x77:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -3089,7 +3089,7 @@ case 0x63:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -3101,7 +3101,7 @@ case 0x63:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];
@@ -3133,7 +3133,7 @@ case 0x73:
 
   if(!D)
   {
-    Int16 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
+    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
     V = ((sum > 127) || (sum < -128));
 
     sum = (Int16)A + (Int16)operand + (C);
@@ -3145,7 +3145,7 @@ case 0x73:
   else
   {
     uInt8 oldA = A;
-    Int16 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     C = (sum > 99);
     A = ourBCDTable[1][sum & 0xff];

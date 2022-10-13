@@ -724,7 +724,7 @@ extern uInt8 *myDisplayImageDPCP;
 extern uInt32 myFractionalCounters[];
 extern uInt32 myFractionalIncrements[];
 extern uInt32 myTops[];
-extern uInt32 myBottoms[];
+extern uInt32 myTopsMinusBottoms[];
 extern uInt8 *myDPCptr;
 
 inline uInt8 M6502Low::peek_Fetch(uInt8 address)
@@ -759,35 +759,35 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
         break;
            
     case 0x0010:
-        result = (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > ((myTops[0]-myBottoms[0]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[0]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[0]++] & result;
         break;
     case 0x0011:
-        result = (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > ((myTops[1]-myBottoms[1]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[1]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[1]++] & result;
         break;
     case 0x0012:
-        result = (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > ((myTops[2]-myBottoms[2]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[2]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[2]++] & result;
         break;
     case 0x0013:
-        result = (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > ((myTops[3]-myBottoms[3]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[3]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[3]++] & result;
         break;
     case 0x0014:
-        result = (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > ((myTops[4]-myBottoms[4]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[4]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[4]++] & result;
         break;
     case 0x0015:
-        result = (((myTops[5]-(myCounters[5] & 0x00ff)) & 0xFF) > ((myTops[5]-myBottoms[5]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[5]-(myCounters[5] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[5]) ? 0xFF : 0;
         return  myDisplayImageDPCP[myCounters[5]++] & result;
         break;
     case 0x0016:
-        result = (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > ((myTops[6]-myBottoms[6]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[6]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[6]++] & result;
         break;
     case 0x0017:
-        result = (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > ((myTops[7]-myBottoms[7]) & 0xFF)) ? 0xFF : 0;
+        result = (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[7]) ? 0xFF : 0;
         return myDisplayImageDPCP[myCounters[7]++] & result;
         break;
           
@@ -833,28 +833,28 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
         break;
           
     case 0x0020:
-        return (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > ((myTops[0]-myBottoms[0]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[0]) ? 0xFF : 0;
         break;
     case 0x0021:
-        return (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > ((myTops[1]-myBottoms[1]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[1]) ? 0xFF : 0;
         break;
     case 0x0022:
-        return (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > ((myTops[2]-myBottoms[2]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[2]) ? 0xFF : 0;
         break;
     case 0x0023:
-        return (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > ((myTops[3]-myBottoms[3]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[3]) ? 0xFF : 0;
         break;
     case 0x0024:
-        return (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > ((myTops[4]-myBottoms[4]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[4]) ? 0xFF : 0;
         break;
     case 0x0025:
-        return (((myTops[5]-(myCounters[5] & 0x00ff)) & 0xFF) > ((myTops[5]-myBottoms[5]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[5]-(myCounters[5] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[5]) ? 0xFF : 0;
         break;
     case 0x0026:
-        return (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > ((myTops[6]-myBottoms[6]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[6]) ? 0xFF : 0;
         break;
     case 0x0027:
-        return (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > ((myTops[7]-myBottoms[7]) & 0xFF)) ? 0xFF : 0;
+        return (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[7]) ? 0xFF : 0;
         break;
           
     default:

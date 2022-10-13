@@ -85,6 +85,7 @@ uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't b
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
+char bScreenRefresh __attribute__((section(".dtcm"))) = 0;
 
 static uInt8 full_speed=0;
 uInt16 gTotalAtariFrames=0;
@@ -187,7 +188,6 @@ inline void ShowStatusLine(void)
 }
 
 
-char bScreenRefresh = 0;
 u16 stretch_x = 0;
 ITCM_CODE void vblankIntr() 
 {

@@ -48,6 +48,8 @@ uInt32 myFractionalIncrements[8] __attribute__((section(".dtcm")));
 // The top registers for the data fetchers
 uInt32 myTops[8] __attribute__((section(".dtcm")));
 
+uInt32 myTopsMinusBottoms[8] __attribute__((section(".dtcm")));
+
 // The bottom registers for the data fetchers
 uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
@@ -84,7 +86,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   // Initialize the DPC data fetcher registers
   for(uInt16 i = 0; i < 8; ++i)
   {
-    myTops[i] = myBottoms[i] = myCounters[i] = myFractionalIncrements[i] =  myFractionalCounters[i] = 0;
+    myTops[i] = myBottoms[i] = myCounters[i] = myFractionalIncrements[i] =  myFractionalCounters[i] = myTopsMinusBottoms[i] = 0;
   }
 
   // Set waveforms to first waveform entry
@@ -99,7 +101,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   myFastFetch = false;
 
   // Create Thumbulator ARM emulator
-  myThumbEmulator = new Thumbulator((uInt16*)(myProgramImage-0xC00), (uInt16*)fast_cart_buffer);  
+  myThumbEmulator = new Thumbulator((uInt16*)(myProgramImage-0xC00));
   
   myFractionalLowMask = (myCartInfo.special == SPEC_OLDDPCP) ? 0x0F0000 : 0x0F00FF;  
         
@@ -324,11 +326,13 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
       // DFxTOP - set top of window (for reads of DFxDATAW)
       case 0x40:
         myTops[index] = value;
+        myTopsMinusBottoms[index] = (myTops[index]-myBottoms[index]) & 0xFF;
         break;
 
       // DFxBOT - set bottom of window (for reads of DFxDATAW)
       case 0x48:
         myBottoms[index] = value;
+        myTopsMinusBottoms[index] = (myTops[index]-myBottoms[index]) & 0xFF;
         break;
 
       // DFxLOW - data pointer low byte
