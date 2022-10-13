@@ -1769,9 +1769,9 @@ const CartInfo table[] =
     {"82e7aab602c378cffdd8186a099e807e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"1bef389e3dd2d4ca4f2f60d42c932509",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  2},    // Space Robot (Dimax - Sinmax) (PAL).bin
     {"c4d888bcf532e7c9c5fdeafbb145266a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Space Robot (Dimax - Sinmax) (PAL).bin
-    {"03db2942cfbea51633726853c81a7b17",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks - Encore.bin
-    {"6fce528556f11a1721db8cfc95d5547a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks - TE Encore.bin 
-    {"fe395b292e802ea16b3b5782b21ee686",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  6},    // Space Rocks.bin
+    {"03db2942cfbea51633726853c81a7b17",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - Encore.bin
+    {"6fce528556f11a1721db8cfc95d5547a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - TE Encore.bin 
+    {"fe395b292e802ea16b3b5782b21ee686",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks.bin
     {"898143773824663efe88d0a3a0bb1ba4",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983).bin
     {"4f6702c3ba6e0ee2e2868d054b00c064",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    92,   0,  0},    // Space Shuttle (1983) (PAL).bin
