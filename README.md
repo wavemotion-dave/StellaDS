@@ -176,7 +176,7 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
-V5.6 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
+V5.6 : 14-Oct-2022 by Dave Bernazzani (wavemotion)
   * Massive speedup improvement for DPC+ games. Most play full speed on the DSi.
   * Fixed graphical glitches on Space Rocks homebrew.
   * Other cleanups and optmizations across the board to shine things up.
