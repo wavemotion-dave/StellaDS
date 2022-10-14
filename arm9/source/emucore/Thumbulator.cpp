@@ -1027,7 +1027,7 @@ void Thumbulator::execute ( void )
           }
       } 
       else // High bit set in instruction 0x8000
-      {          
+      {   
           //B(1) conditional branch
           if((inst&0xF000)==0xD000)
           {

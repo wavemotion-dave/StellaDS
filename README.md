@@ -16,6 +16,7 @@ See compatibility.txt for a full list of the ROMS supported. Generally these are
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
 * Most popular bankswitching is supported up to 128K/256K BF/EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
+* DPC+ Arm-Assisted games supported!
 * High score support with up to 10 scores for each game
 * Manuals for more than 100 of the common games included
 * Keypad overlay for Star Raiders
@@ -32,7 +33,7 @@ The StellaDS emulator is offered as-is, without any warranty.
 Known Issues :
 -----------------------
 * CDFJ/CDFJ+ games are not emulated due to the complexities in emulating such a complex scheme that requires ARM assisted code.
-* DPC+ games are supported but are complex enough and most use ARM assisted code so you won't get full speed on most of them even with the DSi.
+* DPC+ games are supported but are complex enough and most use ARM assisted code so you really need a DSi running with TWL++ or Unlaunch to get the faster 2X CPU speed.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
@@ -175,6 +176,11 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.6 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
+  * Massive speedup improvement for DPC+ games. Most play full speed on the DSi.
+  * Fixed graphical glitches on Space Rocks homebrew.
+  * Other cleanups and optmizations across the board to shine things up.
+  
 V5.5 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
   * Added DPC+ with ARM Thumbulator to provide some preliminary support for ARM-assisted games.
   * Improved execution speed of the emulator and improved the frame blending algorithm.
