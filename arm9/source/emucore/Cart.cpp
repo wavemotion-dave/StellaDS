@@ -1612,7 +1612,7 @@ const CartInfo table[] =
     {"01297d9b450455dd716db9658efb2fae",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    89,   0,  0},    // Save Our Ship (Technovision) (PAL).bin
     {"e377c3af4f54a51b85efe37d4b7029e6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  23,    210,    82,   0,  3},    // Save the Whales (1983).bin
     {"fe641247a4ab9bee970e19ab55f23b25",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
-    {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Scramble (final).bin
+    {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble (final).bin
     {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"3fe43915e5655cf69485364e9f464097",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
