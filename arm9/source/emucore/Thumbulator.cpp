@@ -190,616 +190,624 @@ void Thumbulator::execute ( void )
       {
           if (inst & 0x4000)
           {
-              //ADC
-              if((inst&0xFFC0)==0x4140)
+              if (inst & 0x2000)
               {
-                rd=(inst>>0)&0x07;
-                rm=(inst>>3)&0x07;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                reg_sys[rd]=ra+rb+cFlag;
-                do_nflag(reg_sys[rd]);
-                do_zflag(reg_sys[rd]);
-                do_cflag(ra,rb,cFlag);
-                do_add_vflag(ra,rb,reg_sys[rd]);
-                continue;
-              }
 
-              //ADD(4) two registers one or both high no flags
-              if((inst&0xFF00)==0x4400)
-              {
-                rd=(inst>>0)&0x7;
-                rd|=(inst>>4)&0x8;
-                rm=(inst>>3)&0xF;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra+rb;
-                write_register(rd,rc);
-                continue;
-              }
-
-              //AND
-              if((inst&0xFFC0)==0x4000)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                reg_sys[rd] &= reg_sys[rm];
-                do_nflag(reg_sys[rd]);
-                do_zflag(reg_sys[rd]);
-                continue;
-              }
-
-              //ASR(2) two register
-              if((inst&0xFFC0)==0x4100)
-              {
-                rd=(inst>>0)&0x07;
-                rs=(inst>>3)&0x07;
-                rc=read_register(rd);
-                rb=read_register(rs);
-                rb&=0xFF;
-                if(rb==0)
-                {
-                }
-                else if(rb<32)
-                {
-                  do_cflag_bit(rc&(1<<(rb-1)));
-                  ra=rc&0x80000000;
-                  rc>>=rb;
-                  if(ra) //asr, sign is shifted in
+                  //LDR(1) two register immediate
+                  if((inst&0xF800)==0x6800)
                   {
-                    rc|=(~0)<<(32-rb);
+                    rd=(inst>>0)&0x07;
+                    rn=(inst>>3)&0x07;
+                    rb=(inst>>6)&0x1F;
+                    rb<<=2;
+                    rb=read_register(rn)+rb;
+                    rc=read32(rb);
+                    write_register(rd,rc);
+                    continue;
                   }
-                }
-                else
-                {
-                  if(rc&0x80000000)
+                  
+                  //LDRB(1)
+                  if((inst&0xF800)==0x7800)
                   {
-                    do_cflag_bit(1);
-                    rc=(~0);
+                    rd=(inst>>0)&0x07;
+                    rn=(inst>>3)&0x07;
+                    rb=(inst>>6)&0x1F;
+                    rb=read_register(rn)+rb;
+                    rc=read16(rb);
+                    if(rb&1)
+                    {
+                      rc>>=8;
+                    }
+                    else
+                    {
+                    }
+                    write_register(rd,rc&0xFF);
+                    continue;
                   }
-                  else
+                  
+                  //STR(1)
+                  if((inst&0xF800)==0x6000)
                   {
-                    do_cflag_bit(0);
-                    rc=0;
+                    rd=(inst>>0)&0x07;
+                    rn=(inst>>3)&0x07;
+                    rb=(inst>>6)&0x1F;
+                    rb<<=2;
+                    rb=read_register(rn)+rb;
+                    rc=read_register(rd);
+                    write32(rb,rc);
+                    continue;
                   }
-                }
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
 
-
-              //BIC
-              if((inst&0xFFC0)==0x4380)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra&(~rb);
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //BLX(2)
-              if((inst&0xFF87)==0x4780)
-              {
-                rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                rc+=2;
-                if(rc&1)
-                {
-                  write_register(14,reg_sys[15]-2);
-                  write_register(15,rc);
-                    ptr = &rom[(reg_sys[15]-2) >> 1];
-                  continue;
-                }
-                else
-                {
-                  // fxq: this could serve as exit code
-                  break;
-                }
-              }
-
-              //BX
-              if((inst&0xFF87)==0x4700)
-              {
-                rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                rc+=2;
-                if(rc&1)
-                {
-                  write_register(15,rc);
-                    ptr = &rom[(reg_sys[15]-2) >> 1];
-                  continue;
-                }
-                else
-                {
-                  //fprintf(stderr,"cannot branch to arm 0x%08X 0x%04X\n",pc,inst);
-                  // fxq: or maybe this one??
-                  break;
-                }
-              }
-
-              //CMN
-              if((inst&0xFFC0)==0x42C0)
-              {
-                rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rb=read_register(rm);
-                rc=ra+rb;
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(ra,rb,0);
-                do_add_vflag(ra,rb,rc);
-                continue;
-              }
-
-              //CMP(2) compare register
-              if((inst&0xFFC0)==0x4280)
-              {
-                rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rb=read_register(rm);
-                rc=ra-rb;
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(ra,~rb,1);
-                do_sub_vflag(ra,rb,rc);
-                continue;
-              }
-
-              //CMP(3) compare high register
-              if((inst&0xFF00)==0x4500)
-              {
-                rn=(inst>>0)&0x7;
-                rn|=(inst>>4)&0x8;
-                rm=(inst>>3)&0xF;
-                ra=read_register(rn);
-                rb=read_register(rm);
-                rc=ra-rb;
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(ra,~rb,1);
-                do_sub_vflag(ra,rb,rc);
-                continue;
-              }
-
-              //CPY copy high register
-              if((inst&0xFFC0)==0x4600)
-              {
-                //same as mov except you can use both low registers
-                //going to let mov handle high registers
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                rc=read_register(rm);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //EOR
-              if((inst&0xFFC0)==0x4040)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra^rb;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //LDR(1) two register immediate
-              if((inst&0xF800)==0x6800)
-              {
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb<<=2;
-                rb=read_register(rn)+rb;
-                rc=read32(rb);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //LDR(2) three register
-              if((inst&0xFE00)==0x5800)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read32(rb);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //LDR(3)
-              if((inst&0xF800)==0x4800)
-              {
-                rb=(inst>>0)&0xFF;
-                rd=(inst>>8)&0x07;
-                rb<<=2;
-                ra=read_register(15);
-                ra&=~3;
-                rb+=ra;
-                rc=read32(rb);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //LDRB(1)
-              if((inst&0xF800)==0x7800)
-              {
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb=read_register(rn)+rb;
-                rc=read16(rb);
-                if(rb&1)
-                {
-                  rc>>=8;
-                }
-                else
-                {
-                }
-                write_register(rd,rc&0xFF);
-                continue;
-              }
-
-              //LDRB(2)
-              if((inst&0xFE00)==0x5C00)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                if(rb&1)
-                {
-                  rc>>=8;
-                }
-                else
-                {
-                }
-                write_register(rd,rc&0xFF);
-                continue;
-              }
-
-              //LDRH(2)
-              if((inst&0xFE00)==0x5A00)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                write_register(rd,rc&0xFFFF);
-                continue;
-              }
-
-              //LDRSB
-              if((inst&0xFE00)==0x5600)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                if(rb&1)
-                {
-                  rc>>=8;
-                }
-                else
-                {
-                }
-                rc&=0xFF;
-                if(rc&0x80) rc|=((~0)<<8);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //LDRSH
-              if((inst&0xFE00)==0x5E00)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                rc&=0xFFFF;
-                if(rc&0x8000) rc|=((~0)<<16);
-                write_register(rd,rc);
-                continue;
-              }
-
-              //LSL(2) two register
-              if((inst&0xFFC0)==0x4080)
-              {
-                rd=(inst>>0)&0x07;
-                rs=(inst>>3)&0x07;
-                rc=read_register(rd);
-                rb=read_register(rs);
-                rb&=0xFF;
-                if(rb==0)
-                {
-                }
-                else if(rb<32)
-                {
-                  do_cflag_bit(rc&(1<<(32-rb)));
-                  rc<<=rb;
-                }
-                else if(rb==32)
-                {
-                  do_cflag_bit(rc&1);
-                  rc=0;
-                }
-                else
-                {
-                  do_cflag_bit(0);
-                  rc=0;
-                }
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //LSR(2) two register
-              if((inst&0xFFC0)==0x40C0)
-              {
-                rd=(inst>>0)&0x07;
-                rs=(inst>>3)&0x07;
-                rc=read_register(rd);
-                rb=read_register(rs);
-                rb&=0xFF;
-                if(rb==0)
-                {
-                }
-                else if(rb<32)
-                {
-                  do_cflag_bit(rc&(1<<(32-rb)));
-                  rc>>=rb;
-                }
-                else if(rb==32)
-                {
-                  do_cflag_bit(rc&0x80000000);
-                  rc=0;
-                }
-                else
-                {
-                  do_cflag_bit(0);
-                  rc=0;
-                }
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //MOV(3)
-              if((inst&0xFF00)==0x4600)
-              {
-                rd=(inst>>0)&0x7;
-                rd|=(inst>>4)&0x8;
-                rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                if (rd==15) rc+=2; // fxq fix for MOV R15
-                write_register(rd,rc);
-                continue;
-              }
-
-              //MUL
-              if((inst&0xFFC0)==0x4340)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra*rb;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //MVN
-              if((inst&0xFFC0)==0x43C0)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=(~ra);
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //NEG
-              if((inst&0xFFC0)==0x4240)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=0-ra;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(0,~ra,1);
-                do_sub_vflag(0,ra,rc);
-                continue;
-              }
-
-              //ORR
-              if((inst&0xFFC0)==0x4300)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra|rb;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
-
-              //ROR
-              if((inst&0xFFC0)==0x41C0)
-              {
-                rd=(inst>>0)&0x7;
-                rs=(inst>>3)&0x7;
-                rc=read_register(rd);
-                ra=read_register(rs);
-                ra&=0xFF;
-                if(ra==0)
-                {
-                }
-                else
-                {
-                  ra&=0x1F;
-                  if(ra==0)
+                  //STRB(1)
+                  if((inst&0xF800)==0x7000)
                   {
-                    do_cflag_bit(rc&0x80000000);
+                    rd=(inst>>0)&0x07;
+                    rn=(inst>>3)&0x07;
+                    rb=(inst>>6)&0x1F;
+                    rb=read_register(rn)+rb;
+                    rc=read_register(rd);
+                    ra=read16(rb);
+                    if(rb&1)
+                    {
+                      ra&=0x00FF;
+                      ra|=rc<<8;
+                    }
+                    else
+                    {
+                      ra&=0xFF00;
+                      ra|=rc&0x00FF;
+                    }
+                    write16(rb,ra&0xFFFF);
+                    continue;
                   }
-                  else
+              }
+              else //zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+              {
+                  //ADC
+                  if((inst&0xFFC0)==0x4140)
                   {
-                    do_cflag_bit(rc&(1<<(ra-1)));
-                    rb=rc<<(32-ra);
-                    rc>>=ra;
-                    rc|=rb;
+                    rd=(inst>>0)&0x07;
+                    rm=(inst>>3)&0x07;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    reg_sys[rd]=ra+rb+cFlag;
+                    do_nflag(reg_sys[rd]);
+                    do_zflag(reg_sys[rd]);
+                    do_cflag(ra,rb,cFlag);
+                    do_add_vflag(ra,rb,reg_sys[rd]);
+                    continue;
                   }
-                }
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
-              }
 
-              //SBC
-              if((inst&0xFFC0)==0x4180)
-              {
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rd);
-                rb=read_register(rm);
-                rc=ra-rb;
-                if(!(cFlag)) rc--;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(ra,rb,0);
-                do_sub_vflag(ra,rb,rc);
-                continue;
-              }
+                  //ADD(4) two registers one or both high no flags
+                  if((inst&0xFF00)==0x4400)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rd|=(inst>>4)&0x8;
+                    rm=(inst>>3)&0xF;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra+rb;
+                    write_register(rd,rc);
+                    continue;
+                  }
 
-              //STR(1)
-              if((inst&0xF800)==0x6000)
-              {
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb<<=2;
-                rb=read_register(rn)+rb;
-                rc=read_register(rd);
-                write32(rb,rc);
-                continue;
-              }
+                  //AND
+                  if((inst&0xFFC0)==0x4000)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    reg_sys[rd] &= reg_sys[rm];
+                    do_nflag(reg_sys[rd]);
+                    do_zflag(reg_sys[rd]);
+                    continue;
+                  }
 
-              //STR(2)
-              if((inst&0xFE00)==0x5000)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read_register(rd);
-                write32(rb,rc);
-                continue;
-              }
-
-              //STRB(1)
-              if((inst&0xF800)==0x7000)
-              {
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb=read_register(rn)+rb;
-                rc=read_register(rd);
-                ra=read16(rb);
-                if(rb&1)
-                {
-                  ra&=0x00FF;
-                  ra|=rc<<8;
-                }
-                else
-                {
-                  ra&=0xFF00;
-                  ra|=rc&0x00FF;
-                }
-                write16(rb,ra&0xFFFF);
-                continue;
-              }
-
-              //STRB(2)
-              if((inst&0xFE00)==0x5400)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read_register(rd);
-                ra=read16(rb);
-                if(rb&1)
-                {
-                  ra&=0x00FF;
-                  ra|=rc<<8;
-                }
-                else
-                {
-                  ra&=0xFF00;
-                  ra|=rc&0x00FF;
-                }
-                write16(rb,ra&0xFFFF);
-                continue;
-              }
+                  //ASR(2) two register
+                  if((inst&0xFFC0)==0x4100)
+                  {
+                    rd=(inst>>0)&0x07;
+                    rs=(inst>>3)&0x07;
+                    rc=read_register(rd);
+                    rb=read_register(rs);
+                    rb&=0xFF;
+                    if(rb==0)
+                    {
+                    }
+                    else if(rb<32)
+                    {
+                      do_cflag_bit(rc&(1<<(rb-1)));
+                      ra=rc&0x80000000;
+                      rc>>=rb;
+                      if(ra) //asr, sign is shifted in
+                      {
+                        rc|=(~0)<<(32-rb);
+                      }
+                    }
+                    else
+                    {
+                      if(rc&0x80000000)
+                      {
+                        do_cflag_bit(1);
+                        rc=(~0);
+                      }
+                      else
+                      {
+                        do_cflag_bit(0);
+                        rc=0;
+                      }
+                    }
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
 
 
-              //STRH(2)
-              if((inst&0xFE00)==0x5200)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read_register(rd);
-                write16(rb,rc&0xFFFF);
-                continue;
-              }
+                  //BIC
+                  if((inst&0xFFC0)==0x4380)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra&(~rb);
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
 
-              //TST
-              if((inst&0xFFC0)==0x4200)
-              {
-                rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rb=read_register(rm);
-                rc=ra&rb;
-                do_nflag(rc);
-                do_zflag(rc);
-                continue;
+                  //BLX(2)
+                  if((inst&0xFF87)==0x4780)
+                  {
+                    rm=(inst>>3)&0xF;
+                    rc=read_register(rm);
+                    rc+=2;
+                    if(rc&1)
+                    {
+                      write_register(14,reg_sys[15]-2);
+                      write_register(15,rc);
+                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      continue;
+                    }
+                    else
+                    {
+                      // fxq: this could serve as exit code
+                      break;
+                    }
+                  }
+
+                  //BX
+                  if((inst&0xFF87)==0x4700)
+                  {
+                    rm=(inst>>3)&0xF;
+                    rc=read_register(rm);
+                    rc+=2;
+                    if(rc&1)
+                    {
+                      write_register(15,rc);
+                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      continue;
+                    }
+                    else
+                    {
+                      //fprintf(stderr,"cannot branch to arm 0x%08X 0x%04X\n",pc,inst);
+                      // fxq: or maybe this one??
+                      break;
+                    }
+                  }
+
+                  //CMN
+                  if((inst&0xFFC0)==0x42C0)
+                  {
+                    rn=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rn);
+                    rb=read_register(rm);
+                    rc=ra+rb;
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    do_cflag(ra,rb,0);
+                    do_add_vflag(ra,rb,rc);
+                    continue;
+                  }
+
+                  //CMP(2) compare register
+                  if((inst&0xFFC0)==0x4280)
+                  {
+                    rn=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rn);
+                    rb=read_register(rm);
+                    rc=ra-rb;
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    do_cflag(ra,~rb,1);
+                    do_sub_vflag(ra,rb,rc);
+                    continue;
+                  }
+
+                  //CMP(3) compare high register
+                  if((inst&0xFF00)==0x4500)
+                  {
+                    rn=(inst>>0)&0x7;
+                    rn|=(inst>>4)&0x8;
+                    rm=(inst>>3)&0xF;
+                    ra=read_register(rn);
+                    rb=read_register(rm);
+                    rc=ra-rb;
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    do_cflag(ra,~rb,1);
+                    do_sub_vflag(ra,rb,rc);
+                    continue;
+                  }
+
+                  //CPY copy high register
+                  if((inst&0xFFC0)==0x4600)
+                  {
+                    //same as mov except you can use both low registers
+                    //going to let mov handle high registers
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    rc=read_register(rm);
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //EOR
+                  if((inst&0xFFC0)==0x4040)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra^rb;
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //LDR(2) three register
+                  if((inst&0xFE00)==0x5800)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read32(rb);
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //LDR(3)
+                  if((inst&0xF800)==0x4800)
+                  {
+                    rb=(inst>>0)&0xFF;
+                    rd=(inst>>8)&0x07;
+                    rb<<=2;
+                    ra=read_register(15);
+                    ra&=~3;
+                    rb+=ra;
+                    rc=read32(rb);
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //LDRB(2)
+                  if((inst&0xFE00)==0x5C00)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read16(rb);
+                    if(rb&1)
+                    {
+                      rc>>=8;
+                    }
+                    else
+                    {
+                    }
+                    write_register(rd,rc&0xFF);
+                    continue;
+                  }
+
+                  //LDRH(2)
+                  if((inst&0xFE00)==0x5A00)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read16(rb);
+                    write_register(rd,rc&0xFFFF);
+                    continue;
+                  }
+
+                  //LDRSB
+                  if((inst&0xFE00)==0x5600)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read16(rb);
+                    if(rb&1)
+                    {
+                      rc>>=8;
+                    }
+                    else
+                    {
+                    }
+                    rc&=0xFF;
+                    if(rc&0x80) rc|=((~0)<<8);
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //LDRSH
+                  if((inst&0xFE00)==0x5E00)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read16(rb);
+                    rc&=0xFFFF;
+                    if(rc&0x8000) rc|=((~0)<<16);
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //LSL(2) two register
+                  if((inst&0xFFC0)==0x4080)
+                  {
+                    rd=(inst>>0)&0x07;
+                    rs=(inst>>3)&0x07;
+                    rc=read_register(rd);
+                    rb=read_register(rs);
+                    rb&=0xFF;
+                    if(rb==0)
+                    {
+                    }
+                    else if(rb<32)
+                    {
+                      do_cflag_bit(rc&(1<<(32-rb)));
+                      rc<<=rb;
+                    }
+                    else if(rb==32)
+                    {
+                      do_cflag_bit(rc&1);
+                      rc=0;
+                    }
+                    else
+                    {
+                      do_cflag_bit(0);
+                      rc=0;
+                    }
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //LSR(2) two register
+                  if((inst&0xFFC0)==0x40C0)
+                  {
+                    rd=(inst>>0)&0x07;
+                    rs=(inst>>3)&0x07;
+                    rc=read_register(rd);
+                    rb=read_register(rs);
+                    rb&=0xFF;
+                    if(rb==0)
+                    {
+                    }
+                    else if(rb<32)
+                    {
+                      do_cflag_bit(rc&(1<<(32-rb)));
+                      rc>>=rb;
+                    }
+                    else if(rb==32)
+                    {
+                      do_cflag_bit(rc&0x80000000);
+                      rc=0;
+                    }
+                    else
+                    {
+                      do_cflag_bit(0);
+                      rc=0;
+                    }
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //MOV(3)
+                  if((inst&0xFF00)==0x4600)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rd|=(inst>>4)&0x8;
+                    rm=(inst>>3)&0xF;
+                    rc=read_register(rm);
+                    if (rd==15) rc+=2; // fxq fix for MOV R15
+                    write_register(rd,rc);
+                    continue;
+                  }
+
+                  //MUL
+                  if((inst&0xFFC0)==0x4340)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra*rb;
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //MVN
+                  if((inst&0xFFC0)==0x43C0)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rm);
+                    rc=(~ra);
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //NEG
+                  if((inst&0xFFC0)==0x4240)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rm);
+                    rc=0-ra;
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    do_cflag(0,~ra,1);
+                    do_sub_vflag(0,ra,rc);
+                    continue;
+                  }
+
+                  //ORR
+                  if((inst&0xFFC0)==0x4300)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra|rb;
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //ROR
+                  if((inst&0xFFC0)==0x41C0)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rs=(inst>>3)&0x7;
+                    rc=read_register(rd);
+                    ra=read_register(rs);
+                    ra&=0xFF;
+                    if(ra==0)
+                    {
+                    }
+                    else
+                    {
+                      ra&=0x1F;
+                      if(ra==0)
+                      {
+                        do_cflag_bit(rc&0x80000000);
+                      }
+                      else
+                      {
+                        do_cflag_bit(rc&(1<<(ra-1)));
+                        rb=rc<<(32-ra);
+                        rc>>=ra;
+                        rc|=rb;
+                      }
+                    }
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
+
+                  //SBC
+                  if((inst&0xFFC0)==0x4180)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rd);
+                    rb=read_register(rm);
+                    rc=ra-rb;
+                    if(!(cFlag)) rc--;
+                    write_register(rd,rc);
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    do_cflag(ra,rb,0);
+                    do_sub_vflag(ra,rb,rc);
+                    continue;
+                  }
+
+                  //STR(2)
+                  if((inst&0xFE00)==0x5000)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read_register(rd);
+                    write32(rb,rc);
+                    continue;
+                  }
+
+
+                  //STRB(2)
+                  if((inst&0xFE00)==0x5400)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read_register(rd);
+                    ra=read16(rb);
+                    if(rb&1)
+                    {
+                      ra&=0x00FF;
+                      ra|=rc<<8;
+                    }
+                    else
+                    {
+                      ra&=0xFF00;
+                      ra|=rc&0x00FF;
+                    }
+                    write16(rb,ra&0xFFFF);
+                    continue;
+                  }
+
+
+                  //STRH(2)
+                  if((inst&0xFE00)==0x5200)
+                  {
+                    rd=(inst>>0)&0x7;
+                    rn=(inst>>3)&0x7;
+                    rm=(inst>>6)&0x7;
+                    rb=read_register(rn)+read_register(rm);
+                    rc=read_register(rd);
+                    write16(rb,rc&0xFFFF);
+                    continue;
+                  }
+
+                  //TST
+                  if((inst&0xFFC0)==0x4200)
+                  {
+                    rn=(inst>>0)&0x7;
+                    rm=(inst>>3)&0x7;
+                    ra=read_register(rn);
+                    rb=read_register(rm);
+                    rc=ra&rb;
+                    do_nflag(rc);
+                    do_zflag(rc);
+                    continue;
+                  }
               }
           }
-          else // Bit 15=0
+          else // Bit 14=0
           {
+              debug[2]++;
               //ADD(1) small immediate two registers
               if((inst&0xFE00)==0x1C00)
               {
