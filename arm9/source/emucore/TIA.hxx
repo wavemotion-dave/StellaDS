@@ -50,6 +50,8 @@ class System;
 extern uInt16 ourCollisionTable[256];
 extern uInt8 myPriorityEncoder[2][256];
 
+extern    uInt16 myCollision;    // Collision register
+
 // Note that these position registers contain the color clock 
 // on which the object's serial output should begin (0 to 159)
 extern    Int16 myPOSP0;         // Player 0 position register
@@ -96,6 +98,7 @@ extern    Int32 myClockStartDisplay;
 extern    Int32 myClockStopDisplay;
 extern    Int32 myClockAtLastUpdate;
 extern    Int32 myClocksToEndOfScanLine;
+extern    uInt16 myMaximumNumberOfScanlines;
 extern    uInt8 myVSYNC;                        // Holds the VSYNC register value
 extern    uInt8 myVBLANK;                       // Holds the VBLANK register value
 extern    Int32 myLastHMOVEClock;
@@ -244,7 +247,7 @@ class TIA : public Device , public MediaSource
     void computePlayfieldMaskTable();
 
     // Update the current frame buffer for objects and collisions
-    void handleObjectsAndCollisions(Int32 clocksToUpdate, uInt32 hpos);
+    void handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos);
 
     // Update the current frame buffer to the specified color clock
     void updateFrame(Int32 clock);

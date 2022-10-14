@@ -62,6 +62,7 @@ uInt8 gSaveKeyEEWritten = false;
 uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 22050;
+uInt16 origSoundFreq = 22050;
 
 #define MAX_DEBUG 39
 Int32 debug[MAX_DEBUG]={0};
@@ -79,7 +80,6 @@ Console* theConsole = (Console*) NULL;
 
 int bg0, bg0b, bg1b;
 uInt16 etatEmu;
-uInt8 fpsDisplay = false;
 
 uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
@@ -88,6 +88,7 @@ uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0;
 char bScreenRefresh __attribute__((section(".dtcm"))) = 0;
 
 static uInt8 full_speed=0;
+static uInt8 fpsDisplay = false;
 uInt16 gTotalAtariFrames=0;
 
 uInt16 keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, romSel;
@@ -527,11 +528,11 @@ bool dsLoadGame(char *filename)
         dsInitPalette();
 
         memset(sound_buffer, 0x00, SOUND_SIZE);
-        if (myCartInfo.banking == BANK_DPCP) mySoundFreq = 11025; else mySoundFreq = (isDSiMode() ? 22100 :11025);
         
         TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         irqSet(IRQ_TIMER2, Tia_process);
+        
         if (myCartInfo.sound_mute)
         {
             irqDisable(IRQ_TIMER2);
@@ -967,6 +968,7 @@ void dsInstallSoundEmuFIFO(void)
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000); 
         mySoundFreq = 11025;
     }
+    origSoundFreq = mySoundFreq;
     
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;

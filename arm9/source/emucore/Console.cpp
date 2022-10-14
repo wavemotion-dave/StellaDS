@@ -74,6 +74,13 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   M6502* m6502 = new M6502Low(1);
   theM6532 = new M6532(*this);
   myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
+
+  // ------------------------------------------------------------------------------------------------------
+  // If we are DPC+ we reduce the sound quality so that we can squeeze ARM-assisted Thumbulator code in...
+  // ------------------------------------------------------------------------------------------------------
+  extern uInt16 origSoundFreq;
+  if (myCartInfo.banking == BANK_DPCP) mySoundFreq = 11025; else mySoundFreq = origSoundFreq;
+    
   TIA* tia = new TIA(*this);
   theTIA = tia;
   Tia_sound_init(31400, mySoundFreq);

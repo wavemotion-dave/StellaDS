@@ -1026,502 +1026,502 @@ void Thumbulator::execute ( void )
               }
           }
       } 
-      else // High bit set in instruction
+      else // High bit set in instruction 0x8000
       {          
-      //B(1) conditional branch
-      if((inst&0xF000)==0xD000)
-      {
-        rb=(inst>>0)&0xFF;
-        if(rb&0x80)
-          rb|=(~0)<<8;
-        ra=(inst>>8)&0xF;
-        rb<<=1;
-        rb+=reg_sys[15];
-        rb+=2;
-        switch(ra)
-        {
-          case 0x0: //b eq  z set
-            //if(cpsr&CPSR_Z)
-            if (!notZflag)
+          //B(1) conditional branch
+          if((inst&0xF000)==0xD000)
+          {
+            rb=(inst>>0)&0xFF;
+            if(rb&0x80)
+              rb|=(~0)<<8;
+            ra=(inst>>8)&0xF;
+            rb<<=1;
+            rb+=reg_sys[15];
+            rb+=2;
+            switch(ra)
             {
+              case 0x0: //b eq  z set
+                //if(cpsr&CPSR_Z)
+                if (!notZflag)
+                {
+                  write_register(15,rb);
+                  ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x1: //b ne  z clear
+                //if(!(cpsr&CPSR_Z))
+                if (notZflag)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x2: //b cs c set
+                if(cFlag)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x3: //b cc c clear
+                if(!(cFlag))
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x4: //b mi n set
+                if(nFlag)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x5: //b pl n clear
+                if(!(nFlag))
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x6: //b vs v set
+                if(cpsr&CPSR_V)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x7: //b vc v clear
+                if(!(cpsr&CPSR_V))
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x8: //b hi c set z clear
+                if((cFlag)&&(notZflag))
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0x9: //b ls c clear or z set
+                if((!notZflag)||(!(cFlag)))
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0xA: //b ge N == V
+                ra=0;
+                if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
+                if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
+                if(ra)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0xB: //b lt N != V
+                ra=0;
+                if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
+                if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
+                if(ra)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0xC: //b gt Z==0 and N == V
+                ra=0;
+                if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
+                if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
+                if(!notZflag) ra=0;
+                if(ra)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0xD: //b le Z==1 or N != V
+                ra=0;
+                if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
+                if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
+                if(!notZflag) ra++;
+                if(ra)
+                {
+                  write_register(15,rb);
+                    ptr = &rom[(reg_sys[15]-2) >> 1];
+                }
+                continue;
+
+              case 0xE:
+                //undefined instruction
+                break;
+
+              case 0xF:
+                //swi
+                break;
+            }
+          }
+
+          //ADD(5) rd = pc plus immediate
+          if((inst&0xF800)==0xA000)
+          {
+            rb=(inst>>0)&0xFF;
+            rd=(inst>>8)&0x7;
+            rb<<=2;
+            ra=read_register(15);
+            rc=(ra&(~3))+rb;
+            write_register(rd,rc);
+            continue;
+          }
+
+          //ADD(6) rd = sp plus immediate
+          if((inst&0xF800)==0xA800)
+          {
+            rb=(inst>>0)&0xFF;
+            rd=(inst>>8)&0x7;
+            rb<<=2;
+            ra=read_register(13);
+            rc=ra+rb;
+            write_register(rd,rc);
+            continue;
+          }
+
+          //ADD(7) sp plus immediate
+          if((inst&0xFF80)==0xB000)
+          {
+            rb=(inst>>0)&0x7F;
+            rb<<=2;
+            ra=read_register(13);
+            rc=ra+rb;
+            write_register(13,rc);
+            continue;
+          }
+
+          //B(2) unconditional branch
+          if((inst&0xF800)==0xE000)
+          {
+            rb=(inst>>0)&0x7FF;
+            if(rb&(1<<10))
+              rb|=(~0)<<11;
+            rb<<=1;
+            reg_sys[15] += (rb+2);
+            ptr = &rom[(reg_sys[15]-2) >> 1];
+            continue;
+          }
+
+          //BKPT
+          if((inst&0xFF00)==0xBE00)
+          {
+            rb=(inst>>0)&0xFF;
+            break;
+          }
+
+          //BL/BLX(1)
+          if((inst&0xE000)==0xE000) //BL,BLX
+          {
+            if((inst&0x1800)==0x1000) //H=b10
+            {
+              halfadd=inst;
+              continue;
+            }
+            else if((inst&0x1800)==0x1800) //H=b11
+            {
+              //branch to thumb
+              rb=halfadd&((1<<11)-1);
+              if(rb&1<<10)
+                rb|=(~((1<<11)-1)); //sign extend
+              rb<<=11;
+              rb|=inst&((1<<11)-1);
+              rb<<=1;
+              rb+=reg_sys[15];
+              write_register(14,reg_sys[15]-2);
               write_register(15,rb);
               ptr = &rom[(reg_sys[15]-2) >> 1];
+              continue;
             }
-            continue;
-
-          case 0x1: //b ne  z clear
-            //if(!(cpsr&CPSR_Z))
-            if (notZflag)
+            else if((inst&0x1800)==0x0800) //H=b01
             {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
+              // fxq: this should exit the code without having to detect it
+              break;
             }
-            continue;
+          }
 
-          case 0x2: //b cs c set
-            if(cFlag)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x3: //b cc c clear
-            if(!(cFlag))
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x4: //b mi n set
-            if(nFlag)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x5: //b pl n clear
-            if(!(nFlag))
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x6: //b vs v set
-            if(cpsr&CPSR_V)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x7: //b vc v clear
-            if(!(cpsr&CPSR_V))
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x8: //b hi c set z clear
-            if((cFlag)&&(notZflag))
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0x9: //b ls c clear or z set
-            if((!notZflag)||(!(cFlag)))
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0xA: //b ge N == V
-            ra=0;
-            if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
-            if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
-            if(ra)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0xB: //b lt N != V
-            ra=0;
-            if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
-            if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
-            if(ra)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0xC: //b gt Z==0 and N == V
-            ra=0;
-            if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
-            if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
-            if(!notZflag) ra=0;
-            if(ra)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0xD: //b le Z==1 or N != V
-            ra=0;
-            if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
-            if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
-            if(!notZflag) ra++;
-            if(ra)
-            {
-              write_register(15,rb);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
-            }
-            continue;
-
-          case 0xE:
-            //undefined instruction
+          //CPS
+          if((inst&0xFFE8)==0xB660)
+          {
             break;
+          }
 
-          case 0xF:
-            //swi
+          //LDMIA
+          if((inst&0xF800)==0xC800)
+          {
+            rn=(inst>>8)&0x7;
+            sp=read_register(rn);
+            for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
+            {
+              if(inst&rb)
+              {
+                write_register(ra,readRAM32(sp));
+                sp+=4;
+              }
+            }
+            write_register(rn,sp);
+            continue;
+          }
+
+          //LDR(4)
+          if((inst&0xF800)==0x9800)
+          {
+            rb=(inst>>0)&0xFF;
+            rd=(inst>>8)&0x07;
+            rb<<=2;
+            ra=read_register(13);
+            //ra&=~3;
+            rb+=ra;
+            rc=read32(rb);
+            write_register(rd,rc);
+            continue;
+          }
+
+          //LDRH(1)
+          if((inst&0xF800)==0x8800)
+          {
+            rd=(inst>>0)&0x07;
+            rn=(inst>>3)&0x07;
+            rb=(inst>>6)&0x1F;
+            rb<<=1;
+            rb=read_register(rn)+rb;
+            rc=read16(rb);
+            write_register(rd,rc&0xFFFF);
+            continue;
+          }
+
+          //POP
+          if((inst&0xFE00)==0xBC00)
+          {
+            sp=read_register(13);
+            for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
+            {
+              if(inst&rb)
+              {
+                write_register(ra,readRAM32(sp));
+                sp+=4;
+              }
+            }
+            if(inst&0x100)
+            {
+              rc=readRAM32(sp);
+              rc+=2;
+              write_register(15,rc);
+                ptr = &rom[(reg_sys[15]-2) >> 1];
+              sp+=4;
+            }
+            write_register(13,sp);
+            continue;
+          }
+
+          //PUSH
+          if((inst&0xFE00)==0xB400)
+          {
+            sp=read_register(13);
+            for(ra=0,rb=0x01,rc=0;rb;rb=(rb<<1)&0xFF,ra++)
+            {
+              if(inst&rb)
+              {
+                rc++;
+              }
+            }
+            if(inst&0x100) rc++;
+            rc<<=2;
+            sp-=rc;
+            rd=sp;
+            for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
+            {
+              if(inst&rb)
+              {
+                write32(rd,read_register(ra));
+                rd+=4;
+              }
+            }
+            if(inst&0x100)
+            {
+              write32(rd,read_register(14));
+            }
+            write_register(13,sp);
+            continue;
+          }
+
+          //REV
+          if((inst&0xFFC0)==0xBA00)
+          {
+            rd=(inst>>0)&0x7;
+            rn=(inst>>3)&0x7;
+            ra=read_register(rn);
+            rc =((ra>> 0)&0xFF)<<24;
+            rc|=((ra>> 8)&0xFF)<<16;
+            rc|=((ra>>16)&0xFF)<< 8;
+            rc|=((ra>>24)&0xFF)<< 0;
+            write_register(rd,rc);
+            continue;
+          }
+
+          //REV16
+          if((inst&0xFFC0)==0xBA40)
+          {
+            rd=(inst>>0)&0x7;
+            rn=(inst>>3)&0x7;
+            ra=read_register(rn);
+            rc =((ra>> 0)&0xFF)<< 8;
+            rc|=((ra>> 8)&0xFF)<< 0;
+            rc|=((ra>>16)&0xFF)<<24;
+            rc|=((ra>>24)&0xFF)<<16;
+            write_register(rd,rc);
+            continue;
+          }
+
+          //REVSH
+          if((inst&0xFFC0)==0xBAC0)
+          {
+            rd=(inst>>0)&0x7;
+            rn=(inst>>3)&0x7;
+            ra=read_register(rn);
+            rc =((ra>> 0)&0xFF)<< 8;
+            rc|=((ra>> 8)&0xFF)<< 0;
+            if(rc&0x8000) rc|=0xFFFF0000;
+            else          rc&=0x0000FFFF;
+            write_register(rd,rc);
+            continue;
+          }
+
+          //SETEND
+          if((inst&0xFFF7)==0xB650)
+          {
             break;
-        }
-      }
-                    
-      //ADD(5) rd = pc plus immediate
-      if((inst&0xF800)==0xA000)
-      {
-        rb=(inst>>0)&0xFF;
-        rd=(inst>>8)&0x7;
-        rb<<=2;
-        ra=read_register(15);
-        rc=(ra&(~3))+rb;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //ADD(6) rd = sp plus immediate
-      if((inst&0xF800)==0xA800)
-      {
-        rb=(inst>>0)&0xFF;
-        rd=(inst>>8)&0x7;
-        rb<<=2;
-        ra=read_register(13);
-        rc=ra+rb;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //ADD(7) sp plus immediate
-      if((inst&0xFF80)==0xB000)
-      {
-        rb=(inst>>0)&0x7F;
-        rb<<=2;
-        ra=read_register(13);
-        rc=ra+rb;
-        write_register(13,rc);
-        continue;
-      }
-
-      //B(2) unconditional branch
-      if((inst&0xF800)==0xE000)
-      {
-        rb=(inst>>0)&0x7FF;
-        if(rb&(1<<10))
-          rb|=(~0)<<11;
-        rb<<=1;
-        reg_sys[15] += (rb+2);
-        ptr = &rom[(reg_sys[15]-2) >> 1];
-        continue;
-      }
-
-      //BKPT
-      if((inst&0xFF00)==0xBE00)
-      {
-        rb=(inst>>0)&0xFF;
-        break;
-      }
-
-      //BL/BLX(1)
-      if((inst&0xE000)==0xE000) //BL,BLX
-      {
-        if((inst&0x1800)==0x1000) //H=b10
-        {
-          halfadd=inst;
-          continue;
-        }
-        else if((inst&0x1800)==0x1800) //H=b11
-        {
-          //branch to thumb
-          rb=halfadd&((1<<11)-1);
-          if(rb&1<<10)
-            rb|=(~((1<<11)-1)); //sign extend
-          rb<<=11;
-          rb|=inst&((1<<11)-1);
-          rb<<=1;
-          rb+=reg_sys[15];
-          write_register(14,reg_sys[15]-2);
-          write_register(15,rb);
-          ptr = &rom[(reg_sys[15]-2) >> 1];
-          continue;
-        }
-        else if((inst&0x1800)==0x0800) //H=b01
-        {
-          // fxq: this should exit the code without having to detect it
-          break;
-        }
-      }
-
-      //CPS
-      if((inst&0xFFE8)==0xB660)
-      {
-        break;
-      }
-
-      //LDMIA
-      if((inst&0xF800)==0xC800)
-      {
-        rn=(inst>>8)&0x7;
-        sp=read_register(rn);
-        for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-        {
-          if(inst&rb)
-          {
-            write_register(ra,readRAM32(sp));
-            sp+=4;
           }
-        }
-        write_register(rn,sp);
-        continue;
-      }
 
-      //LDR(4)
-      if((inst&0xF800)==0x9800)
-      {
-        rb=(inst>>0)&0xFF;
-        rd=(inst>>8)&0x07;
-        rb<<=2;
-        ra=read_register(13);
-        //ra&=~3;
-        rb+=ra;
-        rc=read32(rb);
-        write_register(rd,rc);
-        continue;
-      }
-
-      //LDRH(1)
-      if((inst&0xF800)==0x8800)
-      {
-        rd=(inst>>0)&0x07;
-        rn=(inst>>3)&0x07;
-        rb=(inst>>6)&0x1F;
-        rb<<=1;
-        rb=read_register(rn)+rb;
-        rc=read16(rb);
-        write_register(rd,rc&0xFFFF);
-        continue;
-      }
-
-      //POP
-      if((inst&0xFE00)==0xBC00)
-      {
-        sp=read_register(13);
-        for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-        {
-          if(inst&rb)
+          //STMIA
+          if((inst&0xF800)==0xC000)
           {
-            write_register(ra,readRAM32(sp));
-            sp+=4;
+            rn=(inst>>8)&0x7;
+            sp=read_register(rn);
+            for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
+            {
+              if(inst&rb)
+              {
+                write32(sp,read_register(ra));
+                sp+=4;
+              }
+            }
+            write_register(rn,sp);
+            continue;
           }
-        }
-        if(inst&0x100)
-        {
-          rc=readRAM32(sp);
-          rc+=2;
-          write_register(15,rc);
-            ptr = &rom[(reg_sys[15]-2) >> 1];
-          sp+=4;
-        }
-        write_register(13,sp);
-        continue;
-      }
 
-      //PUSH
-      if((inst&0xFE00)==0xB400)
-      {
-        sp=read_register(13);
-        for(ra=0,rb=0x01,rc=0;rb;rb=(rb<<1)&0xFF,ra++)
-        {
-          if(inst&rb)
+          //STRH(1)
+          if((inst&0xF800)==0x8000)
           {
-            rc++;
+            rd=(inst>>0)&0x07;
+            rn=(inst>>3)&0x07;
+            rb=(inst>>6)&0x1F;
+            rb<<=1;
+            rb=read_register(rn)+rb;
+            rc=read_register(rd);
+            write16(rb,rc&0xFFFF);
+            continue;
           }
-        }
-        if(inst&0x100) rc++;
-        rc<<=2;
-        sp-=rc;
-        rd=sp;
-        for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-        {
-          if(inst&rb)
+
+
+          //STR(3)
+          if((inst&0xF800)==0x9000)
           {
-            write32(rd,read_register(ra));
-            rd+=4;
+            rb=(inst>>0)&0xFF;
+            rd=(inst>>8)&0x07;
+            rb<<=2;
+            rb=read_register(13)+rb;
+            rc=read_register(rd);
+            write32(rb,rc);
+            continue;
           }
-        }
-        if(inst&0x100)
-        {
-          write32(rd,read_register(14));
-        }
-        write_register(13,sp);
-        continue;
-      }
 
-      //REV
-      if((inst&0xFFC0)==0xBA00)
-      {
-        rd=(inst>>0)&0x7;
-        rn=(inst>>3)&0x7;
-        ra=read_register(rn);
-        rc =((ra>> 0)&0xFF)<<24;
-        rc|=((ra>> 8)&0xFF)<<16;
-        rc|=((ra>>16)&0xFF)<< 8;
-        rc|=((ra>>24)&0xFF)<< 0;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //REV16
-      if((inst&0xFFC0)==0xBA40)
-      {
-        rd=(inst>>0)&0x7;
-        rn=(inst>>3)&0x7;
-        ra=read_register(rn);
-        rc =((ra>> 0)&0xFF)<< 8;
-        rc|=((ra>> 8)&0xFF)<< 0;
-        rc|=((ra>>16)&0xFF)<<24;
-        rc|=((ra>>24)&0xFF)<<16;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //REVSH
-      if((inst&0xFFC0)==0xBAC0)
-      {
-        rd=(inst>>0)&0x7;
-        rn=(inst>>3)&0x7;
-        ra=read_register(rn);
-        rc =((ra>> 0)&0xFF)<< 8;
-        rc|=((ra>> 8)&0xFF)<< 0;
-        if(rc&0x8000) rc|=0xFFFF0000;
-        else          rc&=0x0000FFFF;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //SETEND
-      if((inst&0xFFF7)==0xB650)
-      {
-        break;
-      }
-
-      //STMIA
-      if((inst&0xF800)==0xC000)
-      {
-        rn=(inst>>8)&0x7;
-        sp=read_register(rn);
-        for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-        {
-          if(inst&rb)
+          //SUB(4)
+          if((inst&0xFF80)==0xB080)
           {
-            write32(sp,read_register(ra));
-            sp+=4;
+            rb=inst&0x7F;
+            rb<<=2;
+            ra=read_register(13);
+            ra-=rb;
+            write_register(13,ra);
+            continue;
           }
-        }
-        write_register(rn,sp);
-        continue;
-      }
 
-      //STRH(1)
-      if((inst&0xF800)==0x8000)
-      {
-        rd=(inst>>0)&0x07;
-        rn=(inst>>3)&0x07;
-        rb=(inst>>6)&0x1F;
-        rb<<=1;
-        rb=read_register(rn)+rb;
-        rc=read_register(rd);
-        write16(rb,rc&0xFFFF);
-        continue;
-      }
+          //SWI
+          if((inst&0xFF00)==0xDF00)
+          {
+            rb=inst&0xFF;
+            break;
+          }
 
-          
-      //STR(3)
-      if((inst&0xF800)==0x9000)
-      {
-        rb=(inst>>0)&0xFF;
-        rd=(inst>>8)&0x07;
-        rb<<=2;
-        rb=read_register(13)+rb;
-        rc=read_register(rd);
-        write32(rb,rc);
-        continue;
-      }
+          //SXTB
+          if((inst&0xFFC0)==0xB240)
+          {
+            rd=(inst>>0)&0x7;
+            rm=(inst>>3)&0x7;
+            ra=read_register(rm);
+            rc=ra&0xFF;
+            if(rc&0x80) rc|=(~0)<<8;
+            write_register(rd,rc);
+            continue;
+          }
 
-      //SUB(4)
-      if((inst&0xFF80)==0xB080)
-      {
-        rb=inst&0x7F;
-        rb<<=2;
-        ra=read_register(13);
-        ra-=rb;
-        write_register(13,ra);
-        continue;
-      }
+          //SXTH
+          if((inst&0xFFC0)==0xB200)
+          {
+            rd=(inst>>0)&0x7;
+            rm=(inst>>3)&0x7;
+            ra=read_register(rm);
+            rc=ra&0xFFFF;
+            if(rc&0x8000) rc|=(~0)<<16;
+            write_register(rd,rc);
+            continue;
+          }
 
-      //SWI
-      if((inst&0xFF00)==0xDF00)
-      {
-        rb=inst&0xFF;
-        break;
-      }
+          //UXTB
+          if((inst&0xFFC0)==0xB2C0)
+          {
+            rd=(inst>>0)&0x7;
+            rm=(inst>>3)&0x7;
+            ra=read_register(rm);
+            rc=ra&0xFF;
+            write_register(rd,rc);
+            continue;
+          }
 
-      //SXTB
-      if((inst&0xFFC0)==0xB240)
-      {
-        rd=(inst>>0)&0x7;
-        rm=(inst>>3)&0x7;
-        ra=read_register(rm);
-        rc=ra&0xFF;
-        if(rc&0x80) rc|=(~0)<<8;
-        write_register(rd,rc);
-        continue;
+          //UXTH
+          if((inst&0xFFC0)==0xB280)
+          {
+            rd=(inst>>0)&0x7;
+            rm=(inst>>3)&0x7;
+            ra=read_register(rm);
+            rc=ra&0xFFFF;
+            write_register(rd,rc);
+            continue;
+          }
       }
-
-      //SXTH
-      if((inst&0xFFC0)==0xB200)
-      {
-        rd=(inst>>0)&0x7;
-        rm=(inst>>3)&0x7;
-        ra=read_register(rm);
-        rc=ra&0xFFFF;
-        if(rc&0x8000) rc|=(~0)<<16;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //UXTB
-      if((inst&0xFFC0)==0xB2C0)
-      {
-        rd=(inst>>0)&0x7;
-        rm=(inst>>3)&0x7;
-        ra=read_register(rm);
-        rc=ra&0xFF;
-        write_register(rd,rc);
-        continue;
-      }
-
-      //UXTH
-      if((inst&0xFFC0)==0xB280)
-      {
-        rd=(inst>>0)&0x7;
-        rm=(inst>>3)&0x7;
-        ra=read_register(rm);
-        rc=ra&0xFFFF;
-        write_register(rd,rc);
-        continue;
-      }
-  }
   }
 }
 

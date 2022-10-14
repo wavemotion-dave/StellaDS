@@ -124,19 +124,19 @@ static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
 /* Rather than have a table with 511 entries, I use a random number generator. */
 static uint8 Bit9[POLY9_SIZE] __attribute__((section(".dtcm")));
     
-static uint32  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
-static uint32  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
-static uint32  P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
+static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
+static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
+static uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
 
-static uint32 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
-static uint32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
+static uint8 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
+static uint8 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
 
 /* In my routines, I treat the sample output as another divide by N counter. */
 /* For better accuracy, the Samp_n_cnt has a fixed binary decimal point */
 /* which has 8 binary digits to the right of the decimal point. */
 
-static uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-static int32  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+static uint16 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
+static int16  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
