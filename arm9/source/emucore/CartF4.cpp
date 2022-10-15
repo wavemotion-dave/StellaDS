@@ -55,8 +55,8 @@ const char* CartridgeF4::name() const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeF4::reset()
 {
-  // Upon reset we switch to bank 7
-  bank(7);
+  // Upon reset we switch to bank 0
+  bank(0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,8 +85,8 @@ void CartridgeF4::install(System& system)
       mySystem->setPageAccess(address >> shift, page_access);
   }
     
-  // Install pages for bank 7
-  bank(7);
+  // Install pages for bank 0
+  bank(0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -127,7 +127,6 @@ inline void CartridgeF4::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0000; address < (0x0FF4U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      //myPageAccessTable[access_num++].directPeekBase = (bank < 2) ? &fast_cart_buffer[myCurrentOffset + address] : &myImage[myCurrentOffset + address];
       myPageAccessTable[access_num++].directPeekBase = &myImage[myCurrentOffset + address];
   }
 }

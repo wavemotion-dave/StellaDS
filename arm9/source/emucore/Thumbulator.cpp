@@ -1071,7 +1071,7 @@ void Thumbulator::execute ( void )
                     if (notZflag)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1079,7 +1079,7 @@ void Thumbulator::execute ( void )
                     if(cFlag)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1087,7 +1087,7 @@ void Thumbulator::execute ( void )
                     if(!(cFlag))
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1095,7 +1095,7 @@ void Thumbulator::execute ( void )
                     if(nFlag)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1103,7 +1103,7 @@ void Thumbulator::execute ( void )
                     if(!(nFlag))
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1111,7 +1111,7 @@ void Thumbulator::execute ( void )
                     if(cpsr&CPSR_V)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1119,7 +1119,7 @@ void Thumbulator::execute ( void )
                     if(!(cpsr&CPSR_V))
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1127,7 +1127,7 @@ void Thumbulator::execute ( void )
                     if((cFlag)&&(notZflag))
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1135,7 +1135,7 @@ void Thumbulator::execute ( void )
                     if((!notZflag)||(!(cFlag)))
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1146,7 +1146,7 @@ void Thumbulator::execute ( void )
                     if(ra)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1157,7 +1157,7 @@ void Thumbulator::execute ( void )
                     if(ra)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1169,7 +1169,7 @@ void Thumbulator::execute ( void )
                     if(ra)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1181,7 +1181,7 @@ void Thumbulator::execute ( void )
                     if(ra)
                     {
                       write_register(15,rb);
-                        ptr = &rom[(reg_sys[15]-2) >> 1];
+                      ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
@@ -1280,7 +1280,7 @@ void Thumbulator::execute ( void )
               }          
               
           }
-          else  //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+          else
           {
 
               //LDR(4)
@@ -1484,7 +1484,6 @@ void Thumbulator::execute ( void )
               {
                 break;
               }
-
 
               //SXTB
               if((inst&0xFFC0)==0xB240)

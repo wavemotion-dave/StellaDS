@@ -91,7 +91,7 @@ static uInt8 full_speed=0;
 static uInt8 fpsDisplay = false;
 uInt16 gTotalAtariFrames=0;
 
-uInt16 keys_pressed,last_keys_pressed,keys_touch=0, console_color=1, romSel;
+uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 
 static void DumpDebugData(void)
 {
@@ -338,7 +338,7 @@ void dsDisplayButton(unsigned char button)
 {
   unsigned short *ptrBg1 = bgGetMapPtr(bg0b) +32*26;
   unsigned short *ptrBg0 = bgGetMapPtr(bg0b);
-  unsigned int i;
+  uInt8 i;
 
   switch (button) {
     case 0: // ON/OFF
@@ -567,7 +567,7 @@ bool dsLoadGame(char *filename)
 
 unsigned int dsReadPad(void)
 {
-    unsigned int keys_pressed, ret_keys_pressed;
+    unsigned short keys_pressed, ret_keys_pressed;
 
     do {
         keys_pressed = keysCurrent();
@@ -584,8 +584,8 @@ unsigned int dsReadPad(void)
 bool dsWaitOnQuit(void)
 {
   bool bRet=false, bDone=false;
-  unsigned int keys_pressed;
-  unsigned int posdeb=0;
+  unsigned short keys_pressed;
+  unsigned short posdeb=0;
   char szName[32];
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
@@ -991,6 +991,7 @@ static u16 driving_dampen = 0;
 
 ITCM_CODE void dsMainLoop(void)
 {
+    uInt16 keys_pressed;
     uInt8 rapid_fire   = 0;
     uInt8 button_fire  = false;
     uInt8 button_up    = false;
@@ -1045,7 +1046,7 @@ ITCM_CODE void dsMainLoop(void)
                 TIMER0_DATA=0;
                 TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
                 atari_frames=0;
-            }            
+            }
                 
             // Wait for keys
             scanKeys();
@@ -1069,8 +1070,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_B))
+                    else if (keys_pressed & (KEY_B))
                     {
                         if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1079,8 +1079,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_X))
+                    else if (keys_pressed & (KEY_X))
                     {
                         if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1089,8 +1088,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_Y))
+                    else if (keys_pressed & (KEY_Y))
                     {
                         if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1101,9 +1099,9 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
-                    if (keys_pressed & (KEY_DOWN))                    button_down  = true;
+                    else if (keys_pressed & (KEY_DOWN))               button_down  = true;
                     if (keys_pressed & (KEY_LEFT))                    button_left  = true;
-                    if (keys_pressed & (KEY_RIGHT))                   button_right = true;
+                    else if (keys_pressed & (KEY_RIGHT))              button_right = true;
                     
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, button_fire);
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    button_up);
@@ -1128,8 +1126,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_B))
+                    else if (keys_pressed & (KEY_B))
                     {
                         if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1138,8 +1135,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_X))
+                    else if (keys_pressed & (KEY_X))
                     {
                         if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1148,8 +1144,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
                         if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
-
-                    if (keys_pressed & (KEY_Y))
+                    else if (keys_pressed & (KEY_Y))
                     {
                         if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
                         if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1160,9 +1155,9 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
-                    if (keys_pressed & (KEY_DOWN))                    button_down  = true;
+                    else if (keys_pressed & (KEY_DOWN))               button_down  = true;
                     if (keys_pressed & (KEY_LEFT))                    button_left  = true;
-                    if (keys_pressed & (KEY_RIGHT))                   button_right = true;
+                    else if (keys_pressed & (KEY_RIGHT))              button_right = true;
                     
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,    button_fire);
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    button_up);
@@ -1183,7 +1178,7 @@ ITCM_CODE void dsMainLoop(void)
                     break;
 
                 case CTR_STARGATE:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A))));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
@@ -1500,7 +1495,7 @@ ITCM_CODE void dsMainLoop(void)
                 }                    
 
                 // -----------------------------------------------------------------------
-                // Check the UI keys... full speed, FSP display, offset/scale shift, etc.
+                // Check the UI keys... this is for offset/scale shift of the display.
                 // -----------------------------------------------------------------------
                 if ((keys_pressed & KEY_R) || (keys_pressed & KEY_L))
                 {
@@ -1681,7 +1676,7 @@ ITCM_CODE void dsMainLoop(void)
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, 1);
                     dampen=10;
-                    WAITVBL; dsDisplayButton(6);
+                    WAITVBL; WAITVBL; dsDisplayButton(6);
                 }
                 else if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133)) 
                 {     // 48,100 -> 208,132 cartridge slot

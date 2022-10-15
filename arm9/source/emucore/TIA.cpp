@@ -59,7 +59,6 @@ Int32   myClockStartDisplay         __attribute__((section(".dtcm")));
 Int32   myClockStopDisplay          __attribute__((section(".dtcm")));
 Int32   myClockAtLastUpdate         __attribute__((section(".dtcm")));
 Int32   myClocksToEndOfScanLine     __attribute__((section(".dtcm")));
-uInt16  myMaximumNumberOfScanlines  __attribute__((section(".dtcm")));
 uInt8*  myCurrentBLMask             __attribute__((section(".dtcm")));
 uInt8*  myCurrentM0Mask             __attribute__((section(".dtcm")));
 uInt8*  myCurrentM1Mask             __attribute__((section(".dtcm")));
@@ -277,7 +276,6 @@ uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
 TIA::TIA(const Console& console)
     : myConsole(console)
 {
-  myMaximumNumberOfScanlines = ((myCartInfo.tv_type == PAL) ? 312:262); 
   // --------------------------------------------------------------------------------------
   // Allocate buffers for two frame buffers - Turns out Video Memory is actually slower
   // since we do a lot of 8-bit reads and the video memory is 16-bits wide. So we handle
@@ -3049,18 +3047,21 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228;
       uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
-        
-      // TODO: Remove the following special hack for Space Rocks
-      if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
+      
+      if (hpos == 69)
       {
-          newx = 11;
-      }
-        
-      // TODO: Remove the following special hack for Rabbit Transit
-      // and Dragon Stomper (Excalibur) by StarPath/ARcadia
-      else if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
-      {
-          newx = 11;
+          // TODO: Remove the following special hack for Space Rocks
+          if ((clock - myLastHMOVEClock) == (23 * 3))
+          {
+              newx = 11;
+          }
+
+          // TODO: Remove the following special hack for Rabbit Transit
+          // and Dragon Stomper (Excalibur) by StarPath/ARcadia
+          else if ((clock - myLastHMOVEClock) == (20 * 3))
+          {
+              newx = 11;
+          }
       }
 
       // Find out under what condition the player is being reset
@@ -3149,59 +3150,67 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228 ;
       myPOSBL = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
-        
-      // TODO: Remove the following special hack by figuring out what
-      // really happens when Reset Ball occurs 18 cycles after an HMOVE.
-      if((clock - myLastHMOVEClock) == (18 * 3))
+      
+      // -----------------------------------------------------------------------------------------
+      // If the reset comes "too soon" after the last HMove, the TIA does some strange things.
+      // Modern versions of Stella are cycle accurate and handle this perfectly - but here
+      // we have the old Stella core and need to adjust a few special cases...
+      // -----------------------------------------------------------------------------------------
+      if ((clock - myLastHMOVEClock) < (19*3))
       {
-        // Escape from the Mindmaster (01/09/99)
-        if((hpos == 60) || (hpos == 69))
-          myPOSBL = 10;
-        // Mission Survive (04/11/08)
-        else if(hpos == 63)
-          myPOSBL = 7;
-      }
-      // TODO: Remove the following special hack for Escape from the
-      // Mindmaster by figuring out what really happens when Reset Ball 
-      // occurs 15 cycles after an HMOVE (04/11/08).
-      else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
-      {
-        myPOSBL = 10;
-      } 
-      // TODO: Remove the following special hack for Decathlon by
-      // figuring out what really happens when Reset Ball 
-      // occurs 3 cycles after an HMOVE (04/13/02).
-      else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
-      {
-        myPOSBL = 3;
-      } 
-      // TODO: Remove the following special hack for Robot Tank by
-      // figuring out what really happens when Reset Ball 
-      // occurs 7 cycles after an HMOVE (04/13/02).
-      else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
-      {
-        myPOSBL = 6;
-      } 
-      // TODO: Remove the following special hack for Hole Hunter by
-      // figuring out what really happens when Reset Ball 
-      // occurs 6 cycles after an HMOVE (04/13/02).
-      else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
-      {
-        myPOSBL = 5;
-      }
-      // TODO: Remove the following special hack for Swoops! by
-      // figuring out what really happens when Reset Ball 
-      // occurs 9 cycles after an HMOVE (04/11/08).
-      else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
-      {
-        myPOSBL = 7;
-      }
-      // TODO: Remove the following special hack for Solaris by
-      // figuring out what really happens when Reset Ball 
-      // occurs 12 cycles after an HMOVE (04/11/08).
-      else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
-      {
-        myPOSBL = 8;
+          // TODO: Remove the following special hack by figuring out what
+          // really happens when Reset Ball occurs 18 cycles after an HMOVE.
+          if((clock - myLastHMOVEClock) == (18 * 3))
+          {
+            // Escape from the Mindmaster (01/09/99)
+            if((hpos == 60) || (hpos == 69))
+              myPOSBL = 10;
+            // Mission Survive (04/11/08)
+            else if(hpos == 63)
+              myPOSBL = 7;
+          }
+          // TODO: Remove the following special hack for Escape from the
+          // Mindmaster by figuring out what really happens when Reset Ball 
+          // occurs 15 cycles after an HMOVE (04/11/08).
+          else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
+          {
+            myPOSBL = 10;
+          } 
+          // TODO: Remove the following special hack for Decathlon by
+          // figuring out what really happens when Reset Ball 
+          // occurs 3 cycles after an HMOVE (04/13/02).
+          else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
+          {
+            myPOSBL = 3;
+          } 
+          // TODO: Remove the following special hack for Robot Tank by
+          // figuring out what really happens when Reset Ball 
+          // occurs 7 cycles after an HMOVE (04/13/02).
+          else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
+          {
+            myPOSBL = 6;
+          } 
+          // TODO: Remove the following special hack for Hole Hunter by
+          // figuring out what really happens when Reset Ball 
+          // occurs 6 cycles after an HMOVE (04/13/02).
+          else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
+          {
+            myPOSBL = 5;
+          }
+          // TODO: Remove the following special hack for Swoops! by
+          // figuring out what really happens when Reset Ball 
+          // occurs 9 cycles after an HMOVE (04/11/08).
+          else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
+          {
+            myPOSBL = 7;
+          }
+          // TODO: Remove the following special hack for Solaris by
+          // figuring out what really happens when Reset Ball 
+          // occurs 12 cycles after an HMOVE (04/11/08).
+          else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
+          {
+            myPOSBL = 8;
+          }
       }
        
       myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]

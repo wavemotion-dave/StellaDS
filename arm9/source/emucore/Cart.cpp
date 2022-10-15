@@ -1954,7 +1954,7 @@ const CartInfo table[] =
     {"278f14887d601b5e5b620f1870bc09f6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    72,   0,  0},    // Swoops! (v0.96).bin
     {"528400fad9a77fd5ad7fc5fdc2b7d69d",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Sword of Saros (1983).bin
     {"8b7ca29a55432f886cee3d452fb00481",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    89,   0,  4},    // Sword of Saros (1983) (PAL).bin
-    {"37f8ad4cbd23abf4fe8cbb499554c233",  "??????", BANK_F4,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sword of Surtr.bin
+    {"37f8ad4cbd23abf4fe8cbb499554c233",  "SSURTR", BANK_F4,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sword of Surtr.bin
     {"87662815bc4f3c3c86071dc994e3f30e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Swordfight (1983).bin
     {"5aea9974b975a6a844e6df10d2b861c4",  "EARTHW", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // SwordQuest - EarthWorld (1982).bin
     {"a875f0a919129b4f1b5103ddd200d2fe",  "EARTHW", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   47,    245,    85,   0,  0},    // SwordQuest - EarthWorld (1982) (PAL).bin
@@ -2903,6 +2903,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // --------------------------------------------------------------------------------------------------------
   if (strcmp(myCartInfo.gameID, "REALTE") == 0) cartDriver = 2;     // Real Sports Tennis is F8
   if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
+  if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
 
   original_banking_detect = myCartInfo.banking;
   return myCartInfo.banking;
