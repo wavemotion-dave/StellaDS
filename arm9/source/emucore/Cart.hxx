@@ -95,6 +95,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define CTR_GENESIS     14     // For Genesis 2-button Controller support
 #define CTR_MCA         15     // For missile command arcade - 3 button support
 #define CTR_BUMPBASH    16     // For bumper bash (both paddle buttons used)
+#define CTR_TWINSTICK   17     // For twin-stick games like Rail Slider
 
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9

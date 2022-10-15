@@ -176,6 +176,10 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.X : XX-Oct-2022 by Dave Bernazzani (wavemotion)
+  * Fixed Sword of Surtr so it plays properly.
+  * More DPC+ optmizations... Space Rocks is almost full speed!
+
 V5.6 : 14-Oct-2022 by Dave Bernazzani (wavemotion)
   * Massive speedup improvement for DPC+ games. Most play full speed on the DSi.
   * Fixed graphical glitches on Space Rocks homebrew.

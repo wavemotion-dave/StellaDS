@@ -1497,6 +1497,7 @@ const CartInfo table[] =
     {"1e750000af77cc76232f4d040f4ab060",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Raft Rider (1982).bin
     {"f724d3dd2471ed4cf5f191dbb724b69f",  "RAIDER", BANK_F8,   CTR_RAIDERS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Raiders of the Lost Ark (1982).bin
     {"1cafa9f3f9a2fce4af6e4b85a2bbd254",  "RAIDER", BANK_F8,   CTR_RAIDERS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,   100,   0,  0},    // Raiders of the Lost Ark (PAL).bin
+    {"8cc06f4ba468f764f54feb1773a295f0",  "??????", BANK_DPCP, CTR_TWINSTICK, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Rail Slider (Twin Stick shooter)
     {"cb96b0cf90ab7777a2f6f05e8ad3f694",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Rainbow Invaders NTSC.bin
     {"7096a198531d3f16a99d518ac0d7519a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  1},    // Ram It (1982).bin
     {"63e42d576800086488679490a833e097",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   47,    245,    93,   0,  8},    // Ram It (1982) (PAL).bin

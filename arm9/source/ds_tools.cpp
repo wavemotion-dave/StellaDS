@@ -1223,6 +1223,27 @@ ITCM_CODE void dsMainLoop(void)
                         keys_pressed = 0;
                     }
                     break;
+
+                case CTR_TWINSTICK:
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_B));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, keys_pressed & (KEY_Y));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_A));
+                    
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE,  keys_pressed & (KEY_L));
+                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,      keys_pressed & (KEY_R));
+
+                    // Unfortunately for Raiders, we can't use these keys for UI handling below...
+                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
+                    {
+                        keys_pressed = 0;
+                    }
+                    break;
                     
                 case CTR_BOOSTER:
                     theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_4, (keys_pressed & (KEY_A)));
