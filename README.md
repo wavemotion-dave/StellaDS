@@ -178,6 +178,7 @@ Version History:
 -----------------------
 V5.X : XX-Oct-2022 by Dave Bernazzani (wavemotion)
   * Fixed Sword of Surtr so it plays properly.
+  * Added TWIN STICK controller so games like Rail Slider are playable!
   * More DPC+ optmizations... Space Rocks is almost full speed!
 
 V5.6 : 14-Oct-2022 by Dave Bernazzani (wavemotion)
