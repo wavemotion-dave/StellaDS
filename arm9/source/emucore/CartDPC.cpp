@@ -219,7 +219,7 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeDPC::poke(uInt16 address, uInt8 value)
+void CartridgeDPC::poke(uInt16 address, uInt8 value)
 {
   address = address & 0x0FFF;
 

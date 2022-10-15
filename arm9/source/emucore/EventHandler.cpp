@@ -60,13 +60,6 @@ Event* EventHandler::event()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
-{
-    // Determine where the event should be sent
-    if (myKeyTable[key] != Event::NoType) myEvent->set(myKeyTable[key], state);
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void EventHandler::setKeymap()
 {
   // Since istringstream swallows whitespace, we have to make the

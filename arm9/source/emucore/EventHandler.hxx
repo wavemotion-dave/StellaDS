@@ -100,4 +100,12 @@ class EventHandler
     Event* myEvent;
 };
 
+
+inline void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
+{
+    // Determine where the event should be sent
+    myEvent->set(myKeyTable[key], state);
+}
+
+
 #endif
