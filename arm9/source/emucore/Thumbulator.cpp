@@ -31,6 +31,7 @@
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32 cpsr          __attribute__((section(".dtcm"))) = 0;
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
+uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
 uInt16 rom[ROMSIZE];
 extern uInt16 fast_cart_buffer[];
@@ -134,42 +135,27 @@ inline void Thumbulator::do_cflag ( uInt32 a, uInt32 b, uInt32 c )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c )
 {
-  //if the sign bits are different
-  if((a&0x80000000)^(b&0x80000000))
-  {
-    //and result matches b
-    if((b&0x80000000)==(c&0x80000000))
-      cpsr|=CPSR_V;
-    else 
-      cpsr&=~CPSR_V;
-  } else cpsr&=~CPSR_V;
+  //if the sign bits are different and result matches b
+  vFlag = ((((a^b)&0x80000000)) & ((b&c&0x80000000)));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_add_vflag ( uInt32 a, uInt32 b, uInt32 c )
 {
-  //if sign bits are the same
-  if((a&0x80000000)==(b&0x80000000))
-  {
-    //and the result is different
-    if((b&0x80000000)!=(c&0x80000000))
-      cpsr|=CPSR_V;
-    else 
-      cpsr&=~CPSR_V;
-  } else cpsr&=~CPSR_V;
+  //if sign bits are the same and the result is different
+  vFlag = (((a&b&0x80000000)) & (((b^c)&0x80000000)));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_cflag_bit ( uInt32 x )
 {
-  cFlag = (x ? 1:0);
+  cFlag = x;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_vflag_bit ( uInt32 x )
 {
-  if(x) cpsr|=CPSR_V;
-  else  cpsr&=~CPSR_V;
+  vFlag = x;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -199,10 +185,7 @@ void Thumbulator::execute ( void )
                     rd=(inst>>0)&0x07;
                     rn=(inst>>3)&0x07;
                     rb=(inst>>6)&0x1F;
-                    rb<<=2;
-                    rb=read_register(rn)+rb;
-                    rc=read32(rb);
-                    write_register(rd,rc);
+                    reg_sys[rd] = read32(reg_sys[rn] + (rb<<2));
                     continue;
                   }
                   
@@ -284,7 +267,7 @@ void Thumbulator::execute ( void )
                           ra&=0xFF00;
                           ra|=rc&0x00FF;
                         }
-                        write16(rb,ra&0xFFFF);
+                        write16(rb,ra);
                         continue;
                       }
                       
@@ -400,13 +383,11 @@ void Thumbulator::execute ( void )
                       {
                         rn=(inst>>0)&0x7;
                         rm=(inst>>3)&0x7;
-                        ra=read_register(rn);
-                        rb=read_register(rm);
-                        rc=ra-rb;
+                        rc=reg_sys[rn]-reg_sys[rm];
                         do_nflag(rc);
                         do_zflag(rc);
-                        do_cflag(ra,~rb,1);
-                        do_sub_vflag(ra,rb,rc);
+                        do_cflag(reg_sys[rn],~reg_sys[rm],1);
+                        do_sub_vflag(reg_sys[rn],reg_sys[rm],rc);
                         continue;
                       }
                       
@@ -845,14 +826,11 @@ void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x7;
                 rn=(inst>>3)&0x7;
                 rm=(inst>>6)&0x7;
-                ra=read_register(rn);
-                rb=read_register(rm);
-                rc=ra-rb;
-                write_register(rd,rc);
-                do_nflag(rc);
-                do_zflag(rc);
-                do_cflag(ra,~rb,1);
-                do_sub_vflag(ra,rb,rc);
+                reg_sys[rd]=reg_sys[rn]-reg_sys[rm];
+                do_nflag(reg_sys[rd]);
+                do_zflag(reg_sys[rd]);
+                do_cflag(reg_sys[rn],~reg_sys[rm],1);
+                do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
                 continue;
               }
 
@@ -1053,136 +1031,159 @@ void Thumbulator::execute ( void )
                 if(rb&0x80)
                   rb|=(~0)<<8;
                 ra=(inst>>8)&0xF;
-                rb<<=1;
-                rb+=reg_sys[15];
-                rb+=2;
                 switch(ra)
                 {
                   case 0x0: //b eq  z set
-                    //if(cpsr&CPSR_Z)
                     if (!notZflag)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x1: //b ne  z clear
-                    //if(!(cpsr&CPSR_Z))
                     if (notZflag)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x2: //b cs c set
                     if(cFlag)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x3: //b cc c clear
                     if(!(cFlag))
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x4: //b mi n set
                     if(nFlag)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x5: //b pl n clear
                     if(!(nFlag))
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x6: //b vs v set
-                    if(cpsr&CPSR_V)
+                    if(vFlag)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x7: //b vc v clear
-                    if(!(cpsr&CPSR_V))
+                    if(!(vFlag))
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x8: //b hi c set z clear
                     if((cFlag)&&(notZflag))
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0x9: //b ls c clear or z set
                     if((!notZflag)||(!(cFlag)))
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0xA: //b ge N == V
                     ra=0;
-                    if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
-                    if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
+                    if(  (nFlag) &&  (vFlag) ) ra++;
+                    if((!(nFlag))&&(!(vFlag))) ra++;
                     if(ra)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0xB: //b lt N != V
                     ra=0;
-                    if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
-                    if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
+                    if((!(nFlag))&&(vFlag)) ra++;
+                    if((!(vFlag))&&(nFlag)) ra++;
                     if(ra)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0xC: //b gt Z==0 and N == V
                     ra=0;
-                    if(  (nFlag) &&  (cpsr&CPSR_V) ) ra++;
-                    if((!(nFlag))&&(!(cpsr&CPSR_V))) ra++;
+                    if(  (nFlag) &&  (vFlag) ) ra++;
+                    if((!(nFlag))&&(!(vFlag))) ra++;
                     if(!notZflag) ra=0;
                     if(ra)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
                   case 0xD: //b le Z==1 or N != V
                     ra=0;
-                    if((!(nFlag))&&(cpsr&CPSR_V)) ra++;
-                    if((!(cpsr&CPSR_V))&&(nFlag)) ra++;
+                    if((!(nFlag))&&(vFlag)) ra++;
+                    if((!(vFlag))&&(nFlag)) ra++;
                     if(!notZflag) ra++;
                     if(ra)
                     {
-                      write_register(15,rb);
-                      ptr = &rom[(reg_sys[15]-2) >> 1];
+                      rb<<=1;
+                      rb+=reg_sys[15];
+                      ptr = &rom[rb >> 1];
+                      write_register(15,rb+2);
                     }
                     continue;
 
