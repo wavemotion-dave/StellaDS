@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "intro.h"
-#include "ds_tools.h"
+#include "StellaDS.h"
 #include "highscore.h"
 #include "config.h"
 

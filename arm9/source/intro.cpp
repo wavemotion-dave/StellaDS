@@ -1,7 +1,7 @@
 #include <nds.h>
 #include <stdio.h>
 
-#include "ds_tools.h"
+#include "StellaDS.h"
 
 #include "mus_intro_wav.h"
 #include "pdev_tbg0.h"

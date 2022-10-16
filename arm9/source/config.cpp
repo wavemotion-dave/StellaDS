@@ -9,7 +9,7 @@
 #include <fat.h>
 #include <dirent.h>
 #include <unistd.h>
-#include "ds_tools.h"
+#include "StellaDS.h"
 #include "Console.hxx"
 #include "Cart.hxx"
 #include "config.h"

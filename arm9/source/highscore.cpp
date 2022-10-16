@@ -3,7 +3,7 @@
 #include <fat.h>
 #include <dirent.h>
 #include <unistd.h>
-#include "ds_tools.h"
+#include "StellaDS.h"
 #include "highscore.h"
 #include "Console.hxx"
 #include "Cart.hxx"

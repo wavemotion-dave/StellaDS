@@ -25,7 +25,7 @@
 #include "CartFA2.hxx"
 #include "Random.hxx"
 #include "System.hxx"
-#include "../ds_tools.h"
+#include "../StellaDS.h"
 #include <iostream>
 
 extern char my_filename[MAX_FILE_NAME_LEN+1];
