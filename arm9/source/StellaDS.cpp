@@ -8,7 +8,7 @@
 // royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition),
 // Alekmaul (original port) are thanked profusely along with the entire Stella Team.
 //
-// The ColecoDS emulator is offered as-is, without any warranty.
+// The StellaDS emulator is offered as-is, without any warranty.
 // =====================================================================================================
 #include <nds.h>
 #include <nds/fifomessages.h>
