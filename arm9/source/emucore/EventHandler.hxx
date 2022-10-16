@@ -65,47 +65,6 @@ class EventHandler
       @return The event object
     */
     Event* event();
-
-    /**
-      Send a keyboard event to the handler.
-
-      @param code  The StellaEvent code
-      @param state The StellaEvent state
-    */
-    void sendKeyEvent(StellaEvent::KeyCode code, Int32 state);
-
-    /**
-      Send an event directly to the event handler.
-      These events cannot be remapped.
-
-      @param type  The event
-      @param value The value for the event
-    */
-    void getKeymapArray(Event::Type** array, uInt32* size);
-
-  private:
-    void setKeymap();
-    void setDefaultKeymap();
-
-    bool isValidList(string list, uInt32 length);
-
-  private:
-    // Array of key events
-    Event::Type myKeyTable[StellaEvent::LastKCODE];
-
-    // Global Console object
-    Console* myConsole;
-
-    // Global Event object
-    Event* myEvent;
 };
-
-
-inline void EventHandler::sendKeyEvent(StellaEvent::KeyCode key, Int32 state)
-{
-    // Determine where the event should be sent
-    myEvent->set(myKeyTable[key], state);
-}
-
 
 #endif

@@ -37,7 +37,6 @@
 #include "Keyboard.hxx"
 #include "SaveKey.hxx"
 #include "M6502Low.hxx"
-#include "M6502Hi.hxx"
 #include "M6532.hxx"
 #include "MD5.hxx"
 #include "MediaSrc.hxx"

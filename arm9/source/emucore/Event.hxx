@@ -73,8 +73,6 @@ class Event
       DrivingOneClockwise, DrivingOneCounterClockwise, DrivingOneValue,
 	  DrivingOneFire,
 	  
-      ChangeState, LoadState, SaveState, TakeSnapshot, Pause, Quit,
-
       LastType
     };
 
@@ -103,8 +101,9 @@ class Event
   protected:
     // Array of values associated with each event type
     Int32 myValues[LastType];
-
 };
+
+extern Event myStellaEvent;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline Int32 Event::get(Type type) const

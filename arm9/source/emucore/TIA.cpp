@@ -2751,7 +2751,7 @@ uInt8 poke_needs_update_display[] __attribute__((section(".dtcm"))) =
     1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1
 };
 
-uInt8 player_reset_pos[] =
+uInt32 player_reset_pos[] =
 {
   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,

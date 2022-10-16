@@ -427,7 +427,8 @@ const CartInfo table[] =
     {"f3dfae774f3bd005a026e29894db40d3",  "CIRCUS", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA0_7,  PAL,   67,    245,    99,   0,  0},    // Circus Atari (1980) (PAL).bin
     {"466c9d4a93668ab6a052c268856cf4a5",  "??????", BANK_F4SC, CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA0_7,  NTSC,  34,    210,    90,   0,  3},    // Circus Atari Age PRGE Demo.bin
     {"5f383ce70c30c5059f13e89933b05c4a",  "CIRCAT", BANK_F8,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA0_7,  NTSC,  34,    210,    90,   0,  3},    // Circus Atariage 2020.bin  
-    {"d85d93c7db2790b805c3d9805b3d8b69",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 20200331.bin
+    {"d85d93c7db2790b805c3d9805b3d8b69",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 20200331.bin
+    {"19b1f085068e43db89f0dc28a74f7447",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 2.4.bin
     {"13a11a95c9a9fb0465e419e4e2dbd50a",  "CLIMB5", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Climber 5.bin
     {"1e587ca91518a47753a28217cd4fd586",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  35,    210,    98,   0,  0},    // Coco Nuts (1982).bin
     {"5846b1d34c296bf7afc2fa05bbc16e98",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Codebreaker (1978).bin

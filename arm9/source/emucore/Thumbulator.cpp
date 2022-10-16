@@ -28,8 +28,8 @@
 #include "bspf.hxx"
 #include "Thumbulator.hxx"
 
-uInt32 reg_sys[16]  __attribute__((section(".dtcm"))) = {0};
-uInt32 cpsr         __attribute__((section(".dtcm"))) = 0;
+uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
+uInt32 cpsr          __attribute__((section(".dtcm"))) = 0;
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
 
 uInt16 rom[ROMSIZE];
@@ -90,7 +90,7 @@ inline uInt32 Thumbulator::read32 ( uInt32 addr )
   {
       ptr = (uInt32*) &fast_cart_buffer[(addr&RAMADDMASK) >> 1];
   }
-  else 
+  else
   {
       ptr = (uInt32*) &rom[(addr) >> 1];
   }
@@ -104,6 +104,7 @@ inline uInt32 Thumbulator::readROM32 ( uInt32 addr )
   ptr = (uInt32*) &rom[(addr) >> 1];
   return *ptr;
 }
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::readRAM32 ( uInt32 addr )
 {

@@ -41,24 +41,24 @@ bool Joystick::read(DigitalPin pin)
   switch(pin)
   {
     case One:
-      return (myJack == Left) ? (myEvent.get(Event::JoystickZeroUp) == 0) : 
-          (myEvent.get(Event::JoystickOneUp) == 0);
+      return (myJack == Left) ? (myStellaEvent.get(Event::JoystickZeroUp) == 0) : 
+          (myStellaEvent.get(Event::JoystickOneUp) == 0);
 
     case Two:
-      return (myJack == Left) ? (myEvent.get(Event::JoystickZeroDown) == 0) : 
-          (myEvent.get(Event::JoystickOneDown) == 0);
+      return (myJack == Left) ? (myStellaEvent.get(Event::JoystickZeroDown) == 0) : 
+          (myStellaEvent.get(Event::JoystickOneDown) == 0);
 
     case Three:
-      return (myJack == Left) ? (myEvent.get(Event::JoystickZeroLeft) == 0) : 
-          (myEvent.get(Event::JoystickOneLeft) == 0);
+      return (myJack == Left) ? (myStellaEvent.get(Event::JoystickZeroLeft) == 0) : 
+          (myStellaEvent.get(Event::JoystickOneLeft) == 0);
 
     case Four:
-      return (myJack == Left) ? (myEvent.get(Event::JoystickZeroRight) == 0) : 
-          (myEvent.get(Event::JoystickOneRight) == 0);
+      return (myJack == Left) ? (myStellaEvent.get(Event::JoystickZeroRight) == 0) : 
+          (myStellaEvent.get(Event::JoystickOneRight) == 0);
 
     case Six:
-      return (myJack == Left) ? (myEvent.get(Event::JoystickZeroFire) == 0) : 
-          (myEvent.get(Event::JoystickOneFire) == 0);
+      return (myJack == Left) ? (myStellaEvent.get(Event::JoystickZeroFire) == 0) : 
+          (myStellaEvent.get(Event::JoystickOneFire) == 0);
 
     default:
       return true;

@@ -546,10 +546,11 @@ bool dsLoadGame(char *filename)
 
         // Center all paddles...
         theConsole->fakePaddleResistance = ((MAX_RESISTANCE+MIN_RESISTANCE)/2);
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DELETE, theConsole->fakePaddleResistance);
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F11,    theConsole->fakePaddleResistance);
-        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F9,     theConsole->fakePaddleResistance);
-        
+        myStellaEvent.set(Event::PaddleZeroResistance,  theConsole->fakePaddleResistance);
+        myStellaEvent.set(Event::PaddleOneResistance,   theConsole->fakePaddleResistance);
+        myStellaEvent.set(Event::PaddleTwoResistance,   theConsole->fakePaddleResistance);
+        myStellaEvent.set(Event::PaddleThreeResistance, theConsole->fakePaddleResistance);
+            
         // Make sure the difficulty switches are set right on loding
         bInitialDiffSet = true;
         
@@ -1025,7 +1026,6 @@ ITCM_CODE void dsMainLoop(void)
 
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
-            //dsDisplayButton(14+(myCartInfo.frame_mode == MODE_NO ? 1:0));
             etatEmu = STELLADS_PLAYGAME;
             break;
 
@@ -1055,6 +1055,7 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
+                case CTR_RJOY:                    
                     button_fire  = false;
                     button_up    = false;
                     button_down  = false;
@@ -1063,39 +1064,39 @@ ITCM_CODE void dsMainLoop(void)
                     
                     if (keys_pressed & (KEY_A))
                     {
-                        if ((myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        if ((myCartInfo.aButton == BUTTON_FIRE))           button_fire  = true;
+                        else if ((myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
+                        else if ((myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        else if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        else if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        else if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
                     else if (keys_pressed & (KEY_B))
                     {
-                        if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        if ((myCartInfo.bButton == BUTTON_FIRE))           button_fire  = true;
+                        else if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
+                        else if ((myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        else if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        else if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        else if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
                     else if (keys_pressed & (KEY_X))
                     {
-                        if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        if ((myCartInfo.xButton == BUTTON_FIRE))           button_fire  = true;
+                        else if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
+                        else if ((myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        else if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        else if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        else if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
                     else if (keys_pressed & (KEY_Y))
                     {
-                        if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        if ((myCartInfo.yButton == BUTTON_FIRE))           button_fire  = true;
+                        else if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
+                        else if ((myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
+                        else if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
+                        else if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
+                        else if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
                     }
                     
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
@@ -1103,214 +1104,151 @@ ITCM_CODE void dsMainLoop(void)
                     if (keys_pressed & (KEY_LEFT))                    button_left  = true;
                     else if (keys_pressed & (KEY_RIGHT))              button_right = true;
                     
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, button_fire);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    button_up);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  button_down);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  button_left);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, button_right);
-                    break;
-                    
-                case CTR_RJOY:
-                    button_fire  = false;
-                    button_up    = false;
-                    button_down  = false;
-                    button_left  = false;
-                    button_right = false;
-                    
-                    if (keys_pressed & (KEY_A))
+                    if (myCartInfo.controllerType == CTR_LJOY)
                     {
-                        if ((myCartInfo.aButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        myStellaEvent.set(Event::JoystickZeroFire,  button_fire);
+                        myStellaEvent.set(Event::JoystickZeroUp,    button_up);
+                        myStellaEvent.set(Event::JoystickZeroDown,  button_down);
+                        myStellaEvent.set(Event::JoystickZeroLeft,  button_left);
+                        myStellaEvent.set(Event::JoystickZeroRight, button_right);
                     }
-                    else if (keys_pressed & (KEY_B))
+                    else // RIGHT JOY
                     {
-                        if ((myCartInfo.bButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        myStellaEvent.set(Event::JoystickOneFire,  button_fire);
+                        myStellaEvent.set(Event::JoystickOneUp,    button_up);
+                        myStellaEvent.set(Event::JoystickOneDown,  button_down);
+                        myStellaEvent.set(Event::JoystickOneLeft,  button_left);
+                        myStellaEvent.set(Event::JoystickOneRight, button_right);
                     }
-                    else if (keys_pressed & (KEY_X))
-                    {
-                        if ((myCartInfo.xButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                    }
-                    else if (keys_pressed & (KEY_Y))
-                    {
-                        if ((myCartInfo.yButton == BUTTON_FIRE))      button_fire  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_DOWN))  button_down  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
-                        if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
-                        if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                    }
-                    
-                    if (keys_pressed & (KEY_UP))                      button_up    = true;
-                    else if (keys_pressed & (KEY_DOWN))               button_down  = true;
-                    if (keys_pressed & (KEY_LEFT))                    button_left  = true;
-                    else if (keys_pressed & (KEY_RIGHT))              button_right = true;
-                    
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,    button_fire);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y,    button_up);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h,    button_down);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g,    button_left);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j,    button_right);
                     break;
                     
                 case CTR_MCA:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, (keys_pressed & (KEY_Y)));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, (keys_pressed & (KEY_B)));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, (keys_pressed & (KEY_A)));
+                    myStellaEvent.set(Event::JoystickOneLeft,       (keys_pressed & (KEY_Y)));
+                    myStellaEvent.set(Event::JoystickOneDown,       (keys_pressed & (KEY_B)));
+                    myStellaEvent.set(Event::JoystickOneRight,      (keys_pressed & (KEY_A)));
                     
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
                     break;
 
                 case CTR_STARGATE:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_A));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_Y));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_B));
-                    // Unfortunately for Stargate, we can't use these keys for UI handling below...
-                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
-                    {
-                        keys_pressed = 0;
-                    }
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_A));
+                    
+                    myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_X));
+                    myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_Y));
+                    myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_B));
+                    
                     break;
                     
                 case CTR_SOLARIS:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f, keys_pressed & (KEY_Y));
-                    if (keys_pressed & (KEY_Y))
-                    {
-                        keys_pressed = 0;
-                    }
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroFire,      ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
+                    myStellaEvent.set(Event::JoystickOneFire,       ((keys_pressed & (KEY_X)) | (keys_pressed & (KEY_Y))));
                     break;
                     
                 case CTR_RAIDERS:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_RIGHT));
-
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,     keys_pressed & (KEY_A));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_X));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_Y));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, keys_pressed & (KEY_B));
-
-                    // Unfortunately for Raiders, we can't use these keys for UI handling below...
-                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
-                    {
-                        keys_pressed = 0;
-                    }
+                    myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_A));
+                    
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_X));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_Y));
+                    myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_B));
                     break;
 
                 case CTR_TWINSTICK:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
 
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_y, keys_pressed & (KEY_X));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_h, keys_pressed & (KEY_B));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_g, keys_pressed & (KEY_Y));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_j, keys_pressed & (KEY_A));
+                    myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_X));
+                    myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_B));
+                    myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_Y));
+                    myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_A));
                     
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE,  keys_pressed & (KEY_L));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_f,      keys_pressed & (KEY_R));
-
-                    // Unfortunately for Raiders, we can't use these keys for UI handling below...
-                    if ((keys_pressed & (KEY_X)) || (keys_pressed & (KEY_Y)))
-                    {
-                        keys_pressed = 0;
-                    }
+                    myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_L));
+                    myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_R));
                     break;
                     
                 case CTR_BOOSTER:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_4, (keys_pressed & (KEY_A)));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_5, (keys_pressed & (KEY_B)));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,       keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,       keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,      keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::BoosterGripZeroTrigger, keys_pressed & (KEY_A));
+                    myStellaEvent.set(Event::BoosterGripZeroBooster, keys_pressed & (KEY_B));
                     break;
                     
                 case CTR_GENESIS:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, (keys_pressed & (KEY_A)) | (keys_pressed & (KEY_Y))); // Normal fire button
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_5,     (keys_pressed & (KEY_B)));    // Second Genesis button "C"
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroFire,      (keys_pressed & (KEY_A)) | (keys_pressed & (KEY_Y))); // Normal fire button
+                    myStellaEvent.set(Event::BoosterGripZeroBooster,(keys_pressed & (KEY_B)));    // Second Genesis button "C" is mapped here
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
                     break;                    
                     
                 case CTR_STARRAID:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SPACE, ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_UP,    keys_pressed & (KEY_UP));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_DOWN,  keys_pressed & (KEY_DOWN));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_LEFT,  keys_pressed & (KEY_LEFT));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_RIGHT, keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,       keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,       keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,      keys_pressed & (KEY_RIGHT));
+                    myStellaEvent.set(Event::JoystickZeroFire,       ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
+                    
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
                     {
                         touchPosition touch;
                         touchRead(&touch);
                         keys_touch = 1;
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne1,     1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne2,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne3,     1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne4,   1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne5,   1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne6,   1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne7,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne8,  1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne9,  1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOneStar,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOne0,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOnePound, 1);
                     }
                     else
                     {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 0);
+                        myStellaEvent.set(Event::KeyboardOne1,     0);
+                        myStellaEvent.set(Event::KeyboardOne2,     0);
+                        myStellaEvent.set(Event::KeyboardOne3,     0);
+                        myStellaEvent.set(Event::KeyboardOne4,     0);
+                        myStellaEvent.set(Event::KeyboardOne5,     0);
+                        myStellaEvent.set(Event::KeyboardOne6,     0);
+                        myStellaEvent.set(Event::KeyboardOne7,     0);
+                        myStellaEvent.set(Event::KeyboardOne8,     0);
+                        myStellaEvent.set(Event::KeyboardOne9,     0);
+                        myStellaEvent.set(Event::KeyboardOneStar,  0);
+                        myStellaEvent.set(Event::KeyboardOne0,     0);
+                        myStellaEvent.set(Event::KeyboardOnePound, 0);
                     }   
                     break;
                 
                 case CTR_BUMPBASH:
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F12, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_R)));
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_END, (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_L)));
+                    myStellaEvent.set(Event::PaddleZeroFire,     (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_L)));
+                    myStellaEvent.set(Event::PaddleOneFire,      (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_R)));                    
                     break;
                     
                 case CTR_PADDLE0:
@@ -1319,14 +1257,14 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
                         if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroResistance : Event::PaddleOneResistance, theConsole->fakePaddleResistance);
                     }
                     else
                     if(keys_pressed & (KEY_RIGHT))
                     {
                         theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
                         if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroResistance : Event::PaddleOneResistance, theConsole->fakePaddleResistance);
                     }
                     else
                     if (bShowPaddles  && (keys_pressed & KEY_TOUCH))
@@ -1335,18 +1273,13 @@ ITCM_CODE void dsMainLoop(void)
                         touchRead(&touch);
                         theConsole->fakePaddleResistance = ((MIN_RESISTANCE+MAX_RESISTANCE) - ((MAX_RESISTANCE / 255) * touch.px));
                         keys_touch = 1;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_DELETE:StellaEvent::KCODE_F11), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroResistance : Event::PaddleOneResistance, theConsole->fakePaddleResistance);
                     }
 
-                    theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE0 ? StellaEvent::KCODE_END:StellaEvent::KCODE_F12), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
-                                                                                      (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
-
-                    if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
+                    myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroFire : Event::PaddleOneFire, (keys_pressed & (KEY_A | KEY_B | KEY_R | KEY_L)));  // Any of these trigger it
+                    if (keys_pressed & (KEY_L | KEY_R))
                     {
-                        if (!((keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L))))  // We want to still process for L/R shoulder buttons for possible screen scaling...
-                        {
-                            keys_pressed = 0;   // If these were pressed... don't handle them below...
-                        }
+                        keys_pressed = 0;   // If these were pressed... don't handle them below...
                     }
                     break;
                     
@@ -1356,14 +1289,14 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
                         if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE2 ?  Event::PaddleTwoResistance : Event::PaddleThreeResistance, theConsole->fakePaddleResistance);
                     }
                     else
                     if(keys_pressed & (KEY_RIGHT))
                     {
                         theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
                         if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE2 ?  Event::PaddleTwoResistance : Event::PaddleThreeResistance, theConsole->fakePaddleResistance);
                     }
                     else
                     if (bShowPaddles  && (keys_pressed & KEY_TOUCH))
@@ -1372,30 +1305,22 @@ ITCM_CODE void dsMainLoop(void)
                         touchRead(&touch);
                         theConsole->fakePaddleResistance = ((MIN_RESISTANCE+MAX_RESISTANCE) - ((MAX_RESISTANCE / 255) * touch.px));
                         keys_touch = 1;
-                        theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F9:StellaEvent::KCODE_F13), theConsole->fakePaddleResistance);
+                        myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE2 ?  Event::PaddleTwoResistance : Event::PaddleThreeResistance, theConsole->fakePaddleResistance);
                     }
 
-                    theConsole->eventHandler().sendKeyEvent((myCartInfo.controllerType == CTR_PADDLE2 ? StellaEvent::KCODE_F10:StellaEvent::KCODE_F14), (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) ||
-                                                                                      (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)));      // RIGHT is the Paddle Button... either A or B will trigger this on Paddle Games
-                    if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
+                    myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE2 ?  Event::PaddleTwoFire : Event::PaddleThreeFire, (keys_pressed & (KEY_A | KEY_B | KEY_R | KEY_L)));  // Any of these trigger it
+                    if (keys_pressed & (KEY_L | KEY_R))
                     {
-                        if (!((keys_pressed & (KEY_R)) || (keys_pressed & (KEY_L))))  // We want to still process for L/R shoulder buttons for possible screen scaling...
-                        {
-                            keys_pressed = 0;   // If these were pressed... don't handle them below...
-                        }
+                        keys_pressed = 0;   // If these were pressed... don't handle them below...
                     }
                     break;
                     
                 case CTR_DRIVING:
                     if (++driving_dampen % 2)
                     {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_INSERT, keys_pressed & (KEY_LEFT));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PAGEUP, keys_pressed & (KEY_RIGHT));
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_HOME, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)));
-                        if ((keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_LEFT)) || (keys_pressed & (KEY_RIGHT)))
-                        {
-                            keys_pressed = 0;   // If these were pressed... don't handle them below...
-                        }
+                        myStellaEvent.set(Event::DrivingZeroCounterClockwise, keys_pressed & (KEY_LEFT));
+                        myStellaEvent.set(Event::DrivingZeroClockwise, keys_pressed & (KEY_RIGHT));
+                        myStellaEvent.set(Event::DrivingZeroFire, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)));
                     }
                     break;
                     
@@ -1406,37 +1331,38 @@ ITCM_CODE void dsMainLoop(void)
                         touchRead(&touch);
                         keys_touch = 1;
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero1,     1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero2,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero3,     1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero4,   1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero5,   1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero6,   1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero7,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero8,  1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero9,  1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroStar,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZero0,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroPound, 1);
                     }
                     else
                     {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_8, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_9, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_0, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_i, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_o, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_p, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_k, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_l, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SEMICOLON, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_COMMA, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_PERIOD, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_SLASH, 0);
+                        myStellaEvent.set(Event::KeyboardZero1,     0);
+                        myStellaEvent.set(Event::KeyboardZero2,     0);
+                        myStellaEvent.set(Event::KeyboardZero3,     0);
+                        myStellaEvent.set(Event::KeyboardZero4,     0);
+                        myStellaEvent.set(Event::KeyboardZero5,     0);
+                        myStellaEvent.set(Event::KeyboardZero6,     0);
+                        myStellaEvent.set(Event::KeyboardZero7,     0);
+                        myStellaEvent.set(Event::KeyboardZero8,     0);
+                        myStellaEvent.set(Event::KeyboardZero9,     0);
+                        myStellaEvent.set(Event::KeyboardZeroStar,  0);
+                        myStellaEvent.set(Event::KeyboardZero0,     0);
+                        myStellaEvent.set(Event::KeyboardZeroPound, 0);
                     }
+                    break;                    
                     
                 case CTR_KEYBOARD1:
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
@@ -1445,37 +1371,39 @@ ITCM_CODE void dsMainLoop(void)
                         touchRead(&touch);
                         keys_touch = 1;
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne1,     1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne2,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne3,     1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne4,   1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne5,   1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne6,   1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne7,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne8,  1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne9,  1);
 
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 1);
+                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOneStar,  1);
+                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOne0,     1);
+                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOnePound, 1);
                     }
                     else
                     {
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_1, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_2, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_3, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_q, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_w, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_e, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_a, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_s, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_d, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_z, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_x, 0);
-                        theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_c, 0);
-                    }            } // End Controller Switch
+                        myStellaEvent.set(Event::KeyboardOne1,     0);
+                        myStellaEvent.set(Event::KeyboardOne2,     0);
+                        myStellaEvent.set(Event::KeyboardOne3,     0);
+                        myStellaEvent.set(Event::KeyboardOne4,     0);
+                        myStellaEvent.set(Event::KeyboardOne5,     0);
+                        myStellaEvent.set(Event::KeyboardOne6,     0);
+                        myStellaEvent.set(Event::KeyboardOne7,     0);
+                        myStellaEvent.set(Event::KeyboardOne8,     0);
+                        myStellaEvent.set(Event::KeyboardOne9,     0);
+                        myStellaEvent.set(Event::KeyboardOneStar,  0);
+                        myStellaEvent.set(Event::KeyboardOne0,     0);
+                        myStellaEvent.set(Event::KeyboardOnePound, 0);
+                    }
+                    break;
+            } // End Controller Switch
 
             // --------------------------------------------------------------------------------------
             // For things like showing paddles or console switches, we can do this much slower...
@@ -1495,30 +1423,30 @@ ITCM_CODE void dsMainLoop(void)
                 }
                 else
                 {
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1,  keys_pressed & (KEY_SELECT));
+                    myStellaEvent.set(Event::ConsoleSelect,  keys_pressed & (KEY_SELECT));
                 }
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, keys_pressed & (KEY_START));
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F3, 0);
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F4, 0);
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F5, 0);
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F6, 0);
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F7, 0);
-                theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F8, 0);
+                myStellaEvent.set(Event::ConsoleReset,              keys_pressed & (KEY_START));
+                myStellaEvent.set(Event::ConsoleColor,              0);
+                myStellaEvent.set(Event::ConsoleBlackWhite,         0);
+                myStellaEvent.set(Event::ConsoleLeftDifficultyA,    0);
+                myStellaEvent.set(Event::ConsoleLeftDifficultyB,    0);
+                myStellaEvent.set(Event::ConsoleRightDifficultyA,   0);
+                myStellaEvent.set(Event::ConsoleRightDifficultyB,   0);
                 
                 if (bInitialDiffSet)
                 {
                     bInitialDiffSet = false;
                     // Make sure the difficulty switches are correct...
-                    theConsole->eventHandler().sendKeyEvent(myCartInfo.left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
+                    myStellaEvent.set(myCartInfo.left_difficulty ? Event::ConsoleLeftDifficultyA : Event::ConsoleLeftDifficultyB, 1);
                     dsDisplayButton(10+myCartInfo.left_difficulty);
-                    theConsole->eventHandler().sendKeyEvent(myCartInfo.right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
+                    myStellaEvent.set(myCartInfo.right_difficulty ? Event::ConsoleRightDifficultyA : Event::ConsoleRightDifficultyB, 1);
                     dsDisplayButton(12+myCartInfo.right_difficulty);        
                 }                    
 
                 // -----------------------------------------------------------------------
                 // Check the UI keys... this is for offset/scale shift of the display.
                 // -----------------------------------------------------------------------
-                if ((keys_pressed & KEY_R) || (keys_pressed & KEY_L))
+                if (keys_pressed & (KEY_R | KEY_L))
                 {
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_UP))   myCartInfo.yOffset++;
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_DOWN)) myCartInfo.yOffset--;
@@ -1663,7 +1591,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // tv type
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     console_color=1-console_color;
-                    theConsole->eventHandler().sendKeyEvent(console_color ? StellaEvent::KCODE_F3 : StellaEvent::KCODE_F4, 1);
+                    myStellaEvent.set(console_color ? Event::ConsoleColor : Event::ConsoleBlackWhite, 1);                    
                     dampen=5;
                     dsDisplayButton(3-console_color);
                 }
@@ -1671,7 +1599,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // Left Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.left_difficulty=1-myCartInfo.left_difficulty;
-                    theConsole->eventHandler().sendKeyEvent(myCartInfo.left_difficulty ? StellaEvent::KCODE_F5 : StellaEvent::KCODE_F6, 1);
+                    myStellaEvent.set(myCartInfo.left_difficulty ? Event::ConsoleLeftDifficultyA : Event::ConsoleLeftDifficultyB, 1);                    
                     dampen=5;
                     dsDisplayButton(10+myCartInfo.left_difficulty);
                 }
@@ -1679,7 +1607,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // Right Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.right_difficulty=1-myCartInfo.right_difficulty;
-                    theConsole->eventHandler().sendKeyEvent(myCartInfo.right_difficulty ? StellaEvent::KCODE_F7 : StellaEvent::KCODE_F8, 1);
+                    myStellaEvent.set(myCartInfo.right_difficulty ? Event::ConsoleRightDifficultyA : Event::ConsoleRightDifficultyB, 1);                    
                     dampen=5;
                     dsDisplayButton(12+myCartInfo.right_difficulty);
                 }
@@ -1687,7 +1615,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // game select
                     dsDisplayButton(5);
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F1, 1);
+                    myStellaEvent.set(Event::ConsoleSelect, 1);
                     dampen=10;
                     WAITVBL; dsDisplayButton(4);
                 }
@@ -1695,7 +1623,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // game reset
                     dsDisplayButton(7);
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
-                    theConsole->eventHandler().sendKeyEvent(StellaEvent::KCODE_F2, 1);
+                    myStellaEvent.set(Event::ConsoleReset, 1);
                     dampen=10;
                     WAITVBL; WAITVBL; dsDisplayButton(6);
                 }
