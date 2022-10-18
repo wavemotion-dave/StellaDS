@@ -176,7 +176,7 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
-V5.X : XX-Oct-2022 by Dave Bernazzani (wavemotion)
+V5.7 : 18-Oct-2022 by Dave Bernazzani (wavemotion)
   * Fixed Sword of Surtr so it plays properly.
   * Added TWIN STICK controller so games like Rail Slider are playable!
   * More DPC+ optmizations... Space Rocks is almost full speed!

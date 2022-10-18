@@ -1882,7 +1882,7 @@ const CartInfo table[] =
     {"73c839aff6a055643044d2ce16b3aaf7",  "STARMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // StarMaster (1982) (PAL).bin
     {"00ce76ad69cdc2fa36ada01ae092d5a6",  "STARMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // StarMaster (1982) (PAL).bin
     {"c5bab953ac13dbb2cba03cd0684fb125",  "FROSTY", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    96,   0,  0},    // StayFrosty.bin
-    {"541cac55ebcf7891d9d51c415922303f",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2.bin
+    {"541cac55ebcf7891d9d51c415922303f",  "FROST2", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2.bin
     {"656dc247db2871766dffd978c71da80c",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
@@ -2907,6 +2907,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
   if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
 
+  if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.right_difficulty = DIFF_A;   // Force Stay Frosty 2 to have no background music (can't render it properly and saves cycles)
+    
   original_banking_detect = myCartInfo.banking;
   return myCartInfo.banking;
 }
