@@ -1524,7 +1524,7 @@ ITCM_CODE void dsMainLoop(void)
                 dsPrintValue(9,0,0, (char*)"SAVEKEY WRITTEN");
                 gSaveKeyEEWritten = 2;
             }
-            DumpDebugData();
+            if (DEBUG_DUMP) DumpDebugData();
         }
                 
         // ----------------------------------------

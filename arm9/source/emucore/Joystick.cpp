@@ -19,7 +19,7 @@
 // See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
-
+#include <nds.h>
 #include <assert.h>
 #include "Event.hxx"
 #include "Joystick.hxx"
@@ -36,7 +36,7 @@ Joystick::~Joystick()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-bool Joystick::read(DigitalPin pin)
+ITCM_CODE bool Joystick::read(DigitalPin pin)
 {
   switch(pin)
   {
@@ -66,7 +66,7 @@ bool Joystick::read(DigitalPin pin)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int32 Joystick::read(AnalogPin)
+ITCM_CODE Int32 Joystick::read(AnalogPin)
 {
   // Analog pins are not connect in joystick so we have infinite resistance 
   return maximumResistance;

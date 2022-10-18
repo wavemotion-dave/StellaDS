@@ -24,7 +24,7 @@
 // Code is public domain and used with the author's consent
 //============================================================================
 #define THUMB_SUPPORT
-
+#include <nds.h>
 #include "bspf.hxx"
 #include "Thumbulator.hxx"
 
@@ -52,7 +52,7 @@ Thumbulator::~Thumbulator()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Thumbulator::run( void )
+ITCM_CODE void Thumbulator::run( void )
 {
   reset();
   execute();
@@ -159,12 +159,12 @@ inline void Thumbulator::do_vflag_bit ( uInt32 x )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Thumbulator::execute ( void )
+ITCM_CODE void Thumbulator::execute ( void )
 {
   uInt32 sp, 
          ra,rb,rc,
          rd,rs;
-  uInt8 rm, rn;
+  uInt32 rm, rn;
   uInt32 notZflag = 1;
   uInt32 nFlag = 0;
   register uInt16 *ptr = &rom[(reg_sys[15]-2) >> 1];
@@ -1550,7 +1550,7 @@ void Thumbulator::execute ( void )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-int Thumbulator::reset ( void )
+ITCM_CODE int Thumbulator::reset ( void )
 {
   cpsr=CPSR_T|CPSR_I|CPSR_F|MODE_SVC;
     
