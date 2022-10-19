@@ -3602,6 +3602,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       myHMM0 = 0;
       myHMM1 = 0;
       myHMBL = 0;
+      // Should we enabled TIA M0 "bug" used for stars in Rabbit Transit?
+      if((clock == (myLastHMOVEClock + 20 * 3)))
+      {
+        myM0CosmicArkMotionEnabled = true;
+        myM0CosmicArkCounter = 0;
+      }
+        
       break;
     }
 
