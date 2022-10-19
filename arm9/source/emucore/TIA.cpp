@@ -73,6 +73,7 @@ Int16   myPOSM0                     __attribute__((section(".dtcm")));
 Int16   myPOSM1                     __attribute__((section(".dtcm")));         
 Int16   myPOSBL                     __attribute__((section(".dtcm")));       
 uInt8   myM0CosmicArkCounter        __attribute__((section(".dtcm")));
+uInt8   myM1CosmicArkCounter        __attribute__((section(".dtcm")));
 uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
 uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
 uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
@@ -106,6 +107,7 @@ uInt8   myVSYNC                     __attribute__((section(".dtcm")));
 uInt8   myVBLANK                    __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
+uInt8   myM1CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
@@ -457,7 +459,9 @@ void TIA::reset()
   myLastHMOVEClock = 0;
   myHMOVEBlankEnabled = false;
   myM0CosmicArkMotionEnabled = false;
+  myM1CosmicArkMotionEnabled = false;
   myM0CosmicArkCounter = 0;
+  myM1CosmicArkCounter = 0;
 
   myDumpEnabled = false;
   myDumpDisabledCycle = 0;
@@ -2508,6 +2512,39 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         }
       }
         
+      // Handle the "Cosmic Ark" TIA bug if it's enabled
+      if(myM1CosmicArkMotionEnabled)
+      {
+        // Movement table associated with the bug
+        static uInt16 m[4] = {18, 33, 0, 17};
+
+        myM1CosmicArkCounter = (myM1CosmicArkCounter + 1) & 3;
+        myPOSM1 -= m[myM1CosmicArkCounter];
+
+        if(myPOSM1 >= 160)
+          myPOSM1 -= 160;
+        else if(myPOSM1 < 0)
+          myPOSM1 += 160;
+
+        if(myM1CosmicArkCounter == 1)
+        {
+          // Stretch this missle so it's at least 2 pixels wide
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
+              [myNUSIZ1 & 0x07][((myNUSIZ1 & 0x30) >> 4) | 0x01]
+              [160 - (myPOSM1 & 0xFC)];
+        }
+        else if(myM1CosmicArkCounter == 2)
+        {
+          // Missle is disabled on this line 
+          myCurrentM1Mask = &ourDisabledMaskTable[0];
+        }
+        else
+        {
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
+              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+        }
+      }        
+        
       // --------------------------------------------------------------------------
       // And now we must render this onto the DS screen... but first we check
       // if the cart info says we are any sort of flicker-free or flicker-reduce
@@ -3375,7 +3412,16 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x23:    // Horizontal Motion Missle 1
     {
-      myHMM1 = value >> 4;
+      Int8 tmp = value >> 4;
+       
+      // Should we enabled TIA M1 "bug" used for stars in Stay Frosty?
+      if((clock == (myLastHMOVEClock + 21 * 3)) && (myHMM1 == 7) && (tmp == 6))
+      {
+        myM1CosmicArkMotionEnabled = true;
+        myM1CosmicArkCounter = 0;
+      }
+
+      myHMM1 = tmp;
       break;
     }
 
