@@ -3597,18 +3597,17 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x2b:    // Clear horizontal motion registers
     {
+      // Should we enabled TIA M0 "bug" used for stars in Rabbit Transit?
+      if((clock == (myLastHMOVEClock + 20 * 3)) && (myHMM0 == 7))
+      {
+        myM0CosmicArkMotionEnabled = true;
+        myM0CosmicArkCounter = 0;
+      }
       myHMP0 = 0;
       myHMP1 = 0;
       myHMM0 = 0;
       myHMM1 = 0;
       myHMBL = 0;
-      // Should we enabled TIA M0 "bug" used for stars in Rabbit Transit?
-      if((clock == (myLastHMOVEClock + 20 * 3)))
-      {
-        myM0CosmicArkMotionEnabled = true;
-        myM0CosmicArkCounter = 0;
-      }
-        
       break;
     }
 
