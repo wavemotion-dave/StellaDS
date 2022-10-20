@@ -112,7 +112,6 @@ static void DumpDebugData(void)
         {
             idx=0;
             val = debug[i];
-            dbgbuf[idx++] = 'R';
             dbgbuf[idx++] = '0' + (i / 10);
             dbgbuf[idx++] = '0' + (i % 10);
             dbgbuf[idx++] = ':';
@@ -123,13 +122,15 @@ static void DumpDebugData(void)
             }
             else
             {
-                dbgbuf[idx++] = '0' + (int)val/100000;
+                dbgbuf[idx++] = '0' + (int)val/1000000;
             }
+            val = val % 1000000;
+            dbgbuf[idx++] = '0' + (int)val/100000;
             val = val % 100000;
             dbgbuf[idx++] = '0' + (int)val/10000;
-            val = val % 10000;
+            val= val % 10000;
             dbgbuf[idx++] = '0' + (int)val/1000;
-            val= val % 1000;
+            val = val % 1000;
             dbgbuf[idx++] = '0' + (int)val/100;
             val = val % 100;
             dbgbuf[idx++] = '0' + (int)val/10;
