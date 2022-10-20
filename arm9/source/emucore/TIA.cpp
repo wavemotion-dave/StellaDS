@@ -77,7 +77,7 @@ uInt8   myM1CosmicArkCounter        __attribute__((section(".dtcm")));
 uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
 uInt8   myNUSIZ0                    __attribute__((section(".dtcm")));
 uInt8   myNUSIZ1                    __attribute__((section(".dtcm")));
-uInt8   myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
+uInt32  myPlayfieldPriorityAndScore __attribute__((section(".dtcm")));
 uInt8   myPriorityEncoder[2][256]   __attribute__((section(".dtcm")));
 uInt8   myCTRLPF                    __attribute__((section(".dtcm")));
 uInt8   myREFP0                     __attribute__((section(".dtcm")));
@@ -101,8 +101,8 @@ uInt8   myVDELBL                    __attribute__((section(".dtcm")));
 uInt8   myRESMP0                    __attribute__((section(".dtcm")));
 uInt8   myRESMP1                    __attribute__((section(".dtcm")));
 uInt32  myEnabledObjects            __attribute__((section(".dtcm")));
-uInt8   myCurrentGRP0               __attribute__((section(".dtcm")));
-uInt8   myCurrentGRP1               __attribute__((section(".dtcm")));
+uInt32  myCurrentGRP0               __attribute__((section(".dtcm")));
+uInt32  myCurrentGRP1               __attribute__((section(".dtcm")));
 uInt8   myVSYNC                     __attribute__((section(".dtcm")));
 uInt8   myVBLANK                    __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
@@ -1129,7 +1129,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
    // --------------------------------------------------------------------------------
    if ((myEnabledObjects & (myPFBit | myBLBit)) == (myPFBit | myBLBit)) 
    {
-       if (myEnabledObjects == (myPFBit | myBLBit)) // Playfield and Ball only are enabled
+       if ((myEnabledObjects == (myPFBit | myBLBit)) && ((!(myPlayfieldPriorityAndScore & ScoreBit)))) // Playfield and Ball only are enabled
        {
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mBL = &myCurrentBLMask[hpos];
@@ -1732,7 +1732,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-           else // Priority not set
+           else if (!(myPlayfieldPriorityAndScore & ScoreBit)) // Priority not set and Score not set
            {
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP0 = &myCurrentP0Mask[hpos];
@@ -1754,6 +1754,19 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 
                  ++mPF; ++mP0; ++myFramePointer;
                }
+             }
+           }
+           else // Need to do this the hard way...
+           {
+             uInt8 last_color = 0;
+             uInt8 last_enabled = 255;
+             uInt32*mPF = &myCurrentPFMask[hpos];
+             uInt8* mP0 = &myCurrentP0Mask[hpos];
+             for(; myFramePointer < ending; ++myFramePointer)
+             {
+               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
+               if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+               HANDLE_COLOR_AND_COLLISIONS;
              }
            }
        }
@@ -1783,7 +1796,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-           else // Priority not set
+           else if (!(myPlayfieldPriorityAndScore & ScoreBit)) // Priority not set and Score not set
            {
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -1805,6 +1818,19 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 
                  ++mPF; ++mP1; ++myFramePointer;
                }
+             }
+           }
+           else // Need to do this the hard way...
+           {
+             uInt8 last_color = 0;
+             uInt8 last_enabled = 255;
+             uInt32*mPF = &myCurrentPFMask[hpos];
+             uInt8* mP1 = &myCurrentP1Mask[hpos];
+             for(; myFramePointer < ending; ++myFramePointer)
+             {
+               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
+               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+               HANDLE_COLOR_AND_COLLISIONS;
              }
            }
        }          
@@ -2018,7 +2044,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-           else  // Priority not set
+           else if (!(myPlayfieldPriorityAndScore & ScoreBit)) // Priority not set and Score not set
            {
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM0 = &myCurrentM0Mask[hpos];
@@ -2040,7 +2066,24 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                  ++mBL; ++mM0; ++myFramePointer;
                }
              }
-           }          
+           }
+           else // Need to do this the hard way...
+           {
+             uInt8 last_color = 0;
+             uInt8 last_enabled = 255;
+             uInt32*mPF = &myCurrentPFMask[hpos];
+             uInt8* mM0 = &myCurrentM0Mask[hpos];
+             uInt8* mBL = &myCurrentBLMask[hpos];
+             uInt8 meo1 = (myEnabledObjects & myBLBit);
+             uInt8 meo2 = (myEnabledObjects & myM0Bit);
+             for(; myFramePointer < ending; ++myFramePointer)
+             {
+               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
+               if(meo1 && *mBL++)                enabled |= myBLBit;
+               if(meo2 && *mM0++)                enabled |= myM0Bit;
+               HANDLE_COLOR_AND_COLLISIONS;
+             }
+           }
        }
        else if (myEnabledObjects == (myBLBit | myM1Bit)) // Ball and Missle 1 are enabled
        {
@@ -2067,7 +2110,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-           else  // Priority not set
+           else if (!(myPlayfieldPriorityAndScore & ScoreBit)) // Priority not set and Score not set
            {
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM1 = &myCurrentM1Mask[hpos];
@@ -2088,6 +2131,23 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 
                  ++mBL; ++mM1; ++myFramePointer;
                }
+             }
+           }
+           else // Need to do this the hard way...
+           {
+             uInt8 last_color = 0;
+             uInt8 last_enabled = 255;
+             uInt32*mPF = &myCurrentPFMask[hpos];
+             uInt8* mM1 = &myCurrentM1Mask[hpos];
+             uInt8* mBL = &myCurrentBLMask[hpos];
+             uInt8 meo1 = (myEnabledObjects & myBLBit);
+             uInt8 meo2 = (myEnabledObjects & myM1Bit);
+             for(; myFramePointer < ending; ++myFramePointer)
+             {
+               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
+               if(meo1 && *mBL++)                enabled |= myBLBit;
+               if(meo2 && *mM1++)                enabled |= myM1Bit;
+               HANDLE_COLOR_AND_COLLISIONS;
              }
            }
        }
@@ -2117,7 +2177,7 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-           else // Priority not set
+           else if (!(myPlayfieldPriorityAndScore & ScoreBit)) // Priority not set and Score not set
            {
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
@@ -2141,7 +2201,23 @@ inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
                }
              }
            }
-       }      
+           else // Need to do this the hard way...
+           {
+             uInt8 last_color = 0;
+             uInt8 last_enabled = 255;
+             uInt32*mPF = &myCurrentPFMask[hpos];
+             uInt8* mP1 = &myCurrentP1Mask[hpos];
+             uInt8* mBL = &myCurrentBLMask[hpos];
+             uInt8 meo1 = (myEnabledObjects & myBLBit);
+             for(; myFramePointer < ending; ++myFramePointer)
+             {
+               uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
+               if(meo1 && *mBL++)                enabled |= myBLBit;
+               if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+               HANDLE_COLOR_AND_COLLISIONS;
+             }
+           }
+       }     
        else if (myEnabledObjects == (myBLBit | myP1Bit | myM1Bit)) // Ball, Player 1, Missile 1
        {
          uInt8 last_color = 0;

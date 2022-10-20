@@ -59,7 +59,7 @@ extern    Int16 myPOSP1;         // Player 1 position register
 extern    Int16 myPOSM0;         // Missle 0 position register
 extern    Int16 myPOSM1;         // Missle 1 position register
 extern    Int16 myPOSBL;         // Ball position register
-extern    uInt8 myPlayfieldPriorityAndScore;
+extern    uInt32 myPlayfieldPriorityAndScore;
 extern    uInt32 myColor[4];     // The 4 types of colors (foreground, background,etc) that need to addressed quickly
 extern    uInt8 myCTRLPF;        // Playfield control register
 extern    uInt8 myREFP0;         // Indicates if player 0 is being reflected
@@ -106,8 +106,8 @@ extern    uInt8 myHMOVEBlankEnabled;
 extern    uInt8 myAllowHMOVEBlanks;
 extern    uInt8 myM0CosmicArkMotionEnabled;
 extern    uInt8 myM0CosmicArkCounter;
-extern    uInt8 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.
-extern    uInt8 myCurrentGRP1;                  // Graphics for Player 1 that should be displayed.  This will be reflected if the player is being reflected.
+extern    uInt32 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.
+extern    uInt32 myCurrentGRP1;                  // Graphics for Player 1 that should be displayed.  This will be reflected if the player is being reflected.
 
 // It's VERY important that the BL, M0, M1, P0 and P1 current mask pointers are always on a uInt32 boundary.  Otherwise, the TIA code will fail on a good number of CPUs.
 extern    uInt8* myCurrentBLMask;               // Pointer to the currently active mask array for the ball
