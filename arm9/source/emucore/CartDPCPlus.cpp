@@ -187,25 +187,6 @@ inline void CartridgeDPCPlus::priorClockRandomNumberGenerator()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPCPlus::updateMusicModeDataFetchers()
 {
-  // Calculate the number of cycles since the last update
-  Int32 cycles = mySystem->cycles() - mySystemCycles;
-  mySystemCycles = mySystem->cycles();
-
-  // Calculate the number of DPC OSC clocks since the last update
-  double clocks = ((20000.0 * cycles) / 1193191.66666667) + myFractionalClocks;
-  Int32 wholeClocks = (Int32)clocks;
-  myFractionalClocks = clocks - (double)wholeClocks;
-
-  if(wholeClocks <= 0)
-  {
-    return;
-  }
-
-  // Let's update counters and flags of the music mode data fetchers
-  for(int x = 0; x <= 2; ++x)
-  {
-    myMusicCounters[x] += myMusicFrequencies[x];
-  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -243,47 +224,50 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
 {
     uInt8 result = 0;
     
-    if (address <= 5)
+    switch(address)
     {
-        switch(address)
+      case 0x00:  // RANDOM0NEXT - advance and return byte 0 of random
+        clockRandomNumberGenerator();
+        result = myRandomNumber & 0xFF;
+        break;
+
+      case 0x01:  // RANDOM0PRIOR - return to prior and return byte 0 of random
+        priorClockRandomNumberGenerator();
+        result = myRandomNumber & 0xFF;
+        break;
+
+      case 0x02:  // RANDOM1
+        result = (myRandomNumber>>8) & 0xFF;
+        break;
+
+      case 0x03:  // RANDOM2
+        result = (myRandomNumber>>16) & 0xFF;
+        break;
+
+      case 0x04:  // RANDOM3
+        result = (myRandomNumber>>24) & 0xFF;
+        break;
+
+      case 0x05: // AMPLITUDE
+      {
+        result = 0;
+        // Update the music data fetchers (counter & flag)
+        if ((gSystemCycles - mySystemCycles) > 32)
         {
-          case 0x00:  // RANDOM0NEXT - advance and return byte 0 of random
-            clockRandomNumberGenerator();
-            result = myRandomNumber & 0xFF;
-            break;
-
-          case 0x01:  // RANDOM0PRIOR - return to prior and return byte 0 of random
-            priorClockRandomNumberGenerator();
-            result = myRandomNumber & 0xFF;
-            break;
-
-          case 0x02:  // RANDOM1
-            result = (myRandomNumber>>8) & 0xFF;
-            break;
-
-          case 0x03:  // RANDOM2
-            result = (myRandomNumber>>16) & 0xFF;
-            break;
-
-          case 0x04:  // RANDOM3
-            result = (myRandomNumber>>24) & 0xFF;
-            break;
-
-          case 0x05: // AMPLITUDE
-          {
-            // Update the music data fetchers (counter & flag)
-            updateMusicModeDataFetchers();
-
-            // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
-            // can be modified during runtime.
-            uInt32 i = myDisplayImageDPCP[(myMusicWaveforms[0] << 5) + (myMusicCounters[0] >> 27)] +
-                       myDisplayImageDPCP[(myMusicWaveforms[1] << 5) + (myMusicCounters[1] >> 27)] +
-                       myDisplayImageDPCP[(myMusicWaveforms[2] << 5) + (myMusicCounters[2] >> 27)];
-
-            result = uInt8(i);
-            break;
-          }
+          // Let's update counters and flags of the music mode data fetchers
+          for (int i=0; i<3;i++) myMusicCounters[i] += myMusicFrequencies[i];
+          mySystemCycles = gSystemCycles;
         }
+
+        // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
+        // can be modified during runtime.
+        uInt32 i = myDisplayImageDPCP[(myMusicWaveforms[0] << 5) + (myMusicCounters[0] >> 27)] +
+                   myDisplayImageDPCP[(myMusicWaveforms[1] << 5) + (myMusicCounters[1] >> 27)] +
+                   myDisplayImageDPCP[(myMusicWaveforms[2] << 5) + (myMusicCounters[2] >> 27)];
+
+        result = uInt8(i);
+        break;
+      }
     }
 
     return result;

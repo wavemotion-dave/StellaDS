@@ -161,7 +161,7 @@ class CartridgeDPCPlus : public Cartridge
     uInt32 myMusicFrequencies[3];
   
     // The music waveforms
-    uInt16 myMusicWaveforms[3];
+    uInt32 myMusicWaveforms[3];
   
     // The random number generator register
     uInt32 myRandomNumber;
