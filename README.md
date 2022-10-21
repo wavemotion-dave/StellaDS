@@ -36,6 +36,7 @@ Known Issues :
 * DPC+ games are supported but are complex enough and most use ARM assisted code so you really need a DSi running with TWL++ or Unlaunch to get the faster 2X CPU speed to ensure those games run well enough.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
+* Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 * The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will run fine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.
