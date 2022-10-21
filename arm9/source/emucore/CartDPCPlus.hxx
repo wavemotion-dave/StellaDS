@@ -124,13 +124,7 @@ class CartridgeDPCPlus : public Cartridge
       Clocks the random number generator to move it to its prior state
     */
     void priorClockRandomNumberGenerator();
-
-    /** 
-      Updates any data fetchers in music mode based on the number of
-      CPU cycles which have passed since the last update.
-    */
-    void updateMusicModeDataFetchers();
-
+    
     /** 
       Call Special Functions
     */
@@ -153,24 +147,6 @@ class CartridgeDPCPlus : public Cartridge
 
     // Parameter pointer for special functions
     uInt8 myParameterPointer;
-
-    // The music mode counters
-    uInt32 myMusicCounters[3];
-
-    // The music frequency
-    uInt32 myMusicFrequencies[3];
-  
-    // The music waveforms
-    uInt32 myMusicWaveforms[3];
-  
-    // The random number generator register
-    uInt32 myRandomNumber;
-
-    // System cycle count when the last update to music data fetchers occurred
-    Int32 mySystemCycles;
-
-    // Fractional DPC music OSC clocks unused during the last update
-    double myFractionalClocks;
 
     // Older DPC+ driver code had different behaviour wrt the mask used
     // to retrieve 'DFxFRACLOW' (fractional data pointer low byte)

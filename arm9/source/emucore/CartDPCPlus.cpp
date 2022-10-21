@@ -61,11 +61,28 @@ uInt8 *myDPCptr __attribute__((section(".dtcm")));
 
 CartridgeDPCPlus *myCartDPC __attribute__((section(".dtcm")));
 
+// The music mode counters
+uInt32 myMusicCounters[3] __attribute__((section(".dtcm")));
+
+// The music frequency
+uInt32 myMusicFrequencies[3] __attribute__((section(".dtcm")));
+
+// The music waveforms
+uInt32 myMusicWaveforms[3] __attribute__((section(".dtcm")));
+
+// Pre-shifted
+uInt32 myMusicCountersShifted[3] __attribute__((section(".dtcm")));
+
+// The random number generator register
+uInt32 myDPCPRandomNumber __attribute__((section(".dtcm")));
+
+// System cycle count when the last update to music data fetchers occurred
+static Int32 mySystemCycles __attribute__((section(".dtcm")));
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
-  : myParameterPointer(0),
-    mySystemCycles(0),
-    myFractionalClocks(0.0)
+  : myParameterPointer(0)
 {
   // Pointer to the program ROM (24K @ 0 byte offset)
   myProgramImage = (uInt8 *)image + MEM_3KB;
@@ -74,6 +91,8 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
 
   memset(fast_cart_buffer, 0, 8192);
 
+  mySystemCycles = 0;
+      
   // Pointer to the display RAM
   myDisplayImageDPCP = fast_cart_buffer + MEM_3KB;
 
@@ -91,9 +110,11 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
 
   // Set waveforms to first waveform entry
   myMusicWaveforms[0] = myMusicWaveforms[1] = myMusicWaveforms[2] = 0;
+        
+  myMusicCountersShifted[0] = myMusicCountersShifted[1] = myMusicCountersShifted[2] = 0;
 
   // Initialize the DPC's random number generator register (must be non-zero)
-  myRandomNumber = 0x2B435044; // "DPC+"
+  myDPCPRandomNumber = 0x2B435044; // "DPC+"
 
   // DPC+ always starts in bank 5
   myStartBank = 5;
@@ -125,7 +146,6 @@ void CartridgeDPCPlus::reset()
 {
   // Update cycles to the current system cycles
   mySystemCycles = mySystem->cycles();
-  myFractionalClocks = 0.0;
 
   // Upon reset we switch to the startup bank
   bank(myStartBank);
@@ -171,22 +191,17 @@ void CartridgeDPCPlus::install(System& system)
 inline void CartridgeDPCPlus::clockRandomNumberGenerator()
 {
   // Update random number generator (32-bit LFSR)
-  myRandomNumber = ((myRandomNumber & (1<<10)) ? 0x10adab1e: 0x00) ^
-                   ((myRandomNumber >> 11) | (myRandomNumber << 21));
+  myDPCPRandomNumber = ((myDPCPRandomNumber & (1<<10)) ? 0x10adab1e: 0x00) ^
+                   ((myDPCPRandomNumber >> 11) | (myDPCPRandomNumber << 21));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPCPlus::priorClockRandomNumberGenerator()
 {
   // Update random number generator (32-bit LFSR, reversed)
-  myRandomNumber = ((myRandomNumber & (1<<31)) ?
-    ((0x10adab1e^myRandomNumber) << 11) | ((0x10adab1e^myRandomNumber) >> 21) :
-    (myRandomNumber << 11) | (myRandomNumber >> 21));
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeDPCPlus::updateMusicModeDataFetchers()
-{
+  myDPCPRandomNumber = ((myDPCPRandomNumber & (1<<31)) ?
+    ((0x10adab1e^myDPCPRandomNumber) << 11) | ((0x10adab1e^myDPCPRandomNumber) >> 21) :
+    (myDPCPRandomNumber << 11) | (myDPCPRandomNumber >> 21));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -228,44 +243,45 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
     {
       case 0x00:  // RANDOM0NEXT - advance and return byte 0 of random
         clockRandomNumberGenerator();
-        result = myRandomNumber & 0xFF;
+        result = myDPCPRandomNumber & 0xFF;
         break;
 
       case 0x01:  // RANDOM0PRIOR - return to prior and return byte 0 of random
         priorClockRandomNumberGenerator();
-        result = myRandomNumber & 0xFF;
+        result = myDPCPRandomNumber & 0xFF;
         break;
 
       case 0x02:  // RANDOM1
-        result = (myRandomNumber>>8) & 0xFF;
+        result = (myDPCPRandomNumber>>8) & 0xFF;
         break;
 
       case 0x03:  // RANDOM2
-        result = (myRandomNumber>>16) & 0xFF;
+        result = (myDPCPRandomNumber>>16) & 0xFF;
         break;
 
       case 0x04:  // RANDOM3
-        result = (myRandomNumber>>24) & 0xFF;
+        result = (myDPCPRandomNumber>>24) & 0xFF;
         break;
 
       case 0x05: // AMPLITUDE
       {
-        result = 0;
         // Update the music data fetchers (counter & flag)
-        if ((gSystemCycles - mySystemCycles) > 32)
+        if ((gSystemCycles - mySystemCycles) >= 60)
         {
           // Let's update counters and flags of the music mode data fetchers
-          for (int i=0; i<3;i++) myMusicCounters[i] += myMusicFrequencies[i];
+          for (int i=0; i<3;i++) 
+          {
+              myMusicCounters[i] += myMusicFrequencies[i];
+              myMusicCountersShifted[i] = myMusicCounters[i] >> 27;
+          }
           mySystemCycles = gSystemCycles;
         }
 
         // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
         // can be modified during runtime.
-        uInt32 i = myDisplayImageDPCP[(myMusicWaveforms[0] << 5) + (myMusicCounters[0] >> 27)] +
-                   myDisplayImageDPCP[(myMusicWaveforms[1] << 5) + (myMusicCounters[1] >> 27)] +
-                   myDisplayImageDPCP[(myMusicWaveforms[2] << 5) + (myMusicCounters[2] >> 27)];
-
-        result = uInt8(i);
+        result   = myDisplayImageDPCP[(myMusicWaveforms[0]) + (myMusicCountersShifted[0])] +
+                   myDisplayImageDPCP[(myMusicWaveforms[1]) + (myMusicCountersShifted[1])] +
+                   myDisplayImageDPCP[(myMusicWaveforms[2]) + (myMusicCountersShifted[2])];
         break;
       }
     }
@@ -342,9 +358,14 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
             break;
 
           case 0x05:  // WAVEFORM0
+            myMusicWaveforms[0] = (value & 0x7f) << 5;
+            break;
           case 0x06:  // WAVEFORM1
+            myMusicWaveforms[1] = (value & 0x7f) << 5;
+            break;
           case 0x07:  // WAVEFORM2
-            myMusicWaveforms[index - 5] =  value & 0x7f;
+            myMusicWaveforms[2] = (value & 0x7f) << 5;
+            break;
             break;
           default:
             break;
@@ -369,27 +390,27 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
         {
           case 0x00:  // RRESET - Random Number Generator Reset
           {
-            myRandomNumber = 0x2B435044; // "DPC+"
+            myDPCPRandomNumber = 0x2B435044; // "DPC+"
             break;
           }
           case 0x01:  // RWRITE0 - update byte 0 of random number
           {
-            myRandomNumber = (myRandomNumber & 0xFFFFFF00) | value;
+            myDPCPRandomNumber = (myDPCPRandomNumber & 0xFFFFFF00) | value;
             break;
           }
           case 0x02:  // RWRITE1 - update byte 1 of random number
           {
-            myRandomNumber = (myRandomNumber & 0xFFFF00FF) | (value<<8);
+            myDPCPRandomNumber = (myDPCPRandomNumber & 0xFFFF00FF) | (value<<8);
             break;
           }
           case 0x03:  // RWRITE2 - update byte 2 of random number
           {
-            myRandomNumber = (myRandomNumber & 0xFF00FFFF) | (value<<16);
+            myDPCPRandomNumber = (myDPCPRandomNumber & 0xFF00FFFF) | (value<<16);
             break;
           }
           case 0x04:  // RWRITE3 - update byte 3 of random number
           {
-            myRandomNumber = (myRandomNumber & 0x00FFFFFF) | (value<<24);
+            myDPCPRandomNumber = (myDPCPRandomNumber & 0x00FFFFFF) | (value<<24);
             break;
           }
           case 0x05:  // NOTE0
