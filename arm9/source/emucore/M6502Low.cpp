@@ -727,6 +727,11 @@ extern uInt32 myFractionalIncrements[];
 extern uInt32 myTops[];
 extern uInt32 myTopsMinusBottoms[];
 extern uInt8 *myDPCptr;
+extern uInt32 myMusicCounters[3];
+extern uInt32 myMusicFrequencies[3];
+extern uInt32 myMusicWaveforms[3];
+extern uInt32 myMusicCountersShifted[3];
+extern Int32 myDPCPCycles;
 
 inline uInt8 M6502Low::peek_Fetch(uInt8 address)
 {
@@ -734,6 +739,32 @@ inline uInt8 M6502Low::peek_Fetch(uInt8 address)
 
   switch(address)
   {
+    case 0x05: // AMPLITUDE
+    {
+      // -----------------------------------------------------------------------
+      // Update the music data fetchers (counter & flag)
+      // This is a rough approximation of timing - we can't really
+      // keep up with the fast fetching music anyway so this is good enough.
+      // -----------------------------------------------------------------------
+      if ((gSystemCycles - myDPCPCycles) >= 60)
+      {
+        // Let's update counters and flags of the music mode data fetchers
+        for (int i=0; i<3;i++) 
+        {
+            myMusicCounters[i] += myMusicFrequencies[i];
+            myMusicCountersShifted[i] = myMusicCounters[i] >> 27;
+        }
+        myDPCPCycles = gSystemCycles;
+      }
+
+      // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
+      // can be modified during runtime.
+      return (uInt8) (myDisplayImageDPCP[(myMusicWaveforms[0]) + (myMusicCountersShifted[0])] +
+                 myDisplayImageDPCP[(myMusicWaveforms[1]) + (myMusicCountersShifted[1])] +
+                 myDisplayImageDPCP[(myMusicWaveforms[2]) + (myMusicCountersShifted[2])]);
+      break;
+    }
+          
     case 0x0008:
         return myDisplayImageDPCP[myCounters[0]++];
         break;

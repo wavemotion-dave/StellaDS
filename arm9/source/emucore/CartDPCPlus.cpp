@@ -77,7 +77,7 @@ uInt32 myMusicCountersShifted[3] __attribute__((section(".dtcm")));
 uInt32 myDPCPRandomNumber __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
-static Int32 mySystemCycles __attribute__((section(".dtcm")));
+Int32 myDPCPCycles __attribute__((section(".dtcm")));
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,7 +91,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
 
   memset(fast_cart_buffer, 0, 8192);
 
-  mySystemCycles = 0;
+  myDPCPCycles = 0;
       
   // Pointer to the display RAM
   myDisplayImageDPCP = fast_cart_buffer + MEM_3KB;
@@ -145,7 +145,7 @@ const char* CartridgeDPCPlus::name() const
 void CartridgeDPCPlus::reset()
 {
   // Update cycles to the current system cycles
-  mySystemCycles = mySystem->cycles();
+  myDPCPCycles = mySystem->cycles();
 
   // Upon reset we switch to the startup bank
   bank(myStartBank);
@@ -158,7 +158,7 @@ void CartridgeDPCPlus::systemCyclesReset()
   uInt32 cycles = mySystem->cycles();
 
   // Adjust the cycle counter so that it reflects the new value
-  mySystemCycles -= cycles;
+  myDPCPCycles -= cycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -263,27 +263,6 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
         result = (myDPCPRandomNumber>>24) & 0xFF;
         break;
 
-      case 0x05: // AMPLITUDE
-      {
-        // Update the music data fetchers (counter & flag)
-        if ((gSystemCycles - mySystemCycles) >= 60)
-        {
-          // Let's update counters and flags of the music mode data fetchers
-          for (int i=0; i<3;i++) 
-          {
-              myMusicCounters[i] += myMusicFrequencies[i];
-              myMusicCountersShifted[i] = myMusicCounters[i] >> 27;
-          }
-          mySystemCycles = gSystemCycles;
-        }
-
-        // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
-        // can be modified during runtime.
-        result   = myDisplayImageDPCP[(myMusicWaveforms[0]) + (myMusicCountersShifted[0])] +
-                   myDisplayImageDPCP[(myMusicWaveforms[1]) + (myMusicCountersShifted[1])] +
-                   myDisplayImageDPCP[(myMusicWaveforms[2]) + (myMusicCountersShifted[2])];
-        break;
-      }
     }
 
     return result;
@@ -297,7 +276,7 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
+ITCM_CODE void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
 {
     // Get the index of the data fetcher that's being accessed
     uInt8 index = address & 0x07;
