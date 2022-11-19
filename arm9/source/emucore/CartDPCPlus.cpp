@@ -235,7 +235,7 @@ inline void CartridgeDPCPlus::callFunction(uInt8 value)
   }
 }
 
-ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
+uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
 {
     uInt8 result = 0;
     
@@ -262,7 +262,6 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
       case 0x04:  // RANDOM3
         result = (myDPCPRandomNumber>>24) & 0xFF;
         break;
-
     }
 
     return result;

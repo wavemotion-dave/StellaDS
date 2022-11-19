@@ -315,7 +315,7 @@ uInt8 CartridgeAR::checksum(uInt8* s, uInt16 length)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeAR::loadIntoRAM(uInt8 load)
+void CartridgeAR::loadIntoRAM(uInt8 load)
 {
   uInt16 image;
 

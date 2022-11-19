@@ -32,7 +32,7 @@ class System;
 extern uInt8 fast_cart_buffer[];
 
 extern PageAccess page_access;
-extern uInt16 myCurrentOffset;
+extern uInt32 myCurrentOffset;
 extern uInt8 cartDriver;
 
 #define NTSC    0

@@ -74,7 +74,7 @@ uInt32 myCounters[8] __attribute__((section(".dtcm")));
 
 CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
-uInt16 myCurrentOffset __attribute__((section(".dtcm")));
+uInt32 myCurrentOffset __attribute__((section(".dtcm")));
 uint8 original_flicker_mode = 0;
 
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger BANK_AR carts

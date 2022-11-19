@@ -1111,15 +1111,12 @@ void TIA::computePlayfieldMaskTable()
 // -----------------------------------------------------------------------
 // We spent a LOT of time in here... so we've done our best to keep this
 // as streamlined as possible. We could reduce this to about 10 lines of
-// code if source-code / memory was at a preimium. But it's not - instead
+// code if source-code / memory was at a premium. But it's not - instead
 // we are after speed of execution and are willing to trade off these 
 // large if-then-else blocks to help with code execution to get as many 
 // games running at full frame rate as possible...
-//
-// Note: I'm 99% sure the compiler is ignoring the inline here... 
-// probably because the code is huge/complex.
 // -----------------------------------------------------------------------
-inline void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
+void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
    // Calculate the ending frame pointer value
    uInt8* ending = myFramePointer + clocksToUpdate;
