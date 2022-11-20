@@ -9,6 +9,7 @@
 #include "Cart.hxx"
 #include "bgHighScore.h"
 #include "bgBottom.h"
+#include "printf.h"
 
 #define MAX_HS_GAMES    1000
 #define HS_VERSION      0x0001

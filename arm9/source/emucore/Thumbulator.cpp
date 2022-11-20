@@ -29,7 +29,6 @@
 #include "Thumbulator.hxx"
 
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
-uInt32 cpsr          __attribute__((section(".dtcm"))) = 0;
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
 uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
@@ -157,6 +156,14 @@ inline void Thumbulator::do_vflag_bit ( uInt32 x )
   vFlag = x;
 }
 
+
+// ------------------------------------------------------------------------
+// Somewhere between 10-20% of instructions modify the R15 PC register 
+// so we default to not updating it unless we know we're using it.
+// This produces a small but meaningful speed-up of Thumb processing...
+// ------------------------------------------------------------------------
+#define FIX_R15_PC reg_sys[15] = ((u32) (thumb_ptr - rom) << 1) + 3;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void Thumbulator::execute ( void )
 {
@@ -165,11 +172,11 @@ ITCM_CODE void Thumbulator::execute ( void )
          rd,rs;
   uInt32 rm, rn;
   uInt32 ZNflags = 0x00000000;
-  register uInt16 *ptr = &rom[(reg_sys[15]-2) >> 1];
+  register uInt16 *thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
+  register uInt32 inst;
   while (1)
   {
-      uInt16 inst = *ptr++;
-      reg_sys[15] += 2;
+      inst = *thumb_ptr++;
 
       if ((inst & 0x8000) == 0)
       {
@@ -281,9 +288,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                         {
                           rc>>=8;
                         }
-                        else
-                        {
-                        }
                         write_register(rd,rc&0xFF);
                         continue;
                       }
@@ -326,9 +330,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                         if(rb&1)
                         {
                           rc>>=8;
-                        }
-                        else
-                        {
                         }
                         rc&=0xFF;
                         if(rc&0x80) rc|=((~0)<<8);
@@ -391,6 +392,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                       //LDR(3)
                       if((inst&0xF800)==0x4800)
                       {
+                        FIX_R15_PC
                         rb=(inst>>0)&0xFF;
                         rd=(inst>>8)&0x07;
                         rb<<=2;
@@ -449,6 +451,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                         rc=read_register(rm);
                         if (rd==15) rc+=2; // fxq fix for MOV R15
                         write_register(rd,rc);
+                        if (rd==15) thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                         continue;
                       }
 
@@ -469,19 +472,19 @@ ITCM_CODE void Thumbulator::execute ( void )
                       //BX
                       if((inst&0xFF87)==0x4700)
                       {
+                        FIX_R15_PC  
                         rm=(inst>>3)&0xF;
                         rc=read_register(rm);
                         rc+=2;
                         if(rc&1)
                         {
                           write_register(15,rc);
-                          ptr = &rom[(reg_sys[15]-2) >> 1];
+                          thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                           continue;
                         }
                         else
                         {
                           //fprintf(stderr,"cannot branch to arm 0x%08X 0x%04X\n",pc,inst);
-                          // fxq: or maybe this one??
                           break;
                         }
                       }
@@ -759,6 +762,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                       //BLX(2)
                       if((inst&0xFF87)==0x4780)
                       {
+                        FIX_R15_PC  
                         rm=(inst>>3)&0xF;
                         rc=read_register(rm);
                         rc+=2;
@@ -766,7 +770,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                         {
                           write_register(14,reg_sys[15]-2);
                           write_register(15,rc);
-                          ptr = &rom[(reg_sys[15]-2) >> 1];
+                          thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                           continue;
                         }
                         else
@@ -998,168 +1002,153 @@ ITCM_CODE void Thumbulator::execute ( void )
               {
                 rb=(inst>>0)&0xFF;
                 if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                ra=(inst>>8)&0xF;
-                switch(ra)
+                switch(inst & 0xF00)
                 {
-                  case 0x0: //b eq  z set
+                  case 0x000: //b eq  z set
                     if (!ZNflags)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x1: //b ne  z clear
+                  case 0x100: //b ne  z clear
                     if (ZNflags)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x2: //b cs c set
+                  case 0x200: //b cs c set
                     if(cFlag)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x3: //b cc c clear
+                  case 0x300: //b cc c clear
                     if(!(cFlag))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x4: //b mi n set
+                  case 0x400: //b mi n set
                     if((ZNflags&0x80000000))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x5: //b pl n clear
+                  case 0x500: //b pl n clear
                     if(!((ZNflags&0x80000000)))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x6: //b vs v set
+                  case 0x600: //b vs v set
                     if(vFlag)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x7: //b vc v clear
+                  case 0x700: //b vc v clear
                     if(!(vFlag))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x8: //b hi c set z clear
+                  case 0x800: //b hi c set z clear
                     if((cFlag)&&(ZNflags))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0x9: //b ls c clear or z set
+                  case 0x900: //b ls c clear or z set
                     if((!ZNflags)||(!(cFlag)))
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0xA: //b ge N == V
+                  case 0xA00: //b ge N == V
                     ra=0;
                     if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                    if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
+                    else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
                     if(ra)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0xB: //b lt N != V
+                  case 0xB00: //b lt N != V
                     ra=0;
                     if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                    if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
+                    else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
                     if(ra)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0xC: //b gt Z==0 and N == V
+                  case 0xC00: //b gt Z==0 and N == V
                     ra=0;
                     if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                    if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
+                    else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
                     if(!ZNflags) ra=0;
                     if(ra)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0xD: //b le Z==1 or N != V
+                  case 0xD00: //b le Z==1 or N != V
                     ra=0;
                     if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                    if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
-                    if(!ZNflags) ra++;
+                    else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
+                    else if(!ZNflags) ra++;
                     if(ra)
                     {
-                      rb<<=1;
-                      rb+=reg_sys[15];
-                      ptr = &rom[rb >> 1];
-                      write_register(15,rb+2);
+                        FIX_R15_PC
+                        reg_sys[15] += (rb+1) << 1;
+                        thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                     }
                     continue;
 
-                  case 0xE:
+                  case 0xE00:
                     //undefined instruction
                     break;
 
-                  case 0xF:
+                  case 0xF00:
                     //swi
                     break;
                 }
@@ -1169,18 +1158,18 @@ ITCM_CODE void Thumbulator::execute ( void )
               //B(2) unconditional branch
               if((inst&0xF800)==0xE000)
               {
+                FIX_R15_PC
                 rb=(inst>>0)&0x7FF;
-                if(rb&(1<<10))
-                  rb|=(~0)<<11;
-                rb<<=1;
-                reg_sys[15] += (rb+2);
-                ptr = &rom[(reg_sys[15]-2) >> 1];
+                if(rb&(1<<10))  rb|=(~0)<<11;   // Sign extended
+                reg_sys[15] += (rb+1) << 1;
+                thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                 continue;
               }
 
               //BL/BLX(1)
               if((inst&0xE000)==0xE000) //BL,BLX
               {
+                FIX_R15_PC  
                 if((inst&0x1800)==0x1000) //H=b10
                 {
                   halfadd=inst;
@@ -1198,7 +1187,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rb+=reg_sys[15];
                   write_register(14,reg_sys[15]-2);
                   write_register(15,rb);
-                  ptr = &rom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                   continue;
                 }
                 else if((inst&0x1800)==0x0800) //H=b01
@@ -1293,10 +1282,11 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
                 if(inst&0x100)
                 {
+                  FIX_R15_PC  
                   rc=readRAM32(sp);
                   rc+=2;
                   write_register(15,rc);
-                  ptr = &rom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                   sp+=4;
                 }
                 write_register(13,sp);
@@ -1482,6 +1472,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               //ADD(5) rd = pc plus immediate
               if((inst&0xF800)==0xA000)
               {
+                FIX_R15_PC
                 rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x7;
                 rb<<=2;
@@ -1520,12 +1511,9 @@ ITCM_CODE void Thumbulator::execute ( void )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE int Thumbulator::reset ( void )
 {
-  cpsr=CPSR_T|CPSR_I|CPSR_F|MODE_SVC;
-    
   reg_sys[13]=0x40001fb4; //sp
   reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)
   reg_sys[15]=0x00000c0b; // entry point of 0xc09+2
-  //  reg_sys[15]+=2;
 
   return 0;
 }

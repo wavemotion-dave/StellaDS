@@ -26,6 +26,7 @@
 #include <fstream>
 
 #include "System.hxx"
+#include "../printf.h"
 #include "MT24LC256.hxx"
 
 #define DEBUG_EEPROM 0

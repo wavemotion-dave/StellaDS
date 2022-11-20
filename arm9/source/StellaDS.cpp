@@ -21,6 +21,7 @@
 
 #include "StellaDS.h"
 
+#include "printf.h"
 #include "bgBottom.h"
 #include "bgTop.h"
 #include "bgFileSel.h"
@@ -1824,5 +1825,7 @@ void vcsFindFiles(void)
     qsort (vcsromlist, countvcs, sizeof (FICA2600), a26Filescmp);
   }
 }
+
+void _putchar(char character) {};   // Not used but needed to link printf()
 
 // End of file

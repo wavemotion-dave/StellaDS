@@ -33,7 +33,7 @@ uInt16 myStartBank = 5;
 #define MEM_5KB  (1024 * 5)
 #define MEM_24KB (1024 * 24)
 
-Thumbulator *myThumbEmulator = NULL;
+Thumbulator *myThumbEmulator __attribute__((section(".dtcm"))) = NULL;
 
 // The counter registers for the data fetchers
 bool   myFastFetch        __attribute__((section(".dtcm"))) = 0;

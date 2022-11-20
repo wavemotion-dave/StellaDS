@@ -10,6 +10,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include "StellaDS.h"
+#include "printf.h"
 #include "Console.hxx"
 #include "Cart.hxx"
 #include "config.h"
