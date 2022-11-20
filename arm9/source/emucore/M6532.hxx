@@ -29,7 +29,7 @@ class System;
 #include "bspf.hxx"
 #include "Device.hxx"
 
-// An amazing 128 bytes of RAM
+// An amazing 128 bytes of RAM plus 128 more for the SARA carts
 extern uInt8 myRAM[256];
 
 /**

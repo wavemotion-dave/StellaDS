@@ -389,7 +389,8 @@ const CartInfo table[] =
     {"690a6049db78b9400c13521646708e9c",  "CNEXAR", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  9},    // Challenge of.... Nexar (1982) (PAL).bin
     {"ace319dc4f76548659876741a6690d57",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Championship Soccer (1980).bin
     {"7a09299f473105ae1ef3ad6f9f2cd807",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   43,    245,    71,   0,  0},    // Championship Soccer (1980) (PAL).bin
-    {"1160721a4a98bc0ca5a7b61a91cb8e9a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  1},    // Chaotic Grill    
+    {"1160721a4a98bc0ca5a7b61a91cb8e9a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  1},    // Chaotic Grill - 2021
+    {"78a916081b350b9678255824b9c9ffaa",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  2},    // Chaotic Grill - 2022    
     {"b34b470a41ef971832f05586f0e329ce",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Charge_rev1.bin
     {"3e33ac10dcf2dff014bc1decf8a9aea4",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // Chase the Chuckwagon (1983).bin
     {"3f5a43602f960ede330cd2f43a25139e",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   6,  2},    // Checkers (1980).bin

@@ -791,28 +791,28 @@ ITCM_CODE uInt8 M6502Low::peek_Fetch(uInt8 address)
         break;
            
     case 0x0010:
-        if (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[0]) return myDisplayImageDPCP[myCounters[0]++]; else {myCounters[0]++;return 0;}
+        if (((myTops[0]-(myCounters[0] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[0]) return myDisplayImageDPCP[myCounters[0]++ & 0xFFF]; else {myCounters[0]++;return 0;}
         break;
     case 0x0011:
-        if (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[1]) return myDisplayImageDPCP[myCounters[1]++]; else {myCounters[1]++;return 0;}
+        if (((myTops[1]-(myCounters[1] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[1]) return myDisplayImageDPCP[myCounters[1]++ & 0xFFF]; else {myCounters[1]++;return 0;}
         break;
     case 0x0012:
-        if (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[2]) return myDisplayImageDPCP[myCounters[2]++]; else {myCounters[2]++;return 0;}
+        if (((myTops[2]-(myCounters[2] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[2]) return myDisplayImageDPCP[myCounters[2]++ & 0xFFF]; else {myCounters[2]++;return 0;}
         break;
     case 0x0013:
-        if (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[3]) return myDisplayImageDPCP[myCounters[3]++]; else {myCounters[3]++;return 0;}
+        if (((myTops[3]-(myCounters[3] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[3]) return myDisplayImageDPCP[myCounters[3]++ & 0xFFF]; else {myCounters[3]++;return 0;}
         break;
     case 0x0014:
-        if (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[4]) return myDisplayImageDPCP[myCounters[4]++]; else {myCounters[4]++;return 0;}
+        if (((myTops[4]-(myCounters[4] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[4]) return myDisplayImageDPCP[myCounters[4]++ & 0xFFF]; else {myCounters[4]++;return 0;}
         break;
     case 0x0015:
         if (((myTops[5]-(myCounters[5] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[5]) return myDisplayImageDPCP[myCounters[5]++ & 0xFFF]; else {myCounters[5]++;return 0;}     // Chaotic Grill wraps this one for the title screen...
         break;
     case 0x0016:
-        if (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[6]) return myDisplayImageDPCP[myCounters[6]++]; else {myCounters[6]++;return 0;}
+        if (((myTops[6]-(myCounters[6] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[6]) return myDisplayImageDPCP[myCounters[6]++ & 0xFFF]; else {myCounters[6]++;return 0;}
         break;
     case 0x0017:
-        if (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[7]) return myDisplayImageDPCP[myCounters[7]++]; else {myCounters[7]++;return 0;}
+        if (((myTops[7]-(myCounters[7] & 0x00ff)) & 0xFF) > myTopsMinusBottoms[7]) return myDisplayImageDPCP[myCounters[7]++ & 0xFFF]; else {myCounters[7]++;return 0;}
         break;
           
     case 0x0018:
