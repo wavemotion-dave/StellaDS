@@ -1923,10 +1923,7 @@ case 0xa9:
   operand = peek_PC(PC++);
 #ifdef DPC_PLUS_FAST_FETCH
   extern bool myFastFetch;
-  if (myFastFetch) 
-  {
-      if (operand < 0x0028) operand = peek_Fetch(operand);
-  }
+  if (myFastFetch && (operand < 0x0028)) operand = peek_Fetch(operand); 
 #endif  
 }
 {

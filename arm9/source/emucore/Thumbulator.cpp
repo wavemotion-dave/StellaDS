@@ -61,22 +61,22 @@ ITCM_CODE void Thumbulator::run( void )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write16 ( uInt32 addr, uInt32 data )
 {
-  fast_cart_buffer[(addr&RAMADDMASK) >> 1] = data;
+  fast_cart_buffer[(addr>>1)^0x20000000] = data;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write32 ( uInt32 addr, uInt32 data )
 {
-    uInt32 *ptr = (uInt32*) &fast_cart_buffer[(addr&RAMADDMASK) >> 1];
-    *ptr = data;
+  uInt32 *ptr = (uInt32*) &fast_cart_buffer[(addr>>1)^0x20000000];
+  *ptr = data;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::read16 ( uInt32 addr )
 {
-  if (addr & 0xF0000000)
+  if (addr & 0x40000000)
   {
-      return fast_cart_buffer[(addr&RAMADDMASK) >> 1];
+      return fast_cart_buffer[(addr>>1)^0x20000000];
   }
   return rom[(addr) >> 1];
 }
@@ -86,9 +86,9 @@ inline uInt32 Thumbulator::read32 ( uInt32 addr )
 {
   uInt32 *ptr;
 
-  if (addr & 0xF0000000)
+  if (addr & 0x40000000)
   {
-      ptr = (uInt32*) &fast_cart_buffer[(addr&RAMADDMASK) >> 1];
+      ptr = (uInt32*) &fast_cart_buffer[(addr>>1)^0x20000000];
   }
   else
   {
@@ -109,7 +109,7 @@ inline uInt32 Thumbulator::readROM32 ( uInt32 addr )
 inline uInt32 Thumbulator::readRAM32 ( uInt32 addr )
 {
   uInt32 *ptr;
-  ptr = (uInt32*) &fast_cart_buffer[(addr&RAMADDMASK) >> 1];  
+  ptr = (uInt32*) &fast_cart_buffer[(addr>>1)^0x20000000];  
   return *ptr;    
 }
 
@@ -167,9 +167,7 @@ inline void Thumbulator::do_vflag_bit ( uInt32 x )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void Thumbulator::execute ( void )
 {
-  uInt32 sp, 
-         ra,rb,rc,
-         rd,rs;
+  uInt32 sp,ra,rb,rc,rd;
   uInt32 rm, rn;
   uInt32 ZNflags = 0x00000000;
   register uInt16 *thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
@@ -228,9 +226,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                     if(rb&1)
                     {
                       rc>>=8;
-                    }
-                    else
-                    {
                     }
                     write_register(rd,rc&0xFF);
                     continue;
@@ -348,7 +343,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                         write_register(rd,rc);
                         continue;
                       }
-                      
 
                       //STR(2)
                       if((inst&0xFE00)==0x5000)
@@ -361,7 +355,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                         write32(rb,rc);
                         continue;
                       }
-
 
                       //STRH(2)
                       if((inst&0xFE00)==0x5200)
@@ -522,9 +515,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                       if((inst&0xFFC0)==0x4100)
                       {
                         rd=(inst>>0)&0x07;
-                        rs=(inst>>3)&0x07;
+                        ra=(inst>>3)&0x07;
                         rc=read_register(rd);
-                        rb=read_register(rs);
+                        rb=read_register(ra);
                         rb&=0xFF;
                         if(rb==0)
                         {
@@ -669,9 +662,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                       if((inst&0xFFC0)==0x4080)
                       {
                         rd=(inst>>0)&0x07;
-                        rs=(inst>>3)&0x07;
+                        ra=(inst>>3)&0x07;
                         rc=read_register(rd);
-                        rb=read_register(rs);
+                        rb=read_register(ra);
                         rb&=0xFF;
                         if(rb==0)
                         {
@@ -700,9 +693,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                       if((inst&0xFFC0)==0x40C0)
                       {
                         rd=(inst>>0)&0x07;
-                        rs=(inst>>3)&0x07;
+                        ra=(inst>>3)&0x07;
                         rc=read_register(rd);
-                        rb=read_register(rs);
+                        rb=read_register(ra);
                         rb&=0xFF;
                         if(rb==0)
                         {
@@ -732,14 +725,11 @@ ITCM_CODE void Thumbulator::execute ( void )
                       if((inst&0xFFC0)==0x41C0)
                       {
                         rd=(inst>>0)&0x7;
-                        rs=(inst>>3)&0x7;
+                        ra=(inst>>3)&0x7;
                         rc=read_register(rd);
-                        ra=read_register(rs);
+                        ra=read_register(ra);
                         ra&=0xFF;
-                        if(ra==0)
-                        {
-                        }
-                        else
+                        if(!ra)
                         {
                           ra&=0x1F;
                           if(ra==0)
@@ -804,19 +794,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 continue;
               }
 
-              //SUB(3)
-              if((inst&0xFE00)==0x1A00)
-              {
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                reg_sys[rd]=reg_sys[rn]-reg_sys[rm];
-                do_znflags(reg_sys[rd]);
-                do_cflag(reg_sys[rn],~reg_sys[rm],1);
-                do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
-                continue;
-              }
-
               //CMP(1) compare immediate
               if((inst&0xF800)==0x2800)
               {
@@ -852,6 +829,20 @@ ITCM_CODE void Thumbulator::execute ( void )
                 do_znflags(rb);
                 continue;
               }
+              
+              //SUB(3)
+              if((inst&0xFE00)==0x1A00)
+              {
+                rd=(inst>>0)&0x7;
+                rn=(inst>>3)&0x7;
+                rm=(inst>>6)&0x7;
+                reg_sys[rd]=reg_sys[rn]-reg_sys[rm];
+                do_znflags(reg_sys[rd]);
+                do_cflag(reg_sys[rn],~reg_sys[rm],1);
+                do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
+                continue;
+              }
+
 
               //ASR(1) two register immediate
               if((inst&0xF800)==0x1000)
@@ -1154,7 +1145,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               }
 
-
               //B(2) unconditional branch
               if((inst&0xF800)==0xE000)
               {
@@ -1240,8 +1230,42 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           }
           else
-          {
+          {              
+              //POP
+              if((inst&0xFE00)==0xBC00)
+              {
+                  if (inst & 0x001) {reg_sys[0] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x002) {reg_sys[1] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x004) {reg_sys[2] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x008) {reg_sys[3] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x010) {reg_sys[4] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x020) {reg_sys[5] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x040) {reg_sys[6] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x080) {reg_sys[7] =  readRAM32(reg_sys[13]); reg_sys[13] += 4;}
+                  if (inst & 0x100) 
+                  {
+                      reg_sys[15] = readRAM32(reg_sys[13]) + 2; 
+                      reg_sys[13] += 4;
+                      thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
+                  }
+                  continue;
+              }
 
+              //PUSH
+              if((inst&0xFE00)==0xB400)
+              {
+                  if (inst & 0x100) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[14]);}
+                  if (inst & 0x080) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[7]);}
+                  if (inst & 0x040) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[6]);}
+                  if (inst & 0x020) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[5]);}
+                  if (inst & 0x010) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[4]);}
+                  if (inst & 0x008) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[3]);}
+                  if (inst & 0x004) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[2]);}
+                  if (inst & 0x002) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[1]);}
+                  if (inst & 0x001) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[0]);}
+                  continue;
+              }
+              
               //LDR(4)
               if((inst&0xF800)==0x9800)
               {
@@ -1268,62 +1292,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 continue;
               }              
               
-              //POP
-              if((inst&0xFE00)==0xBC00)
-              {
-                sp=read_register(13);
-                for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-                {
-                  if(inst&rb)
-                  {
-                    write_register(ra,readRAM32(sp));
-                    sp+=4;
-                  }
-                }
-                if(inst&0x100)
-                {
-                  FIX_R15_PC  
-                  rc=readRAM32(sp);
-                  rc+=2;
-                  write_register(15,rc);
-                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                  sp+=4;
-                }
-                write_register(13,sp);
-                continue;
-              }
-
-              //PUSH
-              if((inst&0xFE00)==0xB400)
-              {
-                sp=read_register(13);
-                for(ra=0,rb=0x01,rc=0;rb;rb=(rb<<1)&0xFF,ra++)
-                {
-                  if(inst&rb)
-                  {
-                    rc++;
-                  }
-                }
-                if(inst&0x100) rc++;
-                rc<<=2;
-                sp-=rc;
-                rd=sp;
-                for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
-                {
-                  if(inst&rb)
-                  {
-                    write32(rd,read_register(ra));
-                    rd+=4;
-                  }
-                }
-                if(inst&0x100)
-                {
-                  write32(rd,read_register(14));
-                }
-                write_register(13,sp);
-                continue;
-              }
-              
               //STRH(1)
               if((inst&0xF800)==0x8000)
               {
@@ -1349,17 +1317,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 continue;
               }
 
-              //ADD(7) sp plus immediate
-              if((inst&0xFF80)==0xB000)
-              {
-                rb=(inst>>0)&0x7F;
-                rb<<=2;
-                ra=read_register(13);
-                rc=ra+rb;
-                write_register(13,rc);
-                continue;
-              }
-          
               //LDRH(1)
               if((inst&0xF800)==0x8800)
               {
@@ -1370,6 +1327,17 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rb=read_register(rn)+rb;
                 rc=read16(rb);
                 write_register(rd,rc&0xFFFF);
+                continue;
+              }
+              
+              //ADD(7) sp plus immediate
+              if((inst&0xFF80)==0xB000)
+              {
+                rb=(inst>>0)&0x7F;
+                rb<<=2;
+                ra=read_register(13);
+                rc=ra+rb;
+                write_register(13,rc);
                 continue;
               }
               
@@ -1513,7 +1481,7 @@ ITCM_CODE int Thumbulator::reset ( void )
 {
   reg_sys[13]=0x40001fb4; //sp
   reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)
-  reg_sys[15]=0x00000c0b; // entry point of 0xc09+2
+  reg_sys[15]=0x00000c0b; //pc entry point of 0xc09+2
 
   return 0;
 }
