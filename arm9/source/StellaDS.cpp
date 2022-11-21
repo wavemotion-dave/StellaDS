@@ -1643,6 +1643,9 @@ ITCM_CODE void dsMainLoop(void)
                         dsDisplayButton(10+myCartInfo.left_difficulty);
                         dsDisplayButton(12+myCartInfo.right_difficulty);
                         ShowStatusLine();
+                        bInitialDiffSet=true;
+                        dampen=0;
+                        continue;
                     }
                     else 
                     { 
