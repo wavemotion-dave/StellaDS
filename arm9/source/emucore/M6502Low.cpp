@@ -266,7 +266,8 @@ void M6502Low::execute_F8(uInt16 number)
     uInt16 operandAddress;
     uInt8 operand;
     
-    debug[0]++;
+    NumberOfDistinctAccesses = 0; // Snake Oil
+    
     // Clear all of the execution status bits except for the fatal error bit
     myExecutionStatus = 0;
 
