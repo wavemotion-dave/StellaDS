@@ -177,10 +177,15 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V5.9 : 21-Nov-2022 by Dave Bernazzani (wavemotion)
+  * Minor fixes for some games to render them more accurately including the new Chaotic Grill homebrew.
+  * Improved ARM Thumbulator for another frame of performance.
+  * Minor cleanups and optimizations across the board.
+  
 V5.8 : 21-Oct-2022 by Dave Bernazzani (wavemotion)
   * Fixed colors in Medieval Mayhem (and a few other games).
   * Fixed stars to show properly in Stay Frosty and Rabbit Transit.
-  * Streamlined DPC+ so Space Rocks and Stay Frosty 2 are full speed.
+  * Streamlined DPC+ so Space Rocks and Stay Frosty 2 are nearly full speed.
   * Minor cleanups and optmizations across the board.
   
 V5.7 : 18-Oct-2022 by Dave Bernazzani (wavemotion)

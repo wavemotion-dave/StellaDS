@@ -46,7 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "5.8"
+#define VERSION "5.9"
 
 //#define WRITE_TWEAKS
 
