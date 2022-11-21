@@ -37,7 +37,7 @@
 
 #define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
-extern uInt16 gTotalAtariFrames;
+extern uInt32 gTotalAtariFrames;
 
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
@@ -103,8 +103,8 @@ uInt8   myRESMP1                    __attribute__((section(".dtcm")));
 uInt32  myEnabledObjects            __attribute__((section(".dtcm")));
 uInt32  myCurrentGRP0               __attribute__((section(".dtcm")));
 uInt32  myCurrentGRP1               __attribute__((section(".dtcm")));
-uInt8   myVSYNC                     __attribute__((section(".dtcm")));
-uInt8   myVBLANK                    __attribute__((section(".dtcm")));
+uInt32  myVSYNC                     __attribute__((section(".dtcm")));
+uInt32  myVBLANK                    __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   myM1CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
@@ -2415,9 +2415,9 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
      {
        uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
        if(meo1 & *mBL++)                enabled |= myBLBit;
-       if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+       if(myCurrentGRP1 & *mP1++)       enabled |= myP1Bit;
        if(meo2 & *mM1++)                enabled |= myM1Bit;
-       if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+       if(myCurrentGRP0 & *mP0++)       enabled |= myP0Bit;
        if(meo3 & *mM0++)                enabled |= myM0Bit;
        HANDLE_COLOR_AND_COLLISIONS;
      }
@@ -2499,9 +2499,11 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         // reason to blank the memory which can be time consuming... so check the flag for the cart
         // currently being emulated...
         // -------------------------------------------------------------------------------------------
-        if (myCartInfo.vblankZero) 
+        static u8 vBlankZeroCounter;
+        if (myCartInfo.vblankZero || ++vBlankZeroCounter & 0x20)    // Every 32 frames (roughly half a second) we will do a proper vBlank despite the cartInfo
         {
             memset(myFramePointer, 0x00, clocksToUpdate);
+            if (vBlankZeroCounter & 1) vBlankZeroCounter = 0;       // This ensures we do 2 frames in a row of clearing as some games display different data on alternate frames
         }
         myFramePointer += clocksToUpdate;
     }
@@ -3005,19 +3007,19 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x07:    // Color-Luminance Player 1
     {
-      myColor[MYCOLUP1] = *((uInt32 *)0x068A1000 + value);
+      myColor[MYCOLUP1] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
       break;
     }
 
     case 0x08:    // Color-Luminance Playfield
     {
-      myColor[MYCOLUPF] = *((uInt32 *)0x068A1000 + value);
+      myColor[MYCOLUPF] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
       break;
     }
 
     case 0x09:    // Color-Luminance Background
     {
-      myColor[MYCOLUBK] = *((uInt32 *)0x068A1000 + value);
+      myColor[MYCOLUBK] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
       break;
     }
 

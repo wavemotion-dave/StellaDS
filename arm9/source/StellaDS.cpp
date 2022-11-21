@@ -87,10 +87,10 @@ uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
 char bScreenRefresh __attribute__((section(".dtcm"))) = 0;
+uInt32 gTotalAtariFrames __attribute__((section(".dtcm"))) = 0;
 
 static uInt8 full_speed=0;
 static uInt8 fpsDisplay = false;
-uInt16 gTotalAtariFrames=0;
 
 uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 

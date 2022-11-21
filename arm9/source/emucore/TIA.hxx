@@ -99,8 +99,8 @@ extern    Int32 myClockStopDisplay;
 extern    Int32 myClockAtLastUpdate;
 extern    Int32 myClocksToEndOfScanLine;
 extern    uInt16 myMaximumNumberOfScanlines;
-extern    uInt8 myVSYNC;                        // Holds the VSYNC register value
-extern    uInt8 myVBLANK;                       // Holds the VBLANK register value
+extern    uInt32 myVSYNC;                        // Holds the VSYNC register value
+extern    uInt32 myVBLANK;                       // Holds the VBLANK register value
 extern    Int32 myLastHMOVEClock;
 extern    uInt8 myHMOVEBlankEnabled;
 extern    uInt8 myAllowHMOVEBlanks;
