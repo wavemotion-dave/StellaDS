@@ -1525,11 +1525,11 @@ const CartInfo table[] =
     {"2447e17a4e18e6b609de498fe4ab52ba",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // RealSports Soccer (1983).bin
     {"0e7e73421606873b544e858c59dc283e",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // RealSports Soccer (1983).bin
     {"b9336ed6d94a5cc81a16483b0a946a73",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   54,    245,    72,   0, 10},    // RealSports Soccer (1983) (PAL).bin
-    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"3e7d10d0a911afc4b492d06c99863e65",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"53b66f11f67c3b53b2995e0e02017bd7",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"517923e655755086a3b72c0b17b430e6",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
-    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"3e7d10d0a911afc4b492d06c99863e65",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"53b66f11f67c3b53b2995e0e02017bd7",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"517923e655755086a3b72c0b17b430e6",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
+    {"dac5c0fe74531f077c105b396874a9f1",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // RealSports Tennis (1983).bin
     {"4e66c8e7c670532569c70d205f615dad",  "REALTE", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,    94,   0,  0},    // RealSports Tennis (1983) (PAL).bin
     {"aed0b7bd64cc384f85fdea33e28daf3b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // RealSports Volleyball (1982).bin
     {"cbc373fbcb1653b4c56bfabba33ea50d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // RealSports Volleyball (1982).bin
