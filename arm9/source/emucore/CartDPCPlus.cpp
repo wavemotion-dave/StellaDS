@@ -122,7 +122,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   myFastFetch = false;
 
   // Create Thumbulator ARM emulator
-  myThumbEmulator = new Thumbulator((uInt16*)(myProgramImage-0xC00));
+  myThumbEmulator = new Thumbulator((uInt16*)(myProgramImage-MEM_3KB));
   
   myFractionalLowMask = (myCartInfo.special == SPEC_OLDDPCP) ? 0x0F0000 : 0x0F00FF;  
         
@@ -132,7 +132,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPCPlus::~CartridgeDPCPlus()
 {
-  
+   if (myThumbEmulator) delete myThumbEmulator;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

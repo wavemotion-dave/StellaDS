@@ -97,16 +97,18 @@ static void ApplyOptions(void)
 {
     extern u8 bScreenRefresh;
     bScreenRefresh = 1;
+    extern uInt32 bSafeThumb;
+    bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);
 }
 
 
 static void SetDefaultGameConfig(void)
 {
+    memset(&allConfigs, 0x00, sizeof(allConfigs));
     // Init the entire database
     for (int slot=0; slot<MAX_CONFIGS; slot++)
     {
         strcpy(allConfigs.cart[slot].md5, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        // TBD - do more.
     }
 }
 
@@ -134,9 +136,8 @@ void LoadConfig(void)
     if (bInitDatabase)
     {
         dsPrintValue(0,1,0, (char*)"PLEASE WAIT...");
-        memset(&allConfigs, 0x00, sizeof(allConfigs));
-        allConfigs.config_ver = CONFIG_VER;
         SetDefaultGameConfig();
+        allConfigs.config_ver = CONFIG_VER;
         SaveConfig(FALSE);
         dsPrintValue(0,1,0, (char*)"              ");
     }
@@ -167,7 +168,7 @@ const struct options_t Game_Option_Table[] =
     {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
     {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY", "FF HALF MODE"},                                                                                   &myCartInfo.frame_mode,          5},
     {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
-    {"SOUND",       0, {"ON", "OFF (MUTE)"},                                                                                                                                           &myCartInfo.sound_mute,          2},
+    {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ"},                                                                                                         &myCartInfo.soundQuality,        5},
     {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE"},                                                                                            &myCartInfo.aButton,             6},
     {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE"},                                                                                            &myCartInfo.bButton,             6},
     {"X BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE"},                                                                                            &myCartInfo.xButton,             6},
@@ -180,7 +181,8 @@ const struct options_t Game_Option_Table[] =
     {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                 &myCartInfo.screenScale,         1},
     {"X OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.xOffset,             1},
     {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.yOffset,             1},
-    
+    {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL"},                                                                                                                           &myCartInfo.thumbOptimize,       3},
+   
     {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
 };
 

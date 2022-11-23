@@ -62,8 +62,7 @@ uInt8 tv_type_requested = NTSC;
 uInt8 gSaveKeyEEWritten = false;
 uInt8 gSaveKeyIsDirty = false;
 
-uInt16 mySoundFreq = 22050;
-uInt16 origSoundFreq = 22050;
+uInt16 mySoundFreq = 20933;
 
 #define MAX_DEBUG 39
 Int32 debug[MAX_DEBUG]={0};
@@ -212,12 +211,18 @@ void dsInitScreenMain(void)
     SetYtrigger(190); //trigger 2 lines before vsync
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
-    vramSetBankE(VRAM_E_LCD);                // Not using this for video but 64K of faster RAM always useful! Mapped at 0x06880000
-    vramSetBankI(VRAM_I_LCD);                // Not using this for video but 16K of faster RAM always useful! Mapped at 0x068A0000
+    
+    vramSetBankD(VRAM_D_LCD );    // Not using this for video but 128K of faster RAM always useful! Mapped at 0x06860000
+    vramSetBankE(VRAM_E_LCD );    // Not using this for video but 64K of faster RAM always useful!  Mapped at 0x06880000
+    vramSetBankF(VRAM_F_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06890000
+    vramSetBankG(VRAM_G_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06894000
+    vramSetBankH(VRAM_H_LCD );    // Not using this for video but 32K of faster RAM always useful!  Mapped at 0x06898000
+    vramSetBankI(VRAM_I_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x068A0000
+    
     WAITVBL;
 }
 
-ITCM_CODE void dsInitTimer(void)
+void dsInitTimer(void)
 {
     TIMER0_DATA=0;
     TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
@@ -535,15 +540,15 @@ bool dsLoadGame(char *filename)
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         irqSet(IRQ_TIMER2, Tia_process);
         
-        if (myCartInfo.sound_mute)
-        {
-            irqDisable(IRQ_TIMER2);
-            fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
-        }
-        else
+        if (myCartInfo.soundQuality)
         {
             irqEnable(IRQ_TIMER2);
             fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+        }
+        else    // Mute
+        {
+            irqDisable(IRQ_TIMER2);
+            fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
         }
 
         // Center all paddles...
@@ -928,7 +933,7 @@ unsigned int dsWaitOnMenu(unsigned int actState)
   return uState;
 }
 
-ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
+void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
   u16 *pusEcran,*pusMap;
   u16 usCharac;
@@ -963,15 +968,12 @@ void dsInstallSoundEmuFIFO(void)
     {
         aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
-        mySoundFreq = 22050;
     }
     else
     {
         aptr = (uint16*)((uint32)&sound_buffer[0] + 0x00400000); 
         bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000); 
-        mySoundFreq = 11025;
     }
-    origSoundFreq = mySoundFreq;
     
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
@@ -1565,7 +1567,7 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         WAITVBL;
                     }
-                    if (!myCartInfo.sound_mute)
+                    if (myCartInfo.soundQuality)
                     {
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
@@ -1649,7 +1651,7 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     else 
                     { 
-                        if (!myCartInfo.sound_mute)
+                        if (myCartInfo.soundQuality)
                         {
                             irqEnable(IRQ_TIMER2);
                             fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
@@ -1665,7 +1667,7 @@ ITCM_CODE void dsMainLoop(void)
                     {
                         WAITVBL;
                     }
-                    if (!myCartInfo.sound_mute)
+                    if (myCartInfo.soundQuality)
                     {
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
@@ -1721,7 +1723,7 @@ ITCM_CODE void dsMainLoop(void)
                         WAITVBL;
                     }
                     
-                    if (!myCartInfo.sound_mute)
+                    if (myCartInfo.soundQuality)
                     {
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }

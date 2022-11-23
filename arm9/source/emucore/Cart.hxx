@@ -61,16 +61,29 @@ struct CartInfo
   uInt8 bButton;
   uInt8 xButton;
   uInt8 yButton;
-  uInt8 sound_mute;
+  uInt8 soundQuality;
   uInt8 left_difficulty;
   uInt8 right_difficulty;
-  uInt8 spare1;
-  uInt8 spare2;
+  uInt8 thumbOptimize;
+  uInt8 spare1_0;
+  uInt8 spare2_0;
+  uInt8 spare3_0;
+  uInt8 spare4_0;
+  uInt8 spare5_0;
+  uInt8 spare6_0;
+  uInt8 spare7_0;
+  uInt8 spare8_0;
+  uInt8 spare1_1;
+  uInt8 spare2_1;
+  uInt8 spare3_1;
+  uInt8 spare1_FF;
+  uInt8 spare2_FF;
+  uInt8 spare3_FF;
 };
 
 extern CartInfo myCartInfo;
 
-#define MAX_FILE_SIZE   (1024 * 512)
+#define MAX_FILE_SIZE   (1024 * 512)            // ROMs can be up to 512K in size. This is equivilent to the Harmony Encore and ensures good future-proofing.
 extern uInt8  cart_buffer[MAX_FILE_SIZE];
 
 // Difficulty Switch defines
@@ -109,6 +122,8 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define SPEC_ALPHABM     9     // Patched for joystick use.
 #define SPEC_COOKIEM    10     // Patched for joystick use.
 #define SPEC_OLDDPCP    11     // For special "older" DPC+ handling
+#define SPEC_DPCPOPT    12     // Optmized ARM Thumb DPC+ handling
+#define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
 
 // Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode
@@ -179,6 +194,14 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BUTTON_JOY_LEFT     3
 #define BUTTON_JOY_RIGHT    4
 #define BUTTON_AUTOFIRE     5
+
+// Sound settings
+#define SOUND_MUTE          0
+#define SOUND_10KHZ         1
+#define SOUND_15KHZ         2
+#define SOUND_20KHZ         3
+#define SOUND_30KHZ         4
+
 
 /**
   A cartridge is a device which contains the machine code for a 
@@ -311,7 +334,6 @@ class Cartridge : public Device
     */
     static bool isProbablyFA2(const uInt8* image, uInt32 size);    
     
-
   private:
     // Copy constructor isn't supported by cartridges so make it private
     Cartridge(const Cartridge&);

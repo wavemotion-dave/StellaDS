@@ -76,7 +76,7 @@ class Thumbulator
     void run();
 
   private:
-    inline uInt32 read16 ( uInt32 addr );
+    inline uInt16 read16 ( uInt32 addr );
     inline uInt32 read32 ( uInt32 );
     inline uInt32 readRAM32 ( uInt32 );
     inline uInt32 readROM32 ( uInt32 );

@@ -71,7 +71,6 @@ uInt8 original_banking_detect = 0;
 
 uInt32 myCounters[8] __attribute__((section(".dtcm")));
 
-
 CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 PageAccess page_access __attribute__((section(".dtcm")));
 uInt32 myCurrentOffset __attribute__((section(".dtcm")));
@@ -607,7 +606,7 @@ const CartInfo table[] =
     {"2880c6b59bd54b153174676e465167c7",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Donkey Kong Junior (1983).bin
     {"2091af29b4e7b86914d79d9aaa4cbd20",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   66,    245,    97,   0,  0},    // Donkey Kong Junior (1983) (PAL).bin
     {"494cda91cc640551b4898c82be058dd9",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Donkey Kong VCS (PAL).bin    
-    {"f1ae6305fa33a948e36deb0ef12af852",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Donkey Kong VCS.bin
+    {"78c1759931d0f9ca877fc5eb2a25b61e",  "DKDPCP", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong DPC+.bin    
     {"33c843d1f2fce61582e8a7885c20bf2a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Dorothy X (2006) (Cameron Aubuchon,Tarick F. Khalaf, Daniel Stensland).bin
     {"7386004f9a5a7daf7e50ac8547088337",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // DOT.bin
     {"7e2fe40a788e56765fe56a3576019968",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  6},    // Double Dragon (1989).bin
@@ -840,7 +839,7 @@ const CartInfo table[] =
     {"f303630a2d7316787aecd67fff6b2e33",  "??????", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Gingerbread Man (2007).bin    
     {"37e828675d556775ae8285c0caf7d11c",  "??????", BANK_UA,   CTR_GENESIS,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Gingerbread Man (2007).bin (Sega Controller)    
     {"4359452274f008a339be7622efd68fe3",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Gizzle WAP
-    {"6d8b4f40a6e5ac9518f33927da52e135",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Gizzle Wizard
+    {"6d8b4f40a6e5ac9518f33927da52e135",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Gizzle Wizard
     {"5e0c37f534ab5ccc4661768e2ddf0162",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Glacier Patrol (1989).bin
     {"67cdde4176e0447fc45a71e0a1cdd288",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  7},    // Glacier Patrol (1989) (PAL).bin
     {"2d9e5d8d083b6367eda880e80dfdfaeb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Glib - Video Word Game (1983).bin
@@ -1617,7 +1616,7 @@ const CartInfo table[] =
     {"01297d9b450455dd716db9658efb2fae",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    89,   0,  0},    // Save Our Ship (Technovision) (PAL).bin
     {"e377c3af4f54a51b85efe37d4b7029e6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  23,    210,    82,   0,  3},    // Save the Whales (1983).bin
     {"fe641247a4ab9bee970e19ab55f23b25",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
-    {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble (final).bin
+    {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble (final).bin
     {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"3fe43915e5655cf69485364e9f464097",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
@@ -1775,9 +1774,9 @@ const CartInfo table[] =
     {"82e7aab602c378cffdd8186a099e807e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"1bef389e3dd2d4ca4f2f60d42c932509",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  2},    // Space Robot (Dimax - Sinmax) (PAL).bin
     {"c4d888bcf532e7c9c5fdeafbb145266a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Space Robot (Dimax - Sinmax) (PAL).bin
-    {"03db2942cfbea51633726853c81a7b17",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - Encore.bin
-    {"6fce528556f11a1721db8cfc95d5547a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - TE Encore.bin 
-    {"fe395b292e802ea16b3b5782b21ee686",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks.bin
+    {"03db2942cfbea51633726853c81a7b17",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - Encore.bin
+    {"6fce528556f11a1721db8cfc95d5547a",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks - TE Encore.bin 
+    {"fe395b292e802ea16b3b5782b21ee686",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  8},    // Space Rocks.bin
     {"898143773824663efe88d0a3a0bb1ba4",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983).bin
     {"4f6702c3ba6e0ee2e2868d054b00c064",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    92,   0,  0},    // Space Shuttle (1983) (PAL).bin
@@ -1885,7 +1884,7 @@ const CartInfo table[] =
     {"73c839aff6a055643044d2ce16b3aaf7",  "STARMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // StarMaster (1982) (PAL).bin
     {"00ce76ad69cdc2fa36ada01ae092d5a6",  "STARMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // StarMaster (1982) (PAL).bin
     {"c5bab953ac13dbb2cba03cd0684fb125",  "FROSTY", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    96,   0,  0},    // StayFrosty.bin
-    {"541cac55ebcf7891d9d51c415922303f",  "FROST2", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2.bin
+    {"541cac55ebcf7891d9d51c415922303f",  "FROST2", BANK_DPCP, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2.bin
     {"656dc247db2871766dffd978c71da80c",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
@@ -1897,6 +1896,7 @@ const CartInfo table[] =
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
     {"ef76ea05655a0b62cb1018c92b9b4b7d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
     {"807a8ff6216b00d52aba2dfea5d8d860",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // StratOGemsDeluxe.bin
+    {"42946b04e3dc90df3e9d61e3a9636326",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF, !VB,   HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Stratovox RC1.bin
     {"e10d2c785aadb42c06390fae0d92f282",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    72,   0,  0},    // Strawberry Shortcake (1983).bin
     {"516ffd008057a1d78d007c851e6eff37",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   51,    245,    72,   0,  0},    // Strawberry Shortcake (1983) (PAL).bin
     {"396f7bc90ab4fa4975f8c74abe4e81f0",  "??????", BANK_2K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Street Racer (1977).bin
@@ -2310,6 +2310,40 @@ Cartridge::~Cartridge()
 {
 }
 
+void SetOtherDatabaseFieldDefaults(void)
+{
+  myCartInfo.soundQuality = isDSiMode() ? SOUND_20KHZ:SOUND_10KHZ;    // DSi gets a default of 22050 Hz and older DS gets 11025 Hz
+
+  // A few of the DPC+ games need reduced sound to be playable (11025 Hz)
+  if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
+  if (strcmp(myCartInfo.gameID, "SPAROC") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
+  if (strcmp(myCartInfo.gameID, "SCRAMB") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
+    
+  myCartInfo.thumbOptimize = 0;
+  if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
+  if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 2;
+    
+  myCartInfo.aButton = BUTTON_FIRE;
+  myCartInfo.bButton = BUTTON_FIRE;
+  myCartInfo.xButton = BUTTON_FIRE;
+  myCartInfo.yButton = BUTTON_FIRE;
+
+  myCartInfo.spare1_0 = 0;    
+  myCartInfo.spare2_0 = 0;
+  myCartInfo.spare3_0 = 0;
+  myCartInfo.spare4_0 = 0;
+  myCartInfo.spare5_0 = 0;
+  myCartInfo.spare6_0 = 0;
+  myCartInfo.spare7_0 = 0;
+  myCartInfo.spare8_0 = 0;
+  myCartInfo.spare1_1 = 1;
+  myCartInfo.spare2_1 = 1;
+  myCartInfo.spare3_1 = 1;
+  myCartInfo.spare1_FF = 0xFF;
+  myCartInfo.spare2_FF = 0xFF;
+  myCartInfo.spare3_FF = 0xFF;
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 static char md5[33];
 uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
@@ -2325,11 +2359,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   else
       myCartInfo = table[0];
 
-  myCartInfo.sound_mute = 0;        
-  myCartInfo.aButton = BUTTON_FIRE;
-  myCartInfo.bButton = BUTTON_FIRE;
-  myCartInfo.xButton = BUTTON_FIRE;
-  myCartInfo.yButton = BUTTON_FIRE;
+  // These are the fields not set directly in the Database Entry
+  SetOtherDatabaseFieldDefaults();
     
   // -----------------------------------------------------------------------
   // Take a closer look at the ROM image and try to figure out its type
@@ -2354,17 +2385,16 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
         if (strcmp(entry->md5, md5) == 0)   // String compare...
         {
             myCartInfo = *entry;
-            myCartInfo.sound_mute = 0;        
-            myCartInfo.aButton = BUTTON_FIRE;
-            myCartInfo.bButton = BUTTON_FIRE;
-            myCartInfo.xButton = BUTTON_FIRE;
-            myCartInfo.yButton = BUTTON_FIRE;
+            
+            // These are the fields not set directly in the Database Entry
+            SetOtherDatabaseFieldDefaults();
+            
             bFound = true;
             break;
         }
       }
   }
-  else  // Even if found we search the internal database for the gameID and special entries
+  else  // Even if the entry was found in the config file, we search the internal database for the gameID and special entries
   {
       // First we'll see if its type is listed in the table above
       for(const CartInfo* entry = table; (entry->special != 99); ++entry)
@@ -2819,7 +2849,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "VANGRD") == 0) cartDriver = 2;
       if (strcmp(myCartInfo.gameID, "ZAXXON") == 0) cartDriver = 2;
       
-      if ((strcmp(myCartInfo.gameID, "ASTERD") == 0) || (strcmp(myCartInfo.gameID, "JUNGLE") == 0) || (strcmp(myCartInfo.gameID, "GALAXY") == 0) || (strcmp(myCartInfo.gameID, "BAZONE") == 0))
+      if ((strcmp(myCartInfo.gameID, "JUNGLE") == 0) || (strcmp(myCartInfo.gameID, "GALAXY") == 0) || (strcmp(myCartInfo.gameID, "BAZONE") == 0))
       {
           // Small speed-up
           myCartInfo.hBlankZero = 0; 
@@ -2912,11 +2942,13 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
 
   if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.right_difficulty = DIFF_A;   // Force Stay Frosty 2 to have no background music (can't render it properly and saves cycles)
     
-  original_banking_detect = myCartInfo.banking;
+  extern uInt32 bSafeThumb;
+  bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...
+  
+  original_banking_detect = myCartInfo.banking;     // In case the user wants to restore defaults - this brings back the original "guessed" banking scheme
   return myCartInfo.banking;
 }
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 int Cartridge::searchForBytes(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2)
 {
   uInt32 count = 0;
@@ -2931,7 +2963,6 @@ int Cartridge::searchForBytes(const uInt8* image, uInt32 size, uInt8 byte1, uInt
   return count;
 }
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 int Cartridge::searchForBytes3(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3)
 {
   uInt32 count = 0;
@@ -2946,7 +2977,6 @@ int Cartridge::searchForBytes3(const uInt8* image, uInt32 size, uInt8 byte1, uIn
   return count;
 }
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 int Cartridge::searchForBytes4(const uInt8* image, uInt32 size, uInt8 byte1, uInt8 byte2, uInt8 byte3, uInt8 byte4)
 {
   uInt32 count = 0;
@@ -2976,7 +3006,6 @@ int Cartridge::searchForBytes5(const uInt8* image, uInt32 size, uInt8 byte1, uIn
 }
 
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyFE(const uInt8* image, uInt32 size)
 {
@@ -3022,7 +3051,7 @@ bool Cartridge::isProbablyUA(const uInt8* image, uInt32 size)
 }
 
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablySC(const uInt8* image, uInt32 size)
 {
   // We assume a Superchip cart contains the same bytes for its entire
@@ -3056,13 +3085,13 @@ bool Cartridge::isProbably3F(const uInt8* image, uInt32 size)
   return (count > 2);
 }
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbably3E(const uInt8* image, uInt32 size)
 {
   return (searchForBytes(image, size, 0x85, 0x3E) > 2);
 }
 
-//ALEK - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyE0(const uInt8* image, uInt32 size)
 {
   // E0 cart bankswitching is triggered by accessing addresses
@@ -3249,7 +3278,7 @@ void CartSetDefaultFromInternalDatabase(void)
         myCartInfo.banking = original_banking_detect;
     }
     
-    if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default...
+    if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default... For a few games we will re-enable
     {
         myCartInfo.frame_mode = MODE_NO;    
     }
@@ -3257,9 +3286,5 @@ void CartSetDefaultFromInternalDatabase(void)
     // -----------------------------------------------------------
     // These are always defaulted as such from internal database
     // -----------------------------------------------------------
-    myCartInfo.sound_mute = 0;        
-    myCartInfo.aButton = BUTTON_FIRE;
-    myCartInfo.bButton = BUTTON_FIRE;
-    myCartInfo.xButton = BUTTON_FIRE;
-    myCartInfo.yButton = BUTTON_FIRE;
+    SetOtherDatabaseFieldDefaults();
 }

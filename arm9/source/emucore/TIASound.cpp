@@ -95,7 +95,7 @@ uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
 uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
 uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
-static uint8 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
+static uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
 
 /* Initialze the bit patterns for the polynomials. */
 
@@ -136,7 +136,7 @@ static uint32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n ma
 /* which has 8 binary digits to the right of the decimal point. */
 
 static uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-static int32  Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+static uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
@@ -172,7 +172,8 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 
    /* calculate the sample 'divide by N' value based on the playback freq. */
    Samp_n_max = (uint16)(((uint32)sample_freq<<8)/playback_freq);
-   Samp_n_cnt = 0;  /* initialize all bits of the sample counter */
+   debug[0]=Samp_n_max;
+   Samp_n_cnt = 256;  /* initialize all bits of the sample counter */
 
    /* initialize the local globals */
    for (chan = CHAN1; chan <= CHAN2; chan++)
@@ -362,20 +363,17 @@ ITCM_CODE void Tia_process (void)
        Samp_n_cnt -= 256;
 
        /* if the count down has reached zero */
-       if (Samp_n_cnt < 256)
-       {
-          /* adjust the sample counter */
-          Samp_n_cnt += Samp_n_max;
+       if (Samp_n_cnt & 0xFF00) continue;
+        
+      /* adjust the sample counter */
+      Samp_n_cnt += Samp_n_max;
 
-          /* calculate the latest output value and place in buffer
-             scale the volume by 128, since this is the default silence value
-             when using unsigned 8-bit samples in SDL */
-            uInt16 sample =  *((uInt16 *)0x068A0000 + ((uint16)Outvol[0] + (uint16)Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
-            *aptr = sample;
-            *bptr = sample;
-          /* and done! */
-          break;
-       }
+      /* calculate the latest output value and place in buffer
+         scale the volume by 128, since this is the default silence value
+         when using unsigned 8-bit samples in SDL */
+        *aptr = *bptr = *((uInt16 *)0x068A0000 + ((uint16)Outvol[0] + (uint16)Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+      /* and done! */
+      return;
     }
 }
 

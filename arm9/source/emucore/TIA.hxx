@@ -248,6 +248,8 @@ class TIA : public Device , public MediaSource
 
     // Update the current frame buffer for objects and collisions
     void handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos);
+    void handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos);
+    
 
     // Update the current frame buffer to the specified color clock
     void updateFrame(Int32 clock);
