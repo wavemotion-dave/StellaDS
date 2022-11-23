@@ -153,7 +153,7 @@ inline void CartridgeDPC::bank(uInt16 bank)
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeDPC::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
