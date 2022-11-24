@@ -84,6 +84,7 @@ class Thumbulator
     inline void write32 ( uInt32 addr, uInt32 data );
 
     inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
+    inline void do_cflag_fast ( uInt32 a, uInt32 b );    
     inline void do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c );
     inline void do_add_vflag ( uInt32 a, uInt32 b, uInt32 c );
     inline void do_cflag_bit ( uInt32 x );
