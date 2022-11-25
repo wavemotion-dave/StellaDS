@@ -172,7 +172,6 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 
    /* calculate the sample 'divide by N' value based on the playback freq. */
    Samp_n_max = (uint16)(((uint32)sample_freq<<8)/playback_freq);
-   debug[0]=Samp_n_max;
    Samp_n_cnt = 256;  /* initialize all bits of the sample counter */
 
    /* initialize the local globals */

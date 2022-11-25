@@ -1767,12 +1767,15 @@ case 0xf3:
 break;
 
 
-case 0x4c:
+case 0x4c:  // JMP
 {
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
+#ifdef DATA_STREAMS
+  if (operandAddress < 2) operandAddress = peek_JumpStream(operandAddress);
+#endif
   PC = operandAddress;
 }
 break;
@@ -1920,16 +1923,26 @@ break;
 
 case 0xa9:
 {
-  operand = peek_PC(PC++);
+  A = peek_PC(PC++);
+
 #ifdef DPC_PLUS_FAST_FETCH
   extern bool myFastFetch;
-  if (myFastFetch && (operand < 0x0028)) operand = peek_Fetch(operand); 
-#endif  
+  if (myFastFetch && (A < 0x0028)) A = peek_Fetch(A); 
+#endif
+
+#ifdef DATA_STREAMS
+  extern u8 myDataStreamFetch;
+  if (A < myDataStreamFetch)
+  {
+    uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (A << 2));
+    uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (A << 2));
+    A = myDisplayImageCDF[(*ptr >> 20)];
+    *ptr += (*inc << 12);
+  }
+#endif
 }
 {
-  A = operand;
-  notZ = A;
-  N = A;
+  notZ = N = A;
 }
 break;
 
@@ -1949,10 +1962,9 @@ case 0xb5:
   uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
-  operand = peek(address); 
+  A = peek(address); 
 }
 {
-  A = operand;
   notZ = A;
   N = A;
 }
@@ -1962,10 +1974,9 @@ case 0xad:
 {
   uInt16 address = peek_PC(PC++);
   address |= ((uInt16)peek_PC(PC++) << 8);
-  operand = peek(address);
+  A = peek(address);
 }
 {
-  A = operand;
   notZ = A;
   N = A;
 }
@@ -2008,10 +2019,9 @@ case 0xa1:
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
-  operand = peek(address);
+  A = peek(address);
 }
 {
-  A = operand;
   notZ = A;
   N = A;
 }
@@ -2036,10 +2046,9 @@ break;
 
 case 0xa2:
 {
-  operand = peek_PC(PC++);
+  X = peek_PC(PC++);
 }
 {
-  X = operand;
   notZ = X;
   N = X;
 }
@@ -2047,10 +2056,9 @@ break;
 
 case 0xa6:
 {
-  operand = peek(peek_PC(PC++));
+  X = peek(peek_PC(PC++));
 }
 {
-  X = operand;
   notZ = X;
   N = X;
 }
@@ -2061,10 +2069,9 @@ case 0xb6:
   uInt8 address = peek_PC(PC++);
   peek(address);
   address += Y;
-  operand = peek(address); 
+  X = peek(address); 
 }
 {
-  X = operand;
   notZ = X;
   N = X;
 }
@@ -2074,10 +2081,9 @@ case 0xae:
 {
   uInt16 address = peek_PC(PC++);
   address |= ((uInt16)peek_PC(PC++) << 8);
-  operand = peek(address);
+  X = peek(address);
 }
 {
-  X = operand;
   notZ = X;
   N = X;
 }
@@ -2101,10 +2107,9 @@ break;
 
 case 0xa0:
 {
-  operand = peek_PC(PC++);
+  Y = peek_PC(PC++);
 }
 {
-  Y = operand;
   notZ = Y;
   N = Y;
 }
@@ -2112,10 +2117,9 @@ break;
 
 case 0xa4:
 {
-  operand = peek(peek_PC(PC++));
+  Y = peek(peek_PC(PC++));
 }
 {
-  Y = operand;
   notZ = Y;
   N = Y;
 }
@@ -2126,10 +2130,9 @@ case 0xb4:
   uInt8 address = peek_PC(PC++);
   peek(address);
   address += X;
-  operand = peek(address); 
+  Y = peek(address); 
 }
 {
-  Y = operand;
   notZ = Y;
   N = Y;
 }
@@ -2139,10 +2142,9 @@ case 0xac:
 {
   uInt16 address = peek_PC(PC++);
   address |= ((uInt16)peek_PC(PC++) << 8);
-  operand = peek(address);
+  Y = peek(address);
 }
 {
-  Y = operand;
   notZ = Y;
   N = Y;
 }

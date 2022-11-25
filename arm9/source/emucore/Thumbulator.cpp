@@ -27,6 +27,7 @@
 #include <nds.h>
 #include "bspf.hxx"
 #include "Thumbulator.hxx"
+#include "Cart.hxx"
 
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
@@ -34,7 +35,6 @@ uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
 uInt16 rom[ROMSIZE] ALIGN(32);
 extern uInt8 fast_cart_buffer[];
-extern uInt32 debug[];
 
 bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
 
@@ -938,8 +938,58 @@ ITCM_CODE void Thumbulator::execute ( void )
                         }
                         else
                         {
-                          //fprintf(stderr,"cannot branch to arm 0x%08X 0x%04X\n",pc,inst);
-                          break;
+                                uInt32 pc = reg_sys[15] & 0xFFFFFFFE;
+                                // branch to even address denotes 32 bit ARM code, which the Thumbulator
+                                // class does not support. So capture relavent information and hand it
+                                // off to the Cartridge class for it to handle.
+
+                                bool handled = false;
+                                // address to test for is + 4 due to pipelining
+                              #define CDF1_SetNote     (0x00000752 + 4)
+                              #define CDF1_ResetWave   (0x00000756 + 4)
+                              #define CDF1_GetWavePtr  (0x0000075a + 4)
+                              #define CDF1_SetWaveSize (0x0000075e + 4)
+                            
+                              extern uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2);
+                            
+                                if      (pc == CDF1_SetNote)
+                                {
+                                  CDFCallback(0, reg_sys[2], reg_sys[3]);
+                                  handled = true;
+                                }
+                                else if (pc == CDF1_ResetWave)
+                                {
+                                  CDFCallback(1, read_register(2), 0);
+                                  handled = true;
+                                }
+                                else if (pc == CDF1_GetWavePtr)
+                                {
+                                  reg_sys[2] = CDFCallback(2, reg_sys[2], 0);
+                                  handled = true;
+                                }
+                                else if (pc == CDF1_SetWaveSize)
+                                {
+                                  CDFCallback(3, reg_sys[2], reg_sys[3]);
+                                  handled = true;
+                                }
+                                else if (pc == 0x0000083a)
+                                {
+                                    // exiting Custom ARM code, returning to BUS Driver control
+                                }
+                                else
+                                {
+                                    //myCartridge->thumbCallback(255, 0, 0);
+                                }
+
+                                if (handled)
+                                {
+                                  rc = read_register(14); // lr
+                                  rc += 2;
+                                  write_register(15, rc);
+                                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
+                                  continue;
+                                }
+                            break;
                         }
                       }
                       
@@ -1448,9 +1498,17 @@ ITCM_CODE void Thumbulator::execute ( void )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE int Thumbulator::reset ( void )
 {
-  reg_sys[13]=0x40001fb4; //sp
-  reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)
-  reg_sys[15]=0x00000c0b; //pc entry point of 0xc09+2
-    
-  return 0;
+    if (myCartInfo.banking == BANK_CDFJ)
+    {
+      reg_sys[13]=0x40001fb4; //sp
+      reg_sys[14]=0x00000800; //lr (duz this use odd addrs)
+      reg_sys[15]=0x0000080b; //pc entry point of 0x809+2
+    }
+    else
+    {
+      reg_sys[13]=0x40001fb4; //sp
+      reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)
+      reg_sys[15]=0x00000c0b; //pc entry point of 0xc09+2
+    }
+    return 0;
 }

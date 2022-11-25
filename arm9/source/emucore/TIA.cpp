@@ -556,6 +556,7 @@ ITCM_CODE void TIA::update()
       case 6: mySystem->m6502().execute_F8SC(25000); break;   // If we are F8SC, we can run faster here...
       case 7: mySystem->m6502().execute_F6SC(25000); break;   // If we are F6SC, we can run faster here...
       case 8: mySystem->m6502().execute_DPCP(25000); break;   // If we are DPC+, we can run faster here...
+      case 9: mySystem->m6502().execute_CDFJ(25000); break;   // If we are CDF/CDFJ, we can run faster here...
       default:mySystem->m6502().execute(25000);      break;   // Otherwise the normal execute driver
   }
 }
@@ -1118,42 +1119,18 @@ void TIA::computePlayfieldMaskTable()
 // -----------------------------------------------------------------------
 void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
+    uInt8 last_color=0;
+    uInt8 last_enabled=255;
     #include "TIA.inc"
 }
 
-
+// -----------------------------------------------------------------------
+// For some of the DPC+ and many of the CDF/CDFJ we don't need to handle
+// any special color or collisions so we can do this the fast way..
+// -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
+#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];
 
-#define HANDLE_COLOR_AND_COLLISIONS  \
-              if (enabled == last_enabled)  \
-              {  \
-                  *myFramePointer = last_color;  \
-                  if (++hpos == 80) last_enabled=255;  \
-              }  \
-              else  \
-              {  \
-                  if (hpos < 80)  \
-                  {  \
-                      last_color = myColor[myPriorityEncoder[0][enabled]];  \
-                      hpos++;  \
-                  }  \
-                  else  \
-                  {  \
-                      last_color = myColor[myPriorityEncoder[1][enabled]];  \
-                  }  \
-                  *myFramePointer = last_color;  \
-                  last_enabled = enabled;  \
-              } 
-
-
-// -----------------------------------------------------------------------
-// We spent a LOT of time in here... so we've done our best to keep this
-// as streamlined as possible. We could reduce this to about 10 lines of
-// code if source-code / memory was at a premium. But it's not - instead
-// we are after speed of execution and are willing to trade off these 
-// large if-then-else blocks to help with code execution to get as many 
-// games running at full frame rate as possible...
-// -----------------------------------------------------------------------
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
     #define COLLISIONS_OFF

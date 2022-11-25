@@ -29,6 +29,7 @@
 #include "Cart3F.hxx"
 #include "Cart4K.hxx"
 #include "CartAR.hxx"
+#include "CartCDF.hxx"
 #include "CartDPC.hxx"
 #include "CartDPCPlus.hxx"
 #include "CartE0.hxx"
@@ -2153,7 +2154,7 @@ const CartInfo table[] =
     {"9eeb80df5f07f1ec1b550c2bf1527089",  "WIZWOR", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  0},    // Wizard of Wor - Pit (1982).bin
     {"f05f8bc7ba4bf265162e3d237d8faee8",  "WIZWOR", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  0},    // Wizard of Wor - World (1982).bin
     {"663ef22eb399504d5204c543b8a86bcd",  "WIZWOR", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   70,    245,   100,   0,  0},    // Wizard of Wor (PAL).bin
-    {"ede752f2a5bfaa4827f741962fb2c608",  "WIZWOR", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Wizard of Wor (Arcade)
+    {"ede752f2a5bfaa4827f741962fb2c608",  "WIZWOR", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    206,    88,   0,  2},    // Wizard of Wor (Arcade) - Demo
     {"620a6db9cfd11ef5f2249e6e358dbaba",  "WIZWOR", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -2},    // Wizard of Wor (Arcade - F6 Hack)  
     {"7c9c8c03c563e5972083927f721be86f",  "WIZWOR", BANK_F6,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -2},    // Wizard of Wor (Arcade - F6 DSB Hack)      
     {"af4f98bca8e01d6c50942dc047487213",  "WIZWOR", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -2},    // Wizard of Wor (Arcade - F6 Hack - Earlier Ver)  
@@ -2287,14 +2288,9 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
   else if (banking == BANK_CTY)
     cartridge = new CartridgeCTY(image, size);
   else if (banking == BANK_DPCP)
-  {
       cartridge = new CartridgeDPCPlus(image, size);
-  }
   else if (banking == BANK_CDFJ)
-  {
-      cartridge = new Cartridge4K(image); // It's gonna fail anyway...
-      dsWarnIncompatibileCart();
-  }
+      cartridge = new CartridgeCDF(image, size);
   else
   {
       cartridge = new Cartridge4K(image); // It's gonna fail anyway...
@@ -2326,6 +2322,13 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.thumbOptimize = 0;
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
   if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 2;
+    
+  // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
+  if (myCartInfo.banking == BANK_CDFJ)
+  {
+      myCartInfo.thumbOptimize = 2;
+      myCartInfo.soundQuality = SOUND_10KHZ;
+  }
     
   myCartInfo.aButton = BUTTON_FIRE;
   myCartInfo.bButton = BUTTON_FIRE;
@@ -2801,6 +2804,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   else if (myCartInfo.banking == BANK_DPCP)
   {
       cartDriver = 8;
+  }  
+  else if (myCartInfo.banking == BANK_CDFJ)
+  {
+      cartDriver = 9;
   }  
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {

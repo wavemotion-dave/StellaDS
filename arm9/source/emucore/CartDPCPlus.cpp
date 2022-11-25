@@ -20,13 +20,11 @@
 #include <cassert>
 #include <cstring>
 
-typedef unsigned long long uInt64;
-
 #include "System.hxx"
 #include "CartDPCPlus.hxx"
 #include "Thumbulator.hxx"
 
-uInt16 myStartBank = 5;
+static uInt16 myStartBank = 5;
 
 #define MEM_3KB  (1024 * 3)
 #define MEM_4KB  (1024 * 4)
@@ -55,7 +53,7 @@ uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
 extern uInt32 myCounters[8];
 
-uInt8 myDPC[24*1024];
+uInt8 myDPC[28*1024];
 
 uInt8 *myDPCptr __attribute__((section(".dtcm")));
 

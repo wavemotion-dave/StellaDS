@@ -107,6 +107,7 @@ static void DumpDebugData(void)
         sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
         sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
         sprintf(dbgbuf, "Cart.numLines:  %03d", myCartInfo.displayNumScalines);     dsPrintValue(1,7,0, dbgbuf);
+        sprintf(dbgbuf, "%08X  %08X", debug[15], debug[16]); dsPrintValue(1,8,0, dbgbuf);
         
         for (int i=0; i<MAX_DEBUG; i++)
         {

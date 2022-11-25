@@ -79,6 +79,7 @@ class M6502Low : public M6502
     virtual void execute_F8SC(uInt16 number);
     virtual void execute_F6SC(uInt16 number);
     virtual void execute_DPCP(uInt16 number);
+    virtual void execute_CDFJ(uInt16 number);
     
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
@@ -120,10 +121,17 @@ class M6502Low : public M6502
     inline uInt8 peek_DPCPPC(uInt16 address);
     inline void poke_DPCP(uInt16 address, uInt8 value);
 
+    uInt8 peek_CDFJ(uInt16 address);
+    inline uInt8 peek_CDFJPC(uInt16 address);
+    inline void poke_CDFJ(uInt16 address, uInt8 value);
+
     inline uInt8 peek_PCF8SC(uInt16 address);
     inline uInt8 peek_PCF6SC(uInt16 address);
 
-    uInt8 peek_Fetch(uInt8 address);
+    uInt8  peek_Fetch(uInt8 address);
+    uInt8  peek_DataStream(uInt8 address);
+    uInt16 peek_JumpStream(uInt8 address);
+    
     /**
       Change the byte at the specified address to the given value
 
@@ -131,7 +139,6 @@ class M6502Low : public M6502
       @param value The value to be stored at the address
     */
     void poke(uInt16 address, uInt8 value);
-
 };
 #endif
 
