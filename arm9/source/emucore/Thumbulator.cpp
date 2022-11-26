@@ -189,7 +189,21 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFE00) == 0x1C00 && (inst >> 6) & 0x7) return Op::add1;
 
   //ADD(2) big immediate one register
-  if((inst & 0xF800) == 0x3000) return Op::add2;
+  if((inst & 0xF800) == 0x3000) 
+  {
+      switch (inst & 0x0700)
+      {
+          case 0x0000:  return Op::add2_0;
+          case 0x0100:  return Op::add2_1;
+          case 0x0200:  return Op::add2_2;
+          case 0x0300:  return Op::add2_3;
+          case 0x0400:  return Op::add2_4;
+          case 0x0500:  return Op::add2_5;
+          case 0x0600:  return Op::add2_6;
+          case 0x0700:  return Op::add2_7;
+      }
+      return Op::add2_0;
+  }
 
   //ADD(3) three registers
   if((inst & 0xFE00) == 0x1800) return Op::add3;
@@ -216,7 +230,29 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFFC0) == 0x4100) return Op::asr2;
 
   //B(1) conditional branch
-  if((inst & 0xF000) == 0xD000) return Op::b1;
+  if((inst & 0xF000) == 0xD000) 
+  {
+      switch(inst & 0x0F00)
+      {
+          case 0x000: return Op::b1_000;
+          case 0x100: return Op::b1_100;
+          case 0x200: return Op::b1_200;
+          case 0x300: return Op::b1_300;
+          case 0x400: return Op::b1_400;
+          case 0x500: return Op::b1_500;
+          case 0x600: return Op::b1_600;
+          case 0x700: return Op::b1_700;
+          case 0x800: return Op::b1_800;
+          case 0x900: return Op::b1_900;
+          case 0xA00: return Op::b1_a00;
+          case 0xB00: return Op::b1_b00;
+          case 0xC00: return Op::b1_c00;
+          case 0xD00: return Op::b1_d00;
+          case 0xE00: return Op::b1_e00;
+          case 0xF00: return Op::b1_f00;
+      }
+      return Op::b1_f00;
+  }
 
   //B(2) unconditional branch
   if((inst & 0xF800) == 0xE000) return Op::b2;
@@ -240,7 +276,21 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFFC0) == 0x42C0) return Op::cmn;
 
   //CMP(1) compare immediate
-  if((inst & 0xF800) == 0x2800) return Op::cmp1;
+  if((inst & 0xF800) == 0x2800) 
+  {
+      switch (inst & 0x0700)
+      {
+          case 0x0000:  return Op::cmp1_0;
+          case 0x0100:  return Op::cmp1_1;
+          case 0x0200:  return Op::cmp1_2;
+          case 0x0300:  return Op::cmp1_3;
+          case 0x0400:  return Op::cmp1_4;
+          case 0x0500:  return Op::cmp1_5;
+          case 0x0600:  return Op::cmp1_6;
+          case 0x0700:  return Op::cmp1_7;
+      }
+      return Op::cmp1_0;
+  }
 
   //CMP(2) compare register
   if((inst & 0xFFC0) == 0x4280) return Op::cmp2;
@@ -270,7 +320,21 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xF800) == 0x4800) return Op::ldr3;
 
   //LDR(4)
-  if((inst & 0xF800) == 0x9800) return Op::ldr4;
+  if((inst & 0xF800) == 0x9800) 
+  {
+      switch (inst & 0x0700)
+      {
+          case 0x0000:  return Op::ldr4_0;
+          case 0x0100:  return Op::ldr4_1;
+          case 0x0200:  return Op::ldr4_2;
+          case 0x0300:  return Op::ldr4_3;
+          case 0x0400:  return Op::ldr4_4;
+          case 0x0500:  return Op::ldr4_5;
+          case 0x0600:  return Op::ldr4_6;
+          case 0x0700:  return Op::ldr4_7;
+      }
+      return Op::ldr4_0;
+  }
 
   //LDRB(1)
   if((inst & 0xF800) == 0x7800) return Op::ldrb1;
@@ -428,147 +492,163 @@ ITCM_CODE void Thumbulator::execute ( void )
       
       switch (decoded)
       {
-          case Op::b1:  //B(1) conditional branch
-                rb=(inst>>0)&0xFF;
-                if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                switch(inst & 0xF00)
+          case Op::b1_000:  //B(1) conditional branch
+                if (!ZNflags)
                 {
-                  case 0x000: //b eq  z set
-                    if (!ZNflags)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x100: //b ne  z clear
-                    if (ZNflags)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x200: //b cs c set
-                    if(cFlag)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x300: //b cc c clear
-                    if(!(cFlag))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x400: //b mi n set
-                    if((ZNflags&0x80000000))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x500: //b pl n clear
-                    if(!((ZNflags&0x80000000)))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x600: //b vs v set
-                    if(vFlag)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x700: //b vc v clear
-                    if(!(vFlag))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x800: //b hi c set z clear
-                    if((cFlag)&&(ZNflags))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0x900: //b ls c clear or z set
-                    if((!ZNflags)||(!(cFlag)))
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0xA00: //b ge N == V
-                    ra=0;
-                    if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                    else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
-                    if(ra)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0xB00: //b lt N != V
-                    ra=0;
-                    if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                    else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
-                    if(ra)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0xC00: //b gt Z==0 and N == V
-                    ra=0;
-                    if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                    else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
-                    if(!ZNflags) ra=0;
-                    if(ra)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0xD00: //b le Z==1 or N != V
-                    ra=0;
-                    if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                    else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
-                    else if(!ZNflags) ra++;
-                    if(ra)
-                    {
-                        thumb_ptr += (int)rb+1;
-                        thumb_decode_ptr += (int)rb+1;
-                    }
-                    break;
-
-                  case 0xE00:
-                    //undefined instruction
-                    done = true;
-                    break;
-
-                  case 0xF00:
-                    //swi
-                    done = true;
-                    break;
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
                 }
+              break;
+              
+          case Op::b1_100:  //B(1) conditional branch
+                if (ZNflags)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_200:  //B(1) conditional branch
+                if (cFlag)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_300:  //B(1) conditional branch
+                if(!(cFlag))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_400:  //B(1) conditional branch
+                if((ZNflags&0x80000000))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_500:  //B(1) conditional branch
+                if(!((ZNflags&0x80000000)))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_600:  //B(1) conditional branch
+                if(vFlag)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_700:  //B(1) conditional branch
+                if(!(vFlag))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+
+          case Op::b1_800:  //B(1) conditional branch
+                if((cFlag)&&(ZNflags))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_900:  //B(1) conditional branch
+                if((!ZNflags)||(!(cFlag)))
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+
+          case Op::b1_a00:  //B(1) conditional branch
+                ra=0;
+                if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
+                else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
+                if(ra)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_b00:  //B(1) conditional branch
+                ra=0;
+                if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
+                else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
+                if(ra)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_c00:  //B(1) conditional branch
+                ra=0;
+                if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
+                else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
+                if(!ZNflags) ra=0;
+                if(ra)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_d00:  //B(1) conditional branch
+                ra=0;
+                if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
+                else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
+                else if(!ZNflags) ra++;
+                if(ra)
+                {
+                    rb=(inst>>0)&0xFF;
+                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_e00:  //B(1) conditional branch
+          case Op::b1_f00:  //B(1) conditional branch
+              done = true;
               break;
               
           case Op::b2:  //B(2) unconditional branch
@@ -668,14 +748,62 @@ ITCM_CODE void Thumbulator::execute ( void )
                   }
               break;
               
-          case Op::ldr4:
+          case Op::ldr4_0:
                 rb=(inst>>0)&0xFF;
-                rd=(inst>>8)&0x07;
                 rb<<=2;
                 rb+=read_register(13);
-                write_register(rd,read32(rb));
+                write_register(0,read32(rb));
+              break;
+
+          case Op::ldr4_1:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(1,read32(rb));
               break;
               
+          case Op::ldr4_2:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(2,read32(rb));
+              break;
+
+          case Op::ldr4_3:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(3,read32(rb));
+              break;
+
+          case Op::ldr4_4:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(4,read32(rb));
+              break;
+
+          case Op::ldr4_5:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(5,read32(rb));
+              break;
+
+          case Op::ldr4_6:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(6,read32(rb));
+              break;
+              
+          case Op::ldr4_7:
+                rb=(inst>>0)&0xFF;
+                rb<<=2;
+                rb+=read_register(13);
+                write_register(7,read32(rb));
+              break;
+
           case Op::str3:
                 rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x07;
@@ -959,14 +1087,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rb=read_register(rn)+read_register(rm);
                 rc=read_register(rd);
                 write16(rb,rc&0xFFFF);
-              break;
-              
-          case Op::cmp2:
-                rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ZNflags=reg_sys[rn]-reg_sys[rm];
-                do_cflag(reg_sys[rn],~reg_sys[rm],1);
-                if (bSafeThumb) do_sub_vflag(reg_sys[rn],reg_sys[rm],ZNflags);
               break;
               
           case Op::ldr3:
@@ -1341,10 +1461,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::add2:
-                rd=(inst>>8)&0x7;
-                reg_sys[rd] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[rd]);
+          case Op::add2_0:
+                reg_sys[0] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[0]);
                 // ------------------------------------------------------------------------------------------------------
                 // TBD: This is incorrect (but faster) emulation on an instruction that is very common... we're adding 
                 // a small number to a 32-bit register and we're going to assume that there is no vflag nor cFlag needed.
@@ -1352,13 +1471,97 @@ ITCM_CODE void Thumbulator::execute ( void )
                 //if (bSafeThumb) do_add_vflag(ra,-rb,rc);
                 //if (bSafeThumb) do_cflag(ra,rb,0);
               break;
+          case Op::add2_1:
+                reg_sys[1] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[1]);
+              break;
+          case Op::add2_2:
+                reg_sys[2] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[2]);
+              break;
+          case Op::add2_3:
+                reg_sys[3] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[3]);
+              break;
+          case Op::add2_4:
+                reg_sys[4] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[4]);
+              break;
+          case Op::add2_5:
+                reg_sys[5] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[5]);
+              break;
+          case Op::add2_6:
+                reg_sys[6] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[6]);
+              break;
+          case Op::add2_7:
+                reg_sys[7] += (inst>>0)&0xFF;
+                do_znflags(reg_sys[7]);
+              break;
               
-          case Op::cmp1:
+          case Op::cmp1_0:
                 rb=(inst>>0)&0xFF;
-                ra=read_register((inst>>8)&0x07);
-                ZNflags=ra-rb;
-                do_cflag_fast(ra,~rb);
-                if (bSafeThumb) do_sub_vflag(ra,rb,ZNflags);
+                ZNflags=reg_sys[0]-rb;
+                do_cflag_fast(reg_sys[0],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[0],rb,ZNflags);
+              break;
+
+          case Op::cmp1_1:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[1]-rb;
+                do_cflag_fast(reg_sys[1],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[1],rb,ZNflags);
+              break;
+              
+          case Op::cmp1_2:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[2]-rb;
+                do_cflag_fast(reg_sys[2],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[2],rb,ZNflags);
+              break;
+
+          case Op::cmp1_3:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[3]-rb;
+                do_cflag_fast(reg_sys[3],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[3],rb,ZNflags);
+              break;
+
+          case Op::cmp1_4:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[4]-rb;
+                do_cflag_fast(reg_sys[4],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[4],rb,ZNflags);
+              break;
+              
+          case Op::cmp1_5:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[5]-rb;
+                do_cflag_fast(reg_sys[5],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[5],rb,ZNflags);
+              break;
+              
+          case Op::cmp1_6:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[6]-rb;
+                do_cflag_fast(reg_sys[6],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[6],rb,ZNflags);
+              break;
+
+          case Op::cmp1_7:
+                rb=(inst>>0)&0xFF;
+                ZNflags=reg_sys[7]-rb;
+                do_cflag_fast(reg_sys[7],~rb);
+                if (bSafeThumb) do_sub_vflag(reg_sys[7],rb,ZNflags);
+              break;
+              
+          case Op::cmp2:
+                rn=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[rm];
+                do_cflag(reg_sys[rn],~reg_sys[rm],1);
+                if (bSafeThumb) do_sub_vflag(reg_sys[rn],reg_sys[rm],ZNflags);
               break;
               
           case Op::add3:

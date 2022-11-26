@@ -91,8 +91,6 @@ uInt8  cart_buffer[MAX_FILE_SIZE] __attribute__ ((aligned (32)));
 //3e79dddfa0d34df6c77ca0dd96a4f8f7  Gorf-Arcade_demo_v3_NTSC.bin
 //9104ffc48c5eebd2164ec8aeb0927b91  Mappy_20180606_NTSC.bin
 //7ace475c94ed09b8bea168ae051ea417  Qyx_demo_v3_NTSC.bin
-//1327ee60ebfc3f1fde473618bd8deeab  RobotWar-2684_demo_final_NTSC.bin
-//4f556cd013528aed2aebc715b4e49ac8  Scramble_demo_final_v2_NTSC.bin
 //841057f83ce3731e6bbfda1707cbca58  Super Cobra Arcade (final).bin
 //9168f9f4881eff94cc2f657e3539e2d4  zeviouz00_NTSC.bin
 
@@ -1602,7 +1600,8 @@ const CartInfo table[] =
     {"4f618c2429138e0280969193ed6c107e",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Robot Tank (1983).bin
     {"594437a35603c3e857b5af75b9718b61",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Robot Tank (1983) (PAL).bin
     {"f687ec4b69611a7f78bd69b8a567937a",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Robot Tank (1983) (PAL).bin
-    {"a37c9ab414b6133f24ebd43e59ebc5cd",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Robotwar_20201004_demo_NTSC.bin
+    {"a37c9ab414b6133f24ebd43e59ebc5cd",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  28,    205,    87,   0,  0},    // Robotwar_20201004_demo_NTSC.bin
+    {"1327ee60ebfc3f1fde473618bd8deeab",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  28,    205,    87,   0,  0},    // RobotWar-2684_demo_final_NTSC.bin
     {"65bd29e8ab1b847309775b0de6b2e4fe",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Roc 'n Rope (1984).bin
     {"0173675d40a8d975763ee493377ca87d",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   53,    245,    53,   0,  1},    // Roc 'n Rope (1984) (PAL).bin
     {"cf92ce2324c57a6a5738333a5b0a26f1",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Rocket_Command.bin
@@ -1632,6 +1631,7 @@ const CartInfo table[] =
     {"e377c3af4f54a51b85efe37d4b7029e6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  23,    210,    82,   0,  3},    // Save the Whales (1983).bin
     {"fe641247a4ab9bee970e19ab55f23b25",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
     {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble (final).bin
+    {"4f556cd013528aed2aebc715b4e49ac8",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble_demo_final_v2_NTSC.bin    
     {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"3fe43915e5655cf69485364e9f464097",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
@@ -2210,7 +2210,7 @@ const CartInfo table[] =
     {"eea0da9b987d661264cce69a7c13c3bd",  "ZAXXON", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  8},    // Zaxxon (1982).bin
     {"25bb080457351be724aac8a02021aa92",  "ZAXXON", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   57,    245,    92,   0,  3},    // Zaxxon (1982) (PAL).bin
     {"66caf2dc4a9ea1a4534b2ea169909cbd",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Zirconium 2005-10-28 (Fred Quimby).bin
-    {"05eede12c66e261dd18ee62faf4cdfdb",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  2},    // Zookeeper_20200308_demo2_NTSC.bin
+    {"05eede12c66e261dd18ee62faf4cdfdb",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  30,    205,   100,   0,  1},    // Zookeeper_20200308_demo2_NTSC.bin    
     {"65a6f1255fe22468a8bf84ff28a4d289",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
