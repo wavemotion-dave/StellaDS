@@ -91,7 +91,6 @@ uInt8  cart_buffer[MAX_FILE_SIZE] __attribute__ ((aligned (32)));
 //3e79dddfa0d34df6c77ca0dd96a4f8f7  Gorf-Arcade_demo_v3_NTSC.bin
 //9104ffc48c5eebd2164ec8aeb0927b91  Mappy_20180606_NTSC.bin
 //7ace475c94ed09b8bea168ae051ea417  Qyx_demo_v3_NTSC.bin
-//841057f83ce3731e6bbfda1707cbca58  Super Cobra Arcade (final).bin
 //9168f9f4881eff94cc2f657e3539e2d4  zeviouz00_NTSC.bin
 
 const CartInfo table[] = 
@@ -1944,7 +1943,7 @@ const CartInfo table[] =
     {"c29f8db680990cb45ef7fef6ab57a2c2",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Super Cobra (1982).bin
     {"5f7de62a408b9de3a1168898298fd31d",  "??????", BANK_E0,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Super Cobra (2 Button Hack).bin
     {"d326db524d93fa2897ab69c42d6fb698",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   49,    245,   100,   0,  0},    // Super Cobra (1982) (PAL).bin
-    {"841057f83ce3731e6bbfda1707cbca58",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Super Cobra (Arcade).bin
+    {"841057f83ce3731e6bbfda1707cbca58",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Super Cobra Arcade (final).bin
     {"724613effaf7743cbcd695fab469c2a8",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Super Ferrari (Quelle).bin
     {"09abfe9a312ce7c9f661582fdf12eab6",  "SUPFBL", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Super Football (1988).bin
     {"2f0a8bb4e18839f9b1dcaa2f5d02fd1d",  "SUPFBL", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Super Football (1988).bin
