@@ -805,8 +805,8 @@ const CartInfo table[] =
     {"c1fdd44efda916414be3527a47752c75",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // G.I. Joe - Cobra Strike.bin
     {"b9f6fa399b8cd386c235983ec45e4355",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    94,   0,  0},    // G.I. Joe - Cobra Strike (PAL).bin    
     {"f38210ca3955a098c06a1e1c0004ef39",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Galactopus20141115.bin
-    {"476d8d236085f8b1a6892dad3a898a62",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Galaga V2 (demo).bin
-    {"01a68a1213ff7482fe4b8758f99fb68f",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Galagon V3 Demo Final.bin
+    {"476d8d236085f8b1a6892dad3a898a62",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  1},    // Galaga V2 (demo).bin
+    {"01a68a1213ff7482fe4b8758f99fb68f",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  1},    // Galagon V3 Demo Final.bin
     {"211774f4c5739042618be8ff67351177",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Galaxian (1983).bin
     {"590ac71fa5f71d3eb29c41023b09ade9",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   0,  2},    // Galaxian (1983).bin
     {"803393ed29a9e9346569dd1bf209907b",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Galaxian (1983).bin
