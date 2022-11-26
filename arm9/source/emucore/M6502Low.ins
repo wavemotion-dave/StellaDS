@@ -1932,13 +1932,7 @@ case 0xa9:
 
 #ifdef DATA_STREAMS
   extern u8 myDataStreamFetch;
-  if (A < myDataStreamFetch)
-  {
-    uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (A << 2));
-    uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (A << 2));
-    A = myDisplayImageCDF[(*ptr >> 20)];
-    *ptr += (*inc << 12);
-  }
+  if (A < myDataStreamFetch) A = peek_DataStream(A);
 #endif
 }
 {

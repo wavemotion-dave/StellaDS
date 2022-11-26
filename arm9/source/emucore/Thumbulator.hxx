@@ -76,6 +76,57 @@ class Thumbulator
     void run();
 
   private:
+    
+    enum class Op : uInt8 {
+      invalid,
+      adc,
+      add1, add2, add3, add4, add5, add6, add7,
+      and_,
+      asr1, asr2,
+      b1, b2,
+      bic,
+      bkpt,
+      blx1, blx2,
+      bx,
+      cmn,
+      cmp1, cmp2, cmp3,
+      cps,
+      cpy,
+      eor,
+      ldmia,
+      ldr1, ldr2, ldr3, ldr4,
+      ldrb1, ldrb2,
+      ldrh1, ldrh2,
+      ldrsb,
+      ldrsh,
+      lsl1, lsl2,
+      lsr1, lsr2,
+      mov1, mov2, mov3,
+      mul,
+      mvn,
+      neg,
+      orr,
+      pop,
+      push,
+      rev,
+      rev16,
+      revsh,
+      ror,
+      sbc,
+      setend,
+      stmia,
+      str1, str2, str3,
+      strb1, strb2,
+      strh1, strh2,
+      sub1, sub2, sub3, sub4,
+      swi,
+      sxtb,
+      sxth,
+      tst,
+      uxtb,
+      uxth
+    };
+    
     inline uInt16 read16 ( uInt32 addr );
     inline uInt32 read32 ( uInt32 );
     inline uInt32 readRAM32 ( uInt32 );
@@ -92,6 +143,8 @@ class Thumbulator
 
     void execute ( void );
     int reset ( void );
+    
+    static Op decodeInstructionWord(uint16_t inst);
 
   private:
     uInt32 halfadd;

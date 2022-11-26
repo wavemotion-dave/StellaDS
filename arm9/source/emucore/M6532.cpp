@@ -102,7 +102,7 @@ void M6532::reset()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void M6532::systemCyclesReset()
+void M6532::systemCyclesReset()
 {
   // System cycles are being reset to zero so we need to adjust
   // the cycle count we remembered when the timer was last set

@@ -1121,7 +1121,13 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
     uInt8 last_color=0;
     uInt8 last_enabled=255;
+    uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
+    
+    switch (myEnabledObjects)
+    {
     #include "TIA.inc"
+    }
+    myFramePointer = ending;    
 }
 
 // -----------------------------------------------------------------------
@@ -1129,12 +1135,27 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // any special color or collisions so we can do this the fast way..
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
-#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];
+#define HANDLE_COLOR_AND_COLLISIONS  \
+              if (hpos < 80)  \
+              {  \
+                  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];  \
+                  hpos++;  \
+              }  \
+              else  \
+              {  \
+                  *myFramePointer = myColor[myPriorityEncoder[1][enabled]];  \
+              }
 
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
+    uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
     #define COLLISIONS_OFF
+    
+    switch (myEnabledObjects)
+    {
     #include "TIA.inc"
+    }
+    myFramePointer = ending;    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

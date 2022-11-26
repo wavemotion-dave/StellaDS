@@ -86,6 +86,16 @@ uInt8  cart_buffer[MAX_FILE_SIZE] __attribute__ ((aligned (32)));
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
 
+
+//f40e0d51e6d869975257133b47585374  Frantic 20200828.bin
+//3e79dddfa0d34df6c77ca0dd96a4f8f7  Gorf-Arcade_demo_v3_NTSC.bin
+//9104ffc48c5eebd2164ec8aeb0927b91  Mappy_20180606_NTSC.bin
+//7ace475c94ed09b8bea168ae051ea417  Qyx_demo_v3_NTSC.bin
+//1327ee60ebfc3f1fde473618bd8deeab  RobotWar-2684_demo_final_NTSC.bin
+//4f556cd013528aed2aebc715b4e49ac8  Scramble_demo_final_v2_NTSC.bin
+//841057f83ce3731e6bbfda1707cbca58  Super Cobra Arcade (final).bin
+//9168f9f4881eff94cc2f657e3539e2d4  zeviouz00_NTSC.bin
+
 const CartInfo table[] = 
 {
     {"DefaultCart_NTSCxxxxxxxxxxxxxxxx",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Default Cart is 4k, full-scale, L-Joy and nothing special...
@@ -617,7 +627,7 @@ const CartInfo table[] =
     {"368d88a6c071caba60b4f778615aae94",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Double Dunk (Super Basketball) (1989).bin
     {"cfc226d04d7490b69e155abd7741e98c",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Double Dunk (Super Basketball) (1989) (PAL).bin
     {"6ed5012793f5ddf4353a48c11ea9b8d3",  "??????", BANK_AR,   CTR_PADDLE0,   SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Down on the Line, Handcar.bin
-    {"97f4da9f1031486f4e588f1e53572e53",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
+    {"97f4da9f1031486f4e588f1e53572e53",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
     {"24d9a55d8f0633e886a1b33ee1e0e797",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    75,   0,  0},    // Dragon Defender.bin
     {"95e542a7467c94b1e4ab24a3ebe907f1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    59,   0,  1},    // Dragon Defender (PAL).bin
     {"6a882fb1413912d2ce5cf5fa62cf3875",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    60,   0,  1},    // Dragon Defender (PAL).bin
@@ -759,7 +769,7 @@ const CartInfo table[] =
     {"213e5e82ecb42af237cfed8612c128ac",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   59,    245,   95,    3,  0},    // Forest (1983) (PAL).bin
     {"15dd21c2608e0d7d9f54c0d3f08cca1f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Frankenstein's Monster (1983).bin
     {"7d0b49ea4fe3a5f1e119a6d14843db17",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   46,    245,    80,   0,  0},    // Frankenstein's Monster (1983) (PAL).bin
-    {"f40e0d51e6d869975257133b47585374",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Frantic 20200828.bin    
+    {"f40e0d51e6d869975257133b47585374",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    205,    96,   0,  5},    // Frantic 20200828.bin    
     {"16c909c16ce47e2429fe6e005551178d",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Frantic.bin
     {"8e0ab801b1705a740b476b7f588c6d16",  "FREWAY", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    202,   100,   5,  2},    // Freeway (1981).bin
     {"5dae540347cf0a559962d62604ecf750",  "FREWAY", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    202,   100,   5,  2},    // Freeway (1981).bin
@@ -798,7 +808,8 @@ const CartInfo table[] =
     {"c1fdd44efda916414be3527a47752c75",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // G.I. Joe - Cobra Strike.bin
     {"b9f6fa399b8cd386c235983ec45e4355",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    94,   0,  0},    // G.I. Joe - Cobra Strike (PAL).bin    
     {"f38210ca3955a098c06a1e1c0004ef39",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Galactopus20141115.bin
-    {"476d8d236085f8b1a6892dad3a898a62",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Galaga (demo).bin
+    {"476d8d236085f8b1a6892dad3a898a62",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Galaga V2 (demo).bin
+    {"01a68a1213ff7482fe4b8758f99fb68f",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Galagon V3 Demo Final.bin
     {"211774f4c5739042618be8ff67351177",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Galaxian (1983).bin
     {"590ac71fa5f71d3eb29c41023b09ade9",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   0,  2},    // Galaxian (1983).bin
     {"803393ed29a9e9346569dd1bf209907b",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Galaxian (1983).bin
@@ -1051,6 +1062,7 @@ const CartInfo table[] =
     {"b86552198f52cfce721bafb496363099",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Kyphus (1982).bin
     {"adfbd2e8a38f96e03751717f7422851d",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  4},    // Lady Bug.bin
     {"f1489e27a4539a0c6c8529262f9f7e18",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   52,    245,    80,   0,  0},    // Lady Bug PAL.bin    
+    {"d14be7d60aa80ffaaf4695bd9c72468d",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Lady-Bug-Arcade_demo_final_NTSC.bin
     {"95a89d1bf767d7cc9d0d5093d579ba61",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Lady in Wading (1982).bin
     {"d06b7fcc7640735d36c0b8d44fb5e765",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Lander (2008) (Bastian Framke).bin    
     {"8c103a79b007a2fd5af602334937b4e1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  32,    240,    60,   0, 13},    // Laser Base World End (NTSC by TJ).bin
@@ -1087,6 +1099,7 @@ const CartInfo table[] =
     {"493e90602a4434b117c91c95e73828d1",  "LOCKNC", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,   100,   0,  1},    // Lock 'n' Chase (1982) (PAL).bin
     {"e88340f5bd2f03e2e9ce5ecfa9c644f5",  "LOCKNC", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,   100,   0,  1},    // Lock 'n' Chase (1982) (PAL).bin
     {"3ff5165378213dab531ffa4f1a41ae45",  "LOCKNC", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  9},    // Lock 'n' Chase (1982) (PAL).bin
+    {"c43fc3242c1b36bf36e065bab851ab5f",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    97,   0,  0},    // LodeRunner2600-Demo-NTSC.bin
     {"b4e2fd27d3180f0f4eb1065afc0d7fc9",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // London Blitz (1983).bin
     {"5babe0cad3ec99d76b0aa1d36a695d2f",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Looping (1983).bin
     {"e24d7d879281ffec0641e9c3f52e505a",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // Lord of the Rings (1983).bin
@@ -1599,6 +1612,7 @@ const CartInfo table[] =
     {"685e9668dc270b6deeb9cfbfd4d633c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   37,    245,    87,   0,  5},    // Room of Doom (1982) (PAL).bin
     {"1f2ae0c70a04c980c838c2cdc412cf45",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  1},    // Rubik's Cube (1984).bin
     {"40b1832177c63ebf81e6c5b61aaffd3a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // RubiksCube3D.bin
+    {"490e40c295163a54df322c77ae6d9774",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  30,    205,    94,   0,  0},    // rubyQ_demo_22_01_2022_NTSC.bin
     {"f3cd0f886201d1376f3abab2df53b1b9",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    78,   0,  1},    // Rush Hour (1983).bin
     {"aad61898633f470ce528e3d7ef3d0adb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    78,   0,  1},    // Rush Hour (1983).bin
     {"ebf2dff78a08733251bf3838f02f7938",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  28,    210,    78,   0, -1},    // Rush Hour (1983).bin
@@ -2196,18 +2210,11 @@ const CartInfo table[] =
     {"eea0da9b987d661264cce69a7c13c3bd",  "ZAXXON", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  8},    // Zaxxon (1982).bin
     {"25bb080457351be724aac8a02021aa92",  "ZAXXON", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   57,    245,    92,   0,  3},    // Zaxxon (1982) (PAL).bin
     {"66caf2dc4a9ea1a4534b2ea169909cbd",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Zirconium 2005-10-28 (Fred Quimby).bin
-    {"05eede12c66e261dd18ee62faf4cdfdb",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Zookeeper_20200308_demo2_NTSC.bin
-
+    {"05eede12c66e261dd18ee62faf4cdfdb",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  2},    // Zookeeper_20200308_demo2_NTSC.bin
     {"65a6f1255fe22468a8bf84ff28a4d289",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
-    {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)    
+    {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...

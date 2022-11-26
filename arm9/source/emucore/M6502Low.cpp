@@ -989,6 +989,8 @@ extern uInt32 fastDataStreamBase, fastIncStreamBase;
 // -------------------------------------------
 inline uInt8 M6502Low::peek_DataStream(uInt8 address)
 {
+  if (address == myAmplitudeStream) return 0x00;
+    
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (address << 2));
   uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (address << 2));
   uInt8 value = myDisplayImageCDF[(*ptr >> 20)];
@@ -999,7 +1001,7 @@ inline uInt8 M6502Low::peek_DataStream(uInt8 address)
 inline uInt16 M6502Low::peek_JumpStream(uInt8 address)
 {
   uInt16 result;
-    
+ 
   uInt8 myFastJumpStream = address + JUMPSTREAM_BASE;
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (myFastJumpStream << 2));
   uInt16 addr = *ptr >> 20;
