@@ -2953,6 +2953,13 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
 
   if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.right_difficulty = DIFF_A;   // Force Stay Frosty 2 to have no background music (can't render it properly and saves cycles)
     
+  // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
+  if (myCartInfo.banking == BANK_CDFJ)
+  {
+      myCartInfo.thumbOptimize = 2;
+      myCartInfo.soundQuality = SOUND_10KHZ;
+  }    
+    
   extern uInt32 bSafeThumb;
   bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...
   

@@ -225,7 +225,8 @@ uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
 
       // _GetWavePtr - return the counter
     case 2:
-      return myMusicCounters[value1];
+      //return myMusicCounters[value1];
+        return 0x7FFFFFFF;
 
       // _SetWaveSize - set size of waveform buffer
     case 3:
