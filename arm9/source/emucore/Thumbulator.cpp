@@ -67,6 +67,7 @@ void Thumbulator::run( void )
   return;
 }
 
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write16 ( uInt32 addr, uInt32 data )
 {
@@ -659,29 +660,37 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::blx1: //BL/BLX(1)
+                FIX_R15_PC  
                 if((inst&0x1800)==0x1000) //H=b10
                 {
-                  halfadd=inst;
+                    rb = inst & ((1 << 11) - 1);
+                    if(rb & 1<<10) rb |= (~((1 << 11) - 1)); //sign extend
+                    rb <<= 12;
+                    rb += reg_sys[15];
+                    write_register(14, rb);
                 }
                 else if((inst&0x1800)==0x1800) //H=b11
                 {
-                  FIX_R15_PC  
                   //branch to thumb
-                  rb=halfadd&((1<<11)-1);
-                  if(rb&1<<10) rb|=(~((1<<11)-1)); //sign extend
-                  rb<<=11;
-                  rb|=inst&((1<<11)-1);
-                  rb<<=1;
-                  rb+=reg_sys[15];
-                  write_register(14,reg_sys[15]-2);
-                  write_register(15,rb);
+                  rb = read_register(14);
+                  rb += (inst & ((1 << 11) - 1)) << 1;
+                  rb += 2;
+                  write_register(14, (reg_sys[15]-2) | 1);
+                  write_register(15, rb);
                   thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                   thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
                 }
                 else if((inst&0x1800)==0x0800) //H=b01
                 {
                   // fxq: this should exit the code without having to detect it
-                  done = true;
+                  rb = read_register(14);
+                  rb += (inst & ((1 << 11) - 1)) << 1;
+                  rb &= 0xFFFFFFFC;
+                  rb += 2;
+                  write_register(14, (reg_sys[15]-2) | 1);
+                  write_register(15, rb);
+                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
+                  thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
                 }
               break;
 
@@ -1129,6 +1138,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::mov3:
+                FIX_R15_PC
                 rd=(inst>>0)&0x7;
                 rd|=(inst>>4)&0x8;
                 rm=(inst>>3)&0xF;

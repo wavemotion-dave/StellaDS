@@ -46,19 +46,20 @@ uInt8* myDisplayImageCDF __attribute__((section(".dtcm")));  // Pointer to the 4
 
 uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 fastIncStreamBase   __attribute__((section(".dtcm")));
+uInt32 myWaveformBase      __attribute__((section(".dtcm")));
 
 CartridgeCDF *myCartCDF __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
 
 uInt16 myAmplitudeStream                __attribute__((section(".dtcm"))) = 0x22;
-uInt16 myFastjumpStreamIndexMask        __attribute__((section(".dtcm"))) = 0xff;
 uInt16 myDatastreamBase                 __attribute__((section(".dtcm"))) = 0x00a0;
 uInt16 myDatastreamIncrementBase        __attribute__((section(".dtcm"))) = 0x0128;
 
 // Pointer to the 28K program ROM image of the cartridge
 extern uInt8 myDPC[];
 extern uInt8 *myDPCptr;
+extern Int32 myDPCPCycles;
 
 extern uInt32 myMusicCounters[3];
 extern uInt32 myMusicFrequencies[3];
@@ -69,8 +70,6 @@ extern uInt32 myMusicFrequencies[3];
 // 0- = Packed Digital Sample
 // F- = 3 Voice Music
 uInt8 myMode = 0xFF;
-
-// set to address of #value if last byte peeked was A9 (LDA #)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
@@ -110,23 +109,24 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   switch (subversion) {
     case 0x4a: //CDFJ
       myAmplitudeStream = 0x23;
-      myFastjumpStreamIndexMask = 0xfe;
       myDatastreamBase = 0x0098;
       myDatastreamIncrementBase = 0x0124;
+      myWaveformBase = 0x01b0;
       break;
 
     case 0: //V0
       myAmplitudeStream = 0x22;
-      myFastjumpStreamIndexMask = 0xff;
       myDatastreamBase = 0x06e0;
       myDatastreamIncrementBase = 0x0768;
+      myWaveformBase = 0x07f0;
       break;
 
     default: //V1
       myAmplitudeStream = 0x22;
-      myFastjumpStreamIndexMask = 0xff;
       myDatastreamBase = 0x00a0;
       myDatastreamIncrementBase = 0x0128;
+      myWaveformBase = 0x01b0;
+      break;
  }    
     
  fastDataStreamBase = (uInt32)&fast_cart_buffer[myDatastreamBase];
@@ -157,6 +157,7 @@ const char* CartridgeCDF::name() const
 void CartridgeCDF::reset()
 {
   // Upon reset we switch to the startup bank
+  myDPCPCycles = mySystem->cycles();
   bank(myStartBank);
 }
 
@@ -164,7 +165,10 @@ void CartridgeCDF::reset()
 void CartridgeCDF::systemCyclesReset()
 {
   // Get the current system cycle
-  
+  uInt32 cycles = mySystem->cycles();
+
+  // Adjust the cycle counter so that it reflects the new value
+  myDPCPCycles -= cycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -225,20 +229,22 @@ uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
 
       // _GetWavePtr - return the counter
     case 2:
-        myMusicCounters[value1] = 0xFFFFFFFF;
+        myMusicCounters[value1] = 0xFFFFFFFF;       // TODO: we don't yet support digital waveforms so just tell the caller we're done with the sample
         return myMusicCounters[value1];
 
       // _SetWaveSize - set size of waveform buffer
     case 3:
       myMusicWaveformSize[value1] = value2;
-      debug[18] = value2;
       break;
   }
 
   return 0;
 }
 
-
+uInt8 CartridgeCDF::peekMusic(void)
+{
+    return 0x00;    // We don't yet support digital waveforms (timing is wrong... sounds like crap... too slow for the poor DSi)
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeCDF::peek(uInt16 address)  
@@ -247,7 +253,7 @@ uInt8 CartridgeCDF::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeCDF::poke(uInt16 address, uInt8 value)
+ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
 {
   address &= 0x0FFF;
 
@@ -255,18 +261,18 @@ void CartridgeCDF::poke(uInt16 address, uInt8 value)
   {
     case 0xFF0:   // DSWRITE
       {
-      uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
-      myDisplayImageCDF[ *ptr >> 20 ] = value;
-      *ptr  += 0x100000;  // always increment by 1 when writing
+          uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
+          myDisplayImageCDF[ *ptr >> 20 ] = value;
+          *ptr  += 0x100000;  // always increment by 1 when writing
       }
       break;
 
     case 0xFF1:   // DSPTR
       {
-      uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
-      *ptr <<=8;
-      *ptr &= 0xf0000000;
-      *ptr |= (value << 20);
+          uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
+          *ptr <<=8;
+          *ptr &= 0xf0000000;
+          *ptr |= (value << 20);
       }
       break;
 

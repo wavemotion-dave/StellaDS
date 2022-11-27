@@ -117,7 +117,7 @@ class CartridgeCDF : public Cartridge
     void setDatastreamPointer(uInt8 index, uInt32 value);
     uInt32 getDatastreamIncrement(uInt8 index) const;
     uInt8 readFromDatastream(uInt8 index);
-    
+    uInt8 peekMusic(void);
 
   private:
     /** 
@@ -128,13 +128,6 @@ class CartridgeCDF : public Cartridge
   private:
     // The ROM image and size
     uInt32 mySize;
-
-    // Pointer to the 1K frequency table
-    uInt8* myFrequencyImage;
-    
-    //void updateMusicModeDataFetchers(void);
-    //uInt32 getWaveform(uInt8 index) const;
-    //uInt32 getSample(void);  
 };
 
 extern uInt16 myDatastreamBase;

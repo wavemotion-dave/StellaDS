@@ -273,7 +273,7 @@ ITCM_CODE uInt8 CartridgeDPCPlus::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
+void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
 {
     // Get the index of the data fetcher that's being accessed
     uInt8 index = address & 0x07;

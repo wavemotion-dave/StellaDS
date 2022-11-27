@@ -1848,6 +1848,12 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           newx = 11;
       }
+
+      // TODO: Remove the following special hack for Draconian
+      if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
+      {
+          newx = 11;
+      }
         
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ0 & 7][myPOSP0][newx];
@@ -1900,9 +1906,9 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           {
               newx = 11;
           }
-
+          
           // TODO: Remove the following special hack for Rabbit Transit
-          // and Dragon Stomper (Excalibur) by StarPath/ARcadia
+          // and Dragon Stomper (Excalibur) by StarPath/Arcadia and Draconian
           else if ((clock - myLastHMOVEClock) == (20 * 3))
           {
               newx = 11;
