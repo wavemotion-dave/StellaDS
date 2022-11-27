@@ -256,7 +256,11 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   }
 
   //B(2) unconditional branch
-  if((inst & 0xF800) == 0xE000) return Op::b2;
+  if((inst & 0xF800) == 0xE000) 
+  {
+      if (inst&(1<<10)) return Op::b2_1;
+      return Op::b2_0;
+  }
 
   //BIC
   if((inst & 0xFFC0) == 0x4380) return Op::bic;
@@ -652,11 +656,18 @@ ITCM_CODE void Thumbulator::execute ( void )
               done = true;
               break;
               
-          case Op::b2:  //B(2) unconditional branch
+          case Op::b2_0:  //B(2) unconditional branch no sign extend
                 rb=(inst>>0)&0x7FF;
-                if(rb&(1<<10))  rb|=(~0)<<11;   // Sign extended
-                thumb_ptr += (int)rb+1;
-                thumb_decode_ptr += (int)rb+1;
+                rb++;
+                thumb_ptr += rb;
+                thumb_decode_ptr += rb;
+              break;
+              
+          case Op::b2_1:  //B(2) unconditional branch - sign extend
+                rb=(inst | 0xFFFFF800);
+                rb++;
+                thumb_ptr += (int)rb;
+                thumb_decode_ptr += (int)rb;
               break;
               
           case Op::blx1: //BL/BLX(1)
@@ -758,8 +769,8 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::ldr4_0:
-                rb=(inst>>0)&0xFF;
-                rb<<=2;
+                rb=(inst<<2)&0x3FF;
+                //rb<<=2;
                 rb+=read_register(13);
                 write_register(0,read32(rb));
               break;

@@ -87,7 +87,7 @@ class Thumbulator
       asr1, asr2,
       b1_000, b1_100, b1_200, b1_300, b1_400, b1_500, b1_600, b1_700,
       b1_800, b1_900, b1_a00, b1_b00, b1_c00, b1_d00, b1_e00, b1_f00,
-      b2,
+      b2_0, b2_1,
       bic,
       bkpt,
       blx1, blx2,

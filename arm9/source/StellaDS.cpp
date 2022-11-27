@@ -46,7 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "5.9"
+#define VERSION "6.0"
 
 //#define WRITE_TWEAKS
 
@@ -64,7 +64,7 @@ uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 20933;
 
-#define MAX_DEBUG 39
+#define MAX_DEBUG 40
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
 char my_filename[MAX_FILE_NAME_LEN+1] = {0};
@@ -98,51 +98,13 @@ static void DumpDebugData(void)
     if (DEBUG_DUMP)
     {        
         char dbgbuf[36];
-        int idx=0;
-        int val=0;
 
         sprintf(dbgbuf, "%32s", myCartInfo.md5);                                    dsPrintValue(0,2,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.Scale:     %03d", myCartInfo.screenScale);            dsPrintValue(1,3,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.xOffset:   %03d", myCartInfo.xOffset);                dsPrintValue(1,4,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.yOffset:   %03d", myCartInfo.yOffset);                dsPrintValue(1,5,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.startDisp: %03d", myCartInfo.displayStartScanline);   dsPrintValue(1,6,0, dbgbuf);
-        sprintf(dbgbuf, "Cart.numLines:  %03d", myCartInfo.displayNumScalines);     dsPrintValue(1,7,0, dbgbuf);
-        sprintf(dbgbuf, "%08X  %08X", debug[15], debug[16]); dsPrintValue(1,8,0, dbgbuf);
         
-        for (int i=0; i<MAX_DEBUG; i++)
+        for (int i=0; i<20; i++)
         {
-            idx=0;
-            val = debug[i];
-            dbgbuf[idx++] = '0' + (i / 10);
-            dbgbuf[idx++] = '0' + (i % 10);
-            dbgbuf[idx++] = ':';
-            if (val < 0)
-            {
-                dbgbuf[idx++] = '-';
-                val = -val;
-            }
-            else
-            {
-                dbgbuf[idx++] = '0' + (int)val/1000000;
-            }
-            val = val % 1000000;
-            dbgbuf[idx++] = '0' + (int)val/100000;
-            val = val % 100000;
-            dbgbuf[idx++] = '0' + (int)val/10000;
-            val= val % 10000;
-            dbgbuf[idx++] = '0' + (int)val/1000;
-            val = val % 1000;
-            dbgbuf[idx++] = '0' + (int)val/100;
-            val = val % 100;
-            dbgbuf[idx++] = '0' + (int)val/10;
-            dbgbuf[idx++] = '0' + (int)val%10;
-            dbgbuf[idx++] = 0;
-
-            if (i > 25)
-                dsPrintValue(22,9+(i-26),0, dbgbuf);
-            else if (i > 12)
-                dsPrintValue(11,9+(i-13),0, dbgbuf);
-            else dsPrintValue(0,9+i,0, dbgbuf);
+            sprintf(dbgbuf, "%02d: %9u %08X  %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
+            dsPrintValue(0,2+i,0, dbgbuf);
         }
     }
 }

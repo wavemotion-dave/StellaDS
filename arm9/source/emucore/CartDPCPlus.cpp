@@ -53,7 +53,7 @@ uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
 extern uInt32 myCounters[8];
 
-uInt8 myDPC[28*1024];
+uInt8 myDPC[32*1024];
 
 uInt8 *myDPCptr __attribute__((section(".dtcm")));
 

@@ -84,7 +84,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myDisplayImageCDF = fast_cart_buffer + MEM_2KB;
 
   // Copy intial driver into the CDF Harmony RAM
-  memcpy((myDisplayImageCDF-MEM_2KB), (myDPCptr-MEM_4KB), MEM_2KB);
+  memcpy(fast_cart_buffer, image, MEM_2KB);
   
   for (int i=0; i < 3; ++i)
     myMusicWaveformSize[i] = 27;
@@ -135,8 +135,8 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myMode = 0xFF;
   myDataStreamFetch = 0x00;
     
-    // Create Thumbulator ARM emulator
-  myThumbEmulator = new Thumbulator((uInt16*)(myDPCptr-MEM_4KB));
+  // Create Thumbulator ARM emulator
+  myThumbEmulator = new Thumbulator((uInt16*)(image));
   
   myCartCDF = this;
 }

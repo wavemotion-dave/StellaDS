@@ -32,8 +32,9 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Known Issues :
 -----------------------
-* CDFJ/CDFJ+ games are not currently emulated due to the complexities in emulating the more advanced ARM assisted code, increased fast fetchers, fast jump handling, etc.
+* CDF/CDFJ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
 * DPC+ games are supported but are complex enough and most use ARM assisted code so you really need a DSi running with TWL++ or Unlaunch to get the faster 2X CPU speed to ensure those games run well enough.
+* CDFJ+ (CDFJPlus) carts are not supported.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
@@ -119,6 +120,7 @@ FE/SCABS    8K          --
 AR          2K          6K
 DPC         8K (+ 2K Display Data)  
 DPC+        24K         8K (ARM assisted)
+CDF/CDFJ    28K         8K (ARM assisted)
 E0          8K          --
 FA          12K         256 bytes
 E7          16K         1K + (4) 256 byte pages
@@ -177,6 +179,10 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V6.0 : 27-Nov-2022 by Dave Bernazzani (wavemotion)
+  * CDF/CDFJ games are now supported (but not CDFJ+)
+  * Big speedup in ARM Thumb processing to render all DPC+ games full-speed on the DSi or above.
+
 V5.9 : 21-Nov-2022 by Dave Bernazzani (wavemotion)
   * Minor fixes for some games to render them more accurately including the new Chaotic Grill homebrew.
   * Improved ARM Thumbulator for another frame of performance.
