@@ -31,7 +31,12 @@ class Thumbulator;
 #define COMMSTREAM        0x20
 #define JUMPSTREAM_BASE   0x21
 
-#define DSRAM   0x800
+#define DSRAM             0x800
+
+extern bool   isCDFJPlus;
+extern uInt16 myDatastreamBase;
+extern uInt16 myDatastreamIncrementBase;
+extern uInt16 myAmplitudeStream;
 
 
 /**
@@ -124,10 +129,6 @@ class CartridgeCDF : public Cartridge
     // The ROM image and size
     uInt32 mySize;
 };
-
-extern uInt16 myDatastreamBase;
-extern uInt16 myDatastreamIncrementBase;
-extern uInt16 myAmplitudeStream;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 CartridgeCDF::getDatastreamPointer(uInt8 index) const

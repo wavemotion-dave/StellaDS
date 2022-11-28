@@ -44,12 +44,12 @@ bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
 {
-  for (uInt16 i=0; i<ROMSIZE / 2; i++)
+  for (uInt32 i=0; i<ROMSIZE/2; i++)
   {
     rom[i] = rom_ptr[i];
   }
     
-  for(uInt16 i = 0; i < ROMSIZE / 2; ++i)
+  for(uInt32 i=0; i < ROMSIZE/2; i++)
   {
     decodedRom[i] = (uInt8)decodeInstructionWord(rom[i]);
   }    
@@ -72,14 +72,14 @@ void Thumbulator::run( void )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write16 ( uInt32 addr, uInt32 data )
 {
-  uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & 0xFFFF];
+  uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & RAMADDMASK];
   *ptr = data;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write32 ( uInt32 addr, uInt32 data )
 {
-  uInt32 *ptr = (uInt32*) &fast_cart_buffer[addr & 0xFFFF];
+  uInt32 *ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];
   *ptr = data;
 }
 
@@ -88,7 +88,7 @@ inline uInt16 Thumbulator::read16 ( uInt32 addr )
 {
   if (addr & 0x40000000)
   {
-      uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & 0xFFFF];
+      uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & RAMADDMASK];
       return *ptr;
   }
   return rom[(addr) >> 1];
@@ -101,7 +101,7 @@ inline uInt32 Thumbulator::read32 ( uInt32 addr )
 
   if (addr & 0x40000000)
   {
-      ptr = (uInt32*) &fast_cart_buffer[addr & 0xFFFF];
+      ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];
   }
   else
   {
@@ -122,7 +122,7 @@ inline uInt32 Thumbulator::readROM32 ( uInt32 addr )
 inline uInt32 Thumbulator::readRAM32 ( uInt32 addr )
 {
   uInt32 *ptr;
-  ptr = (uInt32*) &fast_cart_buffer[addr & 0xFFFF];  
+  ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];  
   return *ptr;    
 }
 
@@ -193,18 +193,36 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   //ADD(2) big immediate one register
   if((inst & 0xF800) == 0x3000) 
   {
-      switch (inst & 0x0700)
+      if ((inst & 0xFF) == 1)
       {
-          case 0x0000:  return Op::add2_0;
-          case 0x0100:  return Op::add2_1;
-          case 0x0200:  return Op::add2_2;
-          case 0x0300:  return Op::add2_3;
-          case 0x0400:  return Op::add2_4;
-          case 0x0500:  return Op::add2_5;
-          case 0x0600:  return Op::add2_6;
-          case 0x0700:  return Op::add2_7;
+          switch (inst & 0x0700)
+          {
+              case 0x0000:  return Op::inc_r0;
+              case 0x0100:  return Op::inc_r1;
+              case 0x0200:  return Op::inc_r2;
+              case 0x0300:  return Op::inc_r3;
+              case 0x0400:  return Op::inc_r4;
+              case 0x0500:  return Op::inc_r5;
+              case 0x0600:  return Op::inc_r6;
+              case 0x0700:  return Op::inc_r7;
+          }
+          return Op::inc_r0;
       }
-      return Op::add2_0;
+      else
+      {
+          switch (inst & 0x0700)
+          {
+              case 0x0000:  return Op::add2_0;
+              case 0x0100:  return Op::add2_1;
+              case 0x0200:  return Op::add2_2;
+              case 0x0300:  return Op::add2_3;
+              case 0x0400:  return Op::add2_4;
+              case 0x0500:  return Op::add2_5;
+              case 0x0600:  return Op::add2_6;
+              case 0x0700:  return Op::add2_7;
+          }
+          return Op::add2_0;
+      }
   }
 
   //ADD(3) three registers
@@ -1505,6 +1523,39 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
+          case Op::inc_r0:
+                reg_sys[0]++;
+                do_znflags(reg_sys[0]);
+              break;
+          case Op::inc_r1:
+                reg_sys[1]++;
+                do_znflags(reg_sys[1]);
+              break;
+          case Op::inc_r2:
+                reg_sys[2]++;
+                do_znflags(reg_sys[2]);
+              break;
+          case Op::inc_r3:
+                reg_sys[3]++;
+                do_znflags(reg_sys[3]);
+              break;
+          case Op::inc_r4:
+                reg_sys[4]++;
+                do_znflags(reg_sys[4]);
+              break;
+          case Op::inc_r5:
+                reg_sys[5]++;
+                do_znflags(reg_sys[5]);
+              break;
+          case Op::inc_r6:
+                reg_sys[6]++;
+                do_znflags(reg_sys[6]);
+              break;
+          case Op::inc_r7:
+                reg_sys[7]++;
+                do_znflags(reg_sys[7]);
+              break;
+              
           case Op::add2_0:
                 reg_sys[0] += (inst>>0)&0xFF;
                 do_znflags(reg_sys[0]);
@@ -1768,21 +1819,12 @@ ITCM_CODE int Thumbulator::reset ( void )
 {
     if (myCartInfo.banking == BANK_CDFJ)
     {
-      if (isCDFJPlus)
-      {
-          extern uInt32 cBase, cStack, cStart;
-          reg_sys[13]=cStack;   //sp
-          reg_sys[14]=cBase;    //lr (duz this use odd addrs)
-          reg_sys[15]=cStart+3; //pc entry point of 0x809+2
-      }
-      else
-      {
-          reg_sys[13]=0x40001fb4; //sp
-          reg_sys[14]=0x00000800; //lr (duz this use odd addrs)
-          reg_sys[15]=0x0000080b; //pc entry point of 0x809+2
-      }
+      extern uInt32 cBase, cStack, cStart;
+      reg_sys[13]=cStack;   //sp
+      reg_sys[14]=cBase;    //lr (duz this use odd addrs)
+      reg_sys[15]=cStart+3; //pc entry point of 0x809+2
     }
-    else
+    else // Is DPC+
     {
       reg_sys[13]=0x40001fb4; //sp
       reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)

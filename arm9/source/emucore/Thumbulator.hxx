@@ -28,7 +28,7 @@
 
 #include "bspf.hxx"
 
-#define ROMADDMASK 0x7FFF
+#define ROMADDMASK 0xFFFF
 #define RAMADDMASK 0x1FFF
 
 #define ROMSIZE (ROMADDMASK+1)
@@ -89,6 +89,7 @@ class Thumbulator
       adc,
       add1, 
       add2_0, add2_1, add2_2, add2_3, add2_4, add2_5, add2_6, add2_7,
+      inc_r0, inc_r1, inc_r2, inc_r3, inc_r4, inc_r5, inc_r6, inc_r7, 
       add3, add4, add5, add6, add7,
       and_,
       asr1, asr2,
@@ -158,9 +159,6 @@ class Thumbulator
     int reset ( void );
     
     static Op decodeInstructionWord(uint16_t inst);
-
-  private:
-    uInt32 halfadd;
 };
 
 #endif

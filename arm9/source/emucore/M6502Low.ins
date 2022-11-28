@@ -1773,6 +1773,9 @@ case 0x4c:  // JMP
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
 }
 {
+#ifdef DATA_STREAMS_PLUS
+  if (operandAddress < 2) operandAddress = peek_JumpStreamPlus(operandAddress);
+#endif
 #ifdef DATA_STREAMS
   if (operandAddress < 2) operandAddress = peek_JumpStream(operandAddress);
 #endif
@@ -1934,6 +1937,19 @@ case 0xa9:
   extern u8 myDataStreamFetch;
   if (A < myDataStreamFetch) A = peek_DataStream(A);
 #endif
+
+#ifdef DATA_STREAMS_PLUS
+  extern u8 myDataStreamFetch; extern u32 myFastFetcherOffset;
+  if (myFastFetcherOffset)
+  {
+    uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+    if ((A >= offset) && (A <= offset+(myDataStreamFetch-1))) A = peek_DataStreamPlus(A-offset);
+  }
+  else
+  {
+     if (A < myDataStreamFetch) A = peek_DataStreamPlus(A);
+  }
+#endif
 }
 {
   notZ = N = A;
@@ -2041,6 +2057,22 @@ break;
 case 0xa2:
 {
   X = peek_PC(PC++);
+#ifdef DATA_STREAMS_PLUS
+  extern u8 myDataStreamFetch, myLDXenabled; extern u32 myFastFetcherOffset;
+  if (myLDXenabled)
+  {
+      if (myFastFetcherOffset)
+      {
+        uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+        if ((X >= offset) && (X <= offset+(myDataStreamFetch-1))) X = peek_DataStreamPlus(X-offset);
+      }
+      else
+      {
+         if (X < myDataStreamFetch) X = peek_DataStreamPlus(X);
+      }
+  }
+#endif
+  
 }
 {
   notZ = X;
@@ -2102,6 +2134,21 @@ break;
 case 0xa0:
 {
   Y = peek_PC(PC++);
+#ifdef DATA_STREAMS_PLUS
+  extern u8 myDataStreamFetch, myLDYenabled; extern u32 myFastFetcherOffset;
+  if (myLDYenabled)
+  {
+      if (myFastFetcherOffset)
+      {
+        uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+        if ((Y >= offset) && (Y <= offset+(myDataStreamFetch-1))) Y = peek_DataStreamPlus(Y-offset);
+      }
+      else
+      {
+         if (Y < myDataStreamFetch) Y = peek_DataStreamPlus(Y);
+      }
+  }
+#endif
 }
 {
   notZ = Y;

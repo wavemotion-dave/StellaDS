@@ -2324,13 +2324,6 @@ void SetOtherDatabaseFieldDefaults(void)
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
   if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 2;
     
-  // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
-  if (myCartInfo.banking == BANK_CDFJ)
-  {
-      myCartInfo.thumbOptimize = 2;
-      myCartInfo.soundQuality = SOUND_10KHZ;
-  }
-    
   myCartInfo.aButton = BUTTON_FIRE;
   myCartInfo.bButton = BUTTON_FIRE;
   myCartInfo.xButton = BUTTON_FIRE;
@@ -2677,7 +2670,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       imagePatch[0x19ED] = 0x01;
   }
     
-    
   // If we didn't find the type in the table then guess it based on size
   if(!bFound)
   {
@@ -2744,9 +2736,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if(isProbablySC(image, size))
         myCartInfo.banking = BANK_F4SC;
       else if (isProbablyDPCplus(image, size))
-        myCartInfo.banking = BANK_DPCP;                                               // Unfortunately, we don't handle DPC+ with the ARM core support needed
+        myCartInfo.banking = BANK_DPCP;                                               
       else if (isProbablyCDF(image, size))
-        myCartInfo.banking = BANK_CDFJ;                                               // Unfortunately, we don't handle CDFJ with the ARM core support needed
+        myCartInfo.banking = BANK_CDFJ;                                               
       else if(isProbably3F(image, size))
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else if (isProbablyFA2(image, size))
@@ -2757,7 +2749,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     else if (size == 64*1024) // 64K
     {
       if (isProbablyCDF(image, size))
-        myCartInfo.banking = BANK_CDFJ;                                                  // Unfortunately, we don't handle CDFJ with the ARM core support needed
+        myCartInfo.banking = BANK_CDFJ;                                               
       else if(isProbably3F(image, size))
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else if (isProbablyEF(image, size)) 
@@ -2768,13 +2760,13 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else if(size == (128*1024)) // 128K
     {
-        if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
+        if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       
         else if (isProbablyDFSC(image, size)) myCartInfo.banking = BANK_DFSC;
         else myCartInfo.banking = ((isProbablyDF(image, size)) ? BANK_DF : BANK_SB);          // 128K games generally use either DFSC or, more commonly SuperBanking
     }
     else if(size == (256*1024)) // 256K
     {
-        if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
+        if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       
         else if (isProbablyBF(image,size)) myCartInfo.banking = BANK_BF;
         else myCartInfo.banking = ((isProbablyBFSC(image,size)) ? BANK_BFSC : BANK_SB);       // 256K games are either BFSC or, more commonly SuperBanking
     }
@@ -2784,7 +2776,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else // 512K or some odd-size...
     {
-      if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       // Unfortunately, we don't handle CDFJ with the ARM core support needed
+      if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       
       else if(isProbably3F(image, size))    
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;                 // Many games > 256K are 3E or 3F
       else
@@ -2804,12 +2796,19 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if (myCartInfo.banking == BANK_DPCP)
   {
+      isCDFJPlus = false;
       cartDriver = 8;
   }  
   else if (myCartInfo.banking == BANK_CDFJ)
   {
-      cartDriver = 9;
-  }  
+      isCDFJPlus = (searchForBytes5(image, size, 'P', 'L', 'U', 'S', 'C') ? true:false); 
+      
+      cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
+      
+      // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
+      myCartInfo.thumbOptimize = 2;
+      myCartInfo.soundQuality = SOUND_10KHZ;
+  }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
       cartDriver = 1;
@@ -3208,6 +3207,8 @@ bool Cartridge::isProbablyDPCplus(const uInt8* image, uInt32 size)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyCDF(const uInt8* image, uInt32 size)
 {
+  isCDFJPlus = (searchForBytes5(image, size, 'P', 'L', 'U', 'S', 'C') ? true:false); 
+    
   // DPC+ ARM code has occurrences of the string CDF (or CDFJ)
   return searchForBytes3(image, size, 'C', 'D', 'F');
 }

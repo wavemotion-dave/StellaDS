@@ -80,6 +80,7 @@ class M6502Low : public M6502
     virtual void execute_F6SC(uInt16 number);
     virtual void execute_DPCP(uInt16 number);
     virtual void execute_CDFJ(uInt16 number);
+    virtual void execute_CDFJPlus(uInt16 number);
     
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
@@ -130,7 +131,9 @@ class M6502Low : public M6502
 
     uInt8  peek_Fetch(uInt8 address);
     uInt8  peek_DataStream(uInt8 address);
+    uInt8  peek_DataStreamPlus(uInt8 address);
     uInt16 peek_JumpStream(uInt8 address);
+    uInt16 peek_JumpStreamPlus(uInt8 address);
     
     /**
       Change the byte at the specified address to the given value

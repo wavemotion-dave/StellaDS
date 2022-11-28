@@ -209,7 +209,7 @@ void dsInitPalette(void)
 
 void dsWarnIncompatibileCart(void)
 {
-    dsPrintValue(5,0,0, (char*)"CDFJ CART NOT SUPPORTED");
+    dsPrintValue(5,0,0, (char*)"CART TYPE NOT SUPPORTED");
     bHaltEmulation = 1; // And force the game to not run 
 }
 

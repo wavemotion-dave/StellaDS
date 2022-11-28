@@ -128,6 +128,7 @@ class M6502
     virtual void execute_F6SC(uInt16 number) = 0;
     virtual void execute_DPCP(uInt16 number) = 0;
     virtual void execute_CDFJ(uInt16 number) = 0;
+    virtual void execute_CDFJPlus(uInt16 number) = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 

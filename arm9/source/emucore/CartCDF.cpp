@@ -40,6 +40,7 @@ static uInt16 myStartBank = 6;
 #define MEM_24KB (1024 * 24)
 #define MEM_28KB (1024 * 28)
 #define MEM_32KB (1024 * 32)
+#define MEM_64KB (1024 * 64)
 
 extern Thumbulator *myThumbEmulator;
 uInt8 myDataStreamFetch __attribute__((section(".dtcm"))) = 0x00;
@@ -72,7 +73,7 @@ extern uInt32 myMusicFrequencies[3];
 // -F = Fast Fetch OFF
 // 0- = Packed Digital Sample
 // F- = 3 Voice Music
-uInt8 myMode = 0xFF;
+uInt8 myMode __attribute__((section(".dtcm"))) = 0xFF;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -102,9 +103,9 @@ bool  isCDFJPlus      __attribute__((section(".dtcm"))) = 0;
 CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
 {
   uInt8 subversion = 0;
-
-  isCDFJPlus = false;
     
+  // isCDFJPlus is already set by the Cart auto-detect
+
   // get offset of CDFJPlus ID
   uInt32 cdfjOffset = 0;
     
@@ -112,7 +113,6 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
       getUInt32(image, cdfjOffset+4) == 0x4a464443 &&   // CDFJ
       getUInt32(image, cdfjOffset+8) == 0x00000001)     // V1
   {
-    isCDFJPlus = true;
     myAmplitudeStream = 0x23;
     myDatastreamBase = 0x0098;
     myDatastreamIncrementBase = 0x0124;
@@ -138,6 +138,10 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   }
   else
   {
+      cStack = 0x40001fb4;
+      cBase  = 0x00000800;
+      cStart = 0x00000808;
+      
       for(uInt32 i = 0; i < 2048; i += 4)
       {
         // CDF signature occurs 3 times in a row, i+3 (+7 or +11) is version
@@ -176,7 +180,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
     
   // Pointer to the program ROM (28K @ 4K offset)
   myDPCptr = (uInt8 *)image + (isCDFJPlus ? MEM_2KB : MEM_4KB);
-  memcpy(myDPC, myDPCptr, MEM_32KB);
+  memcpy(myDPC, myDPCptr, MEM_32KB); // For the 6502, we only need to copy 32K 
         
   memset(fast_cart_buffer, 0, 8192);    // Clear all of the "ARM Thumb" RAM
     
@@ -203,7 +207,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myDataStreamFetch = 0x00;
     
   // Create Thumbulator ARM emulator
-  myThumbEmulator = new Thumbulator((uInt16*)image);
+  myThumbEmulator = new Thumbulator((uInt16*)image); // The Thumbulator gets the full image no matter how big...
   
   myCartCDF = this;
 }
@@ -391,9 +395,18 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
   {
     case 0xFF0:   // DSWRITE
       {
-          uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
-          myDisplayImageCDF[ *ptr >> 20 ] = value;
-          *ptr  += 0x100000;  // always increment by 1 when writing
+          if (isCDFJPlus)
+          {
+              uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
+              myDisplayImageCDF[ *ptr >> 16 ] = value;
+              *ptr  += 0x10000;  // always increment by 1 when writing
+          }
+          else          
+          {
+              uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
+              myDisplayImageCDF[ *ptr >> 20 ] = value;
+              *ptr  += 0x100000;  // always increment by 1 when writing
+          }
       }
       break;
 
@@ -401,8 +414,16 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
       {
           uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (COMMSTREAM << 2));
           *ptr <<=8;
-          *ptr &= 0xf0000000;
-          *ptr |= (value << 20);
+          if (isCDFJPlus)
+          {
+              *ptr &= 0xf0000000;
+              *ptr |= (value << 16);
+          }
+          else
+          {
+              *ptr &= 0xff000000;
+              *ptr |= (value << 20);
+          }
       }
       break;
 

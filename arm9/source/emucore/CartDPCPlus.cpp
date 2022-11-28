@@ -30,6 +30,7 @@ static uInt16 myStartBank = 5;
 #define MEM_4KB  (1024 * 4)
 #define MEM_5KB  (1024 * 5)
 #define MEM_24KB (1024 * 24)
+#define MEM_32KB (1024 * 32)
 
 Thumbulator *myThumbEmulator __attribute__((section(".dtcm"))) = NULL;
 
@@ -53,7 +54,7 @@ uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
 extern uInt32 myCounters[8];
 
-uInt8 myDPC[32*1024];
+uInt8 myDPC[MEM_32KB];
 
 uInt8 *myDPCptr __attribute__((section(".dtcm")));
 
