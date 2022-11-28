@@ -59,6 +59,13 @@
 #define CPSR_V (1<<28)
 #define CPSR_Q (1<<27)
 
+static constexpr uInt32 getUInt32(const uInt8* _array, size_t _address) {
+  return static_cast<uInt32>((_array)[(_address) + 0]        +
+                            ((_array)[(_address) + 1] << 8)  +
+                            ((_array)[(_address) + 2] << 16) +
+                            ((_array)[(_address) + 3] << 24));
+}
+
 class Thumbulator
 {
   public:
@@ -85,7 +92,7 @@ class Thumbulator
       add3, add4, add5, add6, add7,
       and_,
       asr1, asr2,
-      b1_000, b1_100, b1_200, b1_300, b1_400, b1_500, b1_600, b1_700,
+      b1_000_neg, b1_000_pos, b1_100_neg, b1_100_pos, b1_200, b1_300, b1_400, b1_500, b1_600, b1_700,
       b1_800, b1_900, b1_a00, b1_b00, b1_c00, b1_d00, b1_e00, b1_f00,
       b2_0, b2_1,
       bic,

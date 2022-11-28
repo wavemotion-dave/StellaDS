@@ -617,7 +617,7 @@ const CartInfo table[] =
     {"368d88a6c071caba60b4f778615aae94",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Double Dunk (Super Basketball) (1989).bin
     {"cfc226d04d7490b69e155abd7741e98c",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Double Dunk (Super Basketball) (1989) (PAL).bin
     {"6ed5012793f5ddf4353a48c11ea9b8d3",  "??????", BANK_AR,   CTR_PADDLE0,   SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Down on the Line, Handcar.bin
-    {"97f4da9f1031486f4e588f1e53572e53",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
+    {"97f4da9f1031486f4e588f1e53572e53",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
     {"24d9a55d8f0633e886a1b33ee1e0e797",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    75,   0,  0},    // Dragon Defender.bin
     {"95e542a7467c94b1e4ab24a3ebe907f1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    59,   0,  1},    // Dragon Defender (PAL).bin
     {"6a882fb1413912d2ce5cf5fa62cf3875",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    60,   0,  1},    // Dragon Defender (PAL).bin
@@ -2953,13 +2953,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
 
   if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.right_difficulty = DIFF_A;   // Force Stay Frosty 2 to have no background music (can't render it properly and saves cycles)
-    
-  // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
-  if (myCartInfo.banking == BANK_CDFJ)
-  {
-      myCartInfo.thumbOptimize = 2;
-      myCartInfo.soundQuality = SOUND_10KHZ;
-  }    
     
   extern uInt32 bSafeThumb;
   bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...

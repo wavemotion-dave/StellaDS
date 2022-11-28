@@ -83,14 +83,6 @@ class CartridgeCDF : public Cartridge
 
 
     /**
-      Access the internal ROM image for this cartridge.
-
-      @param size  Set to the size of the internal ROM image data
-      @return  A pointer to the internal ROM image data
-    */
-    const uInt8* getImage(int& size) const;
-
-    /**
       Get a descriptor for the device name (used in error checking).
 
       @return The name of the object
@@ -116,7 +108,6 @@ class CartridgeCDF : public Cartridge
     uInt32 getDatastreamPointer(uInt8 index) const;
     void setDatastreamPointer(uInt8 index, uInt32 value);
     uInt32 getDatastreamIncrement(uInt8 index) const;
-    uInt8 readFromDatastream(uInt8 index);
     uInt8 peekMusic(void);
 
   private:
@@ -124,6 +115,10 @@ class CartridgeCDF : public Cartridge
       Call Special Functions
     */
     void callFunction(uInt8 value);
+    uInt32 scanCDFDriver(uInt32 searchValue);
+    
+    uInt32 getWaveform(uInt8 index) const;
+    uInt32 getSample();
 
   private:
     // The ROM image and size

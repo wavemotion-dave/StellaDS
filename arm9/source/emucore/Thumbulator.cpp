@@ -33,9 +33,10 @@ uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
 uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
+extern bool  isCDFJPlus;
 extern uInt8 fast_cart_buffer[];
 
-uInt16 rom[ROMSIZE] ALIGN(32);
+uInt16 rom[ROMSIZE/2] ALIGN(32);
 uInt8  decodedRom[ROMSIZE/2] ALIGN(32);
 
 bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
@@ -43,7 +44,7 @@ bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
 {
-  for (uInt16 i=0; i<ROMSIZE; i++)
+  for (uInt16 i=0; i<ROMSIZE / 2; i++)
   {
     rom[i] = rom_ptr[i];
   }
@@ -235,8 +236,16 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   {
       switch(inst & 0x0F00)
       {
-          case 0x000: return Op::b1_000;
-          case 0x100: return Op::b1_100;
+          case 0x000: 
+              {
+                 if (inst & 0x80) return Op::b1_000_neg;
+                 return Op::b1_000_pos;
+              }
+          case 0x100:
+              {
+                 if (inst & 0x80) return Op::b1_100_neg;
+                 return Op::b1_100_pos;
+              }
           case 0x200: return Op::b1_200;
           case 0x300: return Op::b1_300;
           case 0x400: return Op::b1_400;
@@ -489,29 +498,45 @@ ITCM_CODE void Thumbulator::execute ( void )
   uInt32 ZNflags = 0x00000000;
   uInt16 *thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
   uInt8  *thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
-  bool done = false;
-  while (!done)
+  
+  while (1)
   {
       uInt16 inst = *thumb_ptr++;
       Thumbulator::Op decoded = (Thumbulator::Op)*thumb_decode_ptr++;
       
       switch (decoded)
       {
-          case Op::b1_000:  //B(1) conditional branch
+          case Op::b1_000_pos:  //B(1) conditional branch
                 if (!ZNflags)
                 {
                     rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
                     thumb_ptr += (int)rb+1;
                     thumb_decode_ptr += (int)rb+1;
                 }
               break;
               
-          case Op::b1_100:  //B(1) conditional branch
+          case Op::b1_000_neg:  //B(1) conditional branch
+                if (!ZNflags)
+                {
+                    rb=(inst | 0xFFFFFF00);
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+              
+          case Op::b1_100_pos:  //B(1) conditional branch
                 if (ZNflags)
                 {
                     rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
+                    thumb_ptr += (int)rb+1;
+                    thumb_decode_ptr += (int)rb+1;
+                }
+              break;
+
+          case Op::b1_100_neg:  //B(1) conditional branch
+                if (ZNflags)
+                {
+                    rb=(inst | 0xFFFFFF00);
                     thumb_ptr += (int)rb+1;
                     thumb_decode_ptr += (int)rb+1;
                 }
@@ -653,8 +678,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           case Op::b1_e00:  //B(1) conditional branch
           case Op::b1_f00:  //B(1) conditional branch
-              done = true;
-              break;
+              return;
               
           case Op::b2_0:  //B(2) unconditional branch no sign extend
                 rb=(inst>>0)&0x7FF;
@@ -735,8 +759,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           case Op::swi:
                 rb=inst&0xFF;
-                done = true;
-              break;
+                return;
               
           case Op::push:
                   if (inst & 0x100) {reg_sys[13] -= 4; write32(reg_sys[13], reg_sys[14]);}
@@ -879,11 +902,11 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           case Op::bkpt:
                 rb=(inst>>0)&0xFF;
-                done = true;
+                return;
               break;
               
           case Op::cps:
-                done = true;
+                return;
               break;
               
           case Op::rev:
@@ -920,7 +943,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::setend:
-                done = true;
+                return;
               break;
               
           case Op::sxtb:
@@ -1238,7 +1261,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                           thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
                           thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
                         } 
-                        else done = true;
+                        else return;
                 }
               break;
               
@@ -1478,7 +1501,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else
                 {
                   // fxq: this could serve as exit code
-                  done=true;
+                  return;
                 }
               break;
               
@@ -1734,7 +1757,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::invalid:
-                done = true;
+                return;
               break;              
       }
   }
@@ -1745,9 +1768,19 @@ ITCM_CODE int Thumbulator::reset ( void )
 {
     if (myCartInfo.banking == BANK_CDFJ)
     {
-      reg_sys[13]=0x40001fb4; //sp
-      reg_sys[14]=0x00000800; //lr (duz this use odd addrs)
-      reg_sys[15]=0x0000080b; //pc entry point of 0x809+2
+      if (isCDFJPlus)
+      {
+          extern uInt32 cBase, cStack, cStart;
+          reg_sys[13]=cStack;   //sp
+          reg_sys[14]=cBase;    //lr (duz this use odd addrs)
+          reg_sys[15]=cStart+3; //pc entry point of 0x809+2
+      }
+      else
+      {
+          reg_sys[13]=0x40001fb4; //sp
+          reg_sys[14]=0x00000800; //lr (duz this use odd addrs)
+          reg_sys[15]=0x0000080b; //pc entry point of 0x809+2
+      }
     }
     else
     {

@@ -989,8 +989,8 @@ extern uInt32 fastDataStreamBase, fastIncStreamBase;
 // -------------------------------------------
 inline uInt8 M6502Low::peek_DataStream(uInt8 address)
 {
-  if (address == myAmplitudeStream) return 0x00;
-    
+  if (address == myAmplitudeStream) return myCartCDF->peekMusic();
+   
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (address << 2));
   uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (address << 2));
   uInt8 value = myDisplayImageCDF[(*ptr >> 20)];

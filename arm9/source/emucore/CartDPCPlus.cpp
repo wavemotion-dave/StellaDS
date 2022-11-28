@@ -426,11 +426,3 @@ void CartridgeDPCPlus::bank(uInt16 bank)
   myDPCptr = &myDPC[myCurrentOffset];
 }
 
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const uInt8* CartridgeDPCPlus::getImage(int& size) const
-{
-  size = mySize;
-  return 0;
-}
-

@@ -82,14 +82,6 @@ class CartridgeDPCPlus : public Cartridge
 
 
     /**
-      Access the internal ROM image for this cartridge.
-
-      @param size  Set to the size of the internal ROM image data
-      @return  A pointer to the internal ROM image data
-    */
-    const uInt8* getImage(int& size) const;
-
-    /**
       Get a descriptor for the device name (used in error checking).
 
       @return The name of the object
