@@ -17,6 +17,7 @@ See compatibility.txt for a full list of the ROMS supported. Generally these are
 * FA2 and Cherity supported with backing EEPROM support
 * Most popular bankswitching is supported up to 128K/256K BF/EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
 * DPC+ Arm-Assisted games supported!
+* CDF/CDFJ/CDFJ+ Arm-Assisted games supported!
 * High score support with up to 10 scores for each game
 * Manuals for more than 100 of the common games included
 * Keypad overlay for Star Raiders
@@ -32,8 +33,8 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Known Issues :
 -----------------------
-* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better. CDFJ+ is currently limited to 64K ROM and 8K RAM.
-* DPC+ games are supported but are complex enough and most use ARM assisted code so you really need a DSi running with TWL++ or Unlaunch to get the faster 2X CPU speed to ensure those games run well enough.
+* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
+* Any ARM-Assisted games are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
@@ -41,13 +42,13 @@ Known Issues :
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 * The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will run fine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.
 
+Strongest Recommendation:
+-----------------------
+If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will be too great which is why the full gammut of Atari games will always render best on an XL/LL screen.
+
 Installation:
 -----------------------
-Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will
-auto patch the game to run so you should be good to go... press on the CART slot
-too pick and load a game (.bin or .a26). For some older launchers or flash-carts
-you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely
-as most launchers will auto-patch when you run the emulator).
+Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will auto patch the game to run so you should be good to go... press on the CART slot too pick and load a game (.bin or .a26). For some older launchers or flash-carts you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely as most launchers will auto-patch when you run the emulator).
 
 Game Autodetection:
 -----------------------
@@ -120,7 +121,7 @@ AR          2K          6K
 DPC         8K (+ 2K Display Data)  
 DPC+        24K         8K (ARM assisted)
 CDF/CDFJ    32K         8K (ARM assisted)
-CDFJ+       64K         8K (ARM assisted)
+CDFJ+       256K        32K (ARM assisted)
 E0          8K          --
 FA          12K         256 bytes
 E7          16K         1K + (4) 256 byte pages
