@@ -37,16 +37,16 @@ static uInt16 myStartBank = 6;
 #define MEM_3KB  (1024 * 3)
 #define MEM_4KB  (1024 * 4)
 #define MEM_5KB  (1024 * 5)
+#define MEM_8KB  (1024 * 8)
 #define MEM_24KB (1024 * 24)
 #define MEM_28KB (1024 * 28)
 #define MEM_32KB (1024 * 32)
-#define MEM_64KB (1024 * 64)
 
 extern Thumbulator *myThumbEmulator;
 uInt8 myDataStreamFetch __attribute__((section(".dtcm"))) = 0x00;
 
 // The counter registers for the data fetchers
-uInt8* myDisplayImageCDF __attribute__((section(".dtcm")));  // Pointer to the 4K display ROM image of the cartridge
+uInt8* myDisplayImageCDF __attribute__((section(".dtcm")));  // Pointer to the 4K display image of the cartridge
 
 uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 fastIncStreamBase   __attribute__((section(".dtcm")));
@@ -74,6 +74,8 @@ extern uInt32 myMusicFrequencies[3];
 // 0- = Packed Digital Sample
 // F- = 3 Voice Music
 uInt8 myMode __attribute__((section(".dtcm"))) = 0xFF;
+
+uInt8 *myARMRAM __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -177,18 +179,31 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
           break;
      }
   }
+
+  // ------------------------------------------------------------------------
+  // Determine which RAM to use... for 32K/8K CDFJ+ or lower we can use the
+  // 8K of Fast RAM as our ARM RAM. Otherwise we have to use the slower 32K
+  // ------------------------------------------------------------------------
+  if (isCDFJPlus && (size > MEM_32KB))
+  {
+      myARMRAM = (uInt8*)&cart_buffer[480*1024];  // Set to the slow RAM buffer (back 32K of the cart buffer)
+      memset(myARMRAM, 0, MEM_32KB);              // Clear all of the "ARM Thumb" RAM
+  }
+  else
+  {
+      myARMRAM = (uInt8*)fast_cart_buffer;      // Set to the fast RAM buffer
+      memset(myARMRAM, 0, MEM_8KB);             // Clear all of the "ARM Thumb" RAM
+  }
     
   // Pointer to the program ROM (28K @ 4K offset)
   myDPCptr = (uInt8 *)image + (isCDFJPlus ? MEM_2KB : MEM_4KB);
   memcpy(myDPC, myDPCptr, MEM_32KB); // For the 6502, we only need to copy 32K 
-        
-  memset(fast_cart_buffer, 0, 8192);    // Clear all of the "ARM Thumb" RAM
     
   // Copy intial driver into the CDF Harmony RAM
-  memcpy(fast_cart_buffer, image, MEM_2KB);
+  memcpy(myARMRAM, image, MEM_2KB);
 
   // Pointer to the display RAM
-  myDisplayImageCDF = fast_cart_buffer + MEM_2KB;
+  myDisplayImageCDF = myARMRAM + MEM_2KB;
     
   // Set the initial Music Waveform sizes
   for (int i=0; i < 3; ++i)
@@ -200,8 +215,8 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myStartBank = (isCDFJPlus ? 0:6);
   bank(myStartBank);
     
-  fastDataStreamBase = (uInt32)&fast_cart_buffer[myDatastreamBase];
-  fastIncStreamBase = (uInt32)&fast_cart_buffer[myDatastreamIncrementBase];
+  fastDataStreamBase = (uInt32)&myARMRAM[myDatastreamBase];
+  fastIncStreamBase = (uInt32)&myARMRAM[myDatastreamIncrementBase];
     
   myMode = 0xFF;
   myDataStreamFetch = 0x00;
@@ -316,7 +331,7 @@ uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 CartridgeCDF::getWaveform(uInt8 index) const
 {
-  uInt32 *ptr = (uInt32*) ((uInt32)&fast_cart_buffer[myWaveformBase + (index << 2)]);
+  uInt32 *ptr = (uInt32*) ((uInt32)&myARMRAM[myWaveformBase + (index << 2)]);
   uInt32 result = *ptr;
 
   result -= (0x40000000 + MEM_2KB);
@@ -327,7 +342,7 @@ inline uInt32 CartridgeCDF::getWaveform(uInt8 index) const
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 CartridgeCDF::getSample()
 {
-  uInt32 *ptr = (uInt32*) ((uInt32)&fast_cart_buffer[myWaveformBase]);
+  uInt32 *ptr = (uInt32*) ((uInt32)&myARMRAM[myWaveformBase]);
   return *ptr;
 }
 
@@ -351,7 +366,7 @@ ITCM_CODE uInt8 CartridgeCDF::peekMusic(void)
     const uInt32 sampleaddress = getSample() + (myMusicCounters[0] >> 21);
 
     if (sampleaddress & 0xF0000000) // check for RAM
-      peekvalue = fast_cart_buffer[sampleaddress & 0xFFFF];
+      peekvalue = myARMRAM[sampleaddress & 0xFFFF];
     else 
       peekvalue = cart_buffer[sampleaddress];
 

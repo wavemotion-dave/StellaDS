@@ -78,11 +78,15 @@ uInt32 myDPCPRandomNumber __attribute__((section(".dtcm")));
 // System cycle count when the last update to music data fetchers occurred
 Int32 myDPCPCycles __attribute__((section(".dtcm")));
 
+extern uInt8 *myARMRAM;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   : myParameterPointer(0)
 {
+  // For DPC+ we can always use the fast cart buffer as this driver only needs 8K of RAM
+  myARMRAM = fast_cart_buffer;
+      
   // Pointer to the program ROM (24K @ 0 byte offset)
   myProgramImage = (uInt8 *)image + MEM_3KB;
         
@@ -278,7 +282,6 @@ void CartridgeDPCPlus::poke(uInt16 address, uInt8 value)
 {
     // Get the index of the data fetcher that's being accessed
     uInt8 index = address & 0x07;
-    //uInt8 function = ((address - 0x28) >> 3) & 0x0f;
     uInt8 function = address & 0xF8;
 
     switch(function)

@@ -34,24 +34,18 @@ uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
 uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
 extern bool  isCDFJPlus;
-extern uInt8 fast_cart_buffer[];
+extern uInt8* myARMRAM;
 
-uInt16 rom[ROMSIZE/2] ALIGN(32);
-uInt8  decodedRom[ROMSIZE/2] ALIGN(32);
+#define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
 
 bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
 {
-  for (uInt32 i=0; i<ROMSIZE/2; i++)
-  {
-    rom[i] = rom_ptr[i];
-  }
-    
   for(uInt32 i=0; i < ROMSIZE/2; i++)
   {
-    decodedRom[i] = (uInt8)decodeInstructionWord(rom[i]);
+    cart_buffer[MEM_256KB+i] = (uInt8)decodeInstructionWord(*rom_ptr++);
   }    
 }
 
@@ -72,40 +66,43 @@ void Thumbulator::run( void )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write16 ( uInt32 addr, uInt32 data )
 {
-  uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & RAMADDMASK];
+  uInt16 *ptr = (uInt16*) (myARMRAM + (addr & RAMADDMASK));
   *ptr = data;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::write32 ( uInt32 addr, uInt32 data )
 {
-  uInt32 *ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];
+  uInt32 *ptr = (uInt32*) (myARMRAM + (addr & RAMADDMASK));
   *ptr = data;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt16 Thumbulator::read16 ( uInt32 addr )
 {
+  uInt16 *ptr;
   if (addr & 0x40000000)
   {
-      uInt16 *ptr = (uInt16*)&fast_cart_buffer[addr & RAMADDMASK];
-      return *ptr;
+      ptr = (uInt16*) (myARMRAM + (addr & RAMADDMASK));
   }
-  return rom[(addr) >> 1];
+  else
+  {
+    ptr = (uInt16*)&cart_buffer[addr];
+  }
+  return *ptr;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::read32 ( uInt32 addr )
 {
   uInt32 *ptr;
-
   if (addr & 0x40000000)
   {
-      ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];
+      ptr = (uInt32*) (myARMRAM + (addr & RAMADDMASK));
   }
   else
   {
-      ptr = (uInt32*) &rom[(addr) >> 1];
+      ptr = (uInt32*) &cart_buffer[addr];
   }
   return *ptr;
 }
@@ -113,16 +110,14 @@ inline uInt32 Thumbulator::read32 ( uInt32 addr )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::readROM32 ( uInt32 addr )
 {
-  uInt32 *ptr;
-  ptr = (uInt32*) &rom[(addr) >> 1];
+  uInt32 *ptr = (uInt32*) &cart_buffer[addr];
   return *ptr;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::readRAM32 ( uInt32 addr )
 {
-  uInt32 *ptr;
-  ptr = (uInt32*) &fast_cart_buffer[addr & RAMADDMASK];  
+  uInt32 *ptr = (uInt32*) (myARMRAM + (addr & RAMADDMASK));
   return *ptr;    
 }
 
@@ -507,19 +502,19 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
 // so we default to not updating it unless we know we're using it.
 // This produces a small but meaningful speed-up of Thumb processing...
 // ------------------------------------------------------------------------
-#define FIX_R15_PC reg_sys[15] = ((u32) (thumb_ptr - rom) << 1) + 3;
+#define FIX_R15_PC reg_sys[15] = ((u32) (thumb_ptr - (uInt16*)cart_buffer) << 1) + 3;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void Thumbulator::execute ( void )
 {
   uInt32 sp,ra,rb,rc,rd, rm, rn;
   uInt32 ZNflags = 0x00000000;
-  uInt16 *thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-  uInt8  *thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+  uInt16 *thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+  uInt8  *thumb_decode_ptr = &cart_buffer[MEM_256KB+((reg_sys[15]-2) >> 1)];
   
   while (1)
   {
-      uInt16 inst = *thumb_ptr++;
+      uInt32 inst = *thumb_ptr++;
       Thumbulator::Op decoded = (Thumbulator::Op)*thumb_decode_ptr++;
       
       switch (decoded)
@@ -730,8 +725,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rb += 2;
                   write_register(14, (reg_sys[15]-2) | 1);
                   write_register(15, rb);
-                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                  thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                 }
                 else if((inst&0x1800)==0x0800) //H=b01
                 {
@@ -742,8 +737,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rb += 2;
                   write_register(14, (reg_sys[15]-2) | 1);
                   write_register(15, rb);
-                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                  thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                 }
               break;
 
@@ -804,8 +799,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                   {
                       reg_sys[15] = readRAM32(reg_sys[13]) + 2; 
                       reg_sys[13] += 4;
-                      thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                      thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                      thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                      thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                   }
               break;
               
@@ -1199,8 +1194,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
                 if (rd==15)
                 {
-                    thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                    thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                    thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                    thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                 }
               break;
               
@@ -1223,8 +1218,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 if(rc&1)
                 {
                   write_register(15,rc);
-                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                  thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                 }
                 else
                 {
@@ -1276,8 +1271,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                           rc = read_register(14); // lr
                           rc += 2;
                           write_register(15, rc);
-                          thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                          thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                          thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                          thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                         } 
                         else return;
                 }
@@ -1513,8 +1508,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 {
                   write_register(14,reg_sys[15]-2);
                   write_register(15,rc);
-                  thumb_ptr = &rom[(reg_sys[15]-2) >> 1];
-                  thumb_decode_ptr = &decodedRom[(reg_sys[15]-2) >> 1];
+                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
                 }
                 else
                 {

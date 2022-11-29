@@ -32,9 +32,8 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Known Issues :
 -----------------------
-* CDF/CDFJ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
+* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better. CDFJ+ is currently limited to 64K ROM and 8K RAM.
 * DPC+ games are supported but are complex enough and most use ARM assisted code so you really need a DSi running with TWL++ or Unlaunch to get the faster 2X CPU speed to ensure those games run well enough.
-* CDFJ+ (CDFJPlus) carts are not supported.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
@@ -120,7 +119,8 @@ FE/SCABS    8K          --
 AR          2K          6K
 DPC         8K (+ 2K Display Data)  
 DPC+        24K         8K (ARM assisted)
-CDF/CDFJ    28K         8K (ARM assisted)
+CDF/CDFJ    32K         8K (ARM assisted)
+CDFJ+       64K         8K (ARM assisted)
 E0          8K          --
 FA          12K         256 bytes
 E7          16K         1K + (4) 256 byte pages

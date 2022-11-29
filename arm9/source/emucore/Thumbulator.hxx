@@ -28,8 +28,8 @@
 
 #include "bspf.hxx"
 
-#define ROMADDMASK 0xFFFF
-#define RAMADDMASK 0x1FFF
+#define ROMADDMASK 0x3FFFF      // 256K ROM
+#define RAMADDMASK 0x7FFF       // 32K RAM
 
 #define ROMSIZE (ROMADDMASK+1)
 #define RAMSIZE (RAMADDMASK+1)

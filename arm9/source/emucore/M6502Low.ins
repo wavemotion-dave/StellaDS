@@ -1940,9 +1940,10 @@ case 0xa9:
 
 #ifdef DATA_STREAMS_PLUS
   extern u8 myDataStreamFetch; extern u32 myFastFetcherOffset;
+  extern uInt8* myARMRAM;
   if (myFastFetcherOffset)
   {
-    uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+    uInt8 offset = myARMRAM[myFastFetcherOffset];
     if ((A >= offset) && (A <= offset+(myDataStreamFetch-1))) A = peek_DataStreamPlus(A-offset);
   }
   else
@@ -2063,7 +2064,8 @@ case 0xa2:
   {
       if (myFastFetcherOffset)
       {
-        uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+        extern uInt8* myARMRAM;
+        uInt8 offset = myARMRAM[myFastFetcherOffset];
         if ((X >= offset) && (X <= offset+(myDataStreamFetch-1))) X = peek_DataStreamPlus(X-offset);
       }
       else
@@ -2140,7 +2142,8 @@ case 0xa0:
   {
       if (myFastFetcherOffset)
       {
-        uInt8 offset = fast_cart_buffer[myFastFetcherOffset];
+        extern uInt8* myARMRAM;
+        uInt8 offset = myARMRAM[myFastFetcherOffset];
         if ((Y >= offset) && (Y <= offset+(myDataStreamFetch-1))) Y = peek_DataStreamPlus(Y-offset);
       }
       else
