@@ -52,7 +52,7 @@ uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 fastIncStreamBase   __attribute__((section(".dtcm")));
 uInt32 myWaveformBase      __attribute__((section(".dtcm")));
 
-CartridgeCDF *myCartCDF __attribute__((section(".dtcm")));
+CartridgeCDF *myCartCDF    __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
 
@@ -73,9 +73,20 @@ extern uInt32 myMusicFrequencies[3];
 // -F = Fast Fetch OFF
 // 0- = Packed Digital Sample
 // F- = 3 Voice Music
-uInt8 myMode __attribute__((section(".dtcm"))) = 0xFF;
+uInt8 myMode                __attribute__((section(".dtcm"))) = 0xFF;
 
-uInt8 *myARMRAM __attribute__((section(".dtcm")));
+uInt8 *myARMRAM             __attribute__((section(".dtcm")));
+
+bool  isCDFJPlus            __attribute__((section(".dtcm"))) = 0;
+
+u8 myLDXenabled             __attribute__((section(".dtcm"))) = 0;
+u8 myLDYenabled             __attribute__((section(".dtcm"))) = 0;
+uInt32 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
+
+// Not used often enough to warrant putting in fast memory
+uInt32 cBase = 0x00000000;
+uInt32 cStart = 0x00000000;
+uInt32 cStack = 0x00000000;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -93,14 +104,6 @@ uInt32 CartridgeCDF::scanCDFDriver(uInt32 searchValue)
   return 0xFFFFFFFF;
 }
 
-u8 myLDXenabled = 0;
-u8 myLDYenabled = 0;
-uInt32 myFastFetcherOffset = 0;
-uInt32 cBase = 0x00000000;
-uInt32 cStart = 0x00000000;
-uInt32 cStack = 0x00000000;
-
-bool  isCDFJPlus      __attribute__((section(".dtcm"))) = 0;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
 {

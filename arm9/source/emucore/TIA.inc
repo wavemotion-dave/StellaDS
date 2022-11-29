@@ -769,7 +769,25 @@
          }
     }
     break;
-        
+
+    case (myP0Bit | myP1Bit | myM1Bit | myM0Bit): // Player 0, Player 1, Missile 0, Missile 1
+    {
+         uInt8* mM1 = &myCurrentM1Mask[hpos];
+         uInt8* mM0 = &myCurrentM0Mask[hpos];
+         uInt8* mP0 = &myCurrentP0Mask[hpos];
+         uInt8* mP1 = &myCurrentP1Mask[hpos];
+         for(; myFramePointer < ending; ++myFramePointer)
+         {
+           uInt8 enabled = myPlayfieldPriorityAndScore;
+           if(*mM1++)                        enabled |= myM1Bit;
+           if(*mM0++)                        enabled |= myM0Bit;
+           if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+           if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+           HANDLE_COLOR_AND_COLLISIONS;
+         }
+    }
+    break;
+
     case (myBLBit): // Ball is enabled (Official Frogger)
     {
          uInt8* mBL = &myCurrentBLMask[hpos];
@@ -1065,6 +1083,21 @@
     }
     break;
 
+    case (myP0Bit | myM0Bit | myM1Bit): // Player 0, Missile 0, Missile 1
+    {
+         uInt8* mP0 = &myCurrentP0Mask[hpos];
+         uInt8* mM0 = &myCurrentM0Mask[hpos];
+         uInt8* mM1 = &myCurrentM1Mask[hpos];
+         for(; myFramePointer < ending; ++myFramePointer)
+         {
+           uInt8 enabled = myPlayfieldPriorityAndScore;
+           if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+           if(*mM0++)                        enabled |= myM0Bit;
+           if(*mM1++)                        enabled |= myM1Bit;
+           HANDLE_COLOR_AND_COLLISIONS;
+         }
+    }
+    break;
     case (myBLBit | myP0Bit | myM0Bit | myM1Bit): // Ball, Player 0, Missile 0, Missile 1
     {
          uInt8* mP0 = &myCurrentP0Mask[hpos];
@@ -1126,6 +1159,22 @@
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
+           if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
+           if(*mM0++)                        enabled |= myM0Bit;
+           HANDLE_COLOR_AND_COLLISIONS;
+         }
+    }
+    break;
+
+    case (myBLBit | myP1Bit | myM0Bit): // Ball, Player 1, Missile 0
+    {
+         uInt8* mP1 = &myCurrentP1Mask[hpos];
+         uInt8* mM0 = &myCurrentM0Mask[hpos];
+         uInt8* mBL = &myCurrentBLMask[hpos];
+         for(; myFramePointer < ending; ++myFramePointer)
+         {
+           uInt8 enabled = myPlayfieldPriorityAndScore;
+           if(*mBL++)                        enabled |= myBLBit;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
            if(*mM0++)                        enabled |= myM0Bit;
            HANDLE_COLOR_AND_COLLISIONS;

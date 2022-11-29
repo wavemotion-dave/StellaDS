@@ -43,10 +43,10 @@ bool  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
 {
-  for(uInt32 i=0; i < ROMSIZE/2; i++)
-  {
-    cart_buffer[MEM_256KB+i] = (uInt8)decodeInstructionWord(*rom_ptr++);
-  }    
+    for(uInt32 i=0; i < ROMSIZE/2; i++)
+    {
+        cart_buffer[MEM_256KB+i] = (uInt8)decodeInstructionWord(*rom_ptr++);
+    }    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -280,8 +280,8 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   //B(2) unconditional branch
   if((inst & 0xF800) == 0xE000) 
   {
-      if (inst&(1<<10)) return Op::b2_1;
-      return Op::b2_0;
+      if (inst&(1<<10)) return Op::b2_neg;
+      return Op::b2_pos;
   }
 
   //BIC
@@ -522,7 +522,7 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_000_pos:  //B(1) conditional branch
                 if (!ZNflags)
                 {
-                    rb=(inst>>0)&0xFF;
+                    rb=(inst & 0xFF);
                     thumb_ptr += (int)rb+1;
                     thumb_decode_ptr += (int)rb+1;
                 }
@@ -540,7 +540,7 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_100_pos:  //B(1) conditional branch
                 if (ZNflags)
                 {
-                    rb=(inst>>0)&0xFF;
+                    rb=(inst & 0xFF);
                     thumb_ptr += (int)rb+1;
                     thumb_decode_ptr += (int)rb+1;
                 }
@@ -693,14 +693,14 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_f00:  //B(1) conditional branch
               return;
               
-          case Op::b2_0:  //B(2) unconditional branch no sign extend
+          case Op::b2_pos:  //B(2) unconditional branch no sign extend
                 rb=(inst>>0)&0x7FF;
                 rb++;
                 thumb_ptr += rb;
                 thumb_decode_ptr += rb;
               break;
               
-          case Op::b2_1:  //B(2) unconditional branch - sign extend
+          case Op::b2_neg:  //B(2) unconditional branch - sign extend
                 rb=(inst | 0xFFFFF800);
                 rb++;
                 thumb_ptr += (int)rb;

@@ -34,9 +34,9 @@ class System;
 #include "MediaSrc.hxx"
 
 #define      myP0Bit       0x01         // Bit for Player 0
-#define      myM0Bit       0x02         // Bit for Missle 0
+#define      myM0Bit       0x02         // Bit for Missile 0
 #define      myP1Bit       0x04         // Bit for Player 1
-#define      myM1Bit       0x08         // Bit for Missle 1
+#define      myM1Bit       0x08         // Bit for Missile 1
 #define      myBLBit       0x10         // Bit for Ball
 #define      myPFBit       0x20         // Bit for Playfield
 #define      ScoreBit      0x40         // Bit for Playfield score mode
