@@ -987,7 +987,7 @@ extern uInt32 fastDataStreamBase, fastIncStreamBase;
 // -------------------------------------------
 // For the CDF/CDFJ Driver
 // -------------------------------------------
-inline uInt8 M6502Low::peek_DataStream(uInt8 address)
+uInt8 M6502Low::peek_DataStream(uInt8 address)
 {
   if (address == myAmplitudeStream) return myCartCDF->peekMusic();
    
@@ -1022,33 +1022,16 @@ ITCM_CODE uInt8 M6502Low::peek_CDFJ(uInt16 address)
       address &= 0xFFF;
       if (address >= 0xFF4) 
       {
-        if (isCDFJPlus)
+        switch (address)
         {
-            switch (address)
-            {
-                case 0x0FF4:  myDPCptr = &myDPC[0x0000];return myDPCptr[address];
-                case 0x0FF5:  myDPCptr = &myDPC[0x1000];return myDPCptr[address];
-                case 0x0FF6:  myDPCptr = &myDPC[0x2000];return myDPCptr[address];
-                case 0x0FF7:  myDPCptr = &myDPC[0x3000];return myDPCptr[address];
-                case 0x0FF8:  myDPCptr = &myDPC[0x4000];return myDPCptr[address];
-                case 0x0FF9:  myDPCptr = &myDPC[0x5000];return myDPCptr[address];
-                case 0x0FFA:  myDPCptr = &myDPC[0x6000];return myDPCptr[address];
-                case 0x0FFB:  myDPCptr = &myDPC[0x0000];return myDPCptr[address];
-            }
-        }
-        else
-        {
-            switch (address)
-            {
-                case 0x0FF4:  myDPCptr = &myDPC[0x6000];return myDPCptr[address];
-                case 0x0FF5:  myDPCptr = &myDPC[0x0000];return myDPCptr[address];
-                case 0x0FF6:  myDPCptr = &myDPC[0x1000];return myDPCptr[address];
-                case 0x0FF7:  myDPCptr = &myDPC[0x2000];return myDPCptr[address];
-                case 0x0FF8:  myDPCptr = &myDPC[0x3000];return myDPCptr[address];
-                case 0x0FF9:  myDPCptr = &myDPC[0x4000];return myDPCptr[address];
-                case 0x0FFA:  myDPCptr = &myDPC[0x5000];return myDPCptr[address];
-                case 0x0FFB:  myDPCptr = &myDPC[0x6000];return myDPCptr[address];
-            }
+            case 0x0FF4:  myDPCptr = &myDPC[isCDFJPlus ? 0x0000:0x6000]; break;
+            case 0x0FF5:  myDPCptr = &myDPC[isCDFJPlus ? 0x1000:0x0000]; break;
+            case 0x0FF6:  myDPCptr = &myDPC[isCDFJPlus ? 0x2000:0x1000]; break;
+            case 0x0FF7:  myDPCptr = &myDPC[isCDFJPlus ? 0x3000:0x2000]; break;
+            case 0x0FF8:  myDPCptr = &myDPC[isCDFJPlus ? 0x4000:0x3000]; break;
+            case 0x0FF9:  myDPCptr = &myDPC[isCDFJPlus ? 0x5000:0x4000]; break;
+            case 0x0FFA:  myDPCptr = &myDPC[isCDFJPlus ? 0x6000:0x5000]; break;
+            case 0x0FFB:  myDPCptr = &myDPC[isCDFJPlus ? 0x0000:0x6000]; break;
         }
       }
       return myDPCptr[(address)];

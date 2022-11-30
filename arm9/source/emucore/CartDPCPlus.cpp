@@ -271,7 +271,7 @@ uInt8 CartridgeDPCPlus::peekFetch(uInt8 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeDPCPlus::peek(uInt16 address)  
+uInt8 CartridgeDPCPlus::peek(uInt16 address)  
 {
     address &= 0x0FFF;
     return myDPCptr[address];        // This will only get called twice at the reset of the world... after that the driver in M6502Low.cpp will be used

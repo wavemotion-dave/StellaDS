@@ -66,7 +66,7 @@ ITCM_CODE bool Joystick::read(DigitalPin pin)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE Int32 Joystick::read(AnalogPin)
+Int32 Joystick::read(AnalogPin)
 {
   // Analog pins are not connect in joystick so we have infinite resistance 
   return maximumResistance;

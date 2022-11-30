@@ -138,7 +138,7 @@ ITCM_CODE void CartridgeE0::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeE0::segmentZero(uInt16 slice)
+void CartridgeE0::segmentZero(uInt16 slice)
 { 
     uInt32 offset = (slice << 10);
     
@@ -154,7 +154,7 @@ ITCM_CODE void CartridgeE0::segmentZero(uInt16 slice)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeE0::segmentOne(uInt16 slice)
+void CartridgeE0::segmentOne(uInt16 slice)
 { 
     uInt32 offset = (slice << 10);
 
@@ -170,7 +170,7 @@ ITCM_CODE void CartridgeE0::segmentOne(uInt16 slice)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeE0::segmentTwo(uInt16 slice)
+void CartridgeE0::segmentTwo(uInt16 slice)
 { 
     uInt32 offset = (slice << 10);
     
