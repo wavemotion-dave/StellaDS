@@ -87,63 +87,20 @@ class Thumbulator
     enum class Op : uInt8 {
       invalid, adc, add1, add2_r0, add2_r1, add2_r2, add2_r3, add2_r4, add2_r5, add2_r6, add2_r7,
       inc_r0, inc_r1, inc_r2, inc_r3, inc_r4, inc_r5, inc_r6, inc_r7, add3, add4, add5, add6, add7,
-      and_, asr1, asr2,
-      b1_000_neg, b1_000_pos, b1_100_neg, b1_100_pos, b1_200, b1_300, b1_400, b1_500_pos, b1_500_neg,
-      b1_600, b1_700, b1_800, b1_900, b1_a00, b1_b00, b1_c00, b1_d00, b1_e00, b1_f00,
-      b2_pos, b2_neg,
-      bic,
-      bkpt,
-      blx1,     //50
-      blx2,
-      bx,
-      cmn,
+      and_, asr1, asr2, b1_000_neg, b1_000_pos, b1_100_neg, b1_100_pos, b1_200, b1_300, b1_400, 
+      b1_500_pos, b1_500_neg, b1_600, b1_700, b1_800, b1_900, b1_a00, b1_b00, b1_c00, b1_d00, b1_e00, 
+      b1_f00, b2_pos, b2_neg, bic, bkpt, blx1, blx2,bx,cmn,
       cmp1_r0, cmp1_r1, cmp1_r2, cmp1_r3, cmp1_r4, cmp1_r5, cmp1_r6, cmp1_r7,
-      cmp2, cmp2_r2, cmp2_r3, cmp3,
-      cps,
-      cpy,
-      eor,
-      ldmia,
-      ldr1,     // 70
-      ldr2, ldr3, 
-      ldr4_r0, ldr4_r1, ldr4_r2, ldr4_r3, ldr4_r4, ldr4_r5, ldr4_r6, ldr4_r7, //80
-      ldrb1, ldrb2,
-      ldrh1, ldrh2,
-      ldrsb,
-      ldrsh,
-      lsl1, lsl1_rb, lsl2,
-      lsr1, lsr2,
-      mov1, mov2, mov3,
-      mul,
-      mvn,
-      neg,
-      orr,
-      pop,
-      push,
-      rev,
-      rev16,
-      revsh,
-      ror,
-      sbc,
-      setend,
-      stmia,
-      str1, str2, str3,
-      strb1, strb2,
-      strh1, strh2,
-      sub1, sub2, sub3, sub4,
-      swi,
-      sxtb,
-      sxth,
-      tst,
-      uxtb,
-      uxth
+      cmp2, cmp2_r2, cmp2_r3, cmp3, cps, cpy, eor, ldmia, ldr1, ldr2, ldr3, 
+      ldr4_r0, ldr4_r1, ldr4_r2, ldr4_r3, ldr4_r4, ldr4_r5, ldr4_r6, ldr4_r7, 
+      ldrb1, ldrb2, ldrh1, ldrh2, ldrsb, ldrsh, lsl1, lsl1_rb, lsl2, lsr1, lsr2,
+      mov1, mov2, mov3, mul, mvn, neg, orr, pop, push, rev, rev16, revsh, ror, sbc,
+      setend, stmia, str1, str2, str3, strb1, strb2, strh1, strh2, sub1, sub2, sub3, sub4,
+      swi, sxtb, sxth, tst, uxtb, uxth
     };
     
     inline uInt16 read16 ( uInt32 addr );
     inline uInt32 read32 ( uInt32 );
-    inline uInt32 readRAM32 ( uInt32 );
-    inline uInt32 readROM32 ( uInt32 );
-    inline void write16 ( uInt32 addr, uInt32 data );
-    inline void write32 ( uInt32 addr, uInt32 data );
 
     inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
     inline void do_cflag_fast ( uInt32 a, uInt32 b );    

@@ -301,7 +301,7 @@ inline void CartridgeCDF::callFunction(uInt8 value)
 }
 
 
-uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
+ITCM_CODE uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
 {
   switch (function)
   {

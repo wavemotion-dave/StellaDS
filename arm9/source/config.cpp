@@ -97,7 +97,7 @@ static void ApplyOptions(void)
 {
     extern u8 bScreenRefresh;
     bScreenRefresh = 1;
-    extern uInt32 bSafeThumb;
+    extern uInt8 bSafeThumb;
     bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);
 }
 
