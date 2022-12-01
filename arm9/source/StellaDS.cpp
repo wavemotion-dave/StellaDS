@@ -62,8 +62,6 @@ uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 20933;
 
-Int16 temp_shift = 0;
-
 #define MAX_DEBUG 40
 Int32 debug[MAX_DEBUG]={0};
 char DEBUG_DUMP = 0;
@@ -153,6 +151,7 @@ inline void ShowStatusLine(void)
 
 
 u16 stretch_x = 0;
+Int16 temp_shift = 0;
 ITCM_CODE void vblankIntr() 
 {
     static uInt8 shiftTime;
