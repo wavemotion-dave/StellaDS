@@ -31,7 +31,6 @@
 
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
-uInt32  vFlag        __attribute__((section(".dtcm"))) = 0;
 
 extern bool  isCDFJPlus;
 extern uInt8* myARMRAM;
@@ -124,31 +123,10 @@ inline void Thumbulator::do_cflag_fast ( uInt32 a, uInt32 b )  // For when you k
   }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void Thumbulator::do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c )
-{
-  //if the sign bits are different and result matches b
-  vFlag = ((((a^b)&0x80000000)) & ((b&c&0x80000000)));
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void Thumbulator::do_add_vflag ( uInt32 a, uInt32 b, uInt32 c )
-{
-  //if sign bits are the same and the result is different
-  vFlag = (((a&b&0x80000000)) & (((b^c)&0x80000000)));
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void Thumbulator::do_cflag_bit ( uInt32 x )
-{
-  cFlag = x;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void Thumbulator::do_vflag_bit ( uInt32 x )
-{
-  vFlag = x;
-}
+#define do_sub_vflag (a, b, c )  vFlag = ((((a^b)&0x80000000)) & ((b&c&0x80000000)));
+#define do_add_vflag (a, b, c )  vFlag = (((a&b&0x80000000)) & (((b^c)&0x80000000)));
+#define do_vflag_bit(x) vFlag=x;
+#define do_cflag_bit(x) cFlag=x;
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -529,11 +507,15 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
 // ------------------------------------------------------------------------
 #define FIX_R15_PC reg_sys[15] = ((u32) (thumb_ptr - (uInt16*)cart_buffer) << 1) + 3;
 
+#define FIX_THUMB_PTRS  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)]; thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void Thumbulator::execute ( void )
 {
-  uInt32 sp,ra,rb,rc,rd, rm, rn;
-  uInt32 ZNflags = 0x00000000;
+  uInt32 ra,rb,rc,rd, rm,rn;
+  uInt32 ZNflags = 0;
+  uInt32 vFlag = 0;
   uInt16 *thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
   uInt8  *thumb_decode_ptr = &cart_buffer[MEM_256KB+((reg_sys[15]-2) >> 1)];
 
@@ -756,8 +738,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rb += 2;
                   write_register(14, (reg_sys[15]-2) | 1);
                   write_register(15, rb);
-                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                  FIX_THUMB_PTRS
                 }
                 else if((inst&0x1800)==0x0800) //H=b01
                 {
@@ -768,37 +749,36 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rb += 2;
                   write_register(14, (reg_sys[15]-2) | 1);
                   write_register(15, rb);
-                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                  FIX_THUMB_PTRS
                 }
               break;
 
           case Op::ldmia:
                 rn=(inst>>8)&0x7;
-                sp=read_register(rn);
+                rm=read_register(rn);
                 for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
                 {
                   if(inst&rb)
                   {
-                    write_register(ra,readRAM32(sp));
-                    sp+=4;
+                    write_register(ra,readRAM32(rm));
+                    rm+=4;
                   }
                 }
-                write_register(rn,sp);
+                write_register(rn,rm);
               break;
               
           case Op::stmia:
                 rn=(inst>>8)&0x7;
-                sp=read_register(rn);
+                rm=read_register(rn);
                 for(ra=0,rb=0x01;rb;rb=(rb<<1)&0xFF,ra++)
                 {
                   if(inst&rb)
                   {
-                    write32(sp,read_register(ra));
-                    sp+=4;
+                    write32(rm,read_register(ra));
+                    rm+=4;
                   }
                 }
-                write_register(rn,sp);
+                write_register(rn,rm);
               break;
               
           case Op::swi:
@@ -829,8 +809,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                   {
                       reg_sys[15] = readRAM32(reg_sys[13]) + 2; 
                       reg_sys[13] += 4;
-                      thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                      thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                      FIX_THUMB_PTRS
                   }
               break;
               
@@ -1316,8 +1295,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rc=read_register(rm);
                 rc+=2; // fxq fix for MOV R15
                 write_register(15,rc);
-                thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                FIX_THUMB_PTRS
               break;              
               
           case Op::bic:
@@ -1338,8 +1316,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 {
                   rc+=2;
                   write_register(15,rc);
-                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                  FIX_THUMB_PTRS
                 }
                 else
                 {
@@ -1390,8 +1367,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                         {
                           rc = read_register(14) + 2; // lr
                           write_register(15, rc);
-                          thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                          thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                          FIX_THUMB_PTRS
                         } 
                         else return;
                 }
@@ -1635,8 +1611,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                   rc+=2;
                   write_register(14,reg_sys[15]-2);
                   write_register(15,rc);
-                  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                  thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                  FIX_THUMB_PTRS
                 }
                 else
                 {

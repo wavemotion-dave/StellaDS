@@ -33,8 +33,8 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Known Issues :
 -----------------------
-* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
 * Any ARM-Assisted games are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
+* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
 * Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
@@ -81,13 +81,21 @@ press the START button to save out your configuration after making changes:
 * Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground.
 * TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
 * Sound:           Normally ON. Can be turned OFF which will render screen faster.
-* ABXY Button:     Default to FIRE button but you can change this.
+* ABXY Button:     Default to FIRE button but you can change this. You can now set to Screen Pan UP or Screen Pan DN to scroll the screen for more complex games. See Screen Settings below.
 * HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
 * Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game. 
+
+Screen Settings:
+-----------------------
+If you are only running Classic games - the default screen settings should be fine. But if you're running some of the newer homebrews created over the past decade, 
+you will want to configure your screen properly.  For many games, you simply can't fit all the content on the 192 pixel lines of a Nintendo DS/DSi. For these you
+can either cut off the top, bottom or scale the screen. When these options aren't enough, you can set your Y offset so that some of the screen is cut-off top or bottom and then
+you can map one of the DS buttons to 'SCREEN PAN UP' or 'SCREEN PAN DOWN' which will momentarily pan up or down. This works great for Champ Games offerings where the large score
+display is normally off-screen while you play and then you can tap a button to briefly see it. 
 
 PAL vs NTSC:
 -----------------------
@@ -180,6 +188,11 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V6.1 : 01-Dec-2022 by Dave Bernazzani (wavemotion)
+  * CDFJ+ games are now supported up to 256K of ROM and 32K of RAM. Turbo Arcade is playable but isn't yet full speed.
+  * More speedup in ARM Thumb processing.
+  * New Screen Pan Up and Pan Down handling - this can be mapped to any DS button (XYAB) to help with games that use more than 192 pixel lines (really useful for CDFJ games from Champ Games).
+
 V6.0 : 27-Nov-2022 by Dave Bernazzani (wavemotion)
   * CDF/CDFJ games are now supported (but not CDFJ+)
   * Big speedup in ARM Thumb processing to render all DPC+ games full-speed on the DSi or above.

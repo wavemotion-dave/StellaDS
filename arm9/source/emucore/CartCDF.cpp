@@ -60,7 +60,7 @@ uInt16 myAmplitudeStream                __attribute__((section(".dtcm"))) = 0x22
 uInt16 myDatastreamBase                 __attribute__((section(".dtcm"))) = 0x00a0;
 uInt16 myDatastreamIncrementBase        __attribute__((section(".dtcm"))) = 0x0128;
 
-// Pointer to the 28K program ROM image of the cartridge
+// Pointer to the 32K program ROM image of the cartridge
 extern uInt8 myDPC[];
 extern uInt8 *myDPCptr;
 extern Int32 myDPCPCycles;

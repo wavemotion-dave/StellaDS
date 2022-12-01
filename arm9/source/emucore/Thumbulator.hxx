@@ -107,10 +107,6 @@ class Thumbulator
 
     inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
     inline void do_cflag_fast ( uInt32 a, uInt32 b );    
-    inline void do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c );
-    inline void do_add_vflag ( uInt32 a, uInt32 b, uInt32 c );
-    inline void do_cflag_bit ( uInt32 x );
-    inline void do_vflag_bit ( uInt32 x );
 
     void execute ( void );
     int reset ( void );
