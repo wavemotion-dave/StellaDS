@@ -91,7 +91,7 @@ extern    uInt32 myFrameYStart;           // Where do we start drawing Y Pos?
 extern    uInt32 myStartDisplayOffset;
 extern    uInt32 myStopDisplayOffset;
 extern    Int32 myVSYNCFinishClock; 
-extern    uInt32 myEnabledObjects;
+extern    uInt8 myEnabledObjects;
 extern    Int32 myClockWhenFrameStarted;
 extern    Int32 myCyclesWhenFrameStarted;   
 extern    Int32 myClockStartDisplay;

@@ -100,7 +100,7 @@ void CartridgeE0::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeE0::peek(uInt16 address)
+uInt8 CartridgeE0::peek(uInt16 address)
 {
   // Switch banks if necessary
   if ((address & 0x0FF8) == 0xFE0)
@@ -120,7 +120,7 @@ ITCM_CODE uInt8 CartridgeE0::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeE0::poke(uInt16 address, uInt8)
+void CartridgeE0::poke(uInt16 address, uInt8)
 {
   // Switch banks if necessary
   if ((address & 0x0FF8) == 0xFE0)

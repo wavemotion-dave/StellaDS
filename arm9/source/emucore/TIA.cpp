@@ -100,7 +100,7 @@ uInt8   myVDELP1                    __attribute__((section(".dtcm")));
 uInt8   myVDELBL                    __attribute__((section(".dtcm")));
 uInt8   myRESMP0                    __attribute__((section(".dtcm")));
 uInt8   myRESMP1                    __attribute__((section(".dtcm")));
-uInt32  myEnabledObjects            __attribute__((section(".dtcm")));
+uInt8   myEnabledObjects            __attribute__((section(".dtcm")));
 uInt32  myCurrentGRP0               __attribute__((section(".dtcm")));
 uInt32  myCurrentGRP1               __attribute__((section(".dtcm")));
 uInt32  myVSYNC                     __attribute__((section(".dtcm")));
@@ -1242,7 +1242,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     {  
         memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
         myFramePointer += clocksToUpdate;
-    }      
+    }
     else  // All other possibilities... this is expensive CPU-wise
     {
         if (myCartInfo.thumbOptimize == 2)  // If we are Optmizing the ARM Thumb with NO collisions...

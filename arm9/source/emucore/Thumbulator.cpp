@@ -322,13 +322,41 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xF800) == 0xC800) return Op::ldmia;
 
   //LDR(1) two register immediate
-  if((inst & 0xF800) == 0x6800) return Op::ldr1;
+  if((inst & 0xF800) == 0x6800) 
+  {
+      switch (inst & 0x0007)
+      {
+          case 0x0000:  return Op::ldr1_r0;
+          case 0x0001:  return Op::ldr1_r1;
+          case 0x0002:  return Op::ldr1_r2;
+          case 0x0003:  return Op::ldr1_r3;
+          case 0x0004:  return Op::ldr1_r4;
+          case 0x0005:  return Op::ldr1_r5;
+          case 0x0006:  return Op::ldr1_r6;
+          case 0x0007:  return Op::ldr1_r7;
+      }
+      return Op::ldr1_r0;
+  }
 
   //LDR(2) three register
   if((inst & 0xFE00) == 0x5800) return Op::ldr2;
 
   //LDR(3)
-  if((inst & 0xF800) == 0x4800) return Op::ldr3;
+  if((inst & 0xF800) == 0x4800) 
+  {
+      switch ((inst>>8)&0x07)
+      {
+          case 0x0000:  return Op::ldr3_r0;
+          case 0x0001:  return Op::ldr3_r1;
+          case 0x0002:  return Op::ldr3_r2;
+          case 0x0003:  return Op::ldr3_r3;
+          case 0x0004:  return Op::ldr3_r4;
+          case 0x0005:  return Op::ldr3_r5;
+          case 0x0006:  return Op::ldr3_r6;
+          case 0x0007:  return Op::ldr3_r7;
+      }
+      return Op::ldr3_r0;
+  }
 
   //LDR(4)
   if((inst & 0xF800) == 0x9800) 
@@ -388,7 +416,11 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFFC0) == 0x1C00) return Op::mov2;
 
   //MOV(3)
-  if((inst & 0xFF00) == 0x4600) return Op::mov3;
+  if((inst & 0xFF00) == 0x4600) 
+  {
+      if ((((inst>>0)&0x7) | ((inst>>4)&0x8)) == 15) return Op::mov3_r15;
+      return Op::mov3;
+  }
 
   //MUL
   if((inst & 0xFFC0) == 0x4340) return Op::mul;
@@ -436,7 +468,12 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFE00) == 0x5000) return Op::str2;
 
   //STR(3)
-  if((inst & 0xF800) == 0x9000) return Op::str3;
+  if((inst & 0xF800) == 0x9000) 
+  {
+      if (((inst>>8)&0x07) == 2) return Op::str3_r2;
+      if (((inst>>8)&0x07) == 3) return Op::str3_r3;
+      return Op::str3;
+  }
 
   //STRB(1)
   if((inst & 0xF800) == 0x7000) return Op::strb1;
@@ -499,7 +536,7 @@ ITCM_CODE void Thumbulator::execute ( void )
   uInt32 ZNflags = 0x00000000;
   uInt16 *thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
   uInt8  *thumb_decode_ptr = &cart_buffer[MEM_256KB+((reg_sys[15]-2) >> 1)];
-    
+
   while (1)
   {
       uInt16 inst = *thumb_ptr++;
@@ -765,7 +802,6 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::swi:
-                rb=inst&0xFF;
                 return;
               
           case Op::push:
@@ -853,12 +889,23 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rb=read_register(13)+rb;
                 write32(rb,read_register(rd));
               break;
+
+          case Op::str3_r2:
+                rb=(inst<<2)&0x3FF;
+                rb=read_register(13)+rb;
+                write32(rb,read_register(2));
+              break;
+              
+          case Op::str3_r3:
+                rb=(inst<<2)&0x3FF;
+                rb=read_register(13)+rb;
+                write32(rb,read_register(3));
+              break;
               
           case Op::strh1:
                 rd=(inst>>0)&0x07;
                 rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb<<=1;
+                rb=(inst>>5)&0x3E;
                 rb=read_register(rn)+rb;
                 rc=read_register(rd);
                 write16(rb,rc&0xFFFF);
@@ -876,8 +923,7 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::ldrh1:
                 rd=(inst>>0)&0x07;
                 rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb<<=1;
+                rb=(inst>>5)&0x3E;
                 rb=read_register(rn)+rb;
                 rc=read16(rb);
                 write_register(rd,rc&0xFFFF);
@@ -900,7 +946,6 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::bkpt:
-                rb=(inst>>0)&0xFF;
                 return;
               break;
               
@@ -989,8 +1034,36 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::ldr1:
-                reg_sys[(inst>>0)&0x07] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+          case Op::ldr1_r0:
+                reg_sys[0] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+              
+          case Op::ldr1_r1:
+                reg_sys[1] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+
+          case Op::ldr1_r2:
+                reg_sys[2] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+              
+          case Op::ldr1_r3:
+                reg_sys[3] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+              
+          case Op::ldr1_r4:
+                reg_sys[4] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+              
+          case Op::ldr1_r5:
+                reg_sys[5] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+              
+          case Op::ldr1_r6:
+                reg_sys[6] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
+              break;
+
+          case Op::ldr1_r7:
+                reg_sys[7] = read32(reg_sys[(inst>>3)&0x07] + ((inst>>4)&0x7C));
               break;
               
           case Op::strb1:
@@ -1018,19 +1091,20 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rn=(inst>>3)&0x07;
                 rb=(inst>>6)&0x1F;
                 rb=read_register(rn)+rb;
-                rc=read16(rb);
                 if(rb&1)
                 {
-                  rc>>=8;
+                    write_register(rd, read16(rb)>>8);
                 }
-                write_register(rd,rc&0xFF);
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
               break;
               
           case Op::str1:
                 rd=(inst>>0)&0x07;
                 rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb<<=2;
+                rb=(inst>>4)&0x7C;
                 rb=read_register(rn)+rb;
                 rc=read_register(rd);
                 write32(rb,rc);
@@ -1131,13 +1205,68 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write16(rb,rc&0xFFFF);
               break;
               
-          case Op::ldr3:
+          case Op::ldr3_r0:
                 FIX_R15_PC
                 rb=(inst<<2)&0x3FF;
-                rd=(inst>>8)&0x07;
                 ra=read_register(15) & ~3;
                 rb+=ra;
-                reg_sys[rd]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+                reg_sys[0]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r1:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[1]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r2:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[2]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r3:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[3]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r4:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[4]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r5:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[5]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r6:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[6]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+              break;
+
+          case Op::ldr3_r7:
+                FIX_R15_PC
+                rb=(inst<<2)&0x3FF;
+                ra=read_register(15) & ~3;
+                rb+=ra;
+                reg_sys[7]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
               break;
               
           case Op::and_:
@@ -1170,20 +1299,26 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::mov3:
-                FIX_R15_PC
                 rd=(inst>>0)&0x7;
                 rd|=(inst>>4)&0x8;
                 rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                if (rd==15) rc+=2; // fxq fix for MOV R15
-                write_register(rd,rc);
-                if (rd==15)
+                if (rm == 15)
                 {
-                    thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
-                    thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+                    FIX_R15_PC
                 }
+                rc=read_register(rm);
+                write_register(rd,rc);
               break;
-              
+
+          case Op::mov3_r15:
+                FIX_R15_PC
+                rm=(inst>>3)&0xF;
+                rc=read_register(rm);
+                rc+=2; // fxq fix for MOV R15
+                write_register(15,rc);
+                thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
+                thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+              break;              
               
           case Op::bic:
                 rd=(inst>>0)&0x7;
@@ -1199,9 +1334,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 FIX_R15_PC  
                 rm=(inst>>3)&0xF;
                 rc=read_register(rm);
-                rc+=2;
                 if(rc&1)
                 {
+                  rc+=2;
                   write_register(15,rc);
                   thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
                   thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
@@ -1253,8 +1388,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 
                         if (handled)
                         {
-                          rc = read_register(14); // lr
-                          rc += 2;
+                          rc = read_register(14) + 2; // lr
                           write_register(15, rc);
                           thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
                           thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
@@ -1496,9 +1630,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 FIX_R15_PC  
                 rm=(inst>>3)&0xF;
                 rc=read_register(rm);
-                rc+=2;
                 if(rc&1)
                 {
+                  rc+=2;
                   write_register(14,reg_sys[15]-2);
                   write_register(15,rc);
                   thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];

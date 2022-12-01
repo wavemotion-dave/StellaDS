@@ -48,8 +48,6 @@
 
 #define VERSION "6.0"
 
-//#define WRITE_TWEAKS
-
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
 
@@ -63,6 +61,8 @@ uInt8 gSaveKeyEEWritten = false;
 uInt8 gSaveKeyIsDirty = false;
 
 uInt16 mySoundFreq = 20933;
+
+Int16 temp_shift = 0;
 
 #define MAX_DEBUG 40
 Int32 debug[MAX_DEBUG]={0};
@@ -93,12 +93,11 @@ static uInt8 fpsDisplay = false;
 
 uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 
+char dbgbuf[36];
 static void DumpDebugData(void)
 {
     if (DEBUG_DUMP)
-    {        
-        char dbgbuf[36];
-
+    {   
         sprintf(dbgbuf, "%32s", myCartInfo.md5);                                    dsPrintValue(0,2,0, dbgbuf);
         
         for (int i=0; i<20; i++)
@@ -156,14 +155,29 @@ inline void ShowStatusLine(void)
 u16 stretch_x = 0;
 ITCM_CODE void vblankIntr() 
 {
-    if (bScreenRefresh)
+    static uInt8 shiftTime;
+    if (bScreenRefresh || temp_shift)
     {
         REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale);
-        REG_BG3Y = (myCartInfo.yOffset)<<8;
+        REG_BG3Y = (myCartInfo.yOffset + temp_shift)<<8;
         REG_BG3X = (myCartInfo.xOffset)<<8;
         REG_BG3PA = stretch_x;
         
         bScreenRefresh = 0;
+    }
+    
+    if (temp_shift)
+    {
+        ++shiftTime;
+        if (shiftTime > 40) 
+        {
+            if (temp_shift < 0) temp_shift++; else temp_shift--;
+            if (temp_shift == 0)
+            {
+                shiftTime = 0;
+                bScreenRefresh = 1; // Force the next vBlank interrupt to put screen right
+            }
+        }
     }
 }
 
@@ -217,30 +231,11 @@ void dsPrintCartType(char *type, int size)
 {
     if (DEBUG_DUMP)
     {
-        char buf[16];
-        sprintf(buf, "%s %dK", type, size/1024);
-        dsPrintValue(16-(strlen(buf)/2),0,0, (char*)buf);
+        sprintf(dbgbuf, "%s %dK", type, size/1024);
+        dsPrintValue(16-(strlen(dbgbuf)/2),0,0, (char*)dbgbuf);
     }
 }
 
-void dsWriteTweaks(void)
-{
-#ifdef WRITE_TWEAKS
-    FILE *fp;
-    dsPrintValue(22,0,0, (char*)"CFG");
-    fp = fopen("../StellaDS.txt", "a+");
-    if (fp != NULL)
-    {
-        fprintf(fp, "%-32s %4s %2s    %3d  %3d  %3d  %3d  %3d  %s\n", myCartInfo.md5, (myCartInfo.tv_type == 1 ? "PAL":"NTSC"), 
-                (myCartInfo.frame_mode == MODE_FF ? "FF":"NO"), myCartInfo.displayStartScanline, myCartInfo.displayNumScalines, 
-                myCartInfo.screenScale, myCartInfo.xOffset, myCartInfo.yOffset, my_filename);
-        fflush(fp);
-        fclose(fp);
-    }
-    WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
-    dsPrintValue(22,0,0, (char*)"   ");
-#endif    
-}
 
 void dsShowScreenEmu(void)
 {
@@ -552,12 +547,14 @@ unsigned int dsReadPad(void)
     return ret_keys_pressed;
 }
 
+char szName[MAX_FILE_NAME_LEN+1];
+char szName2[MAX_FILE_NAME_LEN+1];
+
 bool dsWaitOnQuit(void)
 {
   bool bRet=false, bDone=false;
   unsigned short keys_pressed;
   unsigned short posdeb=0;
-  char szName[32];
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgFileSelMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -600,8 +597,6 @@ bool dsWaitOnQuit(void)
   return bRet;
 }
 
-char szName[MAX_FILE_NAME_LEN+1];
-char szName2[MAX_FILE_NAME_LEN+1];
 void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 {
   u16 ucBcl,ucGame;
@@ -1037,6 +1032,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
                     else if (keys_pressed & (KEY_B))
                     {
@@ -1046,6 +1043,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        else if ((myCartInfo.bButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.bButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
                     else if (keys_pressed & (KEY_X))
                     {
@@ -1055,6 +1054,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
                     else if (keys_pressed & (KEY_Y))
                     {
@@ -1064,6 +1065,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
+                        else if ((myCartInfo.yButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.yButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
                     
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
@@ -1428,15 +1431,6 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
                     
-#ifdef WRITE_TWEAKS
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  if (myCartInfo.displayStartScanline < 100) myCartInfo.displayStartScanline++;
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.displayStartScanline > 15) myCartInfo.displayStartScanline--;
-                    extern uInt32 myStartDisplayOffset;
-                    extern uInt32 myStopDisplayOffset;
-                    myStartDisplayOffset = 228 * myCartInfo.displayStartScanline;                              // Allow for some underscan lines on a per-cart basis
-                    myStopDisplayOffset = myStartDisplayOffset + (228 * (myCartInfo.displayNumScalines));      // Allow for some overscan lines on a per-cart basis
-                        
-#endif              
                     bScreenRefresh = 1;
                 }
 
@@ -1446,7 +1440,6 @@ ITCM_CODE void dsMainLoop(void)
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_L))
                     {
                         if (keys_pressed & KEY_A)   {lcdSwap();}                        
-                        dsWriteTweaks();
                     }
                     last_keys_pressed = keys_pressed;
                 }

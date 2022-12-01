@@ -194,6 +194,8 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define BUTTON_JOY_LEFT     3
 #define BUTTON_JOY_RIGHT    4
 #define BUTTON_AUTOFIRE     5
+#define BUTTON_SHIFT_UP     6
+#define BUTTON_SHIFT_DN     7
 
 // Sound settings
 #define SOUND_MUTE          0

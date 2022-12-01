@@ -987,7 +987,7 @@ extern uInt32 fastDataStreamBase, fastIncStreamBase;
 // -------------------------------------------
 // For the CDF/CDFJ Driver
 // -------------------------------------------
-uInt8 M6502Low::peek_DataStream(uInt8 address)
+inline uInt8 M6502Low::peek_DataStream(uInt8 address)
 {
   if (address == myAmplitudeStream) return myCartCDF->peekMusic();
    
