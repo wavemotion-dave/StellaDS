@@ -2805,8 +2805,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
       
-      // For the CDF/CDFJ banking we need all the power we can get... turn on max optmization and minimal sound
-      myCartInfo.thumbOptimize = 2;
+      // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
+      if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
       myCartInfo.soundQuality = SOUND_10KHZ;
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))

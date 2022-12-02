@@ -1935,7 +1935,16 @@ case 0xa9:
 
 #ifdef DATA_STREAMS
   extern u8 myDataStreamFetch;
-  if (A < myDataStreamFetch) A = peek_DataStream(A);
+  if (A < myDataStreamFetch) 
+  {
+     A = peek_DataStream(A);
+     // More often than not, what follows LDA is STA...
+     if (myDPCptr[PC&0xFFF] == 0x85)
+     {
+        PC++; gSystemCycles++;
+        poke_small(peek_PC(PC++), A);
+     }
+  }
 #endif
 
 #ifdef DATA_STREAMS_PLUS
@@ -1943,12 +1952,21 @@ case 0xa9:
   extern uInt8* myARMRAM;
   if (myFastFetcherOffset)
   {
-    uInt8 offset = myARMRAM[myFastFetcherOffset];
-    if ((A >= offset) && (A <= offset+(myDataStreamFetch-1))) A = peek_DataStreamPlus(A-offset);
+    uInt8 offset_A = A-myARMRAM[myFastFetcherOffset];
+    if (offset_A < myDataStreamFetch) A = peek_DataStreamPlus(offset_A);
   }
   else
   {
-     if (A < myDataStreamFetch) A = peek_DataStreamPlus(A);
+     if (A < myDataStreamFetch) 
+     {
+         A = peek_DataStreamPlus(A);
+         // More often than not, what follows LDA is STA...
+         if (myDPCptr[PC&0xFFF] == 0x85)
+         {
+            PC++; gSystemCycles++;
+            poke_small(peek_PC(PC++), A);
+         }
+     }
   }
 #endif
 }
@@ -2065,8 +2083,8 @@ case 0xa2:
       if (myFastFetcherOffset)
       {
         extern uInt8* myARMRAM;
-        uInt8 offset = myARMRAM[myFastFetcherOffset];
-        if ((X >= offset) && (X <= offset+(myDataStreamFetch-1))) X = peek_DataStreamPlus(X-offset);
+        uInt8 offset_X = X-myARMRAM[myFastFetcherOffset];
+        if (offset_X < myDataStreamFetch) X = peek_DataStreamPlus(offset_X);
       }
       else
       {
@@ -2143,8 +2161,8 @@ case 0xa0:
       if (myFastFetcherOffset)
       {
         extern uInt8* myARMRAM;
-        uInt8 offset = myARMRAM[myFastFetcherOffset];
-        if ((Y >= offset) && (Y <= offset+(myDataStreamFetch-1))) Y = peek_DataStreamPlus(Y-offset);
+        uInt8 offset_Y = Y-myARMRAM[myFastFetcherOffset];
+        if (offset_Y < myDataStreamFetch) Y = peek_DataStreamPlus(offset_Y);
       }
       else
       {

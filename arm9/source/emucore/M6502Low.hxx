@@ -125,15 +125,17 @@ class M6502Low : public M6502
     uInt8 peek_CDFJ(uInt16 address);
     inline uInt8 peek_CDFJPC(uInt16 address);
     inline void poke_CDFJ(uInt16 address, uInt8 value);
+    inline void poke_small(uInt8 address, uInt8 value);
 
     inline uInt8 peek_PCF8SC(uInt16 address);
     inline uInt8 peek_PCF6SC(uInt16 address);
 
     uInt8  peek_Fetch(uInt8 address);
-    uInt8  peek_DataStream(uInt8 address);
-    uInt8  peek_DataStreamPlus(uInt8 address);
-    uInt16 peek_JumpStream(uInt8 address);
-    uInt16 peek_JumpStreamPlus(uInt8 address);
+    inline uInt8  peek_DataStream(uInt8 address);
+    inline uInt8  peek_DataStreamPlus(uInt8 address);
+    inline uInt16 peek_JumpStream(uInt8 address);
+    inline uInt16 peek_JumpStreamPlus(uInt8 address);
+    
     
     /**
       Change the byte at the specified address to the given value

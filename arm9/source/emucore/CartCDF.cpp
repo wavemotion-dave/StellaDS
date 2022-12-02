@@ -135,6 +135,14 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
       // search for Fast Fetcher Offset (default is 0)
       if ((cdfjValue & 0xFFFFFF00) == 0xE2422000)
         myFastFetcherOffset = i;
+      
+      // Since the new CDFJ+ driver will autmatically have
+      // have an offset but not all games will even use it
+      // the user can disable it with MAX optmization...
+      if ((myCartInfo.thumbOptimize) == 3)
+      {
+        myFastFetcherOffset=0;
+      }
         
       cBase = getUInt32(image, 0x17F8) & 0xFFFFFFFE;    // C Base Address
       cStart = cBase;                                   // C Start Address

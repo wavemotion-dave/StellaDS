@@ -1068,6 +1068,14 @@ inline void M6502Low::poke_CDFJ(uInt16 address, uInt8 value)
   }    
 }
 
+// For when you know the address is 8-bits... it can only be TIA or RAM
+inline void M6502Low::poke_small(uInt8 address, uInt8 value)
+{
+    ++gSystemCycles;
+    if (address & 0x80) myRAM[address & 0x7F] = value;
+    else theTIA->poke(address, value);
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502Low::execute_CDFJ(uInt16 number)
 {
