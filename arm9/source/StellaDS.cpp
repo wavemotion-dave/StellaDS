@@ -96,7 +96,8 @@ static void DumpDebugData(void)
 {
     if (DEBUG_DUMP)
     {   
-        sprintf(dbgbuf, "%32s", myCartInfo.md5);                                    dsPrintValue(0,2,0, dbgbuf);
+        sprintf(dbgbuf, "%32s", myCartInfo.md5);
+        dsPrintValue(0,2,0, dbgbuf);
         
         for (int i=0; i<20; i++)
         {
