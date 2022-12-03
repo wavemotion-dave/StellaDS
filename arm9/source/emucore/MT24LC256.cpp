@@ -23,7 +23,6 @@
 #include <cassert>
 #include <cstdio>
 #include <cstring>
-#include <fstream>
 
 #include "System.hxx"
 #include "../printf.h"
@@ -66,22 +65,23 @@ MT24LC256::MT24LC256(const string& filename)
     myDataChanged(false)
 {
   // Load the data from an external file (if it exists)
-  ifstream in;
-  in.open(myDataFile.c_str(), ios_base::binary);
-  if(in.is_open())
+  FILE* inFile;
+  inFile = fopen(myDataFile.c_str(), "rb");
+  if(inFile)
   {
-    // Get length of file; it must be 32768
-    in.seekg(0, ios::end);
-    if((int)in.tellg() == 32768)
+    if (fread(myData, 32768, 1, inFile) != 32768)
     {
-      in.seekg(0, ios::beg);
-      in.read((char*)myData, 32768);
-      myDataFileExists = true;
+        memset(myData, 0xFF, 32768);
     }
-    in.close();
+    myDataFileExists = true;
+    fclose(inFile);
   }
   else
+  {
     myDataFileExists = false;
+    memset(myData, 0xFF, 32768);
+    WriteEEtoFile();
+  }
 
   // Then initialize the I2C state
   jpee_init();
@@ -101,16 +101,16 @@ MT24LC256::~MT24LC256()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void MT24LC256::WriteEEtoFile(void)
 {
+    FILE *outFile;
     extern uInt8 gSaveKeyEEWritten;
     
-    gSaveKeyEEWritten = 1;
-    ofstream out;
-    out.open(myDataFile.c_str(), ios_base::binary);
-    if(out.is_open())
+    outFile = fopen(myDataFile.c_str(), "wb");
+    if(outFile)
     {
-      out.write((char*)myData, 32768);
-      out.close();
+        fwrite(myData, 32768, 1, outFile);
+        fclose(outFile);
     }
+    gSaveKeyEEWritten = 1;
     myDataChanged = false;
     gSaveKeyIsDirty = false;
 }
