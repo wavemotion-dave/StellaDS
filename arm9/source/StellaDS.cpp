@@ -101,7 +101,7 @@ static void DumpDebugData(void)
         
         for (int i=0; i<20; i++)
         {
-            sprintf(dbgbuf, "%02d: %9u %08X  %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
+            sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
             dsPrintValue(0,2+i,0, dbgbuf);
         }
     }

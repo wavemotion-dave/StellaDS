@@ -442,12 +442,12 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
           *ptr <<=8;
           if (isCDFJPlus)
           {
-              *ptr &= 0xf0000000;
+              *ptr &= 0xff000000;
               *ptr |= (value << 16);
           }
           else
           {
-              *ptr &= 0xff000000;
+              *ptr &= 0xf0000000;
               *ptr |= (value << 20);
           }
       }

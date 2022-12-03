@@ -64,8 +64,8 @@ void Thumbulator::run( void )
   return;
 }
 
-#define write16(addr, data) ( * (uInt16*)(myARMRAM + (addr & RAMADDMASK)) = data )
-#define write32(addr, data) ( * (uInt32*)(myARMRAM + (addr & RAMADDMASK)) = data )
+//#define write16(addr, data) ( * (uInt16*)(myARMRAM + (addr & RAMADDMASK)) = data )
+//#define write32(addr, data) ( * (uInt32*)(myARMRAM + (addr & RAMADDMASK)) = data )
 #define readROM32(addr)     (*((uInt32*) (cart_buffer + addr)))
 #define readRAM32(addr)     (*((uInt32*) (myARMRAM + (addr & RAMADDMASK))))
 
@@ -75,6 +75,21 @@ void Thumbulator::run( void )
 #define do_vflag_bit(x) vFlag=x;
 #define do_cflag_bit(x) cFlag=x;
 #define do_znflags(x) ZNflags=(x)
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+inline void Thumbulator::write16 ( uInt32 addr, uInt32 data )
+{
+  uInt16 *ptr = (uInt16*)&myARMRAM[addr & RAMADDMASK];
+  *ptr = data;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+inline void Thumbulator::write32 ( uInt32 addr, uInt32 data )
+{
+  uInt32 *ptr = (uInt32*) &myARMRAM[addr & RAMADDMASK];
+  *ptr = data;
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt16 Thumbulator::read16 ( uInt32 addr )

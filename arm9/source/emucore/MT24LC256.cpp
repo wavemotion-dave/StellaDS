@@ -28,7 +28,7 @@
 #include "../printf.h"
 #include "MT24LC256.hxx"
 
-#define DEBUG_EEPROM 0
+//#define DEBUG_EEPROM 1
 
 #if DEBUG_EEPROM
   char jpee_msg[256];
@@ -152,10 +152,6 @@ void MT24LC256::update()
   // we only do the write when they have the same 'timestamp'
   if(myCyclesWhenSDASet == myCyclesWhenSCLSet)
   {
-#if DEBUG_EEPROM
-    cerr << endl << "  I2C_PIN_WRITE(SCL = " << mySCL
-         << ", SDA = " << mySDA << ")" << " @ " << gSystemCycles << endl;
-#endif
     jpee_clock(mySCL);
     jpee_data(mySDA);
   }
@@ -387,7 +383,10 @@ bool MT24LC256::jpee_timercheck(int mode)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 int MT24LC256::jpee_logproc(char const *st)
 {
-  cerr << "    " << st << endl;
+  FILE *outFile = fopen("EE.LOG", "a");
+  fputs(st, outFile);
+  fputs("\n", outFile);
+  fclose(outFile);
   return 0;
 }
 

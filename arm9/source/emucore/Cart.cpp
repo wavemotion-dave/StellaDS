@@ -68,6 +68,8 @@ const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR",
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
+uInt8 bFoundInDAT = 1;   
+
 // The counter registers for the data fetchers
 
 uInt32 myCounters[8] __attribute__((section(".dtcm")));
@@ -2378,6 +2380,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     {
         myCartInfo = allConfigs.cart[idx];
         bFound = true;
+        bFoundInDAT = true;
         break;
     }
   }
@@ -2417,19 +2420,22 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   original_flicker_mode = myCartInfo.frame_mode;
   if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default... except for some popular games that can handle it!
   {
-      myCartInfo.frame_mode = MODE_NO;
+      if (!bFoundInDAT)
+      {
+          myCartInfo.frame_mode = MODE_NO;
 
-      if (strcmp(myCartInfo.gameID, "ASTERD") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "CENTIP") == 0) myCartInfo.frame_mode = MODE_HALF;      
-      if (strcmp(myCartInfo.gameID, "DEMONA") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "DEFEND") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "GORFxx") == 0) myCartInfo.frame_mode = MODE_HALF;      
-      if (strcmp(myCartInfo.gameID, "JUNOST") == 0) myCartInfo.frame_mode = MODE_HALF;      
-      if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "MISCOM") == 0) myCartInfo.frame_mode = MODE_BACKG;
-      if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_HALF;
-      if (strcmp(myCartInfo.gameID, "PACMAN") == 0) myCartInfo.frame_mode = MODE_HALF;      
+          if (strcmp(myCartInfo.gameID, "ASTERD") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "CENTIP") == 0) myCartInfo.frame_mode = MODE_HALF;      
+          if (strcmp(myCartInfo.gameID, "DEMONA") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "DEFEND") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "GORFxx") == 0) myCartInfo.frame_mode = MODE_HALF;      
+          if (strcmp(myCartInfo.gameID, "JUNOST") == 0) myCartInfo.frame_mode = MODE_HALF;      
+          if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "MISCOM") == 0) myCartInfo.frame_mode = MODE_BACKG;
+          if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "PACMAN") == 0) myCartInfo.frame_mode = MODE_HALF;
+      }
   }
   
   // Patch Haunted House to avoid original bug
@@ -2808,8 +2814,11 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
       
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
-      if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
-      myCartInfo.soundQuality = SOUND_10KHZ;
+      if (!bFoundInDAT)
+      {
+          if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
+          myCartInfo.soundQuality = SOUND_10KHZ;
+      }
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {

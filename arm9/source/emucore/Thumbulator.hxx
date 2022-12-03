@@ -104,6 +104,8 @@ class Thumbulator
     
     inline uInt16 read16 ( uInt32 addr );
     inline uInt32 read32 ( uInt32 );
+    inline void   write16 ( uInt32 addr, uInt32 data );
+    inline void   write32 ( uInt32 addr, uInt32 data );
 
     inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
     inline void do_cflag_fast ( uInt32 a, uInt32 b );    
