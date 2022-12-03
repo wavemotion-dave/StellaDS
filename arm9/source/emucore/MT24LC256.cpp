@@ -65,21 +65,17 @@ MT24LC256::MT24LC256(const string& filename)
     myDataChanged(false)
 {
   // Load the data from an external file (if it exists)
-  FILE* inFile;
-  inFile = fopen(myDataFile.c_str(), "rb");
+  memset(myData, 0xFF, 32768);
+  FILE* inFile = fopen(myDataFile.c_str(), "rb");
   if(inFile)
   {
-    if (fread(myData, 32768, 1, inFile) != 32768)
-    {
-        memset(myData, 0xFF, 32768);
-    }
+    fread(myData, 32768, 1, inFile);
     myDataFileExists = true;
     fclose(inFile);
   }
   else
   {
     myDataFileExists = false;
-    memset(myData, 0xFF, 32768);
     WriteEEtoFile();
   }
 
@@ -110,7 +106,7 @@ void MT24LC256::WriteEEtoFile(void)
         fwrite(myData, 32768, 1, outFile);
         fclose(outFile);
     }
-    gSaveKeyEEWritten = 1;
+    gSaveKeyEEWritten = 1;  // This puts the SAVEKEY WRITTEN message on screen
     myDataChanged = false;
     gSaveKeyIsDirty = false;
 }
@@ -186,7 +182,6 @@ void MT24LC256::jpee_init()
   jpee_pagemask = 63;
   jpee_smallmode = 0;
   jpee_logmode = -1;
-  if(!myDataFileExists) memset(myData, 0xff, 32768);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
