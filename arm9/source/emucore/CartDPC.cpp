@@ -193,11 +193,11 @@ void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
       }
 
       // Update flag register for this data fetcher
-      if(newLow <= myBottoms[x])
+      if(newLow <= (Int32)myBottoms[x])
       {
         myFlags[x] = 0x00;
       }
-      else if(newLow <= myTops[x])
+      else if(newLow <= (Int32)myTops[x])
       {
         myFlags[x] = 0xff;
       }
