@@ -26,9 +26,7 @@
 #include "System.hxx"
 
 // The 2K display ROM image of the cartridge
-//uInt8 myDisplayImage[2048];
-
-uInt16 *myDisplayImage __attribute__((section(".dtcm"))) = (uInt16*)0x068A2000;   // Use some of the unused VRAM to speed things up sightly. We use 4K here (2048 x 16-bit)
+uInt8 myDisplayImage[2048];
 
 // The top registers for the data fetchers
 extern uInt8 myTops[8];
@@ -39,13 +37,13 @@ extern uInt8 myBottoms[8];
 extern uInt16 myCounters[8];
 
 // The flag registers for the data fetchers
-uInt8 myFlags[8];
+uInt8 myFlags[8] __attribute__((section(".dtcm")));
 
 // The random number generator register
-uInt8 myRandomNumber;
+uInt8 myRandomNumber __attribute__((section(".dtcm")));
 
 // The music mode DF5, DF6, & DF7 enabled flags
-bool myMusicMode[3];
+bool myMusicMode[3] __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
 uInt32 mySystemCycles __attribute__((section(".dtcm"))) = 0; 
@@ -159,10 +157,12 @@ inline void CartridgeDPC::bank(uInt16 bank)
   }
 }
 
+#define DPC_MUSIC_PITCH 64
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
 {
-  Int32 wholeClocks = delta / 60;
+  Int32 wholeClocks = delta / DPC_MUSIC_PITCH;
 
   // Let's update counters and flags of the music mode data fetchers
   for(int x = 5; x <= 7; ++x)
@@ -226,8 +226,9 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
     
     switch(function)
     {
+      extern uInt32 gTotalAtariFrames;
       case 0x00:
-        if (index < 4) result = myRandomNumber++; // Not really random but good enough as it's only to flash the 'eel' in Pitfall II
+        if (index < 4) result = (uInt8)gTotalAtariFrames; // Not really random but good enough to flash the eel in Pitfall II (it's only use)
         else    // No... it's a music fetcher
         {
           if (myCartInfo.soundQuality == SOUND_WAVE)
@@ -237,11 +238,11 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
               };
 
               uInt32 delta = gSystemCycles - mySystemCycles;
-              if (delta >= 60)
+              if (delta >= DPC_MUSIC_PITCH)
               {              
                   // Update the music data fetchers (counter & flag)
                   updateMusicModeDataFetchers(delta);
-                  mySystemCycles = gSystemCycles - (delta % 60);
+                  mySystemCycles = gSystemCycles - (delta % DPC_MUSIC_PITCH);
               }
 
               uInt8 i = 0;
@@ -270,14 +271,14 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
       // DFx display data read
       case 0x01:
       {
-        result = *((uInt16*)0x068A2000+myCounters[index]); //myDisplayImage[myCounters[index]];
+        result = myDisplayImage[myCounters[index]];
         break;
       }
 
       // DFx display data read AND'd w/flag
       case 0x02:
       {
-        result = *((uInt16*)0x068A2000+myCounters[index]) & myFlags[index]; //myDisplayImage[myCounters[index]] & myFlags[index];
+        result = myDisplayImage[myCounters[index]] & myFlags[index];
         break;
       } 
 
