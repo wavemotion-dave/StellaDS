@@ -23,7 +23,7 @@ extern int bg0, bg0b,bg1b;
 
 static int display_options_list(bool bFullDisplay);
 
-#define CONFIG_INSTRUCTION_STR "B=EXIT START=SAVE SELECT=DEFAULT"
+#define CONFIG_INSTRUCTION_STR "B=EXIT STA=SAVE SEL=DEF L/R=MORE"
 
 
 // ---------------------------------------------------------------------------
@@ -162,44 +162,52 @@ struct options_t
     uInt8 option_max;
 };
 
-const struct options_t Game_Option_Table[] =
+uInt8 OptionPage = 0;
+
+const struct options_t Game_Option_Table[2][20] =
 {
-    {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "KEYBOARD 0", "KEYBOARD 1", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS", "MC ARCADE", "BUMP BASH", "TWIN STICK"},    &myCartInfo.controllerType,   18},
-    {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
-    {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY", "FF HALF MODE"},                                                                                   &myCartInfo.frame_mode,          5},
-    {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
-    {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myCartInfo.soundQuality,        6},
-    {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.aButton,             8},
-    {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.bButton,             8},
-    {"X BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.xButton,             8},
-    {"Y BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.yButton,             8},
-    {"HBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.hBlankZero,          2},
-    {"VBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.vblankZero,          2},
-    {"ANALOG SENS", 1, {"5",   "25"},                                                                                                                                                  &myCartInfo.analogSensitivity,   1},
-    {"START SCANL", 1, {"25",  "75"},                                                                                                                                                  &myCartInfo.displayStartScanline,1},
-    {"NUM   SCANL", 1, {"190", "255"},                                                                                                                                                 &myCartInfo.displayNumScalines,  1},
-    {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                 &myCartInfo.screenScale,         1},
-    {"X OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.xOffset,             1},
-    {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.yOffset,             1},
-    {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-NO-OFFSETS"},                                                                                                         &myCartInfo.thumbOptimize,       4},
-   
-    {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
+    {
+        {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "KEYBOARD 0", "KEYBOARD 1", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS", "MC ARCADE", "BUMP BASH", "TWIN STICK"},    &myCartInfo.controllerType,   18},
+        {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
+        {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY", "FF HALF MODE"},                                                                                   &myCartInfo.frame_mode,          5},
+        {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
+        {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myCartInfo.soundQuality,        6},
+        {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.aButton,             8},
+        {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.bButton,             8},
+        {"X BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.xButton,             8},
+        {"Y BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.yButton,             8},
+        {"HBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.hBlankZero,          2},
+        {"VBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.vblankZero,          2},
+        {"ANALOG SENS", 1, {"5",   "25"},                                                                                                                                                  &myCartInfo.analogSensitivity,   1},
+        {"START SCANL", 1, {"25",  "75"},                                                                                                                                                  &myCartInfo.displayStartScanline,1},
+        {"NUM   SCANL", 1, {"190", "255"},                                                                                                                                                 &myCartInfo.displayNumScalines,  1},
+        {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                 &myCartInfo.screenScale,         1},
+        {"X OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.xOffset,             1},
+        {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.yOffset,             1},
+        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-NO-OFFSETS"},                                                                                                         &myCartInfo.thumbOptimize,       4},
+
+        {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
+    },
+    {
+        {"FUTURE OPT",  0, {"NONE"},                                                                                                                                                       &myCartInfo.spare1_0,            1},
+        {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
+    }    
 };
 
 void display_line(uInt8 idx, uInt8 highlight)
 {
     char strBuf[35];
-    if (Game_Option_Table[idx].isNumeric == 1)  // Unsigned 8 bit
+    if (Game_Option_Table[OptionPage][idx].isNumeric == 1)  // Unsigned 8 bit
     {
-        sprintf(strBuf, " %-11s : %-15d", Game_Option_Table[idx].label, *(Game_Option_Table[idx].option_val));
+        sprintf(strBuf, " %-11s : %-15d", Game_Option_Table[OptionPage][idx].label, *(Game_Option_Table[OptionPage][idx].option_val));
     }
-    else if (Game_Option_Table[idx].isNumeric == 2) // Signed 8 bit
+    else if (Game_Option_Table[OptionPage][idx].isNumeric == 2) // Signed 8 bit
     {
-        sprintf(strBuf, " %-11s : %-15d", Game_Option_Table[idx].label, *((Int8*)Game_Option_Table[idx].option_val));
+        sprintf(strBuf, " %-11s : %-15d", Game_Option_Table[OptionPage][idx].label, *((Int8*)Game_Option_Table[OptionPage][idx].option_val));
     }
     else    // Array of strings
     {
-        sprintf(strBuf, " %-11s : %-15s", Game_Option_Table[idx].label, Game_Option_Table[idx].option[*(Game_Option_Table[idx].option_val)]);
+        sprintf(strBuf, " %-11s : %-15s", Game_Option_Table[OptionPage][idx].label, Game_Option_Table[OptionPage][idx].option[*(Game_Option_Table[OptionPage][idx].option_val)]);
     }
     dsPrintValue(1,3+idx, highlight, strBuf);
 }
@@ -217,13 +225,13 @@ static int display_options_list(bool bFullDisplay)
         {
             display_line(len, (len==0 ? 1:0));
             len++;
-            if (Game_Option_Table[len].label == NULL) break;
+            if (Game_Option_Table[OptionPage][len].label == NULL) break;
         }
 
         // Blank out rest of the screen... option menus are of different lengths...
         for (int i=len; i<22; i++) 
         {
-            dsPrintValue(1,4+i, 0, (char *)"                               ");
+            dsPrintValue(1,3+i, 0, (char *)"                               ");
         }
     }
 
@@ -273,52 +281,57 @@ void ShowConfig(void)
                 if (optionHighlighted < (idx-1)) optionHighlighted++;  else optionHighlighted=0;
                 display_line(optionHighlighted, 1);
             }
-
+            if (keysCurrent() & (KEY_L|KEY_R))
+            {
+                OptionPage = 1-OptionPage;
+                optionHighlighted=0;
+                idx = display_options_list(true);
+            }
             if (keysCurrent() & KEY_RIGHT)  // Toggle option clockwise
             {
-                if (Game_Option_Table[optionHighlighted].isNumeric == 1)
+                if (Game_Option_Table[OptionPage][optionHighlighted].isNumeric == 1)
                 {
-                    if (*(Game_Option_Table[optionHighlighted].option_val) < atoi(Game_Option_Table[optionHighlighted].option[1]))
+                    if (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) < atoi(Game_Option_Table[OptionPage][optionHighlighted].option[1]))
                     {
-                        *(Game_Option_Table[optionHighlighted].option_val) += 1;
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) += 1;
                     }
                 }
-                else if (Game_Option_Table[optionHighlighted].isNumeric == 2)
+                else if (Game_Option_Table[OptionPage][optionHighlighted].isNumeric == 2)
                 {
-                    if (*((Int8*)Game_Option_Table[optionHighlighted].option_val) < atoi(Game_Option_Table[optionHighlighted].option[1]))
+                    if (*((Int8*)Game_Option_Table[OptionPage][optionHighlighted].option_val) < atoi(Game_Option_Table[OptionPage][optionHighlighted].option[1]))
                     {
-                        *(Game_Option_Table[optionHighlighted].option_val) += 1;
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) += 1;
                     }
                 }
                 else
                 {
-                    *(Game_Option_Table[optionHighlighted].option_val) = (*(Game_Option_Table[optionHighlighted].option_val) + 1) % Game_Option_Table[optionHighlighted].option_max;
+                    *(Game_Option_Table[OptionPage][optionHighlighted].option_val) = (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) + 1) % Game_Option_Table[OptionPage][optionHighlighted].option_max;
                 }
                 display_line(optionHighlighted, 1);
                 ApplyOptions();                
             }
             if (keysCurrent() & KEY_LEFT)  // Toggle option counterclockwise
             {
-                if (Game_Option_Table[optionHighlighted].isNumeric == 1)
+                if (Game_Option_Table[OptionPage][optionHighlighted].isNumeric == 1)
                 {
-                    if (*(Game_Option_Table[optionHighlighted].option_val) > atoi(Game_Option_Table[optionHighlighted].option[0]))
+                    if (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) > atoi(Game_Option_Table[OptionPage][optionHighlighted].option[0]))
                     {
-                        *(Game_Option_Table[optionHighlighted].option_val) -= 1;
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) -= 1;
                     }
                 }
-                else if (Game_Option_Table[optionHighlighted].isNumeric == 2)
+                else if (Game_Option_Table[OptionPage][optionHighlighted].isNumeric == 2)
                 {
-                    if (*((Int8*)Game_Option_Table[optionHighlighted].option_val) > atoi(Game_Option_Table[optionHighlighted].option[0]))
+                    if (*((Int8*)Game_Option_Table[OptionPage][optionHighlighted].option_val) > atoi(Game_Option_Table[OptionPage][optionHighlighted].option[0]))
                     {
-                        *(Game_Option_Table[optionHighlighted].option_val) -= 1;
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) -= 1;
                     }
                 }
                 else
                 {
-                    if ((*(Game_Option_Table[optionHighlighted].option_val)) == 0)
-                        *(Game_Option_Table[optionHighlighted].option_val) = Game_Option_Table[optionHighlighted].option_max -1;
+                    if ((*(Game_Option_Table[OptionPage][optionHighlighted].option_val)) == 0)
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) = Game_Option_Table[OptionPage][optionHighlighted].option_max -1;
                     else
-                        *(Game_Option_Table[optionHighlighted].option_val) = (*(Game_Option_Table[optionHighlighted].option_val) - 1) % Game_Option_Table[optionHighlighted].option_max;
+                        *(Game_Option_Table[OptionPage][optionHighlighted].option_val) = (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) - 1) % Game_Option_Table[OptionPage][optionHighlighted].option_max;
                 }
                 display_line(optionHighlighted, 1);
                 ApplyOptions();                

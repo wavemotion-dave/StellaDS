@@ -2965,8 +2965,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
   if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
 
-  if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.right_difficulty = DIFF_A;   // Force Stay Frosty 2 to have no background music (can't render it properly and saves cycles)
-    
   extern uInt8 bSafeThumb;
   bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...
   
