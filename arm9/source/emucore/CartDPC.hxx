@@ -101,6 +101,8 @@ class CartridgeDPC : public Cartridge
       @param bank The bank that should be installed in the system
     */
     inline void bank(uInt16 bank);
+    
+    void updateMusicModeDataFetchers(uInt32 delta);
 };
 #endif
 

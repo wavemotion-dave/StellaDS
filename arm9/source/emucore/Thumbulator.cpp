@@ -1991,7 +1991,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE int Thumbulator::reset ( void )
+int Thumbulator::reset ( void )
 {
     if (myCartInfo.banking == BANK_CDFJ)
     {

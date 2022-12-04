@@ -28,24 +28,27 @@
 // The 2K display ROM image of the cartridge
 //uInt8 myDisplayImage[2048];
 
-uInt16 *myDisplayImage = (uInt16*)0x068A2000;   // Use some of the unused VRAM to speed things up sightly. We use 4K here (2048 x 16-bit)
+uInt16 *myDisplayImage __attribute__((section(".dtcm"))) = (uInt16*)0x068A2000;   // Use some of the unused VRAM to speed things up sightly. We use 4K here (2048 x 16-bit)
 
 // The top registers for the data fetchers
-extern uInt32 myTops[8];
+extern uInt8 myTops[8];
 
 // The bottom registers for the data fetchers
-extern uInt32 myBottoms[8];
+extern uInt8 myBottoms[8];
 
-extern uInt32 myCounters[8];
+extern uInt16 myCounters[8];
 
 // The flag registers for the data fetchers
-uInt16 myFlags[8];
+uInt8 myFlags[8];
 
 // The random number generator register
 uInt8 myRandomNumber;
 
+// The music mode DF5, DF6, & DF7 enabled flags
+bool myMusicMode[3];
+
 // System cycle count when the last update to music data fetchers occurred
-Int32 mySystemCycles; 
+uInt32 mySystemCycles __attribute__((section(".dtcm"))) = 0; 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
@@ -69,6 +72,9 @@ CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
   {
     myTops[i] = myBottoms[i] = myCounters[i] = myFlags[i] = 0;
   }
+    
+  // None of the data fetchers are in music mode
+  myMusicMode[0] = myMusicMode[1] = myMusicMode[2] = false;
 
   // Initialize the DPC's random number generator register (must be non-zero)
   myRandomNumber = 1;
@@ -140,20 +146,63 @@ void CartridgeDPC::install(System& system)
   bank(1);
 }
 
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPC::bank(uInt16 bank)
 { 
   uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
   // Map Program ROM image into the system
-  for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (2 << MY_PAGE_SHIFT))
   {
     myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
+    myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + (address + 0x80)];
   }
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
+{
+  Int32 wholeClocks = delta / 60;
+
+  // Let's update counters and flags of the music mode data fetchers
+  for(int x = 5; x <= 7; ++x)
+  {
+    // Update only if the data fetcher is in music mode
+    if(myMusicMode[x - 5])
+    {
+      Int32 top = myTops[x] + 1;
+      Int32 newLow = (Int32)(myCounters[x] & 0x00ff);
+
+      if(myTops[x] != 0)
+      {
+        newLow -= (wholeClocks % top);
+        if(newLow < 0)
+        {
+          newLow += top;
+        }
+      }
+      else
+      {
+        newLow = 0;
+      }
+
+      // Update flag register for this data fetcher
+      if(newLow <= myBottoms[x])
+      {
+        myFlags[x] = 0x00;
+      }
+      else if(newLow <= myTops[x])
+      {
+        myFlags[x] = 0xff;
+      }
+
+      myCounters[x] = (myCounters[x] & 0x0700) | (uInt16)newLow;
+    }
+  }
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeDPC::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
@@ -166,12 +215,11 @@ uInt8 CartridgeDPC::peek(uInt16 address)
     uInt8 function = (address >> 3);
 
     // Update flag register for selected data fetcher
-    uInt8 myCntLow = (myCounters[index] & 0x00ff);
-    if(myCntLow == myTops[index])
+    if((myCounters[index] & 0x00ff) == myTops[index])
     {
       myFlags[index] = 0xff;
     }
-    else if(myCntLow == myBottoms[index])
+    else if((myCounters[index] & 0x00ff) == myBottoms[index])
     {
       myFlags[index] = 0x00;
     }
@@ -180,6 +228,43 @@ uInt8 CartridgeDPC::peek(uInt16 address)
     {
       case 0x00:
         if (index < 4) result = myRandomNumber++; // Not really random but good enough as it's only to flash the 'eel' in Pitfall II
+        else    // No... it's a music fetcher
+        {
+          if (myCartInfo.soundQuality == SOUND_WAVE)
+          {
+              static const uInt8 musicAmplitudes[8] = {
+                  0x00, 0x04, 0x05, 0x09, 0x06, 0x0a, 0x0b, 0x0f
+              };
+
+              uInt32 delta = gSystemCycles - mySystemCycles;
+              if (delta >= 60)
+              {              
+                  // Update the music data fetchers (counter & flag)
+                  updateMusicModeDataFetchers(delta);
+                  mySystemCycles = gSystemCycles - (delta % 60);
+              }
+
+              uInt8 i = 0;
+              if(myMusicMode[0] && myFlags[5])
+              {
+                i |= 0x01;
+              }
+              if(myMusicMode[1] && myFlags[6])
+              {
+                i |= 0x02;
+              }
+              if(myMusicMode[2] && myFlags[7])
+              {
+                i |= 0x04;
+              }
+
+              result = musicAmplitudes[i];
+          }
+          else
+          {
+              result = 0x00;
+          }
+        }
         break;
             
       // DFx display data read
@@ -204,9 +289,12 @@ uInt8 CartridgeDPC::peek(uInt16 address)
       }
     }
 
-    // Clock the selected data fetcher's counter
-    myCounters[index]--;
-
+    // Clock the selected data fetcher's counter if needed
+    if((index < 5) || ((index >= 5) && (!myMusicMode[index - 5])))
+    {
+      myCounters[index] = (myCounters[index] - 1) & 0x07ff;
+    }
+      
     return result;
   }
   else
@@ -249,10 +337,19 @@ void CartridgeDPC::poke(uInt16 address, uInt8 value)
       // DFx counter low
       case 0x02:
       {
-        // Data fecther is either not a music mode data fecther or it
-        // isn't in music mode so it's low counter value should be loaded
-        // with the poked value
-        myCounters[index] = (myCounters[index] & 0x0700) | (uInt16)value;
+        if((index >= 5) && myMusicMode[index - 5])
+        {
+          // Data fecther is in music mode so its low counter value
+          // should be loaded from the top register not the poked value
+          myCounters[index] = (myCounters[index] & 0x0700) | (uInt16)myTops[index];
+        }
+        else
+        {
+            // Data fecther is either not a music mode data fecther or it
+            // isn't in music mode so it's low counter value should be loaded
+            // with the poked value
+            myCounters[index] = (myCounters[index] & 0x0700) | (uInt16)value;
+        }
         break;
       }
 
@@ -260,6 +357,12 @@ void CartridgeDPC::poke(uInt16 address, uInt8 value)
       case 0x03:
       {
         myCounters[index] = (((uInt16)value & 0x07) << 8) | (myCounters[index] & 0x00ff);
+        // Execute special code for music mode data fetchers
+        if(index >= 5)
+        {
+          myMusicMode[index - 5] = (value & 0x10);
+        }
+          
         break;
       }
     } 

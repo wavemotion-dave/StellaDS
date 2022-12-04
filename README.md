@@ -31,13 +31,16 @@ As long as there is no commercial use (i.e. no profit is made), copying and dist
 
 The StellaDS emulator is offered as-is, without any warranty.
 
+Where does this fit in with the mainline Stella? :
+-----------------------
+In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many areas that closely mimic the real hardware. 
+That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS basline is probably closest to mainline Stella 3.7.5 with fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 
+as of the time of this writing). The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned!
+
 Known Issues :
 -----------------------
-* Any ARM-Assisted games are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
-* CDF/CDFJ/CDFJ+ games are supported but the music fetchers (Draconian and Mappy) will not play properly so those games will have missing sounds. Otherwise the games will run fine on the DSi or better.
-* Pitfall II DPC support is incomplete and the background music will not play correctly (game is otherwise fine to play).
+* Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
-* Stay Frosty 2 DPC+ music fetchers are very rough and the background music sounds terrible - so it's turned off by default (game is otherwise fine to play).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 * The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will run fine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.

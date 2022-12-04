@@ -1898,7 +1898,7 @@ const CartInfo table[] =
     {"656dc247db2871766dffd978c71da80c",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
-    {"afcf38bda03206f29200bbea73257930",  "??????", BANK_X07,  CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Stella's Stocking
+    {"afcf38bda03206f29200bbea73257930",  "SSTOCK", BANK_X07,  CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Stella's Stocking
     {"0b8d3002d8f744a753ba434a4d39249a",  "STELTR", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Stellar Track (1980).bin
     {"23fad5a125bcd4463701c8ad8a0043a9",  "??????", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Stone Age (1983).bin
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Strategy X (1983).bin
@@ -2329,6 +2329,8 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "MAPPY_") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "DRACON") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "SSTOCK") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+    
     
   myCartInfo.thumbOptimize = 0;
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
@@ -2822,7 +2824,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (!bFoundInDAT)
       {
           if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
-          myCartInfo.soundQuality = SOUND_10KHZ;
+          if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
       }
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))

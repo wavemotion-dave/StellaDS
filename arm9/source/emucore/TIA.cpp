@@ -469,7 +469,7 @@ void TIA::reset()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void TIA::systemCyclesReset()
+void TIA::systemCyclesReset()
 {
   // Get the current system cycle
   uInt32 cycles = gSystemCycles;
