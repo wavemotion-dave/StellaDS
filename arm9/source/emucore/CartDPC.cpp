@@ -29,12 +29,12 @@
 uInt8 myDisplayImage[2048];
 
 // The top registers for the data fetchers
-extern uInt8 myTops[8];
+extern uInt32 myTops[8];
 
 // The bottom registers for the data fetchers
-extern uInt8 myBottoms[8];
+extern uInt32 myBottoms[8];
 
-extern uInt16 myCounters[8];
+extern uInt32 myCounters[8];
 
 // The flag registers for the data fetchers
 uInt8 myFlags[8] __attribute__((section(".dtcm")));
@@ -47,6 +47,12 @@ bool myMusicMode[3] __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
 uInt32 mySystemCycles __attribute__((section(".dtcm"))) = 0; 
+
+uInt8 musicAmplitudes[8] __attribute__((section(".dtcm"))) = 
+{
+  0x00, 0x04, 0x05, 0x09, 0x06, 0x0a, 0x0b, 0x0f
+};
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
@@ -233,10 +239,6 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
         {
           if (myCartInfo.soundQuality == SOUND_WAVE)
           {
-              static const uInt8 musicAmplitudes[8] = {
-                  0x00, 0x04, 0x05, 0x09, 0x06, 0x0a, 0x0b, 0x0f
-              };
-
               uInt32 delta = gSystemCycles - mySystemCycles;
               if (delta >= DPC_MUSIC_PITCH)
               {              
