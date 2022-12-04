@@ -83,8 +83,8 @@ struct CartInfo
 
 extern CartInfo myCartInfo;
 
-#define MAX_FILE_SIZE   (1024 * 512)            // ROMs can be up to 512K in size. This is equivilent to the Harmony Encore and ensures good future-proofing.
-extern uInt8  cart_buffer[MAX_FILE_SIZE];
+#define MAX_CART_FILE_SIZE   (1024 * 512)            // ROMs can be up to 512K in size. This is equivilent to the Harmony Encore and ensures good future-proofing.
+extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 
 // Difficulty Switch defines
 #define DIFF_B           0

@@ -66,6 +66,11 @@ static constexpr uInt32 getUInt32(const uInt8* _array, size_t _address) {
                             ((_array)[(_address) + 3] << 24));
 }
 
+
+extern uInt32 cStack, cBase, cStart;
+
+extern uInt8 *myARMRAM;
+
 class Thumbulator
 {
   public:
@@ -114,7 +119,7 @@ class Thumbulator
 
 
     void execute ( void );
-    int reset ( void );
+    void reset ( void );
     
     static Op decodeInstructionWord(uint16_t inst);
 };

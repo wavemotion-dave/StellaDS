@@ -27,6 +27,7 @@
 #include "M6502Low.hxx"
 #include "TIA.hxx"
 #include "M6532.hxx"
+#include "CartDPC.hxx"
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
 
@@ -719,8 +720,13 @@ void M6502Low::execute_AR(uInt16 number)
     }
 }
 
-extern uInt8 myDPC[];
-extern CartridgeDPCPlus *myCartDPC;
+
+
+// --------------------------------------------------------
+// Special DPC+ Driver to help speed up the fast fetching!
+// --------------------------------------------------------
+extern uInt8 myARM6502[];
+extern CartridgeDPCPlus *myCartDPCP;
 extern uInt32 myCounters[];
 extern uInt8 *myDisplayImageDPCP;
 extern uInt32 myFractionalCounters[];
@@ -758,7 +764,7 @@ ITCM_CODE uInt8 M6502Low::peek_Fetch(uInt8 address)
         myDPCPCycles = gSystemCycles;
       }
 
-      // using myDisplayImageDPCP[] instead of myDPC[] because waveforms
+      // using myDisplayImageDPCP[] instead of myARM6502[] because waveforms
       // can be modified during runtime.
       return (uInt8) (myDisplayImageDPCP[(myMusicWaveforms[0]) + (myMusicCountersShifted[0])] +
                  myDisplayImageDPCP[(myMusicWaveforms[1]) + (myMusicCountersShifted[1])] +
@@ -883,7 +889,7 @@ ITCM_CODE uInt8 M6502Low::peek_Fetch(uInt8 address)
         break;
           
     default:
-        return myCartDPC->peekFetch(address);
+        return myCartDPCP->peekFetch(address);
         break;
   }
   return result;
@@ -905,12 +911,12 @@ ITCM_CODE uInt8 M6502Low::peek_DPCP(uInt16 address)
       {
         switch (address)
         {
-            case 0x0FF6:  myDPCptr = &myDPC[0x0000];return myDPCptr[address];
-            case 0x0FF7:  myDPCptr = &myDPC[0x1000];return myDPCptr[address];
-            case 0x0FF8:  myDPCptr = &myDPC[0x2000];return myDPCptr[address];
-            case 0x0FF9:  myDPCptr = &myDPC[0x3000];return myDPCptr[address];
-            case 0x0FFA:  myDPCptr = &myDPC[0x4000];return myDPCptr[address];
-            case 0x0FFB:  myDPCptr = &myDPC[0x5000];return myDPCptr[address];
+            case 0x0FF6:  myDPCptr = &myARM6502[0x0000];return myDPCptr[address];
+            case 0x0FF7:  myDPCptr = &myARM6502[0x1000];return myDPCptr[address];
+            case 0x0FF8:  myDPCptr = &myARM6502[0x2000];return myDPCptr[address];
+            case 0x0FF9:  myDPCptr = &myARM6502[0x3000];return myDPCptr[address];
+            case 0x0FFA:  myDPCptr = &myARM6502[0x4000];return myDPCptr[address];
+            case 0x0FFB:  myDPCptr = &myARM6502[0x5000];return myDPCptr[address];
         }
       }
       return myDPCptr[(address)];
@@ -937,7 +943,7 @@ inline void M6502Low::poke_DPCP(uInt16 address, uInt8 value)
   
   if (address & 0x1000)
   {
-      return myCartDPC->poke(address, value);
+      return myCartDPCP->poke(address, value);
   }
   else
   {
@@ -1024,14 +1030,14 @@ ITCM_CODE uInt8 M6502Low::peek_CDFJ(uInt16 address)
       {
         switch (address)
         {
-            case 0x0FF4:  myDPCptr = &myDPC[isCDFJPlus ? 0x0000:0x6000]; break;
-            case 0x0FF5:  myDPCptr = &myDPC[isCDFJPlus ? 0x1000:0x0000]; break;
-            case 0x0FF6:  myDPCptr = &myDPC[isCDFJPlus ? 0x2000:0x1000]; break;
-            case 0x0FF7:  myDPCptr = &myDPC[isCDFJPlus ? 0x3000:0x2000]; break;
-            case 0x0FF8:  myDPCptr = &myDPC[isCDFJPlus ? 0x4000:0x3000]; break;
-            case 0x0FF9:  myDPCptr = &myDPC[isCDFJPlus ? 0x5000:0x4000]; break;
-            case 0x0FFA:  myDPCptr = &myDPC[isCDFJPlus ? 0x6000:0x5000]; break;
-            case 0x0FFB:  myDPCptr = &myDPC[isCDFJPlus ? 0x0000:0x6000]; break;
+            case 0x0FF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
+            case 0x0FF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
+            case 0x0FF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
+            case 0x0FF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
+            case 0x0FF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;
+            case 0x0FF9:  myDPCptr = &myARM6502[isCDFJPlus ? 0x5000:0x4000]; break;
+            case 0x0FFA:  myDPCptr = &myARM6502[isCDFJPlus ? 0x6000:0x5000]; break;
+            case 0x0FFB:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
         }
       }
       return myDPCptr[(address)];
@@ -1115,6 +1121,7 @@ inline uInt8 M6502Low::peek_DataStreamPlus(uInt8 address)
   uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (address << 2));
   uInt8 value = myDisplayImageCDF[(*ptr >> 16)];
   *ptr += (*inc << 8);
+    
   return value;    
 }
 
@@ -1163,3 +1170,88 @@ void M6502Low::execute_CDFJPlus(uInt16 number)
       }
     }
 }
+
+// -------------------------------------------------------------------------------
+// Special DPC (Pitfall II) driver for much faster speeds...
+// -------------------------------------------------------------------------------
+extern CartridgeDPC *myCartDPC;
+
+inline uInt8 M6502Low::peek_PCDPC(uInt16 address)
+{
+  gSystemCycles++;
+  return fast_cart_buffer[address & f8_bankbit];
+}
+
+
+inline uInt8 M6502Low::peek_DPC(uInt16 address)
+{
+  gSystemCycles++;
+
+  if (address & 0x1000)
+  {
+      uInt16 addrMasked = (address & 0x0FFF);
+      if (addrMasked < 0x0040) return myCartDPC->peek_fetch(addrMasked);
+      else if (addrMasked == 0x0FF8) f8_bankbit=0x0FFF;
+      else if (addrMasked == 0x0FF9) f8_bankbit=0x1FFF;
+      
+      return fast_cart_buffer[address & f8_bankbit];
+  }
+  else
+  {
+      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
+      else if (address & 0x200) return theM6532->peek(address);
+      else return theTIA->peek(address);
+  }
+}
+
+
+inline void M6502Low::poke_DPC(uInt16 address, uInt8 value)
+{
+  gSystemCycles++;
+  
+  if (address & 0x1000)
+  {
+      address &= 0xFFF;
+      if (address < 0x80) myCartDPC->poke(address, value);
+      else if (address == 0x0FF8) f8_bankbit=0x0FFF;
+      else if (address == 0x0FF9) f8_bankbit=0x1FFF;
+  }
+  else
+  {
+      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
+      else if (address & 0x200) theM6532->poke(address, value);
+      else theTIA->poke(address, value);
+  }
+}
+
+
+void M6502Low::execute_DPC(uInt16 number)
+{
+    uInt32 fast_loop = number;
+    uInt16 operandAddress;
+    uInt8 operand;
+    
+    // Clear all of the execution status bits except for the fatal error bit
+    myExecutionStatus = 0;
+
+    while (fast_loop-- && !myExecutionStatus)
+    {
+      // Get the next 6502 instruction - do this the fast way!
+      ++gSystemCycles;
+      operand = fast_cart_buffer[PC++ & f8_bankbit];
+
+      // 6502 instruction emulation is generated by an M4 macro file
+      switch (operand)
+      {
+        // A trick of the light... here we map peek/poke to the "F8" cart versions. This improves speed for non-bank-switched carts.
+        #define peek    peek_DPC
+        #define peek_PC peek_PCDPC              
+        #define poke    poke_DPC
+        #include "M6502Low.ins"        
+        #undef peek   
+        #undef peek_PC
+        #undef poke
+      }
+    }
+}
+

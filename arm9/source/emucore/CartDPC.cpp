@@ -43,21 +43,24 @@ uInt8 myFlags[8] __attribute__((section(".dtcm")));
 uInt8 myRandomNumber __attribute__((section(".dtcm")));
 
 // The music mode DF5, DF6, & DF7 enabled flags
-bool myMusicMode[3] __attribute__((section(".dtcm")));
+uInt8 myMusicMode[3] __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
-uInt32 mySystemCycles __attribute__((section(".dtcm"))) = 0; 
+uInt32 myMusicCycles __attribute__((section(".dtcm"))) = 0; 
 
 uInt8 musicAmplitudes[8] __attribute__((section(".dtcm"))) = 
 {
   0x00, 0x04, 0x05, 0x09, 0x06, 0x0a, 0x0b, 0x0f
 };
 
+CartridgeDPC *myCartDPC __attribute__((section(".dtcm")));
+
+extern uInt16 f8_bankbit;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
 {
-  uInt32 addr;
+  uInt16 addr;
 
   // Copy the program ROM image into my buffer
   for(addr = 0; addr < 8192; ++addr)
@@ -84,7 +87,9 @@ CartridgeDPC::CartridgeDPC(const uInt8* image, uInt32 size)
   myRandomNumber = 1;
 
   // Initialize the system cycles counter & fractional clock values
-  mySystemCycles = 0;
+  myMusicCycles = 0;
+    
+  myCartDPC = this;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -102,10 +107,9 @@ const char* CartridgeDPC::name() const
 void CartridgeDPC::reset()
 {
   // Update cycles to the current system cycles
-  mySystemCycles = mySystem->cycles();
+  myMusicCycles = mySystem->cycles();
 
   // Upon reset we switch to bank 1
-  myCurrentOffset = 4096;
   bank(1);
 }
 
@@ -116,7 +120,7 @@ void CartridgeDPC::systemCyclesReset()
   uInt32 cycles = mySystem->cycles();
 
   // Adjust the cycle counter so that it reflects the new value
-  mySystemCycles -= cycles;
+  myMusicCycles -= cycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -133,20 +137,13 @@ void CartridgeDPC::install(System& system)
   page_access.directPokeBase = 0;
   page_access.device = this;
   
-  // Set the page accessing methods for the hot spots
-  for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
-  {
-    mySystem->setPageAccess(i >> shift, page_access);
-  }
-
-  // Set the page accessing method for the DPC reading & writing pages
-  for(uInt32 j = 0x1000; j < 0x1080; j += (1 << shift))
+  // Set page accessing method for the DPC reading & writing pages
+  for(uInt32 j = 0x1000; j < 0x2000; j += (1 << shift))
   {
     mySystem->setPageAccess(j >> shift, page_access);
   }
-
+    
   // Install pages for bank 1
-  myCurrentOffset = 4096;
   bank(1);
 }
 
@@ -154,16 +151,10 @@ void CartridgeDPC::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void CartridgeDPC::bank(uInt16 bank)
 { 
-  uInt32 access_num = 0x1080 >> MY_PAGE_SHIFT;
-  // Map Program ROM image into the system
-  for(uInt32 address = 0x0080; address < (0x0FF8U & ~MY_PAGE_MASK); address += (2 << MY_PAGE_SHIFT))
-  {
-    myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
-    myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + (address + 0x80)];
-  }
+    f8_bankbit = (bank ? 0x1FFF : 0x0FFF);
 }
 
-#define DPC_MUSIC_PITCH 64
+#define DPC_MUSIC_PITCH 60
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
@@ -207,15 +198,16 @@ void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
   }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
+uInt8 CartridgeDPC::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
+    return fast_cart_buffer[address & f8_bankbit];  // Will only be called twice at the start of the world
+}
 
-  if(address < 0x0040)
-  {
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ITCM_CODE uInt8 CartridgeDPC::peek_fetch(uInt16 address)
+{
     uInt8 result = 0;
-
+    
     // Get the index of the data fetcher that's being accessed
     uInt8 index = address & 0x07;
     uInt8 function = (address >> 3);
@@ -242,12 +234,12 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
         {
           if (myCartInfo.soundQuality == SOUND_WAVE)
           {
-              uInt32 delta = gSystemCycles - mySystemCycles;
+              uInt32 delta = gSystemCycles - myMusicCycles;
               if (delta >= DPC_MUSIC_PITCH)
               {              
                   // Update the music data fetchers (counter & flag)
                   updateMusicModeDataFetchers(delta);
-                  mySystemCycles = gSystemCycles - (delta % DPC_MUSIC_PITCH);
+                  myMusicCycles = gSystemCycles - (delta % DPC_MUSIC_PITCH);
               }
 
               uInt8 i = 0;
@@ -302,23 +294,13 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
     }
       
     return result;
-  }
-  else
-  {
-    // Switch banks if necessary
-    if (address == 0x0FF8) {  myCurrentOffset = 0; bank(0);}
-    else if (address == 0x0FF9) {  myCurrentOffset = 4096;bank(1);}
-    return fast_cart_buffer[myCurrentOffset + address];
-  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeDPC::poke(uInt16 address, uInt8 value)
 {
-  address = address & 0x0FFF;
+    address = address & 0x0FFF;
 
-  if((address >= 0x0040) && (address < 0x0080))
-  {
     // Get the index of the data fetcher that's being accessed
     uInt32 index = address & 0x07;    
     uInt32 function = (address >> 3) & 0x07;
@@ -366,17 +348,9 @@ void CartridgeDPC::poke(uInt16 address, uInt8 value)
         // Execute special code for music mode data fetchers
         if(index >= 5)
         {
-          myMusicMode[index - 5] = (value & 0x10);
+            myMusicMode[index - 5] = (value & 0x10);
         }
-          
         break;
       }
     } 
-  }
-  else
-  {
-    // Switch banks if necessary
-    if (address == 0x0FF8) { myCurrentOffset = 0; bank(0);}
-    else if (address == 0x0FF9) {  myCurrentOffset = 4096;bank(1);}
-  }
 }

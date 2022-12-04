@@ -54,11 +54,11 @@ uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
 extern uInt32 myCounters[8];
 
-uInt8 myDPC[MEM_32KB];
+uInt8 myARM6502[MEM_32KB];
 
 uInt8 *myDPCptr __attribute__((section(".dtcm")));
 
-CartridgeDPCPlus *myCartDPC __attribute__((section(".dtcm")));
+CartridgeDPCPlus *myCartDPCP __attribute__((section(".dtcm")));
 
 // The music mode counters
 uInt32 myMusicCounters[3] __attribute__((section(".dtcm")));
@@ -78,8 +78,6 @@ uInt32 myDPCPRandomNumber __attribute__((section(".dtcm")));
 // System cycle count when the last update to music data fetchers occurred
 Int32 myDPCPCycles __attribute__((section(".dtcm")));
 
-extern uInt8 *myARMRAM;
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   : myParameterPointer(0)
@@ -90,7 +88,7 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   // Pointer to the program ROM (24K @ 0 byte offset)
   myProgramImage = (uInt8 *)image + MEM_3KB;
         
-  memcpy(myDPC, myProgramImage, MEM_24KB);
+  memcpy(myARM6502, myProgramImage, MEM_24KB);  // We copy up to 24K of the ROM to the 6502 accessible area
 
   memset(fast_cart_buffer, 0, 8192);
 
@@ -129,7 +127,11 @@ CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
   
   myFractionalLowMask = (myCartInfo.special == SPEC_OLDDPCP) ? 0x0F0000 : 0x0F00FF;  
         
-  myCartDPC = this;
+  myCartDPCP = this;
+
+  cStack = 0x40001fb4;
+  cBase  = 0x00000c00;
+  cStart = 0x00000c08;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -427,6 +429,6 @@ void CartridgeDPCPlus::bank(uInt16 bank)
 {
     // Remember what bank we're in
   myCurrentOffset = bank << 12;
-  myDPCptr = &myDPC[myCurrentOffset];
+  myDPCptr = &myARM6502[myCurrentOffset];
 }
 

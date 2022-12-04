@@ -81,6 +81,8 @@ class M6502Low : public M6502
     virtual void execute_DPCP(uInt16 number);
     virtual void execute_CDFJ(uInt16 number);
     virtual void execute_CDFJPlus(uInt16 number);
+    virtual void execute_DPC(uInt16 number);
+    
     
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
@@ -117,6 +119,10 @@ class M6502Low : public M6502
     inline uInt8 peek_F4(uInt16 address);
     inline uInt8 peek_PCF4(uInt16 address);
     inline void poke_F4(uInt16 address, uInt8 value);
+    
+    inline uInt8 peek_DPC(uInt16 address);
+    inline uInt8 peek_PCDPC(uInt16 address);
+    inline void poke_DPC(uInt16 address, uInt8 value);
 
     uInt8 peek_DPCP(uInt16 address);
     inline uInt8 peek_DPCPPC(uInt16 address);

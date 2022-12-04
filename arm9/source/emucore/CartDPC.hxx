@@ -85,6 +85,8 @@ class CartridgeDPC : public Cartridge
       @return The byte at the specified address
     */
     virtual uInt8 peek(uInt16 address);
+    
+    uInt8 peek_fetch(uInt16 address); // Fast DPC fetcher
 
     /**
       Change the byte at the specified address to the given value

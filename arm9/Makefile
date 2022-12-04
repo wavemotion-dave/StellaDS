@@ -1,4 +1,5 @@
-#This is what I'm using in SET:   DEVKITARM=/opt/devkitpro/devkitARM
+#export DEVKITPRO=/opt/devkitpro
+#export DEVKITARM=/opt/devkitpro/devkitARM
 
 #---------------------------------------------------------------------------------
 .SUFFIXES:
@@ -16,11 +17,11 @@ include $(DEVKITARM)/ds_rules
 # DATA is a list of directories containing binary files
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
-BUILD		  :=	build
-SOURCES		:=	source/emucore source/common source  
-INCLUDES	:=	source/emucore source/common include
-DATA		  := data
-GRAPHICS	:=	gfx
+BUILD       :=	build
+SOURCES     :=	source/emucore source/common source  
+INCLUDES    :=	source/emucore source/common include
+DATA        := data
+GRAPHICS    :=	gfx
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -28,7 +29,7 @@ GRAPHICS	:=	gfx
 #ARCH	:=	-mthumb -mthumb-interwork
 ARCH	:=	
 
-CFLAGS	:=	-Wall -Ofast -march=armv5te -mtune=arm946e-s -fomit-frame-pointer -ffast-math $(ARCH) -falign-functions=16 -frename-registers
+CFLAGS	:=	-Wall -Ofast -march=armv5te -mtune=arm946e-s -fomit-frame-pointer -ffast-math $(ARCH) -falign-functions=32 -frename-registers
 
 CFLAGS	+=	$(INCLUDE) -DARM9
 CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions

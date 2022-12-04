@@ -61,7 +61,7 @@ uInt16 myDatastreamBase                 __attribute__((section(".dtcm"))) = 0x00
 uInt16 myDatastreamIncrementBase        __attribute__((section(".dtcm"))) = 0x0128;
 
 // Pointer to the 32K program ROM image of the cartridge
-extern uInt8 myDPC[];
+extern uInt8 myARM6502[];
 extern uInt8 *myDPCptr;
 extern Int32 myDPCPCycles;
 
@@ -75,18 +75,11 @@ extern uInt32 myMusicFrequencies[3];
 // F- = 3 Voice Music
 uInt8 myMode                __attribute__((section(".dtcm"))) = 0xFF;
 
-uInt8 *myARMRAM             __attribute__((section(".dtcm")));
-
 bool  isCDFJPlus            __attribute__((section(".dtcm"))) = 0;
 
 u8 myLDXenabled             __attribute__((section(".dtcm"))) = 0;
 u8 myLDYenabled             __attribute__((section(".dtcm"))) = 0;
 uInt32 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
-
-// Not used often enough to warrant putting in fast memory
-uInt32 cBase = 0x00000000;
-uInt32 cStart = 0x00000000;
-uInt32 cStack = 0x00000000;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -208,7 +201,8 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
     
   // Pointer to the program ROM (28K @ 4K offset)
   myDPCptr = (uInt8 *)image + (isCDFJPlus ? MEM_2KB : MEM_4KB);
-  memcpy(myDPC, myDPCptr, MEM_32KB); // For the 6502, we only need to copy 32K 
+    
+  memcpy(myARM6502, myDPCptr, MEM_32KB); // For the 6502, we only need to copy 32K 
     
   // Copy intial driver into the CDF Harmony RAM
   memcpy(myARMRAM, image, MEM_2KB);
@@ -483,5 +477,5 @@ void CartridgeCDF::bank(uInt16 bank)
 {
     // Remember what bank we're in
   myCurrentOffset = bank << 12;
-  myDPCptr = &myDPC[myCurrentOffset];
+  myDPCptr = &myARM6502[myCurrentOffset];
 }

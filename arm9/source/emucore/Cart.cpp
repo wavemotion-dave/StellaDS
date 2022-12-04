@@ -83,7 +83,7 @@ uint8 original_flicker_mode = 0;
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 
 // Our cart buffer memory - this can store game ROMs up to 512k
-uInt8  cart_buffer[MAX_FILE_SIZE] __attribute__ ((aligned (32)));
+uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (32)));
 
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
@@ -2805,6 +2805,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
       cartDriver = 5;   
   }
+  else if (myCartInfo.banking == BANK_DPC)
+  {
+      cartDriver = 11;
+  }  
   else if (myCartInfo.banking == BANK_DPCP)
   {
       isCDFJPlus = false;

@@ -31,15 +31,16 @@
 
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
-
-extern bool  isCDFJPlus;
-extern uInt8* myARMRAM;
-
-#define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
+uInt8 *myARMRAM      __attribute__((section(".dtcm"))) = 0;
+u8  bSafeThumb       __attribute__((section(".dtcm"))) = 1;
 
 //#define SAFE_THUMB  1     // This enables the bSafeThumb check... otherwise we are ALWAYS UNSAFE (needed for speed)
 
-u8  bSafeThumb  __attribute__((section(".dtcm"))) = 1;
+extern bool  isCDFJPlus;
+
+#define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
+
+uInt32 cStack, cBase, cStart;           // The DPC+ and CDF/J/+ drivers need to set these before usign the Thumbulator
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
@@ -1991,20 +1992,9 @@ ITCM_CODE void Thumbulator::execute ( void )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-int Thumbulator::reset ( void )
+ITCM_CODE void Thumbulator::reset ( void )
 {
-    if (myCartInfo.banking == BANK_CDFJ)
-    {
-      extern uInt32 cBase, cStack, cStart;
-      reg_sys[13]=cStack;   //sp
-      reg_sys[14]=cBase;    //lr (duz this use odd addrs)
-      reg_sys[15]=cStart+3; //pc entry point of 0x809+2
-    }
-    else // Is DPC+
-    {
-      reg_sys[13]=0x40001fb4; //sp
-      reg_sys[14]=0x00000c00; //lr (duz this use odd addrs)
-      reg_sys[15]=0x00000c0b; //pc entry point of 0xc09+2
-    }
-    return 0;
+    reg_sys[13]=cStack;   //sp
+    reg_sys[14]=cBase;    //lr (duz this use odd addrs)
+    reg_sys[15]=cStart+3; //pc entry point of 0xc09+2 for DPC or 0x809+2 for CDF
 }

@@ -482,7 +482,7 @@ bool dsLoadGame(char *filename)
 
     fseek(romfile, 0, SEEK_END);
     buffer_size = ftell(romfile);
-    if (buffer_size <= MAX_FILE_SIZE)
+    if (buffer_size <= MAX_CART_FILE_SIZE)
     {
         rewind(romfile);
         fread(cart_buffer, buffer_size, 1, romfile);
