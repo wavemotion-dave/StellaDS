@@ -90,7 +90,8 @@ press the START button to save out your configuration after making changes:
 * Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
 * Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
-* Offset/Scale:    You can ajust the screen scaling and offset positions for the game. 
+* Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
+* ARM THUMB:       SAFE is most accurate but slows down processing. Optmized is faster and recommended for DPC+ games. Optmized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
 
 Screen Settings:
 -----------------------
