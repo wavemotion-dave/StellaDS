@@ -232,9 +232,12 @@ ITCM_CODE uInt8 CartridgeDPC::peek(uInt16 address)
     
     switch(function)
     {
-      extern uInt32 gTotalAtariFrames;
       case 0x00:
-        if (index < 4) result = (uInt8)gTotalAtariFrames; // Not really random but good enough to flash the eel in Pitfall II (it's only use)
+        if (index < 4) 
+        {
+            static const u8 DPCRandom[] = {37,127,18,65,203,255,9,188};
+            result = DPCRandom[++myRandomNumber & 7];   // Not truly random but good enough to flash the eel in Pitfall II (which is all this is ever used for)
+        }
         else    // No... it's a music fetcher
         {
           if (myCartInfo.soundQuality == SOUND_WAVE)

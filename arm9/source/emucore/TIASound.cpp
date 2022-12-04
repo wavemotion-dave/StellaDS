@@ -140,7 +140,7 @@ static uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
-uint8 tia_buf[SOUND_SIZE];
+uint16 tia_buf[SOUND_SIZE];
 extern uint16 *aptr;
 extern uint16 *bptr;
 
@@ -374,7 +374,7 @@ ITCM_CODE void Tia_process(void)
          when using unsigned 8-bit samples in SDL */
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {
-            tia_buf[tia_buf_idx++] = (Outvol[0] + Outvol[1]);
+            tia_buf[tia_buf_idx++] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
             tia_buf_idx &= (SOUND_SIZE-1);
         }
         else
@@ -389,6 +389,6 @@ ITCM_CODE void Tia_process(void)
 ITCM_CODE void Tia_process_wave (void)
 {
     if (myIdx == tia_buf_idx) Tia_process();
-    *aptr = *bptr = *((uInt16 *)0x068A0000 + tia_buf[myIdx++]); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+    *aptr = *bptr = tia_buf[myIdx++];
     myIdx &= (SOUND_SIZE-1);
 }
