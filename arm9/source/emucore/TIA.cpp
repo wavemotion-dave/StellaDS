@@ -109,6 +109,7 @@ uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   myM1CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
+uInt32  lastTiaPokeCycles           __attribute__((section(".dtcm"))) = 0;
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
@@ -487,6 +488,9 @@ ITCM_CODE void TIA::systemCyclesReset()
   myClockAtLastUpdate -= clocks;
   myVSYNCFinishClock -= clocks;
   myLastHMOVEClock -= clocks;
+
+  // This one just goes back to zero...
+  lastTiaPokeCycles = 0;
 }
  
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1613,11 +1617,21 @@ uInt32 player_reset_pos[] =
 157, 158, 159,   0,   1,   2,   3,   4 
 };
 
+
 ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 {
   Int32 clock; 
   Int32 delta_clock;
   addr = addr & 0x003f;
+
+  if (myCartInfo.soundQuality == SOUND_WAVE)
+  {
+      while ((gSystemCycles - lastTiaPokeCycles) > 76)
+      {
+          lastTiaPokeCycles += 76;
+          Tia_process();
+      }
+  }
 
   // Update frame to current CPU cycle before we make any changes!
   if (poke_needs_update_display[addr])

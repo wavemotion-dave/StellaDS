@@ -496,7 +496,14 @@ bool dsLoadGame(char *filename)
         
         TIMER2_DATA = TIMER_FREQ(mySoundFreq);
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
-        irqSet(IRQ_TIMER2, Tia_process);
+        if (myCartInfo.soundQuality == SOUND_WAVE)
+        {
+            irqSet(IRQ_TIMER2, Tia_process_wave);
+        }
+        else
+        {
+            irqSet(IRQ_TIMER2, Tia_process);
+        }
         
         if (myCartInfo.soundQuality)
         {

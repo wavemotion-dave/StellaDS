@@ -203,6 +203,7 @@ extern uInt8  cart_buffer[MAX_FILE_SIZE];
 #define SOUND_15KHZ         2
 #define SOUND_20KHZ         3
 #define SOUND_30KHZ         4
+#define SOUND_WAVE          5
 
 
 /**

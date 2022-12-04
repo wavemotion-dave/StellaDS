@@ -83,6 +83,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   if (myCartInfo.soundQuality == SOUND_15KHZ) mySoundFreq  = 15700;
   if (myCartInfo.soundQuality == SOUND_20KHZ) mySoundFreq  = 20933;
   if (myCartInfo.soundQuality == SOUND_30KHZ) mySoundFreq  = 31400;
+  if (myCartInfo.soundQuality == SOUND_WAVE)  mySoundFreq  = 15700;
     
   TIA* tia = new TIA(*this);
   theTIA = tia;

@@ -140,7 +140,7 @@ static uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
-extern uint8 sound_buffer[];
+uint8 tia_buf[SOUND_SIZE];
 extern uint16 *aptr;
 extern uint16 *bptr;
 
@@ -187,6 +187,8 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
       P5[chan] = 0;
       P9[chan] = 0;
    }
+    
+   memset(tia_buf, 0x00, sizeof(tia_buf));
 
     // A bit of speed-up to have this pre-computed
     for (uInt16 i=0; i<256; i++)
@@ -268,7 +270,10 @@ ITCM_CODE void Update_tia_sound (uint8 chan)
 /* Outputs: the buffer will be filled with n bytes of audio - no return val  */
 /*                                                                           */
 /*****************************************************************************/
-ITCM_CODE void Tia_process (void)
+uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
+uInt16 myIdx        __attribute__((section(".dtcm"))) = 0;
+
+ITCM_CODE void Tia_process(void)
 {
     /* loop until the buffer is filled */
     while (1)
@@ -370,9 +375,23 @@ ITCM_CODE void Tia_process (void)
       /* calculate the latest output value and place in buffer
          scale the volume by 128, since this is the default silence value
          when using unsigned 8-bit samples in SDL */
-        *aptr = *bptr = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+        if (myCartInfo.soundQuality == SOUND_WAVE)
+        {
+            tia_buf[tia_buf_idx++] = (Outvol[0] + Outvol[1]);
+            tia_buf_idx &= (SOUND_SIZE-1);
+        }
+        else
+        {
+            *aptr = *bptr = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+        }
       /* and done! */
       return;
     }
 }
 
+ITCM_CODE void Tia_process_wave (void)
+{
+    if (myIdx == tia_buf_idx) Tia_process();
+    *aptr = *bptr = *((uInt16 *)0x068A0000 + tia_buf[myIdx++]); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+    myIdx &= (SOUND_SIZE-1);
+}

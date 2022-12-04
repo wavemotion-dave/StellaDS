@@ -39,6 +39,7 @@
 void Tia_sound_init (unsigned short sample_freq, unsigned short playback_freq);
 void Update_tia_sound (unsigned char chan);
 void Tia_process (void);
+void Tia_process_wave(void);
 
 extern unsigned char AUDC[2];
 extern unsigned char AUDF[2];

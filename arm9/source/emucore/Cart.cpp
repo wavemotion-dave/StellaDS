@@ -68,7 +68,7 @@ const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR",
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
-uInt8 bFoundInDAT = 1;   
+uInt8 bFoundInDAT = false;
 
 // The counter registers for the data fetchers
 
@@ -2372,6 +2372,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // -----------------------------------------------------------------------
   // Take a closer look at the ROM image and try to figure out its type
   // -----------------------------------------------------------------------
+  bFoundInDAT = false;
     
   // Try finding it in the external configuration database...
   for (int idx = 0; idx < MAX_CONFIGS; idx++)
