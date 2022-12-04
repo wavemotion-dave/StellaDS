@@ -296,10 +296,7 @@ ITCM_CODE void Tia_process(void)
           {
              if (AUDC[0] & 0x04)       /* pure modified clock selected */
              {
-                 if (myCartInfo.special == SPEC_QUADRUN)    // Eliminate screech... 
-                     Outvol[0] = 0;
-                 else
-                     Outvol[0] = (Outvol[0] ? 0:AUDV[0]);  // Toggle outvol
+                 Outvol[0] = (Outvol[0] ? 0:AUDV[0]);  // Toggle outvol
              }
              else if (AUDC[0] & 0x08)
              {

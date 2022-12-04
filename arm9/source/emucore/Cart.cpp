@@ -619,7 +619,7 @@ const CartInfo table[] =
     {"368d88a6c071caba60b4f778615aae94",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Double Dunk (Super Basketball) (1989).bin
     {"cfc226d04d7490b69e155abd7741e98c",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Double Dunk (Super Basketball) (1989) (PAL).bin
     {"6ed5012793f5ddf4353a48c11ea9b8d3",  "??????", BANK_AR,   CTR_PADDLE0,   SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Down on the Line, Handcar.bin
-    {"97f4da9f1031486f4e588f1e53572e53",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
+    {"97f4da9f1031486f4e588f1e53572e53",  "DRACON", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
     {"24d9a55d8f0633e886a1b33ee1e0e797",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    75,   0,  0},    // Dragon Defender.bin
     {"95e542a7467c94b1e4ab24a3ebe907f1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    59,   0,  1},    // Dragon Defender (PAL).bin
     {"6a882fb1413912d2ce5cf5fa62cf3875",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    60,   0,  1},    // Dragon Defender (PAL).bin
@@ -1117,7 +1117,7 @@ const CartInfo table[] =
     {"402d876ec4a73f9e3133f8f7f7992a1e",  "MANGOS", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Man Goes Down.bin
     {"54a1c1255ed45eb8f71414dadb1cf669",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mangia' (1983).bin
     {"d8295eff5dcc43360afa87221ea6021f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    89,   0, 14},    // Mangia' (1983) (PAL).bin
-    {"9104ffc48c5eebd2164ec8aeb0927b91",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Mappy_20180606_NTSC.bin
+    {"9104ffc48c5eebd2164ec8aeb0927b91",  "MAPPY_", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Mappy_20180606_NTSC.bin
     {"13895ef15610af0d0f89d588f376b3fe",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Marauder (1982).bin
     {"cc03c68b8348b62331964d7a3dbec381",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Marauder (1982).bin
     {"512e874a240731d7378586a05f28aec6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  0},    // Marauder (1982) (PAL).bin
@@ -1479,7 +1479,7 @@ const CartInfo table[] =
     {"517592e6e0c71731019c0cebc2ce044f",  "??????", BANK_E0,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,  -1,  7},    // Q-bert's Qubes (1984).bin
     {"ac53b83e1b57a601eeae9d3ce1b4a458",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // qb (2.15) (ntsc).bin
     {"34e37eaffc0d34e05e40ed883f848b40",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // qb (2.15) (stella).bin
-    {"024365007a87f213cbe8ef5f2e8e1333",  "??????", BANK_F8,   CTR_LJOY,      SPEC_QUADRUN,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Quadrun (1983).bin
+    {"024365007a87f213cbe8ef5f2e8e1333",  "QUARUN", BANK_F8,   CTR_LJOY,      SPEC_QUADRUN,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Quadrun (1983).bin
     {"a0675883f9b09a3595ddd66a6f5d3498",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  36,    210,   100,   0,  1},    // Quest for Quintana Roo (1984).bin
     {"eaacfcdc1d4ee1258429b7ae7f084125",  "??????", BANK_F8,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  36,    210,   100,   0,  1},    // Quest for Quintana Roo (2 Button Hack).bin
     {"f736864442164b29235e8872013180cd",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   60,    245,   100,   0,  0},    // Quest for Quintana Roo (1984) (PAL).bin
@@ -2322,9 +2322,13 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.soundQuality = isDSiMode() ? SOUND_20KHZ:SOUND_10KHZ;    // DSi gets a default of 22050 Hz and older DS gets 11025 Hz
 
   // A few of the DPC+ games need reduced sound to be playable (11025 Hz)
-  if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
   if (strcmp(myCartInfo.gameID, "SPAROC") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
   if (strcmp(myCartInfo.gameID, "SCRAMB") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
+  if (strcmp(myCartInfo.gameID, "PITFA2") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "MAPPY_") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "DRACON") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.soundQuality = SOUND_WAVE;
     
   myCartInfo.thumbOptimize = 0;
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
