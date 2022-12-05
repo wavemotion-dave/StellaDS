@@ -46,7 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "6.1"
+#define VERSION "6.2"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
@@ -235,7 +235,6 @@ void dsPrintCartType(char *type, int size)
         dsPrintValue(16-(strlen(dbgbuf)/2),0,0, (char*)dbgbuf);
     }
 }
-
 
 void dsShowScreenEmu(void)
 {

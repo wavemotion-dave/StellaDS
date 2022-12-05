@@ -390,7 +390,7 @@ void highscore_entry(short foundIdx)
 void highscore_options(short foundIdx, char *md5)
 {
     uint16 options = 0x0000;
-    char notes[21];
+    static char notes[21];
     char bEntryDone = 0;
     char blink=0;
     unsigned short entry_idx=0;

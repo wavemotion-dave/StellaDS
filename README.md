@@ -56,7 +56,7 @@ Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will a
 Game Autodetection:
 -----------------------
 The Atari 2600 utilizes a growing number of bankswitching scheme. StellaDS 
-currently supports 34 differnet bank switching schemes - and it usually will
+currently supports 35 differnet bank switching schemes - and it usually will
 auto-detect the right one. If for some reason it does not, you can go into
 the configuration (gear icon) and manually select a new scheme. Be sure to hit 
 START to save your config and then try re-loading the game (the bank switching
@@ -192,6 +192,14 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V6.2 : 05-Dec-2022 by Dave Bernazzani (wavemotion)
+  * New WAVE DIRECT sound handling for fast-fetching music. Draconian, Mappy, Stay Frosty 2, Stella's Stocking, Pitfall II and Quadrun have much improved sound. 
+  * New palette options to tweak the colors to your liking.
+  * Memory re-org for a bit more speed but also to recover some valuable resources so more features can be added in the future.
+  * Added a 2nd page (not yet populated) for possible future options. This requires a new configuration file format - your old one will be reset. Sorry!
+  * Fixed CDFJ+ fetchers causing problems (including incorrect handling of SaveKey).
+  * Other small improvements as time permitted.
+  
 V6.1 : 01-Dec-2022 by Dave Bernazzani (wavemotion)
   * CDFJ+ games are now supported up to 256K of ROM and 32K of RAM. Turbo Arcade is playable but isn't yet full speed.
   * More speedup in ARM Thumb processing.
