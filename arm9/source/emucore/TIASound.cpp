@@ -95,6 +95,8 @@ uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
 uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
 uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
+uInt8 bProcessingSample __attribute__((section(".dtcm"))) = 0;
+
 static uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
 
 /* Initialze the bit patterns for the polynomials. */
@@ -139,6 +141,9 @@ static uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multi
 static uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
+
+uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
+uInt16 tia_out_idx  __attribute__((section(".dtcm"))) = 0;
 
 uint16 tia_buf[SOUND_SIZE];
 extern uint16 *aptr;
@@ -189,6 +194,10 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
    }
     
    memset(tia_buf, 0x00, sizeof(tia_buf));
+    
+   bProcessingSample = false;
+    
+   tia_buf_idx = tia_out_idx = 0;
 
     // A bit of speed-up to have this pre-computed
     for (uInt16 i=0; i<256; i++)
@@ -270,11 +279,9 @@ ITCM_CODE void Update_tia_sound (uint8 chan)
 /* Outputs: the buffer will be filled with n bytes of audio - no return val  */
 /*                                                                           */
 /*****************************************************************************/
-uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
-uInt16 myIdx        __attribute__((section(".dtcm"))) = 0;
-
 ITCM_CODE void Tia_process(void)
 {
+    bProcessingSample = true;
     /* loop until the buffer is filled */
     while (1)
     {
@@ -381,6 +388,8 @@ ITCM_CODE void Tia_process(void)
         {
             *aptr = *bptr = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
         }
+        
+      bProcessingSample = false;
       /* and done! */
       return;
     }
@@ -388,7 +397,13 @@ ITCM_CODE void Tia_process(void)
 
 ITCM_CODE void Tia_process_wave (void)
 {
-    if (myIdx == tia_buf_idx) Tia_process();
-    *aptr = *bptr = tia_buf[myIdx++];
-    myIdx &= (SOUND_SIZE-1);
+    // -----------------------------------------
+    //If we have no samples, generate one...
+    // -----------------------------------------
+    if (tia_out_idx == tia_buf_idx) 
+    {
+        if (!bProcessingSample) Tia_process(); else return;
+    }
+    *aptr = *bptr = tia_buf[tia_out_idx++];
+    tia_out_idx &= (SOUND_SIZE-1);
 }

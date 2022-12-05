@@ -93,12 +93,16 @@ void SaveConfig(bool bShow)
 // After settings hae changed, we call this to apply the new options to the game being played.
 // This is also called when loading a game and after the configuration if read from StelaDS.DAT
 // -------------------------------------------------------------------------------------------------
-static void ApplyOptions(void)
+static void ApplyOptions(bool bFull)
 {
     extern u8 bScreenRefresh;
     bScreenRefresh = 1;
     extern uInt8 bSafeThumb;
     bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);
+    if (bFull)
+    {
+        dsInitPalette();
+    }
 }
 
 
@@ -142,7 +146,7 @@ void LoadConfig(void)
         dsPrintValue(0,1,0, (char*)"              ");
     }
     
-    ApplyOptions();
+    ApplyOptions(false);
 }
 
 
@@ -171,6 +175,7 @@ const struct options_t Game_Option_Table[2][20] =
         {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
         {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY", "FF HALF MODE"},                                                                                   &myCartInfo.frame_mode,          5},
         {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
+        {"PALETTE",     0, {"DS OPTMIZED", "STELLA", "Z26"},                                                                                                                               &myCartInfo.palette_type,        3},
         {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myCartInfo.soundQuality,        6},
         {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.aButton,             8},
         {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.bButton,             8},
@@ -189,7 +194,7 @@ const struct options_t Game_Option_Table[2][20] =
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     },
     {
-        {"FUTURE OPT",  0, {"NONE"},                                                                                                                                                       &myCartInfo.spare1_0,            1},
+        {"FUTURE OPT",  0, {"NONE"},                                                                                                                                                       &myCartInfo.spare2_0,            1},
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     }    
 };
@@ -308,7 +313,7 @@ void ShowConfig(void)
                     *(Game_Option_Table[OptionPage][optionHighlighted].option_val) = (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) + 1) % Game_Option_Table[OptionPage][optionHighlighted].option_max;
                 }
                 display_line(optionHighlighted, 1);
-                ApplyOptions();                
+                ApplyOptions(true);
             }
             if (keysCurrent() & KEY_LEFT)  // Toggle option counterclockwise
             {
@@ -334,7 +339,7 @@ void ShowConfig(void)
                         *(Game_Option_Table[OptionPage][optionHighlighted].option_val) = (*(Game_Option_Table[OptionPage][optionHighlighted].option_val) - 1) % Game_Option_Table[OptionPage][optionHighlighted].option_max;
                 }
                 display_line(optionHighlighted, 1);
-                ApplyOptions();                
+                ApplyOptions(true);
             }
             if (keysCurrent() & KEY_START)  // Save Options
             {

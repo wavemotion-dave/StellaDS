@@ -288,7 +288,13 @@ class TIA : public Device , public MediaSource
     // this array are always shades of grey.  This is used to implement
     // the PAL color loss effect.
     static const uInt32 ourPALPalette[256];
+    
+    static const uInt32 ourNTSCPaletteZ26[256];
+    static const uInt32 ourPALPaletteZ26[256];
 
+    static const uInt32 ourNTSCPaletteDS[256];
+    static const uInt32 ourPALPaletteDS[256];
+    
   private:
     // Copy constructor isn't supported by this class so make it private
     TIA(const TIA&);
