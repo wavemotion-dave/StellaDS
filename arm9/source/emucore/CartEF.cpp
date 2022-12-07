@@ -28,11 +28,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeEF::CartridgeEF(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < (64*1024); ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+    // Cart is already in cart_buffer[]
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,7 +84,7 @@ uInt8 CartridgeEF::peek(uInt16 address)
     bank(address - 0x0FE0);
   }
 
-  return myImage[myCurrentOffset + address];
+  return cart_buffer[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -115,7 +111,7 @@ void CartridgeEF::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0000; address < (0x0FE0U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
+      page_access.directPeekBase = &cart_buffer[myCurrentOffset + address];
       mySystem->setPageAccess(access_num++, page_access);
   }
 }

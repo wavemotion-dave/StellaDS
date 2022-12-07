@@ -28,11 +28,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeEFSC::CartridgeEFSC(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < (64*1024); ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Cart is already in cart_buffer[]
     
   // Initialize RAM with random values
   Random random;
@@ -118,7 +114,7 @@ uInt8 CartridgeEFSC::peek(uInt16 address)
   // NOTE: This does not handle accessing RAM, however, this function 
   // should never be called for RAM because of the way page accessing 
   // has been setup
-  return myImage[myCurrentOffset + address];
+  return cart_buffer[myCurrentOffset + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -149,7 +145,7 @@ void CartridgeEFSC::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0100; address < (0x0FE0U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &myImage[myCurrentOffset + address];
+      page_access.directPeekBase = &cart_buffer[myCurrentOffset + address];
       mySystem->setPageAccess(access_num++, page_access);
   }
 }

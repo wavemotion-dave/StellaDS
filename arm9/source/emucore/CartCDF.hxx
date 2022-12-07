@@ -123,7 +123,6 @@ class CartridgeCDF : public Cartridge
     uInt32 scanCDFDriver(uInt32 searchValue);
     
     uInt32 getWaveform(uInt8 index) const;
-    uInt32 getSample();
 
   private:
     // The ROM image and size

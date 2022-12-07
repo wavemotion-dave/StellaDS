@@ -28,11 +28,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeMB::CartridgeMB(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < 65536; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Image is already in cart_buffer[]
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -86,7 +82,7 @@ uInt8 CartridgeMB::peek(uInt16 address)
   // Switch to next bank
   if(address == 0x0FF0) incbank();
 
-  return myImage[myCurrentBank * 4096 + address];
+  return cart_buffer[myCurrentBank * 4096 + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -116,7 +112,7 @@ void CartridgeMB::incbank()
   for(uInt32 address = 0x1000; address < (0x1FF0U & ~mask);
       address += (1 << shift))
   {
-    page_access.directPeekBase = &myImage[offset + (address & 0x0FFF)];
+    page_access.directPeekBase = &cart_buffer[offset + (address & 0x0FFF)];
     mySystem->setPageAccess(address >> shift, page_access);
   }
 }

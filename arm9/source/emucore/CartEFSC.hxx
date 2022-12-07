@@ -91,9 +91,6 @@ class CartridgeEFSC : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // The 64K ROM image of the cartridge
-    uInt8 myImage[64*1024];
-    
     // The 128 bytes of RAM
     uInt8 myRAM[128];
 };

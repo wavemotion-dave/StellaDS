@@ -636,7 +636,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_600:  //B(1) conditional branch
+          case Op::b1_600:                      __attribute__((cold)); //B(1) conditional branch
                 if(vFlag)
                 {
                     rb=(inst>>0)&0xFF;
@@ -646,7 +646,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_700:  //B(1) conditional branch
+          case Op::b1_700:                      __attribute__((cold)); //B(1) conditional branch
                 if(!(vFlag))
                 {
                     rb=(inst>>0)&0xFF;
@@ -656,7 +656,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
-          case Op::b1_800:  //B(1) conditional branch
+          case Op::b1_800:                      __attribute__((cold)); //B(1) conditional branch
                 if((cFlag)&&(ZNflags))
                 {
                     rb=(inst>>0)&0xFF;
@@ -666,7 +666,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_900:  //B(1) conditional branch
+          case Op::b1_900:                      __attribute__((cold)); //B(1) conditional branch
                 if((!ZNflags)||(!(cFlag)))
                 {
                     rb=(inst>>0)&0xFF;
@@ -676,7 +676,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
-          case Op::b1_a00:  //B(1) conditional branch
+          case Op::b1_a00:                      __attribute__((cold)); //B(1) conditional branch
                 ra=0;
                 if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
                 else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
@@ -689,7 +689,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_b00:  //B(1) conditional branch
+          case Op::b1_b00:                      __attribute__((cold)); //B(1) conditional branch
                 ra=0;
                 if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
                 else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
@@ -702,7 +702,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_c00:  //B(1) conditional branch
+          case Op::b1_c00:                      __attribute__((cold)); //B(1) conditional branch
                 ra=0;
                 if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
                 else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
@@ -716,7 +716,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_d00:  //B(1) conditional branch
+          case Op::b1_d00:                      __attribute__((cold)); //B(1) conditional branch
                 ra=0;
                 if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
                 else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
@@ -730,8 +730,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_e00:  //B(1) conditional branch
-          case Op::b1_f00:  //B(1) conditional branch
+          case Op::b1_e00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_f00:                      __attribute__((cold)); //B(1) conditional branch
               return;
               
           case Op::b2_pos:  //B(2) unconditional branch no sign extend
@@ -905,138 +905,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rb=(inst<<2)&0x3FF;
                 rb=read_register(13)+rb;
                 write32(rb,read_register(3));
-              break;
-              
-          case Op::strh1:
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>5)&0x3E;
-                rb=read_register(rn)+rb;
-                rc=read_register(rd);
-                write16(rb,rc&0xFFFF);
-              break;              
-              
-          case Op::add6:
-                rb=(inst>>0)&0xFF;
-                rd=(inst>>8)&0x7;
-                rb<<=2;
-                ra=read_register(13);
-                rc=ra+rb;
-                write_register(rd,rc);
-              break;
-              
-          case Op::ldrh1:
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>5)&0x3E;
-                rb=read_register(rn)+rb;
-                rc=read16(rb);
-                write_register(rd,rc&0xFFFF);
-              break;
-
-          case Op::add7:
-                rb=(inst>>0)&0x7F;
-                rb<<=2;
-                ra=read_register(13);
-                rc=ra+rb;
-                write_register(13,rc);
-              break;
-              
-          case Op::sub4:
-                rb=inst&0x7F;
-                rb<<=2;
-                ra=read_register(13);
-                ra-=rb;
-                write_register(13,ra);
-              break;
-              
-          case Op::bkpt:
-                return;
-              break;
-              
-          case Op::cps:
-                return;
-              break;
-              
-          case Op::rev:
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rc =((ra>> 0)&0xFF)<<24;
-                rc|=((ra>> 8)&0xFF)<<16;
-                rc|=((ra>>16)&0xFF)<< 8;
-                rc|=((ra>>24)&0xFF)<< 0;
-                write_register(rd,rc);
-              break;
-              
-          case Op::rev16:
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rc =((ra>> 0)&0xFF)<< 8;
-                rc|=((ra>> 8)&0xFF)<< 0;
-                rc|=((ra>>16)&0xFF)<<24;
-                rc|=((ra>>24)&0xFF)<<16;
-                write_register(rd,rc);
-              break;
-
-          case Op::revsh:
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rc =((ra>> 0)&0xFF)<< 8;
-                rc|=((ra>> 8)&0xFF)<< 0;
-                if(rc&0x8000) rc|=0xFFFF0000;
-                else          rc&=0x0000FFFF;
-                write_register(rd,rc);
-              break;
-              
-          case Op::setend:
-                return;
-              break;
-              
-          case Op::sxtb:
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=ra&0xFF;
-                if(rc&0x80) rc|=(~0)<<8;
-                write_register(rd,rc);
-              break;
-              
-          case Op::sxth:
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=ra&0xFFFF;
-                if(rc&0x8000) rc|=(~0)<<16;
-                write_register(rd,rc);
-              break;
-              
-          case Op::add5:
-                FIX_R15_PC
-                rb=(inst>>0)&0xFF;
-                rd=(inst>>8)&0x7;
-                rb<<=2;
-                ra=read_register(15);
-                rc=(ra&(~3))+rb;
-                write_register(rd,rc);
-              break;
-              
-          case Op::uxtb:
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=ra&0xFF;
-                write_register(rd,rc);
-              break;
-              
-          case Op::uxth:
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rm);
-                rc=ra&0xFFFF;
-                write_register(rd,rc);
               break;
               
           case Op::ldr1_r0:
@@ -1531,15 +1399,6 @@ ITCM_CODE void Thumbulator::execute ( void )
 #endif              
               break;
               
-          case Op::cpy:
-                //same as mov except you can use both low registers
-                //going to let mov handle high registers
-                rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                rc=read_register(rm);
-                write_register(rd,rc);
-              break;
-              
           case Op::eor:
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
@@ -1629,24 +1488,6 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
                 write_register(rd,rc);
                 do_znflags(rc);
-              break;
-              
-          case Op::blx2:
-                FIX_R15_PC  
-                rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                if(rc&1)
-                {
-                  rc+=2;
-                  write_register(14,reg_sys[15]-2);
-                  write_register(15,rc);
-                  FIX_THUMB_PTRS
-                }
-                else
-                {
-                  // fxq: this could serve as exit code
-                  return;
-                }
               break;
               
           case Op::inc_r0:
@@ -1936,16 +1777,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 #endif              
               break;
               
-          case Op::mov2:
-                rd=(inst>>0)&7;
-                rn=(inst>>3)&7;
-                rc=read_register(rn);
-                write_register(rd,rc);
-                do_znflags(rc);
-                do_cflag_bit(0);
-                do_vflag_bit(0);
-              break;
-              
+
           case Op::sub1:
                 rd=(inst>>0)&7;
                 rn=(inst>>3)&7;
@@ -1984,7 +1816,176 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::invalid:
+          case Op::cpy:                     __attribute__((cold));
+                //same as mov except you can use both low registers
+                //going to let mov handle high registers
+                rd=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                rc=read_register(rm);
+                write_register(rd,rc);
+              break;
+              
+          case Op::blx2:                     __attribute__((cold));
+                FIX_R15_PC  
+                rm=(inst>>3)&0xF;
+                rc=read_register(rm);
+                if(rc&1)
+                {
+                  rc+=2;
+                  write_register(14,reg_sys[15]-2);
+                  write_register(15,rc);
+                  FIX_THUMB_PTRS
+                }
+                else
+                {
+                  // fxq: this could serve as exit code
+                  return;
+                }
+              break;
+              
+          case Op::mov2:                     __attribute__((cold));
+                rd=(inst>>0)&7;
+                rn=(inst>>3)&7;
+                rc=read_register(rn);
+                write_register(rd,rc);
+                do_znflags(rc);
+                do_cflag_bit(0);
+                do_vflag_bit(0);
+              break;
+                            
+          case Op::strh1:                    __attribute__((cold));
+                rd=(inst>>0)&0x07;
+                rn=(inst>>3)&0x07;
+                rb=(inst>>5)&0x3E;
+                rb=read_register(rn)+rb;
+                rc=read_register(rd);
+                write16(rb,rc&0xFFFF);
+              break;              
+              
+          case Op::add6:                    __attribute__((cold));
+                rb=(inst>>0)&0xFF;
+                rd=(inst>>8)&0x7;
+                rb<<=2;
+                ra=read_register(13);
+                rc=ra+rb;
+                write_register(rd,rc);
+              break;
+              
+          case Op::ldrh1:                    __attribute__((cold));
+                rd=(inst>>0)&0x07;
+                rn=(inst>>3)&0x07;
+                rb=(inst>>5)&0x3E;
+                rb=read_register(rn)+rb;
+                rc=read16(rb);
+                write_register(rd,rc&0xFFFF);
+              break;
+
+          case Op::add7:                    __attribute__((cold));
+                rb=(inst>>0)&0x7F;
+                rb<<=2;
+                ra=read_register(13);
+                rc=ra+rb;
+                write_register(13,rc);
+              break;
+              
+          case Op::sub4:                    __attribute__((cold));
+                rb=inst&0x7F;
+                rb<<=2;
+                ra=read_register(13);
+                ra-=rb;
+                write_register(13,ra);
+              break;
+              
+          case Op::bkpt:                    __attribute__((cold));
+                return;
+              break;
+              
+          case Op::cps:                    __attribute__((cold));
+                return;
+              break;
+              
+          case Op::rev:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rn=(inst>>3)&0x7;
+                ra=read_register(rn);
+                rc =((ra>> 0)&0xFF)<<24;
+                rc|=((ra>> 8)&0xFF)<<16;
+                rc|=((ra>>16)&0xFF)<< 8;
+                rc|=((ra>>24)&0xFF)<< 0;
+                write_register(rd,rc);
+              break;
+              
+          case Op::rev16:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rn=(inst>>3)&0x7;
+                ra=read_register(rn);
+                rc =((ra>> 0)&0xFF)<< 8;
+                rc|=((ra>> 8)&0xFF)<< 0;
+                rc|=((ra>>16)&0xFF)<<24;
+                rc|=((ra>>24)&0xFF)<<16;
+                write_register(rd,rc);
+              break;
+
+          case Op::revsh:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rn=(inst>>3)&0x7;
+                ra=read_register(rn);
+                rc =((ra>> 0)&0xFF)<< 8;
+                rc|=((ra>> 8)&0xFF)<< 0;
+                if(rc&0x8000) rc|=0xFFFF0000;
+                else          rc&=0x0000FFFF;
+                write_register(rd,rc);
+              break;
+              
+          case Op::setend:                  __attribute__((cold));
+                return;
+              break;
+              
+          case Op::sxtb:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                ra=read_register(rm);
+                rc=ra&0xFF;
+                if(rc&0x80) rc|=(~0)<<8;
+                write_register(rd,rc);
+              break;
+              
+          case Op::sxth:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                ra=read_register(rm);
+                rc=ra&0xFFFF;
+                if(rc&0x8000) rc|=(~0)<<16;
+                write_register(rd,rc);
+              break;
+              
+          case Op::add5:                    __attribute__((cold));
+                FIX_R15_PC
+                rb=(inst>>0)&0xFF;
+                rd=(inst>>8)&0x7;
+                rb<<=2;
+                ra=read_register(15);
+                rc=(ra&(~3))+rb;
+                write_register(rd,rc);
+              break;
+              
+          case Op::uxtb:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                ra=read_register(rm);
+                rc=ra&0xFF;
+                write_register(rd,rc);
+              break;
+              
+          case Op::uxth:                    __attribute__((cold));
+                rd=(inst>>0)&0x7;
+                rm=(inst>>3)&0x7;
+                ra=read_register(rm);
+                rc=ra&0xFFFF;
+                write_register(rd,rc);
+              break;
+                            
+          case Op::invalid:                 __attribute__((cold));
               return;
               break;              
       }

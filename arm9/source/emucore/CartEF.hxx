@@ -91,8 +91,6 @@ class CartridgeEF : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // The 64K ROM image of the cartridge
-    uInt8 myImage[64*1024];
 };
 #endif
 

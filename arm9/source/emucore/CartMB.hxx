@@ -97,9 +97,6 @@ class CartridgeMB : public Cartridge
   private:
     // Indicates which bank is currently active
     uInt16 myCurrentBank;
-
-    // The 64K ROM image of the cartridge
-    uInt8 myImage[65536];
 };
 #endif
 
