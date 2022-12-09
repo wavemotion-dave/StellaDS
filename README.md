@@ -7,7 +7,7 @@ _**Have you played Atari today?!**_
 
 Features :
 -----------------------
-High level of compatibility to make games playable. Most games you remember fondly run full speed on a DSi in native 133MHz mode. For the older DS-LITE and DS-PHAT, many of the simple 8k, 4k and 2k games will play perfectly More sophisticated bank-switching schemes really require the DSi for the best experience.
+High level of compatibility to make games playable. Most games you remember fondly run full speed on a DSi in native 134MHz mode. For the older DS-LITE and DS-PHAT, many of the simple 8k, 4k and 2k games will play perfectly More sophisticated bank-switching schemes really require the DSi for the best experience.
  
 See compatibility.txt for a full list of the ROMS supported. Generally these are going to be NTSC No-Intro or ROMHUNTER roms (the good ones!). 
 
@@ -83,7 +83,8 @@ press the START button to save out your configuration after making changes:
 * Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
 * Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground.
 * TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
-* Sound:           Normally ON. Can be turned OFF which will render screen faster.
+* Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette.
+* Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian).
 * ABXY Button:     Default to FIRE button but you can change this. You can now set to Screen Pan UP or Screen Pan DN to scroll the screen for more complex games. See Screen Settings below.
 * HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
