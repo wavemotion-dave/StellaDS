@@ -380,7 +380,21 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   }
 
   //LDRB(1)
-  if((inst & 0xF800) == 0x7800) return Op::ldrb1;
+  if((inst & 0xF800) == 0x7800) 
+  {
+      switch ((inst>>3) & 0x0007)
+      {
+          case 0x0000:  return Op::ldrb1_r0;
+          case 0x0001:  return Op::ldrb1_r1;
+          case 0x0002:  return Op::ldrb1_r2;
+          case 0x0003:  return Op::ldrb1_r3;
+          case 0x0004:  return Op::ldrb1_r4;
+          case 0x0005:  return Op::ldrb1_r5;
+          case 0x0006:  return Op::ldrb1_r6;
+          case 0x0007:  return Op::ldrb1_r7;
+      }
+      return Op::ldrb1_r0;
+  }
 
   //LDRB(2)
   if((inst & 0xFE00) == 0x5C00) return Op::ldrb2;
@@ -531,7 +545,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
 // so we default to not updating it unless we know we're using it.
 // This produces a small but meaningful speed-up of Thumb processing...
 // ------------------------------------------------------------------------
-#define FIX_R15_PC reg_sys[15] = ((u32) (thumb_ptr - (uInt16*)cart_buffer) << 1) + 3;
+#define FIX_R15_PC reg_sys[15] = ((u32) ((uInt8*)thumb_ptr - (uInt8*)cart_buffer)) + 2;
 
 #define FIX_THUMB_PTRS  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)]; thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
 
@@ -959,11 +973,100 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write16(rb,ra);
               break;
               
-          case Op::ldrb1:
+          case Op::ldrb1_r0:
                 rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
-                rb=(inst>>6)&0x1F;
-                rb=read_register(rn)+rb;
+                rb=read_register(0)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r1:
+                rd=(inst>>0)&0x07;
+                rb=read_register(1)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+
+          case Op::ldrb1_r2:
+                rd=(inst>>0)&0x07;
+                rb=read_register(2)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r3:
+                rd=(inst>>0)&0x07;
+                rb=read_register(3)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r4:
+                rd=(inst>>0)&0x07;
+                rb=read_register(4)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r5:
+                rd=(inst>>0)&0x07;
+                rb=read_register(5)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r6:
+                rd=(inst>>0)&0x07;
+                rb=read_register(6)+((inst>>6)&0x1F);
+                if(rb&1)
+                {
+                    write_register(rd, read16(rb)>>8);
+                }
+                else
+                {
+                    write_register(rd, read16(rb)&0xFF);
+                }                
+              break;
+              
+          case Op::ldrb1_r7:
+                rd=(inst>>0)&0x07;
+                rb=read_register(7)+((inst>>6)&0x1F);
                 if(rb&1)
                 {
                     write_register(rd, read16(rb)>>8);
