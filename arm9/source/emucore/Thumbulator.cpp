@@ -36,8 +36,6 @@ u8  bSafeThumb       __attribute__((section(".dtcm"))) = 1;
 
 //#define SAFE_THUMB  1     // This enables the bSafeThumb check... otherwise we are ALWAYS UNSAFE (needed for speed)
 
-extern bool  isCDFJPlus;
-
 #define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
 
 uInt32 cStack, cBase, cStart;           // The DPC+ and CDF/J/+ drivers need to set these before usign the Thumbulator
@@ -58,7 +56,7 @@ Thumbulator::~Thumbulator()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void Thumbulator::run( void )
+ITCM_CODE void Thumbulator::run( void )
 {
   reset();
   execute();
