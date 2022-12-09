@@ -1157,6 +1157,21 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_L));
                     myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_R));
                     break;
+
+                case CTR_QUADTARI:
+                    myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
+                    myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
+                    myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
+                    myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
+
+                    myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_X));
+                    myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_B));
+                    myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_Y));
+                    myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_A));
+                    
+                    myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_L));
+                    myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_R));
+                    break;
                     
                 case CTR_BOOSTER:
                     myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));
@@ -1174,7 +1189,7 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
-                    break;                    
+                    break;
                     
                 case CTR_STARRAID:
                     myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));

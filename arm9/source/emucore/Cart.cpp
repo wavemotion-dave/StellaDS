@@ -2326,6 +2326,7 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "DRACON") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "SSTOCK") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "MSPACM") == 0) myCartInfo.soundQuality = SOUND_WAVE;
     
     
   myCartInfo.thumbOptimize = 0;

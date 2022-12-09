@@ -33,6 +33,7 @@
 #include "Event.hxx"
 #include "EventHandler.hxx"
 #include "Genesis.hxx"
+#include "QuadTari.hxx"
 #include "Joystick.hxx"
 #include "Keyboard.hxx"
 #include "SaveKey.hxx"
@@ -113,6 +114,11 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   {
       myControllers[0] = new Genesis(Controller::Left, *myEvent);
       myControllers[1] = new SaveKey(Controller::Right, *myEvent);  // For the Genesis pad, we will allow a Save Key
+  }
+  else if (myCartInfo.controllerType == CTR_QUADTARI)
+  {
+      myControllers[0] = new QuadTari(Controller::Left, *myEvent);
+      myControllers[1] = new SaveKey(Controller::Right, *myEvent);
   }
   else if ((myCartInfo.controllerType == CTR_KEYBOARD0) || (myCartInfo.controllerType == CTR_KEYBOARD1))
   {
