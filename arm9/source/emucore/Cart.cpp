@@ -2444,6 +2444,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_HALF;
           if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_HALF;
           if (strcmp(myCartInfo.gameID, "PACMAN") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "ATLANT") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "SPAINV") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "SPIDFI") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "WIZWOR") == 0) myCartInfo.frame_mode = MODE_HALF;          
       }
   }
   

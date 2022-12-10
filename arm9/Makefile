@@ -17,11 +17,11 @@ include $(DEVKITARM)/ds_rules
 # DATA is a list of directories containing binary files
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
-BUILD       :=	build
-SOURCES     :=	source/emucore source/common source  
-INCLUDES    :=	source/emucore source/common include
-DATA        := data
-GRAPHICS    :=	gfx
+BUILD       :=  build
+SOURCES     :=  source/emucore source/common source  
+INCLUDES    :=  source/emucore source/common include
+DATA        :=  data
+GRAPHICS    :=  gfx
 
 #---------------------------------------------------------------------------------
 # options for code generation

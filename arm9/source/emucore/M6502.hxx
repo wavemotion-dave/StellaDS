@@ -41,7 +41,7 @@ extern uInt8 D;
 extern uInt8 I; 
 extern uInt8 notZ;
 extern uInt8 C;
-extern uInt32 myExecutionStatus;
+extern uInt16 myExecutionStatus;
 
 
 /**
