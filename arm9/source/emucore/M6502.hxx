@@ -41,6 +41,7 @@ extern uInt8 D;
 extern uInt8 I; 
 extern uInt8 notZ;
 extern uInt8 C;
+extern uInt32 myExecutionStatus;
 
 
 /**
@@ -174,13 +175,6 @@ class M6502
     void PS(uInt8 ps);
 
   protected:
-
-    /** 
-      Bit fields used to indicate that certain conditions need to be 
-      handled such as stopping execution, fatal errors, maskable interrupts 
-      and non-maskable interrupts
-    */
-    uInt8 myExecutionStatus;
 
     /**
       Constants used for setting bits in myExecutionStatus
