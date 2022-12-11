@@ -193,6 +193,10 @@ Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).
 
 Version History:
 -----------------------
+V6.3 : 11-Dec-2022 by Dave Bernazzani (wavemotion)
+  * Improved performance across the board. More games play at the right speed even on the older DS-Lite/Phat.
+  * New QuadTari support - for now it's just Dual Joysticks + SaveKey which is useful for games like Robotwar.
+  
 V6.2 : 05-Dec-2022 by Dave Bernazzani (wavemotion)
   * New WAVE DIRECT sound handling for fast-fetching music. Draconian, Mappy, Stay Frosty 2, Stella's Stocking, Pitfall II and Quadrun have much improved sound. 
   * New palette options to tweak the colors to your liking.

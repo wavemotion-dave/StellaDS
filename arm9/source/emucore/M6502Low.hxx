@@ -70,19 +70,18 @@ class M6502Low : public M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual void execute(uInt16 number);
-    virtual void execute_NB(uInt16 number);
-    virtual void execute_F8(uInt16 number);
-    virtual void execute_F6(uInt16 number);
-    virtual void execute_F4(uInt16 number);
-    virtual void execute_AR(uInt16 number);
-    virtual void execute_F8SC(uInt16 number);
-    virtual void execute_F6SC(uInt16 number);
-    virtual void execute_DPCP(uInt16 number);
-    virtual void execute_CDFJ(uInt16 number);
-    virtual void execute_CDFJPlus(uInt16 number);
-    virtual void execute_DPC(uInt16 number);
-    
+    virtual void execute(void);
+    virtual void execute_NB(void);
+    virtual void execute_F8(void);
+    virtual void execute_F6(void);
+    virtual void execute_F4(void);
+    virtual void execute_AR(void);
+    virtual void execute_F8SC(void);
+    virtual void execute_F6SC(void);
+    virtual void execute_DPCP(void);
+    virtual void execute_CDFJ(void);
+    virtual void execute_CDFJPlus(void);
+    virtual void execute_DPC(void);
     
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
@@ -92,64 +91,56 @@ class M6502Low : public M6502
     virtual const char* name() const;
     
   protected:
-    /*
-      Get the byte at the specified address 
-
-      @return The byte at the specified address
-    */
-    
-    inline uInt8 peek(uInt16 address);
-    inline uInt8 peek_PC(uInt16 address);
-    
-    inline void poke_AR(uInt16 address, uInt8 value);
-    inline uInt8 peek_AR(uInt16 address);
-    
-    inline uInt8 peek_NB(uInt16 address);
-    inline uInt8 peek_PCNB(uInt16 address);
-    inline void poke_NB(uInt16 address, uInt8 value);
-
-    inline uInt8 peek_F8(uInt16 address);
-    inline uInt8 peek_PCF8(uInt16 address);
-    inline void poke_F8(uInt16 address, uInt8 value);
-
-    inline uInt8 peek_F6(uInt16 address);
-    inline uInt8 peek_PCF6(uInt16 address);
-    inline void poke_F6(uInt16 address, uInt8 value);
-
-    inline uInt8 peek_F4(uInt16 address);
-    inline uInt8 peek_PCF4(uInt16 address);
-    inline void poke_F4(uInt16 address, uInt8 value);
-    
-    inline uInt8 peek_DPC(uInt16 address);
-    inline uInt8 peek_PCDPC(uInt16 address);
-    inline void poke_DPC(uInt16 address, uInt8 value);
-
-    uInt8 peek_DPCP(uInt16 address);
-    inline uInt8 peek_DPCPPC(uInt16 address);
-    inline void poke_DPCP(uInt16 address, uInt8 value);
-
-    uInt8 peek_CDFJ(uInt16 address);
-    inline uInt8 peek_CDFJPC(uInt16 address);
-    inline void poke_CDFJ(uInt16 address, uInt8 value);
-    inline void poke_small(uInt8 address, uInt8 value);
-
-    inline uInt8 peek_PCF8SC(uInt16 address);
-    inline uInt8 peek_PCF6SC(uInt16 address);
-
-    uInt8  peek_Fetch(uInt8 address);
-    inline uInt8  peek_DataStream(uInt8 address);
-    inline uInt8  peek_DataStreamPlus(uInt8 address);
-    inline uInt16 peek_JumpStream(uInt8 address);
-    inline uInt16 peek_JumpStreamPlus(uInt8 address);
-    
-    
-    /**
-      Change the byte at the specified address to the given value
-
-      @param address The address where the value should be stored
-      @param value The value to be stored at the address
-    */
-    void poke(uInt16 address, uInt8 value);
 };
-#endif
 
+// -------------------------------------------------------------------------
+// We got a small speedup by moving these outside the M6502 class...
+// Possibly because of the virtual/abstract nature of the parent class
+// the code got about 3K smaller and the density really helped performance.
+// -------------------------------------------------------------------------
+inline uInt8 peek(uInt16 address);
+inline uInt8 peek_PC(uInt16 address);
+inline void  poke(uInt16 address, uInt8 value);
+
+inline uInt8 peek_NB(uInt16 address);
+inline uInt8 peek_PCNB(uInt16 address);
+inline void  poke_NB(uInt16 address, uInt8 value);
+
+inline uInt8 peek_F6(uInt16 address);
+inline uInt8 peek_PCF6(uInt16 address);
+inline void  poke_F6(uInt16 address, uInt8 value);
+
+inline uInt8 peek_F4(uInt16 address);
+inline uInt8 peek_PCF4(uInt16 address);
+inline void  poke_F4(uInt16 address, uInt8 value);
+
+inline uInt8 peek_DPC(uInt16 address);
+inline uInt8 peek_PCDPC(uInt16 address);
+inline void  poke_DPC(uInt16 address, uInt8 value);
+
+inline uInt8 peek_PCF8SC(uInt16 address);
+inline uInt8 peek_PCF6SC(uInt16 address);
+
+inline uInt8 peek_AR(uInt16 address);
+inline void  poke_AR(uInt16 address, uInt8 value);
+
+inline uInt8 peek_F8(uInt16 address);
+inline uInt8 peek_PCF8(uInt16 address);
+inline void  poke_F8(uInt16 address, uInt8 value);
+
+       uInt8 peek_DPCP(uInt16 address);
+inline uInt8 peek_DPCPPC(uInt16 address);
+inline void  poke_DPCP(uInt16 address, uInt8 value);
+
+       uInt8 peek_CDFJ(uInt16 address);
+inline uInt8 peek_CDFJPC(uInt16 address);
+inline void  poke_CDFJ(uInt16 address, uInt8 value);
+inline void  poke_small(uInt8 address, uInt8 value);
+
+       uInt8  peek_Fetch(uInt8 address);
+inline uInt8  peek_DataStream(uInt8 address);
+inline uInt16 peek_JumpStream(uInt8 address);
+inline uInt8  peek_DataStreamPlus(uInt8 address);
+inline uInt16 peek_JumpStreamPlus(uInt8 address);
+
+#endif

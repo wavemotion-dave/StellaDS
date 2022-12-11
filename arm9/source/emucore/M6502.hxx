@@ -119,18 +119,18 @@ class M6502
       @param number Indicates the number of instructions to execute
       @return true iff execution stops normally
     */
-    virtual void execute(uInt16 number) = 0;
-    virtual void execute_NB(uInt16 number) = 0;
-    virtual void execute_F8(uInt16 number) = 0;
-    virtual void execute_F6(uInt16 number) = 0;
-    virtual void execute_F4(uInt16 number) = 0;
-    virtual void execute_AR(uInt16 number) = 0;
-    virtual void execute_F8SC(uInt16 number) = 0;
-    virtual void execute_F6SC(uInt16 number) = 0;
-    virtual void execute_DPCP(uInt16 number) = 0;
-    virtual void execute_CDFJ(uInt16 number) = 0;
-    virtual void execute_CDFJPlus(uInt16 number) = 0;
-    virtual void execute_DPC(uInt16 number) = 0;
+    virtual void execute(void)      = 0;
+    virtual void execute_NB(void)   = 0;
+    virtual void execute_F8(void)   = 0;
+    virtual void execute_F6(void)   = 0;
+    virtual void execute_F4(void)   = 0;
+    virtual void execute_AR(void)   = 0;
+    virtual void execute_F8SC(void) = 0;
+    virtual void execute_F6SC(void) = 0;
+    virtual void execute_DPCP(void) = 0;
+    virtual void execute_CDFJ(void) = 0;
+    virtual void execute_CDFJPlus(void) = 0;
+    virtual void execute_DPC(void)  = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 

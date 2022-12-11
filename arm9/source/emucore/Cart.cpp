@@ -609,6 +609,7 @@ const CartInfo table[] =
     {"2880c6b59bd54b153174676e465167c7",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Donkey Kong Junior (1983).bin
     {"2091af29b4e7b86914d79d9aaa4cbd20",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   66,    245,    97,   0,  0},    // Donkey Kong Junior (1983) (PAL).bin
     {"494cda91cc640551b4898c82be058dd9",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Donkey Kong VCS (PAL).bin    
+    {"f1ae6305fa33a948e36deb0ef12af852",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong VCS.bin        
     {"78c1759931d0f9ca877fc5eb2a25b61e",  "DKDPCP", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong DPC+.bin    
     {"33c843d1f2fce61582e8a7885c20bf2a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Dorothy X (2006) (Cameron Aubuchon,Tarick F. Khalaf, Daniel Stensland).bin
     {"7386004f9a5a7daf7e50ac8547088337",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // DOT.bin
@@ -1784,9 +1785,9 @@ const CartInfo table[] =
     {"82e7aab602c378cffdd8186a099e807e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"1bef389e3dd2d4ca4f2f60d42c932509",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  2},    // Space Robot (Dimax - Sinmax) (PAL).bin
     {"c4d888bcf532e7c9c5fdeafbb145266a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Space Robot (Dimax - Sinmax) (PAL).bin
-    {"03db2942cfbea51633726853c81a7b17",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - Encore.bin
+    {"03db2942cfbea51633726853c81a7b17",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - Encore.bin
     {"6fce528556f11a1721db8cfc95d5547a",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - TE Encore.bin 
-    {"fe395b292e802ea16b3b5782b21ee686",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks.bin
+    {"fe395b292e802ea16b3b5782b21ee686",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks.bin
     {"898143773824663efe88d0a3a0bb1ba4",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983).bin
     {"4f6702c3ba6e0ee2e2868d054b00c064",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    92,   0,  0},    // Space Shuttle (1983) (PAL).bin
@@ -2212,10 +2213,8 @@ const CartInfo table[] =
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
