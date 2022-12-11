@@ -115,11 +115,6 @@ void M6502Low::execute(void)
     // Clear all of the execution status bits
     myExecutionStatus = 0;
 
-    // ----------------------------------------------------------------------------------------------------
-    // To gain maximum speed, we aren't going to check the number of cycles we've been asked to execute.
-    // This number is a maximum and guards against runaway code that never finishes a frame but for ARM
-    // assisted games we don't want to take the hit. Assume these games are 'well behaved'.
-    // ----------------------------------------------------------------------------------------------------
     while (!myExecutionStatus)
     {
       // Get the next 6502 instruction - do this the fast way!
@@ -191,11 +186,6 @@ void M6502Low::execute_NB(void)
     // Clear all of the execution status bits
     myExecutionStatus = 0;
 
-    // ----------------------------------------------------------------------------------------------------
-    // To gain maximum speed, we aren't going to check the number of cycles we've been asked to execute.
-    // This number is a maximum and guards against runaway code that never finishes a frame but for ARM
-    // assisted games we don't want to take the hit. Assume these games are 'well behaved'.
-    // ----------------------------------------------------------------------------------------------------
     while (!myExecutionStatus)
     {
       uInt16 operandAddress;
