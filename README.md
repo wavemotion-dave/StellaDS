@@ -1,15 +1,15 @@
 # StellaDS - PHOENIX EDITION
 StellaDS - An Atari 2600 VCS Emulator for the DS/DSi
 To use this emulator, you must use compatibles rom with a26/bin format. 
-Twilight Menu++ wants to see the file extension be .a26 (you can just rename .bin)
+If you want to launch the games directly via Twilight Menu++, you will need the file extension to be .a26 (you can just rename .bin). If you are just launching the StellaDS.nds emulator directly, you can load either .bin or .a26 extensions fine.
 
 _**Have you played Atari today?!**_
 
 Features :
 -----------------------
-High level of compatibility to make games playable. Most games you remember fondly run full speed on a DSi in native 134MHz mode. For the older DS-LITE and DS-PHAT, many of the simple 8k, 4k and 2k games will play perfectly More sophisticated bank-switching schemes really require the DSi for the best experience.
+A solid level of compatibility to make games playable. Most games you remember fondly run full speed on a DSi in native 134MHz mode. For the older DS-LITE and DS-PHAT, many of the simple 8k, 4k and 2k games will play perfectly More sophisticated bank-switching schemes really require the DSi for the best experience.
  
-See compatibility.txt for a full list of the ROMS supported. Generally these are going to be NTSC No-Intro or ROMHUNTER roms (the good ones!). 
+Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these are the good ones!). 
 
 * Full console emulation including Reset, Select, Difficulty Switches, TV Type. 
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
@@ -81,7 +81,7 @@ press the START button to save out your configuration after making changes:
 
 * Controller:      Most games use the Left-Joystick but you can change this.
 * Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
-* Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground.
+* Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground. A new type caled FF HALF mode is proving to be a nice mix of blending but keeping the speed up.
 * TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
 * Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette.
 * Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian).
