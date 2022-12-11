@@ -25,6 +25,7 @@ static int display_options_list(bool bFullDisplay);
 
 #define CONFIG_INSTRUCTION_STR "B=EXIT STA=SAVE SEL=DEF L/R=MORE"
 
+uInt8 OptionPage = 0;
 
 // ---------------------------------------------------------------------------
 // Write out the StellaDS.DAT configuration file to capture the settings for
@@ -54,6 +55,9 @@ void SaveConfig(bool bShow)
     }
 
     allConfigs.cart[slot] = myCartInfo;
+    
+    // Always copy back the Global Info
+    allConfigs.global = myGlobalCartInfo;
     
     // -------------------------------------------------------------------------------------
     // Compute the CRC32 of everything and we can check this as integrity in the future...
@@ -106,7 +110,7 @@ static void ApplyOptions(bool bFull)
 }
 
 
-static void SetDefaultGameConfig(void)
+static void WipeGameConfigsBackToDefault(void)
 {
     memset(&allConfigs, 0x00, sizeof(allConfigs));
     // Init the entire database
@@ -114,6 +118,20 @@ static void SetDefaultGameConfig(void)
     {
         strcpy(allConfigs.cart[slot].md5, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     }
+    
+    // Set the global stuff...
+    allConfigs.global.palette = 0;
+    allConfigs.global.sound   = (isDSiMode() ? SOUND_20KHZ : SOUND_10KHZ);
+    allConfigs.global.global1 = 0;
+    allConfigs.global.global2 = 0;
+    allConfigs.global.global3 = 0;
+    allConfigs.global.global4 = 0;
+    allConfigs.global.global5 = 0;
+    allConfigs.global.global6 = 1;
+    allConfigs.global.global7 = 1;
+    allConfigs.global.global8 = 2;
+    
+    allConfigs.config_ver = CONFIG_VER;
 }
 
 // -------------------------------------------------------------------------
@@ -131,6 +149,32 @@ void LoadConfig(void)
         fread(&allConfigs, sizeof(allConfigs), 1, fp);
         fclose(fp);
         
+        if (allConfigs.config_ver == 0x0007) // One time upgrade
+        {
+            for (short slot=0; slot<MAX_CONFIGS; slot++)
+            {
+                // With version 8 we made the FF mode work like the old HALF mode...
+                if (allConfigs.cart[slot].frame_mode == OLD_MODE_HALF)
+                {
+                    allConfigs.cart[slot].frame_mode = MODE_FF;
+                }
+            }
+                
+            allConfigs.global.palette = 0;
+            allConfigs.global.sound   = (isDSiMode() ? SOUND_20KHZ : SOUND_10KHZ);
+            allConfigs.global.global1 = 0;
+            allConfigs.global.global2 = 0;
+            allConfigs.global.global3 = 0;
+            allConfigs.global.global4 = 0;
+            allConfigs.global.global5 = 0;
+            allConfigs.global.global6 = 1;
+            allConfigs.global.global7 = 1;
+            allConfigs.global.global8 = 2;
+            allConfigs.config_ver = CONFIG_VER; // Patch the version number
+            myGlobalCartInfo = allConfigs.global;
+            SaveConfig(FALSE);
+        }
+        
         if (allConfigs.config_ver == CONFIG_VER)
         {
             bInitDatabase = false;
@@ -139,11 +183,15 @@ void LoadConfig(void)
     
     if (bInitDatabase)
     {
-        dsPrintValue(0,1,0, (char*)"PLEASE WAIT...");
-        SetDefaultGameConfig();
+        WipeGameConfigsBackToDefault();
         allConfigs.config_ver = CONFIG_VER;
-        SaveConfig(FALSE);
-        dsPrintValue(0,1,0, (char*)"              ");
+        myGlobalCartInfo = allConfigs.global;
+        SaveConfig(FALSE);        
+    }
+    else
+    {
+        // Always grab the global config on a successful load
+        myGlobalCartInfo = allConfigs.global;
     }
     
     ApplyOptions(false);
@@ -166,14 +214,12 @@ struct options_t
     uInt8 option_max;
 };
 
-uInt8 OptionPage = 0;
-
 const struct options_t Game_Option_Table[2][20] =
 {
     {
         {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "KEYBOARD 0", "KEYBOARD 1", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS+SAVEKEY", "MC ARCADE", "BUMP BASH", "TWIN STICK", "QUAD+SAVE"},    &myCartInfo.controllerType,   19},
         {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ/CDFJ+","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
-        {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY", "FF HALF MODE"},                                                                                   &myCartInfo.frame_mode,          5},
+        {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY"},                                                                                                   &myCartInfo.frame_mode,          4},
         {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
         {"PALETTE",     0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myCartInfo.palette_type,        3},
         {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myCartInfo.soundQuality,        6},
@@ -194,8 +240,9 @@ const struct options_t Game_Option_Table[2][20] =
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     },
     {
-        {"FUTURE OPT",  0, {"NONE"},                                                                                                                                                       &myCartInfo.spare2_0,            1},
-        {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
+        {"GLOB PALET", 0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myGlobalCartInfo.palette,       3},
+        {"GLOB SOUND", 0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myGlobalCartInfo.sound,         6},
+        {NULL,         0, {"",      ""},                                                                                                                                                  NULL,                            1},
     }    
 };
 

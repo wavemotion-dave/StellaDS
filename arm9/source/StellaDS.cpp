@@ -179,6 +179,16 @@ ITCM_CODE void vblankIntr()
             }
         }
     }
+    
+    // -----------------------------------------------------------------------------------
+    // This is a nice speedup so we don't have to check for too many cycles as part of
+    // the main M6502 exectue() loop. We can just check periodically once per DS frame.
+    // -----------------------------------------------------------------------------------
+    if (gSystemCycles & 0x8000) // 32K cycles is enough... force break
+    {
+        extern uInt16 myExecutionStatus;
+        myExecutionStatus = 0x01;   // STOP bit
+    }
 }
 
 // --------------------------------------------------------------------------------------
@@ -475,9 +485,14 @@ bool dsLoadGame(char *filename)
     
     // Clear out debug information for new game
     memset(debug, 0x00, sizeof(debug));      
+      
+    extern uInt8 OptionPage;
+    OptionPage = 0;
 
     if (theConsole)
+    {
       delete theConsole;
+    }
 
     fseek(romfile, 0, SEEK_END);
     buffer_size = ftell(romfile);

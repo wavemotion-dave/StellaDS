@@ -1403,21 +1403,14 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                 fp1++;fp2++;
               }
           }
-          else if (myCartInfo.frame_mode == MODE_HALF)              // Same as simple blending except we do it only on every other frame... looks just about as good but is 2x faster
+          else                                                      // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
           {
-              if (gTotalAtariFrames & 1)
+              if (gTotalAtariFrames & 1)    // Odd frames... combine with last even frame
               {
                   for (int i=0; i<40; i++)
                   {
                     *fp_blend++ = *fp1++ | *fp2++;
                   }
-              }
-          }
-          else  // Simple blending
-          {
-              for (int i=0; i<40; i++)
-              {
-                *fp_blend++ = *fp1++ | *fp2++;
               }
           }
       }

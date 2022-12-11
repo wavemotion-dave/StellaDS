@@ -78,6 +78,7 @@ CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm
 PageAccess page_access __attribute__((section(".dtcm")));
 uInt32 myCurrentOffset __attribute__((section(".dtcm")));
 uint8 original_flicker_mode = 0;
+GlobalCartInfo myGlobalCartInfo;
 
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger BANK_AR carts
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
@@ -430,8 +431,8 @@ const CartInfo table[] =
     {"f3dfae774f3bd005a026e29894db40d3",  "CIRCUS", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA0_7,  PAL,   67,    245,    99,   0,  0},    // Circus Atari (1980) (PAL).bin
     {"466c9d4a93668ab6a052c268856cf4a5",  "??????", BANK_F4SC, CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA0_7,  NTSC,  34,    210,    90,   0,  3},    // Circus Atari Age PRGE Demo.bin
     {"5f383ce70c30c5059f13e89933b05c4a",  "CIRCAT", BANK_F8,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA0_7,  NTSC,  34,    210,    90,   0,  3},    // Circus Atariage 2020.bin  
-    {"d85d93c7db2790b805c3d9805b3d8b69",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 20200331.bin
-    {"19b1f085068e43db89f0dc28a74f7447",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 2.4.bin
+    {"d85d93c7db2790b805c3d9805b3d8b69",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 20200331.bin
+    {"19b1f085068e43db89f0dc28a74f7447",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // City Defence 2.4.bin
     {"13a11a95c9a9fb0465e419e4e2dbd50a",  "CLIMB5", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Climber 5.bin
     {"1e587ca91518a47753a28217cd4fd586",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  35,    210,    98,   0,  0},    // Coco Nuts (1982).bin
     {"5846b1d34c296bf7afc2fa05bbc16e98",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Codebreaker (1978).bin
@@ -609,8 +610,8 @@ const CartInfo table[] =
     {"2880c6b59bd54b153174676e465167c7",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Donkey Kong Junior (1983).bin
     {"2091af29b4e7b86914d79d9aaa4cbd20",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   66,    245,    97,   0,  0},    // Donkey Kong Junior (1983) (PAL).bin
     {"494cda91cc640551b4898c82be058dd9",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Donkey Kong VCS (PAL).bin    
-    {"f1ae6305fa33a948e36deb0ef12af852",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong VCS.bin        
-    {"78c1759931d0f9ca877fc5eb2a25b61e",  "DKDPCP", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong DPC+.bin    
+    {"f1ae6305fa33a948e36deb0ef12af852",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong VCS.bin        
+    {"78c1759931d0f9ca877fc5eb2a25b61e",  "DKDPCP", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,   !VB,  !HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Donkey Kong DPC+.bin    
     {"33c843d1f2fce61582e8a7885c20bf2a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Dorothy X (2006) (Cameron Aubuchon,Tarick F. Khalaf, Daniel Stensland).bin
     {"7386004f9a5a7daf7e50ac8547088337",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // DOT.bin
     {"7e2fe40a788e56765fe56a3576019968",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  6},    // Double Dragon (1989).bin
@@ -1785,9 +1786,9 @@ const CartInfo table[] =
     {"82e7aab602c378cffdd8186a099e807e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Space Robot (Dimax - Sinmax).bin
     {"1bef389e3dd2d4ca4f2f60d42c932509",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  2},    // Space Robot (Dimax - Sinmax) (PAL).bin
     {"c4d888bcf532e7c9c5fdeafbb145266a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  0},    // Space Robot (Dimax - Sinmax) (PAL).bin
-    {"03db2942cfbea51633726853c81a7b17",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - Encore.bin
+    {"03db2942cfbea51633726853c81a7b17",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_FF,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - Encore.bin
     {"6fce528556f11a1721db8cfc95d5547a",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks - TE Encore.bin 
-    {"fe395b292e802ea16b3b5782b21ee686",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_HALF, !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks.bin
+    {"fe395b292e802ea16b3b5782b21ee686",  "SPAROC", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_FF,   !VB,  !HB,  ANA1_0,  NTSC,  34,    202,   100,   0,  8},    // Space Rocks.bin
     {"898143773824663efe88d0a3a0bb1ba4",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983) [FE Bankswitching].bin
     {"5894c9c0c1e7e29f3ab86c6d3f673361",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    92,   0,  1},    // Space Shuttle (1983).bin
     {"4f6702c3ba6e0ee2e2868d054b00c064",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    92,   0,  0},    // Space Shuttle (1983) (PAL).bin
@@ -1907,7 +1908,7 @@ const CartInfo table[] =
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
     {"ef76ea05655a0b62cb1018c92b9b4b7d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  0},    // Strategy X (1983) (PAL).bin
     {"807a8ff6216b00d52aba2dfea5d8d860",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // StratOGemsDeluxe.bin
-    {"42946b04e3dc90df3e9d61e3a9636326",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF, !VB,   HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Stratovox RC1.bin
+    {"42946b04e3dc90df3e9d61e3a9636326",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,   !VB,   HB,  ANA1_0,  NTSC,  34,    205,   100,   0,  0},    // Stratovox RC1.bin
     {"e10d2c785aadb42c06390fae0d92f282",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    72,   0,  0},    // Strawberry Shortcake (1983).bin
     {"516ffd008057a1d78d007c851e6eff37",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   51,    245,    72,   0,  0},    // Strawberry Shortcake (1983) (PAL).bin
     {"396f7bc90ab4fa4975f8c74abe4e81f0",  "??????", BANK_2K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Street Racer (1977).bin
@@ -2010,7 +2011,7 @@ const CartInfo table[] =
     {"a5c96b046d5f8b7c96daaa12f925bef8",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,   100,   4,  9},    // Tennis (1981) (PAL).bin
     {"053d1e12003c6a5155a1a4b4c8d199b2",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0, -4},    // Terrance and Phillip - Asses Of Fire (2008) (Chris Read).bin
     {"5eeb81292992e057b290a5cd196f155d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   4,  6},    // Texas Chainsaw Massacre (1983).bin
-    {"f7ebf3dfbd6a3ff5ebc2709c4139a53a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_HALF,  VB,  !HB,  ANA1_0,  NTSC,  34,    204,   100,   0,  2},    // The End NTSC - RC6.bin
+    {"f7ebf3dfbd6a3ff5ebc2709c4139a53a",  "??????", BANK_DPCP, CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,  !HB,  ANA1_0,  NTSC,  34,    204,   100,   0,  2},    // The End NTSC - RC6.bin
     {"7d3730b7c3199a49cb4189926179653e",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -3},    // TheHorde.bin
     {"32ee2063bbec93a159d99b64db2285f9",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // The Stacks (2011) (Mike Mika, Kevin Wilson).bin
     {"1d7636a157d5aa1880d9cbd88516f45e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  4},    // Thewickedfather-270514.bin
@@ -2212,7 +2213,7 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
@@ -2318,7 +2319,8 @@ Cartridge::~Cartridge()
 
 void SetOtherDatabaseFieldDefaults(void)
 {
-  myCartInfo.soundQuality = isDSiMode() ? SOUND_20KHZ:SOUND_10KHZ;    // DSi gets a default of 22050 Hz and older DS gets 11025 Hz
+  myCartInfo.soundQuality = myGlobalCartInfo.sound;
+  myCartInfo.palette_type = myGlobalCartInfo.palette;
 
   // A few of the DPC+ games need reduced sound to be playable (11025 Hz)
   if (strcmp(myCartInfo.gameID, "SPAROC") == 0) myCartInfo.soundQuality = SOUND_10KHZ;
@@ -2331,7 +2333,6 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "SSTOCK") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "MSPACM") == 0) myCartInfo.soundQuality = SOUND_WAVE;
     
-    
   myCartInfo.thumbOptimize = 0;
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
   if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 2;
@@ -2341,8 +2342,6 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.xButton = BUTTON_FIRE;
   myCartInfo.yButton = BUTTON_FIRE;
 
-  myCartInfo.palette_type = 0;    // Normal STELLA Palette
-    
   myCartInfo.spare2_0 = 0;
   myCartInfo.spare3_0 = 0;
   myCartInfo.spare4_0 = 0;
@@ -2432,21 +2431,21 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       {
           myCartInfo.frame_mode = MODE_NO;
 
-          if (strcmp(myCartInfo.gameID, "ASTERD") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "CENTIP") == 0) myCartInfo.frame_mode = MODE_HALF;      
-          if (strcmp(myCartInfo.gameID, "DEMONA") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "DEFEND") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "GORFxx") == 0) myCartInfo.frame_mode = MODE_HALF;      
-          if (strcmp(myCartInfo.gameID, "JUNOST") == 0) myCartInfo.frame_mode = MODE_HALF;      
-          if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) myCartInfo.frame_mode = MODE_HALF;
+          if (strcmp(myCartInfo.gameID, "ASTERD") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "CENTIP") == 0) myCartInfo.frame_mode = MODE_FF;      
+          if (strcmp(myCartInfo.gameID, "DEMONA") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "DEFEND") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "GORFxx") == 0) myCartInfo.frame_mode = MODE_FF;      
+          if (strcmp(myCartInfo.gameID, "JUNOST") == 0) myCartInfo.frame_mode = MODE_FF;      
+          if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "MISCOM") == 0) myCartInfo.frame_mode = MODE_BACKG;
-          if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "PACMAN") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "ATLANT") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "SPAINV") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "SPIDFI") == 0) myCartInfo.frame_mode = MODE_HALF;
-          if (strcmp(myCartInfo.gameID, "WIZWOR") == 0) myCartInfo.frame_mode = MODE_HALF;          
+          if (strcmp(myCartInfo.gameID, "STARTR") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "YARSRE") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "PACMAN") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "ATLANT") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "SPAINV") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "SPIDFI") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "WIZWOR") == 0) myCartInfo.frame_mode = MODE_FF;          
       }
   }
   

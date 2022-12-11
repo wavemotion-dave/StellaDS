@@ -83,6 +83,22 @@ struct CartInfo
 
 extern CartInfo myCartInfo;
 
+struct GlobalCartInfo
+{
+    uInt8                   palette;
+    uInt8                   sound;
+    uInt8                   global1;
+    uInt8                   global2;
+    uInt8                   global3;
+    uInt8                   global4;
+    uInt8                   global5;
+    uInt8                   global6;
+    uInt8                   global7;
+    uInt8                   global8;
+};
+
+extern GlobalCartInfo myGlobalCartInfo;
+
 #define MAX_CART_FILE_SIZE   (1024 * 512)            // ROMs can be up to 512K in size. This is equivilent to the Harmony Encore and ensures good future-proofing.
 extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 
@@ -127,11 +143,12 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
 
 // Various output modes for the LCD
-#define MODE_NO          0     // Normal Mode
-#define MODE_FF          1     // Flicker Free Mode (blend last 2 frames equally)
+#define MODE_NO          0     // Normal Mode - fastest no blend mode
+#define MODE_FF          1     // Flicker Free Mode (blend last 2 frames every other frame which is fairly fast)
 #define MODE_BACKG       2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
 #define MODE_BLACK       3     // Ficker Reduce (using Black background improvement only)
-#define MODE_HALF        4     // Ficker Free - blend 2 frames but skip every other frame (Faster)
+
+#define OLD_MODE_HALF    4     // Obsolete... will be converted to MODE_FF
 
 // All of the supported bankswitching schemes
 #define BANK_2K          0

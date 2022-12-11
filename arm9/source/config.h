@@ -12,7 +12,7 @@
 // ---------------------------
 // Config handling...
 // ---------------------------
-#define CONFIG_VER  0x0007
+#define CONFIG_VER  0x0008
 
 #define MAX_CONFIGS 1300
 
@@ -20,6 +20,7 @@ struct AllConfig_t
 {
     uInt16                  config_ver;
     struct CartInfo         cart[MAX_CONFIGS];
+    struct GlobalCartInfo   global;
     uInt32                  crc32;
 };
 

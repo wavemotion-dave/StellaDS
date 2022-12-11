@@ -81,7 +81,7 @@ press the START button to save out your configuration after making changes:
 
 * Controller:      Most games use the Left-Joystick but you can change this.
 * Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
-* Frame Blend:     Normal is fastest. Flicker free is slowest but blends frames. You can also try Flicker Reduce Background/Black which is mid-ground. A new type caled FF HALF mode is proving to be a nice mix of blending but keeping the speed up.
+* Frame Blend:     Normal is fastest. Flicker free combines even/odd frames and it's pretty fast and effective at eliminating flicker. Background/Black mode is the slowest and will help with games that show background/black on one frame and sprites on the other (a simple blending will cause the sprites to disappear - Missile Command is one such game).
 * TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
 * Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette.
 * Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian).
@@ -93,6 +93,8 @@ press the START button to save out your configuration after making changes:
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
 * ARM THUMB:       SAFE is most accurate but slows down processing. Optmized is faster and recommended for DPC+ games. Optmized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
+
+There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
 
 Screen Settings:
 -----------------------
