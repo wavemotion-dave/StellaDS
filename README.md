@@ -41,6 +41,7 @@ Known Issues :
 -----------------------
 * Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
+* Direct Audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 * The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will run fine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.
@@ -158,6 +159,7 @@ BFSC        256K        128B
 TV Boy      256K        --
 3F          512K        --
 3E          512K        32K
+3E+         62K         32K
 </pre>
 
 Thanks :
