@@ -159,7 +159,7 @@ BFSC        256K        128B
 TV Boy      256K        --
 3F          512K        --
 3E          512K        32K
-3E+         62K         32K
+3E+         64K         32K
 </pre>
 
 Thanks :
