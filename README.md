@@ -15,7 +15,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
-* Most popular bankswitching is supported up to 128K/256K BF/EF/DF/SB and 512K 3E and 3F schemes with up to 32K of RAM
+* Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * DPC+ Arm-Assisted games supported!
 * CDF/CDFJ/CDFJ+ Arm-Assisted games supported!
 * High score support with up to 10 scores for each game
