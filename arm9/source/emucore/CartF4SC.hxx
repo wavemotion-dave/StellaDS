@@ -99,8 +99,8 @@ class CartridgeF4SC : public Cartridge
     // Indicates which bank is currently active
     uInt16 myCurrentOffset;
 
-    // The 16K ROM image of the cartridge
-    uInt8 myImage[32768];
+    // The 32K ROM image of the cartridge
+    uInt8 *myImage;
 
     // The 128 bytes of RAM will use fast_cart_buffer[]
 };

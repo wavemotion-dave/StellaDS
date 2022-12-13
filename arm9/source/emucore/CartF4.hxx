@@ -96,7 +96,7 @@ class CartridgeF4 : public Cartridge
 
   private:
     // The 32K ROM image of the cartridge
-    uInt8 myImage[32768];
+    uInt8 *myImage;
 };
 #endif
 

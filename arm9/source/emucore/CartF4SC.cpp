@@ -28,11 +28,8 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF4SC::CartridgeF4SC(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < 32768; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Just reuse the existing cart buffer
+  myImage = (uInt8 *)image;
 
   // Copy 8K of the ROM image into the fast_cart_buffer[] for a bit of a speed-hack
   for(uInt32 addr = 0; addr < 8192; ++addr)
