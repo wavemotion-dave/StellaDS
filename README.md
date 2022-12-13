@@ -39,16 +39,15 @@ as of the time of this writing). The goal is to get as close to accurate as poss
 
 Known Issues :
 -----------------------
-* Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it.
+* Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it. If you are running from an R4 or similar flashcart, you will be running in DS compatibility mode (67MHz) and the ARM games will not run anywhere near full speed.
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
-* Direct Audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
+* Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
-* The original DS-Lite and DS-Phat are running at half the speed (67MHz vs 134MHz) of the DSi/DSi-XL and as such you will find that only a subset of games run at full speed... Fortunately many of the best games will run fine - Space Invaders, Missile Command, Asteroids, Yars Revenge, Adventure, Phoenix, Chopper Command, Megamania, Pitfall!, Cosmic Ark, Demon Attack and lots more will be at your fingertips.
 
 Strongest Recommendation:
 -----------------------
-If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will be too great which is why the full gammut of Atari games will always render best on an XL/LL screen.
+If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will usually be too great which is why the full gammut of Atari games will always render best on an XL/LL screen.
 
 Installation:
 -----------------------
@@ -57,11 +56,11 @@ Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will a
 Game Autodetection:
 -----------------------
 The Atari 2600 utilizes a growing number of bankswitching scheme. StellaDS 
-currently supports 35 differnet bank switching schemes - and it usually will
-auto-detect the right one. If for some reason it does not, you can go into
-the configuration (gear icon) and manually select a new scheme. Be sure to hit 
-START to save your config and then try re-loading the game (the bank switching
-requires a reload of the game). In the catestrophic event that the detected
+currently supports 36 differnet bank switching schemes (see full list further below) - 
+and it usually will auto-detect the right one. If for some reason it does not, you 
+can go into the configuration (gear icon) and manually select a new scheme. Be 
+sure to hit START to save your config and then try re-loading the game (the bank
+switching requires a reload of the game). In the catestrophic event that the detected
 bankswitching scheme causes the emulation to crash, you can try loading the
 game using the Y (instead of A) button which will load the game but NOT start
 it running... this should let you go in and adjust the back switching scheme
