@@ -84,7 +84,8 @@ uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
 char bScreenRefresh __attribute__((section(".dtcm"))) = 0;
-uInt32 gTotalAtariFrames __attribute__((section(".dtcm"))) = 0;
+uInt32 gAtariFrames __attribute__((section(".dtcm"))) = 0;
+uInt32 gTotalAtariFrames = 0;
 
 static uInt8 full_speed=0;
 static uInt8 fpsDisplay = false;
@@ -96,6 +97,8 @@ static void DumpDebugData(void)
 {
     if (DEBUG_DUMP)
     {   
+        extern uInt32 gTotalSystemCycles;
+        extern uInt16 PC;
         sprintf(dbgbuf, "%32s", myCartInfo.md5);
         dsPrintValue(0,2,0, dbgbuf);
         
@@ -104,6 +107,8 @@ static void DumpDebugData(void)
             sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
             dsPrintValue(0,2+i,0, dbgbuf);
         }
+        sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, PC);
+        dsPrintValue(0,23,0, dbgbuf);
     }
 }
 
@@ -544,6 +549,8 @@ bool dsLoadGame(char *filename)
         TIMER0_DATA=0;
         TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
         atari_frames=0;
+        gAtariFrames = 0;
+        gTotalAtariFrames = 0;
         
         return true;
     }
@@ -1496,8 +1503,8 @@ ITCM_CODE void dsMainLoop(void)
 
             if (fpsDisplay)
             {
-                int x = gTotalAtariFrames;
-                gTotalAtariFrames = 0;
+                int x = gAtariFrames;
+                gAtariFrames = 0;
                 if ((!full_speed) && (x>60)) x--;
                 fpsbuf[0] = '0' + (int)x/100;
                 x = x % 100;
@@ -1580,7 +1587,7 @@ ITCM_CODE void dsMainLoop(void)
                         fpsbuf[3] = 0;
                         dsPrintValue(0,0,0, fpsbuf);
                     }
-                    else gTotalAtariFrames=0;                    
+                    else gAtariFrames=0;                    
                     ShowStatusLine();
                 }                
                 else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) 

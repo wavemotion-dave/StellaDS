@@ -26,6 +26,7 @@
 #include "Cart.hxx"
 #include "Cart2K.hxx"
 #include "Cart3E.hxx"
+#include "Cart3EPlus.hxx"
 #include "Cart3F.hxx"
 #include "Cart4K.hxx"
 #include "CartAR.hxx"
@@ -64,7 +65,7 @@
 extern void dsWarnIncompatibileCart(void);
 extern void dsPrintCartType(char *, int);
 
-const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07", "CTY"};
+const char *BANKING_STR[] = {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB", "FA2", "TVBOY", "UASW", "0840", "X07", "CTY", "3E+"};
     
 extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
@@ -2230,6 +2231,8 @@ Cartridge* Cartridge::create(const uInt8* image, uInt32 size)
   // We should know the cart's type by now so let's create it
   if (banking == BANK_2K)
     cartridge = new Cartridge2K(image);
+  else if (banking == BANK_3EPLUS)
+    cartridge = new Cartridge3EPlus(image, size);
   else if (banking == BANK_3E)
     cartridge = new Cartridge3E(image, size);
   else if (banking == BANK_3F)
@@ -2742,6 +2745,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
         myCartInfo.banking = BANK_F6SC;
       else if(isProbablyE7(image, size))
         myCartInfo.banking = BANK_E7;
+      else if(isProbably3EPlus(image, size)) 
+        myCartInfo.banking = BANK_3EPLUS;
       else if(isProbably3F(image, size))
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else
@@ -2760,6 +2765,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
         myCartInfo.banking = BANK_DPCP;                                               
       else if (isProbablyCDF(image, size))
         myCartInfo.banking = BANK_CDFJ;                                               
+      else if(isProbably3EPlus(image, size)) 
+        myCartInfo.banking = BANK_3EPLUS;
       else if(isProbably3F(image, size))
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else if (isProbablyFA2(image, size))
@@ -2771,6 +2778,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     {
       if (isProbablyCDF(image, size))
         myCartInfo.banking = BANK_CDFJ;                                               
+      else if(isProbably3EPlus(image, size)) 
+        myCartInfo.banking = BANK_3EPLUS;
       else if(isProbably3F(image, size))
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;
       else if (isProbablyEF(image, size)) 
@@ -3127,6 +3136,13 @@ bool Cartridge::isProbably3E(const uInt8* image, uInt32 size)
 {
   return (searchForBytes(image, size, 0x85, 0x3E) > 2);
 }
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+bool Cartridge::isProbably3EPlus(const uInt8* image, uInt32 size)
+{
+  return (searchForBytes4(image, size, 'T', 'J', '3', 'E'));    // Signature: $54 $4A $33 $45 (TJ3E)
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyE0(const uInt8* image, uInt32 size)

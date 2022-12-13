@@ -35,6 +35,8 @@
 // ---------------------------------------------------------------------------
 Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 
+uInt32 gTotalSystemCycles = 0;
+
 // -----------------------------------------------------------------------------
 // Allocate page table - since this is in main RAM, the compiler will be able
 // to optiize access as the memory will be known at compile time. Again, not
@@ -63,6 +65,8 @@ System::System(uInt16 n, uInt16 m)
   {
     setPageAccess(page, access);
   }
+          
+  gTotalSystemCycles = 0;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -131,6 +135,8 @@ void System::resetCycles()
     myDevices[i]->systemCyclesReset();
   }
   
+  gTotalSystemCycles += gSystemCycles;
+    
   // Now, we reset cycle count to zero
   gSystemCycles = 0;
 }

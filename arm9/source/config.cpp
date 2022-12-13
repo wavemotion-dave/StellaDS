@@ -209,7 +209,7 @@ struct options_t
 {
     const char  *label;
     uInt8 isNumeric;            // 0=String List, 1=Positive 8-bit, 2=Negative 8-bit
-    const char  *option[35];
+    const char  *option[36];
     uInt8 *option_val;
     uInt8 option_max;
 };
@@ -218,7 +218,7 @@ const struct options_t Game_Option_Table[2][20] =
 {
     {
         {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "KEYBOARD 0", "KEYBOARD 1", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS+SAVEKEY", "MC ARCADE", "BUMP BASH", "TWIN STICK", "QUAD+SAVE"},    &myCartInfo.controllerType,   19},
-        {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ/CDFJ+","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY"}, &myCartInfo.banking,       35},
+        {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ/CDFJ+","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY", "3E+"}, &myCartInfo.banking,       36},
         {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY"},                                                                                                   &myCartInfo.frame_mode,          4},
         {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
         {"PALETTE",     0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myCartInfo.palette_type,        3},

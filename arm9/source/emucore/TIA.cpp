@@ -37,7 +37,7 @@
 
 #define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
-extern uInt32 gTotalAtariFrames;
+extern uInt32 gAtariFrames, gTotalAtariFrames;
 
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
@@ -522,6 +522,7 @@ void TIA::install(System& system)
 ITCM_CODE void TIA::update()
 {
   // We have processed another frame... used for true FPS indication
+  gAtariFrames++;
   gTotalAtariFrames++;
     
   // Remember the number of clocks which have passed on the current scanline
@@ -1251,7 +1252,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         // reason to blank the memory which can be time consuming... so check the flag for the cart
         // currently being emulated...
         // -------------------------------------------------------------------------------------------
-        if (myCartInfo.vblankZero || !(gTotalAtariFrames & 0x0E))    // Every 16 frames we will do two frames proper vBlank despite the cartInfo (two is needed as some games display different data on alternating frames)
+        if (myCartInfo.vblankZero || !(gAtariFrames & 0x0E))    // Every 16 frames we will do two frames proper vBlank despite the cartInfo (two is needed as some games display different data on alternating frames)
         {
             memset(myFramePointer, 0x00, clocksToUpdate);
         }
@@ -1405,7 +1406,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           }
           else                                                      // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
           {
-              if (gTotalAtariFrames & 1)    // Odd frames... combine with last even frame
+              if (gAtariFrames & 1)    // Odd frames... combine with last even frame
               {
                   for (int i=0; i<40; i++)
                   {
@@ -1634,7 +1635,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
   if (myCartInfo.soundQuality == SOUND_WAVE)
   {
-      while ((gSystemCycles - lastTiaPokeCycles) > 76)
+      while ((gSystemCycles - lastTiaPokeCycles) >= 76)
       {
           lastTiaPokeCycles += 76;
           Tia_process();
@@ -2499,22 +2500,31 @@ const uInt32 TIA::ourNTSCPalette[256] =
     
   0x500084, 0, 0x68199a, 0, 0x7d30ad, 0, 0x9246c0, 0,
   0xa459d0, 0, 0xb56ce0, 0, 0xc57cee, 0, 0xd48cfc, 0,
+    
   0x140090, 0, 0x331aa3, 0, 0x4e32b5, 0, 0x6848c6, 0,
   0x7f5cd5, 0, 0x956fe3, 0, 0xa980f0, 0, 0xbc90fc, 0,
+    
   0x000094, 0, 0x181aa7, 0, 0x2d32b8, 0, 0x4248c8, 0,
   0x545cd6, 0, 0x656fe4, 0, 0x7580f0, 0, 0x8490fc, 0,
+    
   0x001c88, 0, 0x183b9d, 0, 0x2d57b0, 0, 0x4272c2, 0,
   0x548ad2, 0, 0x65a0e1, 0, 0x75b5ef, 0, 0x84c8fc, 0,
+    
   0x003064, 0, 0x185080, 0, 0x2d6d98, 0, 0x4288b0, 0,
   0x54a0c5, 0, 0x65b7d9, 0, 0x75cceb, 0, 0x84e0fc, 0,
+    
   0x004030, 0, 0x18624e, 0, 0x2d8169, 0, 0x429e82, 0,
   0x54b899, 0, 0x65d1ae, 0, 0x75e7c2, 0, 0x84fcd4, 0,
+    
   0x004400, 0, 0x1a661a, 0, 0x328432, 0, 0x48a048, 0,
   0x5cba5c, 0, 0x6fd26f, 0, 0x80e880, 0, 0x90fc90, 0,
+    
   0x143c00, 0, 0x355f18, 0, 0x527e2d, 0, 0x6e9c42, 0,
   0x87b754, 0, 0x9ed065, 0, 0xb4e775, 0, 0xc8fc84, 0,
+    
   0x303800, 0, 0x505916, 0, 0x6d762b, 0, 0x88923e, 0,
   0xa0ab4f, 0, 0xb7c25f, 0, 0xccd86e, 0, 0xe0ec7c, 0,
+    
   0x482c00, 0, 0x694d14, 0, 0x866a26, 0, 0xa28638, 0,
   0xbb9f47, 0, 0xd2b656, 0, 0xe8cc63, 0, 0xfce070, 0
 };

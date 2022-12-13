@@ -186,6 +186,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define BANK_0840       32
 #define BANK_X07        33
 #define BANK_CTY        34
+#define BANK_3EPLUS     35
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7
@@ -294,6 +295,11 @@ class Cartridge : public Device
       Returns true if the image is probably a 3E bankswitching cartridge
     */
     static bool isProbably3E(const uInt8* image, uInt32 size);
+    
+    /**
+      Returns true if the image is probably a 3E=+ bankswitching cartridge
+    */
+    static bool isProbably3EPlus(const uInt8* image, uInt32 size);    
     
     /**
       Returns true if the image is probably a DPC+ bankswitching cartridge

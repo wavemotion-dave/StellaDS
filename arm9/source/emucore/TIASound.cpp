@@ -145,6 +145,7 @@ uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM t
 uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
 uInt16 tia_out_idx  __attribute__((section(".dtcm"))) = 0;
 
+//uint16 tia_buf[SOUND_SIZE];
 uint16 tia_buf[SOUND_SIZE];
 extern uint16 *aptr;
 extern uint16 *bptr;
