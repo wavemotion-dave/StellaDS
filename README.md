@@ -161,11 +161,12 @@ TV Boy      256K        --
 3E+         64K         32K
 </pre>
 
-Thanks :
+Thanks and Credits :
 -----------------------
-* To Bradford W. Mott and Stephen Anthony and various contributors for Stella.
-* To Alekmaul for porting Stella to the DS.
-* To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld.
+* To Bradford W. Mott and Stephen Anthony and various contributors for Stella (http://stella.sourceforge.net/)
+* To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld (https://github.com/DS-Homebrew/TWiLightMenu)
+* Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org)
+* To Alekmaul and The Chuckster for porting Stella to the DS.
 
 How to use StellaDS :
 ---------------------
@@ -187,12 +188,6 @@ Controls :
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
  * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
  * Use stylus on buttons for other icon-based actions on bottom screen.
-
-Older Credits and links:
-----------------------------
-Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org).  
-Thanks TheChucksters to understand how Stella emulator works with the release of his source code conversion (http://www.charlesmoyes.com/drupal/).  
-Thanks Stella Team for this marvelous emulator (http://stella.sourceforge.net/).  
 
 Version History:
 -----------------------
