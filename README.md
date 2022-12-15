@@ -164,9 +164,10 @@ TV Boy      256K        --
 Backing Files Used by StellaDS:
 -----------------------
 In the /data directory of your SD card you will see some files auto-created by StellaDS. You are free to delete or back these files up as you see fit. If you delete a file, it will be re-created 'clean' on the next boot of the emulator.
-StellaDS.DAT - this contains the per-game settings (basically when you press START on the Configuration screen and it saves out your settings for the current game).
-StellaDS.HI - this is the high-score file on a per-game basis. Up to 10 scores are saved per game by pressing the little Golden Chalice icon on the main screen.
-StellaDS.EE - this is the SaveKey 32K EEPROM file for games that utilize a SaveKey. If you remove it, a new clean blank copy will be created.
+
+* StellaDS.DAT - this contains the per-game settings (basically when you press START on the Configuration screen and it saves out your settings for the current game).
+* StellaDS.HI - this is the high-score file on a per-game basis. Up to 10 scores are saved per game by pressing the little Golden Chalice icon on the main screen.
+* StellaDS.EE - this is the SaveKey 32K EEPROM file for games that utilize a SaveKey. If you remove it, a new clean blank copy will be created.
 
 Thanks and Credits :
 -----------------------
