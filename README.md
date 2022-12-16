@@ -199,6 +199,13 @@ Controls :
 
 Version History:
 -----------------------
+V6.4 : 16-Dec-2022 by Dave Bernazzani (wavemotion)
+  * Reduced stack memory so we don't crash when first creating a Savekey EE file.
+  * Improved 6502 handling to localize the PC for a bit of a performance boost.
+  * Added the 3E+ banking scheme.
+  * New global palette and sound options on the Configuration Menu page 2 (use L/R keys).
+  * Other small improvements as time permitted.
+
 V6.3 : 11-Dec-2022 by Dave Bernazzani (wavemotion)
   * Improved performance across the board. More games play at the right speed even on the older DS-Lite/Phat.
   * New QuadTari support - for now it's just Dual Joysticks + SaveKey which is useful for games like Robotwar.

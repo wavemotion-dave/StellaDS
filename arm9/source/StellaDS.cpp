@@ -46,7 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "6.3"
+#define VERSION "6.4"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
