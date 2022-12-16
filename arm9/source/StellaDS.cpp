@@ -98,7 +98,7 @@ static void DumpDebugData(void)
     if (DEBUG_DUMP)
     {   
         extern uInt32 gTotalSystemCycles;
-        extern uInt16 PC;
+        extern uInt16 gPC;
         sprintf(dbgbuf, "%32s", myCartInfo.md5);
         dsPrintValue(0,2,0, dbgbuf);
         
@@ -107,7 +107,7 @@ static void DumpDebugData(void)
             sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
             dsPrintValue(0,2+i,0, dbgbuf);
         }
-        sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, PC);
+        sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, gPC);
         dsPrintValue(0,23,0, dbgbuf);
     }
 }
@@ -513,7 +513,7 @@ bool dsLoadGame(char *filename)
 
         memset(sound_buffer, 0x00, SOUND_SIZE);
         
-        TIMER2_DATA = TIMER_FREQ(mySoundFreq);
+        TIMER2_DATA = TIMER_FREQ((myCartInfo.soundQuality == SOUND_WAVE) ? (mySoundFreq+75) : mySoundFreq); // For Wave Direct we run a little faster so as always to keep sampling ahead of TIA output
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {

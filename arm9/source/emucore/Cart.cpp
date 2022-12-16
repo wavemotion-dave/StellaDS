@@ -2758,7 +2758,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else if(size == 32*1024)  // 32K 
     {
-      // Assume this is a 32K super-cart then check to see if it is
       if(isProbablySC(image, size))
         myCartInfo.banking = BANK_F4SC;
       else if (isProbablyDPCplus(image, size))
@@ -2807,6 +2806,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     else // 512K or some odd-size...
     {
       if (isProbablyCDF(image, size)) myCartInfo.banking = BANK_CDFJ;                       
+      else if(isProbably3EPlus(image, size)) 
+        myCartInfo.banking = BANK_3EPLUS;
       else if(isProbably3F(image, size))    
         myCartInfo.banking = isProbably3E(image, size) ? BANK_3E : BANK_3F;                 // Many games > 256K are 3E or 3F
       else

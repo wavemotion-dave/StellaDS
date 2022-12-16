@@ -33,7 +33,7 @@ extern uInt8 A;
 extern uInt8 X; 
 extern uInt8 Y; 
 extern uInt8 SP;
-extern uInt16 PC;
+extern uInt16 gPC;
 extern uInt8 N; 
 extern uInt8 V; 
 extern uInt8 B; 

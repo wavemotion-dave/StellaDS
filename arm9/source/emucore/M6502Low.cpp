@@ -31,7 +31,7 @@
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
 
-uInt16 PC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));   // Program Counter
+uInt16 gPC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));   // Program Counter
 uInt8 A                                 __attribute__((section(".dtcm")));   // Accumulator
 uInt8 X                                 __attribute__((section(".dtcm")));   // X index register
 uInt8 Y                                 __attribute__((section(".dtcm")));   // Y index register
@@ -114,6 +114,8 @@ void M6502Low::execute(void)
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
+    
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -133,6 +135,8 @@ void M6502Low::execute(void)
         #include "M6502Low.ins"        
       }
     }
+    
+    gPC = PC;
 }
 
 
@@ -188,6 +192,7 @@ void M6502Low::execute_NB(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -212,6 +217,8 @@ void M6502Low::execute_NB(void)
         #undef poke 
       }
     }
+    
+    gPC = PC;
 }
 
 // -------------------------------------------------------------------------------
@@ -268,6 +275,7 @@ inline void poke_F8(uInt16 address, uInt8 value)
 void M6502Low::execute_F8(void)
 {
     uInt16 operandAddress;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -295,6 +303,8 @@ void M6502Low::execute_F8(void)
         #undef poke
       }
     }
+    
+    gPC = PC;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -308,6 +318,7 @@ inline uInt8 peek_PCF8SC(uInt16 address)
 void M6502Low::execute_F8SC(void)
 {
     uInt16 operandAddress;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -330,6 +341,8 @@ void M6502Low::execute_F8SC(void)
         #undef peek_PC
       }
     }
+    
+    gPC = PC;
 }
 
 // -------------------------------------------------------------------------------
@@ -394,6 +407,7 @@ void M6502Low::execute_F6(void)
 {
     uInt16 operandAddress;
     uInt8 operand;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -427,6 +441,7 @@ void M6502Low::execute_F6(void)
         #undef poke 
       }
     }
+    gPC = PC;
 }
 
 
@@ -441,6 +456,7 @@ inline uInt8 peek_PCF6SC(uInt16 address)
 void M6502Low::execute_F6SC(void)
 {
     uInt16 operandAddress;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -461,6 +477,7 @@ void M6502Low::execute_F6SC(void)
         #undef peek_PC
       }
     }
+    gPC = PC;
 }
 
 // -------------------------------------------------------------------------------
@@ -535,6 +552,7 @@ inline void poke_F4(uInt16 address, uInt8 value)
 void M6502Low::execute_F4(void)
 {
     uInt16 operandAddress;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -561,6 +579,7 @@ void M6502Low::execute_F4(void)
         #undef poke 
       }
     }
+    gPC = PC;
 }
 
 // ==============================================================================
@@ -703,6 +722,7 @@ inline void poke_AR(uInt16 address, uInt8 value)
 void M6502Low::execute_AR(void)
 {
     uInt16 operandAddress;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -728,6 +748,8 @@ void M6502Low::execute_AR(void)
         #undef poke
       }
     }
+    
+    gPC = PC;
 }
 
 
@@ -968,6 +990,7 @@ void M6502Low::execute_DPCP(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -993,6 +1016,7 @@ void M6502Low::execute_DPCP(void)
         #undef DPC_PLUS_FAST_FETCH
       }
     }
+    gPC = PC;
 }
 
 
@@ -1097,6 +1121,7 @@ void M6502Low::execute_CDFJ(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1122,6 +1147,7 @@ void M6502Low::execute_CDFJ(void)
         #undef DATA_STREAMS
       }
     }
+    gPC = PC;
 }
 
 inline uInt8 peek_DataStreamPlus(uInt8 address)
@@ -1156,6 +1182,7 @@ void M6502Low::execute_CDFJPlus(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1181,6 +1208,7 @@ void M6502Low::execute_CDFJPlus(void)
         #undef DATA_STREAMS_PLUS
       }
     }
+    gPC = PC;
 }
 
 // -------------------------------------------------------------------------------
@@ -1239,8 +1267,7 @@ inline void poke_DPC(uInt16 address, uInt8 value)
 
 void M6502Low::execute_DPC(void)
 {
-    uInt16 operandAddress;
-    uInt8 operand;
+    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -1250,9 +1277,10 @@ void M6502Low::execute_DPC(void)
     // -------------------------------------------------------------------------------------------------------------
     while (!myExecutionStatus)
     {
+      uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
       ++gSystemCycles;
-      operand = fast_cart_buffer[PC++ & f8_bankbit];
+      uInt8 operand = fast_cart_buffer[PC++ & f8_bankbit];
 
       // 6502 instruction emulation is generated by an M4 macro file
       switch (operand)
@@ -1267,5 +1295,6 @@ void M6502Low::execute_DPC(void)
         #undef poke
       }
     }
+    gPC = PC;
 }
 

@@ -124,7 +124,7 @@ static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
 /* Rather than have a table with 511 entries, I use a random number generator. */
-static uint8 Bit9[POLY9_SIZE] __attribute__((section(".dtcm")));
+static uint8 Bit9[POLY9_SIZE];
     
 static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
 static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
@@ -146,7 +146,7 @@ uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
 uInt16 tia_out_idx  __attribute__((section(".dtcm"))) = 0;
 
 //uint16 tia_buf[SOUND_SIZE];
-uint16 tia_buf[SOUND_SIZE];
+uint16 *tia_buf = (uInt16*) 0x06890000; // Use VRAM 
 extern uint16 *aptr;
 extern uint16 *bptr;
 
@@ -194,7 +194,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
       P9[chan] = 0;
    }
     
-   memset(tia_buf, 0x00, sizeof(tia_buf));
+   memset(tia_buf, 0x00, SOUND_SIZE * (sizeof(uInt16)));
     
    bProcessingSample = false;
     
@@ -382,8 +382,8 @@ ITCM_CODE void Tia_process(void)
          when using unsigned 8-bit samples in SDL */
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {
-            tia_buf[tia_buf_idx++] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
-            tia_buf_idx &= (SOUND_SIZE-1);
+            tia_buf[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+            tia_buf_idx = (tia_buf_idx + 1) & (SOUND_SIZE-1);
         }
         else
         {

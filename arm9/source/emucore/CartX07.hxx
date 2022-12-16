@@ -100,7 +100,7 @@ class CartridgeX07 : public Cartridge
     uInt16 myCurrentBank;
     
     // The 64K ROM image of the cartridge
-    uInt8 myImage[64*1024];
+    uInt8 *myImage;
 };
 #endif
 

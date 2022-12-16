@@ -34,11 +34,8 @@ extern M6532 *theM6532;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeX07::CartridgeX07(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < (64*1024); ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Just reuse the existing cart buffer
+  myImage = (uInt8 *)image;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
