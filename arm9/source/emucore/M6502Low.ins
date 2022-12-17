@@ -1949,7 +1949,7 @@ case 0xa9:
 #endif
 
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch; extern u32 myFastFetcherOffset;
+  extern u8 myDataStreamFetch; extern u16 myFastFetcherOffset;
   extern uInt8* myARMRAM;
   if (myFastFetcherOffset)
   {
@@ -2078,7 +2078,7 @@ case 0xa2:
 {
   X = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDXenabled; extern u32 myFastFetcherOffset;
+  extern u8 myDataStreamFetch, myLDXenabled; extern u16 myFastFetcherOffset;
   if (myLDXenabled)
   {
       if (myFastFetcherOffset)
@@ -2156,7 +2156,7 @@ case 0xa0:
 {
   Y = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDYenabled; extern u32 myFastFetcherOffset;
+  extern u8 myDataStreamFetch, myLDYenabled; extern u16 myFastFetcherOffset;
   if (myLDYenabled)
   {
       if (myFastFetcherOffset)

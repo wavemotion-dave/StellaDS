@@ -40,7 +40,7 @@ CartridgeDF::~CartridgeDF()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeDF::name() const
 {
-  return "CartridgeDF";
+  return "DF";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

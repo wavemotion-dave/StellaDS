@@ -285,6 +285,8 @@ TIA::TIA(const Console& console)
   // our buffers in "slower" memory but it turns out to be a little faster to do it in 
   // main memory and then DMA copy into VRAM.
   // --------------------------------------------------------------------------------------
+  memset(videoBuf0, 0x00, sizeof(videoBuf0));
+  memset(videoBuf1, 0x00, sizeof(videoBuf1));
   myCurrentFrameBuffer[0] = videoBuf0; 
   myCurrentFrameBuffer[1] = videoBuf1; 
 
@@ -565,7 +567,7 @@ ITCM_CODE void TIA::update()
       case 9: mySystem->m6502().execute_CDFJ();        break;   // If we are CDF/CDFJ, we can run faster here...
       case 10: mySystem->m6502().execute_CDFJPlus();   break;   // If we are CDFJ+, we can run faster here...
       case 11: mySystem->m6502().execute_DPC();        break;   // If we are DPC (Pitfall II), we can run faster here...
-      default:mySystem->m6502().execute();             break;   // Otherwise the normal execute driver
+      default: mySystem->m6502().execute();            break;   // Otherwise the normal execute driver
   }
 }
 
@@ -1381,8 +1383,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       // --------------------------------------------------------------------------
       if (myCartInfo.frame_mode != MODE_NO)
       {
-          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]);
-          addr += 160;
+          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
           uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
           uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
           uInt32 *fp_blend = (uInt32 *)myDSFramePointer;            // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
@@ -1406,7 +1407,11 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           }
           else                                                      // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
           {
-              if (gAtariFrames & 1)    // Odd frames... combine with last even frame
+              // ----------------------------------------------------------------------
+              // This is the normal blending... it looks nice but takes a 10% CPU hit
+              // Every other frame we combine the last 2 frames together (even+odd).
+              // ----------------------------------------------------------------------
+              if (gAtariFrames & 1)
               {
                   for (int i=0; i<40; i++)
                   {

@@ -52,7 +52,7 @@ CartridgeE7::~CartridgeE7()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeE7::name() const
 {
-  return "CartridgeE7";
+  return "E7";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

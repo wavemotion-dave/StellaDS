@@ -100,7 +100,7 @@ static void DumpDebugData(void)
         extern uInt32 gTotalSystemCycles;
         extern uInt16 gPC;
         sprintf(dbgbuf, "%32s", myCartInfo.md5);
-        dsPrintValue(0,2,0, dbgbuf);
+        dsPrintValue(0,22,0, dbgbuf);
         
         for (int i=0; i<20; i++)
         {
@@ -503,6 +503,7 @@ bool dsLoadGame(char *filename)
     buffer_size = ftell(romfile);
     if (buffer_size <= MAX_CART_FILE_SIZE)
     {
+        memset(cart_buffer, 0xFF, MAX_CART_FILE_SIZE);
         rewind(romfile);
         fread(cart_buffer, buffer_size, 1, romfile);
         fclose(romfile);

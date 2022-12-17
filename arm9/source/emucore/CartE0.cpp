@@ -45,7 +45,7 @@ CartridgeE0::~CartridgeE0()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeE0::name() const
 {
-  return "CartridgeE0";
+  return "E0";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -44,7 +44,7 @@ Cartridge0840::~Cartridge0840()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge0840::name() const
 {
-  return "Cartridge0840";
+  return "0840";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -20,9 +20,9 @@
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
 
-#include <cassert>
-#include <cstdio>
-#include <cstring>
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
 
 #include "System.hxx"
 #include "../printf.h"
@@ -53,20 +53,21 @@ extern uInt8 gSaveKeyIsDirty;
 */
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-MT24LC256::MT24LC256(const string& filename)
+MT24LC256::MT24LC256(const char* filename)
   : mySDA(false),
     mySCL(false),
     myTimerActive(false),
     myCyclesWhenTimerSet(0),
     myCyclesWhenSDASet(0),
     myCyclesWhenSCLSet(0),
-    myDataFile(filename),
     myDataFileExists(false),
     myDataChanged(false)
 {
+  strcpy(myDataFile, filename);
+        
   // Load the data from an external file (if it exists)
   memset(myData, 0xFF, 32768);
-  FILE* inFile = fopen(myDataFile.c_str(), "rb");
+  FILE* inFile = fopen(myDataFile, "rb");
   if(inFile)
   {
     fread(myData, 32768, 1, inFile);
@@ -100,7 +101,7 @@ void MT24LC256::WriteEEtoFile(void)
     FILE *outFile;
     extern uInt8 gSaveKeyEEWritten;
     
-    outFile = fopen(myDataFile.c_str(), "wb");
+    outFile = fopen(myDataFile, "wb");
     if(outFile)
     {
         fwrite(myData, 32768, 1, outFile);
@@ -388,13 +389,6 @@ int MT24LC256::jpee_logproc(char const *st)
   fputs("\n", outFile);
   fclose(outFile);
   return 0;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-MT24LC256::MT24LC256(const MT24LC256& c)
-  : myDataFile(c.myDataFile)
-{
-  assert(false);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

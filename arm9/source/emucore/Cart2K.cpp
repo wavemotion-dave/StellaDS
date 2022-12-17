@@ -43,7 +43,7 @@ Cartridge2K::~Cartridge2K()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge2K::name() const
 {
-  return "Cartridge2K";
+  return "2K";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

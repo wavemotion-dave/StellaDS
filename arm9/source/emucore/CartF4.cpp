@@ -46,7 +46,7 @@ CartridgeF4::~CartridgeF4()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeF4::name() const
 {
-  return "CartridgeF4";
+  return "F4";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -73,7 +73,7 @@ void CartridgeF4::install(System& system)
   // Set the page accessing methods for the hot spots
   for(uInt32 i = (0x1FF4 & ~mask); i < 0x2000; i += (1 << shift))
   {
-    mySystem->setPageAccess(i >> shift, page_access);
+      mySystem->setPageAccess(i >> shift, page_access);
   }
 
   // And setup for this system without any direct peek/poke until we switch banks

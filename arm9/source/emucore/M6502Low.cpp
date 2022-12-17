@@ -31,7 +31,7 @@
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
 
-uInt16 gPC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));   // Program Counter
+uInt16 gPC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));  // Program Counter
 uInt8 A                                 __attribute__((section(".dtcm")));   // Accumulator
 uInt8 X                                 __attribute__((section(".dtcm")));   // X index register
 uInt8 Y                                 __attribute__((section(".dtcm")));   // Y index register
@@ -134,8 +134,7 @@ void M6502Low::execute(void)
       {
         #include "M6502Low.ins"        
       }
-    }
-    
+    }    
     gPC = PC;
 }
 
@@ -216,8 +215,7 @@ void M6502Low::execute_NB(void)
         #undef peek_PC
         #undef poke 
       }
-    }
-    
+    }    
     gPC = PC;
 }
 
@@ -302,8 +300,7 @@ void M6502Low::execute_F8(void)
         #undef peek_PC
         #undef poke
       }
-    }
-    
+    }    
     gPC = PC;
 }
 
@@ -340,8 +337,7 @@ void M6502Low::execute_F8SC(void)
         #include "M6502Low.ins"
         #undef peek_PC
       }
-    }
-    
+    }    
     gPC = PC;
 }
 
@@ -747,8 +743,7 @@ void M6502Low::execute_AR(void)
         #undef peek_PC
         #undef poke
       }
-    }
-    
+    }    
     gPC = PC;
 }
 
@@ -1041,12 +1036,10 @@ inline uInt8 peek_DataStream(uInt8 address)
 inline uInt16 peek_JumpStream(uInt8 address)
 {
   uInt16 result;
- 
   uInt8 myFastJumpStream = address + JUMPSTREAM_BASE;
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (myFastJumpStream << 2));
   uInt16 addr = *ptr >> 20;
-  result = myDisplayImageCDF[ addr++ ];
-  result |= (myDisplayImageCDF[ addr ] << 8);
+  result = *((uInt16*)(myDisplayImageCDF+addr));
   *ptr += 0x00200000;  // always increment by 2
     
   return result;
@@ -1169,8 +1162,7 @@ inline uInt16 peek_JumpStreamPlus(uInt8 address)
   uInt8 myFastJumpStream = address + JUMPSTREAM_BASE;
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (myFastJumpStream << 2));
   uInt16 addr = *ptr >> 16;
-  result = myDisplayImageCDF[ addr++ ];
-  result |= (myDisplayImageCDF[ addr ] << 8);
+  result = *((uInt16*)(myDisplayImageCDF+addr));
   *ptr += 0x00020000;  // always increment by 2
     
   return result;

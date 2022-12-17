@@ -90,7 +90,7 @@ CartridgeWD::~CartridgeWD()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeWD::name() const
 {
-  return "CartridgeWD";
+  return "WD";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

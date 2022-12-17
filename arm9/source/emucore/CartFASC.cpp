@@ -51,7 +51,7 @@ CartridgeFASC::~CartridgeFASC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeFASC::name() const
 {
-  return "CartridgeFASC";
+  return "FASC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

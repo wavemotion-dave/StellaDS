@@ -58,7 +58,7 @@ CartridgeCTY::~CartridgeCTY()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeCTY::name() const
 {
-  return "CartridgeCTY";
+  return "CTY";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

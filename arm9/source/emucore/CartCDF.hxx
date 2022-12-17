@@ -34,8 +34,6 @@ class Thumbulator;
 #define DSRAM             0x800
 
 extern bool   isCDFJPlus;
-extern uInt16 myDatastreamBase;
-extern uInt16 myDatastreamIncrementBase;
 extern uInt16 myAmplitudeStream;
 
 
@@ -109,10 +107,7 @@ class CartridgeCDF : public Cartridge
       @param value The value to be stored at the address
     */
     virtual void poke(uInt16 address, uInt8 value);
-    
-    uInt32 getDatastreamPointer(uInt8 index) const;
-    void setDatastreamPointer(uInt8 index, uInt32 value);
-    uInt32 getDatastreamIncrement(uInt8 index) const;
+
     uInt8 peekMusic(void);
 
   private:
@@ -125,30 +120,7 @@ class CartridgeCDF : public Cartridge
     uInt32 getWaveform(uInt8 index) const;
 
   private:
-    // The ROM image and size
-    uInt32 mySize;
 };
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt32 CartridgeCDF::getDatastreamPointer(uInt8 index) const
-{
-  uInt32 *ptr = (uInt32*) &fast_cart_buffer[myDatastreamBase + index * 4];
-  return *ptr;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeCDF::setDatastreamPointer(uInt8 index, uInt32 value)
-{
-  uInt32 *ptr = (uInt32*) &fast_cart_buffer[myDatastreamBase + index * 4];
-  *ptr = value;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt32 CartridgeCDF::getDatastreamIncrement(uInt8 index) const
-{
-  uInt32 *ptr = (uInt32*) &fast_cart_buffer[myDatastreamIncrementBase + index * 4];
-  return *ptr;
-}
 
 
 #endif

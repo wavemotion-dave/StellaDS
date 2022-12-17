@@ -37,18 +37,18 @@ extern uInt32 myBottoms[8];
 extern uInt32 myCounters[8];
 
 // The flag registers for the data fetchers
-uInt8 myFlags[8] __attribute__((section(".dtcm")));
+uInt8 myFlags[8];
 
 // The random number generator register
-uInt8 myRandomNumber __attribute__((section(".dtcm")));
+uInt8 myRandomNumber;
 
 // The music mode DF5, DF6, & DF7 enabled flags
-uInt8 myMusicMode[3] __attribute__((section(".dtcm")));
+uInt8 myMusicMode[3];
 
 // System cycle count when the last update to music data fetchers occurred
 uInt32 myMusicCycles __attribute__((section(".dtcm"))) = 0; 
 
-uInt8 musicAmplitudes[8] __attribute__((section(".dtcm"))) = 
+uInt8 musicAmplitudes[8] = 
 {
   0x00, 0x04, 0x05, 0x09, 0x06, 0x0a, 0x0b, 0x0f
 };
@@ -100,7 +100,7 @@ CartridgeDPC::~CartridgeDPC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeDPC::name() const
 {
-  return "CartridgeDPC";
+  return "DPC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -204,7 +204,7 @@ uInt8 CartridgeDPC::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeDPC::peek_fetch(uInt16 address)
+uInt8 CartridgeDPC::peek_fetch(uInt16 address)
 {
     uInt8 result = 0;
     

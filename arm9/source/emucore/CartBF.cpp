@@ -40,7 +40,7 @@ CartridgeBF::~CartridgeBF()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeBF::name() const
 {
-  return "CartridgeBF";
+  return "BF";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

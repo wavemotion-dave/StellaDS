@@ -72,7 +72,7 @@ CartridgeAR::~CartridgeAR()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeAR::name() const
 {
-  return "CartridgeAR";
+  return "AR";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

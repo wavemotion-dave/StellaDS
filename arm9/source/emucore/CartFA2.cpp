@@ -65,7 +65,7 @@ CartridgeFA2::~CartridgeFA2()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeFA2::name() const
 {
-  return "CartridgeFA2";
+  return "FA2";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

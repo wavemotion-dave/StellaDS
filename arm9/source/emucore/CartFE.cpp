@@ -45,7 +45,7 @@ CartridgeFE::~CartridgeFE()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeFE::name() const
 {
-  return "CartridgeFE";
+  return "FE";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

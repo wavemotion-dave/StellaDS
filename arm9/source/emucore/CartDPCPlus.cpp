@@ -143,7 +143,7 @@ CartridgeDPCPlus::~CartridgeDPCPlus()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeDPCPlus::name() const
 {
-  return "CartridgeDPCPlus";
+  return "DPC+";
 }    
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

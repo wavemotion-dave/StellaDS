@@ -46,7 +46,7 @@ CartridgeX07::~CartridgeX07()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeX07::name() const
 {
-  return "CartridgeX07";
+  return "X07";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -46,7 +46,7 @@ CartridgeEFSC::~CartridgeEFSC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeEFSC::name() const
 {
-  return "CartridgeEFSC";
+  return "EFSC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

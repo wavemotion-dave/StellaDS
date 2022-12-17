@@ -47,7 +47,7 @@ CartridgeF8::~CartridgeF8()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeF8::name() const
 {
-  return "CartridgeF8";
+  return "F8";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

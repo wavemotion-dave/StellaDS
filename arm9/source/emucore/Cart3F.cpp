@@ -44,7 +44,7 @@ Cartridge3F::~Cartridge3F()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge3F::name() const
 {
-  return "Cartridge3F";
+  return "3F";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

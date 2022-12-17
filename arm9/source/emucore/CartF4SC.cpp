@@ -54,7 +54,7 @@ CartridgeF4SC::~CartridgeF4SC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeF4SC::name() const
 {
-  return "CartridgeF4SC";
+  return "F4SC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

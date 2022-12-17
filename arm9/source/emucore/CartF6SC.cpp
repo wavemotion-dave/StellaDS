@@ -48,7 +48,7 @@ CartridgeF6SC::~CartridgeF6SC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeF6SC::name() const
 {
-  return "CartridgeF6SC";
+  return "F6SC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

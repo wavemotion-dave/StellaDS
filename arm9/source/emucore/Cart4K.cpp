@@ -43,7 +43,7 @@ Cartridge4K::~Cartridge4K()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge4K::name() const
 {
-  return "Cartridge4K";
+  return "4K";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

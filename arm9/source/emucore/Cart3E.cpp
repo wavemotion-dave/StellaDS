@@ -49,7 +49,7 @@ Cartridge3E::~Cartridge3E()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge3E::name() const
 {
-  return "Cartridge3E";
+  return "3E";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

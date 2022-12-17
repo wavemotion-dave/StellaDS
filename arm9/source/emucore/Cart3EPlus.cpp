@@ -55,7 +55,7 @@ Cartridge3EPlus::~Cartridge3EPlus()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* Cartridge3EPlus::name() const
 {
-  return "Cartridge3EPlus";
+  return "3E+";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -110,7 +110,6 @@ uInt8 Cartridge3EPlus::peek(uInt16 address)
   {
      return theTIA->peek(address);   
   }
-    debug[0]++;
   return 0x00;
 }
 

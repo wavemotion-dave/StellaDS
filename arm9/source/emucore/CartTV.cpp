@@ -41,7 +41,7 @@ CartridgeTV::~CartridgeTV()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeTV::name() const
 {
-  return "CartridgeTV";
+  return "TV";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

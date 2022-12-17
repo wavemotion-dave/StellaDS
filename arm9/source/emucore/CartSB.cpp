@@ -43,7 +43,7 @@ CartridgeSB::~CartridgeSB()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeSB::name() const
 {
-  return "CartridgeSB";
+  return "SB";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

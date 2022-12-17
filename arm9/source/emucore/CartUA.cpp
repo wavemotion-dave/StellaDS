@@ -45,7 +45,7 @@ CartridgeUA::~CartridgeUA()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeUA::name() const
 {
-  return "CartridgeUA";
+  return "UA";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

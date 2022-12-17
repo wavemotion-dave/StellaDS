@@ -47,7 +47,7 @@ CartridgeDFSC::~CartridgeDFSC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeDFSC::name() const
 {
-  return "CartridgeDFSC";
+  return "DFSC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

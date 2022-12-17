@@ -45,7 +45,7 @@ class MT24LC256
       @param filename Data file containing the EEPROM data
       @param system   The system using the controller of this device
     */
-    MT24LC256(const string& filename);
+    MT24LC256(const char *filename);
  
     /**
       Destructor
@@ -97,7 +97,7 @@ class MT24LC256
     uInt32 myCyclesWhenSDASet, myCyclesWhenSCLSet;
 
     // The file containing the EEPROM data
-    string myDataFile;
+    char myDataFile[128];
 
     // Indicates if a valid EEPROM data file exists/was successfully loaded
     bool myDataFileExists;
@@ -113,9 +113,6 @@ class MT24LC256
     uInt8 jpee_packet[70];
 
   private:
-    // Copy constructor isn't supported by this class so make it private
-    MT24LC256(const MT24LC256&);
- 
     // Assignment operator isn't supported by this class so make it private
     MT24LC256& operator = (const MT24LC256&);
 };

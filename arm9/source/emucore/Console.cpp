@@ -50,6 +50,8 @@
 TIA *theTIA     __attribute__((section(".dtcm"))) = 0;
 M6532 *theM6532 __attribute__((section(".dtcm"))) = 0;
 
+extern void dsPrintCartType(char *, int);
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const uInt8* image, uInt32 size, const char* filename)
 {
@@ -74,6 +76,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   M6502* m6502 = new M6502Low(1);
   theM6532 = new M6532(*this);
   myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
+  dsPrintCartType((char *)myCartridge->name(), size);
 
   // -------------------------------------------------------------------------
   // Set the sound quality based on the user configuration for this cart...

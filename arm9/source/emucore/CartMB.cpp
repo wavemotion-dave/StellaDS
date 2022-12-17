@@ -39,7 +39,7 @@ CartridgeMB::~CartridgeMB()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeMB::name() const
 {
-  return "CartridgeMB";
+  return "F0/MB";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

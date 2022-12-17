@@ -54,7 +54,7 @@ CartridgeF8SC::~CartridgeF8SC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeF8SC::name() const
 {
-  return "CartridgeF8SC";
+  return "F8SC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

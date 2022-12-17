@@ -39,7 +39,7 @@ CartridgeEF::~CartridgeEF()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeEF::name() const
 {
-  return "CartridgeEF";
+  return "EF";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

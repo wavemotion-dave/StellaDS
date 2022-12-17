@@ -24,10 +24,11 @@
 #include "CartCDF.hxx"
 #include "Thumbulator.hxx"
 
-uInt32 myMusicWaveformSize[3];
+uInt32 myMusicWaveformSize[3] = {0,0,0};
 
 #define FAST_FETCH_ON ((myMode & 0x0F) == 0)
 #define DIGITAL_AUDIO_ON ((myMode & 0xF0) == 0)
+#define DIGITAL_AUDIO_OFF (myMode & 0xF0)
 
 static uInt16 myStartBank = 6;
 
@@ -41,10 +42,10 @@ static uInt16 myStartBank = 6;
 #define MEM_32KB (1024 * 32)
 
 extern Thumbulator *myThumbEmulator;
-uInt8 myDataStreamFetch __attribute__((section(".dtcm"))) = 0x00;
+uInt8 myDataStreamFetch     __attribute__((section(".dtcm"))) = 0x00;
 
 // The counter registers for the data fetchers
-uInt8* myDisplayImageCDF __attribute__((section(".dtcm")));  // Pointer to the 4K display image of the cartridge
+uInt8* myDisplayImageCDF    __attribute__((section(".dtcm")));  // Pointer to the 4K display image of the cartridge
 
 uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 *commPtr32          __attribute__((section(".dtcm")));
@@ -55,11 +56,13 @@ CartridgeCDF *myCartCDF    __attribute__((section(".dtcm")));
 
 // System cycle count when the last update to music data fetchers occurred
 
-uInt16 myAmplitudeStream                __attribute__((section(".dtcm"))) = 0x22;
-uInt16 myDatastreamBase                 __attribute__((section(".dtcm"))) = 0x00a0;
-uInt16 myDatastreamIncrementBase        __attribute__((section(".dtcm"))) = 0x0128;
+uInt16 myAmplitudeStream  __attribute__((section(".dtcm"))) = 0x22;
 
 uInt8 peekvalue __attribute__((section(".dtcm"))) = 0;
+
+// These two don't need to be in fast memory as we will use a pointer to each anyway...
+static uInt16 myDatastreamBase          = 0x00a0;
+static uInt16 myDatastreamIncrementBase = 0x0128;
 
 // Pointer to the 32K program ROM image of the cartridge
 extern uInt8 myARM6502[];
@@ -80,7 +83,8 @@ bool  isCDFJPlus            __attribute__((section(".dtcm"))) = 0;
 
 u8 myLDXenabled             __attribute__((section(".dtcm"))) = 0;
 u8 myLDYenabled             __attribute__((section(".dtcm"))) = 0;
-uInt32 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
+uInt16 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
+uInt8 subversion = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -91,7 +95,7 @@ uInt32 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
 //  - 0xFFFFFFFF if not found
 uInt32 CartridgeCDF::scanCDFDriver(uInt32 searchValue)
 {
-  for (int i = 0; i < 2048; i += 4)
+  for (uInt32 i = 0; i < 2048; i += 4)
     if (getUInt32(cart_buffer, i) == searchValue)
       return i;
 
@@ -101,7 +105,6 @@ uInt32 CartridgeCDF::scanCDFDriver(uInt32 searchValue)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
 {
-  uInt8 subversion = 0;
   uInt16 myWaveformBase;
     
   // isCDFJPlus is already set by the Cart auto-detect
@@ -203,10 +206,10 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
     
   myWaveformBasePtr = (uInt32*)&myARMRAM[myWaveformBase];
     
-  // Pointer to the program ROM (28K @ 4K offset)
+  // Pointer to the program ROM (28K @ 4K or 2K offset)
   myDPCptr = (uInt8 *)image + (isCDFJPlus ? MEM_2KB : MEM_4KB);
-    
-  memcpy(myARM6502, myDPCptr, MEM_32KB); // For the 6502, we only need to copy 32K 
+  memset(myARM6502, 0xFF, MEM_32KB);
+  memcpy(myARM6502, myDPCptr, MEM_28KB); // For the 6502, we only need to copy 28K max
     
   // Copy intial driver into the CDF Harmony RAM
   memcpy(myARMRAM, image, MEM_2KB);
@@ -247,7 +250,7 @@ CartridgeCDF::~CartridgeCDF()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeCDF::name() const
 {
-  return "CartridgeCDF";
+  return (isCDFJPlus ? "CDFJ+": (subversion==0x4a ? "CDFJ":"CDF"));
 }    
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -327,6 +330,7 @@ ITCM_CODE uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2)
       // _GetWavePtr - return the counter
     case 2:
         return myMusicCounters[value1];
+          
       // _SetWaveSize - set size of waveform buffer
     case 3:
       myMusicWaveformSize[value1] = value2;
@@ -346,7 +350,21 @@ inline uInt32 CartridgeCDF::getWaveform(uInt8 index) const
 
 ITCM_CODE uInt8 CartridgeCDF::peekMusic(void)
 {
-  if (DIGITAL_AUDIO_ON)
+  if (DIGITAL_AUDIO_OFF)
+  {
+      uInt32 cyclesPassed = (gSystemCycles - myDPCPCycles);
+      if (cyclesPassed >= 60)
+      {
+          myMusicCounters[0] += myMusicFrequencies[0] * (cyclesPassed/60);
+          myMusicCounters[1] += myMusicFrequencies[1] * (cyclesPassed/60);
+          myMusicCounters[2] += myMusicFrequencies[2] * (cyclesPassed/60);
+          myDPCPCycles = (gSystemCycles - (cyclesPassed % 60));
+          peekvalue = myDisplayImageCDF[getWaveform(0) + (myMusicCounters[0] >> myMusicWaveformSize[0])]
+                    + myDisplayImageCDF[getWaveform(1) + (myMusicCounters[1] >> myMusicWaveformSize[1])]
+                    + myDisplayImageCDF[getWaveform(2) + (myMusicCounters[2] >> myMusicWaveformSize[2])];
+      }
+  }
+  else
   {
       uInt32 cyclesPassed = (gSystemCycles - myDPCPCycles);
       if (cyclesPassed >= 60)
@@ -367,21 +385,7 @@ ITCM_CODE uInt8 CartridgeCDF::peekMusic(void)
           {
             peekvalue >>= 4;
           }
-          peekvalue &= 0x0f;
-      }
-  }
-  else
-  {
-      uInt32 cyclesPassed = (gSystemCycles - myDPCPCycles);
-      if (cyclesPassed >= 60)
-      {
-          myMusicCounters[0] += myMusicFrequencies[0] * (cyclesPassed/60);
-          myMusicCounters[1] += myMusicFrequencies[1] * (cyclesPassed/60);
-          myMusicCounters[2] += myMusicFrequencies[2] * (cyclesPassed/60);
-          myDPCPCycles = (gSystemCycles - (cyclesPassed % 60));
-          peekvalue = myDisplayImageCDF[getWaveform(0) + (myMusicCounters[0] >> myMusicWaveformSize[0])]
-                    + myDisplayImageCDF[getWaveform(1) + (myMusicCounters[1] >> myMusicWaveformSize[1])]
-                    + myDisplayImageCDF[getWaveform(2) + (myMusicCounters[2] >> myMusicWaveformSize[2])];
+          else peekvalue &= 0x0f;
       }
   }
   return peekvalue;   
@@ -394,6 +398,13 @@ uInt8 CartridgeCDF::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void CartridgeCDF::bank(uInt16 bank)
+{
+  // Remember what bank we're in
+  myDPCptr = &myARM6502[bank << 12];
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
 {
   address &= 0x0FFF;
@@ -401,33 +412,29 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
   switch(address)
   {
     case 0xFF0:   // DSWRITE
+      if (isCDFJPlus)
       {
-          if (isCDFJPlus)
-          {
-              myDisplayImageCDF[ *commPtr32 >> 16 ] = value;
-              *commPtr32  += 0x10000;  // always increment by 1 when writing
-          }
-          else          
-          {
-              myDisplayImageCDF[ *commPtr32 >> 20 ] = value;
-              *commPtr32  += 0x100000;  // always increment by 1 when writing
-          }
+          myDisplayImageCDF[ *commPtr32 >> 16 ] = value;
+          *commPtr32  += 0x10000;  // always increment by 1 when writing
+      }
+      else          
+      {
+          myDisplayImageCDF[ *commPtr32 >> 20 ] = value;
+          *commPtr32  += 0x100000;  // always increment by 1 when writing
       }
       break;
 
     case 0xFF1:   // DSPTR
+      *commPtr32 <<=8;
+      if (isCDFJPlus)
       {
-          *commPtr32 <<=8;
-          if (isCDFJPlus)
-          {
-              *commPtr32 &= 0xff000000;
-              *commPtr32 |= (value << 16);
-          }
-          else
-          {
-              *commPtr32 &= 0xf0000000;
-              *commPtr32 |= (value << 20);
-          }
+          *commPtr32 &= 0xff000000;
+          *commPtr32 |= (value << 16);
+      }
+      else
+      {
+          *commPtr32 &= 0xf0000000;
+          *commPtr32 |= (value << 20);
       }
       break;
 
@@ -440,14 +447,15 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
       callFunction(value);
       break;
           
-    case 0xFF4: bank(isCDFJPlus ? 0 : 6); break;
-    case 0xFF5: bank(isCDFJPlus ? 1 : 0); break;
-    case 0xFF6: bank(isCDFJPlus ? 2 : 1); break;
-    case 0xFF7: bank(isCDFJPlus ? 3 : 2); break;
-    case 0xFF8: bank(isCDFJPlus ? 4 : 3); break;
-    case 0xFF9: bank(isCDFJPlus ? 5 : 4); break;
-    case 0xFFA: bank(isCDFJPlus ? 6 : 5); break;
-    case 0xFFB: bank(isCDFJPlus ? 0 : 6); break;
+    // Check for bankswitch write...
+    case 0xFF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
+    case 0xFF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
+    case 0xFF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
+    case 0xFF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
+    case 0xFF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;
+    case 0xFF9:  myDPCptr = &myARM6502[isCDFJPlus ? 0x5000:0x4000]; break;
+    case 0xFFA:  myDPCptr = &myARM6502[isCDFJPlus ? 0x6000:0x5000]; break;
+    case 0xFFB:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
 
     default:
       break;
@@ -456,10 +464,3 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
   return;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeCDF::bank(uInt16 bank)
-{
-    // Remember what bank we're in
-  myCurrentOffset = bank << 12;
-  myDPCptr = &myARM6502[myCurrentOffset];
-}

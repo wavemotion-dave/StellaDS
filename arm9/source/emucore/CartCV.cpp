@@ -72,7 +72,7 @@ CartridgeCV::~CartridgeCV()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeCV::name() const
 {
-  return "CartridgeCV";
+  return "CV";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

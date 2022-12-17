@@ -47,7 +47,7 @@ CartridgeBFSC::~CartridgeBFSC()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const char* CartridgeBFSC::name() const
 {
-  return "CartridgeBFSC";
+  return "BFSC";
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
