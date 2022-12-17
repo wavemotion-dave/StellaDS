@@ -27,7 +27,7 @@ Copyright :
 -----------------------
 StellaDS Phoenix-Edition is Copyright (c) 2020-2022 Dave Bernazzani (wavemotion-dave)
 
-As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, it's source code and associated readme files, with or without modification,  are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
+As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification,  are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
 The StellaDS emulator is offered as-is, without any warranty.
 
@@ -51,7 +51,7 @@ If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (
 
 Installation:
 -----------------------
-Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will auto patch the game to run so you should be good to go... press on the CART slot too pick and load a game (.bin or .a26). For some older launchers or flash-carts you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely as most launchers will auto-patch when you run the emulator).
+Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will auto patch the game to run so you should be good to go... press on the CART slot to pick and load a game (.bin or .a26). For some older launchers or flash-carts you might need to DLDI patch the StellaDS.nds for your system (but it's unlikely as most launchers will auto-patch when you run the emulator).
 
 Game Autodetection:
 -----------------------
