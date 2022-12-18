@@ -112,6 +112,11 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
 
   // get offset of CDFJPlus ID
   uInt32 cdfjOffset = 0;
+
+  // These need to be proven below...
+  myFastFetcherOffset = 0;
+  myLDXenabled = false;
+  myLDYenabled = false;
     
   if ((cdfjOffset = scanCDFDriver(0x53554c50)) != 0xFFFFFFFF && // Plus
       getUInt32(image, cdfjOffset+4) == 0x4a464443 &&   // CDFJ
@@ -120,7 +125,6 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
     myAmplitudeStream = 0x23;
     myDatastreamBase = 0x0098;
     myDatastreamIncrementBase = 0x0124;
-    myFastFetcherOffset = 0;
     myWaveformBase = 0x01b0;
 
     for (int i = 0; i < 2048; i += 4)
