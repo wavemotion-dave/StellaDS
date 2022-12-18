@@ -1267,8 +1267,27 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     }
     else  // All other possibilities... this is expensive CPU-wise
     {
-        if (myCartInfo.thumbOptimize >= 2)  // If we are Optmizing the ARM Thumb with NO collisions...
-            handleObjectsNoCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
+        if (myCartInfo.thumbOptimize & 2)  // If we are Optmizing the ARM Thumb with NO collisions...
+        {
+            if ((myEnabledObjects == myPFBit) && !myPlayfieldPriorityAndScore) // Playfield bit set... without priority/score (common in CDF/J/+ games)
+            {
+                   uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
+                   uInt32* mask = &myCurrentPFMask[clocksFromStartOfScanLine - HBLANK];
+                   // Update a uInt8 at a time until reaching a uInt32 boundary
+                   for(; ((uintptr_t)myFramePointer & 0x03); ++myFramePointer, ++mask)
+                   {
+                     *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                   }
+
+                   // Now, update a uInt32 at a time
+                   for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
+                   {
+                     *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                   }
+                   myFramePointer = ending;
+            }
+            else handleObjectsNoCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
+        }
         else    // Normal handling...
             handleObjectsAndCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
     }

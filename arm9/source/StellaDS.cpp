@@ -986,7 +986,7 @@ static u16 dampen=0;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
 
-ITCM_CODE void dsMainLoop(void)
+void dsMainLoop(void)
 {
     uInt16 keys_pressed;
     uInt8 rapid_fire   = 0;

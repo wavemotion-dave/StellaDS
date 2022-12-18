@@ -108,6 +108,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   uInt16 myWaveformBase;
     
   // isCDFJPlus is already set by the Cart auto-detect
+  subversion = 0;
 
   // get offset of CDFJPlus ID
   uInt32 cdfjOffset = 0;
@@ -217,10 +218,12 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // Pointer to the display RAM
   myDisplayImageCDF = myARMRAM + MEM_2KB;
     
-  // Set the initial Music Waveform sizes
+  // Set the initial Music Waveform sizes and counters
   for (int i=0; i < 3; ++i)
   {
     myMusicWaveformSize[i] = 27;
+    myMusicCounters[i] = 0;
+    myMusicFrequencies[i] = 0;
   }
     
   // CDF/CDFJ always starts in bank 6, CDFJ+ in bank 0
