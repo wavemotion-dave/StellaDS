@@ -50,7 +50,7 @@
 /* CONSTANT DEFINITIONS */
 
 /* definitions for AUDCx (15, 16) */
-#define SET_TO_1     0x00      /* 0000 */
+#define VOL_ONLY     0x00      /* 0000 */
 #define POLY4        0x01      /* 0001 */
 #define DIV31_POLY4  0x02      /* 0010 */
 #define POLY5_POLY4  0x03      /* 0011 */
@@ -225,43 +225,79 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 /*                                                                           */
 /*****************************************************************************/
 
-ITCM_CODE void Update_tia_sound (uint8 chan)
+ITCM_CODE void Update_tia_sound_0 (void)
 {
-    uint16 new_val;
-    
    /* an AUDC value of 0 is a special case */
-   if (AUDC[chan] == SET_TO_1)
+   if (AUDC[0] == VOL_ONLY)
    {
       /* indicate the clock is zero so no processing will occur */
-      new_val = 0;
+      Div_n_cnt[0] = 0;
 
       /* and set the output to the selected volume */
-      Outvol[chan] = AUDV[chan];
+      Outvol[0] = AUDV[0];
    }
    else
    {
       /* otherwise calculate the 'divide by N' value */
-      new_val = AUDF[chan] + 1;
+      uint16 new_val = AUDF[0] + 1;
 
       /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
-      if ((AUDC[chan] & DIV3_MASK) == DIV3_MASK)
+      if ((AUDC[0] & DIV3_MASK) == DIV3_MASK)
       {
          new_val *= 3;
       }
-   }
-
-   /* only reset those channels that have changed */
-   if (new_val != Div_n_max[chan])
-   {
-      /* reset the divide by n counters */
-      Div_n_max[chan] = new_val;
-
-      /* if the channel is now volume only or was volume only */
-      if ((Div_n_cnt[chan] == 0) || (new_val == 0))
+       
+      /* only reset those channels that have changed */
+      if (new_val != Div_n_max[0])
       {
-         /* reset the counter (otherwise let it complete the previous) */
-         Div_n_cnt[chan] = new_val;
+         /* reset the divide by n counters */
+         Div_n_max[0] = new_val;
+   
+         /* if the channel was volume only */
+         if (Div_n_cnt[0] == 0)
+         {
+            /* reset the counter (otherwise let it complete the previous) */
+            Div_n_cnt[0] = new_val;
+         }
+      }       
+   }
+}
+
+ITCM_CODE void Update_tia_sound_1 (void)
+{
+   /* an AUDC value of 0 is a special case */
+   if (AUDC[1] == VOL_ONLY)
+   {
+      /* indicate the clock is zero so no processing will occur */
+      Div_n_cnt[1] = 0;
+
+      /* and set the output to the selected volume */
+      Outvol[1] = AUDV[1];
+   }
+   else
+   {
+      /* otherwise calculate the 'divide by N' value */
+      uint16 new_val = AUDF[1] + 1;
+
+      /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
+      if ((AUDC[1] & DIV3_MASK) == DIV3_MASK)
+      {
+         new_val *= 3;
       }
+       
+      /* only reset those channels that have changed */
+      if (new_val != Div_n_max[1])
+      {
+         /* reset the divide by n counters */
+         Div_n_max[1] = new_val;
+   
+         /* if the channel was volume only */
+         if (Div_n_cnt[1] == 0)
+         {
+            /* reset the counter (otherwise let it complete the previous) */
+            Div_n_cnt[1] = new_val;
+         }
+      }       
    }
 }
 

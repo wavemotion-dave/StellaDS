@@ -1928,8 +1928,9 @@ case 0xa9:
       // More often than not, what follows LDA is STA...
       if (myDPCptr[PC&0xFFF] == 0x85)
       {
-        PC++; gSystemCycles++;
-        poke_small(peek_PC(PC++), A);
+        gSystemCycles += 3;
+        poke_small(myDPCptr[++PC & 0xFFF], A);
+        PC++;
       }
   }
 #endif
@@ -1942,33 +1943,41 @@ case 0xa9:
      // More often than not, what follows LDA is STA...
      if (myDPCptr[PC&0xFFF] == 0x85)
      {
-        PC++; gSystemCycles++;
-        poke_small(peek_PC(PC++), A);
+        gSystemCycles += 3;
+        poke_small(myDPCptr[++PC & 0xFFF], A);
+        PC++;
      }
   }
 #endif
 
 #ifdef DATA_STREAMS_PLUS
   extern u8 myDataStreamFetch; extern u16 myFastFetcherOffset;
-  extern uInt8* myARMRAM;
   if (myFastFetcherOffset)
   {
-    uInt8 offset_A = A-myARMRAM[myFastFetcherOffset];
-    if (offset_A < myDataStreamFetch) A = peek_DataStreamPlus(offset_A);
+     extern uInt8* myARMRAM;
+     uInt8 offset_A = A-myARMRAM[myFastFetcherOffset];
+     if (offset_A < myDataStreamFetch) 
+     {
+        A = peek_DataStreamPlus(offset_A);
+     }
   }
   else
   {
      if (A < myDataStreamFetch) 
      {
          A = peek_DataStreamPlus(A);
-         // More often than not, what follows LDA is STA...
-         if (myDPCptr[PC&0xFFF] == 0x85)
-         {
-            PC++; gSystemCycles++;
-            poke_small(peek_PC(PC++), A);
-         }
      }
   }
+  // --------------------------------------------------
+  // More often than not, what follows LDA is STA...
+  // This gives us a nice look-ahead-speed-up
+  // --------------------------------------------------
+  if (myDPCptr[PC&0xFFF] == 0x85)
+  {
+     gSystemCycles += 3;
+     poke_small(myDPCptr[++PC & 0xFFF], A);
+     PC++;
+  }  
 #endif
 }
 {

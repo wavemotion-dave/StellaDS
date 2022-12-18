@@ -373,15 +373,15 @@ ITCM_CODE uInt8 CartridgeCDF::peekMusic(void)
           myDPCPCycles = (gSystemCycles - (cyclesPassed % 60));
           
           // retrieve packed sample (max size is 2K, or 4K of unpacked data)
-          const uInt32 sampleaddress = *myWaveformBasePtr + (myMusicCounters[0] >> 21);
+          const uInt32 sampleaddress = *myWaveformBasePtr + (myMusicCounters[0] >> (isCDFJPlus ? 13:21));
 
           if (sampleaddress & 0xF0000000) // check for RAM
-            peekvalue = myARMRAM[sampleaddress & 0xFFFF];
+            peekvalue = myARMRAM[sampleaddress & RAMADDMASK];
           else 
             peekvalue = cart_buffer[sampleaddress];
 
           // make sure current volume value is in the lower nybble
-          if ((myMusicCounters[0] & (1<<20)) == 0)
+          if ((myMusicCounters[0] & (1<<(isCDFJPlus ? 12:20))) == 0)
           {
             peekvalue >>= 4;
           }

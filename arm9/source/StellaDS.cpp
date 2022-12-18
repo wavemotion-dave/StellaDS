@@ -79,6 +79,8 @@ Console* theConsole = (Console*) NULL;
 int bg0, bg0b, bg1b;
 uInt16 etatEmu;
 
+static uInt32 fps_counters[5]={0,0,0,0,0};
+
 uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
@@ -490,6 +492,9 @@ bool dsLoadGame(char *filename)
     
     // Clear out debug information for new game
     memset(debug, 0x00, sizeof(debug));      
+      
+    // Clear out the FPS counters
+    memset(fps_counters, 0x00, sizeof(fps_counters));
       
     extern uInt8 OptionPage;
     OptionPage = 0;
@@ -975,7 +980,7 @@ void dsInstallSoundEmuFIFO(void)
     fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }
 
-char fpsbuf[8];
+char fpsbuf[12];
 short int iTx,iTy;
 static u16 dampen=0;
 static u16 info_dampen=0;
@@ -1504,14 +1509,11 @@ ITCM_CODE void dsMainLoop(void)
 
             if (fpsDisplay)
             {
-                int x = gAtariFrames;
-                gAtariFrames = 0;
-                if ((!full_speed) && (x>60)) x--;
-                fpsbuf[0] = '0' + (int)x/100;
-                x = x % 100;
-                fpsbuf[1] = '0' + (int)x/10;
-                fpsbuf[2] = '0' + (int)x%10;
-                fpsbuf[3] = 0;
+                if ((!full_speed) && (gAtariFrames>60)) gAtariFrames--;
+                fps_counters[fps_counters[4]++ & 0x03] = gAtariFrames;
+                uInt32 avg=fps_counters[0]+fps_counters[1]+fps_counters[2]+fps_counters[3];
+                sprintf(fpsbuf, "%03d [%d.%d]", gAtariFrames, avg/4, ((10*avg)/4) % 10);
+                gAtariFrames=0;
                 dsPrintValue(0,0,0, fpsbuf);
             }
             if (gSaveKeyIsDirty)

@@ -1383,41 +1383,55 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       // --------------------------------------------------------------------------
       if (myCartInfo.frame_mode != MODE_NO)
       {
-          int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
-          uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
-          uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
           uInt32 *fp_blend = (uInt32 *)myDSFramePointer;            // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
-          if (myCartInfo.frame_mode == MODE_BACKG)
+          switch (myCartInfo.frame_mode)
           {
-              for (int i=0; i<40; i++)
+              case MODE_BACKG:
               {
-                if (*fp1 == myBlendBk) *fp_blend++ = *fp2;          // mid-screen background - use previous frame
-                else *fp_blend++ = *fp1;                            // Use current frame 
-                fp1++;fp2++;
-              }
-          }
-          else if (myCartInfo.frame_mode == MODE_BLACK)
-          {
-              for (int i=0; i<40; i++)
-              {
-                if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
-                else *fp_blend++ = *fp1;                            // Use current frame 
-                fp1++;fp2++;
-              }
-          }
-          else                                                      // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
-          {
-              // ----------------------------------------------------------------------
-              // This is the normal blending... it looks nice but takes a 10% CPU hit
-              // Every other frame we combine the last 2 frames together (even+odd).
-              // ----------------------------------------------------------------------
-              if (gAtariFrames & 1)
-              {
+                  int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                  uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                  uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
                   for (int i=0; i<40; i++)
                   {
-                    *fp_blend++ = *fp1++ | *fp2++;
+                    if (*fp1 == myBlendBk) *fp_blend++ = *fp2;          // mid-screen background - use previous frame
+                    else *fp_blend++ = *fp1;                            // Use current frame 
+                    fp1++;fp2++;
                   }
               }
+              break;
+                  
+              case MODE_BLACK:
+              {
+                  int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                  uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                  uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+                  for (int i=0; i<40; i++)
+                  {
+                    if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
+                    else *fp_blend++ = *fp1;                            // Use current frame 
+                    fp1++;fp2++;
+                  }
+              }
+              break;
+                  
+              default:                                                  // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
+              {
+                  // ----------------------------------------------------------------------
+                  // This is the normal blending... it looks nice but takes a 10% CPU hit
+                  // Every other frame we combine the last 2 frames together (even+odd).
+                  // ----------------------------------------------------------------------
+                  if (gAtariFrames & 1)
+                  {
+                      int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                      uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                      uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+                      for (int i=0; i<40; i++)
+                      {
+                        *fp_blend++ = *fp1++ | *fp2++;
+                      }
+                  }
+              }
+              break;
           }
       }
       else
@@ -1609,13 +1623,13 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 
 uInt8 poke_needs_update_display[] __attribute__((section(".dtcm"))) =
 {
-    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1,
+    1,1,0,1,1,1,1,1,   1,1,1,1,1,1,1,1,
     1,1,1,1,1,0,0,0,   0,0,0,1,1,1,1,1,
     1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1,
     1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1
 };
 
-uInt32 player_reset_pos[] =
+uInt8 player_reset_pos[] =
 {
   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
@@ -2100,30 +2114,30 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x15:    // Audio control 0
           AUDC[0] = value & 0x0f;
-          Update_tia_sound(0);
+          Update_tia_sound_0();
           break;
     case 0x16:    // Audio control 1
           AUDC[1] = value & 0x0f;
-          Update_tia_sound(1);
+          Update_tia_sound_1();
           break;
           
     case 0x17:    // Audio frequency 0
           AUDF[0] = value & 0x1f;
-          Update_tia_sound(0);
+          Update_tia_sound_0();
           break;          
     case 0x18:    // Audio frequency 1
           AUDF[1] = value & 0x1f;
-          Update_tia_sound(1);
+          Update_tia_sound_1();
           break;
           
     case 0x19:    // Audio volume 0
           AUDV[0] = (value & 0x0f) << 3;
-          Update_tia_sound(0);
+          Update_tia_sound_0();
           break;
 
     case 0x1A:    // Audio volume 1
           AUDV[1] = (value & 0x0f) << 3;
-          Update_tia_sound(1);
+          Update_tia_sound_1();
           break;
   
     case 0x1B: // Graphics Player 0
