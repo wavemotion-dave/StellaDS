@@ -986,7 +986,7 @@ static u16 dampen=0;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
 
-void dsMainLoop(void)
+ITCM_CODE void dsMainLoop(void)
 {
     uInt16 keys_pressed;
     uInt8 rapid_fire   = 0;
@@ -1584,10 +1584,7 @@ void dsMainLoop(void)
                     fpsDisplay = 1-fpsDisplay;
                     if (!fpsDisplay)
                     {
-                        fpsbuf[0] = ' ';
-                        fpsbuf[1] = ' ';
-                        fpsbuf[2] = ' ';
-                        fpsbuf[3] = 0;
+                        strcpy(fpsbuf, "          ");
                         dsPrintValue(0,0,0, fpsbuf);
                     }
                     else gAtariFrames=0;                    

@@ -97,7 +97,7 @@ break;
 case 0x75:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -170,7 +170,6 @@ case 0x7d:
     operand = peek((high | low) + X);
 }
 {
-  uInt8 oldA = A;
   Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
 
   if(!D)
@@ -185,6 +184,7 @@ case 0x7d:
   }
   else
   {
+    uInt8 oldA = A;
     Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
 
     notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
@@ -361,7 +361,7 @@ break;
 case 0x35:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -539,7 +539,7 @@ case 0x06:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -559,7 +559,7 @@ case 0x16:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -578,7 +578,7 @@ case 0x0e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -599,7 +599,7 @@ case 0x1e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -658,7 +658,7 @@ case 0x24:
 }
 {
   notZ = (A & operand);
-  N = operand & 0x80;
+  N = operand;
   V = operand & 0x40;
 }
 break;
@@ -671,7 +671,7 @@ case 0x2C:
 }
 {
   notZ = (A & operand);
-  N = operand & 0x80;
+  N = operand;
   V = operand & 0x40;
 }
 break;
@@ -844,7 +844,7 @@ break;
 case 0xd5:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -1098,7 +1098,7 @@ case 0xc7:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-   C = ((value2 & 0x0100) ? 0:1);
+  C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1117,7 +1117,7 @@ case 0xd7:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-   C = ((value2 & 0x0100) ? 0:1);
+  C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1138,7 +1138,7 @@ case 0xc3:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-   C = ((value2 & 0x0100) ? 0:1);
+  C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1159,7 +1159,7 @@ case 0xd3:
   uInt16 value2 = (uInt16)A - (uInt16)value;
   notZ = value2;
   N = value2 & 0x0080;
-   C = ((value2 & 0x0100) ? 0:1);
+  C = ((value2 & 0x0100) ? 0:1);
 }
 break;
 
@@ -1282,7 +1282,7 @@ break;
 case 0x55:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -1869,7 +1869,7 @@ break;
 case 0xb7:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += Y;
   operand = peek(address); 
 }
@@ -1999,7 +1999,7 @@ break;
 case 0xb5:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   A = peek(address); 
 }
@@ -2123,7 +2123,7 @@ break;
 case 0xb6:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += Y;
   X = peek(address); 
 }
@@ -2200,7 +2200,7 @@ break;
 case 0xb4:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   Y = peek(address); 
 }
@@ -2268,7 +2268,7 @@ case 0x46:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2288,7 +2288,7 @@ case 0x56:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2307,7 +2307,7 @@ case 0x4e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2328,7 +2328,7 @@ case 0x5e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2392,7 +2392,7 @@ case 0xd4:
 case 0xf4:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -2453,7 +2453,7 @@ break;
 case 0x15:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -2755,7 +2755,7 @@ case 0x26:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2777,7 +2777,7 @@ case 0x36:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2798,7 +2798,7 @@ case 0x2e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2821,7 +2821,7 @@ case 0x3e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2859,7 +2859,7 @@ case 0x66:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2881,7 +2881,7 @@ case 0x76:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2902,7 +2902,7 @@ case 0x6e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -2925,7 +2925,7 @@ case 0x7e:
   poke(operandAddress, operand);
 
   notZ = operand;
-  N = operand & 0x80;
+  N = operand;
 }
 break;
 
@@ -3374,7 +3374,7 @@ break;
 case 0xf5:
 {
   uInt8 address = peek_PC(PC++);
-  peek(address);
+  fake_peek();
   address += X;
   operand = peek(address); 
 }
@@ -4036,10 +4036,11 @@ break;
 
 case 0x85:
 {
-  operandAddress = peek_PC(PC++);
-}
-{
-  poke(operandAddress, A);
+#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
+  gSystemCycles++; poke_small(peek_PC(PC++), A);
+#else
+  poke(peek_PC(PC++), A);
+#endif
 }
 break;
 
@@ -4117,10 +4118,11 @@ break;
 
 case 0x86:
 {
-  operandAddress = peek_PC(PC++);
-}
-{
-  poke(operandAddress, X);
+#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
+  gSystemCycles++; poke_small(peek_PC(PC++), X);
+#else
+  poke(peek_PC(PC++), X);
+#endif  
 }
 break;
 
@@ -4148,10 +4150,11 @@ break;
 
 case 0x84:
 {
-  operandAddress = peek_PC(PC++);
-}
-{
-  poke(operandAddress, Y);
+#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
+  gSystemCycles++; poke_small(peek_PC(PC++), Y);
+#else
+  poke(peek_PC(PC++), Y);
+#endif
 }
 break;
 

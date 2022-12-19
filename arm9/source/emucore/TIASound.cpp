@@ -224,14 +224,15 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 /* Outputs: Adjusts local globals - no return value                          */
 /*                                                                           */
 /*****************************************************************************/
-
 ITCM_CODE void Update_tia_sound_0 (void)
 {
+    uint16 new_val;
+    
    /* an AUDC value of 0 is a special case */
    if (AUDC[0] == VOL_ONLY)
    {
       /* indicate the clock is zero so no processing will occur */
-      Div_n_cnt[0] = 0;
+      new_val = 0;
 
       /* and set the output to the selected volume */
       Outvol[0] = AUDV[0];
@@ -239,37 +240,38 @@ ITCM_CODE void Update_tia_sound_0 (void)
    else
    {
       /* otherwise calculate the 'divide by N' value */
-      uint16 new_val = AUDF[0] + 1;
+      new_val = AUDF[0] + 1;
 
       /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
       if ((AUDC[0] & DIV3_MASK) == DIV3_MASK)
       {
          new_val *= 3;
       }
-       
-      /* only reset those channels that have changed */
-      if (new_val != Div_n_max[0])
-      {
-         /* reset the divide by n counters */
-         Div_n_max[0] = new_val;
-   
-         /* if the channel was volume only */
-         if (Div_n_cnt[0] == 0)
-         {
-            /* reset the counter (otherwise let it complete the previous) */
-            Div_n_cnt[0] = new_val;
-         }
-      }       
    }
-}
+
+   /* only reset those channels that have changed */
+   if (new_val != Div_n_max[0])
+   {
+      /* reset the divide by n counters */
+      Div_n_max[0] = new_val;
+
+      /* if the channel is now volume only or was volume only */
+      if ((Div_n_cnt[0] == 0) || (new_val == 0))
+      {
+         /* reset the counter (otherwise let it complete the previous) */
+         Div_n_cnt[0] = new_val;
+      }
+   }}
 
 ITCM_CODE void Update_tia_sound_1 (void)
 {
+    uint16 new_val;
+    
    /* an AUDC value of 0 is a special case */
    if (AUDC[1] == VOL_ONLY)
    {
       /* indicate the clock is zero so no processing will occur */
-      Div_n_cnt[1] = 0;
+      new_val = 0;
 
       /* and set the output to the selected volume */
       Outvol[1] = AUDV[1];
@@ -277,27 +279,27 @@ ITCM_CODE void Update_tia_sound_1 (void)
    else
    {
       /* otherwise calculate the 'divide by N' value */
-      uint16 new_val = AUDF[1] + 1;
+      new_val = AUDF[1] + 1;
 
       /* if bits 2 & 3 are set, then multiply the 'div by n' count by 3 */
       if ((AUDC[1] & DIV3_MASK) == DIV3_MASK)
       {
          new_val *= 3;
       }
-       
-      /* only reset those channels that have changed */
-      if (new_val != Div_n_max[1])
+   }
+
+   /* only reset those channels that have changed */
+   if (new_val != Div_n_max[1])
+   {
+      /* reset the divide by n counters */
+      Div_n_max[1] = new_val;
+
+      /* if the channel is now volume only or was volume only */
+      if ((Div_n_cnt[1] == 0) || (new_val == 0))
       {
-         /* reset the divide by n counters */
-         Div_n_max[1] = new_val;
-   
-         /* if the channel was volume only */
-         if (Div_n_cnt[1] == 0)
-         {
-            /* reset the counter (otherwise let it complete the previous) */
-            Div_n_cnt[1] = new_val;
-         }
-      }       
+         /* reset the counter (otherwise let it complete the previous) */
+         Div_n_cnt[1] = new_val;
+      }
    }
 }
 
@@ -418,7 +420,7 @@ ITCM_CODE void Tia_process(void)
          when using unsigned 8-bit samples in SDL */
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {
-            tia_buf[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+            ((uInt16*)0x06890000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
             tia_buf_idx = (tia_buf_idx + 1) & (SOUND_SIZE-1);
         }
         else
@@ -441,6 +443,6 @@ ITCM_CODE void Tia_process_wave (void)
     {
         if (!bProcessingSample) Tia_process(); else return;
     }
-    *aptr = *bptr = tia_buf[tia_out_idx++];
+    *aptr = *bptr = ((uInt16*)0x06890000)[tia_out_idx++];
     tia_out_idx &= (SOUND_SIZE-1);
 }

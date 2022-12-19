@@ -39,6 +39,7 @@
 void Tia_sound_init (unsigned short sample_freq, unsigned short playback_freq);
 void Update_tia_sound_0(void);
 void Update_tia_sound_1(void);
+void Update_tia_sound (uInt8 chan);
 void Tia_process (void);
 void Tia_process_wave(void);
 

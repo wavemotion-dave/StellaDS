@@ -1156,18 +1156,13 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // -----------------------------------------------------------------------
 // For some of the DPC+ and many of the CDF/CDFJ we don't need to handle
 // any special color or collisions so we can do this the fast way..
+// Note that we are purposely ignoring the ScoreBit handling here which 
+// provides a bit more speed and nobody is using that for the ARM-Assisted
+// games that also don't provide any collision usage. It's not a safe
+// way to do this... but nothing has broken it and we need the speed.
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
-#define HANDLE_COLOR_AND_COLLISIONS  \
-              if (hpos < 80)  \
-              {  \
-                  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];  \
-                  hpos++;  \
-              }  \
-              else  \
-              {  \
-                  *myFramePointer = myColor[myPriorityEncoder[1][enabled]];  \
-              }
+#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];  
 
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
@@ -1267,29 +1262,34 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     }
     else  // All other possibilities... this is expensive CPU-wise
     {
-        if (myCartInfo.thumbOptimize & 2)  // If we are Optmizing the ARM Thumb with NO collisions...
+        Int32 hpos = clocksFromStartOfScanLine - HBLANK;
+        if (myCartInfo.thumbOptimize & 2)  // If we are Optimizing the ARM Thumb with NO collisions...
         {
-            if ((myEnabledObjects == myPFBit) && !myPlayfieldPriorityAndScore) // Playfield bit set... without priority/score (common in CDF/J/+ games)
+            if ((myEnabledObjects|myPlayfieldPriorityAndScore) == myPFBit) // Playfield bit set... without priority/score (common in CDF/J/+ games)
             {
                    uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
-                   uInt32* mask = &myCurrentPFMask[clocksFromStartOfScanLine - HBLANK];
-                   // Update a uInt8 at a time until reaching a uInt32 boundary
-                   for(; ((uintptr_t)myFramePointer & 0x03); ++myFramePointer, ++mask)
+                   uInt32* mask = &myCurrentPFMask[hpos];
+                   // Since a 32-bit access to main memory is always split as 16-bits, we can just align to 16 bits
+                   if ((uInt32)myFramePointer & 1)
                    {
-                     *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                       *myFramePointer++ = myColor[(myPF & *mask++) ? MYCOLUPF:MYCOLUBK];
                    }
-
                    // Now, update a uInt32 at a time
                    for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
                    {
-                     *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                     *((uInt32*)myFramePointer) = myColor[(myPF & *mask) ? MYCOLUPF:MYCOLUBK];
                    }
                    myFramePointer = ending;
             }
-            else handleObjectsNoCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
+            else 
+            {
+                handleObjectsNoCollisions(clocksToUpdate, hpos);
+            }
         }
         else    // Normal handling...
-            handleObjectsAndCollisions(clocksToUpdate, clocksFromStartOfScanLine - HBLANK);
+        {
+            handleObjectsAndCollisions(clocksToUpdate, hpos);
+        }
     }
 
     // Handle HMOVE blanks if they are enabled
