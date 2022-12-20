@@ -401,7 +401,18 @@ ITCM_CODE uInt8 CartridgeCDF::peekMusic(void)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeCDF::peek(uInt16 address)  
 {
-  return myDPCptr[address & 0xFFF];
+   switch (address)
+   {
+        case 0x0FF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
+        case 0x0FF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
+        case 0x0FF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
+        case 0x0FF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
+        case 0x0FF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;
+        case 0x0FF9:  myDPCptr = &myARM6502[isCDFJPlus ? 0x5000:0x4000]; break;
+        case 0x0FFA:  myDPCptr = &myARM6502[isCDFJPlus ? 0x6000:0x5000]; break;
+        case 0x0FFB:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
+    }
+    return myDPCptr[address & 0xFFF];    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -234,7 +234,7 @@ break;
 case 0x61:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -418,7 +418,7 @@ break;
 case 0x21:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -529,7 +529,8 @@ case 0x06:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -546,10 +547,11 @@ break;
 case 0x16:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -568,7 +570,8 @@ case 0x0e:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -586,10 +589,11 @@ case 0x1e:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -909,7 +913,7 @@ break;
 case 0xc1:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -1032,7 +1036,8 @@ case 0xcf:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1049,10 +1054,11 @@ case 0xdf:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1069,10 +1075,11 @@ case 0xdb:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1089,7 +1096,8 @@ case 0xc7:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1105,10 +1113,11 @@ break;
 case 0xd7:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1124,12 +1133,13 @@ break;
 case 0xc3:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1147,10 +1157,11 @@ case 0xd3:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1168,7 +1179,8 @@ case 0xc6:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1182,10 +1194,11 @@ break;
 case 0xd6:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1201,7 +1214,8 @@ case 0xce:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1216,10 +1230,11 @@ case 0xde:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand - 1;
@@ -1339,7 +1354,7 @@ break;
 case 0x41:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -1373,7 +1388,8 @@ case 0xe6:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand + 1;
@@ -1387,10 +1403,11 @@ break;
 case 0xf6:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand + 1;
@@ -1406,7 +1423,8 @@ case 0xee:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand + 1;
@@ -1421,10 +1439,11 @@ case 0xfe:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = operand + 1;
@@ -1465,7 +1484,8 @@ case 0xef:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1505,10 +1525,11 @@ case 0xff:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1549,10 +1570,11 @@ case 0xfb:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1592,7 +1614,8 @@ case 0xe7:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1631,10 +1654,11 @@ break;
 case 0xf7:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1673,12 +1697,13 @@ break;
 case 0xe3:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1719,10 +1744,11 @@ case 0xf3:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   operand = operand + 1;
@@ -1884,7 +1910,7 @@ break;
 case 0xa3:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -2054,7 +2080,7 @@ break;
 case 0xa1:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -2258,7 +2284,8 @@ case 0x46:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -2275,10 +2302,11 @@ break;
 case 0x56:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -2297,7 +2325,8 @@ case 0x4e:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -2315,10 +2344,11 @@ case 0x5e:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -2510,7 +2540,7 @@ break;
 case 0x01:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -2589,7 +2619,8 @@ case 0x2f:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2606,10 +2637,11 @@ case 0x3f:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2626,10 +2658,11 @@ case 0x3b:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2646,7 +2679,8 @@ case 0x27:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2662,10 +2696,11 @@ break;
 case 0x37:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2681,12 +2716,13 @@ break;
 case 0x23:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2704,10 +2740,11 @@ case 0x33:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   uInt8 value = (operand << 1) | (C);
@@ -2743,7 +2780,8 @@ case 0x26:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2762,10 +2800,11 @@ break;
 case 0x36:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2786,7 +2825,8 @@ case 0x2e:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2806,10 +2846,11 @@ case 0x3e:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2847,7 +2888,8 @@ case 0x66:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2866,10 +2908,11 @@ break;
 case 0x76:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2890,7 +2933,8 @@ case 0x6e:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2910,10 +2954,11 @@ case 0x7e:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2935,7 +2980,8 @@ case 0x6f:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -2975,10 +3021,11 @@ case 0x7f:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3018,10 +3065,11 @@ case 0x7b:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3061,7 +3109,8 @@ case 0x67:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3100,10 +3149,11 @@ break;
 case 0x77:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3142,12 +3192,13 @@ break;
 case 0x63:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3188,10 +3239,11 @@ case 0x73:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   bool oldC = C;
@@ -3243,13 +3295,10 @@ break;
 
 case 0x60:
 {
-  fake_peek();
-}
-{
-  peek(0x0100 + SP++);
+  gSystemCycles += 2;SP++;
   PC = peek(0x0100 + SP++);
   PC |= ((uInt16)peek(0x0100 + SP) << 8);
-  peek_PC(PC++);
+  fake_peek(); PC++;
 }
 break;
 
@@ -3276,7 +3325,7 @@ break;
 case 0x97:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + Y) & 0xFF;
 }
 {
@@ -3287,7 +3336,7 @@ break;
 case 0x83:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
@@ -3531,7 +3580,7 @@ break;
 case 0xe1:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   uInt16 address = peek(pointer++);
   address |= ((uInt16)peek(pointer) << 8);
@@ -3660,7 +3709,7 @@ case 0x9f:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -3675,7 +3724,7 @@ case 0x93:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -3690,7 +3739,7 @@ case 0x9b:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -3706,7 +3755,7 @@ case 0x9e:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -3721,7 +3770,7 @@ case 0x9c:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
 }
 {
@@ -3737,7 +3786,8 @@ case 0x0f:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3756,10 +3806,11 @@ case 0x1f:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3778,10 +3829,11 @@ case 0x1b:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3800,7 +3852,8 @@ case 0x07:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3818,10 +3871,11 @@ break;
 case 0x17:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3839,12 +3893,13 @@ break;
 case 0x03:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3864,10 +3919,11 @@ case 0x13:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the left-most bit in value
@@ -3888,7 +3944,8 @@ case 0x4f:
   operandAddress = peek_PC(PC++);
   operandAddress |= ((uInt16)peek_PC(PC++) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -3907,10 +3964,11 @@ case 0x5f:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -3929,10 +3987,11 @@ case 0x5b:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -3951,7 +4010,8 @@ case 0x47:
 {
   operandAddress = peek_PC(PC++);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -3969,10 +4029,11 @@ break;
 case 0x57:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -3990,12 +4051,13 @@ break;
 case 0x43:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -4015,10 +4077,11 @@ case 0x53:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
   operand = peek(operandAddress);
-  poke(operandAddress, operand);
+  //poke(operandAddress, operand);
+  fake_poke();
 }
 {
   // Set carry flag according to the right-most bit in value
@@ -4036,18 +4099,14 @@ break;
 
 case 0x85:
 {
-#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
-  gSystemCycles++; poke_small(peek_PC(PC++), A);
-#else
   poke(peek_PC(PC++), A);
-#endif
 }
 break;
 
 case 0x95:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
 }
 {
@@ -4069,7 +4128,7 @@ case 0x9d:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + X));
+  fake_peek();
   operandAddress = (high | low) + X;
 }
 {
@@ -4081,7 +4140,7 @@ case 0x99:
 {
   uInt16 low = peek_PC(PC++);
   uInt16 high = ((uInt16)peek_PC(PC++) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -4092,7 +4151,7 @@ break;
 case 0x81:
 {
   uInt8 pointer = peek_PC(PC++);
-  peek(pointer);
+  fake_peek();
   pointer += X;
   operandAddress = peek(pointer++);
   operandAddress |= ((uInt16)peek(pointer) << 8);
@@ -4107,7 +4166,7 @@ case 0x91:
   uInt8 pointer = peek_PC(PC++);
   uInt16 low = peek(pointer++);
   uInt16 high = ((uInt16)peek(pointer) << 8);
-  peek(high | (uInt8)(low + Y));
+  fake_peek();
   operandAddress = (high | low) + Y;
 }
 {
@@ -4118,18 +4177,14 @@ break;
 
 case 0x86:
 {
-#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
-  gSystemCycles++; poke_small(peek_PC(PC++), X);
-#else
   poke(peek_PC(PC++), X);
-#endif  
 }
 break;
 
 case 0x96:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + Y) & 0xFF;
 }
 {
@@ -4150,18 +4205,14 @@ break;
 
 case 0x84:
 {
-#if defined(DATA_STREAMS_PLUS) || defined(DATA_STREAMS) || defined(DPC_PLUS_FAST_FETCH)
-  gSystemCycles++; poke_small(peek_PC(PC++), Y);
-#else
   poke(peek_PC(PC++), Y);
-#endif
 }
 break;
 
 case 0x94:
 {
   operandAddress = peek_PC(PC++);
-  peek(operandAddress);
+  fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
 }
 {

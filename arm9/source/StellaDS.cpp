@@ -248,7 +248,7 @@ void dsPrintCartType(char *type, int size)
 {
     if (DEBUG_DUMP)
     {
-        sprintf(dbgbuf, "%s %dK", type, size/1024);
+        sprintf(dbgbuf, "%s %dK [%d]", type, size/1024, cartDriver);
         dsPrintValue(16-(strlen(dbgbuf)/2),0,0, (char*)dbgbuf);
     }
 }

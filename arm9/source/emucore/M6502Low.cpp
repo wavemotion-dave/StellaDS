@@ -71,6 +71,7 @@ M6502Low::~M6502Low()
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #define fake_peek()  gSystemCycles++;
+#define fake_poke()  gSystemCycles++;
 
 // -------------------------------------------------------------------------------
 // This is the normal driver - optmized but will drive unused TIA pins to 0x00
@@ -1101,7 +1102,7 @@ inline void poke_CDFJ(uInt16 address, uInt8 value)
   }    
 }
 
-// For when you know the address is 8-bits... it can only be TIA or RAM
+// For when you know the address is 8-bits... it can only be TIA or RAM and gSystemCycles is handled by the caller
 inline void poke_small(uInt8 address, uInt8 value)
 {
     if (address & 0x80) myRAM[address & 0x7F] = value;

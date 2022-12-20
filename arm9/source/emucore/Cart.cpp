@@ -1594,6 +1594,7 @@ const CartInfo table[] =
     {"fef7a035eb3a6ad8f658a339d5f1df0e",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // RoboMechanik_WIP4__NTSC.bin
     {"ec44dcf2ddb4319962fc43b725a902e8",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  31,    210,    96,   0,  0},    // Robot City (RC8).bin
     {"4f618c2429138e0280969193ed6c107e",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Robot Tank (1983).bin
+    {"f2edec8d3dbfb19261caf85ff4d975d6",  "ROTAN8", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Robot Tank (1983).bin [F8]    
     {"594437a35603c3e857b5af75b9718b61",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Robot Tank (1983) (PAL).bin
     {"f687ec4b69611a7f78bd69b8a567937a",  "ROTANK", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Robot Tank (1983) (PAL).bin
     {"a37c9ab414b6133f24ebd43e59ebc5cd",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  28,    205,    87,   0,  0},    // Robotwar_20201004_demo_NTSC.bin
@@ -2877,6 +2878,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "GRAVIT") == 0) cartDriver = 2;      
       if (strcmp(myCartInfo.gameID, "GYVOLV") == 0) cartDriver = 2;
       if (strcmp(myCartInfo.gameID, "HEROAV") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "ROTAN8") == 0) cartDriver = 2;      
       if (strcmp(myCartInfo.gameID, "IXION_") == 0) cartDriver = 2;      
       if (strcmp(myCartInfo.gameID, "JOUST_") == 0) cartDriver = 2;
       if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) cartDriver = 2;
