@@ -49,4 +49,7 @@ typedef unsigned int uInt32;
   #include <string>
   using namespace std;
 
+#define likely(x)       __builtin_expect(!!(x), 1)
+#define unlikely(x)     __builtin_expect(!!(x), 0)
+
 #endif

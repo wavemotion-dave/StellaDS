@@ -201,6 +201,11 @@ Controls :
 
 Version History:
 -----------------------
+V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
+  * Polished release - a few more tweaks, a few more optmizations and everything is running as fast science allows on the DS/DSi.
+  * Removed "ghost read" and "ghost writes" on the 6502 emulation for a bit more speed.
+  * Use of gcc "likely/unlikely" in a few key spots to help the compiler optmize.
+
 V6.4 : 16-Dec-2022 by Dave Bernazzani (wavemotion)
   * Reduced stack memory so we don't crash when first creating a Savekey EE file.
   * Improved 6502 handling to localize the PC for a bit of a performance boost.

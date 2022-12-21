@@ -165,7 +165,7 @@ inline uInt8 peek_NB(uInt16 address)
 {
   gSystemCycles++;
 
-  if (address & 0x1000)
+  if (unlikely(address & 0x1000))
   {
       return fast_cart_buffer[address & 0xFFF];    
   }
@@ -668,7 +668,6 @@ inline void poke_AR(uInt16 address, uInt8 value)
   // TIA access is common... filter that one out first...
   if (address < 0x80)
   {
-      extern TIA *theTIA;
       theTIA->poke(address, value);
       return;
   }
@@ -924,7 +923,7 @@ ITCM_CODE uInt8 peek_Fetch(uInt8 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 peek_DPCP(uInt16 address)
+inline uInt8 peek_DPCP(uInt16 address)
 {
   ++gSystemCycles;
   
@@ -1025,7 +1024,7 @@ extern uInt32 fastDataStreamBase, fastIncStreamBase;
 // -------------------------------------------
 inline uInt8 peek_DataStream(uInt8 address)
 {
-  if (address == myAmplitudeStream) return myCartCDF->peekMusic();
+  if (unlikely(address == myAmplitudeStream)) return myCartCDF->peekMusic();
    
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (address << 2));
   uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (address << 2));
@@ -1045,30 +1044,15 @@ inline uInt16 peek_JumpStream(uInt8 address)
     
   return result;
 }
-
+ 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 peek_CDFJ(uInt16 address)
+inline uInt8 peek_CDFJ(uInt16 address)
 {
   ++gSystemCycles;
   
   if (address & 0x1000)
   {
-      address &= 0xFFF;
-      if (address >= 0xFF4) 
-      {
-        switch (address)
-        {
-            case 0x0FF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
-            case 0x0FF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
-            case 0x0FF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
-            case 0x0FF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
-            case 0x0FF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;
-            case 0x0FF9:  myDPCptr = &myARM6502[isCDFJPlus ? 0x5000:0x4000]; break;
-            case 0x0FFA:  myDPCptr = &myARM6502[isCDFJPlus ? 0x6000:0x5000]; break;
-            case 0x0FFB:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
-        }
-      }
-      return myDPCptr[(address)];
+      return myCartCDF->peek(address);
   }
   else
   {
@@ -1145,7 +1129,7 @@ void M6502Low::execute_CDFJ(void)
 
 inline uInt8 peek_DataStreamPlus(uInt8 address)
 {
-  if (address == myAmplitudeStream) return myCartCDF->peekMusic();
+  if (unlikely(address == myAmplitudeStream)) return myCartCDF->peekMusic();
    
   uInt32 *ptr = (uInt32*) ((uInt32)fastDataStreamBase + (address << 2));
   uInt32 *inc = (uInt32*) ((uInt32)fastIncStreamBase + (address << 2));

@@ -46,7 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 
-#define VERSION "6.4"
+#define VERSION "6.5"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
@@ -97,21 +97,18 @@ uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 char dbgbuf[36];
 static void DumpDebugData(void)
 {
-    if (DEBUG_DUMP)
-    {   
-        extern uInt32 gTotalSystemCycles;
-        extern uInt16 gPC;
-        sprintf(dbgbuf, "%32s", myCartInfo.md5);
-        dsPrintValue(0,22,0, dbgbuf);
-        
-        for (int i=0; i<20; i++)
-        {
-            sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
-            dsPrintValue(0,2+i,0, dbgbuf);
-        }
-        sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, gPC);
-        dsPrintValue(0,23,0, dbgbuf);
+    extern uInt32 gTotalSystemCycles;
+    extern uInt16 gPC;
+    sprintf(dbgbuf, "%32s", myCartInfo.md5);
+    dsPrintValue(0,22,0, dbgbuf);
+
+    for (int i=0; i<20; i++)
+    {
+        sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
+        dsPrintValue(0,2+i,0, dbgbuf);
     }
+    sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, gPC);
+    dsPrintValue(0,23,0, dbgbuf);
 }
 
 

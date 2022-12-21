@@ -296,6 +296,7 @@ const CartInfo table[] =
     {"c471b97446a85304bbac021c57c2cb49",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   45,    245,   100,   0,  0},    // Boing! (1983) (PAL).bin
     {"1eabc038854452bd3f963cb47673f3ac",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Bomb City (final).bin
     {"0ff357ea06b7f4f542cbfdd953eb159e",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  4},    // Bombs Away! (2010) (Steve Engelhardt).bin
+    {"5a17d44208edfcb28c0f37e85bb6c4bc",  "BOOM!!", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // BOOM! (RC2).bin    
     {"ab48c4af46c8b34c3613d210e1206132",  "??????", BANK_3E,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  37,    210,   100,   0,  0},    // Boulder Dash Demo.bin
     {"96662271ae50b6859017bffbdda75525",  "??????", BANK_3E,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  37,    210,   100,   0,  0},    // Boulder Dash Full.bin
     {"594dbc80b93fa5804e0f1368c037331d",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  10},   // Bouncin' Baby Bunnies (Prototype).bin
@@ -620,7 +621,7 @@ const CartInfo table[] =
     {"368d88a6c071caba60b4f778615aae94",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Double Dunk (Super Basketball) (1989).bin
     {"cfc226d04d7490b69e155abd7741e98c",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Double Dunk (Super Basketball) (1989) (PAL).bin
     {"6ed5012793f5ddf4353a48c11ea9b8d3",  "??????", BANK_AR,   CTR_PADDLE0,   SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Down on the Line, Handcar.bin
-    {"97f4da9f1031486f4e588f1e53572e53",  "DRACON", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
+    {"97f4da9f1031486f4e588f1e53572e53",  "DRACON", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Draconian (RC8).bin
     {"24d9a55d8f0633e886a1b33ee1e0e797",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  30,    210,    75,   0,  0},    // Dragon Defender.bin
     {"95e542a7467c94b1e4ab24a3ebe907f1",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    59,   0,  1},    // Dragon Defender (PAL).bin
     {"6a882fb1413912d2ce5cf5fa62cf3875",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    60,   0,  1},    // Dragon Defender (PAL).bin
@@ -2216,6 +2217,7 @@ const CartInfo table[] =
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2331,6 +2333,7 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "FROST2") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "MAPPY_") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "DRACON") == 0) myCartInfo.soundQuality = SOUND_WAVE;
+  if (strcmp(myCartInfo.gameID, "BOOM!!") == 0) myCartInfo.soundQuality = SOUND_WAVE;    
   if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "SSTOCK") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "MSPACM") == 0) myCartInfo.soundQuality = SOUND_WAVE;

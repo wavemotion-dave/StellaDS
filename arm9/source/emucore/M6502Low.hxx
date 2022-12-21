@@ -128,11 +128,11 @@ inline uInt8 peek_F8(uInt16 address);
 inline uInt8 peek_PCF8(uInt16 address);
 inline void  poke_F8(uInt16 address, uInt8 value);
 
-       uInt8 peek_DPCP(uInt16 address);
+inline uInt8 peek_DPCP(uInt16 address);
 inline uInt8 peek_DPCPPC(uInt16 address);
 inline void  poke_DPCP(uInt16 address, uInt8 value);
 
-       uInt8 peek_CDFJ(uInt16 address);
+inline uInt8 peek_CDFJ(uInt16 address);
 inline uInt8 peek_CDFJPC(uInt16 address);
 inline void  poke_CDFJ(uInt16 address, uInt8 value);
 inline void  poke_small(uInt8 address, uInt8 value);

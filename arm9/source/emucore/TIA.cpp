@@ -1189,7 +1189,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   if (myClockAtLastUpdate >= clock)              return;
 
   // Truncate the number of cycles to update to the stop display point
-  if(clock > myClockStopDisplay)
+  if (unlikely(clock > myClockStopDisplay))
   {
     clock = myClockStopDisplay;
   }
@@ -1671,7 +1671,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   Int32 delta_clock;
   addr = addr & 0x003f;
 
-  if (myCartInfo.soundQuality == SOUND_WAVE)
+  if (unlikely(myCartInfo.soundQuality == SOUND_WAVE))
   {
       while ((gSystemCycles - lastTiaPokeCycles) >= 76)
       {
