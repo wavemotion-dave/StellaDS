@@ -29,6 +29,9 @@
 #include "System.hxx"
 #include <iostream>
 
+// We index purposely out of bounds (but correct it on the fetch) as a speed hack...
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
 extern uInt32 NumberOfDistinctAccesses;
 extern uInt8 fast_cart_buffer[];
 
