@@ -74,10 +74,26 @@ void CartridgeUA::install(System& system)
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
   page_access.device = this;
-  mySystem->setPageAccess(0x0220 >> shift, page_access);    // Normal hotspot
-  mySystem->setPageAccess(0x0240 >> shift, page_access);
-  mySystem->setPageAccess(0x02A0 >> shift, page_access);    // Brazillian hotspot
-  mySystem->setPageAccess(0x02C0 >> shift, page_access);
+    
+  // Meltdown does a read from 0x2A0 which will cause an inadvertant bankswitch so we restrict this one...
+  if (myCartInfo.special == SPEC_MELTDOWN)
+  {
+        mySystem->setPageAccess((0x0220) >> shift, page_access);
+        mySystem->setPageAccess((0x0240) >> shift, page_access);
+  }
+  else  // Extended UA handling 
+  {
+      for(uInt16 a11 = 0; a11 <= 1; ++a11)
+        for(uInt16 a10 = 0; a10 <= 1; ++a10)
+          for(uInt16 a8 = 0; a8 <= 1; ++a8)
+            for(uInt16 a7 = 0; a7 <= 1; ++a7)
+            {
+              const uInt16 addr = (a11 << 11) + (a10 << 10) + (a8 << 8) + (a7 << 7);
+
+              mySystem->setPageAccess((0x0220 | addr) >> shift, page_access);
+              mySystem->setPageAccess((0x0240 | addr) >> shift, page_access);
+            }
+  }
 
   // Install pages for bank 0
   bank(bUAswapped ? 1:0);
@@ -89,16 +105,14 @@ uInt8 CartridgeUA::peek(uInt16 address)
   address = address & 0x1FFF;
 
   // Switch banks if necessary
-  switch(address)
+  switch(address & 0x1260)
   {
     case 0x0220:
-    case 0x02A0:
       // Set the current bank to the lower 4k bank
       bank(bUAswapped ? 1:0);
       break;
 
     case 0x0240:
-    case 0x02C0:
       // Set the current bank to the upper 4k bank
       bank(bUAswapped ? 0:1);
       break;
@@ -126,16 +140,14 @@ void CartridgeUA::poke(uInt16 address, uInt8 value)
   address = address & 0x1FFF;
 
   // Switch banks if necessary
-  switch(address)
+  switch(address & 0x1260)
   {
     case 0x0220:
-    case 0x02A0:
       // Set the current bank to the lower 4k bank
       bank(bUAswapped ? 1:0);
       break;
 
     case 0x0240:
-    case 0x02C0:
       // Set the current bank to the upper 4k bank
       bank(bUAswapped ? 0:1);
       break;
