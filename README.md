@@ -95,6 +95,7 @@ press the START button to save out your configuration after making changes:
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
 * ARM THUMB:       SAFE is most accurate but slows down processing. Optmized is faster and recommended for DPC+ games. Optmized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
+* BUS Driver:      Normally set to OPTMIZED so we run as fast as possible but COMPATIBLE is needed for a few games that must have the unused bits of the TIA driven to the last value on the data bus. This will slow down emulation a bit (fine for DSi and above).
 
 There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
 
@@ -204,6 +205,7 @@ Version History:
 V6.5b : 18-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for MELTDOWN prototype so it doesn't crash.
   * Fix for Pleiades to fix graphical glitches.
+  * Added new option to use the 'Compatible' BUS driver which will properly reflect the last bits on the bus in TIA reads (a few games rely on this - but it does slow down emulation slightly).
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
   * Polished release - a few more tweaks, a few more optmizations and everything is running as fast science allows on the DS/DSi.

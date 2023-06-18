@@ -66,7 +66,7 @@ struct CartInfo
   uInt8 right_difficulty;
   uInt8 thumbOptimize;
   uInt8 palette_type;
-  uInt8 spare2_0;
+  uInt8 bus_driver;
   uInt8 spare3_0;
   uInt8 spare4_0;
   uInt8 spare5_0;

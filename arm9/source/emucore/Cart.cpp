@@ -1296,6 +1296,7 @@ const CartInfo table[] =
     {"ead60451c28635b55ca8fea198444e16",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   65,    245,    83,   0, 18},    // Nightmare (PAL).bin
     {"63ccbde4fbff7c3dbb52f78f3edbb01b",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Nightrider02NTSC.bin
     {"2df8ea51bcc9f1b3b4c61a141b5a1405",  "NINJAG", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // NinjishGuy_prerelease.bin
+    {"9e25d77f17008847d789d68bd1948ce1",  "NINJAG", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // NinjishGuy_prerelease.bin    
     {"1c11997364ae24a2e10f929b898226e2",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  30,    210,   100,   0,  0},    // Nite Bear.bin
     {"b6d52a0cf53ad4216feb04147301f87d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // No Escape! (1982).bin
     {"dc81c4805bf23959fcf2c649700b82bf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // No Escape! (1982) (PAL).bin
@@ -2347,7 +2348,7 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.xButton = BUTTON_FIRE;
   myCartInfo.yButton = BUTTON_FIRE;
 
-  myCartInfo.spare2_0 = 0;
+  myCartInfo.bus_driver = 0;
   myCartInfo.spare3_0 = 0;
   myCartInfo.spare4_0 = 0;
   myCartInfo.spare5_0 = 0;
@@ -2849,7 +2850,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
-      cartDriver = 1;
+      cartDriver = (myCartInfo.bus_driver ? 0:1);
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
       if (strcmp(myCartInfo.gameID, "SPPLUS") == 0) cartDriver = 0;  // SP+ requires the normal driver
   }  
@@ -2906,6 +2907,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.vblankZero = 0;
       } 
       
+      if (myCartInfo.bus_driver) cartDriver = 0;
   }
   else if ((myCartInfo.banking == BANK_F6) && !isDSiMode())
   {
@@ -2920,6 +2922,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.hBlankZero = 0; 
           myCartInfo.vblankZero = 0;
       }
+      
+      if (myCartInfo.bus_driver) cartDriver = 0;
   }
   else if ((myCartInfo.banking == BANK_F4) && !isDSiMode())
   {
@@ -2949,10 +2953,13 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.hBlankZero = 0; 
           myCartInfo.vblankZero = 0;
       } 
+      
+      if (myCartInfo.bus_driver) cartDriver = 0;
   }
   else if ((myCartInfo.banking == BANK_F8SC) && !isDSiMode())
   {
       cartDriver = 6;
+      if (myCartInfo.bus_driver) cartDriver = 0;
   }
   else if ((myCartInfo.banking == BANK_F6SC) && !isDSiMode())
   {
@@ -2977,6 +2984,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.hBlankZero = 0; 
           myCartInfo.vblankZero = 0;
       } 
+      if (myCartInfo.bus_driver) cartDriver = 0;
   }
   else // Use the normal drivers....
   {

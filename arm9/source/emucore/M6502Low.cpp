@@ -120,7 +120,6 @@ inline void poke(uInt16 address, uInt8 value)
 void M6502Low::execute(void)
 {
     uInt16 operandAddress;
-    uInt8 operand;
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -132,6 +131,7 @@ void M6502Low::execute(void)
     // -------------------------------------------------------------------------------------------------------------
     while (!myExecutionStatus)
     {
+      #define operand myDataBusState
       // Get the next 6502 instruction - do this the fast way!
       ++gSystemCycles;
       PageAccess& access = myPageAccessTable[(PC & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
@@ -144,6 +144,7 @@ void M6502Low::execute(void)
       {
         #include "M6502Low.ins"        
       }
+      #undef operand
     }    
     gPC = PC;
 }
