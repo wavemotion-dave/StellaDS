@@ -1442,7 +1442,7 @@ const CartInfo table[] =
     {"78821ef76ebc3934850d1bc1b9e4f4b0",  "PLAQUE", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   42,    245,   100,   0,  0},    // Plaque Attack (1983) (PAL).bin
     {"3eccf9f363f5c5de0c8b174a535dc83b",  "PLAQUE", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  0},    // Plaque Attack (1983) (PAL).bin
     {"7ced6709f091e79a2ab9575d3516a4ac",  "PLAQUE", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Plaque Attack (1983) (PAL).bin
-    {"8bbfd951c89cc09c148bfabdefa08bec",  "??????", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  33,    210,    94,   0,  0},    // Pleiades (1983).bin
+    {"8bbfd951c89cc09c148bfabdefa08bec",  "??????", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  28,    210,    92,   0,  4},    // Pleiades (1983).bin
     {"8c136e97c0a4af66da4a249561ed17db",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Poker_squares.bin
     {"44f71e70b89dcc7cf39dfd622cfb9a27",  "POLARI", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polaris (1983).bin
     {"87bea777a34278d29b3b6029833c5422",  "POLARI", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  38,    210,   100,   0,  0},    // Polaris (1983) (TJ).bin
@@ -3078,8 +3078,7 @@ bool Cartridge::isProbablyFE(const uInt8* image, uInt32 size)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 bool Cartridge::isProbablyUA(const uInt8* image, uInt32 size)
 {
-  // UA cart bankswitching switches to bank 1 by accessing address 0x240
-  // using 'STA $240' or 'LDA $240'
+  // UA cart bankswitching switches to bank 1 by accessing address 0x240 using STA 0x240 or LDS 0x240
   uInt8 signature[7][3] = {
     { 0x8D, 0x40, 0x02 },  // STA $240 (Funky Fish, Pleiades)
     { 0xAD, 0x40, 0x02 },  // LDA $240 (???)

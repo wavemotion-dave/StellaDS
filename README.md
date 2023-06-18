@@ -201,8 +201,9 @@ Controls :
 
 Version History:
 -----------------------
-V6.5a : 17-Jun-2023 by Dave Bernazzani (wavemotion)
+V6.5b : 18-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for MELTDOWN prototype so it doesn't crash.
+  * Fix for Pleiades to fix graphical glitches.
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
   * Polished release - a few more tweaks, a few more optmizations and everything is running as fast science allows on the DS/DSi.

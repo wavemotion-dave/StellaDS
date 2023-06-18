@@ -1472,6 +1472,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
+    extern u8 myDataBusState;
     // ----------------------------------------------------------------
     // The undriven bits of the TIA are usually waht's last on the bus 
     // so we do a poor-man's emulation of that by setting the noise to 
@@ -1479,7 +1480,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     // games like Warlords or Haunted House play correctly. Conquest
     // of Mars is a special case... 
     // ----------------------------------------------------------------
-    uInt8 noise = (myCartInfo.special == SPEC_CONMARS) ? 0x02: (addr & 0x3F);
+    uInt8 noise = (myCartInfo.special == SPEC_CONMARS) ? 0x02: (myDataBusState & 0x3F);
     
     addr &= 0x000F;
     
