@@ -75,25 +75,16 @@ void CartridgeUA::install(System& system)
   page_access.directPokeBase = 0;
   page_access.device = this;
     
-  // Meltdown does a read from 0x2A0 which will cause an inadvertant bankswitch so we restrict this one...
-  if (myCartInfo.special == SPEC_MELTDOWN)
-  {
-        mySystem->setPageAccess((0x0220) >> shift, page_access);
-        mySystem->setPageAccess((0x0240) >> shift, page_access);
-  }
-  else  // Extended UA handling 
-  {
-      for(uInt16 a11 = 0; a11 <= 1; ++a11)
-        for(uInt16 a10 = 0; a10 <= 1; ++a10)
-          for(uInt16 a8 = 0; a8 <= 1; ++a8)
-            for(uInt16 a7 = 0; a7 <= 1; ++a7)
-            {
-              const uInt16 addr = (a11 << 11) + (a10 << 10) + (a8 << 8) + (a7 << 7);
+  for(uInt16 a11 = 0; a11 <= 1; ++a11)
+    for(uInt16 a10 = 0; a10 <= 1; ++a10)
+      for(uInt16 a8 = 0; a8 <= 1; ++a8)
+        for(uInt16 a7 = 0; a7 <= 1; ++a7)
+        {
+          const uInt16 addr = (a11 << 11) + (a10 << 10) + (a8 << 8) + (a7 << 7);
 
-              mySystem->setPageAccess((0x0220 | addr) >> shift, page_access);
-              mySystem->setPageAccess((0x0240 | addr) >> shift, page_access);
-            }
-  }
+          mySystem->setPageAccess((0x0220 | addr) >> shift, page_access);
+          mySystem->setPageAccess((0x0240 | addr) >> shift, page_access);
+        }
 
   // Install pages for bank 0
   bank(bUAswapped ? 1:0);

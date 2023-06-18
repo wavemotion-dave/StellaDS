@@ -1163,7 +1163,7 @@ const CartInfo table[] =
     {"345769d085113d57937198262af52298",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   48,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"6604f72a966ca6b2df6a94ee4a68eb82",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"049626cbfb1a5f7a5dc885a0c4bb758e",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
-    {"96e798995af6ed9d8601166d4350f276",  "??????", BANK_UA,   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Prototype) (1983).bin
+    {"96e798995af6ed9d8601166d4350f276",  "MELTDN", BANK_4K,   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Prototype) (1983).bin
     {"2cc3049b7feb8e92f1870f1972629757",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Atom Smasher (1983).bin
     {"6ceb7d6a54e9a5e62d26874d1cc88dbc",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Atom Smasher (1983).bin
     {"5f791d93ac95bdd8a691a65d665fb436",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Atom Smasher (1983).bin
@@ -2853,6 +2853,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       cartDriver = (myCartInfo.bus_driver ? 0:1);
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
       if (strcmp(myCartInfo.gameID, "SPPLUS") == 0) cartDriver = 0;  // SP+ requires the normal driver
+      if (strcmp(myCartInfo.gameID, "MELTDN") == 0) cartDriver = 0;  // Meltdown requires the normal driver
   }  
   else if (myCartInfo.banking == BANK_F8 && !isDSiMode())
   {
