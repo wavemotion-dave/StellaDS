@@ -67,7 +67,7 @@ struct CartInfo
   uInt8 thumbOptimize;
   uInt8 palette_type;
   uInt8 bus_driver;
-  uInt8 spare3_0;
+  uInt8 clearRAM;
   uInt8 spare4_0;
   uInt8 spare5_0;
   uInt8 spare6_0;

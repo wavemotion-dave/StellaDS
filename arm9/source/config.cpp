@@ -241,6 +241,8 @@ const struct options_t Game_Option_Table[2][20] =
     },
     {
         {"BUS DRIVER", 0, {"OPTIMIZED", "COMPATIBLE"},                                                                                                                                    &myCartInfo.bus_driver,          2},
+        {"6532 RAM",   0, {"RANDOM", "CLEAR (ZEROS)"},                                                                                                                                    &myCartInfo.clearRAM,            2},
+        
         {"GLOB PALET", 0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myGlobalCartInfo.palette,       3},
         {"GLOB SOUND", 0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myGlobalCartInfo.sound,         6},
         {NULL,         0, {"",      ""},                                                                                                                                                  NULL,                            1},

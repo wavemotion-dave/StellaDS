@@ -66,7 +66,7 @@ M6532::M6532(const Console& console)
 
   for(uInt32 t = 0; t < 128; ++t)
   {
-      myRAM[t] = random.next();
+      myRAM[t] = (myCartInfo.clearRAM ? 0x00:random.next());
   }
 
   // Initialize other data members

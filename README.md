@@ -208,7 +208,11 @@ V6.5d : 20-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Atom Smasher prototype so it doesn't crash on start (wrong bank scheme detected).
   * Fix for E7 banking so it handles 8K, 12K and 16K roms.
   * Fix for Flash Gordon to eliminate graphical glitches.
-  * Improved random() generator for more robust RAM clear / handling on startup.
+  * Fix for Elf Adventure prototype so it runs.
+  * Fix for Star Gunner so it doesn't glitch.
+  * Fix for Worlords graphical glitches.
+  * Fix for Worm War I graphical glitches.
+  * Improved random() generator for more robust RAM clear / handling on startup and added config to either randomize RAM or clear it at start.
   * Added new option to use the 'Compatible' BUS driver which will properly reflect the last bits on the bus in TIA reads (a few games rely on this - but it does slow down emulation slightly).
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
