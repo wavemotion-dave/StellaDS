@@ -26,9 +26,11 @@
 #include <iostream>
 
 uInt16 myCurrentSlice __attribute__((section(".dtcm"))) = 0;
+uInt8  myNumBanks __attribute__((section(".dtcm"))) = 0;
+uInt8  myLastBank __attribute__((section(".dtcm"))) = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-CartridgeE7::CartridgeE7(const uInt8* image)
+CartridgeE7::CartridgeE7(const uInt8* image, uInt16 size)
 {
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 16384; ++addr)
@@ -36,6 +38,9 @@ CartridgeE7::CartridgeE7(const uInt8* image)
     myImage[addr] = image[addr];
   }
 
+  myNumBanks = size / 2048;
+  myLastBank = myNumBanks-1;
+    
   // Initialize RAM with random values
   Random random;
   for(uInt32 i = 0; i < 2048; ++i)
@@ -87,7 +92,7 @@ void CartridgeE7::install(System& system)
   for(uInt32 j = 0x1A00; j < (0x1FE0U & ~mask); j += (1 << shift))
   {
     page_access.device = this;
-    page_access.directPeekBase = &myImage[7 * 2048 + (j & 0x07FF)];
+    page_access.directPeekBase = &myImage[myLastBank * 2048 + (j & 0x07FF)];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(j >> shift, page_access);
   }
@@ -97,6 +102,9 @@ void CartridgeE7::install(System& system)
   bank(0);
 }
 
+static const uInt8 e7_banks[] = {0, 1, 0, 1, 2, 3, 4, 5}; // For 12K carts, the banking is unusual based on the way the 8K/4K PROMS are used
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeE7::peek(uInt16 address)
 {
@@ -105,15 +113,24 @@ uInt8 CartridgeE7::peek(uInt16 address)
   if (address >= 0x0FE0)
   {
       // Switch banks if necessary
-      if(address <= 0x0FE7)
+      if ((myNumBanks == 4) && (address >= 0x0FE4) && (address <= 0x0FE7))
+      {
+        bank(address & 0x0003);
+      }
+      else if ((myNumBanks == 8) && (address >= 0x0FE0) && (address <= 0x0FE7))
       {
         bank(address & 0x0007);
       }
-      else if(address <= 0x0FEB)
+      else if ((myNumBanks == 6) && (address >= 0x0FE0) && (address <= 0x0FE7))
+      {
+        bank(e7_banks[address & 0x0007]);
+      }
+      else if((address >= 0x0FE8) && (address <= 0x0FEB))
       {
         bankRAM(address & 0x0003);
       }
-      return myImage[(7 << 11) + (address & 0x07FF)];
+
+      return myImage[(myLastBank << 11) + (address & 0x07FF)];
   }
   else
   {
@@ -121,7 +138,7 @@ uInt8 CartridgeE7::peek(uInt16 address)
       // this function should never be called for RAM because of the
       // way page accessing has been setup
       if (address & 0x0800)
-          return myImage[(7 << 11) + (address & 0x07FF)];
+          return myImage[(myLastBank << 11) + (address & 0x07FF)];
       else
           return myImage[myCurrentSlice + (address & 0x07FF)];
   }
@@ -135,11 +152,19 @@ void CartridgeE7::poke(uInt16 address, uInt8)
   if (address >= 0x0FE0)
   {
       // Switch banks if necessary
-      if (address <= 0x0FE7)
+      if ((myNumBanks == 4) && (address >= 0x0FE4) && (address <= 0x0FE7))
+      {
+        bank(address & 0x0003);
+      }
+      else if ((myNumBanks == 8) && (address >= 0x0FE0) && (address <= 0x0FE7))
       {
         bank(address & 0x0007);
       }
-      else if (address <= 0x0FEB)
+      else if ((myNumBanks == 6) && (address >= 0x0FE0) && (address <= 0x0FE7))
+      {
+        bank(e7_banks[address & 0x0007]);
+      }
+      else if((address >= 0x0FE8) && (address <= 0x0FEB))
       {
         bankRAM(address & 0x0003);
       }
@@ -157,7 +182,7 @@ void CartridgeE7::bank(uInt16 slice)
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Setup the page access methods for the current bank
-  if(slice != 7)
+  if(slice != myLastBank)
   {
     page_access.directPokeBase = 0;
 

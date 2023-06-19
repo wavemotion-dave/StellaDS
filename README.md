@@ -142,7 +142,7 @@ CDF/CDFJ    32K         8K (ARM assisted)
 CDFJ+       256K        32K (ARM assisted)
 E0          8K          --
 FA          12K         256 bytes
-E7          16K         1K + (4) 256 byte pages
+E7          8K/12K/16K  1K + (4) 256 byte pages
 F6          16K         -- 
 F6SC        16K         128B
 CTY         28K         64B  (+256 EEPROM)
@@ -202,10 +202,13 @@ Controls :
 
 Version History:
 -----------------------
-V6.5b : 18-Jun-2023 by Dave Bernazzani (wavemotion)
-  * Fix for MELTDOWN prototype so it doesn't crash.
+V6.5d : 20-Jun-2023 by Dave Bernazzani (wavemotion)
+  * Fix for Meltdown prototype so it doesn't crash.
   * Fix for Pleiades to fix graphical glitches.
   * Fix for Atom Smasher prototype so it doesn't crash on start (wrong bank scheme detected).
+  * Fix for E7 banking so it handles 8K, 12K and 16K roms.
+  * Fix for Flash Gordon to eliminate graphical glitches.
+  * Improved random() generator for more robust RAM clear / handling on startup.
   * Added new option to use the 'Compatible' BUS driver which will properly reflect the last bits on the bus in TIA reads (a few games rely on this - but it does slow down emulation slightly).
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)

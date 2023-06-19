@@ -30,6 +30,7 @@
 #include "CartDPC.hxx"
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
+#include "Random.hxx"
 
 uInt16 gPC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));  // Program Counter
 uInt8 A                                 __attribute__((section(".dtcm")));   // Accumulator
@@ -60,8 +61,12 @@ extern M6532        *theM6532;
 M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
     : M6502(systemCyclesPerProcessorCycle)
 {
+    Random random;
     NumberOfDistinctAccesses = 0;
     cartDriver = 0;
+    A = random.next() & 0xFF;
+    X = random.next() & 0xFF;
+    Y = random.next() & 0xFF;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

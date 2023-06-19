@@ -35,7 +35,7 @@ Random::Random()
   // If we haven't been seeded then seed ourself
   if(!ourSeeded)
   {
-	ourSeed = (uInt32)34553;
+	ourSeed = (uInt32) time(NULL);
     ourSeeded = true;
   }
 

@@ -64,7 +64,7 @@ class CartridgeE7 : public Cartridge
 
       @param image Pointer to the ROM image
     */
-    CartridgeE7(const uInt8* image);
+    CartridgeE7(const uInt8* image, uInt16 size);
  
     /**
       Destructor
