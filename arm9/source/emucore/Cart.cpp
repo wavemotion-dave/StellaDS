@@ -93,11 +93,12 @@ const CartInfo table[] =
     {"DefaultCart_NTSCxxxxxxxxxxxxxxxx",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Default Cart is 4k, full-scale, L-Joy and nothing special...
     {"DefaultCart_PALxxxxxxxxxxxxxxxxx",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Default PAL Cart is 4k, full-scale, L-Joy and nothing special...    
     {"2662d1a4bfdbd234f23957436c4fd5c0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // 1775 (v2) (David Weavil).bin    
+    {"941500699285bb60f782fa82ec7df078",  "1942xx", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  2},    // 1942 (32k).bin    
     {"0db4f4150fecf77e4ce72ca4d04c052f",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // 3-D Tic-Tac-Toe (1980).bin    
     {"e3600be9eb98146adafdc12d91323d0f",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   33,    245,    69,   0,  8},    // 3-D Tic-Tac-Toe (1980)(PAL).bin
     {"7b5207e68ee85b16998bea861987c690",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    93,   0,  8},    // 3-D Tic-Tac-Toe (1980)(PAL).bin
     {"8dc78243950eaf1b26fe42a732ea0c85",  "CELERY", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -5},    // 50celery67.bin
-    {"c50fbee08681f15d2d40dbc693d3a837",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A Star.bin
+    {"c50fbee08681f15d2d40dbc693d3a837",  "A-STAR", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A Star.bin
     {"cd5af682685cfecbc25a983e16b9d833",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A-Team (AKA Saboteur) (1984).bin
     {"c00734a2233ef683d9b6e622ac97a5c8",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // A-Team (AKA Saboteur) (1984).bin
     {"82ee056af81203af58092ff2e6cf079d",  "AARDVK", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    89,   0,  1},    // Aardvark (32k).bin    
@@ -136,7 +137,7 @@ const CartInfo table[] =
     {"4ca94fcd35a70cf1ee573d5a26be56a2",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  4},    // Alien Greed 2.bin
     {"f82e1558c956a9e7037531dd81103111",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  3},    // Alien Greed 3.bin
     {"297a7c0ade563a910bea068fab650925",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  0},    // Alien Greed 4.bin
-    {"a36824dcc3290746c0c205966e750b30",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  37,    210,    95,   0,  4},    // AlienRevenge2.bin
+    {"a36824dcc3290746c0c205966e750b30",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  37,    210,    95,   0,  1},    // AlienRevenge2.bin
     {"a4f741910a8dade004e61be5d5ef5d8b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // AlienAttack4-8-20.bin
     {"e1a51690792838c5c687da80cd764d78",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator People (1983).bin
     {"3aa47765f6184e64c41d1fa2b0b16ddc",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator32.bin
@@ -317,6 +318,8 @@ const CartInfo table[] =
     {"fd6e507b5df68beeeddeaf696b6828fa",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   47,    245,    98,   3, 16},    // Boxing (1980) (PAL).bin
     {"2c45c3eb819a797237820a1816c532eb",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   45,    245,    98,   3, 16},    // Boxing (1980) (PAL).bin
     {"7f07cd2e89dda5a3a90d3ab064bfd1f6",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   46,    245,    98,   3, 16},    // Boxing (1980) (PAL).bin
+    {"2c6caeb16c3102308015ca9f0a400365",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_1,  NTSC,  34,    210,   100,   0,  5},    // Bot&Tom2 (NTSC).bin
+    {"b966ad0c6252344162add8a3b1f8e3b4",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_1,  PAL,   34,    210,   100,   0,  5},    // Bot&Tom2 (PAL).bin    
     {"1cca2197d95c5a41f2add49a13738055",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Brain Games (1978).bin
     {"f280976d69d6e27a48506bd6bad11dcd",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Brain Games (1978) (PAL).bin
     {"f34f08e5eb96e500e851a80be3277a56",  "BRKOUT", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_1,  NTSC,  34,    200,   100,   0,  0},    // Breakout (1978).bin
@@ -920,14 +923,14 @@ const CartInfo table[] =
     {"e4e173eae89f847ffa3610ede9035b55",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // HEIST.bin
     {"260c787e8925bf3649c8aeae5b97dcc0",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Hell Driver (ITT Family Games, Thomas Jentzsch) (NTSC).bin
     {"aab840db22075aa0f6a6b83a597f8890",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    245,   100,   0,  1},    // Hell Driver (ITT Family Games) (PAL).bin
-    {"129d6c4cda0cd883faac4ae20499e0c2",  "HELWAY", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Hellway (Final)
+    {"129d6c4cda0cd883faac4ae20499e0c2",  "HELWAY", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    97,   0,  1},    // Hellway (Final)
     {"c52d9bbdc5530e1ef8e8ba7be692b01e",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Holey Moley (1984).bin
     {"078e08c1ddf839067b7bc7b88dc04ac1",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Holey Moley (joystick) Prototype.bin    
     {"0bfabf1e98bdb180643f35f2165995d0",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Home Run - Baseball (1978).bin
     {"328949872e454181223a80389d03c122",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Home Run - Baseball (1978) (PAL).bin
     {"ca7aaebd861a9ef47967d31c5a6c4555",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3, 13},    // Home Run - Baseball (1978) (PAL).bin
     {"9f901509f0474bf9760e6ebd80e629cd",  "??????", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Home Run - Baseball (Sears 4K).bin
-    {"a6fe2dd4b829ad267b2b3183e1650228",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Hugo Hunt stellaDemo8k_ntsc.bin    
+    {"a6fe2dd4b829ad267b2b3183e1650228",  "HUGOHU", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Hugo Hunt stellaDemo8k_ntsc.bin    
     {"7972e5101fa548b952d852db24ad6060",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   3,  0},    // Human Cannonball (1979).bin
     {"11330eaa5dd2629052fac37cfe1a0b7d",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   41,    245,    92,   3,  0},    // Human Cannonball (1979) (PAL).bin
     {"10a3cd14e5dcfdde6ff216a14ce7b7dd",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   41,    245,    92,   3,  0},    // Human Cannonball (1979) (PAL).bin
@@ -2857,19 +2860,24 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
   {
-      cartDriver = (myCartInfo.bus_driver ? 0:1);
+      cartDriver = 1;   // Assume we can use the optmized driver until proven otherwise
+      
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
       if (strcmp(myCartInfo.gameID, "SPPLUS") == 0) cartDriver = 0;  // SP+ requires the normal driver
       if (strcmp(myCartInfo.gameID, "MELTDN") == 0) cartDriver = 0;  // Meltdown requires the normal driver
       if (strcmp(myCartInfo.gameID, "FLASHG") == 0) cartDriver = 0;  // Flash Gordon requires the normal driver      
       if (strcmp(myCartInfo.gameID, "STAGUN") == 0) cartDriver = 0;  // Star Gunner requires the normal driver
       if (strcmp(myCartInfo.gameID, "WARLOR") == 0) cartDriver = 0;  // Worlords requires the normal driver      
-      if (strcmp(myCartInfo.gameID, "WORMW1") == 0) cartDriver = 0;  // Worm War I requires the normal driver      
+      if (strcmp(myCartInfo.gameID, "WORMW1") == 0) cartDriver = 0;  // Worm War I requires the normal driver
+      if (strcmp(myCartInfo.gameID, "A-STAR") == 0) cartDriver = 0;  // A-Star requires the normal driver      
+      if (strcmp(myCartInfo.gameID, "HUGOHU") == 0) cartDriver = 0;  // Hugo Hunt requires the normal driver
+      if (strcmp(myCartInfo.gameID, "OYSTRO") == 0) cartDriver = 0;  // Oystron requires the normal driver
       
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }  
   else if (myCartInfo.banking == BANK_F8 && !isDSiMode())
   {
-      cartDriver = 0;
+      cartDriver = 0; // Assume we must use the non-optmized driver but switch to the highly optmized driver for some games...
           
       // ---------------------------------------------------------------------------------
       // For a handful of F8 games, we can turn on special speed-hack banking handling...
@@ -2920,7 +2928,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.vblankZero = 0;
       } 
       
-      if (myCartInfo.bus_driver) cartDriver = 0;
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }
   else if ((myCartInfo.banking == BANK_F6) && !isDSiMode())
   {
@@ -2936,7 +2944,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.vblankZero = 0;
       }
       
-      if (myCartInfo.bus_driver) cartDriver = 0;
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }
   else if ((myCartInfo.banking == BANK_F4) && !isDSiMode())
   {
@@ -2967,12 +2975,12 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.vblankZero = 0;
       } 
       
-      if (myCartInfo.bus_driver) cartDriver = 0;
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }
   else if ((myCartInfo.banking == BANK_F8SC) && !isDSiMode())
   {
       cartDriver = 6;
-      if (myCartInfo.bus_driver) cartDriver = 0;
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }
   else if ((myCartInfo.banking == BANK_F6SC) && !isDSiMode())
   {
@@ -2997,9 +3005,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           myCartInfo.hBlankZero = 0; 
           myCartInfo.vblankZero = 0;
       } 
-      if (myCartInfo.bus_driver) cartDriver = 0;
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
   }
-  else // Use the normal drivers....
+  else // Use the normal driver....
   {
       cartDriver = 0;
   }

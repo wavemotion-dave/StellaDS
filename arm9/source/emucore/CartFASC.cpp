@@ -39,7 +39,7 @@ CartridgeFASC::CartridgeFASC(const uInt8* image)
   Random random;
   for(uInt32 i = 0; i < 256; ++i)
   {
-    myRAM[i] = random.next();
+    myRAM[i] = (myCartInfo.clearRAM ? 0x00:random.next());
   }
 }
  

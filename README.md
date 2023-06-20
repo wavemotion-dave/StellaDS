@@ -14,10 +14,10 @@ A solid level of compatibility to make games playable. Most games you remember f
 Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these are the good ones!). 
 
 * Full console emulation including Reset, Select, Difficulty Switches, TV Type. 
+* Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
-* Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * DPC+ Arm-Assisted games supported!
 * CDF/CDFJ/CDFJ+ Arm-Assisted games supported!
 * High score support with up to 10 scores for each game
@@ -27,7 +27,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 
 Copyright :
 -----------------------
-StellaDS Phoenix-Edition is Copyright (c) 2020-2022 Dave Bernazzani (wavemotion-dave)
+StellaDS Phoenix-Edition is Copyright (c) 2020-2023 Dave Bernazzani (wavemotion-dave)
 
 As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification,  are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
@@ -44,6 +44,7 @@ Known Issues :
 * Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it. If you are running from an R4 or similar flashcart, you will be running in DS compatibility mode (67MHz) and the ARM games will not run anywhere near full speed.
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
+* Edtris does not run. It is sensitive to accurate emulation of reads/writes which are not emulated well enough in this version of StellaDS.
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
@@ -202,7 +203,7 @@ Controls :
 
 Version History:
 -----------------------
-V6.5d : 20-Jun-2023 by Dave Bernazzani (wavemotion)
+V6.6 : 20-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Meltdown prototype so it doesn't crash.
   * Fix for Pleiades to fix graphical glitches.
   * Fix for Atom Smasher prototype so it doesn't crash on start (wrong bank scheme detected).
@@ -210,10 +211,12 @@ V6.5d : 20-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Flash Gordon to eliminate graphical glitches.
   * Fix for Elf Adventure prototype so it runs.
   * Fix for Star Gunner so it doesn't glitch.
-  * Fix for Worlords graphical glitches.
+  * Fix for Warlords graphical glitches.
   * Fix for Worm War I graphical glitches.
+  * Fix for A-Star not starting.
+  * Fix for Hugo Hunt graphical glitches.
   * Improved random() generator for more robust RAM clear / handling on startup and added config to either randomize RAM or clear it at start.
-  * Added new option to use the 'Compatible' BUS driver which will properly reflect the last bits on the bus in TIA reads (a few games rely on this - but it does slow down emulation slightly).
+  * Added new option to use the 'Compatible' BUS driver which will handles things like invalid reads and drives unused TIA bits (a few games rely on this - but it does slow down emulation slightly).
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
   * Polished release - a few more tweaks, a few more optmizations and everything is running as fast science allows on the DS/DSi.

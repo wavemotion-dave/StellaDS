@@ -42,7 +42,7 @@ CartridgeF4SC::CartridgeF4SC(const uInt8* image)
   Random random;
   for(uInt32 i = 0; i < 128; ++i)
   {
-    myRAM[128+i] = random.next();
+    myRAM[128+i] = (myCartInfo.clearRAM ? 0x00:random.next());
   }
 }
 
