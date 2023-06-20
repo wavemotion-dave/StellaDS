@@ -60,6 +60,7 @@
 #include "CartX07.hxx"
 #include "CartCTY.hxx"
 #include "MD5.hxx"
+#include "M6502.hxx"
 #include "../config.h"
 
 extern void dsWarnIncompatibileCart(void);
@@ -459,8 +460,8 @@ const CartInfo table[] =
     {"ec407a206b718a0a9f69b03e920a0185",  "COMRAI", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   49,    245,   100,   0,  0},    // Commando Raid (1982) (PAL).bin
     {"5864cab0bc21a60be3853b6bcd50c59f",  "COMRAI", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Commando Raid (1982) (PAL).bin
     {"5f316973ffd107f7ab9117e93f50e4bd",  "COMRAI", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   55,    245,   100,   0,  0},    // Commando Raid (1982) (PAL).bin
-    {"2c8835aed7f52a0da9ade5226ee5aa75",  "COMMIE", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    200,    95,   4,  0},    // Communist Mutants from Space (1982).bin
-    {"e2c89f270f72cd256ed667507fa038a2",  "COMMIE", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  PAL,   68,    240,   100,   4,  0},    // Communist Mutants from Space (1982) (PAL).bin
+    {"2c8835aed7f52a0da9ade5226ee5aa75",  "COMMIE", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  31,    200,    95,   4,  0},    // Communist Mutants from Space (1982).bin
+    {"e2c89f270f72cd256ed667507fa038a2",  "COMMIE", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_FF,    VB,   HB,  ANA1_0,  PAL,   68,    240,   100,   4,  0},    // Communist Mutants from Space (1982) (PAL).bin
     {"b98cc2c6f7a0f05176f74f0f62c45488",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // CompuMate.bin
     {"e7f005ddb6902c648de098511f6ae2e5",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // CompuMate (PAL).bin
     {"6a2c68f7a77736ba02c0f21a6ba0985b",  "??????", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  9},    // Computer Chess (1978).bin
@@ -2225,8 +2226,6 @@ const CartInfo table[] =
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2834,16 +2833,16 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // ----------------------------------------------------------------
   if (myCartInfo.special == SPEC_AR)
   {
-      cartDriver = 5;   
+      cartDriver = 5;   // AR carts must use the special driver
   }
   else if (myCartInfo.banking == BANK_DPC)
   {
-      cartDriver = 11;
+      cartDriver = 11;  // DPC carts must use the special driver
   }  
   else if (myCartInfo.banking == BANK_DPCP)
   {
       isCDFJPlus = false;
-      cartDriver = 8;
+      cartDriver = 8;   // DPC+ carts must use the special driver
   }  
   else if (myCartInfo.banking == BANK_CDFJ)
   {
@@ -2858,7 +2857,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
       }
   }
-  else if ((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K))
+  else if (((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K)) && !isDSiMode())
   {
       cartDriver = 1;   // Assume we can use the optmized driver until proven otherwise
       
@@ -3018,6 +3017,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (strcmp(myCartInfo.gameID, "REALTE") == 0) cartDriver = 2;     // Real Sports Tennis is F8
   if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
   if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
+    
+  // Conquest of Mars has a glitch unless the unused TIA pins are driven exactly so...
+  if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = 3; myDataBusState = 0x02;}    
 
   extern uInt8 bSafeThumb;
   bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...

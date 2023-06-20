@@ -240,7 +240,7 @@ const struct options_t Game_Option_Table[2][20] =
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     },
     {
-        {"BUS DRIVER", 0, {"OPTIMIZED", "COMPATIBLE"},                                                                                                                                    &myCartInfo.bus_driver,          2},
+        {"DS BUS MODE",0, {"OPTIMIZED", "COMPATIBLE"},                                                                                                                                    &myCartInfo.bus_driver,          2},
         {"6532 RAM",   0, {"RANDOM", "CLEAR (ZEROS)"},                                                                                                                                    &myCartInfo.clearRAM,            2},
         
         {"GLOB PALET", 0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myGlobalCartInfo.palette,       3},

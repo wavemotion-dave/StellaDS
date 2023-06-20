@@ -42,6 +42,7 @@ extern uInt8 I;
 extern uInt8 notZ;
 extern uInt8 C;
 extern uInt16 myExecutionStatus;
+extern uInt8 myDataBusState;
 
 
 /**

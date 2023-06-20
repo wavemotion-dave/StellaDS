@@ -93,7 +93,7 @@ inline uInt8 peek(uInt16 address)
   PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
   if(access.directPeekBase != 0) myDataBusState =  *(access.directPeekBase + (address & MY_PAGE_MASK));
   else myDataBusState = access.device->peek(address);
-    
+  
   return myDataBusState;
 }
 
@@ -642,7 +642,7 @@ inline uInt8 peek_AR(uInt16 address)
               }
           }
 
-          return myImage1[addr];
+          myDataBusState = myImage1[addr];
       }
       else // WE are in the lower bank
       {
@@ -663,30 +663,33 @@ inline uInt8 peek_AR(uInt16 address)
             if (myWriteEnabled) myWritePending = true;
           }
 
-          return myImage0[addr];
+          myDataBusState = myImage0[addr];
       }
+      return myDataBusState;      
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if ((address & 0x280) == 0x80) myDataBusState = myRAM[address & 0x7F];
+      else if (address & 0x200) myDataBusState = theM6532->peek(address);
+      else myDataBusState = theTIA->peek(address);
+      return myDataBusState;      
   }
-}
+}    
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void poke_AR(uInt16 address, uInt8 value)
 {
   NumberOfDistinctAccesses++;
-  gSystemCycles++;  
+  gSystemCycles++;
+  myDataBusState = value;
     
   // TIA access is common... filter that one out first...
   if (address < 0x80)
   {
       theTIA->poke(address, value);
-      return;
   }
-    
+  else 
   // --------------------------------------------------------------------
   // If not TIA access, we check if we are in the code area...
   // --------------------------------------------------------------------

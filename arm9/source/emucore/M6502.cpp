@@ -21,6 +21,7 @@
 //============================================================================
 
 #include "M6502.hxx"
+#include "Random.hxx"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
@@ -51,17 +52,24 @@ void M6502::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502::reset()
 {
+  Random random;
   // Clear the execution status flags
   myExecutionStatus = 0;
 
   // Set registers to default values
-  A = X = Y = 0;
+  A = random.next() & 0xFF;
+  X = random.next() & 0xFF;
+  Y = random.next() & 0xFF;
+    
   SP = 0xff;
   PS(0x20);
 
   // Load PC from the reset vector
   gPC = (uInt16)mySystem->peek(0xfffc) | ((uInt16)mySystem->peek(0xfffd) << 8);
   gPC &= MY_ADDR_MASK;
+    
+  // Set the data bus back to zero
+  myDataBusState = 0x02;    
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
