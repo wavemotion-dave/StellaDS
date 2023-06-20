@@ -2134,6 +2134,7 @@ const CartInfo table[] =
     {"ee659ae50e9df886ac4f8d7ad10d046a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Reflex (1983).bin
     {"297236cb9156be35679f83c4e38ee169",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Video Reflex (1983).bin
     {"6c128bc950fcbdbcaf0d99935da70156",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Volleyball (1983).bin
+    {"df9384d371588cd0400b29b03350eb62",  "VROOM!", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  28,    210,    88,   0, -4},    // VROOM! (v1.0) (PlusROM) (NTSC).bin    
     {"6041f400b45511aa3a69fab4b8fc8f41",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Wabbit (1982).bin
     {"45abcf993b65a9a1bbb49a019d5556dc",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    215,    73,   0,  0},    // Walker (NTSC by TJ).bin
     {"d175258b2973b917a05b46df4e1cf15d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   40,    240,    79,   0,  0},    // Walker (1983) (PAL).bin
