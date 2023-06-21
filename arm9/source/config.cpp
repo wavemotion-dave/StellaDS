@@ -158,6 +158,9 @@ void LoadConfig(void)
                 {
                     allConfigs.cart[slot].frame_mode = MODE_FF;
                 }
+                
+                // With version 9 we want the bus_driver to reflect the DS model in use
+                allConfigs.cart[slot].bus_driver = (isDSiMode() ? 1:0);
             }
                 
             allConfigs.global.palette = 0;
@@ -170,6 +173,18 @@ void LoadConfig(void)
             allConfigs.global.global6 = 1;
             allConfigs.global.global7 = 1;
             allConfigs.global.global8 = 2;
+            allConfigs.config_ver = CONFIG_VER; // Patch the version number
+            myGlobalCartInfo = allConfigs.global;
+            SaveConfig(FALSE);
+        }
+        else if (allConfigs.config_ver == 0x0008) // One time upgrade
+        {
+            for (short slot=0; slot<MAX_CONFIGS; slot++)
+            {
+                // With version 9 we want the bus_driver to reflect the DS model in use
+                allConfigs.cart[slot].bus_driver = (isDSiMode() ? 1:0);
+            }
+                
             allConfigs.config_ver = CONFIG_VER; // Patch the version number
             myGlobalCartInfo = allConfigs.global;
             SaveConfig(FALSE);
@@ -240,7 +255,7 @@ const struct options_t Game_Option_Table[2][20] =
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     },
     {
-        {"DS BUS MODE",0, {"OPTIMIZED", "COMPATIBLE"},                                                                                                                                    &myCartInfo.bus_driver,          2},
+        {"BUS MODE",   0, {"OPTIMIZED", "ACCURATE"},                                                                                                                                      &myCartInfo.bus_driver,          2},
         {"6532 RAM",   0, {"RANDOM", "CLEAR (ZEROS)"},                                                                                                                                    &myCartInfo.clearRAM,            2},
         
         {"GLOB PALET", 0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myGlobalCartInfo.palette,       3},

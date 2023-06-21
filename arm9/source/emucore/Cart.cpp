@@ -2356,7 +2356,7 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.xButton = BUTTON_FIRE;
   myCartInfo.yButton = BUTTON_FIRE;
 
-  myCartInfo.bus_driver = 0;
+  myCartInfo.bus_driver = (isDSiMode() ? 1:0);
   myCartInfo.clearRAM = 0;
   myCartInfo.spare4_0 = 0;
   myCartInfo.spare5_0 = 0;
@@ -2858,7 +2858,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
       }
   }
-  else if (((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K)) && !isDSiMode())
+  else if (((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K)))
   {
       cartDriver = 1;   // Assume we can use the optmized driver until proven otherwise
       
@@ -2873,9 +2873,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "HUGOHU") == 0) cartDriver = 0;  // Hugo Hunt requires the normal driver
       if (strcmp(myCartInfo.gameID, "OYSTRO") == 0) cartDriver = 0;  // Oystron requires the normal driver
       
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }  
-  else if (myCartInfo.banking == BANK_F8 && !isDSiMode())
+  else if (myCartInfo.banking == BANK_F8)
   {
       cartDriver = 0; // Assume we must use the non-optmized driver but switch to the highly optmized driver for some games...
           
@@ -2923,14 +2923,17 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       if ((strcmp(myCartInfo.gameID, "JUNGLE") == 0) || (strcmp(myCartInfo.gameID, "GALAXY") == 0) || (strcmp(myCartInfo.gameID, "BAZONE") == 0))
       {
-          // Small speed-up
-          myCartInfo.hBlankZero = 0; 
-          myCartInfo.vblankZero = 0;
+          if (!isDSiMode())
+          {
+              // Small speed-up
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+          }
       } 
       
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
-  else if ((myCartInfo.banking == BANK_F6) && !isDSiMode())
+  else if ((myCartInfo.banking == BANK_F6))
   {
       // ------------------------------------------------------------------------------------
       // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
@@ -2939,14 +2942,17 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "CONMAR") == 0) || (strcmp(myCartInfo.gameID, "MANGOS") == 0) || (strcmp(myCartInfo.gameID, "FROSTY") == 0))
       {
-          // Small speed-up
-          myCartInfo.hBlankZero = 0; 
-          myCartInfo.vblankZero = 0;
+          if (!isDSiMode())
+          {
+              // Small speed-up
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+          }
       }
       
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
-  else if ((myCartInfo.banking == BANK_F4) && !isDSiMode())
+  else if ((myCartInfo.banking == BANK_F4))
   {
       // ------------------------------------------------------------------------------------
       // For F4 games we will utilize a special optmized F4 driver directly in M6502Low.cpp
@@ -2970,19 +2976,22 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           (strcmp(myCartInfo.gameID, "SPGAME") == 0) || (strcmp(myCartInfo.gameID, "DUNGEN") == 0) || (strcmp(myCartInfo.gameID, "KOCRUZ") == 0) ||
           (strcmp(myCartInfo.gameID, "UPPLUS") == 0) || (strcmp(myCartInfo.gameID, "PRIRES") == 0))
       {
-          // Small speed-up
-          myCartInfo.hBlankZero = 0; 
-          myCartInfo.vblankZero = 0;
+          if (!isDSiMode())
+          {
+              // Small speed-up
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+          }
       } 
       
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
-  else if ((myCartInfo.banking == BANK_F8SC) && !isDSiMode())
+  else if ((myCartInfo.banking == BANK_F8SC))
   {
       cartDriver = 6;
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
-  else if ((myCartInfo.banking == BANK_F6SC) && !isDSiMode())
+  else if ((myCartInfo.banking == BANK_F6SC))
   {
       cartDriver = 0;
       
@@ -3001,11 +3010,14 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if ((strcmp(myCartInfo.gameID, "DIGDUG") == 0) || (strcmp(myCartInfo.gameID, "JRPACM") == 0) || (strcmp(myCartInfo.gameID, "MIPEDE") == 0) ||
           (strcmp(myCartInfo.gameID, "SPRINT") == 0))
       {
-          // Small speed-up
-          myCartInfo.hBlankZero = 0; 
-          myCartInfo.vblankZero = 0;
+          if (!isDSiMode())
+          {
+              // Small speed-up
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+          }
       } 
-      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'compatible' driver force it to be used...
+      if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
   else // Use the normal driver....
   {

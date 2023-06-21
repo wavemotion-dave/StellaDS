@@ -18,8 +18,8 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
 * Savekey Support with backing 32K EEPROM
 * FA2 and Cherity supported with backing EEPROM support
-* DPC+ Arm-Assisted games supported!
-* CDF/CDFJ/CDFJ+ Arm-Assisted games supported!
+* DPC+ Arm-Assisted games supported! (DSi or above needed for full speed)
+* CDF/CDFJ/CDFJ+ Arm-Assisted games supported! (DSi or above needed for full speed)
 * High score support with up to 10 scores for each game
 * Manuals for more than 100 of the common games included
 * Keypad overlay for Star Raiders
@@ -44,7 +44,6 @@ Known Issues :
 * Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it. If you are running from an R4 or similar flashcart, you will be running in DS compatibility mode (67MHz) and the ARM games will not run anywhere near full speed.
 * Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
-* Edtris does not run. It is sensitive to accurate emulation of reads/writes which are not emulated well enough in this version of StellaDS.
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
@@ -96,7 +95,8 @@ press the START button to save out your configuration after making changes:
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
 * ARM THUMB:       SAFE is most accurate but slows down processing. Optmized is faster and recommended for DPC+ games. Optmized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
-* BUS Driver:      Normally set to OPTMIZED so we run as fast as possible but COMPATIBLE is needed for a few games that must have the unused bits of the TIA driven to the last value on the data bus. This will slow down emulation a bit (fine for DSi and above).
+* BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optmized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
+* RAM Clear        Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
 
 There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
 
@@ -203,6 +203,11 @@ Controls :
 
 Version History:
 -----------------------
+V6.6b : 21-Jun-2023 by Dave Bernazzani (wavemotion)
+  * DSi now defaults to the 'Accurate' BUS MODE for maximum compatibility.
+  * Improved data bus handling for undriven pins in Tia::Peek() for improved compatibility.
+  * A few more tweaks to a few more games to make them as accurate as possible.
+  
 V6.6 : 20-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Meltdown prototype so it doesn't crash.
   * Fix for Pleiades to fix graphical glitches.
