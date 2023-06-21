@@ -37,7 +37,7 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Where does this fit in with the mainline Stella? :
 -----------------------
-In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many areas that closely mimic the real hardware. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS basline is probably closest to mainline Stella 3.7.5 with fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). In addition, some optmizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totaly on me - be happy you didn't pay anything for it!
+In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many areas that closely mimic the real hardware. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS baseline is probably closest to mainline Stella 3.7.5 with fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). In addition, some optimizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totally on me - be happy you didn't pay anything for it!
 
 Known Issues :
 -----------------------
@@ -49,7 +49,7 @@ Known Issues :
 
 Strongest Recommendation:
 -----------------------
-If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will usually be too great which is why the full gammut of Atari games will always render best on an XL/LL screen.
+If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will usually be too great which is why the full gamut of Atari games will always render best on an XL/LL screen.
 
 Installation:
 -----------------------
@@ -58,11 +58,11 @@ Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will a
 Game Autodetection:
 -----------------------
 The Atari 2600 utilizes a growing number of bankswitching scheme. StellaDS 
-currently supports 36 differnet bank switching schemes (see full list further below) - 
+currently supports 36 different bank switching schemes (see full list further below) - 
 and it usually will auto-detect the right one. If for some reason it does not, you 
 can go into the configuration (gear icon) and manually select a new scheme. Be 
 sure to hit START to save your config and then try re-loading the game (the bank
-switching requires a reload of the game). In the catestrophic event that the detected
+switching requires a reload of the game). In the catastrophic event that the detected
 bankswitching scheme causes the emulation to crash, you can try loading the
 game using the Y (instead of A) button which will load the game but NOT start
 it running... this should let you go in and adjust the back switching scheme
@@ -94,8 +94,8 @@ press the START button to save out your configuration after making changes:
 * Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
-* ARM THUMB:       SAFE is most accurate but slows down processing. Optmized is faster and recommended for DPC+ games. Optmized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
-* BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optmized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
+* ARM THUMB:       SAFE is most accurate but slows down processing. Optimized is faster and recommended for DPC+ games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
+* BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optimized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
 * RAM Clear        Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
 
 There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
@@ -115,7 +115,7 @@ games, 99% of all games were developed as NTSC for the American Market and
 only later ported to a PAL system for our European friends. Some game makers
 did a good job (Imagic). Some did an OK job (Atari). And some did not do well
 (Activision). That means that some games just don't run at the right speed 
-for the PAL market - since Activision did not optiize for PAL, the games run
+for the PAL market - since Activision did not optimize for PAL, the games run
 17% slower due to the frame rate difference. To make matters worse, the main
 benefit of PAL is that the programmer has more scanlines to work with but the
 DS only has 192 pixel rows... so with PAL we must compress the image and
@@ -224,9 +224,9 @@ V6.6 : 20-Jun-2023 by Dave Bernazzani (wavemotion)
   * Added new option to use the 'Compatible' BUS driver which will handles things like invalid reads and drives unused TIA bits (a few games rely on this - but it does slow down emulation slightly).
   
 V6.5 : 21-Dec-2022 by Dave Bernazzani (wavemotion)
-  * Polished release - a few more tweaks, a few more optmizations and everything is running as fast science allows on the DS/DSi.
+  * Polished release - a few more tweaks, a few more optimizations and everything is running as fast science allows on the DS/DSi.
   * Removed "ghost read" and "ghost writes" on the 6502 emulation for a bit more speed.
-  * Use of gcc "likely/unlikely" in a few key spots to help the compiler optmize.
+  * Use of gcc "likely/unlikely" in a few key spots to help the compiler optimize.
 
 V6.4 : 16-Dec-2022 by Dave Bernazzani (wavemotion)
   * Reduced stack memory so we don't crash when first creating a Savekey EE file.
