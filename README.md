@@ -7,6 +7,8 @@ If you want to launch the games directly via Twilight Menu++, you will need the 
 
 _**Have you played Atari today?!**_
 
+![StellaDS](https://github.com/wavemotion-dave/StellaDS/blob/master/arm9/gfx/bgTop.png)
+
 Features :
 -----------------------
 A solid level of compatibility to make games playable. Most games you remember fondly run full speed on a DSi in native 134MHz mode. For the older DS-LITE and DS-PHAT, many of the simple 8k, 4k and 2k games will play perfectly More sophisticated bank-switching schemes really require the DSi for the best experience.
@@ -15,15 +17,15 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 
 * Full console emulation including Reset, Select, Difficulty Switches, TV Type. 
 * Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
-* Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more
-* Savekey Support with backing 32K EEPROM
-* FA2 and Cherity supported with backing EEPROM support
-* DPC+ Arm-Assisted games supported! (DSi or above needed for full speed)
-* CDF/CDFJ/CDFJ+ Arm-Assisted games supported! (DSi or above needed for full speed)
-* High score support with up to 10 scores for each game
-* Manuals for more than 100 of the common games included
-* Keypad overlay for Star Raiders
-* Frame Blending to help smooth out flicker
+* Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more.
+* Savekey Support with backing 32K EEPROM.
+* FA2 and Cherity supported with backing EEPROM support.
+* DPC+ Arm-Assisted games supported! (DSi or above needed for full speed).
+* CDF/CDFJ/CDFJ+ Arm-Assisted games supported! (DSi or above needed for full speed).
+* High score support with up to 10 scores for each game.
+* Manuals included for more than 100 of the common games.
+* Keypad overlay for Star Raiders.
+* Frame Blending to help smooth out flicker.
 
 Copyright :
 -----------------------
@@ -35,9 +37,7 @@ The StellaDS emulator is offered as-is, without any warranty.
 
 Where does this fit in with the mainline Stella? :
 -----------------------
-In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many areas that closely mimic the real hardware. 
-That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS basline is probably closest to mainline Stella 3.7.5 with fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 
-as of the time of this writing). The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned!
+In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many areas that closely mimic the real hardware. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS basline is probably closest to mainline Stella 3.7.5 with fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). In addition, some optmizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totaly on me - be happy you didn't pay anything for it!
 
 Known Issues :
 -----------------------
