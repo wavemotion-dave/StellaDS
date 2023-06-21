@@ -96,7 +96,7 @@ press the START button to save out your configuration after making changes:
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
 * ARM THUMB:       SAFE is most accurate but slows down processing. Optimized is faster and recommended for DPC+ games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
 * BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optimized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
-* RAM Clear        Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
+* RAM Clear:       Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
 
 There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
 
