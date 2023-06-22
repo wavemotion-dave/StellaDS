@@ -1476,9 +1476,8 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     // The undriven bits of the TIA are usually what's last on the bus 
     // so we do a poor-man's emulation of that by setting the noise to 
     // what we last read/wrote on the data bus. It's not perfect.
-    // Conquest of Mars is a special case and myDataBusState = 0x02.
+    // Conquest of Mars is a special case where myDataBusState = 0x02.
     // ----------------------------------------------------------------
-    //uInt8 noise = (myCartInfo.special == SPEC_CONMARS) ? 0x02: (myDataBusState & 0x3F);
     uInt8 noise = (myDataBusState & 0x3F);
     
     addr &= 0x000F;

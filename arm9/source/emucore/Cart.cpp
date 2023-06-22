@@ -3029,7 +3029,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // --------------------------------------------------------------------------------------------------------
   if (strcmp(myCartInfo.gameID, "REALTE") == 0) cartDriver = 2;     // Real Sports Tennis is F8
   if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
-  if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 4;     // Sword of Surtr is F4 (won't work with the full driver... don't know why yet)
+  if (strcmp(myCartInfo.gameID, "SSURTR") == 0) cartDriver = 0;     // Sword of Surtr needs the normal driver
     
   // Conquest of Mars has a glitch unless the unused TIA pins are driven exactly so...
   if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = 3; myDataBusState = 0x02;}    

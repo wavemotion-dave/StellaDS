@@ -203,6 +203,9 @@ Controls :
 
 Version History:
 -----------------------
+V6.6c : ??-Jun-2023 by Dave Bernazzani (wavemotion)
+  * Fix for Sword of Surtr so it runs correctly.
+
 V6.6b : 21-Jun-2023 by Dave Bernazzani (wavemotion)
   * DSi now defaults to the 'Accurate' BUS MODE for maximum compatibility.
   * Improved data bus handling for undriven pins in Tia::Peek() for improved compatibility.
