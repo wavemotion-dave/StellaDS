@@ -240,10 +240,7 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
 
     default:
     {    
-#ifdef DEBUG_ACCESSES
-      cerr << "BAD M6532 Peek: " << hex << addr << endl;
-#endif
-      return 0;
+      return 0x00;
     }
   }
 }
@@ -323,22 +320,6 @@ ITCM_CODE void M6532::poke(uInt16 addr, uInt8 value)
     myIntervalShift = 10;
     myCyclesWhenTimerSet = gSystemCycles;
     myTimerReadAfterInterrupt = false;
-  }
-  else if((addr & 0x14) == 0x04)    // Write Edge Detect Control
-  {
-#ifdef DEBUG_ACCESSES
-    cerr << "M6532 Poke (Write Edge Detect): "
-        << ((addr & 0x02) ? "PA7 enabled" : "PA7 disabled")
-        << ", "
-        << ((addr & 0x01) ? "Positive edge" : "Negative edge")
-        << endl;
-#endif
-  }
-  else
-  {
-#ifdef DEBUG_ACCESSES
-    cerr << "BAD M6532 Poke: " << hex << addr << endl;
-#endif
   }
 }
 

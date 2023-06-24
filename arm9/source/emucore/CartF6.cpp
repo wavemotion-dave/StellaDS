@@ -20,6 +20,7 @@
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
 
+#include <nds.h>
 #include <assert.h>
 #include "CartF6.hxx"
 #include "System.hxx"
@@ -159,7 +160,7 @@ void CartridgeF6::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeF6::bank(uInt16 bank)
+inline  void CartridgeF6::bank(uInt16 bank)
 { 
   // Setup the page access methods for the current bank
   uInt16 access_num = 0x1000 >> MY_PAGE_SHIFT;

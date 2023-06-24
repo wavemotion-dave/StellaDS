@@ -199,14 +199,14 @@ Controls :
  * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
  * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
+ * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card)
  * Use stylus on buttons for other icon-based actions on bottom screen.
 
 Version History:
 -----------------------
-V6.6c : ??-Jun-2023 by Dave Bernazzani (wavemotion)
+V6.7 : 24-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Sword of Surtr so it runs correctly.
-
-V6.6b : 21-Jun-2023 by Dave Bernazzani (wavemotion)
+  * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card)
   * DSi now defaults to the 'Accurate' BUS MODE for maximum compatibility.
   * Improved data bus handling for undriven pins in Tia::Peek() for improved compatibility.
   * A few more tweaks to a few more games to make them as accurate as possible.

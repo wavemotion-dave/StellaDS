@@ -23,7 +23,6 @@
 #ifndef M6502_HXX
 #define M6502_HXX
 
-class D6502;
 class M6502;
 
 #include "bspf.hxx"
@@ -55,23 +54,6 @@ extern uInt8 myDataBusState;
 */
 class M6502
 {
-  public:
-    /**
-      The 6502 debugger class is a friend who needs special access
-    */
-    friend class D6502;
-
-  public:
-    /**
-      Enumeration of the 6502 addressing modes
-    */
-    enum AddressingMode 
-    {
-      Absolute, AbsoluteX, AbsoluteY, Immediate, Implied,
-      Indirect, IndirectX, IndirectY, Invalid, Relative,
-      Zero, ZeroX, ZeroY
-    };
-
   public:
     /**
       Create a new 6502 microprocessor with the specified cycle 
@@ -151,15 +133,6 @@ class M6502
       return myExecutionStatus & FatalErrorBit;
     }
   
-  public:
-    /**
-      Overload the ostream output operator for addressing modes.
-
-      @param out The stream to output the addressing mode to
-      @param mode The addressing mode to output
-    */
-    friend ostream& operator<<(ostream& out, const AddressingMode& mode);
-
   protected:
     /**
       Get the 8-bit value of the Processor Status register.

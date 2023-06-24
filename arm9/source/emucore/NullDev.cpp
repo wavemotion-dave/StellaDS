@@ -52,13 +52,13 @@ void NullDevice::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 NullDevice::peek(uInt16 address)
 {
-  cerr << hex << "NullDevice: peek(" << address << ")" << endl;
   return 0;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void NullDevice::poke(uInt16 address, uInt8 value)
 {
-  cerr << hex << "NullDevice: poke(" << address << "," << value << ")" << endl;
+  // Do nothing
+  return;
 }
 

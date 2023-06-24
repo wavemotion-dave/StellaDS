@@ -20,6 +20,7 @@
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
 
+#include <nds.h>
 #include <assert.h>
 #include "CartF6SC.hxx"
 #include "Random.hxx"
@@ -109,7 +110,7 @@ void CartridgeF6SC::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeF6SC::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeF6SC::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
@@ -147,7 +148,7 @@ uInt8 CartridgeF6SC::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeF6SC::poke(uInt16 address, uInt8)
+ITCM_CODE void CartridgeF6SC::poke(uInt16 address, uInt8)
 {
   address = address & 0x0FFF;
 
@@ -184,7 +185,7 @@ void CartridgeF6SC::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void CartridgeF6SC::bank(uInt16 bank)
+ITCM_CODE void CartridgeF6SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;

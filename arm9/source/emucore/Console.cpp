@@ -157,7 +157,6 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const Console& console)
 {
-  // TODO: Write this method
   assert(false);
 }
  

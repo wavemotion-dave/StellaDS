@@ -20,6 +20,7 @@
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
 
+#include <nds.h>
 #include <assert.h>
 #include "CartF8.hxx"
 #include "System.hxx"
@@ -89,7 +90,7 @@ void CartridgeF8::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 CartridgeF8::peek(uInt16 address)
+ITCM_CODE uInt8 CartridgeF8::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
@@ -111,7 +112,7 @@ uInt8 CartridgeF8::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeF8::poke(uInt16 address, uInt8)
+ITCM_CODE void CartridgeF8::poke(uInt16 address, uInt8)
 {
   address = address & 0x0FFF;
 
@@ -132,7 +133,7 @@ void CartridgeF8::poke(uInt16 address, uInt8)
 
 extern uInt16 f8_bankbit;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeF8::bank(uInt16 bank)
+ITCM_CODE void CartridgeF8::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;

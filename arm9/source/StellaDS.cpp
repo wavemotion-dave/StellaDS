@@ -1,7 +1,7 @@
 // =====================================================================================================
 // Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
 //
-// Copyright (c) 2020-2022 by Dave Bernazzani
+// Copyright (c) 2020-2023 by Dave Bernazzani
 //
 // Copying and distribution of this emulator, it's source code and associated 
 // readme files, with or without modification, are permitted in any medium without 
@@ -45,8 +45,9 @@
 #include "highscore.h"
 #include "config.h"
 #include "instructions.h"
+#include "screenshot.h"
 
-#define VERSION "6.5"
+#define VERSION "6.7"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
@@ -1476,6 +1477,18 @@ ITCM_CODE void dsMainLoop(void)
                     // Allow horizontal scaling ... not hugely needed but for some games that don't utilize the entire horizontal width this can be used to zoom in a bit
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
                     if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
+                    
+                    if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L))
+                    {
+                        static u8 dampen = 0;
+                        if (++dampen == 5) 
+                        {
+                            dsPrintValue(12,0,0, (char*)"SNAPSHOT");
+                            (void)screenshot();
+                            WAITVBL;WAITVBL;
+                            dsPrintValue(12,0,0, (char*)"        ");
+                        }
+                    } else dampen=0;
                     
                     bScreenRefresh = 1;
                 }
