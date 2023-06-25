@@ -49,7 +49,7 @@ Known Issues :
 
 Strongest Recommendation:
 -----------------------
-If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending (recommend try Half Blend Mode as it's the least CPU intensive). This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will usually be too great which is why the full gamut of Atari games will always render best on an XL/LL screen.
+If you're a fan of classic emulators on the DS/DSi, I urge you to get a DSi XL (USA) or LL (Japan) version. Or a 2DS/3DS if you can get homebrews to run on those. The reason is that the original DSi has a fast LCD fade and as such some of the games will be a little hard to see or appear to flicker due to the way the original Atari game is coded. For a real TV or a slow LCD fade, this looks much better. StellaDS includes an option to reduce the flicker - in configuration you can turn on Blending. This comes at a performance pentaly - for many games, the DSi can handle that penalty. For the ARM-Assisted games (DPC+, CDF/CDFJ/CDFJ+) that penalty will often be too great which is why the full gamut of Atari games will always render best on an XL/LL screen.
 
 Installation:
 -----------------------
@@ -105,8 +105,8 @@ Screen Settings:
 If you are only running Classic games - the default screen settings should be fine. But if you're running some of the newer homebrews created over the past decade, 
 you will want to configure your screen properly.  For many games, you simply can't fit all the content on the 192 pixel lines of a Nintendo DS/DSi. For these you
 can either cut off the top, bottom or scale the screen. When these options aren't enough, you can set your Y offset so that some of the screen is cut-off top or bottom and then
-you can map one of the DS buttons to 'SCREEN PAN UP' or 'SCREEN PAN DOWN' which will momentarily pan up or down. This works great for Champ Games offerings where the large score
-display is normally off-screen while you play and then you can tap a button to briefly see it. 
+you can map one of the DS buttons to 'SCREEN PAN UP' or 'SCREEN PAN DOWN' which will momentarily pan up or down. This works great for Champ Games offerings where the score
+display is normally off-screen while you play and then you can tap a button to briefly see it.
 
 PAL vs NTSC:
 -----------------------
@@ -177,7 +177,7 @@ Thanks and Credits :
 -----------------------
 * To Bradford W. Mott and Stephen Anthony and various contributors for Stella (http://stella.sourceforge.net/)
 * To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld (https://github.com/DS-Homebrew/TWiLightMenu)
-* Thanks Wintermute for devkitpro and libnds (http://www.devkitpro.org)
+* To Wintermute for devkitpro and libnds (http://www.devkitpro.org)
 * To Alekmaul and The Chuckster for porting Stella to the DS.
 
 How to use StellaDS :
