@@ -656,7 +656,7 @@ const CartInfo table[] =
     {"8febdd9142960d084ab6eeb1d3e88969",  "EXTRAT", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,   100,   0,  0},    // E.T. - The Extra-Terrestrial (1982) (PAL).bin
     {"033e21521e0bf4e54e8816873943406d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    210,    88,   0,  0},    // Earth Dies Screaming (1983).bin
     {"2c0dc885d5ede94aa664bf3081add34e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   53,    245,    88,   0,  3},    // Earth Dies Screaming (1983) (PAL).bin    
-    {"683dc64ef7316c13ba04ee4398e2b93a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Edtris (1995).bin
+    {"e1d75bcfbbb4e4d5e8d5af62e25ffba2",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Edtris (1995).bin
     {"db41f3ffc90cbb22a289386a85c524fe",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Egg Drop (2011) (Mr. Podoboo).bin    
     {"42b2c3b4545f1499a083cfbc4a3b7640",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // Eggomania (1982).bin
     {"5f560837396387455c9dcb05cdd4b053",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  8},    // Eggomania (1982).bin
@@ -2498,7 +2498,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       imagePatch[0x69] = 0x21;
   }
 
-  // Patch Big Bird Egg Catch for Joystick Use (keypad logic fails emulation)
+  // Patch Big Bird Egg Catch so we can just use the joysticks which are easier to control
   if (myCartInfo.special == SPEC_BIGBIRD)
   {
       uInt8* imagePatch = (uInt8*)(image);
@@ -2515,7 +2515,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
     
     
-  // Patch Alpha Beam with Ernie (keypad logic fails emulation)
+  // Patch Alpha Beam with Ernie  so we can just use the joysticks which are easier to control
   if (myCartInfo.special == SPEC_ALPHABM)
   {
       uInt8* imagePatch = (uInt8*)(image);
@@ -2648,9 +2648,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       imagePatch[0x1C6F] = 0x05;
       imagePatch[0x1C70] = 0xD7;
   }
+
     
-    
-  // Patch Cookie Monster Munch (keypad logic fails emulation)
+  // Patch Cookie Monster Munch so we can just use the joysticks which are easier to control
   if (myCartInfo.special == SPEC_COOKIEM)
   {
       uInt8* imagePatch = (uInt8*)(image);
@@ -2710,6 +2710,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       imagePatch[0x19EC] = 0x85;
       imagePatch[0x19ED] = 0x01;
   }
+    
     
   // If we didn't find the type in the table then guess it based on size
   if(!bFound)

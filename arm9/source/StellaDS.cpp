@@ -1507,6 +1507,7 @@ ITCM_CODE void dsMainLoop(void)
                 // -----------------------------------------------------------------------
                 // Check the UI keys... this is for offset/scale shift of the display.
                 // -----------------------------------------------------------------------
+                static u16 ss_dampen = 0;
                 if (keys_pressed & (KEY_R | KEY_L))
                 {
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_UP))   myCartInfo.yOffset++;
@@ -1524,18 +1525,17 @@ ITCM_CODE void dsMainLoop(void)
                     
                     if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L))
                     {
-                        static u8 dampen = 0;
-                        if (++dampen == 5) 
+                        if (++ss_dampen == 5) 
                         {
                             dsPrintValue(12,0,0, (char*)"SNAPSHOT");
                             (void)screenshot();
                             WAITVBL;WAITVBL;
                             dsPrintValue(12,0,0, (char*)"        ");
                         }
-                    } else dampen=0;
+                    }
                     
                     bScreenRefresh = 1;
-                }
+                } else ss_dampen = 0;
 
                 
                 if (keys_pressed != last_keys_pressed)

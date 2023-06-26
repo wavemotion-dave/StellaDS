@@ -201,9 +201,30 @@ Controls :
  * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
  * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card)
  * Use stylus on buttons for other icon-based actions on bottom screen.
+ 
+Compile Instructions :
+-----------------------
+I'm using the following:
+* devkitpro-pacman version 6.0.1-2
+* gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+* libnds 1.8.2-1
+
+I use Ubuntu and the Pacman repositories (devkitpro-pacman version 6.0.1-2).  I'm told it should also build under 
+Windows but I've never done it and don't know how.
+
+If you try to build on a newer gcc, you will likely find it bloats the code a bit and you'll run out of ITCM_CODE memory.
+If this happens, first try pulling some of the ITCM_CODE declarations in and around the Antic.c module (try to leave
+the one in CPU as it has a big impact on performance).  
 
 Version History:
 -----------------------
+V6.xx : ??-Jun-2023 by Dave Bernazzani (wavemotion)
+  * Improved RSYNC so Extra Terrestrials (1984 by Skill Screen Games) works.
+  * Improved keypad handling so Magicard and similar keypad/keyboard game work.
+  * Added a few of the ultra-rare games discovered in the last decade to the internal database.
+  * Starpath Supercharger (AR) carts now clear RAM by default (prevent lock-ups).
+  * Added Dual Keypad/Keyboards for the few game that need them (BASIC, Magicard mostly).
+
 V6.7 : 24-Jun-2023 by Dave Bernazzani (wavemotion)
   * Fix for Sword of Surtr so it runs correctly.
   * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card)
