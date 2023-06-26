@@ -1741,7 +1741,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
 
-    case 0x02:    // Wait for leading edge of HBLANK
+    case 0x02:    // Wait for leading edge of HBLANK (WSYNC)
     {
         // Tell the cpu to waste the necessary amount of time
         uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
@@ -1753,9 +1753,15 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
         break;
     }
 
-    case 0x03:    // Reset horizontal sync counter
+    case 0x03:    // Reset horizontal sync counter (RSYNC)
     {
-      break;
+        if (myCartInfo.special == SPEC_RSYNC)
+        {
+            uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
+
+            gSystemCycles += (cyclesToEndOfLine-1);
+        }
+        break;
     }
 
     case 0x04:    // Number-size of player-missle 0

@@ -115,7 +115,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define CTR_PADDLE3      5     // Tac-Scan uses the second set of paddles and the other paddle on that side. Double sigh.
 #define CTR_DRIVING      6     // For Driving Controller games like Indy500
 #define CTR_KEYBOARD0    7     // For keyboard games like Codebreaker
-#define CTR_KEYBOARD1    8     // For keyboard games - second port
+#define CTR_KEYBOARD1    8     // For both keyboards showing at same time
 #define CTR_BOOSTER      9     // Omega Race and Thrust+
 #define CTR_RAIDERS     10     // Special 2 joystick setup for Raiders of the Lost Ark
 #define CTR_STARRAID    11     // Star raiders has Left Joystick and Right Keypad
@@ -141,6 +141,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SPEC_OLDDPCP    11     // For special "older" DPC+ handling
 #define SPEC_DPCPOPT    12     // Optmized ARM Thumb DPC+ handling
 #define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
+#define SPEC_RSYNC      14     // Game requires emulation of RSYNC
 
 // Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode - fastest no blend mode

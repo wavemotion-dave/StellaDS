@@ -27,6 +27,7 @@
 #include "bgFileSel.h"
 #include "bgPaddles.h"
 #include "bgKeypad.h"
+#include "bgDualKeypad.h"
 #include "bgStarRaiders.h"
 #include "bgInfo.h"
 #include "bgInstructions.h"
@@ -47,7 +48,7 @@
 #include "instructions.h"
 #include "screenshot.h"
 
-#define VERSION "6.7"
+#define VERSION "6.8"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  80000
@@ -301,6 +302,12 @@ void dsShowScreenKeypad(void)
     decompress(bgStarRaidersTiles, bgGetGfxPtr(bg0b), LZ77Vram);
     decompress(bgStarRaidersMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
     dmaCopy((void *) bgStarRaidersPal,(u16*) BG_PALETTE_SUB,256*2);
+  }
+  else if (myCartInfo.controllerType == CTR_KEYBOARD1)
+  {
+    decompress(bgDualKeypadTiles, bgGetGfxPtr(bg0b), LZ77Vram);
+    decompress(bgDualKeypadMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
+    dmaCopy((void *) bgDualKeypadPal,(u16*) BG_PALETTE_SUB,256*2);
   }
   else
   {
@@ -978,6 +985,97 @@ void dsInstallSoundEmuFIFO(void)
     fifoSendDatamsg(FIFO_USER_01, sizeof(msg), (u8*)&msg);
 }
 
+__attribute__((noinline)) void ProcessAtariKeypad(void)
+{
+    touchPosition touch;
+    touchRead(&touch);
+    
+    if (myCartInfo.controllerType == CTR_KEYBOARD0)
+    {
+        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero1,     1);
+        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero2,     1);
+        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero3,     1);
+
+        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero4,   1);
+        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero5,   1);
+        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero6,   1);
+
+        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero7,  1);
+        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero8,  1);
+        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero9,  1);
+
+        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroStar,  1);
+        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZero0,     1);
+        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroPound, 1);
+    }
+    else
+    {
+        // Keyboard 0
+        if (touch.px > 10  && touch.px < 45  && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero1,     1);
+        if (touch.px >=45  && touch.px < 81  && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero2,     1);
+        if (touch.px >=81  && touch.px < 120 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero3,     1);
+
+        if (touch.px > 10  && touch.px < 45  && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero4,   1);
+        if (touch.px >=45  && touch.px < 81  && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero5,   1);
+        if (touch.px >=81  && touch.px < 120 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero6,   1);
+
+        if (touch.px > 10  && touch.px < 45  && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero7,  1);
+        if (touch.px >=45  && touch.px < 81  && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero8,  1);
+        if (touch.px >=81  && touch.px < 120 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero9,  1);
+
+        if (touch.px > 10  && touch.px < 45  && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroStar,  1);
+        if (touch.px >=45  && touch.px < 81  && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZero0,     1);
+        if (touch.px >=81  && touch.px < 120 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroPound, 1);
+
+        // Keyboard 1
+        if (touch.px >138  && touch.px < 174 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne1,     1);
+        if (touch.px >=174 && touch.px < 211 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne2,     1);
+        if (touch.px >=211 && touch.px < 249 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne3,     1);
+
+        if (touch.px >138  && touch.px < 174 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne4,   1);
+        if (touch.px >=174 && touch.px < 211 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne5,   1);
+        if (touch.px >=211 && touch.px < 249 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne6,   1);
+
+        if (touch.px >138  && touch.px < 174 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne7,  1);
+        if (touch.px >=174 && touch.px < 211 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne8,  1);
+        if (touch.px >=211 && touch.px < 249 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne9,  1);
+
+        if (touch.px >138  && touch.px < 174 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOneStar,  1);
+        if (touch.px >=174 && touch.px < 211 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOne0,     1);
+        if (touch.px >=211 && touch.px < 249 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOnePound, 1);
+    }   
+}
+
+__attribute__((noinline)) void ClearAtariKeypad(void)
+{
+    myStellaEvent.set(Event::KeyboardZero1,     0);
+    myStellaEvent.set(Event::KeyboardZero2,     0);
+    myStellaEvent.set(Event::KeyboardZero3,     0);
+    myStellaEvent.set(Event::KeyboardZero4,     0);
+    myStellaEvent.set(Event::KeyboardZero5,     0);
+    myStellaEvent.set(Event::KeyboardZero6,     0);
+    myStellaEvent.set(Event::KeyboardZero7,     0);
+    myStellaEvent.set(Event::KeyboardZero8,     0);
+    myStellaEvent.set(Event::KeyboardZero9,     0);
+    myStellaEvent.set(Event::KeyboardZeroStar,  0);
+    myStellaEvent.set(Event::KeyboardZero0,     0);
+    myStellaEvent.set(Event::KeyboardZeroPound, 0);
+
+    myStellaEvent.set(Event::KeyboardOne1,     0);
+    myStellaEvent.set(Event::KeyboardOne2,     0);
+    myStellaEvent.set(Event::KeyboardOne3,     0);
+    myStellaEvent.set(Event::KeyboardOne4,     0);
+    myStellaEvent.set(Event::KeyboardOne5,     0);
+    myStellaEvent.set(Event::KeyboardOne6,     0);
+    myStellaEvent.set(Event::KeyboardOne7,     0);
+    myStellaEvent.set(Event::KeyboardOne8,     0);
+    myStellaEvent.set(Event::KeyboardOne9,     0);
+    myStellaEvent.set(Event::KeyboardOneStar,  0);
+    myStellaEvent.set(Event::KeyboardOne0,     0);
+    myStellaEvent.set(Event::KeyboardOnePound, 0);
+    
+}
+
 char fpsbuf[12];
 short int iTx,iTy;
 static u16 dampen=0;
@@ -1341,83 +1439,29 @@ ITCM_CODE void dsMainLoop(void)
                     }
                     break;
                     
+                // Just the left/P1 keyboard shown
                 case CTR_KEYBOARD0:
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
                     {
-                        touchPosition touch;
-                        touchRead(&touch);
                         keys_touch = 1;
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero1,     1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero2,     1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero3,     1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero4,   1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero5,   1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardZero6,   1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero7,  1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero8,  1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardZero9,  1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroStar,  1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZero0,     1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardZeroPound, 1);
+                        ProcessAtariKeypad();
                     }
                     else
                     {
-                        myStellaEvent.set(Event::KeyboardZero1,     0);
-                        myStellaEvent.set(Event::KeyboardZero2,     0);
-                        myStellaEvent.set(Event::KeyboardZero3,     0);
-                        myStellaEvent.set(Event::KeyboardZero4,     0);
-                        myStellaEvent.set(Event::KeyboardZero5,     0);
-                        myStellaEvent.set(Event::KeyboardZero6,     0);
-                        myStellaEvent.set(Event::KeyboardZero7,     0);
-                        myStellaEvent.set(Event::KeyboardZero8,     0);
-                        myStellaEvent.set(Event::KeyboardZero9,     0);
-                        myStellaEvent.set(Event::KeyboardZeroStar,  0);
-                        myStellaEvent.set(Event::KeyboardZero0,     0);
-                        myStellaEvent.set(Event::KeyboardZeroPound, 0);
+                        ClearAtariKeypad();
                     }
                     break;                    
-                    
+
+                // Both keyboards shown...
                 case CTR_KEYBOARD1:
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
                     {
-                        touchPosition touch;
-                        touchRead(&touch);
                         keys_touch = 1;
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne1,     1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne2,     1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardOne3,     1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne4,   1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne5,   1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 55 && touch.py < 100) myStellaEvent.set(Event::KeyboardOne6,   1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne7,  1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne8,  1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 105 && touch.py < 150) myStellaEvent.set(Event::KeyboardOne9,  1);
-
-                        if (touch.px > 60  && touch.px < 105 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOneStar,  1);
-                        if (touch.px >105  && touch.px < 150 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOne0,     1);
-                        if (touch.px >151  && touch.px < 195 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOnePound, 1);
+                        ProcessAtariKeypad();
                     }
                     else
                     {
-                        myStellaEvent.set(Event::KeyboardOne1,     0);
-                        myStellaEvent.set(Event::KeyboardOne2,     0);
-                        myStellaEvent.set(Event::KeyboardOne3,     0);
-                        myStellaEvent.set(Event::KeyboardOne4,     0);
-                        myStellaEvent.set(Event::KeyboardOne5,     0);
-                        myStellaEvent.set(Event::KeyboardOne6,     0);
-                        myStellaEvent.set(Event::KeyboardOne7,     0);
-                        myStellaEvent.set(Event::KeyboardOne8,     0);
-                        myStellaEvent.set(Event::KeyboardOne9,     0);
-                        myStellaEvent.set(Event::KeyboardOneStar,  0);
-                        myStellaEvent.set(Event::KeyboardOne0,     0);
-                        myStellaEvent.set(Event::KeyboardOnePound, 0);
+                        ClearAtariKeypad();
                     }
                     break;
             } // End Controller Switch

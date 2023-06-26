@@ -61,6 +61,13 @@ bool Keyboard::read(DigitalPin pin)
           (myEvent.get(Event::KeyboardOnePound) == 0);
     }
   }
+  else
+  {
+      if (pin == One)   return (myPinState & 0x01);
+      if (pin == Two)   return (myPinState & 0x02);
+      if (pin == Three) return (myPinState & 0x04);
+      if (pin == Four)  return (myPinState & 0x08);
+  }
 
   return true;
 }

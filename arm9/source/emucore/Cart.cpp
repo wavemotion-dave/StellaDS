@@ -232,7 +232,7 @@ const CartInfo table[] =
     {"a41450333f8dd0e96e5e9f0af3770ae9",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Basic Math (1977) (PAL).bin
     {"5f46d1ff6d7cdeb4b09c39d04dfd50a1",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Basic Math (1977) (PAL).bin
     {"819aeeb9a2e11deb54e6de334f843894",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Basic Math (1977) (PAL).bin
-    {"9f48eeb47836cf145a15771775f0767a",  "??????", BANK_4K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // BASIC Programming (1979).bin
+    {"9f48eeb47836cf145a15771775f0767a",  "??????", BANK_4K,   CTR_KEYBOARD1, SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // BASIC Programming (1979).bin
     {"b061e98a4c854a672aadefa233236e51",  "??????", BANK_4K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // BASIC Programming (1979) (PAL).bin
     {"ab4ac994865fb16ebb85738316309457",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Basketball (1978).bin
     {"6588d192d9a8afce27b44271a2072325",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Basketball (1978).bin
@@ -709,7 +709,7 @@ const CartInfo table[] =
     {"6362396c8344eec3e86731a700b13abf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
     {"74f623833429d35341b7a84bc09793c0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
     {"7ac4f4fb425db38288fa07fb8ff4b21d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   35,    245,    63,   0,  0},    // Exocet (1983) (PAL).bin
-    {"ebd2488dcace40474c1a78fa53ebfadf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Extra Terrestrials.bin   
+    {"ebd2488dcace40474c1a78fa53ebfadf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_RSYNC,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Extra Terrestrials.bin   
     {"8f459512fa21f8af59c3df8020be5b9d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // F-4 Supercharger (2006) (David Weavil).bin
     {"76181e047c0507b2779b4bcbf032c9d5",  "FALLDN", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Fall Down.bin
     {"78f788e8d0288069b97a887990e2123f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Fallout (Chain Reaction) (2005) (Colman Bryant, Jill Donnely, April Headen).bin
@@ -727,8 +727,8 @@ const CartInfo table[] =
     {"313243fc41e49ef6bd3aa9ebc0d372dd",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   58,    245,   100,   0,  1},    // Fast Food (1982) (PAL).bin
     {"a1f9159121142d42e63e6fb807d337aa",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   58,    245,   100,   0,  1},    // Fast Food (1982) (PAL).bin
     {"a1ca372388b6465a693e4626cc98b865",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   65,    245,   100,   0,  1},    // Fast Food (1982) (PAL).bin
-    {"85470dcb7989e5e856f36b962d815537",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  0},    // Fatal Run (1991).bin
-    {"074ec425ec20579e64a7ded592155d48",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   4,  6},    // Fatal Run (1991) (PAL).bin
+    {"85470dcb7989e5e856f36b962d815537",  "FATRUN", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  0},    // Fatal Run (1991).bin
+    {"074ec425ec20579e64a7ded592155d48",  "FATRUN", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   4,  6},    // Fatal Run (1991) (PAL).bin
     {"0b55399cf640a2a00ba72dd155a0c140",  "FATHOM", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Fathom (1983).bin
     {"68ac69b8e1ba83af8792f693f5ae7783",  "FATHOM", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Fathom (1983).bin
     {"47cd61f83457a0890de381e478f5cf5f",  "FATHOM", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   0,  0},    // Fathom (1983) (PAL).bin
@@ -917,7 +917,7 @@ const CartInfo table[] =
     {"610c5f8a514f540410671ed3cb3ccf41",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Haunted Adventure I.bin
     {"2f09da6a4011bbc25ec120d9ee0824e2",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Haunted Adventure II.bin
     {"f0a6e99f5875891246c3dbecbf2d2cea",  "HAUNTH", BANK_4K,   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
-    {"4857f8bb88bb63c640d3ea5aac7f5d6d",  "HAUNTH", BANK_4K,   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
+    {"4857f8bb88bb63c640d3ea5aac7f5d6d",  "HAUNTH", BANK_F8,   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982 - Prototype).bin
     {"3ca51b5c08f5a0ecfb17d0c1ec6d0942",  "HAUNTH", BANK_4K,   CTR_LJOY,      SPEC_HAUNTED,   MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Haunted House (1982).bin
     {"09e1ecf9bd2a3030d5670dba7a65e78d",  "HAUNTH", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Haunted House (1982) (PAL).bin
     {"2cc640f904e1034bf438075a139548d3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Heartbreak.bin
@@ -1122,7 +1122,7 @@ const CartInfo table[] =
     {"43c6cfffeddab6b3787357fed9d44529",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   45,    245,    54,   4,  1},    // M.A.S.H (1983) (PAL).bin
     {"e97eafd0635651d3999cece953c06bd5",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   60,    245,    97,   4,  1},    // M.A.S.H (1983) (PAL).bin
     {"65ba1a4c643d1ab44481bdddeb403827",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    95,   4, 10},    // M.A.S.H (1983) (PAL).bin
-    {"cddabfd68363a76cd30bee4e8094c646",  "??????", BANK_2K,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // MagiCard (1981).bin
+    {"cddabfd68363a76cd30bee4e8094c646",  "??????", BANK_CV,   CTR_KEYBOARD1, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // MagiCard (1981).bin
     {"ccb5fa954fb76f09caae9a8c66462190",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Malagai (1983).bin
     {"402d876ec4a73f9e3133f8f7f7992a1e",  "MANGOS", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Man Goes Down.bin
     {"54a1c1255ed45eb8f71414dadb1cf669",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mangia' (1983).bin
@@ -1360,6 +1360,7 @@ const CartInfo table[] =
     {"c2410d03820e0ff0a449fa6170f51211",  "PACMAN", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   1,  0},    // Pac-Man (1982) (PAL).bin
     {"880e45b99c785e9910450b88e69c49eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Pac-Man 4k.bin
     {"98d41ef327c58812ecc75bf1611ddced",  "PACM8K", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    204,    92,   0,  1},    // Pac-Man 8k.bin
+    {"f3ce4c5e0a01a6960583adf9a60beed6",  "PACM8K", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    204,    98,   0,  1},    // Pac-Man 8k - fast corner fix.bin    
     {"6e88da2b704916eb04a998fed9e23a3e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Pac-Man_4k (debro).bin
     {"82bf0dff20cee6a1ed4bb834b00074e6",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    80,   4,  1},    // Panda Chase (PAL).bin
     {"0e713d4e272ea7322c5b27d645f56dd0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    80,   4,  1},    // Panda Chase (PAL).bin
@@ -2360,7 +2361,7 @@ void SetOtherDatabaseFieldDefaults(void)
   myCartInfo.yButton = BUTTON_FIRE;
 
   myCartInfo.bus_driver = (isDSiMode() ? 1:0);
-  myCartInfo.clearRAM = 0;
+  myCartInfo.clearRAM = (myCartInfo.special == SPEC_AR) ? 1:0;  // Supercharger AR games generally want RAM CLEAR
   myCartInfo.spare4_0 = 0;
   myCartInfo.spare5_0 = 0;
   myCartInfo.spare6_0 = 0;
