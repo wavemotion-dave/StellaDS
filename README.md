@@ -103,7 +103,7 @@ There is a 2nd page of Options that can be accessed with L/R shoulder buttons. T
 Screen Settings:
 -----------------------
 If you are only running Classic games - the default screen settings should be fine. But if you're running some of the newer homebrews created over the past decade, 
-you will want to configure your screen properly.  For many games, you simply can't fit all the content on the 192 pixel lines of a Nintendo DS/DSi. For these you
+you will want to configure your screen properly.  For many games, you simply can't fit all the content on the 192 pixel lines of a DS/DSi. For these you
 can either cut off the top, bottom or scale the screen. When these options aren't enough, you can set your Y offset so that some of the screen is cut-off top or bottom and then
 you can map one of the DS buttons to 'SCREEN PAN UP' or 'SCREEN PAN DOWN' which will momentarily pan up or down. This works great for Champ Games offerings where the score
 display is normally off-screen while you play and then you can tap a button to briefly see it.
