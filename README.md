@@ -213,8 +213,7 @@ I use Ubuntu and the Pacman repositories (devkitpro-pacman version 6.0.1-2).  I'
 Windows but I've never done it and don't know how.
 
 If you try to build on a newer gcc, you will likely find it bloats the code a bit and you'll run out of ITCM_CODE memory.
-If this happens, first try pulling some of the ITCM_CODE declarations in and around the Antic.c module (try to leave
-the one in CPU as it has a big impact on performance).  
+If this happens, first try pulling some of the ITCM_CODE declarations in areas that aren't heavily utilized.
 
 Version History:
 -----------------------
