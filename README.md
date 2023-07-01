@@ -218,10 +218,11 @@ the one in CPU as it has a big impact on performance).
 
 Version History:
 -----------------------
-V6.xx : ??-Jun-2023 by Dave Bernazzani (wavemotion)
+V6.8 : 01-Jul-2023 by Dave Bernazzani (wavemotion)
   * Improved RSYNC so Extra Terrestrials (1984 by Skill Screen Games) works.
   * Improved keypad handling so Magicard and similar keypad/keyboard game work.
   * Added a few of the ultra-rare games discovered in the last decade to the internal database.
+  * Updated internal database to ROMHUNTER v18 for the classic-era games.
   * Starpath Supercharger (AR) carts now clear RAM by default (prevent lock-ups).
   * Added Dual Keypad/Keyboards for the few game that need them (BASIC, Magicard mostly).
 

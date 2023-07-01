@@ -51,7 +51,7 @@
 #define VERSION "6.8"
 
 #define MAX_RESISTANCE  1000000
-#define MIN_RESISTANCE  80000
+#define MIN_RESISTANCE  70000
 
 uInt16 atari_frames=0;
 
