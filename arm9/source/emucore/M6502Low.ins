@@ -1941,7 +1941,7 @@ case 0xb3:
 }
 break;
 
-
+//LDA
 case 0xa9:
 {
   A = peek_PC(PC++);
@@ -1977,11 +1977,11 @@ case 0xa9:
 #endif
 
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch; extern u16 myFastFetcherOffset;
-  if (myFastFetcherOffset)
+  extern u8 myDataStreamFetch; extern uInt8* myFetcherOffsetPtr;
+  
+  if (myFetcherOffsetPtr)
   {
-     extern uInt8* myARMRAM;
-     uInt8 offset_A = A-myARMRAM[myFastFetcherOffset];
+     uInt8 offset_A = A-(*myFetcherOffsetPtr); 
      if (offset_A < myDataStreamFetch) 
      {
         A = peek_DataStreamPlus(offset_A);
@@ -2003,6 +2003,8 @@ case 0xa9:
      gSystemCycles += 3;
      poke_small(myDPCptr[++PC & 0xFFF], A);
      PC++;
+     
+     break; // Actung! This is dangerous... we are not setting notZ nor N here for CDFJ+ with fast Data Fetchers to save some cycles
   }  
 #endif
 }
@@ -2113,13 +2115,12 @@ case 0xa2:
 {
   X = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDXenabled; extern u16 myFastFetcherOffset;
+  extern u8 myDataStreamFetch, myLDXenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDXenabled)
   {
-      if (myFastFetcherOffset)
+      if (myFetcherOffsetPtr)
       {
-        extern uInt8* myARMRAM;
-        uInt8 offset_X = X-myARMRAM[myFastFetcherOffset];
+        uInt8 offset_X = X-(*myFetcherOffsetPtr); 
         if (offset_X < myDataStreamFetch) X = peek_DataStreamPlus(offset_X);
       }
       else
@@ -2191,13 +2192,12 @@ case 0xa0:
 {
   Y = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDYenabled; extern u16 myFastFetcherOffset;
+  extern u8 myDataStreamFetch, myLDYenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDYenabled)
   {
-      if (myFastFetcherOffset)
+      if (myFetcherOffsetPtr)
       {
-        extern uInt8* myARMRAM;
-        uInt8 offset_Y = Y-myARMRAM[myFastFetcherOffset];
+        uInt8 offset_Y = Y-(*myFetcherOffsetPtr); 
         if (offset_Y < myDataStreamFetch) Y = peek_DataStreamPlus(offset_Y);
       }
       else

@@ -24,7 +24,7 @@
 #include "CartCDF.hxx"
 #include "Thumbulator.hxx"
 
-uInt32 myMusicWaveformSize[3] = {0,0,0};
+uInt16 myMusicWaveformSize[3] __attribute__((section(".dtcm"))) = {0,0,0};
 
 #define FAST_FETCH_ON ((myMode & 0x0F) == 0)
 #define DIGITAL_AUDIO_ON ((myMode & 0xF0) == 0)
@@ -46,6 +46,9 @@ uInt8 myDataStreamFetch     __attribute__((section(".dtcm"))) = 0x00;
 
 // The counter registers for the data fetchers
 uInt8* myDisplayImageCDF    __attribute__((section(".dtcm")));  // Pointer to the 4K display image of the cartridge
+
+uInt8* myFetcherOffsetPtr   __attribute__((section(".dtcm")));  // Pointer to the RAM cell that contains the offset
+
 
 uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 *commPtr32          __attribute__((section(".dtcm")));
@@ -137,7 +140,9 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
         
       // search for Fast Fetcher Offset (default is 0)
       if ((cdfjValue & 0xFFFFFF00) == 0xE2422000)
+      {
         myFastFetcherOffset = i;
+      }
       
       // Since the new CDFJ+ driver will autmatically have
       // have an offset but not all games will even use it
@@ -193,7 +198,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
           break;
      }
   }
-
+    
   // ------------------------------------------------------------------------
   // Determine which RAM to use... for 32K/8K CDFJ+ or lower we can use the
   // 8K of Fast RAM as our ARM RAM. Otherwise we have to use the slower 32K
@@ -209,6 +214,13 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
       memset(myARMRAM, 0, MEM_8KB);             // Clear all of the "ARM Thumb" RAM
   }
     
+  // Pointer to where the offset is located for DPCJ+ games utilizing a fast-fetcher offset
+  if (myFastFetcherOffset)
+    myFetcherOffsetPtr = &myARMRAM[myFastFetcherOffset];    
+  else
+    myFetcherOffsetPtr = (uInt8*)0;
+   
+  // Pointer to the waveform base in RAM
   myWaveformBasePtr = (uInt32*)&myARMRAM[myWaveformBase];
     
   // Pointer to the program ROM (28K @ 4K or 2K offset)
