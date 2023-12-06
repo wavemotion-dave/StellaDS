@@ -217,6 +217,11 @@ If this happens, first try pulling some of the ITCM_CODE declarations in areas t
 
 Version History:
 -----------------------
+V6.9 : 06-Dec-2023 by Dave Bernazzani (wavemotion)
+  * Improved the ARM Thumb driver and the CDFJ driver to squeeze out two more frames of performance.
+  * Fixed PAN UP / PAN DOWN handling on the A-button and you can now pan even if another button is pressed (useful for Turbo Arcade).
+  * Minor cleanups as time permitted.
+
 V6.8 : 01-Jul-2023 by Dave Bernazzani (wavemotion)
   * Improved RSYNC so Extra Terrestrials (1984 by Skill Screen Games) works.
   * Improved keypad handling so Magicard and similar keypad/keyboard game work.
