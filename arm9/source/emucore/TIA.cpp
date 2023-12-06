@@ -111,6 +111,8 @@ uInt8   myM1CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 uInt32  lastTiaPokeCycles           __attribute__((section(".dtcm"))) = 0;
 
+uInt8   bWaveDirectSound            __attribute__((section(".dtcm"))) = 0;
+
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
   1,  // VBLANK (0) / 1
@@ -548,6 +550,8 @@ ITCM_CODE void TIA::update()
   myCurrentFrame = (myCurrentFrame + 1) % 2;
   myFramePointer = myCurrentFrameBuffer[myCurrentFrame];
   myDSFramePointer = BG_GFX;
+    
+  bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
 
   // --------------------------------------------------------------------
   // Execute instructions until frame is finished
@@ -1199,7 +1203,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   {
     // Compute the number of clocks we're going to update
     Int32 clocksToUpdate = clock - myClockAtLastUpdate;
-
+      
     // Remember how many clocks we are from the left side of the screen
     Int32 clocksFromStartOfScanLine = 228 - myClocksToEndOfScanLine;
 
@@ -1231,6 +1235,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       clocksFromStartOfScanLine += tmp;
       clocksToUpdate -= tmp;
     }
+      
 
     // Remember frame pointer in case HMOVE blanks need to be handled
     uInt8* oldFramePointer = myFramePointer;
@@ -1240,55 +1245,64 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     // this routine has been optimized to handle objects in a
     // sort of "best" order...
     // ----------------------------------------------------------------
-      
-    // See if we're in the vertical blank region
-    if(myVBLANK & 0x02)
-    {
-        // -------------------------------------------------------------------------------------------
-        // Some games present a fairly static screen from frame to frame and so there is really no 
-        // reason to blank the memory which can be time consuming... so check the flag for the cart
-        // currently being emulated...
-        // -------------------------------------------------------------------------------------------
-        if (myCartInfo.vblankZero || !(gAtariFrames & 0x0E))    // Every 16 frames we will do two frames proper vBlank despite the cartInfo (two is needed as some games display different data on alternating frames)
+
+    if (clocksToUpdate)
+    {   
+        // If we are updating, make sure the Enabled Objects register is up to date...
+        if(myPF != 0)
+          myEnabledObjects |= myPFBit;
+        else
+          myEnabledObjects &= ~myPFBit;
+
+        // See if we're in the vertical blank region
+        if(myVBLANK & 0x02)
         {
-            memset(myFramePointer, 0x00, clocksToUpdate);
-        }
-        myFramePointer += clocksToUpdate;
-    }
-    else if (myEnabledObjects == 0x00)  // Background handling...
-    {  
-        memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
-        myFramePointer += clocksToUpdate;
-    }
-    else  // All other possibilities... this is expensive CPU-wise
-    {
-        Int32 hpos = clocksFromStartOfScanLine - HBLANK;
-        if (myCartInfo.thumbOptimize & 2)  // If we are Optimizing the ARM Thumb with NO collisions...
-        {
-            if ((myEnabledObjects|myPlayfieldPriorityAndScore) == myPFBit) // Playfield bit set... without priority/score (common in CDF/J/+ games)
+            // -------------------------------------------------------------------------------------------
+            // Some games present a fairly static screen from frame to frame and so there is really no 
+            // reason to blank the memory which can be time consuming... so check the flag for the cart
+            // currently being emulated...
+            // -------------------------------------------------------------------------------------------
+            if (myCartInfo.vblankZero || !(gAtariFrames & 0x0E))    // Every 16 frames we will do two frames proper vBlank despite the cartInfo (two is needed as some games display different data on alternating frames)
             {
-                   uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
-                   uInt32* mask = &myCurrentPFMask[hpos];
-                   // Since a 32-bit access to main memory is always split as 16-bits, we can just align to 16 bits
-                   if ((uInt32)myFramePointer & 1)
-                   {
-                       *myFramePointer++ = myColor[(myPF & *mask++) ? MYCOLUPF:MYCOLUBK];
-                   }
-                   // Now, update a uInt32 at a time
-                   for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
-                   {
-                     *((uInt32*)myFramePointer) = myColor[(myPF & *mask) ? MYCOLUPF:MYCOLUBK];
-                   }
-                   myFramePointer = ending;
+                memset(myFramePointer, 0x00, clocksToUpdate);
             }
-            else 
-            {
-                handleObjectsNoCollisions(clocksToUpdate, hpos);
-            }
+            myFramePointer += clocksToUpdate;
         }
-        else    // Normal handling...
+        else if (myEnabledObjects == 0x00)  // Background handling...
+        {  
+            memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
+            myFramePointer += clocksToUpdate;
+        }
+        else  // All other possibilities... this is expensive CPU-wise
         {
-            handleObjectsAndCollisions(clocksToUpdate, hpos);
+            Int32 hpos = clocksFromStartOfScanLine - HBLANK;
+            if (myCartInfo.thumbOptimize & 2)  // If we are Optimizing the ARM Thumb with NO collisions...
+            {
+                if ((myEnabledObjects|myPlayfieldPriorityAndScore) == myPFBit) // Playfield bit set... without priority/score (common in CDF/J/+ games)
+                {
+                       uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
+                       uInt32* mask = &myCurrentPFMask[hpos];
+                       // Since a 32-bit access to main memory is always split as 16-bits, we can just align to 16 bits
+                       if ((uInt32)myFramePointer & 1)
+                       {
+                           *myFramePointer++ = myColor[(myPF & *mask++) ? MYCOLUPF:MYCOLUBK];
+                       }
+                       // Now, update a uInt32 at a time
+                       for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
+                       {
+                         *((uInt32*)myFramePointer) = myColor[(myPF & *mask) ? MYCOLUPF:MYCOLUBK];
+                       }
+                       myFramePointer = ending;
+                }
+                else 
+                {
+                    handleObjectsNoCollisions(clocksToUpdate, hpos);
+                }
+            }
+            else    // Normal handling...
+            {
+                handleObjectsAndCollisions(clocksToUpdate, hpos);
+            }
         }
     }
 
@@ -1670,7 +1684,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   Int32 delta_clock;
   addr = addr & 0x003f;
 
-  if (unlikely(myCartInfo.soundQuality == SOUND_WAVE))
+  if (unlikely(bWaveDirectSound))
   {
       while ((gSystemCycles - lastTiaPokeCycles) >= 76)
       {
@@ -1678,7 +1692,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           Tia_process();
       }
   }
-
+    
   // Update frame to current CPU cycle before we make any changes!
   if (poke_needs_update_display[addr])
   {
@@ -1872,36 +1886,18 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     case 0x0D:    // Playfield register byte 0
     {
       myPF = (myPF & 0x000FFFF0) | ((value >> 4) & 0x0F);
-
-      if(myPF != 0)
-        myEnabledObjects |= myPFBit;
-      else
-        myEnabledObjects &= ~myPFBit;
-
       break;
     }
 
     case 0x0E:    // Playfield register byte 1
     {
       myPF = (myPF & 0x000FF00F) | ((uInt32)value << 4);
-
-      if(myPF != 0)
-        myEnabledObjects |= myPFBit;
-      else
-        myEnabledObjects &= ~myPFBit;
-
       break;
     }
 
     case 0x0F:    // Playfield register byte 2
     {
       myPF = (myPF & 0x00000FFF) | ((uInt32)value << 12);
-
-      if(myPF != 0)
-        myEnabledObjects |= myPFBit;
-      else
-        myEnabledObjects &= ~myPFBit;
-
       break;
     }
 
