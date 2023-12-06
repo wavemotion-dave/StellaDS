@@ -48,7 +48,7 @@
 #include "instructions.h"
 #include "screenshot.h"
 
-#define VERSION "6.8"
+#define VERSION "6.9"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000
@@ -1162,10 +1162,10 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                        else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                        else if ((myCartInfo.aButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.aButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
-                    else if (keys_pressed & (KEY_B))
+                    if (keys_pressed & (KEY_B))
                     {
                         if ((myCartInfo.bButton == BUTTON_FIRE))           button_fire  = true;
                         else if ((myCartInfo.bButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1176,7 +1176,7 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.bButton == BUTTON_SHIFT_UP))  temp_shift = -16;
                         else if ((myCartInfo.bButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
-                    else if (keys_pressed & (KEY_X))
+                    if (keys_pressed & (KEY_X))
                     {
                         if ((myCartInfo.xButton == BUTTON_FIRE))           button_fire  = true;
                         else if ((myCartInfo.xButton == BUTTON_JOY_UP))    button_up    = true;
@@ -1187,7 +1187,7 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
                         else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
                     }
-                    else if (keys_pressed & (KEY_Y))
+                    if (keys_pressed & (KEY_Y))
                     {
                         if ((myCartInfo.yButton == BUTTON_FIRE))           button_fire  = true;
                         else if ((myCartInfo.yButton == BUTTON_JOY_UP))    button_up    = true;

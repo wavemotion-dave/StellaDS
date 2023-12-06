@@ -497,14 +497,14 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void Thumbulator::execute ( void )
 {
-  uInt32 ra,rb,rc,rd,rm,rn;
   uInt32 ZNflags = 0;
   uInt32 vFlag = 0;
   uInt16 *thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
   uInt8  *thumb_decode_ptr = &cart_buffer[MEM_256KB+((reg_sys[15]-2) >> 1)];
 
-  while (1)
+  for (;;)
   {
+      uInt32 ra,rb,rc,rd,rm,rn;
       uInt16 inst = *thumb_ptr++;
       Thumbulator::Op decoded = (Thumbulator::Op)*thumb_decode_ptr++;
       
@@ -513,36 +513,32 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_000_pos:  //B(1) conditional branch
                 if (!ZNflags)
                 {
-                    rb=(inst & 0xFF)+1;
-                    thumb_ptr += (int)rb;
-                    thumb_decode_ptr += (int)rb;
+                    thumb_ptr += (int)(inst & 0xFF)+1;
+                    thumb_decode_ptr += (int)(inst & 0xFF)+1;
                 }
               break;
               
           case Op::b1_000_neg:  //B(1) conditional branch
                 if (!ZNflags)
                 {
-                    rb=(inst | 0xFFFFFF00)+1;
-                    thumb_ptr += (int)rb;
-                    thumb_decode_ptr += (int)rb;
+                    thumb_ptr += (int)(inst | 0xFFFFFF00)+1;;
+                    thumb_decode_ptr += (int)(inst | 0xFFFFFF00)+1;;
                 }
               break;
               
           case Op::b1_100_pos:  //B(1) conditional branch
                 if (ZNflags)
                 {
-                    rb=(inst & 0xFF)+1;
-                    thumb_ptr += (int)rb;
-                    thumb_decode_ptr += (int)rb;
+                    thumb_ptr += (int)(inst & 0xFF)+1;
+                    thumb_decode_ptr += (int)(inst & 0xFF)+1;
                 }
               break;
 
           case Op::b1_100_neg:  //B(1) conditional branch
                 if (ZNflags)
                 {
-                    rb=(inst | 0xFFFFFF00)+1;
-                    thumb_ptr += (int)rb;
-                    thumb_decode_ptr += (int)rb;
+                    thumb_ptr += (int)(inst | 0xFFFFFF00)+1;;
+                    thumb_decode_ptr += (int)(inst | 0xFFFFFF00)+1;;
                 }
               break;
               
@@ -693,15 +689,13 @@ ITCM_CODE void Thumbulator::execute ( void )
               return;
               
           case Op::b2_pos:  //B(2) unconditional branch no sign extend
-                rb=(inst&0x7FF)+1;
-                thumb_ptr += rb;
-                thumb_decode_ptr += rb;
+                thumb_ptr += (inst&0x7FF)+1;
+                thumb_decode_ptr += (inst&0x7FF)+1;
               break;
               
           case Op::b2_neg:  //B(2) unconditional branch - sign extend
-                rb=(inst | 0xFFFFF800)+1;
-                thumb_ptr += (int)rb;
-                thumb_decode_ptr += (int)rb;
+                thumb_ptr += (int)(inst | 0xFFFFF800)+1;
+                thumb_decode_ptr += (int)(inst | 0xFFFFF800)+1;
               break;
               
           case Op::blx1: //BL/BLX(1)
@@ -798,58 +792,48 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::ldr4_r0:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(0,readRAM32(rb));
               break;
 
           case Op::ldr4_r1:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(1,readRAM32(rb));
               break;
               
           case Op::ldr4_r2:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(2,readRAM32(rb));
               break;
 
           case Op::ldr4_r3:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(3,readRAM32(rb));
               break;
 
           case Op::ldr4_r4:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(4,readRAM32(rb));
               break;
 
           case Op::ldr4_r5:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(5,readRAM32(rb));
               break;
 
           case Op::ldr4_r6:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(6,readRAM32(rb));
               break;
               
           case Op::ldr4_r7:
-                rb=(inst<<2)&0x3FF;
-                rb+=read_register(13);
+                rb=read_register(13) + ((inst<<2)&0x3FF);
                 write_register(7,readRAM32(rb));
               break;
 
           case Op::str3:
-                rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x07;
-                rb<<=2;
-                rb=read_register(13)+rb;
+                rb=read_register(13) + (((inst>>0)&0xFF)<<2);
                 write32(rb,read_register(rd));
               break;
 
@@ -898,11 +882,9 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::strb1:
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
                 rb=(inst>>6)&0x1F;
-                rb=read_register(rn)+rb;
-                rc=read_register(rd);
+                rb=read_register((inst>>3)&0x07)+rb;
+                rc=read_register((inst>>0)&0x07);
                 ra=read16(rb);
                 if(rb&1)
                 {
@@ -919,8 +901,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 
           case Op::ldrb1:
                 rd=(inst>>0)&0x07;
-                rn = ((inst>>3) & 0x0007);
-                rb=read_register(rn)+((inst>>6)&0x1F);
+                rb=read_register(((inst>>3) & 0x07))+((inst>>6)&0x1F);
                 if(rb&1)
                 {
                     write_register(rd, read16(rb)>>8);
@@ -932,20 +913,15 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
 
           case Op::str1:
-                rd=(inst>>0)&0x07;
-                rn=(inst>>3)&0x07;
                 rb=(inst>>4)&0x7C;
-                rb=read_register(rn)+rb;
-                rc=read_register(rd);
+                rb=read_register((inst>>3)&0x07)+rb;
+                rc=read_register((inst>>0)&0x07);
                 write32(rb,rc);
               break;
               
           case Op::strb2:
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
-                rc=read_register(rd);
+                rb=read_register((inst>>3)&0x7)+read_register((inst>>6)&0x7);
+                rc=read_register((inst>>0)&0x7);
                 ra=read16(rb);
                 if(rb&1)
                 {
@@ -961,16 +937,13 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::ldrb2:
-                rd=(inst>>0)&0x7;
-                rn=(inst>>3)&0x7;
-                rm=(inst>>6)&0x7;
-                rb=read_register(rn)+read_register(rm);
+                rb=read_register((inst>>3)&0x7)+read_register((inst>>6)&0x7);
                 rc=read16(rb);
                 if(rb&1)
                 {
                   rc>>=8;
                 }
-                write_register(rd,rc&0xFF);
+                write_register((inst>>0)&0x7,rc&0xFF);
               break;
               
           case Op::ldrsh:
