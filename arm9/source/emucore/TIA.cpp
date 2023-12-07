@@ -112,6 +112,7 @@ uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 uInt32  lastTiaPokeCycles           __attribute__((section(".dtcm"))) = 0;
 
 uInt8   bWaveDirectSound            __attribute__((section(".dtcm"))) = 0;
+uInt8   bFrameSkipCDFJ              __attribute__((section(".dtcm"))) = 0;
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
@@ -552,6 +553,7 @@ ITCM_CODE void TIA::update()
   myDSFramePointer = BG_GFX;
     
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
+  bFrameSkipCDFJ = (myCartInfo.thumbOptimize == 3);
 
   // --------------------------------------------------------------------
   // Execute instructions until frame is finished
@@ -1183,6 +1185,16 @@ void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void TIA::updateFrame(Int32 clock)
 {
+  // -------------------------------------------------------------------------------------
+  // Games like Elevator Agent are highly demanding and require us to skip frames 
+  // to even have a chance of keeping up... Check that here and render 4 frames,
+  // then skip 4 frames, etc. It causes minor flicker but we're desperate!
+  // -------------------------------------------------------------------------------------
+  if (bFrameSkipCDFJ)
+  {
+    if (gTotalAtariFrames & 0x04) return;
+  }
+    
   // ---------------------------------------------------------------
   // See if we're in the nondisplayable portion of the screen or if
   // we've already updated this portion of the screen

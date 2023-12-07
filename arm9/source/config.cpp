@@ -250,7 +250,7 @@ const struct options_t Game_Option_Table[2][20] =
         {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                 &myCartInfo.screenScale,         1},
         {"X OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.xOffset,             1},
         {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.yOffset,             1},
-        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-NO-OFFSETS"},                                                                                                         &myCartInfo.thumbOptimize,       4},
+        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                          &myCartInfo.thumbOptimize,       4},
 
         {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
     },
