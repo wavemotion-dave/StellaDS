@@ -85,7 +85,7 @@ extern char my_filename[];
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 
 // Our cart buffer memory - this can store game ROMs up to 512k
-uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (0x1000)));
+uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (0x4000)));
 
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
@@ -2239,9 +2239,9 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2880,9 +2880,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
       
-      // These carts need a little extra oomph from the CPU so we have a special driver
-      if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;
-      if (strstr(my_filename, "elevator") != 0)  cartDriver = 11;
+      // These carts need a little extra oomph from the CPU so we have a special optmized driver
+      if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
+      if (strstr(my_filename, "elevator") != 0)  cartDriver = 11;  //CDFJ++
       
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
       if (!bFoundInDAT)
@@ -2956,7 +2956,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "galagon") != 0)
           {
-              myCartInfo.frame_mode = MODE_FF;              
               myCartInfo.hBlankZero = 0; 
               myCartInfo.vblankZero = 0;
               myCartInfo.yOffset = 12;
@@ -2997,8 +2996,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.hBlankZero = 0; 
               myCartInfo.vblankZero = 0;
               myCartInfo.displayStartScanline = 34;
-              myCartInfo.displayNumScalines = 206;
-              myCartInfo.xButton = BUTTON_SHIFT_DN;
+              myCartInfo.displayNumScalines = 208;
+              myCartInfo.yOffset = 14;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
           }
       }
       

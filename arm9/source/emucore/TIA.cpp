@@ -554,8 +554,14 @@ ITCM_CODE void TIA::update()
   myDSFramePointer = BG_GFX;
     
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
-  bFrameSkipCDFJ = (myCartInfo.thumbOptimize == 3);
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
+  
+  // If the cart requires frame skipping (mostly for Turbo Arcade)
+  // then we set the skip flag for every other pair of frames
+  if (myCartInfo.thumbOptimize == 3)
+  {
+     bFrameSkipCDFJ = ((gTotalAtariFrames & 0x02) ? 1:0);
+  } else bFrameSkipCDFJ = 0;
 
   // --------------------------------------------------------------------
   // Execute instructions until frame is finished
@@ -1193,10 +1199,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   // to even have a chance of keeping up... Check that here and render 2 frames,
   // then skip 2 frames, etc. It causes minor flicker but we're desperate!
   // -------------------------------------------------------------------------------------
-  if (bFrameSkipCDFJ)
-  {
-    if (gTotalAtariFrames & 0x02) return;
-  }
+  if (bFrameSkipCDFJ) return;
     
   // ---------------------------------------------------------------
   // See if we're in the nondisplayable portion of the screen or if
@@ -1702,18 +1705,14 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   Int32 delta_clock;
   addr = addr & 0x003f;
     
-  if (unlikely(bWaveDirectSound))
-  {
-      while ((gSystemCycles - lastTiaPokeCycles) >= 76)
-      {
-          lastTiaPokeCycles += 76;
-          Tia_process();
-      }
-  }
-    
   // Update frame to current CPU cycle before we make any changes!
   if (poke_needs_update_display[addr])
   {
+      if (bFrameSkipCDFJ)
+      {
+          if (addr > 0x02) return;
+      }
+      
       clock = (3*gSystemCycles); 
       delta_clock = (clock - myClockWhenFrameStarted);
       Int8 delay = ourPokeDelayTable[addr];
@@ -1728,6 +1727,15 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   {
       clock = 0; 
       delta_clock = 0;
+  }
+
+  if (unlikely(bWaveDirectSound))
+  {
+      while ((gSystemCycles - lastTiaPokeCycles) >= 76)
+      {
+          lastTiaPokeCycles += 76;
+          Tia_process();
+      }
   }
     
   switch(addr)

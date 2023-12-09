@@ -2121,7 +2121,7 @@ case 0xa2:
   extern u8 myDataStreamFetch, myLDXenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDXenabled)
   {
-     uInt8 offset_X = X-(*myFetcherOffsetPtr); 
+     unsigned int offset_X = X-(*myFetcherOffsetPtr); 
      if (offset_X < myDataStreamFetch) 
 #ifdef DATA_STREAMS_PLUS_PLUS     
         X = peek_DataStreamPlusPlus(offset_X);
@@ -2196,7 +2196,7 @@ case 0xa0:
   extern u8 myDataStreamFetch, myLDYenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDYenabled)
   {
-    uInt8 offset_Y = Y-(*myFetcherOffsetPtr); 
+    unsigned int offset_Y = Y-(*myFetcherOffsetPtr); 
     if (offset_Y < myDataStreamFetch) 
 #ifdef DATA_STREAMS_PLUS_PLUS    
         Y = peek_DataStreamPlus(offset_Y);

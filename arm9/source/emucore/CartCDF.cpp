@@ -90,7 +90,6 @@ u8 myLDXenabled             __attribute__((section(".dtcm"))) = 0;
 u8 myLDYenabled             __attribute__((section(".dtcm"))) = 0;
 uInt16 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
 uInt8 subversion = 0;
-u8 myZeroOffset = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -200,7 +199,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // ------------------------------------------------------------------------
   if (isCDFJPlus && (size > MEM_32KB))
   {
-      myARMRAM = (uInt8*)&cart_buffer[480*1024];  // Set to the slow RAM buffer (back 32K of the cart buffer)
+      myARMRAM = (uInt8*)&cart_buffer[446*1024];  // Set to the slow RAM buffer (back 64K-2k of the cart buffer)
       memset(myARMRAM, 0, MEM_32KB);              // Clear all of the "ARM Thumb" RAM
   }
   else
@@ -210,10 +209,12 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   }
     
   // Pointer to where the offset is located for DPCJ+ games utilizing a fast-fetcher offset
+  extern uInt32 myDPCPRandomNumber;
+  myDPCPRandomNumber = 0x00;
   if (myFastFetcherOffset)
     myFetcherOffsetPtr = &myARMRAM[myFastFetcherOffset];    
   else
-    myFetcherOffsetPtr = (uInt8*)&myZeroOffset;
+    myFetcherOffsetPtr = (uInt8*)&myDPCPRandomNumber;   // Some fast memory from another driver we repurpose
    
   // Pointer to the waveform base in RAM
   myWaveformBasePtr = (uInt32*)&myARMRAM[myWaveformBase];
@@ -246,6 +247,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myStartBank = (isCDFJPlus ? 0:6);
   bank(myStartBank);
     
+  debug[22] = myDatastreamBase;
   fastDataStreamBase = (uInt32)&myARMRAM[myDatastreamBase];
   fastIncStreamBase = (uInt32)&myARMRAM[myDatastreamIncrementBase];
     
@@ -481,8 +483,8 @@ ITCM_CODE void CartridgeCDF::poke(uInt16 address, uInt8 value)
       break;
           
     // Check for bankswitch write...
-    case 0xFF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
-    case 0xFF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
+    case 0xFF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; f8_bankbit = 0x0FFF; break;
+    case 0xFF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; f8_bankbit = 0x1FFF; break;
     case 0xFF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
     case 0xFF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
     case 0xFF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;

@@ -1243,8 +1243,11 @@ void M6502Low::execute_CDFJPlus(void)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 peek_DataStreamPlusPlus(uInt8 address)
 {
-  uInt16 *ptr = (uInt16*)((uInt32)fastDataStreamBase + (address << 2))+1;
-  uInt8 value = myDisplayImageCDF[*ptr];
+  // We place the ARMRAM for the CDFJ++ (>32K) games at a very specific
+  // alginment such that the myDisplayImageCDF[] will always be aligned
+  // on a 16K boundary which allows us to just do simplified math/OR here.
+  uInt16 *ptr = (uInt16*)((uInt32)&cart_buffer[(446*1024)+0x98+2] + (address << 2));
+  uInt8 value = cart_buffer[(448*1024) | *ptr];
   *ptr += 1;
     
   return value;    
