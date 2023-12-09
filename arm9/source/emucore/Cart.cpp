@@ -2871,6 +2871,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.displayNumScalines = 212;
               myCartInfo.yOffset = 18;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
+              myCartInfo.special = SPEC_DPCPNOC;
           }
       }      
   }  

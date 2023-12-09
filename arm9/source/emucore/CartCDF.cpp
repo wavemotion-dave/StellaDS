@@ -196,6 +196,8 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // ------------------------------------------------------------------------
   // Determine which RAM to use... for 32K/8K CDFJ+ or lower we can use the
   // 8K of Fast RAM as our ARM RAM. Otherwise we have to use the slower 32K
+  // but we will repurpose the fast_cart_buffer[] as 6502 Assembly code 
+  // assuming that those games won't need more than 2 banks of 6502 assembly.
   // ------------------------------------------------------------------------
   if (isCDFJPlus && (size > MEM_32KB))
   {
@@ -224,6 +226,9 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   memset(myARM6502, 0xFF, MEM_32KB);
   memcpy(myARM6502, myDPCptr, MEM_28KB); // For the 6502, we only need to copy 28K max
  
+  // Repurpose the fast cart buffer memory for 6502 code. This is potentially
+  // unsafe as it only supports 2 banks... but there are only a couple of 
+  // games in this stratosphere and none use more than 2 banks of 6502 code.
   if (isCDFJPlus && (size > MEM_32KB))
   {
       memcpy(fast_cart_buffer, myARM6502, MEM_8KB);
@@ -247,7 +252,6 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myStartBank = (isCDFJPlus ? 0:6);
   bank(myStartBank);
     
-  debug[22] = myDatastreamBase;
   fastDataStreamBase = (uInt32)&myARMRAM[myDatastreamBase];
   fastIncStreamBase = (uInt32)&myARMRAM[myDatastreamIncrementBase];
     

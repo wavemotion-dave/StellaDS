@@ -175,10 +175,10 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
    
-uInt32  color_repeat_table[256]; // __attribute__((section(".dtcm")));
+uInt32  color_repeat_table[256] __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
+uInt8 ourHMOVEBlankEnableCycles[76] = {
   true,  true,  true,  true,  true,  true,  true,  true,  true,  true,   // 00
   true,  true,  true,  true,  true,  true,  true,  true,  true,  true,   // 10
   true,  false, false, false, false, false, false, false, false, false,  // 20

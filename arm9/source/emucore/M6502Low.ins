@@ -2199,9 +2199,9 @@ case 0xa0:
     unsigned int offset_Y = Y-(*myFetcherOffsetPtr); 
     if (offset_Y < myDataStreamFetch) 
 #ifdef DATA_STREAMS_PLUS_PLUS    
-        Y = peek_DataStreamPlus(offset_Y);
-#else
         Y = peek_DataStreamPlusPlus(offset_Y);
+#else
+        Y = peek_DataStreamPlus(offset_Y);
 #endif        
   }
 #endif

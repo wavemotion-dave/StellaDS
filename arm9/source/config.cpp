@@ -149,47 +149,6 @@ void LoadConfig(void)
         fread(&allConfigs, sizeof(allConfigs), 1, fp);
         fclose(fp);
         
-        if (allConfigs.config_ver == 0x0007) // One time upgrade
-        {
-            for (short slot=0; slot<MAX_CONFIGS; slot++)
-            {
-                // With version 8 we made the FF mode work like the old HALF mode...
-                if (allConfigs.cart[slot].frame_mode == OLD_MODE_HALF)
-                {
-                    allConfigs.cart[slot].frame_mode = MODE_FF;
-                }
-                
-                // With version 9 we want the bus_driver to reflect the DS model in use
-                allConfigs.cart[slot].bus_driver = (isDSiMode() ? 1:0);
-            }
-                
-            allConfigs.global.palette = 0;
-            allConfigs.global.sound   = (isDSiMode() ? SOUND_20KHZ : SOUND_10KHZ);
-            allConfigs.global.global1 = 0;
-            allConfigs.global.global2 = 0;
-            allConfigs.global.global3 = 0;
-            allConfigs.global.global4 = 0;
-            allConfigs.global.global5 = 0;
-            allConfigs.global.global6 = 1;
-            allConfigs.global.global7 = 1;
-            allConfigs.global.global8 = 2;
-            allConfigs.config_ver = CONFIG_VER; // Patch the version number
-            myGlobalCartInfo = allConfigs.global;
-            SaveConfig(FALSE);
-        }
-        else if (allConfigs.config_ver == 0x0008) // One time upgrade
-        {
-            for (short slot=0; slot<MAX_CONFIGS; slot++)
-            {
-                // With version 9 we want the bus_driver to reflect the DS model in use
-                allConfigs.cart[slot].bus_driver = (isDSiMode() ? 1:0);
-            }
-                
-            allConfigs.config_ver = CONFIG_VER; // Patch the version number
-            myGlobalCartInfo = allConfigs.global;
-            SaveConfig(FALSE);
-        }
-        
         if (allConfigs.config_ver == CONFIG_VER)
         {
             bInitDatabase = false;
