@@ -79,12 +79,13 @@ PageAccess page_access __attribute__((section(".dtcm")));
 uInt32 myCurrentOffset __attribute__((section(".dtcm")));
 uint8 original_flicker_mode = 0;
 GlobalCartInfo myGlobalCartInfo;
+extern char my_filename[];
 
 // We can store up to 8k in the fast DTCM memory to give a speed boost... This helps 2k/4k and 8k carts... plus Starpath Supercharger BANK_AR carts
 uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
 
 // Our cart buffer memory - this can store game ROMs up to 512k
-uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (32)));
+uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (0x1000)));
 
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
@@ -212,6 +213,7 @@ const CartInfo table[] =
     {"5f791d93ac95bdd8a691a65d665fb436",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Atom Smasher (1983).bin
     {"14d8bf013eed9edd76e55b86a27709d8",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Ature (2010) (beoran).bin
     {"4eb7b733de3e61184341f46a24f8e489",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  36,    210,   100,   0,  0},    // Avalanche.bin
+    {"b2294cc6bd6f2118633e0bf6d4bebd18",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  36,    210,   100,   0,  0},    // Avalanche_demo_final_NTSC.bin
     {"cb81972e2cd9b175ded45d7f0892da42",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // AVCSTec Challenge.bin
     {"ddd2e0aa26a1c3f3240d55682b245f95",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // bBlocks.bin
     {"5b124850de9eea66781a50b2e9837000",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  25,    210,    83,   0,  0},    // Bachelor Party (1982).bin
@@ -477,6 +479,7 @@ const CartInfo table[] =
     {"335a7c5cfa6fee0f35f5824d1fa09aed",  "CONGOB", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   70,    245,   100,   0,  0},    // Congo Bongo (1983) (PAL).bin
     {"50dd164c77c4df579843baf838327469",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v1).bin
     {"0f604cd4c9d2795cf5746e8af7948064",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v2).bin
+    {"b9f64a784b0e271526887ecfb67d36ae",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest-of-Mars_demo_final_NTSC.bin        
     {"57c5b351d4de021785cf8ed8191a195c",  "??????", BANK_F8,   CTR_LJOY,      SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin (patched for joystick)
     {"ba403a44966fd8307aac08214ac73bdd",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (joystick).bin  
     {"798b8921276eec9e332dfcb47a2dbb17",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
@@ -1063,6 +1066,7 @@ const CartInfo table[] =
     {"7ad782952e5147b88b65a25cadcdf9e0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   0,  5},    // Kwibble (1983).bin
     {"b86552198f52cfce721bafb496363099",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Kyphus (1982).bin
     {"adfbd2e8a38f96e03751717f7422851d",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  4},    // Lady Bug.bin
+    {"5b45b4ad247c37600dd0faf269bff993",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  4},    // Lady-Bug_demo_final_NTSC.bin    
     {"f1489e27a4539a0c6c8529262f9f7e18",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   52,    245,    80,   0,  0},    // Lady Bug PAL.bin    
     {"d14be7d60aa80ffaaf4695bd9c72468d",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Lady-Bug-Arcade_demo_final_NTSC.bin
     {"95a89d1bf767d7cc9d0d5093d579ba61",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Lady in Wading (1982).bin
@@ -1640,6 +1644,7 @@ const CartInfo table[] =
     {"fe641247a4ab9bee970e19ab55f23b25",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    90,   0,  2},    // Save the Whales (1983).bin
     {"e9f25c7af4f27c9e1b5b8f6fe6141e8c",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble (final).bin
     {"4f556cd013528aed2aebc715b4e49ac8",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble_demo_final_v2_NTSC.bin    
+    {"bee094c9d3d1feac3c63ed81b4881617",  "SCRAMB", BANK_DPCP, CTR_LJOY,      SPEC_DPCPNOC,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  32,    205,   100,   0,  0},    // Scramble_demo_final_CG_NTSC.bin   
     {"19e761e53e5ec8e9f2fceea62715ca06",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"3fe43915e5655cf69485364e9f464097",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
     {"5dccf215fdb9bbf5d4a6d0139e5e8bcb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  41,    210,    97,   0,  2},    // Scuba Diver (1983).bin
@@ -1913,7 +1918,7 @@ const CartInfo table[] =
     {"656dc247db2871766dffd978c71da80c",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
-    {"afcf38bda03206f29200bbea73257930",  "SSTOCK", BANK_X07,  CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Stella's Stocking
+    {"afcf38bda03206f29200bbea73257930",  "SSTOCK", BANK_X07,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Stella's Stocking
     {"0b8d3002d8f744a753ba434a4d39249a",  "STELTR", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Stellar Track (1980).bin
     {"23fad5a125bcd4463701c8ad8a0043a9",  "??????", BANK_4K,   CTR_RJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // Stone Age (1983).bin
     {"9333172e3c4992ecf548d3ac1f2553eb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // Strategy X (1983).bin
@@ -2849,12 +2854,25 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if (myCartInfo.banking == BANK_DPC)
   {
-      cartDriver = 11;  // DPC carts must use the special driver
+      cartDriver = 12;  // DPC carts must use the special driver
   }  
   else if (myCartInfo.banking == BANK_DPCP)
   {
       isCDFJPlus = false;
       cartDriver = 8;   // DPC+ carts must use the special driver
+      
+      if (!bFoundInDAT)
+      {
+          if (strstr(my_filename, "scramble") != 0)
+          {
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 30;
+              myCartInfo.displayNumScalines = 212;
+              myCartInfo.yOffset = 18;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+      }      
   }  
   else if (myCartInfo.banking == BANK_CDFJ)
   {
@@ -2862,12 +2880,128 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
       
+      // These carts need a little extra oomph from the CPU so we have a special driver
+      if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;
+      if (strstr(my_filename, "elevator") != 0)  cartDriver = 11;
+      
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
       if (!bFoundInDAT)
       {
           if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
+
+          // -----------------------------------------------------------------------
+          // The special CHAMP GAMES handler ... Since these ROMs are unique to 
+          // a buyer, we will just handle them based on filename. This allows us
+          // to set some sensible defaults for these cutting-edge games...
+          // -----------------------------------------------------------------------
+          if (strstr(my_filename, "mappy") != 0)
+          {
+              myCartInfo.soundQuality = SOUND_WAVE;
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.displayStartScanline = 30;
+              myCartInfo.yOffset = 14;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "qyx") != 0)
+          {
+              myCartInfo.soundQuality = SOUND_15KHZ;
+              myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.displayStartScanline = 28;
+              myCartInfo.yOffset = 16;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "lady") != 0)
+          {
+              myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.yOffset = 15;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "zoo") != 0)
+          {
+              myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 32;
+              myCartInfo.displayNumScalines = 210;
+              myCartInfo.yOffset = 19;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "gorf") != 0)
+          {
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 32;
+              myCartInfo.displayNumScalines = 211;
+              myCartInfo.yOffset = 17;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "cobra") != 0)
+          {
+              myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 30;
+              myCartInfo.displayNumScalines = 212;
+              myCartInfo.yOffset = 18;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "galagon") != 0)
+          {
+              myCartInfo.frame_mode = MODE_FF;              
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.yOffset = 12;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "robot") != 0)
+          {
+              myCartInfo.controllerType = CTR_QUADTARI;
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 28;
+              myCartInfo.displayNumScalines = 205;
+              myCartInfo.screenScale = 87;
+          }
+          else
+          if (strstr(my_filename, "wizard") != 0)
+          {
+              myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.hBlankZero = 0;
+              myCartInfo.vblankZero = 0;
+              myCartInfo.yOffset = -9;
+              myCartInfo.xButton = BUTTON_SHIFT_DN;
+          }
+          else
+          if (strstr(my_filename, "turbo") != 0)
+          {
+              myCartInfo.hBlankZero = 0;
+              myCartInfo.vblankZero = 0;
+              myCartInfo.yOffset = 10;
+              myCartInfo.displayNumScalines = 206;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "elevator") != 0)
+          {
+              myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.hBlankZero = 0; 
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 34;
+              myCartInfo.displayNumScalines = 206;
+              myCartInfo.xButton = BUTTON_SHIFT_DN;
+          }
       }
+      
   }
   else if (((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K)))
   {
@@ -3043,7 +3177,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     
   // Conquest of Mars has a glitch unless the unused TIA pins are driven exactly so...
   if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = 3; myDataBusState = 0x02;}    
-
+    
   extern uInt8 bSafeThumb;
   bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);    // For any games that use the DPC+ ARM Thumbulator, we can enable "unsafe" optmizations...
   

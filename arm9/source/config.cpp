@@ -266,7 +266,7 @@ const struct options_t Game_Option_Table[2][20] =
 
 void display_line(uInt8 idx, uInt8 highlight)
 {
-    char strBuf[35];
+    static char strBuf[35];
     if (Game_Option_Table[OptionPage][idx].isNumeric == 1)  // Unsigned 8 bit
     {
         sprintf(strBuf, " %-11s : %-15d", Game_Option_Table[OptionPage][idx].label, *(Game_Option_Table[OptionPage][idx].option_val));
@@ -287,7 +287,7 @@ void display_line(uInt8 idx, uInt8 highlight)
 // ------------------------------------------------------------------
 static int display_options_list(bool bFullDisplay)
 {
-    int len=0;
+    short int len=0;
     
     if (bFullDisplay)
     {

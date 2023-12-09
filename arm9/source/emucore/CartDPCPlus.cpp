@@ -54,7 +54,7 @@ uInt32 myBottoms[8] __attribute__((section(".dtcm")));
 
 extern uInt32 myCounters[8];
 
-uInt8 myARM6502[MEM_32KB];
+uInt8 myARM6502[MEM_32KB] __attribute__ ((aligned (0x1000)));
 
 uInt8 *myDPCptr __attribute__((section(".dtcm")));
 

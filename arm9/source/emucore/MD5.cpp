@@ -328,9 +328,9 @@ static void MD5_memset(POINTER output, int value, unsigned int len)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 string MD5(const uInt8* buffer, uInt32 length)
 {
-  char hex[] = "0123456789abcdef";
+  static char hex[] = "0123456789abcdef";
   MD5_CTX context;
-  unsigned char md5[16];
+  static unsigned char md5[16];
 
   MD5Init(&context);
   MD5Update(&context, buffer, length);

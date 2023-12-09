@@ -485,7 +485,10 @@ void dsFreeEmu(void)
 bool dsLoadGame(char *filename) 
 {
   unsigned int buffer_size=0;
-  strncpy(my_filename, filename, MAX_FILE_NAME_LEN);
+  for (u16 i=0; i<(u16)strlen(filename)+1; i++)
+  {
+      my_filename[i] = tolower(filename[i]);
+  }
   my_filename[MAX_FILE_NAME_LEN] = 0;
     
   // Load the file
@@ -1510,18 +1513,21 @@ ITCM_CODE void dsMainLoop(void)
                 static u16 ss_dampen = 0;
                 if (keys_pressed & (KEY_R | KEY_L))
                 {
-                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_UP))   myCartInfo.yOffset++;
-                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_DOWN)) myCartInfo.yOffset--;
-                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
-                    if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
+                    if (myCartInfo.controllerType != CTR_QUADTARI)
+                    {
+                        if ((keys_pressed & KEY_R) && (keys_pressed & KEY_UP))   myCartInfo.yOffset++;
+                        if ((keys_pressed & KEY_R) && (keys_pressed & KEY_DOWN)) myCartInfo.yOffset--;
+                        if ((keys_pressed & KEY_R) && (keys_pressed & KEY_LEFT))  myCartInfo.xOffset++;
+                        if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
-                    // Allow vertical scaling from 51% to 100%
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 100) myCartInfo.screenScale++;
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 51) myCartInfo.screenScale--;
+                        // Allow vertical scaling from 51% to 100%
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 100) myCartInfo.screenScale++;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 51) myCartInfo.screenScale--;
 
-                    // Allow horizontal scaling ... not hugely needed but for some games that don't utilize the entire horizontal width this can be used to zoom in a bit
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
-                    if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
+                        // Allow horizontal scaling ... not hugely needed but for some games that don't utilize the entire horizontal width this can be used to zoom in a bit
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
+                    }
                     
                     if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L))
                     {

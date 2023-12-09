@@ -113,6 +113,7 @@ uInt32  lastTiaPokeCycles           __attribute__((section(".dtcm"))) = 0;
 
 uInt8   bWaveDirectSound            __attribute__((section(".dtcm"))) = 0;
 uInt8   bFrameSkipCDFJ              __attribute__((section(".dtcm"))) = 0;
+uInt8   bNoCollisionDetection       __attribute__((section(".dtcm"))) = 0;
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
@@ -174,7 +175,7 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
    
-uInt32  *color_repeat_table = (uInt32 *) 0x068A1000;    // 1K in size and stored in VRAM to give a little performance boost.
+uInt32  color_repeat_table[256]; // __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
@@ -554,6 +555,7 @@ ITCM_CODE void TIA::update()
     
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
   bFrameSkipCDFJ = (myCartInfo.thumbOptimize == 3);
+  bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
 
   // --------------------------------------------------------------------
   // Execute instructions until frame is finished
@@ -572,7 +574,8 @@ ITCM_CODE void TIA::update()
       case 8: mySystem->m6502().execute_DPCP();        break;   // If we are DPC+, we can run faster here...
       case 9: mySystem->m6502().execute_CDFJ();        break;   // If we are CDF/CDFJ, we can run faster here...
       case 10: mySystem->m6502().execute_CDFJPlus();   break;   // If we are CDFJ+, we can run faster here...
-      case 11: mySystem->m6502().execute_DPC();        break;   // If we are DPC (Pitfall II), we can run faster here...
+      case 11: mySystem->m6502().execute_CDFJPlusPlus();break;  // If we are CDFJ+, we can run faster here...
+      case 12: mySystem->m6502().execute_DPC();        break;   // If we are DPC (Pitfall II), we can run faster here...
       default: mySystem->m6502().execute();            break;   // Otherwise the normal execute driver
   }
 }
@@ -1168,7 +1171,7 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // way to do this... but nothing has broken it and we need the speed.
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
-#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = myColor[myPriorityEncoder[0][enabled]];  
+#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = (enabled ? myColor[myPriorityEncoder[0][enabled]] : myColor[0]); 
 
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
@@ -1187,12 +1190,12 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 {
   // -------------------------------------------------------------------------------------
   // Games like Elevator Agent are highly demanding and require us to skip frames 
-  // to even have a chance of keeping up... Check that here and render 4 frames,
-  // then skip 4 frames, etc. It causes minor flicker but we're desperate!
+  // to even have a chance of keeping up... Check that here and render 2 frames,
+  // then skip 2 frames, etc. It causes minor flicker but we're desperate!
   // -------------------------------------------------------------------------------------
   if (bFrameSkipCDFJ)
   {
-    if (gTotalAtariFrames & 0x04) return;
+    if (gTotalAtariFrames & 0x02) return;
   }
     
   // ---------------------------------------------------------------
@@ -1288,7 +1291,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         else  // All other possibilities... this is expensive CPU-wise
         {
             Int32 hpos = clocksFromStartOfScanLine - HBLANK;
-            if (myCartInfo.thumbOptimize & 2)  // If we are Optimizing the ARM Thumb with NO collisions...
+            if (bNoCollisionDetection)  // If we are Optimizing the ARM Thumb with NO collisions...
             {
                 if ((myEnabledObjects|myPlayfieldPriorityAndScore) == myPFBit) // Playfield bit set... without priority/score (common in CDF/J/+ games)
                 {
@@ -1510,9 +1513,12 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     
     if (addr < 8)
     {
-         // Update frame to current color clock before we look at anything!
+        // For CDF/J/+ games that have no collision, just return noise
+        if (bNoCollisionDetection) return noise;
+        
+        // Update frame to current color clock before we look at anything!
         updateFrame((3*gSystemCycles));
-        if (!myCollision) return noise;
+        if (!myCollision) {return noise;}
         switch(addr)
         {
         case 0x00:    // CXM0P
@@ -1695,7 +1701,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   Int32 clock; 
   Int32 delta_clock;
   addr = addr & 0x003f;
-
+    
   if (unlikely(bWaveDirectSound))
   {
       while ((gSystemCycles - lastTiaPokeCycles) >= 76)
@@ -1827,25 +1833,25 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x06:    // Color-Luminance Player 0
     {
-      myColor[MYCOLUP0] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
+      myColor[MYCOLUP0] = color_repeat_table[value];
       break;
     }
 
     case 0x07:    // Color-Luminance Player 1
     {
-      myColor[MYCOLUP1] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
+      myColor[MYCOLUP1] = color_repeat_table[value];
       break;
     }
 
     case 0x08:    // Color-Luminance Playfield
     {
-      myColor[MYCOLUPF] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
+      myColor[MYCOLUPF] = color_repeat_table[value];
       break;
     }
 
     case 0x09:    // Color-Luminance Background
     {
-      myColor[MYCOLUBK] = *((uInt32 *)0x068A1000 + value); //color_repeat_table[value];
+      myColor[MYCOLUBK] = color_repeat_table[value];
       break;
     }
 

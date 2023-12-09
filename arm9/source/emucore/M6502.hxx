@@ -113,6 +113,7 @@ class M6502
     virtual void execute_DPCP(void) = 0;
     virtual void execute_CDFJ(void) = 0;
     virtual void execute_CDFJPlus(void) = 0;
+    virtual void execute_CDFJPlusPlus(void) = 0;
     virtual void execute_DPC(void)  = 0;
 
     /**

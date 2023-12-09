@@ -65,7 +65,7 @@ uint32 highscore_checksum(void)
 
 void highscore_init(void) 
 {
-    bool create_defaults = 0;
+    u8 create_defaults = 0;
     FILE *fp;
     
     strcpy(highscores.last_initials, "   ");

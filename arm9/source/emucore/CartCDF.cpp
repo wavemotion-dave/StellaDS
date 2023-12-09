@@ -75,6 +75,8 @@ extern Int32 myDPCPCycles;
 extern uInt32 myMusicCounters[3];
 extern uInt32 myMusicFrequencies[3];
 
+extern uInt16 f8_bankbit;
+
 // Controls mode, lower nybble sets Fast Fetch, upper nybble sets audio
 // -0 = Fast Fetch ON
 // -F = Fast Fetch OFF
@@ -88,6 +90,7 @@ u8 myLDXenabled             __attribute__((section(".dtcm"))) = 0;
 u8 myLDYenabled             __attribute__((section(".dtcm"))) = 0;
 uInt16 myFastFetcherOffset  __attribute__((section(".dtcm"))) = 0;
 uInt8 subversion = 0;
+u8 myZeroOffset = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // params:
@@ -210,7 +213,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   if (myFastFetcherOffset)
     myFetcherOffsetPtr = &myARMRAM[myFastFetcherOffset];    
   else
-    myFetcherOffsetPtr = (uInt8*)0;
+    myFetcherOffsetPtr = (uInt8*)&myZeroOffset;
    
   // Pointer to the waveform base in RAM
   myWaveformBasePtr = (uInt32*)&myARMRAM[myWaveformBase];
@@ -219,6 +222,11 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   myDPCptr = (uInt8 *)image + (isCDFJPlus ? MEM_2KB : MEM_4KB);
   memset(myARM6502, 0xFF, MEM_32KB);
   memcpy(myARM6502, myDPCptr, MEM_28KB); // For the 6502, we only need to copy 28K max
+ 
+  if (isCDFJPlus && (size > MEM_32KB))
+  {
+      memcpy(fast_cart_buffer, myARM6502, MEM_8KB);
+  }
     
   // Copy intial driver into the CDF Harmony RAM
   memcpy(myARMRAM, image, MEM_2KB);
@@ -306,6 +314,8 @@ void CartridgeCDF::install(System& system)
 
   // Install pages for the startup bank
   bank(myStartBank);
+    
+  f8_bankbit = 0x0FFF;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -408,8 +418,8 @@ uInt8 CartridgeCDF::peek(uInt16 address)
    address &= 0xFFF;
    switch (address)
    {
-        case 0x0FF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; break;
-        case 0x0FF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; break;
+        case 0x0FF4:  myDPCptr = &myARM6502[isCDFJPlus ? 0x0000:0x6000]; f8_bankbit = 0x0FFF; break;
+        case 0x0FF5:  myDPCptr = &myARM6502[isCDFJPlus ? 0x1000:0x0000]; f8_bankbit = 0x1FFF;break;
         case 0x0FF6:  myDPCptr = &myARM6502[isCDFJPlus ? 0x2000:0x1000]; break;
         case 0x0FF7:  myDPCptr = &myARM6502[isCDFJPlus ? 0x3000:0x2000]; break;
         case 0x0FF8:  myDPCptr = &myARM6502[isCDFJPlus ? 0x4000:0x3000]; break;

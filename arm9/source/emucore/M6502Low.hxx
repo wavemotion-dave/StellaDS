@@ -81,6 +81,7 @@ class M6502Low : public M6502
     virtual void execute_DPCP(void);
     virtual void execute_CDFJ(void);
     virtual void execute_CDFJPlus(void);
+    virtual void execute_CDFJPlusPlus(void);
     virtual void execute_DPC(void);
     
     /**
@@ -141,6 +142,7 @@ inline void  poke_small(uInt8 address, uInt8 value);
 inline uInt8  peek_DataStream(uInt8 address);
 inline uInt16 peek_JumpStream(uInt8 address);
 inline uInt8  peek_DataStreamPlus(uInt8 address);
+inline uInt8  peek_DataStreamPlusPlus(uInt8 address);
 inline uInt16 peek_JumpStreamPlus(uInt8 address);
 
 #endif

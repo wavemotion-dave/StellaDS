@@ -65,7 +65,7 @@ break;
 
 case 0x65:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
@@ -349,7 +349,7 @@ break;
 
 case 0x25:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   A &= operand;
@@ -528,7 +528,7 @@ break;
 case 0x06:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -549,7 +549,7 @@ case 0x16:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -658,7 +658,7 @@ break;
 
 case 0x24:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   notZ = (A & operand);
@@ -834,7 +834,7 @@ break;
 
 case 0xc5:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)A - (uInt16)operand;
@@ -962,7 +962,7 @@ break;
 
 case 0xe4:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)X - (uInt16)operand;
@@ -1004,7 +1004,7 @@ break;
 
 case 0xc4:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   uInt16 value = (uInt16)Y - (uInt16)operand;
@@ -1178,7 +1178,7 @@ break;
 case 0xc6:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -1196,7 +1196,7 @@ case 0xd6:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -1285,7 +1285,7 @@ break;
 
 case 0x45:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   A ^= operand;
@@ -1387,7 +1387,7 @@ break;
 case 0xe6:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -1405,7 +1405,7 @@ case 0xf6:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -1882,7 +1882,7 @@ break;
 
 case 0xa7:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   A = operand;
@@ -1980,26 +1980,23 @@ case 0xa9:
 
 #ifdef DATA_STREAMS_PLUS
   extern u8 myDataStreamFetch; extern uInt8* myFetcherOffsetPtr;
-  
+#ifdef DATA_STREAMS_PLUS_PLUS  
+  u8 *next6502Inst = &fast_cart_buffer[PC++ & f8_bankbit];
+#else  
   u8 *next6502Inst = &myDPCptr[PC++ & 0xFFF];
+#endif  
   A = *next6502Inst++;  
   
-  if (myFetcherOffsetPtr)
+  unsigned int offset_A = A-(*myFetcherOffsetPtr); 
+  if (offset_A < myDataStreamFetch)  
   {
-     uInt8 offset_A = A-(*myFetcherOffsetPtr); 
-     if (offset_A < myDataStreamFetch) 
-     {
-        A = peek_DataStreamPlus(offset_A);
-     }
+#ifdef DATA_STREAMS_PLUS_PLUS  
+     A = peek_DataStreamPlusPlus(offset_A);
+#else     
+     A = peek_DataStreamPlus(offset_A);
+#endif     
   }
-  else
-  {
-     if (A < myDataStreamFetch) 
-     {
-         A = peek_DataStreamPlus(A);
-     }
-  }
-  
+
   // --------------------------------------------------
   // More often than not, what follows LDA is STA...
   // This gives us a nice look-ahead-speed-up
@@ -2012,6 +2009,7 @@ case 0xa9:
      break; // Actung! This is dangerous... we are not setting notZ nor N here for CDFJ+ with fast Data Fetchers to save some cycles
   } else gSystemCycles++;
 #endif
+
 }
 {
   notZ = N = A;
@@ -2020,7 +2018,7 @@ break;
 
 case 0xa5:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   A = operand;
@@ -2123,15 +2121,13 @@ case 0xa2:
   extern u8 myDataStreamFetch, myLDXenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDXenabled)
   {
-      if (myFetcherOffsetPtr)
-      {
-        uInt8 offset_X = X-(*myFetcherOffsetPtr); 
-        if (offset_X < myDataStreamFetch) X = peek_DataStreamPlus(offset_X);
-      }
-      else
-      {
-         if (X < myDataStreamFetch) X = peek_DataStreamPlus(X);
-      }
+     uInt8 offset_X = X-(*myFetcherOffsetPtr); 
+     if (offset_X < myDataStreamFetch) 
+#ifdef DATA_STREAMS_PLUS_PLUS     
+        X = peek_DataStreamPlusPlus(offset_X);
+#else
+        X = peek_DataStreamPlus(offset_X);
+#endif
   }
 #endif
   
@@ -2144,7 +2140,7 @@ break;
 
 case 0xa6:
 {
-  X = peek(peek_PC(PC++));
+  X = peek_zpg(peek_PC(PC++));
 }
 {
   notZ = X;
@@ -2200,15 +2196,13 @@ case 0xa0:
   extern u8 myDataStreamFetch, myLDYenabled; extern uInt8 *myFetcherOffsetPtr;
   if (myLDYenabled)
   {
-      if (myFetcherOffsetPtr)
-      {
-        uInt8 offset_Y = Y-(*myFetcherOffsetPtr); 
-        if (offset_Y < myDataStreamFetch) Y = peek_DataStreamPlus(offset_Y);
-      }
-      else
-      {
-         if (Y < myDataStreamFetch) Y = peek_DataStreamPlus(Y);
-      }
+    uInt8 offset_Y = Y-(*myFetcherOffsetPtr); 
+    if (offset_Y < myDataStreamFetch) 
+#ifdef DATA_STREAMS_PLUS_PLUS    
+        Y = peek_DataStreamPlus(offset_Y);
+#else
+        Y = peek_DataStreamPlusPlus(offset_Y);
+#endif        
   }
 #endif
 }
@@ -2220,7 +2214,7 @@ break;
 
 case 0xa4:
 {
-  Y = peek(peek_PC(PC++));
+  Y = peek_zpg(peek_PC(PC++));
 }
 {
   notZ = Y;
@@ -2288,7 +2282,7 @@ break;
 case 0x46:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -2309,7 +2303,7 @@ case 0x56:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -2403,7 +2397,7 @@ case 0x89:
 case 0xc2:
 case 0xe2:
 {
-  operand = peek_PC(PC++);
+  fake_peek(); PC++; // These are, effectiovely, NO-OPs
 }
 {
 }
@@ -2413,7 +2407,7 @@ case 0x04:
 case 0x44:
 case 0x64:
 {
-  operand = peek(peek_PC(PC++));
+  fake_peek(); fake_peek(); PC++; // These are, effectiovely, NO-OPs
 }
 {
 }
@@ -2476,7 +2470,7 @@ break;
 
 case 0x05:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   A |= operand;
@@ -2784,7 +2778,7 @@ break;
 case 0x26:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -2807,7 +2801,7 @@ case 0x36:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -2892,7 +2886,7 @@ break;
 case 0x66:
 {
   operandAddress = peek_PC(PC++);
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -2915,7 +2909,7 @@ case 0x76:
   operandAddress = peek_PC(PC++);
   fake_peek();
   operandAddress = (operandAddress + X) & 0xFF;
-  operand = peek(operandAddress);
+  operand = peek_zpg(operandAddress);
   //poke(operandAddress, operand);
   fake_poke();
 }
@@ -3391,7 +3385,7 @@ break;
 
 case 0xe5:
 {
-  operand = peek(peek_PC(PC++));
+  operand = peek_zpg(peek_PC(PC++));
 }
 {
   if(!D)
@@ -4104,7 +4098,12 @@ break;
 
 case 0x85:
 {
+#ifdef DATA_STREAMS_PLUS
+  gSystemCycles++;
+  poke_small(peek_PC(PC++), A);
+#else
   poke(peek_PC(PC++), A);
+#endif
 }
 break;
 
@@ -4182,7 +4181,12 @@ break;
 
 case 0x86:
 {
+#ifdef DATA_STREAMS_PLUS
+  gSystemCycles++;
+  poke_small(peek_PC(PC++), X);
+#else
   poke(peek_PC(PC++), X);
+#endif  
 }
 break;
 
@@ -4210,7 +4214,12 @@ break;
 
 case 0x84:
 {
+#ifdef DATA_STREAMS_PLUS
+  gSystemCycles++;
+  poke_small(peek_PC(PC++), Y);
+#else
   poke(peek_PC(PC++), Y);
+#endif  
 }
 break;
 

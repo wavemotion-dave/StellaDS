@@ -109,10 +109,10 @@ static uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volum
 static uint8 Bit4[POLY4_SIZE] __attribute__((section(".dtcm"))) =
       { 0xff,0xff,0,0xff,0xff,0xff,0,0,0,0,0xff,0,0xff,0,0 };
 
-static uint8 Bit5[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
+static uint8 Bit5[POLY5_SIZE] =
       { 0,0,1,0,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,1,1,1,0,1,0,1,0,0,0,0,1 };
 
-static uint8 Bit5a[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
+static uint8 Bit5a[POLY5_SIZE] =
       { 0,0,0xff,0,0xff,0xff,0,0,0xff,0xff,0xff,0xff,0xff,0,0,0,0xff,0xff,0,0xff,0xff,0xff,0,0xff,0,0xff,0,0,0,0,0xff };
 
 /* I've treated the 'Div by 31' counter as another polynomial because of */
@@ -120,7 +120,7 @@ static uint8 Bit5a[POLY5_SIZE]  __attribute__((section(".dtcm"))) =
 /* has a 13:18 ratio (of course, 13+18 = 31).  This could also be */
 /* implemented by using counters. */
 
-static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
+static uint8 Div31[POLY5_SIZE] =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
 /* Rather than have a table with 511 entries, I use a random number generator. */

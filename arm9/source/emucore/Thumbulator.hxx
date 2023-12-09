@@ -102,7 +102,7 @@ class Thumbulator
       lsr1,         lsr2,       mov1,       mov2,       mov3,       mov3_r15,   mul,        mvn,        neg,        orr,            //90
       pop,          push,       rev,        rev16,      revsh,      ror,        sbc,        setend,     stmia,      str1,           //100
       str2,         str3,       str3_r2,    str3_r3,    strb1,      strb2,      strh1,      strh2,      sub1,       sub2,           //110
-      sub3,         sub4,       swi,        sxtb,       sxth,       tst,        uxtb,       uxth                                    //120
+      sub3,         sub4,       swi,        sxtb,       sxth,       tst,        uxtb,       uxth,       mov1z                       //120      
     };
     
     inline uInt16 read16 ( uInt32 addr );

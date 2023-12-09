@@ -30,7 +30,7 @@
 #include "Cart.hxx"
 
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
-uInt32  cFlag        __attribute__((section(".dtcm"))) = 0;
+uInt32 cFlag         __attribute__((section(".dtcm"))) = 0;
 uInt8 *myARMRAM      __attribute__((section(".dtcm"))) = 0;
 u8  bSafeThumb       __attribute__((section(".dtcm"))) = 1;
 
@@ -372,7 +372,11 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFFC0) == 0x40C0) return Op::lsr2;
 
   //MOV(1) immediate
-  if((inst & 0xF800) == 0x2000) return Op::mov1;
+  if((inst & 0xF800) == 0x2000)
+  {
+      if ((inst & 0xFF) == 0) return Op::mov1z;
+      return Op::mov1;
+  }
 
   //MOV(2) two low registers
   if((inst & 0xFFC0) == 0x1C00) return Op::mov2;
@@ -792,61 +796,48 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::ldr4_r0:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(0,readRAM32(rb));
+                write_register(0,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::ldr4_r1:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(1,readRAM32(rb));
+                write_register(1,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
               
           case Op::ldr4_r2:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(2,readRAM32(rb));
+                write_register(2,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::ldr4_r3:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(3,readRAM32(rb));
+                write_register(3,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::ldr4_r4:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(4,readRAM32(rb));
+                write_register(4,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::ldr4_r5:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(5,readRAM32(rb));
+                write_register(5,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::ldr4_r6:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(6,readRAM32(rb));
+                write_register(6,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
               
           case Op::ldr4_r7:
-                rb=read_register(13) + ((inst<<2)&0x3FF);
-                write_register(7,readRAM32(rb));
+                write_register(7,readRAM32((read_register(13) + ((inst<<2)&0x3FF))));
               break;
 
           case Op::str3:
-                rd=(inst>>8)&0x07;
                 rb=read_register(13) + (((inst>>0)&0xFF)<<2);
-                write32(rb,read_register(rd));
+                write32(rb,read_register(((inst>>8)&0x07)));
               break;
 
           case Op::str3_r2:
-                rb=(inst<<2)&0x3FF;
-                rb=read_register(13)+rb;
-                write32(rb,read_register(2));
+                write32((read_register(13)+((inst<<2)&0x3FF)),read_register(2));
               break;
               
           case Op::str3_r3:
-                rb=(inst<<2)&0x3FF;
-                rb=read_register(13)+rb;
-                write32(rb,read_register(3));
+                write32((read_register(13)+((inst<<2)&0x3FF)),read_register(3));
               break;
               
           case Op::ldr1_r0:
@@ -1063,9 +1054,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 
           case Op::mov3_r15:
                 FIX_R15_PC
-                rm=(inst>>3)&0xF;
-                rc=read_register(rm);
-                rc+=2; // fxq fix for MOV R15
+                rc=read_register((inst>>3)&0xF)+2;
                 write_register(15,rc);
                 FIX_THUMB_PTRS
               break;              
@@ -1147,9 +1136,8 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           case Op::sbc:
                 rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
                 ra=read_register(rd);
-                rb=read_register(rm);
+                rb=read_register((inst>>3)&0x7);
                 rc=ra-rb;
                 if(!(cFlag)) rc--;
                 write_register(rd,rc);
@@ -1161,10 +1149,9 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::tst:
-                rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ra=read_register(rn);
-                rb=read_register(rm);
+
+                ra=read_register((inst>>0)&0x7);
+                rb=read_register((inst>>3)&0x7);
                 ZNflags=ra&rb;
               break;
               
@@ -1222,9 +1209,8 @@ ITCM_CODE void Thumbulator::execute ( void )
               
           case Op::mul:
                 rd=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
                 ra=read_register(rd);
-                rb=read_register(rm);
+                rb=read_register((inst>>3)&0x7);
                 rc=ra*rb;
                 write_register(rd,rc);
                 do_znflags(rc);
@@ -1367,8 +1353,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
 
           case Op::incr:
-                rn = (inst & 0x0700) >> 8;
-                do_znflags(++reg_sys[rn]);
+                do_znflags(++reg_sys[(inst & 0x0700) >> 8]);
               break;
               
           case Op::add2_r0:
@@ -1529,6 +1514,13 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::mov1:
                 ZNflags=(inst>>0)&0xFF;
                 write_register((inst>>8)&0x07,ZNflags);
+              break;
+              
+          case Op::mov1z:
+#ifdef SAFE_THUMB              
+                ZNflags=0;
+#endif              
+                write_register((inst>>8)&0x07,0);
               break;
               
           case Op::sub3:
