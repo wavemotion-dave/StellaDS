@@ -177,6 +177,7 @@ Champ Games Support :
 -----------------------
 ![Champ Games](https://github.com/wavemotion-dave/StellaDS/blob/master/png/champ.png)
 
+
 StellaDS supports all current Champ Games offerings through Turbo Arcade and Elevator Agent. These games represent the cutting edge of what is possible on the Atari 2600 using an ARM co-processor to help move data through the system. These games push the limits of the emulator. To run these advanced arm-assisted games, you will need a DSi or greater running either Twilight Menu++ or Unlaunch to unlock the 2X CPU (134MHz). The original DS (or the DSi/2DS/3DS running with an R4 cart) will only run in DS compatibility mode (67MHz) which is too slow to render these games full speed.
 
 It is also recommended that you use an XL/LL model - these larger screens have a slower LCD fade resulting in a picture that more closely resembles an old TV. This means less flicker overall.
