@@ -182,7 +182,7 @@ StellaDS supports all current Champ Games offerings through Turbo Arcade and Ele
 
 It is also recommended that you use an XL/LL model - these larger screens have a slower LCD fade resulting in a picture that more closely resembles an old TV. This means less flicker overall.
 
-Be aware that most of these games utilize a significant amount of overscan. The DS/DSi/XL/LL only has 192 pixels of vertical resolution and this means the extra 16-20 pixels of game information will render-off screen. StellaDS utilizes screen pan UP/DN to handle this. For example, in GORF, you will not see the score at the top normally... but if you press the X button (pan UP), the screen will momentarily shift up to show you the score and then automatically pan back down. It's quite smooth and is very serviceable in normal gameplay.
+Be aware that most of these games utilize a significant amount of overscan. The DS/DSi/XL/LL only has 192 pixels of vertical resolution and this means the extra 16-20 pixels of game information will render-off screen. StellaDS will always show the main gameplay portion of the screen and utilizes a screen pan UP/DN to shift in the score or status (non-gameplay) information. For example, in GORF, you will not see the score at the top normally... but if you press the X button (pan UP), the screen will momentarily shift up to show you the score and then automatically pan back down. It's quite smooth and is very serviceable in normal gameplay.
 
 ![Gorf](https://github.com/wavemotion-dave/StellaDS/blob/master/png/gorf.bmp)
 
