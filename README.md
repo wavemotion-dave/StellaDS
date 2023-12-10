@@ -172,13 +172,11 @@ In the /data directory of your SD card you will see some files auto-created by S
 * StellaDS.DAT - this contains the per-game settings (basically when you press START on the Configuration screen and it saves out your settings for the current game). The easiest way to set all your games back to default settings is to remove this file.
 * StellaDS.HI - this is the high-score file on a per-game basis. Up to 10 scores are saved per game by pressing the little Golden Chalice icon on the main screen.
 * StellaDS.EE - this is the SaveKey 32K EEPROM file for games that utilize a SaveKey. If you remove it, a new clean blank copy will be created.
-
-Thanks and Credits :
+ 
+Champ Games Support :
 -----------------------
-* To Bradford W. Mott and Stephen Anthony and various contributors for Stella (http://stella.sourceforge.net/)
-* To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld (https://github.com/DS-Homebrew/TWiLightMenu)
-* To Wintermute for devkitpro and libnds (http://www.devkitpro.org)
-* To Alekmaul and The Chuckster for porting Stella to the DS.
+![Champ Games](https://github.com/wavemotion-dave/StellaDS/blob/master/png/champ.png)
+![Gorf](https://github.com/wavemotion-dave/StellaDS/blob/master/png/gorf.png)
 
 How to use StellaDS :
 ---------------------
@@ -215,8 +213,19 @@ Windows but I've never done it and don't know how.
 If you try to build on a newer gcc, you will likely find it bloats the code a bit and you'll run out of ITCM_CODE memory.
 If this happens, first try pulling some of the ITCM_CODE declarations in areas that aren't heavily utilized.
 
+Thanks and Credits :
+-----------------------
+* To Bradford W. Mott and Stephen Anthony and various contributors for Stella (http://stella.sourceforge.net/)
+* To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld (https://github.com/DS-Homebrew/TWiLightMenu)
+* To Wintermute for devkitpro and libnds (http://www.devkitpro.org)
+* To Alekmaul and The Chuckster for porting Stella to the DS.
+* To John Champeau for his support in helping me optmize the emualtor for his advanced arm-assisted games.
+
 Version History:
 -----------------------
+V7.0 : 10-Dec-2023 by Dave Bernazzani (wavemotion)
+  * Champ Games Edition! 
+
 V6.9 : 06-Dec-2023 by Dave Bernazzani (wavemotion)
   * Improved the ARM Thumb driver and the CDFJ driver to squeeze out two more frames of performance.
   * Fixed PAN UP / PAN DOWN handling on the A-button and you can now pan even if another button is pressed (useful for Turbo Arcade).
