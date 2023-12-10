@@ -234,7 +234,7 @@ Thanks and Credits :
 Version History:
 -----------------------
 V7.0 : 10-Dec-2023 by Dave Bernazzani (wavemotion)
-  * Champ Games Edition! Major overhal to the CDFJ/+ driver to squeeze out ever bit of performance.
+  * Champ Games Edition! Major overhaul to the CDFJ/+ driver to squeeze out every bit of performance.
   * Fix for Genesis gamepad emulation (detection now works).
   * Other minor cleanups and tweaks as time permitted.
 
