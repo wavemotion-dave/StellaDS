@@ -182,11 +182,11 @@ StellaDS supports all current Champ Games offerings through Turbo Arcade and Ele
 
 It is also recommended that you use an XL/LL model - these larger screens have a slower LCD fade resulting in a picture that more closely resembles an old TV. This means less flicker overall.
 
-Also, be aware that most of these games utilize a significant amount of overscan. The DS/DSi/XL/LL only has 192 pixels of vertical resolution and this means the extra 16-20 pixels of game information will render-off screen. StellaDS utilizes screen pan UP/DN to handle this. For example, in GORF, you will not see the score at the top normally... but if you press the X button (pan UP), the screen will momentarily shift up to show you the score and then automatically pan back down. It's quite smooth and is very servicible in normal gameplay.
+Be aware that most of these games utilize a significant amount of overscan. The DS/DSi/XL/LL only has 192 pixels of vertical resolution and this means the extra 16-20 pixels of game information will render-off screen. StellaDS utilizes screen pan UP/DN to handle this. For example, in GORF, you will not see the score at the top normally... but if you press the X button (pan UP), the screen will momentarily shift up to show you the score and then automatically pan back down. It's quite smooth and is very serviceable in normal gameplay.
 
 ![Gorf](https://github.com/wavemotion-dave/StellaDS/blob/master/png/gorf.bmp)
 
-All Champ Games should run at or near full speed with the exception of the two most complex games: Turbo Arcade (which dips down into the 50+ FPS but is generally not notacible for gameplay) and Elevator Agent which runs at 55+ (often up to full speed) but is variable enough that you will hear some slight wavring in the music output (but still quite playable and enjoyable). Try the DEMO roms first to be sure you're happy with the quality here. Be aware that any performance issues related to these cutting-edge games is a reflection of my emulation and not the superior craftsmanship of the games themselves. 
+All Champ Games should run at or near full speed with the exception of the two most complex games: Turbo Arcade (which dips down for some scenes but is generally not noticeable for gameplay) and Elevator Agent which runs at 55+ (often up to full speed) but is variable enough that you will hear some slight wavering in the music output (but still quite playable and enjoyable). Try the DEMO roms first to be sure you're happy with the quality here. Be aware that any performance issues related to these cutting-edge games is a reflection of my emulation and not the superior craftsmanship of the games themselves. 
 
 How to use StellaDS :
 ---------------------
@@ -234,7 +234,9 @@ Thanks and Credits :
 Version History:
 -----------------------
 V7.0 : 10-Dec-2023 by Dave Bernazzani (wavemotion)
-  * Champ Games Edition! 
+  * Champ Games Edition! Major overhal to the CDFJ/+ driver to squeeze out ever bit of performance.
+  * Fix for Genesis gamepad emulation (detection now works).
+  * Other minor cleanups and tweaks as time permitted.
 
 V6.9 : 06-Dec-2023 by Dave Bernazzani (wavemotion)
   * Improved the ARM Thumb driver and the CDFJ driver to squeeze out two more frames of performance.
