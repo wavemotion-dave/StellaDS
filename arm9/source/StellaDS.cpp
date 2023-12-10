@@ -48,7 +48,7 @@
 #include "instructions.h"
 #include "screenshot.h"
 
-#define VERSION "6.9"
+#define VERSION "7.0"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000
@@ -1316,6 +1316,12 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
+                    
+                    if (keys_pressed & (KEY_X))
+                    {
+                             if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                    }
                     break;
                     
                 case CTR_STARRAID:

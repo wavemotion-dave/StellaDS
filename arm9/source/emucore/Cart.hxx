@@ -117,15 +117,15 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define CTR_KEYBOARD0    7     // For keyboard games like Codebreaker
 #define CTR_KEYBOARD1    8     // For both keyboards showing at same time
 #define CTR_BOOSTER      9     // Omega Race and Thrust+
-#define CTR_RAIDERS     10     // Special 2 joystick setup for Raiders of the Lost Ark
-#define CTR_STARRAID    11     // Star raiders has Left Joystick and Right Keypad
-#define CTR_STARGATE    12     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
-#define CTR_SOLARIS     13     // For Solaris - needs button on 2nd controller
-#define CTR_GENESIS     14     // For Genesis 2-button Controller support
-#define CTR_MCA         15     // For missile command arcade - 3 button support
-#define CTR_BUMPBASH    16     // For bumper bash (both paddle buttons used)
-#define CTR_TWINSTICK   17     // For twin-stick games like Rail Slider
-#define CTR_QUADTARI    18     // For QuadTari two sticks on left port and Save Key on right port
+#define CTR_GENESIS     10     // For Genesis 2-button Controller support + Save Key on right port
+#define CTR_QUADTARI    11     // For QuadTari two sticks on left port and Save Key on right port
+#define CTR_RAIDERS     12     // Special 2 joystick setup for Raiders of the Lost Ark
+#define CTR_STARRAID    13     // Star raiders has Left Joystick and Right Keypad
+#define CTR_STARGATE    14     // Defender II, Stargate and Defender Arcade (Hack) need both joysticks
+#define CTR_SOLARIS     15     // For Solaris - needs button on 2nd controller
+#define CTR_MCA         16     // For missile command arcade - 3 button support
+#define CTR_BUMPBASH    17     // For bumper bash (both paddle buttons used)
+#define CTR_TWINSTICK   18     // For twin-stick games like Rail Slider
 
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9
@@ -148,8 +148,6 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define MODE_FF          1     // Flicker Free Mode (blend last 2 frames every other frame which is fairly fast)
 #define MODE_BACKG       2     // Flicker Reduce (try using background color grab - helps with Missile Command, Astroblast etc. with shifting backgrounds)
 #define MODE_BLACK       3     // Ficker Reduce (using Black background improvement only)
-
-#define OLD_MODE_HALF    4     // Obsolete... will be converted to MODE_FF
 
 // All of the supported bankswitching schemes
 #define BANK_2K          0

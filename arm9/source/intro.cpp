@@ -1,3 +1,15 @@
+// =====================================================================================================
+// Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
+//
+// Copyright (c) 2020-2023 by Dave Bernazzani
+//
+// Copying and distribution of this emulator, it's source code and associated 
+// readme files, with or without modification, are permitted in any medium without 
+// royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition),
+// Alekmaul (original port) are thanked profusely along with the entire Stella Team.
+//
+// The StellaDS emulator is offered as-is, without any warranty.
+// =====================================================================================================
 #include <nds.h>
 #include <stdio.h>
 

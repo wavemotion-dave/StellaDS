@@ -479,7 +479,7 @@ const CartInfo table[] =
     {"335a7c5cfa6fee0f35f5824d1fa09aed",  "CONGOB", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   70,    245,   100,   0,  0},    // Congo Bongo (1983) (PAL).bin
     {"50dd164c77c4df579843baf838327469",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v1).bin
     {"0f604cd4c9d2795cf5746e8af7948064",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v2).bin
-    {"b9f64a784b0e271526887ecfb67d36ae",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest-of-Mars_demo_final_NTSC.bin        
+    {"b9f64a784b0e271526887ecfb67d36ae",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_CONMARS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest-of-Mars_demo_final_NTSC.bin
     {"57c5b351d4de021785cf8ed8191a195c",  "??????", BANK_F8,   CTR_LJOY,      SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin (patched for joystick)
     {"ba403a44966fd8307aac08214ac73bdd",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (joystick).bin  
     {"798b8921276eec9e332dfcb47a2dbb17",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
@@ -1065,9 +1065,9 @@ const CartInfo table[] =
     {"4474b3ad3bf6aabe719a2d7f1d1fb4cc",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   5,  5},    // Kung-Fu Master (1987) (PAL).bin
     {"7ad782952e5147b88b65a25cadcdf9e0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    98,   0,  5},    // Kwibble (1983).bin
     {"b86552198f52cfce721bafb496363099",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Kyphus (1982).bin
-    {"adfbd2e8a38f96e03751717f7422851d",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  4},    // Lady Bug.bin
-    {"5b45b4ad247c37600dd0faf269bff993",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  4},    // Lady-Bug_demo_final_NTSC.bin    
-    {"f1489e27a4539a0c6c8529262f9f7e18",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   52,    245,    80,   0,  0},    // Lady Bug PAL.bin    
+    {"adfbd2e8a38f96e03751717f7422851d",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, 10},    // Lady Bug.bin
+    {"5b45b4ad247c37600dd0faf269bff993",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, 10},    // Lady-Bug_demo_final_NTSC.bin    
+    {"f1489e27a4539a0c6c8529262f9f7e18",  "LADBUG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   52,    245,    80,   0,  0},    // Lady Bug PAL.bin
     {"d14be7d60aa80ffaaf4695bd9c72468d",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Lady-Bug-Arcade_demo_final_NTSC.bin
     {"95a89d1bf767d7cc9d0d5093d579ba61",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Lady in Wading (1982).bin
     {"d06b7fcc7640735d36c0b8d44fb5e765",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Lander (2008) (Bastian Framke).bin    
@@ -2239,9 +2239,9 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
-    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    //{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2851,6 +2851,11 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   if (myCartInfo.special == SPEC_AR)
   {
       cartDriver = 5;   // AR carts must use the special driver
+      
+      if ((strcmp(myCartInfo.gameID, "MINDMA") == 0))
+      {
+          myCartInfo.soundQuality = SOUND_15KHZ;
+      }
   }
   else if (myCartInfo.banking == BANK_DPC)
   {
@@ -2976,6 +2981,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strstr(my_filename, "wizard") != 0)
           {
               myCartInfo.frame_mode = MODE_FF;
+              myCartInfo.soundQuality = SOUND_15KHZ;
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
               myCartInfo.yOffset = -9;
@@ -2994,6 +3000,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strstr(my_filename, "elevator") != 0)
           {
               myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.controllerType = CTR_GENESIS;
               myCartInfo.hBlankZero = 0; 
               myCartInfo.vblankZero = 0;
               myCartInfo.displayStartScanline = 34;
@@ -3085,6 +3092,29 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
       // ------------------------------------------------------------------------------------
       cartDriver = 3;
+      
+      if (!bFoundInDAT)
+      {
+          if (strstr(my_filename, "mars") != 0)
+          {
+              strcpy(myCartInfo.gameID, "CONMAR");
+              myCartInfo.special = SPEC_CONMARS;
+              myCartInfo.displayStartScanline = 34;
+              myCartInfo.displayNumScalines = 210;
+              myCartInfo.yOffset = 7;
+          }
+
+          if ((strstr(my_filename, "lady") != 0) && (strstr(my_filename, "bug") != 0))
+          {
+              strcpy(myCartInfo.gameID, "LADBUG");
+              myCartInfo.frame_mode = MODE_BLACK;
+              myCartInfo.displayStartScanline = 34;
+              myCartInfo.displayNumScalines = 210;
+              myCartInfo.yOffset = 10;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+      }
+      
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "CONMAR") == 0) || (strcmp(myCartInfo.gameID, "MANGOS") == 0) || (strcmp(myCartInfo.gameID, "FROSTY") == 0))
       {

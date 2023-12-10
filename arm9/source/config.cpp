@@ -1,7 +1,14 @@
 // =====================================================================================================
-// Stella DSi - Improved Version by Dave Bernazzani (wavemotion)
+// Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
 //
-// See readme.txt for a list of everything that has changed in the baseline 1.0 code.
+// Copyright (c) 2020-2023 by Dave Bernazzani
+//
+// Copying and distribution of this emulator, it's source code and associated 
+// readme files, with or without modification, are permitted in any medium without 
+// royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition),
+// Alekmaul (original port) are thanked profusely along with the entire Stella Team.
+//
+// The StellaDS emulator is offered as-is, without any warranty.
 // =====================================================================================================
 
 #include <nds.h>
@@ -191,27 +198,29 @@ struct options_t
 const struct options_t Game_Option_Table[2][20] =
 {
     {
-        {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "LEFT KEYBOARD", "BOTH KEYBOARDS", "BOOSTER", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "GENESIS+SAVEKEY", "MC ARCADE", "BUMP BASH", "TWIN STICK", "QUAD+SAVE"},    &myCartInfo.controllerType,   19},
-        {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ/CDFJ+","F0/MB","CV","UA","WD","EF","EFSC","BF","BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY", "3E+"}, &myCartInfo.banking,       36},
-        {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY"},                                                                                                   &myCartInfo.frame_mode,          4},
-        {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                                &myCartInfo.tv_type,             2},
-        {"PALETTE",     0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                              &myCartInfo.palette_type,        3},
-        {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                          &myCartInfo.soundQuality,        6},
-        {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.aButton,             8},
-        {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.bButton,             8},
-        {"X BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.xButton,             8},
-        {"Y BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                        &myCartInfo.yButton,             8},
-        {"HBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.hBlankZero,          2},
-        {"VBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                              &myCartInfo.vblankZero,          2},
-        {"ANALOG SENS", 1, {"5",   "25"},                                                                                                                                                  &myCartInfo.analogSensitivity,   1},
-        {"START SCANL", 1, {"25",  "75"},                                                                                                                                                  &myCartInfo.displayStartScanline,1},
-        {"NUM   SCANL", 1, {"190", "255"},                                                                                                                                                 &myCartInfo.displayNumScalines,  1},
-        {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                 &myCartInfo.screenScale,         1},
-        {"X OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.xOffset,             1},
-        {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                          (uInt8*)&myCartInfo.yOffset,             1},
-        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                          &myCartInfo.thumbOptimize,       4},
+        {"CONTROLLER",  0, {"LEFTJOY+SAVEKEY", "RIGHT JOYSTICK", "LEFT PADDLE 0", "LEFT PADDLE 1", "RIGHT PADDLE 2", "RIGHT PADDLE 3", "DRIVING", "LEFT KEYBOARD", "BOTH KEYBOARDS", 
+                            "BOOSTER", "GENESIS+SAVEKEY", "QUAD+SAVE", "LOST ARK", "STAR RAIDERS", "STARGATE", "SOLARIS", "MC ARCADE", "BUMP BASH", "TWIN STICK"},                        &myCartInfo.controllerType,      19},
+        {"BANKSWITCH",  0, {"2K","4K","F4","F4SC","F6","F6SC","F8","F8SC","AR","DPC","DPC+","3E","3F","E0","E7","FASC","FE","CDFJ/CDFJ+","F0/MB","CV","UA","WD","EF","EFSC","BF",
+                            "BFSC","DF","DFSC","SB","FA2","TVBOY", "UASW", "0840", "X07", "CTY", "3E+"},                                                                                  &myCartInfo.banking,             36},
+        {"FRAME BLEND", 0, {"NORMAL", "FLICKER FREE", "FF BACKGROUND", "FF BLACK ONLY"},                                                                                                  &myCartInfo.frame_mode,          4},
+        {"TV TYPE",     0, {"NTSC", "PAL"},                                                                                                                                               &myCartInfo.tv_type,             2},
+        {"PALETTE",     0, {"DS OPTIMIZED", "STELLA", "Z26"},                                                                                                                             &myCartInfo.palette_type,        3},
+        {"SOUND",       0, {"OFF (MUTE)", "10 kHZ", "15 kHZ", "20 kHZ", "30 kHZ", "WAVE DIRECT"},                                                                                         &myCartInfo.soundQuality,        6},
+        {"A BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                       &myCartInfo.aButton,             8},
+        {"B BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                       &myCartInfo.bButton,             8},
+        {"X BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                       &myCartInfo.xButton,             8},
+        {"Y BUTTON",    0, {"FIRE", "JOY UP", "JOY DOWN", "JOY LEFT", "JOY RIGHT", "AUTOFIRE", "SCREEN PAN UP", "SCREEN PAN DOWN"},                                                       &myCartInfo.yButton,             8},
+        {"HBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                             &myCartInfo.hBlankZero,          2},
+        {"VBLANK ZERO", 0, {"NO (FASTER)", "YES (ACCURATE)"},                                                                                                                             &myCartInfo.vblankZero,          2},
+        {"ANALOG SENS", 1, {"5",   "25"},                                                                                                                                                 &myCartInfo.analogSensitivity,   1},
+        {"START SCANL", 1, {"25",  "75"},                                                                                                                                                 &myCartInfo.displayStartScanline,1},
+        {"NUM   SCANL", 1, {"190", "255"},                                                                                                                                                &myCartInfo.displayNumScalines,  1},
+        {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                &myCartInfo.screenScale,         1},
+        {"X OFFSET",    2, {"-50", "50"},                                                                                                                                         (uInt8*)&myCartInfo.xOffset,             1},
+        {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                         (uInt8*)&myCartInfo.yOffset,             1},
+        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                         &myCartInfo.thumbOptimize,       4},
 
-        {NULL,          0, {"",      ""},                                                                                                                                                  NULL,                            1},
+        {NULL,          0, {"",      ""},                                                                                                                                                 NULL,                            1},
     },
     {
         {"BUS MODE",   0, {"OPTIMIZED", "ACCURATE"},                                                                                                                                      &myCartInfo.bus_driver,          2},
@@ -275,11 +284,11 @@ static int display_options_list(bool bFullDisplay)
 // -----------------------------------------------------------------------------
 void ShowConfig(void)
 {
-    int optionHighlighted;
-    int idx;
-    bool bDone=false;
-    int keys_pressed;
-    int last_keys_pressed = 999;
+    short int optionHighlighted;
+    short int idx;
+    u8 bDone=false;
+    short int keys_pressed;
+    short int last_keys_pressed = 999;
 
     // Show the Options background...
     decompress(bgInstructionsTiles, bgGetGfxPtr(bg0b), LZ77Vram);
@@ -287,8 +296,7 @@ void ShowConfig(void)
     dmaCopy((void *) bgInstructionsPal,(u16*) BG_PALETTE_SUB,256*2);
     unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
     dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-    swiWaitForVBlank();
-    
+    swiWaitForVBlank();    
 
     idx=display_options_list(true);
     optionHighlighted = 0;

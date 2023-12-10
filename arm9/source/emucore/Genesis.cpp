@@ -86,7 +86,7 @@ Int32 Genesis::read(AnalogPin pin)
       }
 
     case Nine:
-      return maximumResistance;     // This is actually how games can tell if we've got this controller plugged in!
+      return minimumResistance;     // This is actually how games can tell if we've got this controller plugged in!
 
     default:
       return maximumResistance;

@@ -175,10 +175,10 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
    
-uInt32  color_repeat_table[256] __attribute__((section(".dtcm")));
+uInt32  color_repeat_table[256]; // __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 ourHMOVEBlankEnableCycles[76] = {
+uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {
   true,  true,  true,  true,  true,  true,  true,  true,  true,  true,   // 00
   true,  true,  true,  true,  true,  true,  true,  true,  true,  true,   // 10
   true,  false, false, false, false, false, false, false, false, false,  // 20
@@ -1508,7 +1508,8 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     // The undriven bits of the TIA are usually what's last on the bus 
     // so we do a poor-man's emulation of that by setting the noise to 
     // what we last read/wrote on the data bus. It's not perfect.
-    // Conquest of Mars is a special case where myDataBusState = 0x02.
+    // For Conquest of Mars, this will always be set to 0x02 to avoid
+    // a collision detect "bug" in the game (works on real HW)
     // ----------------------------------------------------------------
     uInt8 noise = (myDataBusState & 0x3F);
     
