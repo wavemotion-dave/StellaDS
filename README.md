@@ -42,7 +42,7 @@ In general, it doesn't. StellaDS is based on an amalgamation of different Stella
 Known Issues :
 -----------------------
 * Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it. If you are running from an R4 or similar flashcart, you will be running in DS compatibility mode (67MHz) and the ARM games will not run anywhere near full speed.
-* Cherity music fetchers are incomplete and the background music will not play correctly (game is otherwise fine to play).
+* Cherity music fetchers are incomplete and the background music will not play (game is otherwise fine to play).
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
