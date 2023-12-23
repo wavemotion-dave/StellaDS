@@ -32,13 +32,16 @@
 uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32 cFlag         __attribute__((section(".dtcm"))) = 0;
 uInt8 *myARMRAM      __attribute__((section(".dtcm"))) = 0;
-u8  bSafeThumb       __attribute__((section(".dtcm"))) = 1;
 
-//#define SAFE_THUMB  1     // This enables the bSafeThumb check... otherwise we are ALWAYS UNSAFE (needed for speed)
+//#define SAFE_THUMB  1     // This enables the Safe Thumb check... otherwise we are ALWAYS UNSAFE (needed for speed)
 
 #define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
 
 uInt32 cStack, cBase, cStart;           // The DPC+ and CDF/J/+ drivers need to set these before usign the Thumbulator
+
+#ifdef CPU_PROFILER
+u32 profiler[256];
+#endif
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Thumbulator::Thumbulator(uInt16* rom_ptr)
@@ -511,6 +514,10 @@ ITCM_CODE void Thumbulator::execute ( void )
       uInt32 ra,rb,rc,rd,rm,rn;
       uInt16 inst = *thumb_ptr++;
       Thumbulator::Op decoded = (Thumbulator::Op)*thumb_decode_ptr++;
+      
+#ifdef CPU_PROFILER
+      profiler[(u8)decoded]++;
+#endif
       
       switch (decoded)
       {
@@ -1001,12 +1008,8 @@ ITCM_CODE void Thumbulator::execute ( void )
 
               
           case Op::ldr3:
-                FIX_R15_PC
                 rn = ((inst>>8)&0x07);
-                rb=(inst<<2)&0x3FF;
-                ra=read_register(15) & ~3;
-                rb+=ra;
-                reg_sys[rn]=readROM32(rb);   // This one will always be fetched from ROM as it's based on the PC
+                reg_sys[rn] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
               break;
 
           case Op::and_:
@@ -1024,7 +1027,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 do_znflags(reg_sys[rd]);
                 do_cflag(ra,rb,cFlag);
 #ifdef SAFE_THUMB                            
-                if (bSafeThumb) vFlag = do_add_vflag(ra,rb,reg_sys[rd]);
+                vFlag = do_add_vflag(ra,rb,reg_sys[rd]);
 #endif              
               break;
               
@@ -1040,7 +1043,6 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::mov3:
-                FIX_R15_PC
                 rd=(inst>>0)&0x7;
                 rd|=(inst>>4)&0x8;
                 rm=(inst>>3)&0xF;
@@ -1053,7 +1055,6 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
 
           case Op::mov3_r15:
-                FIX_R15_PC
                 rc=read_register((inst>>3)&0xF)+2;
                 write_register(15,rc);
                 FIX_THUMB_PTRS
@@ -1064,9 +1065,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>3)&0x7;
                 ra=read_register(rd);
                 rb=read_register(rm);
-                rc=ra&(~rb);
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra&(~rb);
+                write_register(rd,ZNflags);
               break;
               
           case Op::bx:
@@ -1138,13 +1138,12 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x7;
                 ra=read_register(rd);
                 rb=read_register((inst>>3)&0x7);
-                rc=ra-rb;
-                if(!(cFlag)) rc--;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra-rb;
+                if(!(cFlag)) ZNflags--;
+                write_register(rd,ZNflags);
                 do_cflag(ra,rb,0);
 #ifdef SAFE_THUMB                            
-                if (bSafeThumb) vFlag = do_sub_vflag(ra,rb,rc);
+                vFlag = do_sub_vflag(ra,rb,ZNflags);
 #endif              
               break;
               
@@ -1158,7 +1157,7 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::asr2:
                 rd=(inst>>0)&0x07;
                 ra=(inst>>3)&0x07;
-                rc=read_register(rd);
+                ZNflags=read_register(rd);
                 rb=read_register(ra);
                 rb&=0xFF;
                 if(rb==0)
@@ -1166,29 +1165,28 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
                 else if(rb<32)
                 {
-                  do_cflag_bit(rc&(1<<(rb-1)));
-                  ra=rc&0x80000000;
-                  rc>>=rb;
+                  do_cflag_bit(ZNflags&(1<<(rb-1)));
+                  ra=ZNflags&0x80000000;
+                  ZNflags>>=rb;
                   if(ra) //asr, sign is shifted in
                   {
-                    rc|=(~0)<<(32-rb);
+                    ZNflags|=(~0)<<(32-rb);
                   }
                 }
                 else
                 {
-                  if(rc&0x80000000)
+                  if(ZNflags&0x80000000)
                   {
                     do_cflag_bit(1);
-                    rc=(~0);
+                    ZNflags=(~0);
                   }
                   else
                   {
                     do_cflag_bit(0);
-                    rc=0;
+                    ZNflags=0;
                   }
                 }
-                write_register(rd,rc);
-                do_znflags(rc);
+                write_register(rd,ZNflags);
               break;
               
               
@@ -1199,11 +1197,10 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>3)&0xF;
                 ra=read_register(rn);
                 rb=read_register(rm);
-                rc=ra-rb;
-                do_znflags(rc);
+                ZNflags=ra-rb;
                 do_cflag(ra,~rb,1);
 #ifdef SAFE_THUMB                            
-                if (bSafeThumb) vFlag = do_sub_vflag(ra,rb,rc);
+                vFlag = do_sub_vflag(ra,rb,ZNflags);
 #endif              
               break;
               
@@ -1211,30 +1208,27 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x7;
                 ra=read_register(rd);
                 rb=read_register((inst>>3)&0x7);
-                rc=ra*rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra*rb;
+                write_register(rd,ZNflags);
               break;
               
           case Op::mvn:
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
-                rc=(~ra);
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=(~ra);
+                write_register(rd,ZNflags);
               break;
               
           case Op::neg:
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
-                rc=0-ra;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=0-ra;
+                write_register(rd,ZNflags);
                 do_cflag(0,~ra,1);
 #ifdef SAFE_THUMB
-                if (bSafeThumb) vFlag = do_sub_vflag(0,ra,rc);
+                vFlag = do_sub_vflag(0,ra,ZNflags);
 #endif
               break;
               
@@ -1243,9 +1237,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>3)&0x7;
                 ra=read_register(rd);
                 rb=read_register(rm);
-                rc=ra|rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra|rb;
+                write_register(rd,ZNflags);
               break;
               
           case Op::cmn:
@@ -1253,11 +1246,10 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>3)&0x7;
                 ra=read_register(rn);
                 rb=read_register(rm);
-                rc=ra+rb;
-                do_znflags(rc);
+                ZNflags=ra+rb;
                 do_cflag(ra,rb,0);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_add_vflag(ra,rb,rc);
+                vFlag = do_add_vflag(ra,rb,ZNflags);
 #endif              
               break;
               
@@ -1266,15 +1258,14 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>3)&0x7;
                 ra=read_register(rd);
                 rb=read_register(rm);
-                rc=ra^rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra^rb;
+                write_register(rd,ZNflags);
               break;
               
           case Op::lsl2:
                 rd=(inst>>0)&0x07;
                 ra=(inst>>3)&0x07;
-                rc=read_register(rd);
+                ZNflags=read_register(rd);
                 rb=read_register(ra);
                 rb&=0xFF;
                 if(rb==0)
@@ -1282,27 +1273,26 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
                 else if(rb<32)
                 {
-                  do_cflag_bit(rc&(1<<(32-rb)));
-                  rc<<=rb;
+                  do_cflag_bit(ZNflags&(1<<(32-rb)));
+                  ZNflags<<=rb;
                 }
                 else if(rb==32)
                 {
-                  do_cflag_bit(rc&1);
-                  rc=0;
+                  do_cflag_bit(ZNflags&1);
+                  ZNflags=0;
                 }
                 else
                 {
                   do_cflag_bit(0);
-                  rc=0;
+                  ZNflags=0;
                 }
-                write_register(rd,rc);
-                do_znflags(rc);
+                write_register(rd,ZNflags);
               break;
               
           case Op::lsr2:
                 rd=(inst>>0)&0x07;
                 ra=(inst>>3)&0x07;
-                rc=read_register(rd);
+                ZNflags=read_register(rd);
                 rb=read_register(ra);
                 rb&=0xFF;
                 if(rb==0)
@@ -1310,27 +1300,26 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
                 else if(rb<32)
                 {
-                  do_cflag_bit(rc&(1<<(32-rb)));
-                  rc>>=rb;
+                  do_cflag_bit(ZNflags&(1<<(32-rb)));
+                  ZNflags>>=rb;
                 }
                 else if(rb==32)
                 {
-                  do_cflag_bit(rc&0x80000000);
-                  rc=0;
+                  do_cflag_bit(ZNflags&0x80000000);
+                  ZNflags=0;
                 }
                 else
                 {
                   do_cflag_bit(0);
-                  rc=0;
+                  ZNflags=0;
                 }
-                write_register(rd,rc);
-                do_znflags(rc);              
+                write_register(rd,ZNflags);
               break;
               
           case Op::ror:
                 rd=(inst>>0)&0x7;
                 ra=(inst>>3)&0x7;
-                rc=read_register(rd);
+                ZNflags=read_register(rd);
                 ra=read_register(ra);
                 ra&=0xFF;
                 if(!ra)
@@ -1338,18 +1327,17 @@ ITCM_CODE void Thumbulator::execute ( void )
                   ra&=0x1F;
                   if(ra==0)
                   {
-                    do_cflag_bit(rc&0x80000000);
+                    do_cflag_bit(ZNflags&0x80000000);
                   }
                   else
                   {
-                    do_cflag_bit(rc&(1<<(ra-1)));
-                    rb=rc<<(32-ra);
-                    rc>>=ra;
-                    rc|=rb;
+                    do_cflag_bit(ZNflags&(1<<(ra-1)));
+                    rb=ZNflags<<(32-ra);
+                    ZNflags>>=ra;
+                    ZNflags|=rb;
                   }
                 }
-                write_register(rd,rc);
-                do_znflags(rc);
+                write_register(rd,ZNflags);
               break;
 
           case Op::incr:
@@ -1364,7 +1352,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 // a small number to a 32-bit register and we're going to assume that there is no vflag nor cFlag needed.
                 // ------------------------------------------------------------------------------------------------------
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) {vFlag = do_add_vflag(ra,-rb,rc); do_cflag(ra,rb,0);}
+                {vFlag = do_add_vflag(ra,-rb,rc); do_cflag(ra,rb,0);}
 #endif              
               break;
           case Op::add2_r1:
@@ -1401,7 +1389,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[0]-rb;
                 do_cflag_fast(reg_sys[0],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[0],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[0],rb,ZNflags);
 #endif              
               break;
 
@@ -1410,7 +1398,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[1]-rb;
                 do_cflag_fast(reg_sys[1],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[1],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[1],rb,ZNflags);
 #endif              
               break;
               
@@ -1419,7 +1407,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[2]-rb;
                 do_cflag_fast(reg_sys[2],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[2],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[2],rb,ZNflags);
 #endif              
               break;
 
@@ -1428,7 +1416,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[3]-rb;
                 do_cflag_fast(reg_sys[3],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[3],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[3],rb,ZNflags);
 #endif              
               break;
 
@@ -1437,7 +1425,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[4]-rb;
                 do_cflag_fast(reg_sys[4],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[4],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[4],rb,ZNflags);
 #endif              
               break;
               
@@ -1446,7 +1434,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[5]-rb;
                 do_cflag_fast(reg_sys[5],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[5],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[5],rb,ZNflags);
 #endif              
               break;
               
@@ -1455,7 +1443,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[6]-rb;
                 do_cflag_fast(reg_sys[6],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[6],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[6],rb,ZNflags);
 #endif              
               break;
 
@@ -1464,7 +1452,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[7]-rb;
                 do_cflag_fast(reg_sys[7],~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[7],rb,ZNflags);
+                vFlag = do_sub_vflag(reg_sys[7],rb,ZNflags);
 #endif              
               break;
               
@@ -1473,7 +1461,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[rn]-reg_sys[2];
                 do_cflag(reg_sys[rn],~reg_sys[2],1);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[rn],reg_sys[2],ZNflags);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[2],ZNflags);
 #endif              
               break;
 
@@ -1482,7 +1470,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[rn]-reg_sys[3];
                 do_cflag(reg_sys[rn],~reg_sys[3],1);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[rn],reg_sys[3],ZNflags);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[3],ZNflags);
 #endif              
               break;
 
@@ -1492,7 +1480,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=reg_sys[rn]-reg_sys[rm];
                 do_cflag(reg_sys[rn],~reg_sys[rm],1);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],ZNflags);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],ZNflags);
 #endif              
               break;
               
@@ -1503,11 +1491,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 reg_sys[rd] = reg_sys[rn] + reg_sys[rm];
                 do_znflags(reg_sys[rd]);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb)
-                {
-                    do_cflag(reg_sys[rn],reg_sys[rm],0);
-                    vFlag = do_add_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
-                }
+                do_cflag(reg_sys[rn],reg_sys[rm],0);
+                vFlag = do_add_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
 #endif              
               break;
               
@@ -1531,7 +1516,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 do_znflags(reg_sys[rd]);
                 do_cflag(reg_sys[rn],~reg_sys[rm],1);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
 #endif              
               break;
 
@@ -1539,80 +1524,75 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x07;
                 rm=(inst>>3)&0x07;
                 rb=(inst>>6)&0x1F;
-                rc=read_register(rm);
+                ZNflags=read_register(rm);
                 if(rb==0)
                 {
-                  if(rc&0x80000000)
+                  if(ZNflags&0x80000000)
                   {
                     do_cflag_bit(1);
-                    rc=~0;
+                    ZNflags=~0;
                   }
                   else
                   {
                     do_cflag_bit(0);
-                    rc=0;
+                    ZNflags=0;
                   }
                 }
                 else
                 {
-                  do_cflag_bit(rc&(1<<(rb-1)));
-                  ra=rc&0x80000000;
-                  rc>>=rb;
+                  do_cflag_bit(ZNflags&(1<<(rb-1)));
+                  ra=ZNflags&0x80000000;
+                  ZNflags>>=rb;
                   if(ra) //asr, sign is shifted in
                   {
-                    rc|=(~0)<<(32-rb);
+                    ZNflags|=(~0)<<(32-rb);
                   }
                 }
-                write_register(rd,rc);
-                do_znflags(rc);
+                write_register(rd,ZNflags);
               break;
 
           case Op::lsl1:
                 rm=(inst>>3)&0x07;
-                reg_sys[inst&0x07] = reg_sys[rm];
-                do_znflags(reg_sys[inst&0x07]);
+                ZNflags = reg_sys[inst&0x07] = reg_sys[rm];
               break;
               
           case Op::lsl1_rb:
                 rd=(inst>>0)&0x07;
                 rm=(inst>>3)&0x07;
                 rb=(inst>>6)&0x1F;
-                rc=read_register(rm);
-                do_cflag_bit(rc&(1<<(32-rb)));
-                rc<<=rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=read_register(rm);
+                do_cflag_bit(ZNflags&(1<<(32-rb)));
+                ZNflags<<=rb;
+                write_register(rd,ZNflags);
               break;
 
           case Op::lsr1:
                 rd=(inst>>0)&0x07;
                 rm=(inst>>3)&0x07;
                 rb=(inst>>6)&0x1F;
-                rc=read_register(rm);
+                ZNflags=read_register(rm);
                 if(rb==0)
                 {
-                  do_cflag_bit(rc&0x80000000);
-                  rc=0;
+                  do_cflag_bit(ZNflags&0x80000000);
+                  ZNflags=0;
                 }
                 else
                 {
-                  do_cflag_bit(rc&(1<<(rb-1)));
-                  rc>>=rb;
+                  do_cflag_bit(ZNflags&(1<<(rb-1)));
+                  ZNflags>>=rb;
                 }
-                write_register(rd,rc);
-                do_znflags(rc);
+                write_register(rd,ZNflags);
               break;
               
           case Op::sub2:
                 rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x07;
                 ra=read_register(rd);
-                rc=ra-rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra-rb;
+                write_register(rd,ZNflags);
                 do_cflag_fast(ra,~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(ra,rb,rc);
+                vFlag = do_sub_vflag(ra,rb,ZNflags);
 #endif              
               break;
               
@@ -1622,12 +1602,11 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rn=(inst>>3)&7;
                 rb=(inst>>6)&7;
                 ra=read_register(rn);
-                rc=ra-rb;
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=ra-rb;
+                write_register(rd,ZNflags);
                 do_cflag_fast(ra,~rb);
 #ifdef SAFE_THUMB              
-                if (bSafeThumb) vFlag = do_sub_vflag(ra,rb,rc);
+                vFlag = do_sub_vflag(ra,rb,ZNflags);
 #endif              
               break;
               
@@ -1638,15 +1617,11 @@ ITCM_CODE void Thumbulator::execute ( void )
                 if(rb)
                 {
                   ra=read_register(rn);
-                  rc=ra+rb;
-                  write_register(rd,rc);
-                  do_znflags(rc);
+                  ZNflags=ra+rb;
+                  write_register(rd,ZNflags);
 #ifdef SAFE_THUMB                    
-                  if (bSafeThumb)
-                  {
-                      do_cflag(ra,rb,0);
-                      vFlag = do_add_vflag(ra,rb,rc);
-                  }
+                  do_cflag(ra,rb,0);
+                  vFlag = do_add_vflag(ra,rb,ZNflags);
 #endif                    
                 }
                 else
@@ -1685,9 +1660,8 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::mov2:                     __attribute__((cold));
                 rd=(inst>>0)&7;
                 rn=(inst>>3)&7;
-                rc=read_register(rn);
-                write_register(rd,rc);
-                do_znflags(rc);
+                ZNflags=read_register(rn);
+                write_register(rd,ZNflags);
                 do_cflag_bit(0);
                 do_vflag_bit(0);
               break;

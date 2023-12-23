@@ -108,8 +108,6 @@ static void ApplyOptions(bool bFull)
 {
     extern u8 bScreenRefresh;
     bScreenRefresh = 1;
-    extern uInt8 bSafeThumb;
-    bSafeThumb = (myCartInfo.thumbOptimize ? 0:1);
     if (bFull)
     {
         dsInitPalette();

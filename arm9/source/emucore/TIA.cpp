@@ -560,8 +560,13 @@ ITCM_CODE void TIA::update()
   // then we set the skip flag for every other pair of frames
   if (myCartInfo.thumbOptimize == 3)
   {
-     bFrameSkipCDFJ = ((gTotalAtariFrames & 0x02) ? 1:0);
-  } else bFrameSkipCDFJ = 0;
+      extern uInt8 bElevatorAgent;
+      if (bElevatorAgent)
+        bFrameSkipCDFJ = ((gTotalAtariFrames & 0x02) ? 1:0);    // Heavy Frameskip (2 on, 2 off)
+      else
+        bFrameSkipCDFJ = ((gTotalAtariFrames & 0x03) ? 0:1);    // Moderate Frameskip (3 on, 1 off)
+  } 
+  else bFrameSkipCDFJ = 0;
 
   // --------------------------------------------------------------------
   // Execute instructions until frame is finished
@@ -1500,6 +1505,32 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   while(myClockAtLastUpdate < clock);
 }
 
+// ---------------------------------------------------------------------
+// Only handle basic controller input and skip accurate bus "noise"
+// Useful for CDFJ/+ games which don't bother with collision detection.
+// ---------------------------------------------------------------------
+ITCM_CODE uInt8 TIA::peek_minimal(uInt8 addr)
+{
+    addr &= 0x0F;
+    
+    switch (addr)
+    {
+    case 0x08:    // INPT0
+      return (myConsole.controller(Controller::Left).read(Controller::Nine) == Controller::minimumResistance) ? 0x80 : 0x00;
+
+    case 0x09:    // INPT1
+      return (myConsole.controller(Controller::Left).read(Controller::Five) == Controller::minimumResistance) ? 0x80 : 0x00;
+            
+    case 0x0C:    // INPT4
+      return myConsole.controller(Controller::Left).read(Controller::Six) ? 0x80 : 0x00;
+
+    case 0x0D:    // INPT5
+      return myConsole.controller(Controller::Right).read(Controller::Six) ? 0x80 : 0x00;
+
+    default:
+      return 0x00;
+    }
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)

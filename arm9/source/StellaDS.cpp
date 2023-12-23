@@ -47,8 +47,9 @@
 #include "config.h"
 #include "instructions.h"
 #include "screenshot.h"
+#include "Thumbulator.hxx"
 
-#define VERSION "7.0"
+#define VERSION "7.1"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000
@@ -81,8 +82,6 @@ Console* theConsole = (Console*) NULL;
 int bg0, bg0b, bg1b;
 uInt16 etatEmu;
 
-static uInt32 fps_counters[5]={0,0,0,0,0};
-
 uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
@@ -103,6 +102,19 @@ static void DumpDebugData(void)
     extern uInt16 gPC;
     sprintf(dbgbuf, "%32s", myCartInfo.md5);
     dsPrintValue(0,22,0, dbgbuf);
+    
+#ifdef CPU_PROFILER
+    int j=0;
+    for (int i=0; i<256; i++)
+    {
+        if (profiler[i] > 10000000)
+        {
+            debug[j] = profiler[i];
+            debug[20+j] = i;
+            j++;
+        }
+    }
+#endif    
 
     for (int i=0; i<20; i++)
     {
@@ -158,14 +170,14 @@ inline void ShowStatusLine(void)
 
 
 u16 stretch_x = 0;
-Int16 temp_shift = 0;
+Int16 temp_shift __attribute__((section(".dtcm"))) = 0;
+uInt8 shiftTime;
 ITCM_CODE void vblankIntr() 
 {
-    static uInt8 shiftTime;
     if (bScreenRefresh || temp_shift)
     {
         REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale);
-        REG_BG3Y = (myCartInfo.yOffset + temp_shift)<<8;
+        REG_BG3Y = (myCartInfo.yOffset + temp_shift) << 8;
         REG_BG3X = (myCartInfo.xOffset)<<8;
         REG_BG3PA = stretch_x;
         
@@ -500,9 +512,6 @@ bool dsLoadGame(char *filename)
     
     // Clear out debug information for new game
     memset(debug, 0x00, sizeof(debug));      
-      
-    // Clear out the FPS counters
-    memset(fps_counters, 0x00, sizeof(fps_counters));
       
     extern uInt8 OptionPage;
     OptionPage = 0;
@@ -961,6 +970,21 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
   }
 }
 
+ITCM_CODE void dsPrintFPS(char *pchStr)
+{
+  u16 *pusEcran,*pusMap;
+  char *pTrTxt=pchStr;
+
+  pusEcran=(u16*) (bgGetMapPtr(bg1b))+0+(0<<5);
+  pusMap=(u16*) (bgGetMapPtr(bg0b)+(2*0+24)*32);
+
+  while((*pTrTxt)!='\0')
+  {
+    *pusEcran++ = *(pusMap+(*pTrTxt++)-' ');
+  }
+}
+
+
 //---------------------------------------------------------------------------------
 void dsInstallSoundEmuFIFO(void)
 {
@@ -1165,8 +1189,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.aButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.aButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.aButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                        else if ((myCartInfo.aButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.aButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                        else if ((myCartInfo.aButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
+                        else if ((myCartInfo.aButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     if (keys_pressed & (KEY_B))
                     {
@@ -1176,8 +1200,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.bButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.bButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.bButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                        else if ((myCartInfo.bButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.bButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                        else if ((myCartInfo.bButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
+                        else if ((myCartInfo.bButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     if (keys_pressed & (KEY_X))
                     {
@@ -1187,8 +1211,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.xButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.xButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.xButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                        else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     if (keys_pressed & (KEY_Y))
                     {
@@ -1198,8 +1222,8 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.yButton == BUTTON_JOY_LEFT))  button_left  = true;
                         else if ((myCartInfo.yButton == BUTTON_JOY_RIGHT)) button_right = true;
                         else if ((myCartInfo.yButton == BUTTON_AUTOFIRE))  button_fire  = (++rapid_fire & 0x08);
-                        else if ((myCartInfo.yButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.yButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                        else if ((myCartInfo.yButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
+                        else if ((myCartInfo.yButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
@@ -1319,8 +1343,8 @@ ITCM_CODE void dsMainLoop(void)
                     
                     if (keys_pressed & (KEY_X))
                     {
-                             if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  temp_shift = -16;
-                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  temp_shift = +16;
+                             if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
+                        else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     break;
                     
@@ -1576,11 +1600,12 @@ ITCM_CODE void dsMainLoop(void)
             if (fpsDisplay)
             {
                 if ((!full_speed) && (gAtariFrames>60)) gAtariFrames--;
-                fps_counters[fps_counters[4]++ & 0x03] = gAtariFrames;
-                uInt32 avg=fps_counters[0]+fps_counters[1]+fps_counters[2]+fps_counters[3];
-                sprintf(fpsbuf, "%03d [%d.%d]", gAtariFrames, avg/4, ((10*avg)/4) % 10);
+                fpsbuf[0] = '0' + (gAtariFrames/100);
+                fpsbuf[1] = '0' + (gAtariFrames%100)/10;
+                fpsbuf[2] = '0' + (gAtariFrames%10);
+                fpsbuf[3] = 0;
                 gAtariFrames=0;
-                dsPrintValue(0,0,0, fpsbuf);
+                dsPrintFPS(fpsbuf);
             }
             if (gSaveKeyIsDirty)
             {

@@ -1097,16 +1097,16 @@ inline uInt8 peek_CDFJ(uInt16 address)
   {
       if ((address & 0x280) == 0x80) return myRAM[address & 0x7f];
       else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      else return theTIA->peek_minimal(address);
   }
 }
 
 inline uInt8 peek_CDFJzpg(uInt8 address)
 {
-  gSystemCycles++;
+  ++gSystemCycles;
     
   if (address & 0x80) return myRAM[address & 0x7f];
-  else return theTIA->peek(address);
+  else return theTIA->peek_minimal(address);
 }
 
 

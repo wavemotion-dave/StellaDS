@@ -29,9 +29,9 @@
 
 // ---------------------------------------------------------------------------
 // Global speedup hack which gives 10% or better speedup in core emulation.
-// I'm not proud of this... Stella is beautiful code and as such deserves
-// better than some global variable hack but the speedup is needed to bring
-// even more games up to 60 FPS. Sometimes the ends justify the means.
+// I'm not proud of all the globals... Stella is beautiful code and as such 
+// deserves better than some global variable hack but the speedup is needed 
+// to bring even more games up to 60 FPS. Sometimes the ends justify the means.
 // ---------------------------------------------------------------------------
 Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
 
@@ -80,9 +80,6 @@ System::~System()
 
   // Free the M6502 that I own
   delete myM6502;
-
-  // Free my page access table
-  //delete[] myPageAccessTable;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -19,6 +19,7 @@
 // See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
+#include <nds.h>
 
 #include "M6502.hxx"
 #include "Random.hxx"
@@ -79,7 +80,7 @@ void M6502::stop()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 M6502::PS() const
+ITCM_CODE uInt8 M6502::PS() const
 {
   uInt8 ps = 0x20;
 
@@ -102,7 +103,7 @@ uInt8 M6502::PS() const
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6502::PS(uInt8 ps)
+ITCM_CODE void M6502::PS(uInt8 ps)
 {
   N = ps & 0x80;
   V = ps & 0x40;

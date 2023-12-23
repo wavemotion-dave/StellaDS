@@ -199,7 +199,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // but we will repurpose the fast_cart_buffer[] as 6502 Assembly code 
   // assuming that those games won't need more than 2 banks of 6502 assembly.
   // ------------------------------------------------------------------------
-  if (isCDFJPlus && (size > MEM_32KB))
+  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
   {
       myARMRAM = (uInt8*)&cart_buffer[446*1024];  // Set to the slow RAM buffer (back 64K-2k of the cart buffer)
       memset(myARMRAM, 0, MEM_32KB);              // Clear all of the "ARM Thumb" RAM
@@ -229,7 +229,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // Repurpose the fast cart buffer memory for 6502 code. This is potentially
   // unsafe as it only supports 2 banks... but there are only a couple of 
   // games in this stratosphere and none use more than 2 banks of 6502 code.
-  if (isCDFJPlus && (size > MEM_32KB))
+  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
   {
       memcpy(fast_cart_buffer, myARM6502, MEM_8KB);
   }

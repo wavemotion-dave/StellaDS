@@ -233,6 +233,11 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+V7.1 : 23-Dec-2023 by Dave Bernazzani (wavemotion)
+  * Squeezed out one extra frame of performance on CDFJ/+ games. 
+  * New light frameskip applied to Draconian for a performance boost.
+  * Minor fixes and tweaks to make all the latest homebrew games look and play their best.
+
 V7.0 : 10-Dec-2023 by Dave Bernazzani (wavemotion)
   * Champ Games Edition! Major overhaul to the CDFJ/+ driver to squeeze out every bit of performance.
   * Fix for Genesis gamepad emulation (detection now works).

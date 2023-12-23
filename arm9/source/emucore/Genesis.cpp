@@ -19,6 +19,7 @@
 // See the file "License.txt" for information on usage and redistribution of
 // this file, and for a DISCLAIMER OF ALL WARRANTIES.
 //============================================================================
+#include <nds.h>
 
 #include "Event.hxx"
 #include "Genesis.hxx"
@@ -35,7 +36,7 @@ Genesis::~Genesis()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-bool Genesis::read(DigitalPin pin)
+ITCM_CODE bool Genesis::read(DigitalPin pin)
 {
   switch(pin)
   {
@@ -65,7 +66,7 @@ bool Genesis::read(DigitalPin pin)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int32 Genesis::read(AnalogPin pin)
+ITCM_CODE Int32 Genesis::read(AnalogPin pin)
 {
   // The Genesis has one more button (C) that can be read by the 2600
   // However, it seems to work opposite to the BoosterGrip controller,

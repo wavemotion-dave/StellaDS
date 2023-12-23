@@ -187,6 +187,8 @@ class TIA : public Device , public MediaSource
       @return The byte at the specified address
     */
     virtual uInt8 peek(uInt16 address);
+    
+    uInt8 peek_minimal(uInt8 address);
 
     /**
       Change the byte at the specified address to the given value
@@ -303,4 +305,6 @@ class TIA : public Device , public MediaSource
     TIA& operator = (const TIA&);
 };
 
+uInt8 tia_peek_minimal(uInt8 addr);
+    
 #endif

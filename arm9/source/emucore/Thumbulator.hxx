@@ -34,6 +34,12 @@
 #define ROMSIZE (ROMADDMASK+1)
 #define RAMSIZE (RAMADDMASK+1)
 
+//#define CPU_PROFILER  TRUE
+
+#ifdef CPU_PROFILER
+extern u32 profiler[];
+#endif
+
 //0b10000 User       PC, R14 to R0, CPSR
 //0b10001 FIQ        PC, R14_fiq to R8_fiq, R7 to R0, CPSR, SPSR_fiq
 //0b10010 IRQ        PC, R14_irq, R13_irq, R12 to R0, CPSR, SPSR_irq
