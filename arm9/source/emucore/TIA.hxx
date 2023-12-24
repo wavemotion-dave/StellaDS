@@ -265,7 +265,7 @@ class TIA : public Device , public MediaSource
     Int32 myDumpDisabledCycle;
 
     // Indicates if the dump is current enabled for the paddles
-    bool myDumpEnabled;
+    uInt8 myDumpEnabled;
 
   private:
     // Ball mask table (entries are true or false)
@@ -305,6 +305,5 @@ class TIA : public Device , public MediaSource
     TIA& operator = (const TIA&);
 };
 
-uInt8 tia_peek_minimal(uInt8 addr);
     
 #endif

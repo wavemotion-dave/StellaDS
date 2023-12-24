@@ -1990,7 +1990,8 @@ const CartInfo table[] =
     {"bf976cf80bcf52c5f164c1d45f2b316b",  "FIREWO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   67,    245,   100,   0,  0},    // SwordQuest - FireWorld (1982) (PAL).bin
     {"bc5389839857612cfabeb810ba7effdc",  "WATERW", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    94,   0,  6},    // SwordQuest - WaterWorld (1983).bin
     {"c0eee10f8868de535c9ac0995ef3f6dc",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Sync.bin
-    {"2c2aea31b01c6126c1a43e10cacbfd58",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Synth Cart.bin
+    {"2c2aea31b01c6126c1a43e10cacbfd58",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Synth Cart.bin
+    {"d0b9f705aa5f61f47a748a66009ae2d2",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Synth Cart.bin    
     {"d45ebf130ed9070ea8ebd56176e48a38",  "TACSCN", BANK_4K,   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_6,  NTSC,  50,    210,   100,   0,  0},    // Tac-Scan (1982).bin
     {"4892b85c248131d6a42c66a4163a40d0",  "TACSCN", BANK_4K,   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_6,  NTSC,  50,    210,   100,   0,  0},    // Tac-Scan (1982).bin
     {"6aca52e11b597ab84b33d5252e1cd9d1",  "TACSCN", BANK_4K,   CTR_PADDLE3,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_6,  NTSC,  50,    210,   100,   0,  0},    // Tac-Scan (1982).bin
@@ -2879,6 +2880,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // These carts need a little extra oomph from the CPU so we have a special optmized driver
       if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "elevator") != 0)  {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
+      if (strstr(my_filename, "gorf") != 0)     cartDriver = 11;  //CDFJ++
       
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
       if (!bFoundInDAT)
