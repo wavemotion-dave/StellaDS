@@ -1548,9 +1548,6 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     
     if (addr < 8)
     {
-        // For CDF/J/+ games that have no collision, just return noise
-        if (bNoCollisionDetection) return noise;
-        
         // Update frame to current color clock before we look at anything!
         updateFrame((3*gSystemCycles));
         if (!myCollision) {return noise;}
