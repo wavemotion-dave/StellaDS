@@ -1351,9 +1351,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 // TBD: This is incorrect (but faster) emulation on an instruction that is very common... we're adding 
                 // a small number to a 32-bit register and we're going to assume that there is no vflag nor cFlag needed.
                 // ------------------------------------------------------------------------------------------------------
-#ifdef SAFE_THUMB              
-                {vFlag = do_add_vflag(ra,-rb,rc); do_cflag(ra,rb,0);}
-#endif              
+                //{vFlag = do_add_vflag(ra,-rb,rc); do_cflag(ra,rb,0);}
               break;
           case Op::add2_r1:
                 reg_sys[1] += (inst>>0)&0xFF;

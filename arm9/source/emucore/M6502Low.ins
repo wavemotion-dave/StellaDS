@@ -1941,7 +1941,10 @@ case 0xb3:
 }
 break;
 
-//LDA
+//---------------------------------------------------------------------------------------------------------
+//LDA - This one is special as the DPC+/CDF/J+ ARM assisted code uses this to pass data from ARM ram into
+//      the A register. Significant emulation CPU time is consumed here so we do our best to optmize it.
+//---------------------------------------------------------------------------------------------------------
 case 0xa9:
 {
 #ifndef DATA_STREAMS_PLUS
@@ -1981,9 +1984,9 @@ case 0xa9:
 #ifdef DATA_STREAMS_PLUS
   extern u8 myDataStreamFetch; extern uInt8* myFetcherOffsetPtr;
 #ifdef DATA_STREAMS_PLUS_PLUS  
-  u8 *next6502Inst = &fast_cart_buffer[PC++ & f8_bankbit];
+  u8 *next6502Inst = &fast_cart_buffer[PC & f8_bankbit];
 #else  
-  u8 *next6502Inst = &myDPCptr[PC++ & 0xFFF];
+  u8 *next6502Inst = &myDPCptr[PC & 0xFFF];
 #endif  
   A = *next6502Inst++;  
   
@@ -2004,10 +2007,10 @@ case 0xa9:
   if (*next6502Inst == 0x85)
   {
      gSystemCycles += 4;
-     PC += 2; next6502Inst++;
+     PC += 3; next6502Inst++;
      poke_small(*next6502Inst, A);
-     break; // Actung! This is dangerous... we are not setting notZ nor N here for CDFJ+ with fast Data Fetchers to save some cycles
-  } else gSystemCycles++;
+     break; // Actung! This is dangerous... we are not setting Z nor N here for CDFJ+ with fast Data Fetchers to save some cycles
+  } else {PC++; gSystemCycles++;}
 #endif
 
 }
