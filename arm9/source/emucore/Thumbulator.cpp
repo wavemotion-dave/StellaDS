@@ -66,9 +66,9 @@ ITCM_CODE void Thumbulator::run( void )
   return;
 }
 
-#define write16(addr, data) ( * (uInt16*)(myARMRAM + (addr & RAMADDMASK)) = data )
-#define write32(addr, data) ( * (uInt32*)(myARMRAM + (addr & RAMADDMASK)) = data )
-#define readROM32(addr)     (*((uInt32*) (cart_buffer + addr)))
+#define write8(addr, data)  (*(uInt8*)(myARMRAM + (addr & RAMADDMASK)) = data)
+#define write16(addr, data) (*(uInt16*)(myARMRAM + (addr & RAMADDMASK)) = data)
+#define write32(addr, data) (*(uInt32*)(myARMRAM + (addr & RAMADDMASK)) = data)
 #define readRAM32(addr)     (*((uInt32*) (myARMRAM + (addr & RAMADDMASK))))
 
 #define read_register(reg)       reg_sys[reg]
@@ -76,7 +76,7 @@ ITCM_CODE void Thumbulator::run( void )
 
 #define do_vflag_bit(x) vFlag=x;
 #define do_cflag_bit(x) cFlag=x;
-#define do_znflags(x) ZNflags=(x)
+#define do_znflags(x)   ZNflags=(x)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt16 Thumbulator::read16 ( uInt32 addr )
@@ -103,6 +103,19 @@ inline uInt32 Thumbulator::read32 ( uInt32 addr )
       return *((uInt32*)&cart_buffer[addr]);
   }
 }
+
+inline uInt8 Thumbulator::read8 ( uInt32 addr )
+{
+  if (addr & 0x40000000)
+  {
+      return *((uInt8*) (myARMRAM + (addr & RAMADDMASK)));
+  }
+  else
+  {
+      return *((uInt8*)&cart_buffer[addr]);
+  }
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_cflag ( uInt32 a, uInt32 b, uInt32 c )
@@ -601,7 +614,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_600:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_600:                       //B(1) conditional branch
                 if(vFlag)
                 {
                     rb=(inst>>0)&0xFF;
@@ -611,7 +624,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_700:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_700:                       //B(1) conditional branch
                 if(!(vFlag))
                 {
                     rb=(inst>>0)&0xFF;
@@ -621,7 +634,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
-          case Op::b1_800:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_800:                       //B(1) conditional branch
                 if((cFlag)&&(ZNflags))
                 {
                     rb=(inst>>0)&0xFF;
@@ -631,7 +644,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_900:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_900:                       //B(1) conditional branch
                 if((!ZNflags)||(!(cFlag)))
                 {
                     rb=(inst>>0)&0xFF;
@@ -641,7 +654,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
-          case Op::b1_a00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_a00:                       //B(1) conditional branch
                 ra=0;
                 if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
                 else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
@@ -654,7 +667,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_b00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_b00:                       //B(1) conditional branch
                 ra=0;
                 if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
                 else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
@@ -667,7 +680,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_c00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_c00:                       //B(1) conditional branch
                 ra=0;
                 if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
                 else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
@@ -681,7 +694,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_d00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_d00:                       //B(1) conditional branch
                 ra=0;
                 if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
                 else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
@@ -695,8 +708,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::b1_e00:                      __attribute__((cold)); //B(1) conditional branch
-          case Op::b1_f00:                      __attribute__((cold)); //B(1) conditional branch
+          case Op::b1_e00:                       //B(1) conditional branch
+          case Op::b1_f00:                       //B(1) conditional branch
               return;
               
           case Op::b2_pos:  //B(2) unconditional branch no sign extend
@@ -883,31 +896,13 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rb=(inst>>6)&0x1F;
                 rb=read_register((inst>>3)&0x07)+rb;
                 rc=read_register((inst>>0)&0x07);
-                ra=read16(rb);
-                if(rb&1)
-                {
-                  ra&=0x00FF;
-                  ra|=rc<<8;
-                }
-                else
-                {
-                  ra&=0xFF00;
-                  ra|=rc&0x00FF;
-                }
-                write16(rb,ra);
+                write8(rb, rc);
               break;
 
           case Op::ldrb1:
                 rd=(inst>>0)&0x07;
                 rb=read_register(((inst>>3) & 0x07))+((inst>>6)&0x1F);
-                if(rb&1)
-                {
-                    write_register(rd, read16(rb)>>8);
-                }
-                else
-                {
-                    write_register(rd, read16(rb)&0xFF);
-                }                
+                write_register(rd, read8(rb));
               break;
 
           case Op::str1:
@@ -920,28 +915,12 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::strb2:
                 rb=read_register((inst>>3)&0x7)+read_register((inst>>6)&0x7);
                 rc=read_register((inst>>0)&0x7);
-                ra=read16(rb);
-                if(rb&1)
-                {
-                  ra&=0x00FF;
-                  ra|=rc<<8;
-                }
-                else
-                {
-                  ra&=0xFF00;
-                  ra|=rc&0x00FF;
-                }
-                write16(rb,ra);
+                write8(rb, rc);
               break;
               
           case Op::ldrb2:
                 rb=read_register((inst>>3)&0x7)+read_register((inst>>6)&0x7);
-                rc=read16(rb);
-                if(rb&1)
-                {
-                  rc>>=8;
-                }
-                write_register((inst>>0)&0x7,rc&0xFF);
+                write_register((inst>>0)&0x7,read8(rb));
               break;
               
           case Op::ldrsh:
@@ -969,12 +948,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rn=(inst>>3)&0x7;
                 rm=(inst>>6)&0x7;
                 rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                if(rb&1)
-                {
-                  rc>>=8;
-                }
-                rc&=0xFF;
+                rc=read8(rb);
                 if(rc&0x80) rc|=((~0)<<8);
                 write_register(rd,rc);
               break;
@@ -1628,7 +1602,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::cpy:                     __attribute__((cold));
+          case Op::cpy:                     
                 //same as mov except you can use both low registers
                 //going to let mov handle high registers
                 rd=(inst>>0)&0x7;
@@ -1637,7 +1611,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::blx2:                     __attribute__((cold));
+          case Op::blx2:                     
                 FIX_R15_PC  
                 rm=(inst>>3)&0xF;
                 rc=read_register(rm);
@@ -1655,7 +1629,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
               
-          case Op::mov2:                     __attribute__((cold));
+          case Op::mov2:                     
                 rd=(inst>>0)&7;
                 rn=(inst>>3)&7;
                 ZNflags=read_register(rn);
@@ -1664,7 +1638,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 do_vflag_bit(0);
               break;
                             
-          case Op::strh1:                    __attribute__((cold));
+          case Op::strh1:                    
                 rd=(inst>>0)&0x07;
                 rn=(inst>>3)&0x07;
                 rb=(inst>>5)&0x3E;
@@ -1673,7 +1647,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write16(rb,rc&0xFFFF);
               break;              
               
-          case Op::add6:                    __attribute__((cold));
+          case Op::add6:                    
                 rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x7;
                 rb<<=2;
@@ -1682,7 +1656,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::ldrh1:                    __attribute__((cold));
+          case Op::ldrh1:                    
                 rd=(inst>>0)&0x07;
                 rn=(inst>>3)&0x07;
                 rb=(inst>>5)&0x3E;
@@ -1691,7 +1665,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc&0xFFFF);
               break;
 
-          case Op::add7:                    __attribute__((cold));
+          case Op::add7:                    
                 rb=(inst>>0)&0x7F;
                 rb<<=2;
                 ra=read_register(13);
@@ -1699,7 +1673,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(13,rc);
               break;
               
-          case Op::sub4:                    __attribute__((cold));
+          case Op::sub4:                    
                 rb=inst&0x7F;
                 rb<<=2;
                 ra=read_register(13);
@@ -1707,15 +1681,15 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(13,ra);
               break;
               
-          case Op::bkpt:                    __attribute__((cold));
+          case Op::bkpt:                    
                 return;
               break;
               
-          case Op::cps:                    __attribute__((cold));
+          case Op::cps:                    
                 return;
               break;
               
-          case Op::rev:                    __attribute__((cold));
+          case Op::rev:                    
                 rd=(inst>>0)&0x7;
                 rn=(inst>>3)&0x7;
                 ra=read_register(rn);
@@ -1726,7 +1700,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::rev16:                    __attribute__((cold));
+          case Op::rev16:                    
                 rd=(inst>>0)&0x7;
                 rn=(inst>>3)&0x7;
                 ra=read_register(rn);
@@ -1737,7 +1711,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
 
-          case Op::revsh:                    __attribute__((cold));
+          case Op::revsh:                    
                 rd=(inst>>0)&0x7;
                 rn=(inst>>3)&0x7;
                 ra=read_register(rn);
@@ -1748,11 +1722,11 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::setend:                  __attribute__((cold));
+          case Op::setend:                  
                 return;
               break;
               
-          case Op::sxtb:                    __attribute__((cold));
+          case Op::sxtb:                    
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
@@ -1761,7 +1735,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::sxth:                    __attribute__((cold));
+          case Op::sxth:                    
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
@@ -1770,7 +1744,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::add5:                    __attribute__((cold));
+          case Op::add5:                    
                 FIX_R15_PC
                 rb=(inst>>0)&0xFF;
                 rd=(inst>>8)&0x7;
@@ -1780,7 +1754,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::uxtb:                    __attribute__((cold));
+          case Op::uxtb:                    
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
@@ -1788,7 +1762,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
               
-          case Op::uxth:                    __attribute__((cold));
+          case Op::uxth:                    
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
@@ -1796,7 +1770,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write_register(rd,rc);
               break;
                             
-          case Op::invalid:                 __attribute__((cold));
+          case Op::invalid:                 
               return;
               break;              
       }

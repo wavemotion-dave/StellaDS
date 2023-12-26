@@ -112,7 +112,8 @@ class Thumbulator
     };
     
     inline uInt16 read16 ( uInt32 addr );
-    inline uInt32 read32 ( uInt32 );
+    inline uInt32 read32 ( uInt32 addr );
+    inline uInt8  read8 ( uInt32 addr );
     inline void   write16 ( uInt32 addr, uInt32 data );
     inline void   write32 ( uInt32 addr, uInt32 data );
 
