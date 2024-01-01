@@ -1,7 +1,7 @@
 // =====================================================================================================
 // Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
 //
-// Copyright (c) 2020-2023 by Dave Bernazzani
+// Copyright (c) 2020-2024 by Dave Bernazzani
 //
 // Copying and distribution of this emulator, it's source code and associated 
 // readme files, with or without modification, are permitted in any medium without 

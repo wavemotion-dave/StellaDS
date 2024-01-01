@@ -19,19 +19,21 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more.
 * Savekey Support with backing 32K EEPROM.
-* FA2 and Cherity supported with backing EEPROM support.
 * DPC+ Arm-Assisted games supported! (DSi or above needed for full speed).
 * CDF/CDFJ/CDFJ+ Arm-Assisted games supported! (DSi or above needed for full speed).
+* FA2 and Cherity supported with backing EEPROM support.
 * High score support with up to 10 scores for each game.
 * Manuals included for more than 100 of the common games.
 * Keypad overlay for Star Raiders.
-* Frame Blending to help smooth out flicker.
+* Frame Blending to help smooth out flicker and make the games shine.
 
 Copyright :
 -----------------------
-StellaDS Phoenix-Edition is Copyright (c) 2020-2023 Dave Bernazzani (wavemotion-dave)
+StellaDS Phoenix-Edition is Copyright (c) 2020-2024 Dave Bernazzani (wavemotion-dave)
 
-As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification,  are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
+As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
+
+Most of this code is based on the Stella project - please see their github page for details on the original codebase: https://github.com/stella-emu/stella 
 
 The StellaDS emulator is offered as-is, without any warranty.
 
@@ -81,24 +83,25 @@ loaded.
 Here is a description of the configuration items you can adjust. Be sure to 
 press the START button to save out your configuration after making changes:
 
-* Controller:      Most games use the Left-Joystick but you can change this.
-* Bankswitch:      The system tries to auto-detect the correct bankswitching scheme.
-* Frame Blend:     Normal is fastest. Flicker free combines even/odd frames and it's pretty fast and effective at eliminating flicker. Background/Black mode is the slowest and will help with games that show background/black on one frame and sprites on the other (a simple blending will cause the sprites to disappear - Missile Command is one such game).
-* TV Type:         NTSC vs PAL. Reload your game after saving this setting.             
-* Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette.
-* Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian).
+* Controller:      Most games use the Left-Joystick (with a Savekey in the right port) but you can change this.
+* Bankswitch:      The system tries to auto-detect the correct bankswitching scheme but you can override that here if needed.
+* Frame Blend:     Normal is fastest. Flicker free combines even/odd frames and it's pretty fast (10% hit to emulation speed which is no problem on most games) and effective at eliminating flicker. Background/Black mode is the slowest and will help with games that show background/black on one frame and sprites on the other (a simple blending will cause the sprites to disappear - Missile Command is one such game).
+* TV Type:         NTSC vs PAL. Reload your game after saving this setting.
+* Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette. You can also set the global palette for loading up all future games (page 2 of options).
+* Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian). Most games should auto-detect this correctly. You can also set the global sound for loading up all future games (page 2 of options).
 * ABXY Button:     Default to FIRE button but you can change this. You can now set to Screen Pan UP or Screen Pan DN to scroll the screen for more complex games. See Screen Settings below.
 * HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
 * Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
-* Offset/Scale:    You can ajust the screen scaling and offset positions for the game.
-* ARM THUMB:       SAFE is most accurate but slows down processing. Optimized is faster and recommended for DPC+ games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision and so this will run fastest. A final option is only for CDFJ+ games that don't need an offset adjustment... Gorf is one such game. If you try a setting and it doesn't work, back down to the one below it.
+* Offset/Scale:    You can ajust the screen scaling and offset positions for the game. If you scale down, be aware that some pixel lines will not render - such is life with a very small 256x192 pixel DS screen.
+* ARM THUMB:       SAFE and Optimized are roughly the same - Optmized is preferred as is slightly faster and recommended for ARM-assisted games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision detection. One final experimental setting is to enable some level of frameskip for the really hard-hitting newest ARM games (e.g. Elevator Agent).
 * BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optimized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
 * RAM Clear:       Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
 
-There is a 2nd page of Options that can be accessed with L/R shoulder buttons. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
+These options are spread across two (2) pages ... use the L/R shoulder buttons to switch pages. This gets you access to some global settings for sound quality and default color palette (after saving, new games loaded will use the global settings by default and you can tweak individual games as desired).
+
 
 Screen Settings:
 -----------------------
@@ -111,7 +114,7 @@ display is normally off-screen while you play and then you can tap a button to b
 PAL vs NTSC:
 -----------------------
 StellaDS supports PAL games but be warned... in the very early days of video
-games, 99% of all games were developed as NTSC for the American Market and
+games, most games were developed as NTSC for the American Market and
 only later ported to a PAL system for our European friends. Some game makers
 did a good job (Imagic). Some did an OK job (Atari). And some did not do well
 (Activision). That means that some games just don't run at the right speed 
@@ -207,17 +210,17 @@ Controls :
  * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
  * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
- * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card)
+ * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card as a .BMP file)
  * Use stylus on buttons for other icon-based actions on bottom screen.
  
 Compile Instructions :
 -----------------------
 I'm using the following:
 * devkitpro-pacman version 6.0.1-2
-* gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+* gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
 * libnds 1.8.2-1
 
-I use Ubuntu and the Pacman repositories (devkitpro-pacman version 6.0.1-2).  I'm told it should also build under 
+I use Xubuntu (22.04.3 LTS) and the Pacman repositories (devkitpro-pacman version 6.0.1-2).  I'm told it should also build under 
 Windows but I've never done it and don't know how.
 
 If you try to build on a newer gcc, you will likely find it bloats the code a bit and you'll run out of ITCM_CODE memory.
@@ -229,10 +232,15 @@ Thanks and Credits :
 * To Robz for Twilight-Menu++ which rekindled emulation on the classic handheld (https://github.com/DS-Homebrew/TWiLightMenu)
 * To Wintermute for devkitpro and libnds (http://www.devkitpro.org)
 * To Alekmaul and The Chuckster for porting Stella to the DS.
-* To John Champeau for his support in helping me optmize the emualtor for his advanced arm-assisted games.
+* To John Champeau for his support in helping me optimize the emualtor for his advanced arm-assisted games.
 
 Version History:
 -----------------------
+V7.2 : 01-Jan-2024 by Dave Bernazzani (wavemotion)
+  * Updated copyright as we cross into the new year!
+  * Another partial frame of performance on CDFJ/+ games.
+  * Cleanup this readme file to reflect latest changes in the emulator.
+
 V7.1 : 23-Dec-2023 by Dave Bernazzani (wavemotion)
   * Squeezed out one extra frame of performance on CDFJ/+ games. 
   * New light frameskip applied to Draconian for a performance boost.

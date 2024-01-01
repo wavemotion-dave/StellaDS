@@ -1906,6 +1906,7 @@ const CartInfo table[] =
     {"00ce76ad69cdc2fa36ada01ae092d5a6",  "STARMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // StarMaster (1982) (PAL).bin
     {"c5bab953ac13dbb2cba03cd0684fb125",  "FROSTY", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    96,   0,  0},    // StayFrosty.bin
     {"541cac55ebcf7891d9d51c415922303f",  "FROST2", BANK_DPCP, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2.bin
+    {"f2564445e395cf1bebb76f92c5810095",  "FROST2", BANK_DPCP, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    91,   0,  3},    // StayFrosty2 - harmony fix.bin    
     {"656dc247db2871766dffd978c71da80c",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  34,    210,   100,   0,  5},    // Steeplechase (1980).bin    
     {"1619bc27632f9148d8480cd813aa74c3",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  NTSC,  27,    235,    93,   1,  1},    // Steeplechase (1983 Video Gems) (NTSC by TJ).bin
     {"f1eeeccc4bba6999345a2575ae96508e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA2_5,  PAL,   52,    245,    82,   0, 10},    // Steeplechase (1983 Video Gems) (PAL).bin
@@ -2228,7 +2229,6 @@ const CartInfo table[] =
     {"1b5a8da0622bffcee4c5b42aed4e0ef0",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   1, 30},    // TV Boy2
     {"f7ec2f2bdbe8fbea048c0d5fa6503b0b",  "??????", BANK_TV,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    230,   100,   1, 17},    // TV Boy (PAL)
     
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
