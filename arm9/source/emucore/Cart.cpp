@@ -2881,8 +2881,9 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       // These carts need a little extra oomph from the CPU so we have a special optmized driver
       if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "elevator") != 0)  {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
-      if (strstr(my_filename, "gorf") != 0)     cartDriver = 11;  //CDFJ++
+      if (strstr(my_filename, "elevator") != 0) {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
+      if (strstr(my_filename, "gorf") != 0)      cartDriver = 11;  //CDFJ++
+      if (strstr(my_filename, "tutankham") != 0) cartDriver = 11;  //CDFJ++
       
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
       if (!bFoundInDAT)
@@ -3005,6 +3006,16 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.xButton = BUTTON_SHIFT_UP;
           }
           else
+          if (strstr(my_filename, "tutankham") != 0)
+          {
+              myCartInfo.controllerType = CTR_GENESIS;
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 33;
+              myCartInfo.displayNumScalines = 208;
+              myCartInfo.yOffset = 14;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
           if (strstr(my_filename, "frantic") != 0)
           {
               myCartInfo.hBlankZero = 0; 
@@ -3059,6 +3070,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "A-STAR") == 0) cartDriver = 0;  // A-Star requires the normal driver      
       if (strcmp(myCartInfo.gameID, "HUGOHU") == 0) cartDriver = 0;  // Hugo Hunt requires the normal driver
       if (strcmp(myCartInfo.gameID, "OYSTRO") == 0) cartDriver = 0;  // Oystron requires the normal driver
+      if (strcmp(myCartInfo.gameID, "ALIEN0") == 0) cartDriver = 0;  // Alien requires the normal driver
       
       if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }  
