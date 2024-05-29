@@ -139,6 +139,7 @@ WD          8K          64B
 F8          8K          --
 F8SC        8K          128B
 FE/SCABS    8K          --
+wF8         8K          --
 AR          2K          6K
 DPC         8K (+ 2K Display Data)  
 DPC+        24K         8K (ARM assisted)
