@@ -186,6 +186,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define BANK_X07        33
 #define BANK_CTY        34
 #define BANK_3EPLUS     35
+#define BANK_WF8        36
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7

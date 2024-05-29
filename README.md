@@ -236,6 +236,10 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+
+V7.2b : 29-May-2024 by Dave Bernazzani (wavemotion)
+  * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.
+
 V7.2 : 01-Jan-2024 by Dave Bernazzani (wavemotion)
   * Updated copyright as we cross into the new year!
   * Another partial frame of performance on CDFJ/+ games.
