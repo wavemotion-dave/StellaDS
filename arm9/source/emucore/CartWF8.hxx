@@ -29,11 +29,9 @@ class CartridgeWF8;
 #include "Cart.hxx"
 
 /**
-  Cartridge class used for Atari's 8K bankswitched games.  There
-  are two 4K banks.
-
-  @author  Bradford W. Mott
-  @version $Id: CartF8.hxx,v 1.2 2002/05/13 19:17:32 stephena Exp $
+  Cartridge class used for some later Coleco games
+  like Smurf Rescue and Zaxxon which utilize a write to 0xFFF8
+  to bank-switch.
 */
 class CartridgeWF8 : public Cartridge
 {

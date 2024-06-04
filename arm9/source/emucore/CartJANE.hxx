@@ -29,7 +29,8 @@ class CartridgeJANE;
 #include "Cart.hxx"
 
 /**
-  Cartridge class used for the Tarzan Prototype - four banks with hotspots at FFF0, FFF1, FFF8, FFF9
+  Cartridge class used for the Tarzan Prototype - four banks with
+  hotspots at FFF0 (bank 0), FFF1 (bank 1), FFF8 (bank2), FFF9 (bank3)
 */
 class CartridgeJANE : public Cartridge
 {
