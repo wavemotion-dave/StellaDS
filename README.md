@@ -150,6 +150,7 @@ FA          12K         256 bytes
 E7          8K/12K/16K  1K + (4) 256 byte pages
 F6          16K         -- 
 F6SC        16K         128B
+JANE        16K         -- (Tarzan Prototype)
 CTY         28K         64B  (+256 EEPROM)
 FA2         29K         256B (+256 EEPROM)
 F4          32K         --
@@ -238,8 +239,9 @@ Thanks and Credits :
 Version History:
 -----------------------
 
-V7.2b : 29-May-2024 by Dave Bernazzani (wavemotion)
+V7.2c : 04-Jun-2024 by Dave Bernazzani (wavemotion)
   * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.
+  * Added JANE banking scheme for the new Tarzan prototype release.
   * Added support for Champ Games Tutankham Arcade.
 
 V7.2 : 01-Jan-2024 by Dave Bernazzani (wavemotion)
