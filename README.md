@@ -239,7 +239,7 @@ Thanks and Credits :
 Version History:
 -----------------------
 
-V7.2c : 04-Jun-2024 by Dave Bernazzani (wavemotion)
+V7.3 : 05-Jun-2024 by Dave Bernazzani (wavemotion)
   * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.
   * Added JANE banking scheme for the new Tarzan prototype release.
   * Added support for Champ Games Tutankham Arcade.

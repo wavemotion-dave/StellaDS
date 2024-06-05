@@ -49,7 +49,7 @@
 #include "screenshot.h"
 #include "Thumbulator.hxx"
 
-#define VERSION "7.2"
+#define VERSION "7.3"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000
