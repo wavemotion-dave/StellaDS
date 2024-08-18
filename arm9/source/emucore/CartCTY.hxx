@@ -29,8 +29,7 @@ class CartridgeCTY;
 #include "Cart.hxx"
 
 /**
-  Cartridge class used for CBS' RAM Plus cartridges extended format.
-  There are seven 4K banks and 256 bytes of RAM.
+  Cartridge class used for Chetiry - has extra RAM and an EE Chip
 */
 class CartridgeCTY : public Cartridge
 {
@@ -98,11 +97,11 @@ class CartridgeCTY : public Cartridge
     // The ROM image of the cartridge
     uInt8 *myImage;
 
-    // The 64 bytes of RAM on the cartridge
-    uInt8 myRAM[256];
+    // The 256 bytes of RAM on the cartridge
+    uInt8 *ctyRAM;
 
     // The 256 bytes of EEPROM on the cartridge
-    uInt8 myEE[256];
+    uInt8 *ctyEE;
 };
 #endif
 

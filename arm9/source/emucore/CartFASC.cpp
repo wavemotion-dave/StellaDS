@@ -29,17 +29,14 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeFASC::CartridgeFASC(const uInt8* image)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < 12288; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Reuse the existing cart buffer...
+  myImage = (uInt8 *)image;
 
   // Initialize RAM with random values
   Random random;
   for(uInt32 i = 0; i < 256; ++i)
   {
-    myRAM[i] = (myCartInfo.clearRAM ? 0x00:random.next());
+    fast_cart_buffer[i] = (myCartInfo.clearRAM ? 0x00:random.next());
   }
 }
  
@@ -85,7 +82,7 @@ void CartridgeFASC::install(System& system)
   {
     page_access.device = this;
     page_access.directPeekBase = 0;
-    page_access.directPokeBase = &myRAM[j & 0x00FF];
+    page_access.directPokeBase = &fast_cart_buffer[j & 0x00FF];
     mySystem->setPageAccess(j >> shift, page_access);
   }
  
@@ -93,7 +90,7 @@ void CartridgeFASC::install(System& system)
   for(uInt32 k = 0x1100; k < 0x1200; k += (1 << shift))
   {
     page_access.device = this;
-    page_access.directPeekBase = &myRAM[k & 0x00FF];
+    page_access.directPeekBase = &fast_cart_buffer[k & 0x00FF];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(k >> shift, page_access);
   }

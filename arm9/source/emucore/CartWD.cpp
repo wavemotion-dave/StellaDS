@@ -27,6 +27,8 @@
 #include "TIA.hxx"
 #include <iostream>
 
+Int32 myCyclesAtBankswitchInit;
+uInt8 myPendingBank;
 
 const uInt8 ourBankOrg[16][4] = 
 {
@@ -160,7 +162,7 @@ uInt8 CartridgeWD::peek(uInt16 address)
       address = address & 0x0FFF;       // Map down to 4k
       if (address < 0x40)               // Lower 128 bytes of first bank is special RAM (first 64 bytes to READ, next 64 bytes to WRITE)
       {
-        return myRam[address & 0x3F];
+        return myRAM[128 +(address & 0x3F)];
       }
       else if (address < 0x400)
       {
@@ -188,7 +190,7 @@ void CartridgeWD::poke(uInt16 address, uInt8 value)
   {
       if ((address & 0x0FFF) < 0x0080)  // Lower 128 bytes of first bank is special RAM (first 64 bytes to READ, next 64 bytes to WRITE)
       {
-        myRam[address & 0x3F] = value;
+        myRAM[128 + (address & 0x3F)] = value;
       }
   }
   else

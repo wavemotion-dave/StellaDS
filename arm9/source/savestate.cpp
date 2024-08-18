@@ -33,6 +33,7 @@
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
 #include "Cart3EPlus.hxx"
+#include "CartWD.hxx"
 #include "highscore.h"
 #include "config.h"
 #include "instructions.h"
@@ -45,7 +46,7 @@
 #include "Thumbulator.hxx"
 #include "bgFileSel.h"
 
-#define SAVE_VERSION 0x0002
+#define SAVE_VERSION 0x0003
 
 char tmp_buf[SOUND_SIZE];
 
@@ -55,11 +56,11 @@ extern int bg0, bg0b,bg1b;
 extern unsigned int dsReadPad(void);
 uInt16 savedTimerData = 0;
 
-#define TYPE_RAW        0
-#define TYPE_RAM        1
-#define TYPE_CART       2
-#define TYPE_FASTCART   3
-#define TYPE_XLRAM      4
+#define TYPE_RAW        0       // Peek/Poke offset is pointer direct to memory location (not ideal as it's not portable)
+#define TYPE_RAM        1       // Peek/Poke offset into the small 256-byte RAM buffer
+#define TYPE_CART       2       // Peek/Poke offset into the large Cart Buffer
+#define TYPE_FASTCART   3       // Peek/Poke offset into the 8K Fast Cart Buffer
+#define TYPE_XLRAM      4       // Peek/Poke offset into the 32K Slow RAM buffer
 
 typedef struct
 {
@@ -71,52 +72,9 @@ typedef struct
 
 Offsets_t myPageOffsets[64];
 
-u8 IsSaveSupported(void)
-{
-    switch (myCartInfo.banking)
-    {
-        case BANK_2K:
-        case BANK_4K:
-        case BANK_F8:
-        case BANK_F6:
-        case BANK_F4:
-        case BANK_F8SC:
-        case BANK_F6SC:
-        case BANK_F4SC:
-        case BANK_FE:
-        case BANK_JANE:
-        case BANK_DPC:
-        case BANK_BF:
-        case BANK_DF:
-        case BANK_EF:
-        case BANK_BFSC:
-        case BANK_DFSC:
-        case BANK_EFSC:
-        case BANK_E0:
-        case BANK_E7:
-        case BANK_3F:
-        case BANK_TV:
-        case BANK_WF8:
-        case BANK_AR:
-        case BANK_SB:
-        case BANK_UA:
-        case BANK_FA2:
-        case BANK_X07:
-        case BANK_CV:
-        case BANK_MB:
-        case BANK_0840:
-        case BANK_DPCP:
-        case BANK_3E:
-        case BANK_3EPLUS:
-        case BANK_CDFJ:
-            return true;    // Save State supported for these carts...
-            
-        default:
-            return false;   // Save State not supported for all others...
-    }
-}
-
 char save_filename[256];
+
+char spare_bytes[128];
 
 void MakeSaveName(void)
 {
@@ -154,17 +112,17 @@ void SaveState(void)
             myPageOffsets[i].peek_type = TYPE_RAM;
             myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - myRAM);
         }
-        else if ((myPageAccessTable[i].directPeekBase >= &cart_buffer[0]) && (myPageAccessTable[i].directPeekBase <= &cart_buffer[MAX_CART_FILE_SIZE]))
+        else if ((myPageAccessTable[i].directPeekBase >= &cart_buffer[0]) && (myPageAccessTable[i].directPeekBase < &cart_buffer[MAX_CART_FILE_SIZE]))
         {
             myPageOffsets[i].peek_type = TYPE_CART;
             myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - cart_buffer);
         }
-        else if ((myPageAccessTable[i].directPeekBase >= &fast_cart_buffer[0]) && (myPageAccessTable[i].directPeekBase <= &fast_cart_buffer[8*1024]))
+        else if ((myPageAccessTable[i].directPeekBase >= &fast_cart_buffer[0]) && (myPageAccessTable[i].directPeekBase < &fast_cart_buffer[8*1024]))
         {
             myPageOffsets[i].peek_type = TYPE_FASTCART;
             myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - fast_cart_buffer);
         }
-        else if ((myPageAccessTable[i].directPeekBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPeekBase <= &xl_ram_buffer[32*1024]))
+        else if ((myPageAccessTable[i].directPeekBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPeekBase < &xl_ram_buffer[32*1024]))
         {
             myPageOffsets[i].peek_type = TYPE_XLRAM;
             myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - xl_ram_buffer);
@@ -181,17 +139,17 @@ void SaveState(void)
             myPageOffsets[i].poke_type = TYPE_RAM;
             myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - myRAM);
         }
-        else if ((myPageAccessTable[i].directPokeBase >= &cart_buffer[0]) && (myPageAccessTable[i].directPokeBase <= &cart_buffer[MAX_CART_FILE_SIZE]))
+        else if ((myPageAccessTable[i].directPokeBase >= &cart_buffer[0]) && (myPageAccessTable[i].directPokeBase < &cart_buffer[MAX_CART_FILE_SIZE]))
         {
             myPageOffsets[i].poke_type = TYPE_CART;
             myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - cart_buffer);
         }
-        else if ((myPageAccessTable[i].directPokeBase >= &fast_cart_buffer[0]) && (myPageAccessTable[i].directPokeBase <= &fast_cart_buffer[8*1024]))
+        else if ((myPageAccessTable[i].directPokeBase >= &fast_cart_buffer[0]) && (myPageAccessTable[i].directPokeBase < &fast_cart_buffer[8*1024]))
         {
             myPageOffsets[i].poke_type = TYPE_FASTCART;
             myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - fast_cart_buffer);
         }
-        else if ((myPageAccessTable[i].directPokeBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPokeBase <= &xl_ram_buffer[32*1024]))
+        else if ((myPageAccessTable[i].directPokeBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPokeBase < &xl_ram_buffer[32*1024]))
         {
             myPageOffsets[i].poke_type = TYPE_XLRAM;
             myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - xl_ram_buffer);
@@ -363,6 +321,8 @@ void SaveState(void)
     fwrite(&bPossibleLoad,              sizeof(bPossibleLoad),             1, fp);
     fwrite(&myNumberOfLoadImages,       sizeof(myNumberOfLoadImages),      1, fp);
     fwrite(&LastConfigurationAR,        sizeof(LastConfigurationAR),       1, fp);
+    fwrite(&myCyclesAtBankswitchInit,   sizeof(myCyclesAtBankswitchInit),  1, fp);
+    fwrite(&myPendingBank,              sizeof(myPendingBank),             1, fp);
 
     // tia_buf[] is in VRAM so we have to use an intermediate buffer...
     memcpy(tmp_buf, tia_buf,            SOUND_SIZE);
@@ -400,13 +360,17 @@ void SaveState(void)
     fwrite(&myLDXenabled,               sizeof(myLDXenabled),              1, fp);
     fwrite(&myLDYenabled,               sizeof(myLDYenabled),              1, fp);
     fwrite(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);   
-    fwrite(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);   
+    fwrite(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);
     
     // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
     if (bSaveStateXL)
     {
         fwrite(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
     }
+    
+    // Write out some spare bytes we can eat into for the future...
+    memset(spare_bytes, 0x00, sizeof(spare_bytes));
+    fwrite(spare_bytes,       sizeof(spare_bytes),                         1, fp);
     
     fclose(fp);
 
@@ -422,281 +386,292 @@ void LoadState(void)
 {
     MakeSaveName();
 
-    FILE * fp = fopen(save_filename, "rb");
-
-    // Version
-    uInt16 save_version = 0xFFFF;
-    fread(&save_version,               sizeof(save_version),               1, fp);
-    if (save_version == SAVE_VERSION) 
+    FILE *fp = fopen(save_filename, "rb");
+    
+    if (fp)
     {
-        // StellaDS
-        fread(fast_cart_buffer,            8*1024,                             1, fp);
-        fread(sound_buffer,                SOUND_SIZE,                         1, fp);
-        fread(&etatEmu,                    sizeof(etatEmu),                    1, fp);
-        fread(&bHaltEmulation,             sizeof(bHaltEmulation),             1, fp);
-        fread(&bScreenRefresh,             sizeof(bScreenRefresh),             1, fp);
-        fread(&gAtariFrames,               sizeof(gAtariFrames),               1, fp);
-        fread(&gTotalAtariFrames,          sizeof(gTotalAtariFrames),          1, fp);
-        fread(&atari_frames,               sizeof(atari_frames),               1, fp);
-        fread(&gSaveKeyEEWritten,          sizeof(gSaveKeyEEWritten),          1, fp);
-        fread(&gSaveKeyIsDirty,            sizeof(gSaveKeyIsDirty),            1, fp);
-        fread(&mySoundFreq,                sizeof(mySoundFreq),                1, fp);
-        fread(&savedTimerData,             sizeof(savedTimerData),             1, fp);
-        fread(&console_color,              sizeof(console_color),              1, fp);   
-        fread(&myCartInfo.left_difficulty, sizeof(uInt8),                      1, fp);
-        fread(&myCartInfo.right_difficulty,sizeof(uInt8),                      1, fp);
-        
-        // 6532
-        fread(myRAM,                       256,                                1, fp);
-        fread(&myTimer,                    sizeof(myTimer),                    1, fp);
-        fread(&myIntervalShift,            sizeof(myIntervalShift),            1, fp);
-        fread(&myCyclesWhenTimerSet,       sizeof(myCyclesWhenTimerSet),       1, fp);
-        fread(&myCyclesWhenInterruptReset, sizeof(myCyclesWhenInterruptReset), 1, fp);
-        fread(&myTimerReadAfterInterrupt,  sizeof(myTimerReadAfterInterrupt),  1, fp);
-
-        fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
-        fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
-        fread(&myOutA,                     sizeof(myOutA),                     1, fp);
-
-        // 6502
-        fread(&A,                          sizeof(A),                          1, fp);
-        fread(&X,                          sizeof(X),                          1, fp);
-        fread(&Y,                          sizeof(Y),                          1, fp);
-        fread(&SP,                         sizeof(SP),                         1, fp);
-        fread(&gPC,                        sizeof(gPC),                        1, fp);
-        fread(&N,                          sizeof(N),                          1, fp);
-        fread(&V,                          sizeof(V),                          1, fp);
-        fread(&B,                          sizeof(B),                          1, fp);
-        fread(&D,                          sizeof(D),                          1, fp);
-        fread(&I,                          sizeof(I),                          1, fp);
-        fread(&C,                          sizeof(C),                          1, fp);
-        fread(&notZ,                       sizeof(notZ),                       1, fp);
-        fread(&myExecutionStatus,          sizeof(myExecutionStatus),          1, fp);
-        fread(&myDataBusState,             sizeof(myDataBusState),             1, fp);
-        fread(&NumberOfDistinctAccesses,   sizeof(NumberOfDistinctAccesses),   1, fp);
-
-        // Cart Driver
-        fread(&myCurrentBank,              sizeof(myCurrentBank),              1, fp);
-        fread(&myCurrentOffset,            sizeof(myCurrentOffset),            1, fp);
-        fread(&myCurrentOffset32,          sizeof(myCurrentOffset32),          1, fp);
-        fread(&cartDriver,                 sizeof(cartDriver),                 1, fp);
-        fread(&f8_bankbit,                 sizeof(f8_bankbit),                 1, fp);
-        fread(myCurrentBanks,              sizeof(myCurrentBanks),             1, fp);
-
-        fread(&myRandomNumber,             sizeof(myRandomNumber),             1, fp);
-        fread(&myMusicCycles,              sizeof(myMusicCycles),              1, fp);
-        fread(myFlags,                     sizeof(myFlags),                    1, fp);
-        fread(myMusicMode,                 sizeof(myMusicMode),                1, fp);
-
-        // System
-        fread(&gSystemCycles,              sizeof(gSystemCycles),              1, fp);
-        fread(&gTotalSystemCycles,         sizeof(gTotalSystemCycles),         1, fp);
-        fread(&myPageOffsets,              sizeof(myPageOffsets),              1, fp);
-
-        // TIA
-        fread(ourCollisionTable,           sizeof(ourCollisionTable),          1, fp);
-        fread(myPriorityEncoder,           sizeof(myPriorityEncoder),          1, fp);
-        fread(&myCollision,                sizeof(myCollision),                1, fp);
-
-        fread(&myPOSP0,                    sizeof(myPOSP0),                    1, fp);
-        fread(&myPOSP1,                    sizeof(myPOSP1),                    1, fp);
-        fread(&myPOSM0,                    sizeof(myPOSM0),                    1, fp);
-        fread(&myPOSM1,                    sizeof(myPOSM1),                    1, fp);
-        fread(&myPOSBL,                    sizeof(myPOSBL),                    1, fp);
-
-        fread(&myPlayfieldPriorityAndScore,sizeof(myPlayfieldPriorityAndScore),1, fp);
-        fread(myColor,                     sizeof(myColor),                    1, fp);
-        fread(&myCTRLPF,                   sizeof(myCTRLPF),                   1, fp);
-        fread(&myREFP0,                    sizeof(myREFP0),                    1, fp);
-        fread(&myREFP0,                    sizeof(myREFP0),                    1, fp);
-        fread(&myREFP1,                    sizeof(myREFP1),                    1, fp);
-        fread(&myPF,                       sizeof(myPF),                       1, fp);
-        fread(&myGRP0,                     sizeof(myGRP0),                     1, fp);
-        fread(&myGRP1,                     sizeof(myGRP1),                     1, fp);
-        fread(&myDGRP0,                    sizeof(myDGRP0),                    1, fp);
-        fread(&myDGRP1,                    sizeof(myDGRP1),                    1, fp);
-        fread(&myENAM0,                    sizeof(myENAM0),                    1, fp);
-        fread(&myENAM1,                    sizeof(myENAM1),                    1, fp);
-        fread(&myENABL,                    sizeof(myENABL),                    1, fp);
-        fread(&myDENABL,                   sizeof(myDENABL),                   1, fp);
-        fread(&myHMP0,                     sizeof(myHMP0),                     1, fp);
-        fread(&myHMP1,                     sizeof(myHMP1),                     1, fp);
-        fread(&myHMM0,                     sizeof(myHMM0),                     1, fp);
-        fread(&myHMM1,                     sizeof(myHMM1),                     1, fp);
-        fread(&myHMBL,                     sizeof(myHMBL),                     1, fp);
-        fread(&myVDELP0,                   sizeof(myVDELP0),                   1, fp);
-        fread(&myVDELP1,                   sizeof(myVDELP1),                   1, fp);
-        fread(&myVDELBL,                   sizeof(myVDELBL),                   1, fp);
-        fread(&myRESMP0,                   sizeof(myRESMP0),                   1, fp);
-        fread(&myRESMP1,                   sizeof(myRESMP1),                   1, fp);
-
-        fread(&myStartDisplayOffset,       sizeof(myStartDisplayOffset),       1, fp);
-        fread(&myStopDisplayOffset,        sizeof(myStopDisplayOffset),        1, fp);
-        fread(&myVSYNCFinishClock,         sizeof(myVSYNCFinishClock),         1, fp);
-        fread(&myEnabledObjects,           sizeof(myEnabledObjects),           1, fp);
-        fread(&myClockWhenFrameStarted,    sizeof(myClockWhenFrameStarted),    1, fp);
-        fread(&myCyclesWhenFrameStarted,   sizeof(myCyclesWhenFrameStarted),   1, fp);
-
-        fread(&myClockStartDisplay,        sizeof(myClockStartDisplay),        1, fp);
-        fread(&myClockStopDisplay,         sizeof(myClockStopDisplay),         1, fp);
-        fread(&myClockAtLastUpdate,        sizeof(myClockAtLastUpdate),        1, fp);
-        fread(&myClocksToEndOfScanLine,    sizeof(myClocksToEndOfScanLine),    1, fp);
-        fread(&myVSYNC,                    sizeof(myVSYNC),                    1, fp);
-        fread(&myVBLANK,                   sizeof(myVBLANK),                   1, fp);
-        fread(&myLastHMOVEClock,           sizeof(myLastHMOVEClock),           1, fp);
-        fread(&myHMOVEBlankEnabled,        sizeof(myHMOVEBlankEnabled),        1, fp);
-
-        fread(&myM0CosmicArkMotionEnabled, sizeof(myM0CosmicArkMotionEnabled), 1, fp);
-        fread(&myM0CosmicArkCounter,       sizeof(myM0CosmicArkCounter),       1, fp);
-        fread(&myCurrentGRP0,              sizeof(myCurrentGRP0),              1, fp);
-        fread(&myCurrentGRP1,              sizeof(myCurrentGRP1),              1, fp);
-
-        fread(&myNUSIZ0,                   sizeof(myNUSIZ0),                   1, fp);
-        fread(&myNUSIZ0,                   sizeof(myNUSIZ0),                   1, fp);
-
-        fread(ourPlayerReflectTable,       sizeof(ourPlayerReflectTable),      1, fp);
-        fread(ourPlayfieldTable,           sizeof(ourPlayfieldTable),          1, fp);
-
-        // TIA Sound
-        fread(AUDC,                        sizeof(AUDC),                       1, fp);
-        fread(AUDF,                        sizeof(AUDF),                       1, fp);
-        fread(AUDV,                        sizeof(AUDV),                       1, fp);
-        fread(Outvol,                      sizeof(Outvol),                     1, fp);
-        fread(&bProcessingSample,          sizeof(bProcessingSample),          1, fp);
-        fread(&tia_buf_idx,                sizeof(tia_buf_idx),                1, fp);
-        fread(&tia_out_idx,                sizeof(tia_out_idx),                1, fp);
-
-        fread(&Samp_n_max,                 sizeof(Samp_n_max),                 1, fp);
-        fread(&Samp_n_cnt,                 sizeof(Samp_n_cnt),                 1, fp);
-        fread(Bit9,                        sizeof(Bit9),                       1, fp);
-        fread(P4,                          sizeof(P4),                         1, fp);
-        fread(P9,                          sizeof(P9),                         1, fp);
-        fread(Div_n_cnt,                   sizeof(Div_n_cnt),                  1, fp);
-        fread(Div_n_max,                   sizeof(Div_n_max),                  1, fp);
-
-        // Complicated Carts
-        fread(&NumberOfDistinctAccesses,   sizeof(NumberOfDistinctAccesses),  1, fp);
-        fread(&myWriteEnabled,             sizeof(myWriteEnabled),            1, fp);
-        fread(&myDataHoldRegister,         sizeof(myDataHoldRegister),        1, fp);
-        fread(&myWritePending,             sizeof(myWritePending),            1, fp);
-        fread(&bPossibleLoad,              sizeof(bPossibleLoad),             1, fp);
-        fread(&myNumberOfLoadImages,       sizeof(myNumberOfLoadImages),      1, fp);
-        fread(&LastConfigurationAR,        sizeof(LastConfigurationAR),       1, fp);
-        if (LastConfigurationAR != 255) SetConfigurationAR(LastConfigurationAR);
-
-        // tia_buf[] is in VRAM so we have to use an intermediate buffer...
-        fread(tmp_buf,                     SOUND_SIZE,                        1, fp);
-        memcpy(tia_buf, tmp_buf,           SOUND_SIZE);
-
-        // Thumbulator
-        fread(reg_sys,                     sizeof(reg_sys),                   1, fp);
-        fread(&cFlag,                      sizeof(cFlag),                     1, fp);
-        fread(&cStack,                     sizeof(cStack),                    1, fp);
-        fread(&cBase,                      sizeof(cBase),                     1, fp);
-        fread(&cStart,                     sizeof(cStart),                    1, fp);
-
-        // DPC+ Parameters
-        fread(&myFastFetch,                sizeof(myFastFetch),               1, fp);
-        fread(&myDPCPRandomNumber,         sizeof(myDPCPRandomNumber),        1, fp);
-        fread(&myDPCPCycles,               sizeof(myDPCPCycles),              1, fp);
-        fread(&myParameterPointer,         sizeof(myParameterPointer),        1, fp);
-        fread(myFractionalCounters,        sizeof(myFractionalCounters),      1, fp);
-        fread(myFractionalIncrements,      sizeof(myFractionalIncrements),    1, fp);
-        fread(myTops,                      sizeof(myTops),                    1, fp);
-        fread(myTopsMinusBottoms,          sizeof(myTopsMinusBottoms),        1, fp);
-        fread(myBottoms,                   sizeof(myBottoms),                 1, fp);
-        fread(myCounters,                  sizeof(myCounters),                1, fp);
-        fread(myMusicCounters,             sizeof(myMusicCounters),           1, fp);
-        fread(myMusicFrequencies,          sizeof(myMusicFrequencies),        1, fp);
-        fread(myMusicWaveforms,            sizeof(myMusicWaveforms),          1, fp);
-        fread(myMusicCountersShifted,      sizeof(myMusicCountersShifted),    1, fp);
-        fread(myParameter,                 sizeof(myParameter),               1, fp);
-        
-        // CDFJ+ Parameters
-        fread(&myAmplitudeStream,          sizeof(myAmplitudeStream),         1, fp);
-        fread(&myDataStreamFetch,          sizeof(myDataStreamFetch),         1, fp);    
-        fread(&peekvalue,                  sizeof(peekvalue),                 1, fp);
-        fread(&myMode,                     sizeof(myMode),                    1, fp);
-        fread(&myLDXenabled,               sizeof(myLDXenabled),              1, fp);
-        fread(&myLDYenabled,               sizeof(myLDYenabled),              1, fp);
-        fread(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);        
-        fread(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);
-        
-        // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
-        if (bSaveStateXL)
+        // Version
+        uInt16 save_version = 0xFFFF;
+        fread(&save_version,               sizeof(save_version),               1, fp);
+        if (save_version == SAVE_VERSION) 
         {
-            fread(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
+            // StellaDS
+            fread(fast_cart_buffer,            8*1024,                             1, fp);
+            fread(sound_buffer,                SOUND_SIZE,                         1, fp);
+            fread(&etatEmu,                    sizeof(etatEmu),                    1, fp);
+            fread(&bHaltEmulation,             sizeof(bHaltEmulation),             1, fp);
+            fread(&bScreenRefresh,             sizeof(bScreenRefresh),             1, fp);
+            fread(&gAtariFrames,               sizeof(gAtariFrames),               1, fp);
+            fread(&gTotalAtariFrames,          sizeof(gTotalAtariFrames),          1, fp);
+            fread(&atari_frames,               sizeof(atari_frames),               1, fp);
+            fread(&gSaveKeyEEWritten,          sizeof(gSaveKeyEEWritten),          1, fp);
+            fread(&gSaveKeyIsDirty,            sizeof(gSaveKeyIsDirty),            1, fp);
+            fread(&mySoundFreq,                sizeof(mySoundFreq),                1, fp);
+            fread(&savedTimerData,             sizeof(savedTimerData),             1, fp);
+            fread(&console_color,              sizeof(console_color),              1, fp);   
+            fread(&myCartInfo.left_difficulty, sizeof(uInt8),                      1, fp);
+            fread(&myCartInfo.right_difficulty,sizeof(uInt8),                      1, fp);
+            
+            // 6532
+            fread(myRAM,                       256,                                1, fp);
+            fread(&myTimer,                    sizeof(myTimer),                    1, fp);
+            fread(&myIntervalShift,            sizeof(myIntervalShift),            1, fp);
+            fread(&myCyclesWhenTimerSet,       sizeof(myCyclesWhenTimerSet),       1, fp);
+            fread(&myCyclesWhenInterruptReset, sizeof(myCyclesWhenInterruptReset), 1, fp);
+            fread(&myTimerReadAfterInterrupt,  sizeof(myTimerReadAfterInterrupt),  1, fp);
+
+            fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
+            fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
+            fread(&myOutA,                     sizeof(myOutA),                     1, fp);
+
+            // 6502
+            fread(&A,                          sizeof(A),                          1, fp);
+            fread(&X,                          sizeof(X),                          1, fp);
+            fread(&Y,                          sizeof(Y),                          1, fp);
+            fread(&SP,                         sizeof(SP),                         1, fp);
+            fread(&gPC,                        sizeof(gPC),                        1, fp);
+            fread(&N,                          sizeof(N),                          1, fp);
+            fread(&V,                          sizeof(V),                          1, fp);
+            fread(&B,                          sizeof(B),                          1, fp);
+            fread(&D,                          sizeof(D),                          1, fp);
+            fread(&I,                          sizeof(I),                          1, fp);
+            fread(&C,                          sizeof(C),                          1, fp);
+            fread(&notZ,                       sizeof(notZ),                       1, fp);
+            fread(&myExecutionStatus,          sizeof(myExecutionStatus),          1, fp);
+            fread(&myDataBusState,             sizeof(myDataBusState),             1, fp);
+            fread(&NumberOfDistinctAccesses,   sizeof(NumberOfDistinctAccesses),   1, fp);
+
+            // Cart Driver
+            fread(&myCurrentBank,              sizeof(myCurrentBank),              1, fp);
+            fread(&myCurrentOffset,            sizeof(myCurrentOffset),            1, fp);
+            fread(&myCurrentOffset32,          sizeof(myCurrentOffset32),          1, fp);
+            fread(&cartDriver,                 sizeof(cartDriver),                 1, fp);
+            fread(&f8_bankbit,                 sizeof(f8_bankbit),                 1, fp);
+            fread(myCurrentBanks,              sizeof(myCurrentBanks),             1, fp);
+
+            fread(&myRandomNumber,             sizeof(myRandomNumber),             1, fp);
+            fread(&myMusicCycles,              sizeof(myMusicCycles),              1, fp);
+            fread(myFlags,                     sizeof(myFlags),                    1, fp);
+            fread(myMusicMode,                 sizeof(myMusicMode),                1, fp);
+
+            // System
+            fread(&gSystemCycles,              sizeof(gSystemCycles),              1, fp);
+            fread(&gTotalSystemCycles,         sizeof(gTotalSystemCycles),         1, fp);
+            fread(&myPageOffsets,              sizeof(myPageOffsets),              1, fp);
+
+            // TIA
+            fread(ourCollisionTable,           sizeof(ourCollisionTable),          1, fp);
+            fread(myPriorityEncoder,           sizeof(myPriorityEncoder),          1, fp);
+            fread(&myCollision,                sizeof(myCollision),                1, fp);
+
+            fread(&myPOSP0,                    sizeof(myPOSP0),                    1, fp);
+            fread(&myPOSP1,                    sizeof(myPOSP1),                    1, fp);
+            fread(&myPOSM0,                    sizeof(myPOSM0),                    1, fp);
+            fread(&myPOSM1,                    sizeof(myPOSM1),                    1, fp);
+            fread(&myPOSBL,                    sizeof(myPOSBL),                    1, fp);
+
+            fread(&myPlayfieldPriorityAndScore,sizeof(myPlayfieldPriorityAndScore),1, fp);
+            fread(myColor,                     sizeof(myColor),                    1, fp);
+            fread(&myCTRLPF,                   sizeof(myCTRLPF),                   1, fp);
+            fread(&myREFP0,                    sizeof(myREFP0),                    1, fp);
+            fread(&myREFP0,                    sizeof(myREFP0),                    1, fp);
+            fread(&myREFP1,                    sizeof(myREFP1),                    1, fp);
+            fread(&myPF,                       sizeof(myPF),                       1, fp);
+            fread(&myGRP0,                     sizeof(myGRP0),                     1, fp);
+            fread(&myGRP1,                     sizeof(myGRP1),                     1, fp);
+            fread(&myDGRP0,                    sizeof(myDGRP0),                    1, fp);
+            fread(&myDGRP1,                    sizeof(myDGRP1),                    1, fp);
+            fread(&myENAM0,                    sizeof(myENAM0),                    1, fp);
+            fread(&myENAM1,                    sizeof(myENAM1),                    1, fp);
+            fread(&myENABL,                    sizeof(myENABL),                    1, fp);
+            fread(&myDENABL,                   sizeof(myDENABL),                   1, fp);
+            fread(&myHMP0,                     sizeof(myHMP0),                     1, fp);
+            fread(&myHMP1,                     sizeof(myHMP1),                     1, fp);
+            fread(&myHMM0,                     sizeof(myHMM0),                     1, fp);
+            fread(&myHMM1,                     sizeof(myHMM1),                     1, fp);
+            fread(&myHMBL,                     sizeof(myHMBL),                     1, fp);
+            fread(&myVDELP0,                   sizeof(myVDELP0),                   1, fp);
+            fread(&myVDELP1,                   sizeof(myVDELP1),                   1, fp);
+            fread(&myVDELBL,                   sizeof(myVDELBL),                   1, fp);
+            fread(&myRESMP0,                   sizeof(myRESMP0),                   1, fp);
+            fread(&myRESMP1,                   sizeof(myRESMP1),                   1, fp);
+
+            fread(&myStartDisplayOffset,       sizeof(myStartDisplayOffset),       1, fp);
+            fread(&myStopDisplayOffset,        sizeof(myStopDisplayOffset),        1, fp);
+            fread(&myVSYNCFinishClock,         sizeof(myVSYNCFinishClock),         1, fp);
+            fread(&myEnabledObjects,           sizeof(myEnabledObjects),           1, fp);
+            fread(&myClockWhenFrameStarted,    sizeof(myClockWhenFrameStarted),    1, fp);
+            fread(&myCyclesWhenFrameStarted,   sizeof(myCyclesWhenFrameStarted),   1, fp);
+
+            fread(&myClockStartDisplay,        sizeof(myClockStartDisplay),        1, fp);
+            fread(&myClockStopDisplay,         sizeof(myClockStopDisplay),         1, fp);
+            fread(&myClockAtLastUpdate,        sizeof(myClockAtLastUpdate),        1, fp);
+            fread(&myClocksToEndOfScanLine,    sizeof(myClocksToEndOfScanLine),    1, fp);
+            fread(&myVSYNC,                    sizeof(myVSYNC),                    1, fp);
+            fread(&myVBLANK,                   sizeof(myVBLANK),                   1, fp);
+            fread(&myLastHMOVEClock,           sizeof(myLastHMOVEClock),           1, fp);
+            fread(&myHMOVEBlankEnabled,        sizeof(myHMOVEBlankEnabled),        1, fp);
+
+            fread(&myM0CosmicArkMotionEnabled, sizeof(myM0CosmicArkMotionEnabled), 1, fp);
+            fread(&myM0CosmicArkCounter,       sizeof(myM0CosmicArkCounter),       1, fp);
+            fread(&myCurrentGRP0,              sizeof(myCurrentGRP0),              1, fp);
+            fread(&myCurrentGRP1,              sizeof(myCurrentGRP1),              1, fp);
+
+            fread(&myNUSIZ0,                   sizeof(myNUSIZ0),                   1, fp);
+            fread(&myNUSIZ0,                   sizeof(myNUSIZ0),                   1, fp);
+
+            fread(ourPlayerReflectTable,       sizeof(ourPlayerReflectTable),      1, fp);
+            fread(ourPlayfieldTable,           sizeof(ourPlayfieldTable),          1, fp);
+
+            // TIA Sound
+            fread(AUDC,                        sizeof(AUDC),                       1, fp);
+            fread(AUDF,                        sizeof(AUDF),                       1, fp);
+            fread(AUDV,                        sizeof(AUDV),                       1, fp);
+            fread(Outvol,                      sizeof(Outvol),                     1, fp);
+            fread(&bProcessingSample,          sizeof(bProcessingSample),          1, fp);
+            fread(&tia_buf_idx,                sizeof(tia_buf_idx),                1, fp);
+            fread(&tia_out_idx,                sizeof(tia_out_idx),                1, fp);
+
+            fread(&Samp_n_max,                 sizeof(Samp_n_max),                 1, fp);
+            fread(&Samp_n_cnt,                 sizeof(Samp_n_cnt),                 1, fp);
+            fread(Bit9,                        sizeof(Bit9),                       1, fp);
+            fread(P4,                          sizeof(P4),                         1, fp);
+            fread(P9,                          sizeof(P9),                         1, fp);
+            fread(Div_n_cnt,                   sizeof(Div_n_cnt),                  1, fp);
+            fread(Div_n_max,                   sizeof(Div_n_max),                  1, fp);
+
+            // Complicated Carts
+            fread(&NumberOfDistinctAccesses,   sizeof(NumberOfDistinctAccesses),  1, fp);
+            fread(&myWriteEnabled,             sizeof(myWriteEnabled),            1, fp);
+            fread(&myDataHoldRegister,         sizeof(myDataHoldRegister),        1, fp);
+            fread(&myWritePending,             sizeof(myWritePending),            1, fp);
+            fread(&bPossibleLoad,              sizeof(bPossibleLoad),             1, fp);
+            fread(&myNumberOfLoadImages,       sizeof(myNumberOfLoadImages),      1, fp);
+            fread(&LastConfigurationAR,        sizeof(LastConfigurationAR),       1, fp);
+            if (LastConfigurationAR != 255) SetConfigurationAR(LastConfigurationAR);
+            fread(&myCyclesAtBankswitchInit,   sizeof(myCyclesAtBankswitchInit),  1, fp);
+            fread(&myPendingBank,              sizeof(myPendingBank),             1, fp);
+            
+
+            // tia_buf[] is in VRAM so we have to use an intermediate buffer...
+            fread(tmp_buf,                     SOUND_SIZE,                        1, fp);
+            memcpy(tia_buf, tmp_buf,           SOUND_SIZE);
+
+            // Thumbulator
+            fread(reg_sys,                     sizeof(reg_sys),                   1, fp);
+            fread(&cFlag,                      sizeof(cFlag),                     1, fp);
+            fread(&cStack,                     sizeof(cStack),                    1, fp);
+            fread(&cBase,                      sizeof(cBase),                     1, fp);
+            fread(&cStart,                     sizeof(cStart),                    1, fp);
+
+            // DPC+ Parameters
+            fread(&myFastFetch,                sizeof(myFastFetch),               1, fp);
+            fread(&myDPCPRandomNumber,         sizeof(myDPCPRandomNumber),        1, fp);
+            fread(&myDPCPCycles,               sizeof(myDPCPCycles),              1, fp);
+            fread(&myParameterPointer,         sizeof(myParameterPointer),        1, fp);
+            fread(myFractionalCounters,        sizeof(myFractionalCounters),      1, fp);
+            fread(myFractionalIncrements,      sizeof(myFractionalIncrements),    1, fp);
+            fread(myTops,                      sizeof(myTops),                    1, fp);
+            fread(myTopsMinusBottoms,          sizeof(myTopsMinusBottoms),        1, fp);
+            fread(myBottoms,                   sizeof(myBottoms),                 1, fp);
+            fread(myCounters,                  sizeof(myCounters),                1, fp);
+            fread(myMusicCounters,             sizeof(myMusicCounters),           1, fp);
+            fread(myMusicFrequencies,          sizeof(myMusicFrequencies),        1, fp);
+            fread(myMusicWaveforms,            sizeof(myMusicWaveforms),          1, fp);
+            fread(myMusicCountersShifted,      sizeof(myMusicCountersShifted),    1, fp);
+            fread(myParameter,                 sizeof(myParameter),               1, fp);
+            
+            // CDFJ+ Parameters
+            fread(&myAmplitudeStream,          sizeof(myAmplitudeStream),         1, fp);
+            fread(&myDataStreamFetch,          sizeof(myDataStreamFetch),         1, fp);    
+            fread(&peekvalue,                  sizeof(peekvalue),                 1, fp);
+            fread(&myMode,                     sizeof(myMode),                    1, fp);
+            fread(&myLDXenabled,               sizeof(myLDXenabled),              1, fp);
+            fread(&myLDYenabled,               sizeof(myLDYenabled),              1, fp);
+            fread(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);        
+            fread(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);
+            
+            // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
+            if (bSaveStateXL)
+            {
+                fread(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
+            }
+
+            fclose(fp);
+
+            // ----------------------------------------------------------------------------------------------
+            // Since the page offsets point into memory buffers that can change from build-to-build, we must
+            // restore these carefully by checking the peek/poke type and rebuilding the pointer correctly.
+            // ----------------------------------------------------------------------------------------------
+            for (int i=0; i<64; i++)
+            {
+                // Direct PEEKs
+                if (myPageOffsets[i].peek_type == TYPE_RAM)
+                {
+                    myPageAccessTable[i].directPeekBase = &myRAM[myPageOffsets[i].peek_offset];
+                }
+                else if (myPageOffsets[i].peek_type == TYPE_CART)
+                {
+                    myPageAccessTable[i].directPeekBase = &cart_buffer[myPageOffsets[i].peek_offset];
+                }
+                else if (myPageOffsets[i].peek_type == TYPE_FASTCART)
+                {
+                    myPageAccessTable[i].directPeekBase = &fast_cart_buffer[myPageOffsets[i].peek_offset];
+                }
+                else if (myPageOffsets[i].peek_type == TYPE_XLRAM)
+                {
+                    myPageAccessTable[i].directPeekBase = &xl_ram_buffer[myPageOffsets[i].peek_offset];
+                }
+                else // Must be RAW
+                {
+                    myPageAccessTable[i].directPeekBase = (uInt8 *)myPageOffsets[i].peek_offset;
+                }
+
+                // Direct POKEs
+                if (myPageOffsets[i].poke_type == TYPE_RAM)
+                {
+                    myPageAccessTable[i].directPokeBase = &myRAM[myPageOffsets[i].poke_offset];
+                }
+                else if (myPageOffsets[i].poke_type == TYPE_CART)
+                {
+                    myPageAccessTable[i].directPokeBase = &cart_buffer[myPageOffsets[i].poke_offset];
+                }
+                else if (myPageOffsets[i].poke_type == TYPE_FASTCART)
+                {
+                    myPageAccessTable[i].directPokeBase = &fast_cart_buffer[myPageOffsets[i].poke_offset];
+                }
+                else if (myPageOffsets[i].poke_type == TYPE_XLRAM)
+                {
+                    myPageAccessTable[i].directPokeBase = &xl_ram_buffer[myPageOffsets[i].poke_offset];
+                }
+                else // Must be RAW
+                {
+                    myPageAccessTable[i].directPokeBase = (uInt8 *)myPageOffsets[i].poke_offset;
+                }
+            }
+
+            bInitialDiffSet = true;
+            TIMER0_DATA = savedTimerData;
         }
-
-        fclose(fp);
-
-        // ----------------------------------------------------------------------------------------------
-        // Since the page offsets point into memory buffers that can change from build-to-build, we must
-        // restore these carefully by checking the peek/poke type and rebuilding the pointer correctly.
-        // ----------------------------------------------------------------------------------------------
-        for (int i=0; i<64; i++)
+        else
         {
-            // Direct PEEKs
-            if (myPageOffsets[i].peek_type == TYPE_RAM)
-            {
-                myPageAccessTable[i].directPeekBase = &myRAM[myPageOffsets[i].peek_offset];
-            }
-            else if (myPageOffsets[i].peek_type == TYPE_CART)
-            {
-                myPageAccessTable[i].directPeekBase = &cart_buffer[myPageOffsets[i].peek_offset];
-            }
-            else if (myPageOffsets[i].peek_type == TYPE_FASTCART)
-            {
-                myPageAccessTable[i].directPeekBase = &fast_cart_buffer[myPageOffsets[i].peek_offset];
-            }
-            else if (myPageOffsets[i].peek_type == TYPE_XLRAM)
-            {
-                myPageAccessTable[i].directPeekBase = &xl_ram_buffer[myPageOffsets[i].peek_offset];
-            }
-            else // Must be RAW
-            {
-                myPageAccessTable[i].directPeekBase = (uInt8 *)myPageOffsets[i].peek_offset;
-            }
-
-            // Direct POKEs
-            if (myPageOffsets[i].poke_type == TYPE_RAM)
-            {
-                myPageAccessTable[i].directPokeBase = &myRAM[myPageOffsets[i].poke_offset];
-            }
-            else if (myPageOffsets[i].poke_type == TYPE_CART)
-            {
-                myPageAccessTable[i].directPokeBase = &cart_buffer[myPageOffsets[i].poke_offset];
-            }
-            else if (myPageOffsets[i].poke_type == TYPE_FASTCART)
-            {
-                myPageAccessTable[i].directPokeBase = &fast_cart_buffer[myPageOffsets[i].poke_offset];
-            }
-            else if (myPageOffsets[i].poke_type == TYPE_XLRAM)
-            {
-                myPageAccessTable[i].directPokeBase = &xl_ram_buffer[myPageOffsets[i].poke_offset];
-            }
-            else // Must be RAW
-            {
-                myPageAccessTable[i].directPokeBase = (uInt8 *)myPageOffsets[i].poke_offset;
-            }
+            dsPrintValue(9,0,0, (char*)"BAD SAVE FILE");
+            WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
+            WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
+            dsPrintValue(9,0,0, (char*)"             ");
         }
-
-        bInitialDiffSet = true;
-        TIMER0_DATA = savedTimerData;
+    }
+    else
+    {
+        dsPrintValue(10,0,0, (char*)"NO SAVE FILE");
+        WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
+        WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
+        dsPrintValue(10,0,0, (char*)"            ");
     }
 }
 
 void dsSaveStateHandler(void)
 {
-    if (!IsSaveSupported()) 
-    {
-        dsPrintValue(10,0,0, (char*)"NOT SUPPORTED");
-        WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
-        WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
-        dsPrintValue(10,0,0, (char*)"      ");
-        return;
-    }
-
     u8 bDone=false;
     unsigned short keys_pressed;
     unsigned short posdeb=0;

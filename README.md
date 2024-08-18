@@ -239,8 +239,8 @@ Thanks and Credits :
 Version History:
 -----------------------
 
-V7.3a : 18-Aug-2024 by Dave Bernazzani (wavemotion)
-  * First pass at adding Save / Restore State handling for all non-ARM carts.
+V7.3c : 18-Aug-2024 by Dave Bernazzani (wavemotion)
+  * Adding adding save/restore state handling for all games. Use the new down-arrow icon in the lower left.
 
 V7.3 : 05-Jun-2024 by Dave Bernazzani (wavemotion)
   * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.

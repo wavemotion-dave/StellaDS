@@ -28,6 +28,10 @@ class CartridgeWD;
 #include "bspf.hxx"
 #include "Cart.hxx"
 
+extern Int32 myCyclesAtBankswitchInit;
+extern uInt8 myPendingBank;
+
+
 /**
   This is the cartridge class for a "Wickstead Design" prototype cart.
   The ROM has 64 bytes of RAM.
@@ -110,17 +114,11 @@ class CartridgeWD : public Cartridge
     virtual void poke(uInt16 address, uInt8 value);
 
   private:
-    uInt8  myRam[64];
-
     // Pointer to a dynamically allocated ROM image of the cartridge
     uInt8* myImage;
 
     // Size of the ROM image
     uInt32 mySize;
-    
-    Int32 myCyclesAtBankswitchInit;
-   
-    uInt8  myPendingBank;    
 };
 #endif
 

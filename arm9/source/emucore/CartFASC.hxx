@@ -97,10 +97,7 @@ class CartridgeFASC : public Cartridge
 
   private:
     // The 12K ROM image of the cartridge
-    uInt8 myImage[12288];
-
-    // The 256 bytes of RAM on the cartridge
-    uInt8 myRAM[256];
+    uInt8 *myImage;
 };
 #endif
 

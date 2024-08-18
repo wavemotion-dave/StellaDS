@@ -28,6 +28,9 @@
 #include "../StellaDS.h"
 #include <iostream>
 
+#define CTY_RAM_SIZE    256
+#define CTY_EE_SIZE     256
+
 extern char my_filename[MAX_FILE_NAME_LEN+1];
 extern char flash_filename[MAX_FILE_NAME_LEN+5];
 
@@ -36,12 +39,15 @@ CartridgeCTY::CartridgeCTY(const uInt8* image, uInt32 size)
 {
   // Copy the ROM image into my buffer - just reuse the existing buffer
   myImage = (uInt8 *)image;
+  
+  ctyRAM = fast_cart_buffer + 0;
+  ctyEE  = fast_cart_buffer + 256;
 
   // Initialize RAM with random values
   Random random;
   for(uInt32 i = 0; i < 256; ++i)
   {
-    myRAM[i] = random.next();
+    ctyRAM[i] = random.next();
   }
     
   // Save the Flash backing filename for the extra RAM
@@ -101,20 +107,20 @@ void CartridgeCTY::install(System& system)
 
 void CartridgeCTY::handle_cty_flash_backing(void)
 {
-    u8 op = myRAM[0] & 0x0F;
-    u8 index = (myRAM[0] >> 4) & 0x0F;
+    u8 op = ctyRAM[0] & 0x0F;
+    u8 index = (ctyRAM[0] >> 4) & 0x0F;
     switch (op)
     {
         case 2: // Load Score Table
         {
             FILE *fp = fopen(flash_filename, "rb");
             if (fp == NULL)
-                memset(myEE, 0x00, sizeof(myEE));
+                memset(ctyEE, 0x00, CTY_EE_SIZE);
             else
-                fread(myEE, sizeof(myEE), 1, fp);
+                fread(ctyEE, CTY_EE_SIZE, 1, fp);
             
             // Grab 60B slice @ given index (first 4 bytes are ignored)
-            memcpy(myRAM+4, myEE + (index << 6) + 4, 60);
+            memcpy(ctyRAM+4, ctyEE + (index << 6) + 4, 60);
             
             fclose(fp);
         }
@@ -123,26 +129,26 @@ void CartridgeCTY::handle_cty_flash_backing(void)
         case 3: // Write Score Table
         {
             // Add 60B RAM to score table @ given index (first 4 bytes are ignored)
-            memcpy(myEE + (index << 6) + 4, myRAM+4, 60);
+            memcpy(ctyEE + (index << 6) + 4, ctyRAM+4, 60);
 
             FILE *fp = fopen(flash_filename, "wb+");
-            fwrite(myEE, sizeof(myEE), 1, fp);
+            fwrite(ctyEE, CTY_EE_SIZE, 1, fp);
             fclose(fp);
         }
         break;
             
         case 4: // Wipe Score Table
         {
-            memset(myEE, 0x00, sizeof(myEE));
-            memset(myRAM, 0x00, sizeof(myRAM));
+            memset(ctyEE, 0x00, CTY_EE_SIZE);
+            memset(ctyRAM, 0x00, CTY_RAM_SIZE);
             FILE *fp = fopen(flash_filename, "wb+");
-            fwrite(myEE, sizeof(myEE), 1, fp);
+            fwrite(ctyEE, CTY_EE_SIZE, 1, fp);
             fclose(fp);
         }
         break;
     }
     
-    myRAM[0] = 0;   // Mark this operation as GOOD
+    ctyRAM[0] = 0;   // Mark this operation as GOOD
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -152,7 +158,7 @@ uInt8 CartridgeCTY::peek(uInt16 address)
 
   if (address < 0x80)  // Are we reading the extra RAM?
   {
-      return myRAM[address & 0x3F];
+      return ctyRAM[address & 0x3F];
   }
   else if (address >= 0x0FF5 && address <= 0x0FFB)  // Switch banks if necessary
   {
@@ -173,7 +179,7 @@ void CartridgeCTY::poke(uInt16 address, uInt8 value)
 
   if (address < 0x80)  // Are we reading the extra RAM?
   {
-      myRAM[address & 0x3F] = value;
+      ctyRAM[address & 0x3F] = value;
   }
   else if (address >= 0x0FF5 && address <= 0x0FFB) // Switch banks if necessary
   {

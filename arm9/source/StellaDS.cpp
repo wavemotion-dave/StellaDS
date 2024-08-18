@@ -95,6 +95,9 @@ static uInt8 fpsDisplay = false;
 
 uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 
+char szName[MAX_FILE_NAME_LEN+1];
+char szName2[MAX_FILE_NAME_LEN+1];
+
 char dbgbuf[36];
 static void DumpDebugData(void)
 {
@@ -587,9 +590,6 @@ unsigned int dsReadPad(void)
     return ret_keys_pressed;
 }
 
-char szName[MAX_FILE_NAME_LEN+1];
-char szName2[MAX_FILE_NAME_LEN+1];
-
 bool dsWaitOnQuit(void)
 {
   u8 bRet=false, bDone=false;
@@ -645,7 +645,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
   unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) (bgGetMapPtr(bg1b)),32*24*2);
   sprintf(szName,"%04d/%04d GAMES",(int)(1+ucSel+NoDebGame),countvcs);
-  dsPrintValue(16-strlen(szName)/2,2,0,szName);
+  dsPrintValue(16-strlen(szName)/2,3,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
   sprintf(szName,"%s %s","A=CHOOSE Y=HALT B=BACK  VER:", VERSION);
