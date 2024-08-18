@@ -90,14 +90,9 @@ class CartridgeDFSC : public Cartridge
     */
     void bank(uInt16 bank);
     
-    uInt32 myCurrentOffset32;
-
   private:
     // The 128K ROM image of the cartridge
     uInt8 *myImage;
-    
-    // The 128 bytes of RAM
-    uInt8 myRAM[128];
 };
 #endif
 

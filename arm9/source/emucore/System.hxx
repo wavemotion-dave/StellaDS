@@ -35,6 +35,7 @@ class NullDevice;
 
 
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
+extern uInt32 gTotalSystemCycles;
 extern Int32 debug[];          // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
 extern uInt8 myRAM[];          // The Atari 128 bytes of RAM plus another 128 for the SC (Super Carts)
 

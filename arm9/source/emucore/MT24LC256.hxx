@@ -68,6 +68,7 @@ class MT24LC256
     void systemCyclesReset();
     
     void WriteEEtoFile(void);
+    bool IsBusy(void);
 
   private:
     // I2C access code provided by Supercat

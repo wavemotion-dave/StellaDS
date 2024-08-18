@@ -97,9 +97,6 @@ class CartridgeUA : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-    
     // Some UA carts swap the bank hotspots
     uInt8 bUAswapped;
 

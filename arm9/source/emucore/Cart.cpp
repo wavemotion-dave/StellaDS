@@ -75,12 +75,13 @@ uInt8 bElevatorAgent = false;
 
 // The counter registers for the data fetchers
 
-uInt32 myCounters[8] __attribute__((section(".dtcm")));
+uInt32 myCurrentOffset32    __attribute__((section(".dtcm")));
+uInt32 myCounters[8]        __attribute__((section(".dtcm")));
+CartInfo myCartInfo         __attribute__((section(".dtcm"))) __attribute__ ((aligned (32)));
+PageAccess page_access      __attribute__((section(".dtcm")));
+uInt32 myCurrentOffset      __attribute__((section(".dtcm")));
+uInt16 myCurrentBank        __attribute__((section(".dtcm"))) = 0;
 
-CartInfo myCartInfo __attribute__ ((aligned (32))) __attribute__((section(".dtcm")));
-PageAccess page_access __attribute__((section(".dtcm")));
-uInt32 myCurrentOffset __attribute__((section(".dtcm")));
-uint8 original_flicker_mode = 0;
 GlobalCartInfo myGlobalCartInfo;
 extern char my_filename[];
 
@@ -2453,7 +2454,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       }
   }
     
-  original_flicker_mode = myCartInfo.frame_mode;
   if (!isDSiMode()) // For older DS/DS-LITE, we turn off Flicker Free by default... except for some popular games that can handle it!
   {
       if (!bFoundInDAT)
@@ -2886,7 +2886,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       
       cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
       
-      // These carts need a little extra oomph from the CPU so we have a special optmized driver
+      // ----------------------------------------------------------------------------------
+      // These carts need a little extra oomph from the CPU so we have a special optmized 
+      // driver that requires the Atari 6502 native code to be no more than 2 banks (8K).
+      // ----------------------------------------------------------------------------------
       if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "elevator") != 0) {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
       if (strstr(my_filename, "gorf") != 0)      cartDriver = 11;  //CDFJ++

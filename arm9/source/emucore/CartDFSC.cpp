@@ -35,7 +35,7 @@ CartridgeDFSC::CartridgeDFSC(const uInt8* image)
   Random random;
   for(uInt32 i = 0; i < 128; ++i)
   {
-    myRAM[i] = (myCartInfo.clearRAM ? 0x00:random.next());
+    myRAM[128+i] = (myCartInfo.clearRAM ? 0x00:random.next());
   }    
 }
 
@@ -80,7 +80,7 @@ void CartridgeDFSC::install(System& system)
   // Set the page accessing method for the RAM writing pages
   for(uInt32 j = 0x1000; j < 0x1080; j += (1 << shift))
   {
-    page_access.directPokeBase = &myRAM[j & 0x007F];
+    page_access.directPokeBase = &myRAM[128 + (j & 0x007F)];
     page_access.directPeekBase = 0;
     mySystem->setPageAccess(j >> shift, page_access);
   }
@@ -88,7 +88,7 @@ void CartridgeDFSC::install(System& system)
   // Set the page accessing method for the RAM reading pages
   for(uInt32 k = 0x1080; k < 0x1100; k += (1 << shift))
   {
-    page_access.directPeekBase = &myRAM[k & 0x007F];
+    page_access.directPeekBase = &myRAM[128 + (k & 0x007F)];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(k >> shift, page_access);
   }

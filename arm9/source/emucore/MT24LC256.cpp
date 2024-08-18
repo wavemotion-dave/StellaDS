@@ -94,6 +94,10 @@ MT24LC256::~MT24LC256()
   }
 }
 
+bool MT24LC256::IsBusy(void)
+{
+    return ((gSaveKeyIsDirty || myDataChanged || jpee_state) ? true:false);
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void MT24LC256::WriteEEtoFile(void)
@@ -172,13 +176,13 @@ void MT24LC256::systemCyclesReset()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void MT24LC256::jpee_init()
 {
-  jpee_sdat = 1;
-  jpee_address = 0;
-  jpee_state=0;
-  jpee_sizemask = 32767;
-  jpee_pagemask = 63;
+  jpee_sdat      = 1;
+  jpee_address   = 0;
+  jpee_state     = 0;
+  jpee_sizemask  = 32767;
+  jpee_pagemask  = 63;
   jpee_smallmode = 0;
-  jpee_logmode = -1;
+  jpee_logmode   = -1;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

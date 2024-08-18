@@ -136,7 +136,7 @@ class Cartridge3EPlus : public Cartridge
 
   private:
     // Indicates which bank is currently active for the segments
-    uInt16 myCurrentBank[4];
+    uInt16 myCurrentBanks[4];
 
     // RAM contents. For now every ROM gets all 32K of potential RAM
     uInt8 my3ERam[32768];

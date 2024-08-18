@@ -37,7 +37,7 @@ Cartridge3E::Cartridge3E(const uInt8* image, uInt32 size)
   class Random random;
   for(uInt32 i = 0; i < 32768; ++i)
   {
-    myRam[i] = random.next();
+    my3ERam[i] = random.next();
   }
 }
 
@@ -110,7 +110,7 @@ uInt8 Cartridge3E::peek(uInt16 address)
         if(myCurrentBank < 256)
           return myImage[(address & 0x07FF) + (myCurrentBank * 2048)];
         else
-          return myRam[(address & 0x03FF) + ((myCurrentBank - 256) * 1024)];
+          return my3ERam[(address & 0x03FF) + ((myCurrentBank - 256) * 1024)];
       }
       else
       {
@@ -185,7 +185,7 @@ void Cartridge3E::bank(uInt16 bank)
     // Map read-port RAM image into the system
     for(address = 0x1000; address < 0x1400; address += (1 << shift))
     {
-        page_access.directPeekBase = &myRam[offset + (address & 0x03FF)];
+        page_access.directPeekBase = &my3ERam[offset + (address & 0x03FF)];
         mySystem->setPageAccess(address >> shift, page_access);
     }
 
@@ -194,7 +194,7 @@ void Cartridge3E::bank(uInt16 bank)
     // Map write-port RAM image into the system
     for(address = 0x1400; address < 0x1800; address += (1 << shift))
     {
-        page_access.directPokeBase = &myRam[offset + (address & 0x03FF)];
+        page_access.directPokeBase = &my3ERam[offset + (address & 0x03FF)];
         mySystem->setPageAccess(address >> shift, page_access);
     }
   }

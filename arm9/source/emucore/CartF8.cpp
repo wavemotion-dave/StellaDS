@@ -23,10 +23,9 @@
 #include <nds.h>
 #include <assert.h>
 #include "CartF8.hxx"
+#include "M6502.hxx"
 #include "System.hxx"
 #include <iostream>
-
-extern uInt16 f8_bankbit;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
@@ -131,7 +130,6 @@ ITCM_CODE void CartridgeF8::poke(uInt16 address, uInt8)
   }
 }
 
-extern uInt16 f8_bankbit;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeF8::bank(uInt16 bank)
 { 

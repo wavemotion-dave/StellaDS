@@ -96,9 +96,6 @@ class CartridgeX07 : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-    
     // The 64K ROM image of the cartridge
     uInt8 *myImage;
 };

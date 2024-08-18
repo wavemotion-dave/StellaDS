@@ -94,14 +94,9 @@ class CartridgeFA2 : public Cartridge
     void handle_fa2_flash_backing(void);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
 
     // The ROM image of the cartridge
     uInt8 *myImage;
-
-    // The 256 bytes of RAM on the cartridge
-    uInt8 myRAM[256];
 };
 #endif
 

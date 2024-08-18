@@ -28,7 +28,6 @@ class M6502Low;
 #include "bspf.hxx"
 #include "Cart.hxx"
 
-
 extern uInt8 myWriteEnabled;
 extern uInt8 myDataHoldRegister;
 extern uInt8 myWritePending;
@@ -36,6 +35,10 @@ extern uInt8 bPossibleLoad;
 extern uInt8 *myImage;
 extern uInt8 *myImage0;
 extern uInt8 *myImage1;
+extern uInt8 myNumberOfLoadImages;
+extern uInt8 LastConfigurationAR;
+
+extern void SetConfigurationAR(uInt8 configuration);
 
 
 /**
@@ -122,25 +125,6 @@ class CartridgeAR : public Cartridge
 
     // Sets up a "dummy" BIOS ROM in the ROM bank of the cartridge
     void initializeROM(void);
-
-  private:
-    // The 256 byte header for the current 8448 byte load
-    uInt8 myHeader[256];
-
-    // All of the 8448 byte loads associated with the game 
-    uInt8* myLoadImages;
-
-    // Indicates how many 8448 loads there are
-    uInt8 myNumberOfLoadImages;
-
-    // Indicates if the ROM's power is on or off
-    uInt8 myPower;
-
-    // Indicates when the power was last turned on
-    Int32 myPowerRomCycle;
-
-    // The bank of flash we are utilizing...
-    uInt8 myCurrentBank;
 };
 #endif
 

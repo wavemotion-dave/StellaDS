@@ -89,13 +89,6 @@ class CartridgeCV : public Cartridge
       @param value The value to be stored at the address
     */
     virtual void poke(uInt16 address, uInt8 value);
-
-  private:
-    // The 2k ROM image for the cartridge
-    uInt8 myImage[2048];
-
-    // The 1024 bytes of RAM
-    uInt8 myRAM[1024];
 };
 #endif
 

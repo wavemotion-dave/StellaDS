@@ -28,6 +28,9 @@
 #include "../StellaDS.h"
 #include <iostream>
 
+// We use fast_cart_buffer[] for the 256 bytes of RAM as it has no other use for this cart type...
+#define FA2_RAM_SIZE    256
+
 extern char my_filename[MAX_FILE_NAME_LEN+1];
 char flash_filename[MAX_FILE_NAME_LEN+5];
 
@@ -35,20 +38,22 @@ char flash_filename[MAX_FILE_NAME_LEN+5];
 CartridgeFA2::CartridgeFA2(const uInt8* image, uInt32 size)
 {
   // Copy the ROM image into my buffer - just reuse the existing buffer
-  if (size <= (28 * 1024))
+  myImage = (uInt8 *)image;
+  
+  if (size > (28 * 1024))   // For larger than 28K, we've got ARM code that needs to be skipped...
   {
-    myImage = (uInt8 *)image;
-  }
-  else
-  {
-      myImage = (uInt8 *) (image + 1024);  // Offset past ARM junk in first 1K block for 29K/32K versions of this...
+      // Shift binary down so it aligns with the start of the cart_buffer[]
+      for (int i=0; i < (31*1024); i++)
+      {
+          myImage[i] = myImage[i+1024];
+      }
   }
 
   // Initialize RAM with random values
   Random random;
-  for(uInt32 i = 0; i < 256; ++i)
+  for(uInt32 i = 0; i < FA2_RAM_SIZE; ++i)
   {
-    myRAM[i] = random.next();
+      fast_cart_buffer[i] = random.next();
   }
     
   // Save the Flash backing filename for the extra RAM
@@ -82,7 +87,6 @@ void CartridgeFA2::install(System& system)
   mySystem = &system;
   uInt16 shift = mySystem->pageShift();
   uInt16 mask = mySystem->pageMask();
-
     
   // Make sure the system we're being installed in has a page size that'll work
   assert(((0x1100 & mask) == 0) && ((0x1200 & mask) == 0));
@@ -101,7 +105,7 @@ void CartridgeFA2::install(System& system)
   {
     page_access.device = this;
     page_access.directPeekBase = 0;
-    page_access.directPokeBase = &myRAM[j & 0x00FF];
+    page_access.directPokeBase = &fast_cart_buffer[j & 0x00FF];
     mySystem->setPageAccess(j >> shift, page_access);
   }
  
@@ -109,7 +113,7 @@ void CartridgeFA2::install(System& system)
   for(uInt32 k = 0x1100; k < 0x1200; k += (1 << shift))
   {
     page_access.device = this;
-    page_access.directPeekBase = &myRAM[k & 0x00FF];
+    page_access.directPeekBase = &fast_cart_buffer[k & 0x00FF];
     page_access.directPokeBase = 0;
     mySystem->setPageAccess(k >> shift, page_access);
   }
@@ -122,27 +126,27 @@ void CartridgeFA2::install(System& system)
 void CartridgeFA2::handle_fa2_flash_backing(void)
 {
 
-  if (myRAM[255] == 1) // 1=Read Request
+  if (fast_cart_buffer[255] == 1) // 1=Read Request
   {
       FILE *fp = fopen(flash_filename, "rb");
       if (fp == NULL)
       {
-          memset(myRAM, 0x00, sizeof(myRAM));
+          memset(fast_cart_buffer, 0x00, FA2_RAM_SIZE);
       }
       else
       {
-          fread(myRAM, sizeof(myRAM), 1, fp);
+          fread(fast_cart_buffer, FA2_RAM_SIZE, 1, fp);
       }
       fclose(fp);
   }
-  else if (myRAM[255] == 2)  // 2=Write Request
+  else if (fast_cart_buffer[255] == 2)  // 2=Write Request
   {
       FILE *fp = fopen(flash_filename, "wb+");
-      fwrite(myRAM, sizeof(myRAM), 1, fp);
+      fwrite(fast_cart_buffer, FA2_RAM_SIZE, 1, fp);
       fclose(fp);
   }
     
-  myRAM[255] = 0;   // Indicate success
+  fast_cart_buffer[255] = 0;   // Indicate success
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

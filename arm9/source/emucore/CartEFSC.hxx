@@ -89,10 +89,6 @@ class CartridgeEFSC : public Cartridge
       @param bank The bank that should be installed in the system
     */
     void bank(uInt16 bank);
-
-  private:
-    // The 128 bytes of RAM
-    uInt8 myRAM[128];
 };
 #endif
 

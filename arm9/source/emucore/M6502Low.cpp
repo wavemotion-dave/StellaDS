@@ -1272,7 +1272,11 @@ void M6502Low::execute_CDFJPlusPlus(void)
     while (!myExecutionStatus)
     {
       uInt16 operandAddress;
-      // Get the next 6502 instruction - do this the fast way!
+      // ----------------------------------------------------------------------------------
+      // Get the next 6502 instruction - do this the fast way!  This is a special driver
+      // that requires the CDFJ+ game have no more than 2 banks (8K) of normal Atari
+      // 6502 code... this is generally true of the biggest CDFJ+ games from Champ Games.
+      // ----------------------------------------------------------------------------------
       ++gSystemCycles;
       uInt8 operand = fast_cart_buffer[(PC++ & f8_bankbit)];
 

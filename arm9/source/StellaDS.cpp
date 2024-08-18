@@ -29,7 +29,6 @@
 #include "bgKeypad.h"
 #include "bgDualKeypad.h"
 #include "bgStarRaiders.h"
-#include "bgInfo.h"
 #include "bgInstructions.h"
 
 #include "clickNoQuit_wav.h"
@@ -47,6 +46,7 @@
 #include "config.h"
 #include "instructions.h"
 #include "screenshot.h"
+#include "savestate.h"
 #include "Thumbulator.hxx"
 
 #define VERSION "7.3"
@@ -86,7 +86,7 @@ uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't b
 uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
-char bScreenRefresh __attribute__((section(".dtcm"))) = 0;
+uint8 bScreenRefresh __attribute__((section(".dtcm"))) = 0;
 uInt32 gAtariFrames __attribute__((section(".dtcm"))) = 0;
 uInt32 gTotalAtariFrames = 0;
 
@@ -285,17 +285,6 @@ void dsShowScreenEmu(void)
   bScreenRefresh = 1;
   swiWaitForVBlank();
 }
-
-void dsShowScreenInfo(void) 
-{
-  decompress(bgInfoTiles, bgGetGfxPtr(bg0b), LZ77Vram);
-  decompress(bgInfoMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
-  dmaCopy((void *) bgInfoPal,(u16*) BG_PALETTE_SUB,256*2);
-  unsigned short dmaVal = *(bgGetMapPtr(bg1b) +31*32);
-  dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
-  swiWaitForVBlank();
-}
-
 
 void dsShowScreenPaddles(void) 
 {
@@ -603,7 +592,7 @@ char szName2[MAX_FILE_NAME_LEN+1];
 
 bool dsWaitOnQuit(void)
 {
-  bool bRet=false, bDone=false;
+  u8 bRet=false, bDone=false;
   unsigned short keys_pressed;
   unsigned short posdeb=0;
 
@@ -614,7 +603,7 @@ bool dsWaitOnQuit(void)
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
 
   strcpy(szName,"Quit StellaDS?");
-  dsPrintValue(16-strlen(szName)/2,2,0,szName);
+  dsPrintValue(16-strlen(szName)/2,3,0,szName);
   sprintf(szName,"%s","A TO CONFIRM, B TO GO BACK");
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
 
@@ -1535,6 +1524,7 @@ ITCM_CODE void dsMainLoop(void)
                     dsDisplayButton(10+myCartInfo.left_difficulty);
                     myStellaEvent.set(myCartInfo.right_difficulty ? Event::ConsoleRightDifficultyA : Event::ConsoleRightDifficultyB, 1);
                     dsDisplayButton(12+myCartInfo.right_difficulty);        
+                    dsDisplayButton(3-console_color);
                 }                    
 
                 // -----------------------------------------------------------------------
@@ -1762,21 +1752,26 @@ ITCM_CODE void dsMainLoop(void)
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                 }
-                else if ((iTx>5) && (iTx<35) && (iTy>150) && (iTy<200)) 
-                { // Show Info Mode!
-                    if (bShowInfo == false)
+                else if ((iTx>5) && (iTx<45) && (iTy>150) && (iTy<200)) 
+                { // Save/Restore State
+                    u8 bSaveRestoreAllowed = true;
+                    if (gSaveKeyEEprom)
                     {
-                        bShowInfo = true;
-                        info_dampen = 15;
-                        dsShowScreenInfo();
+                        // If the SaveKey / EEPROM is busy in any way, we don't allow Save/Restore State
+                        if (gSaveKeyEEprom->IsBusy()) bSaveRestoreAllowed = false;
                     }
-                    else
+                    if (bSaveRestoreAllowed)
                     {
-                        bShowInfo = false;
+                        irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
+                        dsSaveStateHandler();
                         dsShowScreenMain(false);
+                        if (myCartInfo.soundQuality)
+                        {
+                            irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
+                        }
                     }
                 }
-                else if ((iTx>50) && (iTx<90) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>=45) && (iTx<90) && (iTy>150) && (iTy<200)) 
                 { // Paddle Mode!
                     if (bShowPaddles == false)
                     {

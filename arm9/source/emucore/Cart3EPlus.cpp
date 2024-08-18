@@ -152,7 +152,7 @@ void Cartridge3EPlus::segment(uInt8 seg, uInt8 bank)
 {
   if(bank < 128)  // ROM bank
   {
-    myCurrentBank[seg] = bank;
+    myCurrentBanks[seg] = bank;
     uInt32 offset = bank * 0x400;
     uInt16 shift = mySystem->pageShift();
 
@@ -169,7 +169,7 @@ void Cartridge3EPlus::segment(uInt8 seg, uInt8 bank)
   }
   else // RAM bank
   {
-    myCurrentBank[seg] = bank;
+    myCurrentBanks[seg] = bank;
     bank -= 128;
 
     uInt32 offset = bank * 0x200;

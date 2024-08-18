@@ -111,9 +111,6 @@ class CartridgeWD : public Cartridge
 
   private:
     uInt8  myRam[64];
-    
-    // Indicates which bank is currently active for the first segment
-    uInt16 myCurrentBank;
 
     // Pointer to a dynamically allocated ROM image of the cartridge
     uInt8* myImage;

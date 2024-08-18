@@ -93,10 +93,6 @@ class CartridgeMB : public Cartridge
       Install pages for the next bank in the system
     */
     void incbank();
-
-  private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
 };
 #endif
 

@@ -96,9 +96,6 @@ class CartridgeFASC : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
-
     // The 12K ROM image of the cartridge
     uInt8 myImage[12288];
 

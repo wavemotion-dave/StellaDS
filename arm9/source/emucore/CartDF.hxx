@@ -89,8 +89,6 @@ class CartridgeDF : public Cartridge
       @param bank The bank that should be installed in the system
     */
     void bank(uInt16 bank);
-    
-    uInt32 myCurrentOffset32;
 
   private:
     // The 128K ROM image of the cartridge

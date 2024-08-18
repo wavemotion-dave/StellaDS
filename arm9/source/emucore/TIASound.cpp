@@ -37,15 +37,16 @@
 #include <time.h>
 #include "Cart.hxx"
 #include "System.hxx"
+#include "TIASound.hxx"
 
 
 /* define some data types to keep it platform independent */
 #define int8   char
 #define int16  short
 #define int32  long
-#define uint8  unsigned int8 
-#define uint16 unsigned int16
-#define uint32 unsigned int32
+#define uint8  uInt8
+#define uint16 uInt16
+#define uint32 uInt32
 
 /* CONSTANT DEFINITIONS */
 
@@ -76,11 +77,6 @@
 #define AUDV0        0x19
 #define AUDV1        0x1a
 
-/* the size (in entries) of the 4 polynomial tables */
-#define POLY4_SIZE  0x000f
-#define POLY5_SIZE  0x001f
-#define POLY9_SIZE  0x01ff
-
 /* channel definitions */
 #define CHAN1       0
 #define CHAN2       1
@@ -97,7 +93,7 @@ uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
 uInt8 bProcessingSample __attribute__((section(".dtcm"))) = 0;
 
-static uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
+uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
 
 /* Initialze the bit patterns for the polynomials. */
 
@@ -124,21 +120,21 @@ static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
 /* Rather than have a table with 511 entries, I use a random number generator. */
-static uint8 Bit9[POLY9_SIZE];
+uint8 Bit9[POLY9_SIZE];
     
-static uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
-static uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
-static uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
+uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
+uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
+uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
 
-static uint32 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
-static uint32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
+uint32 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
+uint32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
 
 /* In my routines, I treat the sample output as another divide by N counter. */
 /* For better accuracy, the Samp_n_cnt has a fixed binary decimal point */
 /* which has 8 binary digits to the right of the decimal point. */
 
-static uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-static uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
+uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 

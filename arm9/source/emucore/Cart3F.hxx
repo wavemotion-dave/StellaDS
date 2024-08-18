@@ -102,9 +102,6 @@ class Cartridge3F : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active for the first segment
-    uInt16 myCurrentBank;
-
     // Pointer to a ROM image of the cartridge
     uInt8* myImage;
 

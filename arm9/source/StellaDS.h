@@ -27,12 +27,25 @@ typedef struct FICtoLoad {
   uInt8 directory;
 } FICA2600;
 
-
 extern Console* theConsole;
 extern Sound* theSound;
 
 extern unsigned short int etatEmu;
 extern FICA2600 vcsromlist[];
+
+extern uInt16 atari_frames;
+extern uInt8 bInitialDiffSet;
+extern uInt8 tv_type_requested;
+extern uInt8 gSaveKeyEEWritten;
+extern uInt8 gSaveKeyIsDirty;
+extern uInt16 mySoundFreq;
+extern uInt16 etatEmu;
+extern uint8 sound_buffer[SOUND_SIZE];
+extern uint8  bHaltEmulation; 
+extern uint8 bScreenRefresh;
+extern uInt32 gAtariFrames;
+extern uInt32 gTotalAtariFrames;
+extern uInt16 console_color;
 
 #define ds_GetTicks() (TIMER0_DATA)
 

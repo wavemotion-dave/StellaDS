@@ -86,8 +86,6 @@ extern    uInt8 myRESMP1;        // Indicates if missle 1 is reset to player 1
 extern    uInt8* myCurrentFrameBuffer[2]; // Pointer to the current frame buffer
 extern    uInt8* myFramePointer;          // Pointer to the next pixel that will be drawn in the current frame buffer
 extern    uInt16* myDSFramePointer;       // Pointer to start of the DS video frame
-extern    uInt32 myFrameXStart;           // Where do we start drawing X Pos?
-extern    uInt32 myFrameYStart;           // Where do we start drawing Y Pos?
 extern    uInt32 myStartDisplayOffset;
 extern    uInt32 myStopDisplayOffset;
 extern    Int32 myVSYNCFinishClock; 
@@ -98,12 +96,10 @@ extern    Int32 myClockStartDisplay;
 extern    Int32 myClockStopDisplay;
 extern    Int32 myClockAtLastUpdate;
 extern    Int32 myClocksToEndOfScanLine;
-extern    uInt16 myMaximumNumberOfScanlines;
 extern    uInt32 myVSYNC;                        // Holds the VSYNC register value
 extern    uInt32 myVBLANK;                       // Holds the VBLANK register value
 extern    Int32 myLastHMOVEClock;
 extern    uInt8 myHMOVEBlankEnabled;
-extern    uInt8 myAllowHMOVEBlanks;
 extern    uInt8 myM0CosmicArkMotionEnabled;
 extern    uInt8 myM0CosmicArkCounter;
 extern    uInt32 myCurrentGRP0;                  // Graphics for Player 0 that should be displayed.  This will be reflected if the player is being reflected.

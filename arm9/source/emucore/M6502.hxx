@@ -42,7 +42,9 @@ extern uInt8 notZ;
 extern uInt8 C;
 extern uInt16 myExecutionStatus;
 extern uInt8 myDataBusState;
-
+extern uInt32 NumberOfDistinctAccesses;
+extern uInt8  cartDriver;
+extern uInt16 f8_bankbit;
 
 /**
   This is an abstract base class for classes that emulate the

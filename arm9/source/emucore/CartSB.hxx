@@ -91,8 +91,6 @@ class CartridgeSB : public Cartridge
     */
     void bank(uInt16 bank);
     
-    uInt32 myCurrentOffset32;
-    
     bool checkSwitchBank(uInt16 address);  
 
   private:

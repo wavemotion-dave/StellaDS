@@ -93,8 +93,6 @@ class CartridgeTV : public Cartridge
 
   private:
     uInt8 *myImage;
-    
-    uInt32 myCurrentOffset32;
 };
 #endif
 

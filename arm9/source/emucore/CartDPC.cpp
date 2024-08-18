@@ -28,14 +28,6 @@
 // The 2K display ROM image of the cartridge
 uInt8 myDisplayImage[2048];
 
-// The top registers for the data fetchers
-extern uInt32 myTops[8];
-
-// The bottom registers for the data fetchers
-extern uInt32 myBottoms[8];
-
-extern uInt32 myCounters[8];
-
 // The flag registers for the data fetchers
 uInt8 myFlags[8];
 

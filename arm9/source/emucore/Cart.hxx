@@ -35,6 +35,16 @@ extern PageAccess page_access;
 extern uInt32 myCurrentOffset;
 extern uInt8 cartDriver;
 
+extern uInt32 myTops[8];
+extern uInt32 myBottoms[8];
+extern uInt32 myCounters[8];
+extern uInt8 myFlags[8];
+extern uInt8 myRandomNumber;
+extern uInt8 myMusicMode[3];
+extern uInt32 myMusicCycles; 
+extern uInt32 myCurrentOffset32;
+extern uInt16 myCurrentBank;
+
 #define NTSC    0
 #define PAL     1
 

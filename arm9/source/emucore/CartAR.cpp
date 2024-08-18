@@ -46,15 +46,25 @@ uInt8 *myImage0 __attribute__((section(".dtcm")));
 uInt8 *myImage1 __attribute__((section(".dtcm")));    
 CartridgeAR *myAR __attribute__((section(".dtcm")));    
 
+uInt8 LastConfigurationAR = 255;
+
+// The 256 byte header for the current 8448 byte load
+uInt8 *myHeader = &fast_cart_buffer[8196 - 256];
+
+// All of the 8448 byte loads associated with the game 
+uInt8* myLoadImages __attribute__((section(".dtcm"))); 
+
+// Indicates how many 8448 loads there are
+uInt8 myNumberOfLoadImages;
+    
 #define DISTINCT_THRESHOLD  5
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 {
-  // Create a load image buffer and copy the given image
-  myLoadImages = new uInt8[size];
+  // Reuse the image buffer
+  myLoadImages = (uInt8 *)image;
   myNumberOfLoadImages = size / 8448;
-  memcpy(myLoadImages, image, size);
 
   myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point... Enough to handle 6k of Supercharger RAM
   myImage0 = myImage;
@@ -69,7 +79,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::~CartridgeAR()
 {
-  delete[] myLoadImages;
+    LastConfigurationAR = 255;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -84,7 +94,6 @@ void CartridgeAR::reset()
   // Initialize RAM to Zeros
   memset(myImage, 0x00, 6*1024);
 
-  myPower = true;
   myWriteEnabled = false;
 
   myDataHoldRegister = 0;
@@ -136,8 +145,7 @@ void CartridgeAR::poke(uInt16 addr, uInt8)
     // Not used... all AR poke handling done directly in 6502-Low for speed
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void CartridgeAR::bankConfiguration(uInt8 configuration)
+void SetConfigurationAR(uInt8 configuration)
 {
   // D7-D5 of this byte: Write Pulse Delay (n/a for emulator)
   //
@@ -156,9 +164,9 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
   //    to happen.  0 = disabled, and the cart acts like ROM.)
   //  p = ROM Power (0 = enabled, 1 = off.)  Only power the ROM if you're
   //    wanting to access the ROM for multiloads.  Otherwise set to 1.
+  
+  LastConfigurationAR = configuration;
    
-  //myCurrentBank = configuration & 0x1f; // remember for the bank() method
-    
   myWriteEnabled = configuration & 0x02;
     
   switch((configuration >> 2) & 0x07)
@@ -235,6 +243,12 @@ void CartridgeAR::bankConfiguration(uInt8 configuration)
       break;
     }
   }
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void CartridgeAR::bankConfiguration(uInt8 configuration)
+{
+    SetConfigurationAR(configuration);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

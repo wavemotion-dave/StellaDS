@@ -124,11 +124,8 @@ class Cartridge3E : public Cartridge
     void bank(uInt16 bank);
 
   private:
-    // Indicates which bank is currently active for the first segment
-    uInt16 myCurrentBank;
-
     // RAM contents. For now every ROM gets all 32K of potential RAM
-    uInt8 myRam[32768];
+    uInt8 my3ERam[32768];
     
     // ROM contents ... up to 512K
     uInt8 *myImage;

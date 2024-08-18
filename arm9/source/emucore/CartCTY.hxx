@@ -94,8 +94,6 @@ class CartridgeCTY : public Cartridge
     void handle_cty_flash_backing(void);
 
   private:
-    // Indicates which bank is currently active
-    uInt16 myCurrentBank;
 
     // The ROM image of the cartridge
     uInt8 *myImage;

@@ -32,6 +32,15 @@ class System;
 // An amazing 128 bytes of RAM plus 128 more for the SARA carts
 extern uInt8 myRAM[256];
 
+extern uInt32 myTimer;
+extern uInt8 myIntervalShift;
+extern Int32 myCyclesWhenTimerSet;
+extern Int32 myCyclesWhenInterruptReset;
+extern uInt8 myTimerReadAfterInterrupt;
+extern uInt8 myDDRA;
+extern uInt8 myDDRB; 
+extern uInt8 myOutA;
+
 /**
   RIOT
 
