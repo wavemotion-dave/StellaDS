@@ -1887,10 +1887,14 @@ void vcsFindFiles(void)
       filenametmp[MAX_FILE_NAME_LEN-1] = 0;
       if (pent->d_type == DT_DIR)
       {
-        if (!( (filenametmp[0] == '.') && (strlen(filenametmp) == 1))) {
-          vcsromlist[countvcs].directory = true;
-          strcpy(vcsromlist[countvcs].filename,filenametmp);
-          countvcs++;
+        // Do not include the [sav] directory
+        if (strcasecmp(filenametmp, "sav") != 0)
+        {
+            if (!( (filenametmp[0] == '.') && (strlen(filenametmp) == 1))) {
+              vcsromlist[countvcs].directory = true;
+              strcpy(vcsromlist[countvcs].filename,filenametmp);
+              countvcs++;
+            }
         }
       }
       else {
