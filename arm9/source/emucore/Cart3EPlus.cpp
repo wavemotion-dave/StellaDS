@@ -25,6 +25,8 @@
 #include "System.hxx"
 #include "TIA.hxx"
 
+uInt16 myCurrentBanks[4] __attribute__((section(".dtcm"))) = {0,0,0};
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge3EPlus::Cartridge3EPlus(const uInt8* image, uInt32 size)
   : mySize(size)
@@ -36,7 +38,7 @@ Cartridge3EPlus::Cartridge3EPlus(const uInt8* image, uInt32 size)
   class Random random;
   for(uInt32 i = 0; i < 32768; ++i)
   {
-    my3ERam[i] = random.next();
+    xl_ram_buffer[i] = random.next();
   }
   
   // ----------------------------------------------------------------------
@@ -45,6 +47,9 @@ Cartridge3EPlus::Cartridge3EPlus(const uInt8* image, uInt32 size)
   // but we will initalize all segments 0-3 with this starting bank...
   // ----------------------------------------------------------------------
   statingBank = 0;
+  
+  // Force saving of the extra 32K of RAM
+  bSaveStateXL = true;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -182,7 +187,7 @@ void Cartridge3EPlus::segment(uInt8 seg, uInt8 bank)
     // Map read-port RAM image into the system
     for(uInt32 address = 0x1000+((uInt32)0x400*seg); address < 0x1200+((uInt32)0x400*seg); address += (1 << shift))
     {
-        page_access.directPeekBase = &my3ERam[offset + (address & 0x01FF)];
+        page_access.directPeekBase = &xl_ram_buffer[offset + (address & 0x01FF)];
         mySystem->setPageAccess(address >> shift, page_access);
     }
 
@@ -191,7 +196,7 @@ void Cartridge3EPlus::segment(uInt8 seg, uInt8 bank)
     // Map write-port RAM image into the system - this is shifted up 0x200 bytes
     for(uInt32 address = 0x1200+((uInt32)0x400*seg); address < 0x1400+((uInt32)0x400*seg); address += (1 << shift))
     {
-        page_access.directPokeBase = &my3ERam[offset + (address & 0x01FF)];
+        page_access.directPokeBase = &xl_ram_buffer[offset + (address & 0x01FF)];
         mySystem->setPageAccess(address >> shift, page_access);
     }
   }    

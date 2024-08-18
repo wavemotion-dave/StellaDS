@@ -24,8 +24,6 @@
 #include "CartCDF.hxx"
 #include "Thumbulator.hxx"
 
-uInt16 myMusicWaveformSize[3] __attribute__((section(".dtcm"))) = {0,0,0};
-
 #define FAST_FETCH_ON ((myMode & 0x0F) == 0)
 #define DIGITAL_AUDIO_ON ((myMode & 0xF0) == 0)
 #define DIGITAL_AUDIO_OFF (myMode & 0xF0)
@@ -49,6 +47,7 @@ uInt8* myDisplayImageCDF    __attribute__((section(".dtcm")));  // Pointer to th
 
 uInt8* myFetcherOffsetPtr   __attribute__((section(".dtcm")));  // Pointer to the RAM cell that contains the offset
 
+uInt16 myMusicWaveformSize[3] __attribute__((section(".dtcm"))) = {0,0,0};
 
 uInt32 fastDataStreamBase  __attribute__((section(".dtcm")));
 uInt32 *commPtr32          __attribute__((section(".dtcm")));
@@ -201,11 +200,13 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // ------------------------------------------------------------------------
   if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
   {
-      myARMRAM = (uInt8*)&cart_buffer[446*1024];  // Set to the slow RAM buffer (back 64K-2k of the cart buffer)
+      bSaveStateXL = true;
+      myARMRAM = xl_ram_buffer;                   // Set to the slow but larger 32K RAM buffer
       memset(myARMRAM, 0, MEM_32KB);              // Clear all of the "ARM Thumb" RAM
   }
   else
   {
+      bSaveStateXL = false;
       myARMRAM = (uInt8*)fast_cart_buffer;      // Set to the fast RAM buffer
       memset(myARMRAM, 0, MEM_8KB);             // Clear all of the "ARM Thumb" RAM
   }

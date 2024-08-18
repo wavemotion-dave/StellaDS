@@ -72,6 +72,7 @@ extern uInt8 tv_type_requested;
 uInt8 original_banking_detect = 0;
 uInt8 bFoundInDAT = false;
 uInt8 bElevatorAgent = false;
+uInt8 bSaveStateXL = false;
 
 // The counter registers for the data fetchers
 
@@ -90,6 +91,9 @@ uInt8 fast_cart_buffer[8*1024] __attribute__ ((aligned (32))) __attribute__((sec
 
 // Our cart buffer memory - this can store game ROMs up to 512k
 uInt8  cart_buffer[MAX_CART_FILE_SIZE] __attribute__ ((aligned (0x4000)));
+
+// For the few carts that need a big chunk of RAM. This is mostly CDFJ+ and E3/E3+ carts.
+uInt8  xl_ram_buffer[32768] __attribute__ ((aligned (4096)));
 
 #define VB 1        // Vertical Blank (1=zero the vertical blank... 0 or !VB is faster but may graphically cause glitching) 
 #define HB 1        // Horizontal Blank (1=zero the horizontal blank... 0 or !HB is faster but may graphically cause glitching)
@@ -2843,6 +2847,8 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
     
   bElevatorAgent = false;
+  bSaveStateXL = false;
+  memset(xl_ram_buffer, 0x00, sizeof(xl_ram_buffer));
     
   // ----------------------------------------------------------------
   // For Starpath Supercharger games, we must track distinct memory

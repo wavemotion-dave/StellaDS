@@ -20,6 +20,24 @@
 #ifndef CARTRIDGE_DPC_PLUS_HXX
 #define CARTRIDGE_DPC_PLUS_HXX
 
+
+extern bool   myFastFetch;
+extern uInt32 myFractionalCounters[8];
+extern uInt32 myFractionalIncrements[8];
+extern uInt32 myTops[8];
+extern uInt32 myTopsMinusBottoms[8];
+extern uInt32 myBottoms[8];
+extern uInt32 myCounters[8];
+extern uInt32 myMusicCounters[3];
+extern uInt32 myMusicFrequencies[3];
+extern uInt32 myMusicWaveforms[3];
+extern uInt32 myMusicCountersShifted[3];
+extern uInt32 myDPCPRandomNumber;
+extern Int32 myDPCPCycles;
+extern uInt8 myParameter[8];
+extern uInt8 myParameterPointer;
+
+
 class System;
 #ifdef THUMB_SUPPORT
 class Thumbulator;
@@ -134,12 +152,6 @@ class CartridgeDPCPlus : public Cartridge
     // Pointer to the 1K frequency table
     uInt8* myFrequencyImage;
 
-    // Parameter for special functions
-    uInt8 myParameter[8];
-
-    // Parameter pointer for special functions
-    uInt8 myParameterPointer;
-
     // Older DPC+ driver code had different behaviour wrt the mask used
     // to retrieve 'DFxFRACLOW' (fractional data pointer low byte)
     // ROMs built with an old DPC+ driver and using the newer mask can
@@ -147,7 +159,6 @@ class CartridgeDPCPlus : public Cartridge
     // For current versions, this is 0x0F00FF; older versions need 0x0F0000
     uInt32 myFractionalLowMask{0x0F00FF};
     //uInt32 myFractionalLowMask{0x0F0000};
-
 };
 
 #endif

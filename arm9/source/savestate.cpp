@@ -30,6 +30,9 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 #include "CartAR.hxx"
+#include "CartDPCPlus.hxx"
+#include "CartCDF.hxx"
+#include "Cart3EPlus.hxx"
 #include "highscore.h"
 #include "config.h"
 #include "instructions.h"
@@ -42,7 +45,7 @@
 #include "Thumbulator.hxx"
 #include "bgFileSel.h"
 
-#define SAVE_VERSION 0x0001
+#define SAVE_VERSION 0x0002
 
 char tmp_buf[SOUND_SIZE];
 
@@ -56,6 +59,7 @@ uInt16 savedTimerData = 0;
 #define TYPE_RAM        1
 #define TYPE_CART       2
 #define TYPE_FASTCART   3
+#define TYPE_XLRAM      4
 
 typedef struct
 {
@@ -101,10 +105,12 @@ u8 IsSaveSupported(void)
         case BANK_CV:
         case BANK_MB:
         case BANK_0840:
-        //case BANK_3E:
-        //case BANK_3EPLUS:
+        case BANK_DPCP:
+        case BANK_3E:
+        case BANK_3EPLUS:
+        case BANK_CDFJ:
             return true;    // Save State supported for these carts...
-
+            
         default:
             return false;   // Save State not supported for all others...
     }
@@ -158,6 +164,11 @@ void SaveState(void)
             myPageOffsets[i].peek_type = TYPE_FASTCART;
             myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - fast_cart_buffer);
         }
+        else if ((myPageAccessTable[i].directPeekBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPeekBase <= &xl_ram_buffer[32*1024]))
+        {
+            myPageOffsets[i].peek_type = TYPE_XLRAM;
+            myPageOffsets[i].peek_offset = (myPageAccessTable[i].directPeekBase - xl_ram_buffer);
+        }
         else if (myPageAccessTable[i].directPeekBase != 0)
         {
             myPageOffsets[i].peek_type = TYPE_RAW;
@@ -179,6 +190,11 @@ void SaveState(void)
         {
             myPageOffsets[i].poke_type = TYPE_FASTCART;
             myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - fast_cart_buffer);
+        }
+        else if ((myPageAccessTable[i].directPokeBase >= &xl_ram_buffer[0]) && (myPageAccessTable[i].directPokeBase <= &xl_ram_buffer[32*1024]))
+        {
+            myPageOffsets[i].poke_type = TYPE_XLRAM;
+            myPageOffsets[i].poke_offset = (myPageAccessTable[i].directPokeBase - xl_ram_buffer);
         }
         else if (myPageAccessTable[i].directPokeBase != 0)
         {
@@ -246,12 +262,10 @@ void SaveState(void)
     fwrite(&myCurrentOffset32,          sizeof(myCurrentOffset32),          1, fp);
     fwrite(&cartDriver,                 sizeof(cartDriver),                 1, fp);
     fwrite(&f8_bankbit,                 sizeof(f8_bankbit),                 1, fp);
+    fwrite(myCurrentBanks,              sizeof(myCurrentBanks),             1, fp);    
 
     fwrite(&myRandomNumber,             sizeof(myRandomNumber),             1, fp);
     fwrite(&myMusicCycles,              sizeof(myMusicCycles),              1, fp);
-    fwrite(myTops,                      sizeof(myTops),                     1, fp);
-    fwrite(myBottoms,                   sizeof(myBottoms),                  1, fp);
-    fwrite(myCounters,                  sizeof(myCounters),                 1, fp);
     fwrite(myFlags,                     sizeof(myFlags),                    1, fp);
     fwrite(myMusicMode,                 sizeof(myMusicMode),                1, fp);
 
@@ -353,7 +367,47 @@ void SaveState(void)
     // tia_buf[] is in VRAM so we have to use an intermediate buffer...
     memcpy(tmp_buf, tia_buf,            SOUND_SIZE);
     fwrite(tmp_buf,                     SOUND_SIZE,                        1, fp);
+    
+    // Thumbulator
+    fwrite(reg_sys,                     sizeof(reg_sys),                   1, fp);
+    fwrite(&cFlag,                      sizeof(cFlag),                     1, fp);
+    fwrite(&cStack,                     sizeof(cStack),                    1, fp);
+    fwrite(&cBase,                      sizeof(cBase),                     1, fp);
+    fwrite(&cStart,                     sizeof(cStart),                    1, fp);
+    
+    // DPC+ Parameters
+    fwrite(&myFastFetch,                sizeof(myFastFetch),               1, fp);
+    fwrite(&myDPCPRandomNumber,         sizeof(myDPCPRandomNumber),        1, fp);
+    fwrite(&myDPCPCycles,               sizeof(myDPCPCycles),              1, fp);
+    fwrite(&myParameterPointer,         sizeof(myParameterPointer),        1, fp);
+    fwrite(myFractionalCounters,        sizeof(myFractionalCounters),      1, fp);
+    fwrite(myFractionalIncrements,      sizeof(myFractionalIncrements),    1, fp);
+    fwrite(myTops,                      sizeof(myTops),                    1, fp);
+    fwrite(myTopsMinusBottoms,          sizeof(myTopsMinusBottoms),        1, fp);
+    fwrite(myBottoms,                   sizeof(myBottoms),                 1, fp);
+    fwrite(myCounters,                  sizeof(myCounters),                1, fp);
+    fwrite(myMusicCounters,             sizeof(myMusicCounters),           1, fp);
+    fwrite(myMusicFrequencies,          sizeof(myMusicFrequencies),        1, fp);
+    fwrite(myMusicWaveforms,            sizeof(myMusicWaveforms),          1, fp);
+    fwrite(myMusicCountersShifted,      sizeof(myMusicCountersShifted),    1, fp);
+    fwrite(myParameter,                 sizeof(myParameter),               1, fp);
 
+    // CDFJ+ Parameters
+    fwrite(&myAmplitudeStream,          sizeof(myAmplitudeStream),         1, fp);
+    fwrite(&myDataStreamFetch,          sizeof(myDataStreamFetch),         1, fp);    
+    fwrite(&peekvalue,                  sizeof(peekvalue),                 1, fp);
+    fwrite(&myMode,                     sizeof(myMode),                    1, fp);
+    fwrite(&myLDXenabled,               sizeof(myLDXenabled),              1, fp);
+    fwrite(&myLDYenabled,               sizeof(myLDYenabled),              1, fp);
+    fwrite(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);   
+    fwrite(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);   
+    
+    // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
+    if (bSaveStateXL)
+    {
+        fwrite(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
+    }
+    
     fclose(fp);
 
     WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;WAITVBL;
@@ -427,12 +481,10 @@ void LoadState(void)
         fread(&myCurrentOffset32,          sizeof(myCurrentOffset32),          1, fp);
         fread(&cartDriver,                 sizeof(cartDriver),                 1, fp);
         fread(&f8_bankbit,                 sizeof(f8_bankbit),                 1, fp);
+        fread(myCurrentBanks,              sizeof(myCurrentBanks),             1, fp);
 
         fread(&myRandomNumber,             sizeof(myRandomNumber),             1, fp);
         fread(&myMusicCycles,              sizeof(myMusicCycles),              1, fp);
-        fread(myTops,                      sizeof(myTops),                     1, fp);
-        fread(myBottoms,                   sizeof(myBottoms),                  1, fp);
-        fread(myCounters,                  sizeof(myCounters),                 1, fp);
         fread(myFlags,                     sizeof(myFlags),                    1, fp);
         fread(myMusicMode,                 sizeof(myMusicMode),                1, fp);
 
@@ -536,6 +588,46 @@ void LoadState(void)
         fread(tmp_buf,                     SOUND_SIZE,                        1, fp);
         memcpy(tia_buf, tmp_buf,           SOUND_SIZE);
 
+        // Thumbulator
+        fread(reg_sys,                     sizeof(reg_sys),                   1, fp);
+        fread(&cFlag,                      sizeof(cFlag),                     1, fp);
+        fread(&cStack,                     sizeof(cStack),                    1, fp);
+        fread(&cBase,                      sizeof(cBase),                     1, fp);
+        fread(&cStart,                     sizeof(cStart),                    1, fp);
+
+        // DPC+ Parameters
+        fread(&myFastFetch,                sizeof(myFastFetch),               1, fp);
+        fread(&myDPCPRandomNumber,         sizeof(myDPCPRandomNumber),        1, fp);
+        fread(&myDPCPCycles,               sizeof(myDPCPCycles),              1, fp);
+        fread(&myParameterPointer,         sizeof(myParameterPointer),        1, fp);
+        fread(myFractionalCounters,        sizeof(myFractionalCounters),      1, fp);
+        fread(myFractionalIncrements,      sizeof(myFractionalIncrements),    1, fp);
+        fread(myTops,                      sizeof(myTops),                    1, fp);
+        fread(myTopsMinusBottoms,          sizeof(myTopsMinusBottoms),        1, fp);
+        fread(myBottoms,                   sizeof(myBottoms),                 1, fp);
+        fread(myCounters,                  sizeof(myCounters),                1, fp);
+        fread(myMusicCounters,             sizeof(myMusicCounters),           1, fp);
+        fread(myMusicFrequencies,          sizeof(myMusicFrequencies),        1, fp);
+        fread(myMusicWaveforms,            sizeof(myMusicWaveforms),          1, fp);
+        fread(myMusicCountersShifted,      sizeof(myMusicCountersShifted),    1, fp);
+        fread(myParameter,                 sizeof(myParameter),               1, fp);
+        
+        // CDFJ+ Parameters
+        fread(&myAmplitudeStream,          sizeof(myAmplitudeStream),         1, fp);
+        fread(&myDataStreamFetch,          sizeof(myDataStreamFetch),         1, fp);    
+        fread(&peekvalue,                  sizeof(peekvalue),                 1, fp);
+        fread(&myMode,                     sizeof(myMode),                    1, fp);
+        fread(&myLDXenabled,               sizeof(myLDXenabled),              1, fp);
+        fread(&myLDYenabled,               sizeof(myLDYenabled),              1, fp);
+        fread(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);        
+        fread(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);
+        
+        // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
+        if (bSaveStateXL)
+        {
+            fread(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
+        }
+
         fclose(fp);
 
         // ----------------------------------------------------------------------------------------------
@@ -557,6 +649,10 @@ void LoadState(void)
             {
                 myPageAccessTable[i].directPeekBase = &fast_cart_buffer[myPageOffsets[i].peek_offset];
             }
+            else if (myPageOffsets[i].peek_type == TYPE_XLRAM)
+            {
+                myPageAccessTable[i].directPeekBase = &xl_ram_buffer[myPageOffsets[i].peek_offset];
+            }
             else // Must be RAW
             {
                 myPageAccessTable[i].directPeekBase = (uInt8 *)myPageOffsets[i].peek_offset;
@@ -574,6 +670,10 @@ void LoadState(void)
             else if (myPageOffsets[i].poke_type == TYPE_FASTCART)
             {
                 myPageAccessTable[i].directPokeBase = &fast_cart_buffer[myPageOffsets[i].poke_offset];
+            }
+            else if (myPageOffsets[i].poke_type == TYPE_XLRAM)
+            {
+                myPageAccessTable[i].directPokeBase = &xl_ram_buffer[myPageOffsets[i].poke_offset];
             }
             else // Must be RAW
             {

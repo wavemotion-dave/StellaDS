@@ -44,6 +44,8 @@ extern uInt8 myMusicMode[3];
 extern uInt32 myMusicCycles; 
 extern uInt32 myCurrentOffset32;
 extern uInt16 myCurrentBank;
+extern uInt8 bSaveStateXL;
+extern uInt8 xl_ram_buffer[32768];
 
 #define NTSC    0
 #define PAL     1

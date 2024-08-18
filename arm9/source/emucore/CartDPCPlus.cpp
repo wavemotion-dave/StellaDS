@@ -78,10 +78,18 @@ uInt32 myDPCPRandomNumber __attribute__((section(".dtcm")));
 // System cycle count when the last update to music data fetchers occurred
 Int32 myDPCPCycles __attribute__((section(".dtcm")));
 
+// Parameter for special functions
+uInt8 myParameter[8]  __attribute__((section(".dtcm")));
+
+// Parameter pointer for special functions
+uInt8 myParameterPointer  __attribute__((section(".dtcm")));
+    
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeDPCPlus::CartridgeDPCPlus(const uInt8* image, uInt32 size)
-  : myParameterPointer(0)
 {
+  myParameterPointer = 0;
+  memset(myParameter, 0x00, sizeof(myParameter));
+  
   // For DPC+ we can always use the fast cart buffer as this driver only needs 8K of RAM
   myARMRAM = fast_cart_buffer;
       

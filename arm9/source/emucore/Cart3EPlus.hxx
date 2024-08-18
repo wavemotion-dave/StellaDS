@@ -24,6 +24,8 @@
 
 class Cartridge3EPlus;
 
+extern uInt16 myCurrentBanks[4];
+
 #include "bspf.hxx"
 #include "Cart.hxx"
 
@@ -135,12 +137,6 @@ class Cartridge3EPlus : public Cartridge
     void segment(uInt8 seg, uInt8 bank);
 
   private:
-    // Indicates which bank is currently active for the segments
-    uInt16 myCurrentBanks[4];
-
-    // RAM contents. For now every ROM gets all 32K of potential RAM
-    uInt8 my3ERam[32768];
-    
     // ROM contents ... up to 64K
     uInt8 *myImage;
     

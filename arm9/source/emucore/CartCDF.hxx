@@ -35,7 +35,14 @@ class Thumbulator;
 
 extern bool   isCDFJPlus;
 extern uInt16 myAmplitudeStream;
-
+extern uInt8 myDataStreamFetch;
+extern uInt8 peekvalue;
+extern Int32 myDPCPCycles;
+extern uInt8 myMode;
+extern u8 myLDXenabled;
+extern u8 myLDYenabled;
+extern uInt16 myFastFetcherOffset;
+extern uInt16 myMusicWaveformSize[3];
 
 /**
   Cartridge class used for CDF/CDFJ.

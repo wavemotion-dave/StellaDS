@@ -791,18 +791,8 @@ void M6502Low::execute_AR(void)
 // --------------------------------------------------------
 extern uInt8 myARM6502[];
 extern CartridgeDPCPlus *myCartDPCP;
-extern uInt32 myCounters[];
 extern uInt8 *myDisplayImageDPCP;
-extern uInt32 myFractionalCounters[];
-extern uInt32 myFractionalIncrements[];
-extern uInt32 myTops[];
-extern uInt32 myTopsMinusBottoms[];
 extern uInt8 *myDPCptr;
-extern uInt32 myMusicCounters[3];
-extern uInt32 myMusicFrequencies[3];
-extern uInt32 myMusicWaveforms[3];
-extern uInt32 myMusicCountersShifted[3];
-extern Int32 myDPCPCycles;
 
 ITCM_CODE uInt8 peek_Fetch(uInt8 address)
 {
@@ -1246,8 +1236,8 @@ inline uInt8 peek_DataStreamPlusPlus(uInt8 address)
   // We place the ARMRAM for the CDFJ++ (>32K) games at a very specific
   // alginment such that the myDisplayImageCDF[] will always be aligned
   // on a 16K boundary which allows us to just do simplified math/OR here.
-  uInt16 *ptr = (uInt16*)((uInt32)&cart_buffer[(446*1024)+0x98+2] + (address << 2));
-  uInt8 value = cart_buffer[(448*1024) | *ptr];
+  uInt16 *ptr = (uInt16*)((uInt32)&xl_ram_buffer[0x98+2] + (address << 2));
+  uInt8 value = xl_ram_buffer[2048 + *ptr];
   *ptr += 1;
     
   return value;    

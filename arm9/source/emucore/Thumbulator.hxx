@@ -40,6 +40,11 @@
 extern u32 profiler[];
 #endif
 
+extern uInt32 reg_sys[16];
+extern uInt32 cFlag;
+extern uInt32 cStack, cBase, cStart;
+
+
 //0b10000 User       PC, R14 to R0, CPSR
 //0b10001 FIQ        PC, R14_fiq to R8_fiq, R7 to R0, CPSR, SPSR_fiq
 //0b10010 IRQ        PC, R14_irq, R13_irq, R12 to R0, CPSR, SPSR_irq
