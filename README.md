@@ -243,8 +243,8 @@ Version History:
 
 V7.4 : 19-Aug-2024 by Dave Bernazzani (wavemotion)
   * Adding adding save/restore state handling for all games. Use the new down-arrow icon in the lower left.
-  * Added 03E0 banking for Parker Bros. Brazillian carts.
-  * Added 0FA0 banking for Fotomania Brazillian carts.
+  * Added 03E0 banking for Parker Bros. Brazilian carts.
+  * Added 0FA0 banking for Fotomania Brazilian carts.
 
 V7.3 : 05-Jun-2024 by Dave Bernazzani (wavemotion)
   * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.
