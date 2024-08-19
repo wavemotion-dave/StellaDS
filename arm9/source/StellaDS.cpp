@@ -49,7 +49,7 @@
 #include "savestate.h"
 #include "Thumbulator.hxx"
 
-#define VERSION "7.3"
+#define VERSION "7.4"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000

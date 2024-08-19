@@ -47,6 +47,8 @@ extern uInt16 myCurrentBank;
 extern uInt8 bSaveStateXL;
 extern uInt8 xl_ram_buffer[32768];
 
+extern char my_filename[];
+
 #define NTSC    0
 #define PAL     1
 
@@ -57,15 +59,15 @@ struct CartInfo
   char  md5[33];
   char  gameID[7];
   uInt8 banking;
-  uInt8  controllerType;
-  uInt8  special;
-  uInt8  frame_mode;
-  uInt8  vblankZero;
-  uInt8  hBlankZero;
-  uInt8  analogSensitivity;      // 10=1.0
-  uInt8  tv_type;                // NTSC or PAL
-  uInt8  displayStartScanline;   
-  uInt8  displayNumScalines;  
+  uInt8 controllerType;
+  uInt8 special;
+  uInt8 frame_mode;
+  uInt8 vblankZero;
+  uInt8 hBlankZero;
+  uInt8 analogSensitivity;      // 10=1.0
+  uInt8 tv_type;                // NTSC or PAL
+  uInt8 displayStartScanline;   
+  uInt8 displayNumScalines;  
   uInt8 screenScale;            // 100 = 100% (smaller numbers squish screen to fit)
   Int8  xOffset;
   Int8  yOffset;
@@ -139,10 +141,9 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define CTR_BUMPBASH    17     // For bumper bash (both paddle buttons used)
 #define CTR_TWINSTICK   18     // For twin-stick games like Rail Slider
 
+// Various special attributes of games
 #define SPEC_NONE        0     // Nothing special to do with this game...
 #define SPEC_HAUNTED     1     // Haunted House - fix bug by patching offset 1103's E5 to E9
-#define SPEC_CONMARS     2     // Conquest of Mars - fix bug for collision detections
-#define SPEC_QUADRUN     3     // Quadrun has some audio artifacts we can't generate so we disable them
 #define SPEC_AR          4     // AR Carts we must track distinct memory access
 #define SPEC_MELTDOWN    5     // Meltdown requires NUSIZ0/1 changes
 #define SPEC_BUMPBASH    6     // Bumper Bash requires NUSIZ0/1 changes
@@ -200,6 +201,8 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define BANK_3EPLUS     35
 #define BANK_WF8        36
 #define BANK_JANE       37
+#define BANK_03E0       38
+#define BANK_0FA0       39
 
 // Analog Sensitivity... 10 = 1.0 and normal... 1.1 is faster and 0.9 is slower
 #define ANA0_7        7
@@ -368,11 +371,21 @@ class Cartridge : public Device
       Returns true if the image is probably a 0840 Econobanking cartridge
     */
     static bool isProbably0840(const uInt8* image, uInt32 size);
-    
+
+    /**
+      Returns true if the image is probably a 0FA0 Brazillian cartridge
+    */
+    static bool isProbably0FA0(const uInt8* image, uInt32 size);
+
+    /**
+      Returns true if the image is probably a 03E0 Brazillian cartridge
+    */
+    static bool isProbably03E0(const uInt8* image, uInt32 size);
+
     /**
       Returns true if the image is probably an FA2 cartridge (32K only)
     */
-    static bool isProbablyFA2(const uInt8* image, uInt32 size);    
+    static bool isProbablyFA2(const uInt8* image, uInt32 size);
     
   private:
     // Copy constructor isn't supported by cartridges so make it private

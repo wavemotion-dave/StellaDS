@@ -52,6 +52,7 @@ char tmp_buf[SOUND_SIZE];
 
 extern char my_filename[];
 extern char szName[];
+extern char szName2[];
 extern int bg0, bg0b,bg1b;
 extern unsigned int dsReadPad(void);
 uInt16 savedTimerData = 0;
@@ -72,8 +73,6 @@ typedef struct
 
 Offsets_t myPageOffsets[64];
 
-char save_filename[256];
-
 char spare_bytes[128];
 
 void MakeSaveName(void)
@@ -82,11 +81,11 @@ void MakeSaveName(void)
     if (dir) closedir(dir);       // Directory exists. All good.
     else mkdir("sav", 0777);      // Doesn't exist - make it...
 
-    strcpy(save_filename, (char *)"sav/");
-    strcat(save_filename, my_filename);
-    save_filename[strlen(save_filename)-3] = 's';
-    save_filename[strlen(save_filename)-2] = 'a';
-    save_filename[strlen(save_filename)-1] = 'v';
+    strcpy(szName2, (char *)"sav/");
+    strcat(szName2, my_filename);
+    szName2[strlen(szName2)-3] = 's';
+    szName2[strlen(szName2)-2] = 'a';
+    szName2[strlen(szName2)-1] = 'v';
 }
 
 void SaveState(void)
@@ -161,7 +160,7 @@ void SaveState(void)
         }
     }
 
-    FILE * fp = fopen(save_filename, "wb");
+    FILE * fp = fopen(szName2, "wb");
     savedTimerData = TIMER0_DATA;
     
     // Version
@@ -386,7 +385,7 @@ void LoadState(void)
 {
     MakeSaveName();
 
-    FILE *fp = fopen(save_filename, "rb");
+    FILE *fp = fopen(szName2, "rb");
     
     if (fp)
     {

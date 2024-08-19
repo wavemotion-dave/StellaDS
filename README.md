@@ -16,7 +16,7 @@ A solid level of compatibility to make games playable. Most games you remember f
 Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these are the good ones!). 
 
 * Full console emulation including Reset, Select, Difficulty Switches, TV Type. 
-* Most popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
+* Virtually all popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more.
 * Savekey Support with backing 32K EEPROM.
 * DPC+ Arm-Assisted games supported! (DSi or above needed for full speed).
@@ -140,6 +140,8 @@ F8          8K          --
 F8SC        8K          128B
 FE/SCABS    8K          --
 wF8         8K          --
+03E0        8K          --
+0FA0        8K          --
 AR          2K          6K
 DPC         8K (+ 2K Display Data)  
 DPC+        24K         8K (ARM assisted)
@@ -239,8 +241,10 @@ Thanks and Credits :
 Version History:
 -----------------------
 
-V7.3c : 18-Aug-2024 by Dave Bernazzani (wavemotion)
+V7.4 : 19-Aug-2024 by Dave Bernazzani (wavemotion)
   * Adding adding save/restore state handling for all games. Use the new down-arrow icon in the lower left.
+  * Added 03E0 banking for Parker Bros. Brazillian carts.
+  * Added 0FA0 banking for Fotomania Brazillian carts.
 
 V7.3 : 05-Jun-2024 by Dave Bernazzani (wavemotion)
   * Added wF8 banking scheme for the new dump of Smurf and Zaxxon.
