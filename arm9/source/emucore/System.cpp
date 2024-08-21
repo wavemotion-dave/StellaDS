@@ -42,7 +42,7 @@ uInt32 gTotalSystemCycles = 0;
 // to optiize access as the memory will be known at compile time. Again, not
 // overly proud of making these things global but speed is critical on the DS.
 // -----------------------------------------------------------------------------
-PageAccess myPageAccessTable[64] __attribute__ ((aligned (32))); 
+PageAccess myPageAccessTable[64] __attribute__ ((aligned (32))) __attribute__((section(".dtcm"))); 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)
@@ -104,8 +104,6 @@ void System::reset()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void System::attach(Device* device)
 {
-  assert(myNumberOfDevices < 100);
-
   // Add device to my collection of devices
   myDevices[myNumberOfDevices++] = device;
 
@@ -139,12 +137,6 @@ void System::resetCycles()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void System::setPageAccess(uInt16 page, const PageAccess& access)
-{
-  myPageAccessTable[page] = access;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const PageAccess& System::getPageAccess(uInt16 page)
 {
   return myPageAccessTable[page];
@@ -155,7 +147,7 @@ System::System(const System& s)
     : myAddressMask(s.myAddressMask),
       myPageShift(s.myPageShift),
       myPageMask(s.myPageMask),
-     myNumberOfPages(s.myNumberOfPages)
+      myNumberOfPages(s.myNumberOfPages)
 {
   assert(false);
 }

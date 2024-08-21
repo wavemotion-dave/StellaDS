@@ -19,7 +19,7 @@ typedef enum {
   EMUARM7_PLAY_SND = 0x123E,
 } FifoMesType;
 
-#define MAX_ROMS_PER_DIRECTORY  1200
+#define MAX_ROMS_PER_DIRECTORY  1500
 #define MAX_FILE_NAME_LEN       167
 
 typedef struct FICtoLoad {
@@ -30,19 +30,18 @@ typedef struct FICtoLoad {
 extern Console* theConsole;
 extern Sound* theSound;
 
-extern unsigned short int etatEmu;
 extern FICA2600 vcsromlist[];
 
 extern uInt16 atari_frames;
-extern uInt8 bInitialDiffSet;
-extern uInt8 tv_type_requested;
-extern uInt8 gSaveKeyEEWritten;
-extern uInt8 gSaveKeyIsDirty;
+extern uInt8  bInitialDiffSet;
+extern uInt8  tv_type_requested;
+extern uInt8  gSaveKeyEEWritten;
+extern uInt8  gSaveKeyIsDirty;
 extern uInt16 mySoundFreq;
-extern uInt16 etatEmu;
-extern uint8 sound_buffer[SOUND_SIZE];
+extern uInt16 emuState;
+extern uint8  sound_buffer[SOUND_SIZE];
 extern uint8  bHaltEmulation; 
-extern uint8 bScreenRefresh;
+extern uint8  bScreenRefresh;
 extern uInt32 gAtariFrames;
 extern uInt32 gTotalAtariFrames;
 extern uInt16 console_color;

@@ -441,7 +441,7 @@ void M6502Low::execute_F6(void)
     while (!myExecutionStatus)
     {
       // Get the next 6502 instruction - do this the fast way!
-      if (PC >= 0xFFF6) 
+      if (PC >= 0x1FF6) 
       {
           operand = peek_F6(PC++);
       }
@@ -620,7 +620,7 @@ void M6502Low::execute_F4(void)
 // so we'll go the extra mile here...
 // ==============================================================================
 
-#define DISTINCT_THRESHOLD  5
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 peek_AR(uInt16 address)
 {
@@ -654,12 +654,12 @@ inline uInt8 peek_AR(uInt16 address)
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
                   //if(!bPossibleLoad)    // Can't poke to ROM :-) -- but we're looking for speed so...
-                  myImage1[addr] = myDataHoldRegister;
+                  myImageAR1[addr] = myDataHoldRegister;
                   myWritePending = false;
               }
           }
 
-          myDataBusState = myImage1[addr];
+          myDataBusState = myImageAR1[addr];
       }
       else // WE are in the lower bank
       {
@@ -668,7 +668,7 @@ inline uInt8 peek_AR(uInt16 address)
           {
               if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
               {
-                  myImage0[addr] = myDataHoldRegister;
+                  myImageAR0[addr] = myDataHoldRegister;
                   myWritePending = false;
               }
           }
@@ -680,7 +680,7 @@ inline uInt8 peek_AR(uInt16 address)
             if (myWriteEnabled) myWritePending = true;
           }
 
-          myDataBusState = myImage0[addr];
+          myDataBusState = myImageAR0[addr];
       }
       return myDataBusState;      
   }
@@ -734,9 +734,9 @@ inline void poke_AR(uInt16 address, uInt8 value)
           if (NumberOfDistinctAccesses >= DISTINCT_THRESHOLD)
           {
             if((addr & 0x0800) == 0)
-              myImage0[addr] = myDataHoldRegister;
+              myImageAR0[addr] = myDataHoldRegister;
             else if(!bPossibleLoad)    // Can't poke to ROM :-)
-              myImage1[addr] = myDataHoldRegister;
+              myImageAR1[addr] = myDataHoldRegister;
             myWritePending = false;
           }
       }

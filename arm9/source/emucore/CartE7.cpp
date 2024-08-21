@@ -25,18 +25,15 @@
 #include "System.hxx"
 #include <iostream>
 
-uInt16 myCurrentSlice __attribute__((section(".dtcm"))) = 0;
-uInt8  myNumBanks __attribute__((section(".dtcm"))) = 0;
-uInt8  myLastBank __attribute__((section(".dtcm"))) = 0;
+static uInt16 myCurrentSlice __attribute__((section(".dtcm"))) = 0;
+static uInt8  myNumBanks     __attribute__((section(".dtcm"))) = 0;
+static uInt8  myLastBank     __attribute__((section(".dtcm"))) = 0;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeE7::CartridgeE7(const uInt8* image, uInt16 size)
 {
-  // Copy the ROM image into my buffer
-  for(uInt32 addr = 0; addr < 16384; ++addr)
-  {
-    myImage[addr] = image[addr];
-  }
+  // Reuse the cart buffer
+  myImage = (uInt8 *)image;
 
   myNumBanks = size / 2048;
   myLastBank = myNumBanks-1;

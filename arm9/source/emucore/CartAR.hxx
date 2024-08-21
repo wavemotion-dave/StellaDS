@@ -32,13 +32,15 @@ extern uInt8 myWriteEnabled;
 extern uInt8 myDataHoldRegister;
 extern uInt8 myWritePending;
 extern uInt8 bPossibleLoad;
-extern uInt8 *myImage;
-extern uInt8 *myImage0;
-extern uInt8 *myImage1;
+extern uInt8 *myImageAR;
+extern uInt8 *myImageAR0;
+extern uInt8 *myImageAR1;
 extern uInt8 myNumberOfLoadImages;
 extern uInt8 LastConfigurationAR;
 
 extern void SetConfigurationAR(uInt8 configuration);
+
+#define DISTINCT_THRESHOLD  5
 
 
 /**

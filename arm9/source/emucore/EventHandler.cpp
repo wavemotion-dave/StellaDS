@@ -33,7 +33,7 @@
 #include "bspf.hxx"
 
   // Create the event object which will be used for this handler
-Event  myStellaEvent  __attribute__((section(".dtcm")));
+Event  myStellaEvent;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 EventHandler::EventHandler(Console* console)

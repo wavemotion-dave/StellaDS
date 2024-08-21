@@ -80,14 +80,14 @@ static short bShowInfo = false;
 Console* theConsole = (Console*) NULL;
 
 int bg0, bg0b, bg1b;
-uInt16 etatEmu;
+uInt16 emuState;
 
-uint8 sound_buffer[SOUND_SIZE] __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
-uint16 *aptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
-uint16 *bptr __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
-uint8  bHaltEmulation __attribute__((section(".dtcm"))) = 0; 
-uint8 bScreenRefresh __attribute__((section(".dtcm"))) = 0;
-uInt32 gAtariFrames __attribute__((section(".dtcm"))) = 0;
+uint8 sound_buffer[SOUND_SIZE]  __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
+uint16 *aptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
+uint16 *bptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
+uint8  bHaltEmulation           __attribute__((section(".dtcm"))) = 0; 
+uint8 bScreenRefresh            __attribute__((section(".dtcm"))) = 0;
+uInt32 gAtariFrames             __attribute__((section(".dtcm"))) = 0;
 uInt32 gTotalAtariFrames = 0;
 
 static uInt8 full_speed=0;
@@ -98,13 +98,17 @@ uInt16 last_keys_pressed,keys_touch=0, console_color=1, romSel;
 char szName[MAX_FILE_NAME_LEN+1];
 char szName2[MAX_FILE_NAME_LEN+1];
 
+int getMemUsed(void)      // returns the amount of used memory in bytes
+{
+    struct mallinfo mi = mallinfo();
+    return mi.uordblks;
+}
+
 char dbgbuf[36];
 static void DumpDebugData(void)
 {
     extern uInt32 gTotalSystemCycles;
     extern uInt16 gPC;
-    sprintf(dbgbuf, "%32s", myCartInfo.md5);
-    dsPrintValue(0,22,0, dbgbuf);
     
 #ifdef CPU_PROFILER
     int j=0;
@@ -117,15 +121,24 @@ static void DumpDebugData(void)
             j++;
         }
     }
-#endif    
+#endif
 
-    for (int i=0; i<20; i++)
+    for (int i=0; i<17; i++)
     {
         sprintf(dbgbuf, "%02d: %-10u %08X %02d: %04X", i, debug[i], debug[i], i+20, debug[20+i]);
         dsPrintValue(0,2+i,0, dbgbuf);
     }
+    uInt8 idx = 19;
+    sprintf(dbgbuf, "Build Date:    %-11s V%s",    __DATE__, VERSION);
+    dsPrintValue(0, idx++, 0, dbgbuf);
+    sprintf(dbgbuf, "CPU Mode:      %-18s",        isDSiMode() ? "DSI 134MHz 16MB":"DS 67MHz 4 MB");  
+    dsPrintValue(0, idx++, 0, dbgbuf);
+    sprintf(dbgbuf, "Memory Used:   %-9d BYTES  ", getMemUsed());                       
+    dsPrintValue(0, idx++, 0, dbgbuf);        
     sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, gPC);
-    dsPrintValue(0,23,0, dbgbuf);
+    dsPrintValue(0,idx++,0, dbgbuf);
+    sprintf(dbgbuf, "%32s", myCartInfo.md5);
+    dsPrintValue(0,idx++,0, dbgbuf);
 }
 
 
@@ -1119,22 +1132,22 @@ ITCM_CODE void dsMainLoop(void)
     TIMER1_DATA=0;
     TIMER1_CR=TIMER_ENABLE | TIMER_DIV_1024;
     
-    while(etatEmu != STELLADS_QUITSTDS)
+    while(emuState != STELLADS_QUITSTDS)
     {
-        switch (etatEmu)
+        switch (emuState)
         {
         case STELLADS_MENUINIT:
             dsShowScreenMain(true);
-            etatEmu = STELLADS_MENUSHOW;
+            emuState = STELLADS_MENUSHOW;
             break;
 
         case STELLADS_MENUSHOW:
-            etatEmu = dsWaitOnMenu(STELLADS_MENUSHOW);
+            emuState = dsWaitOnMenu(STELLADS_MENUSHOW);
             break;
 
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
-            etatEmu = STELLADS_PLAYGAME;
+            emuState = STELLADS_PLAYGAME;
             break;
 
         case STELLADS_PLAYGAME:
@@ -1645,7 +1658,7 @@ ITCM_CODE void dsMainLoop(void)
                 { // quit
                     irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     dsDisplayButton(1);
-                    if (dsWaitOnQuit()) etatEmu=STELLADS_QUITSTDS;
+                    if (dsWaitOnQuit()) emuState=STELLADS_QUITSTDS;
                     else
                     {
                         WAITVBL;
@@ -1719,7 +1732,7 @@ ITCM_CODE void dsMainLoop(void)
                     romSel=dsWaitForRom();
                     if (romSel) 
                     {
-                        etatEmu=STELLADS_PLAYINIT;
+                        emuState=STELLADS_PLAYINIT;
                         dsLoadGame(vcsromlist[ucFicAct].filename);
                         dsDisplayButton(3-console_color);
                         dsDisplayButton(10+myCartInfo.left_difficulty);

@@ -220,7 +220,6 @@ class System
       @return The byte at the specified address
     */
     uInt8 peek(uInt16 address);
-    uInt8 peek_pc(void);
 
     /**
       Change the byte at the specified address to the given value.
@@ -283,23 +282,6 @@ class System
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 System::peek_pc(void)
-{
-  extern uInt16 PC;
-  PageAccess& access = myPageAccessTable[(PC & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
-
-  // See if this page uses direct accessing or not 
-  if(access.directPeekBase != 0)
-  {
-    return *(access.directPeekBase + (PC & MY_PAGE_MASK));
-  }
-  else
-  {
-    return access.device->peek(PC);
-  }
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 System::peek(uInt16 addr)
 {
   PageAccess& access = myPageAccessTable[(addr & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
@@ -330,4 +312,11 @@ inline void System::poke(uInt16 addr, uInt8 value)
     access.device->poke(addr, value);
   }
 }
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+inline void System::setPageAccess(uInt16 page, const PageAccess& access)
+{
+  myPageAccessTable[page] = access;
+}
+
 #endif

@@ -54,14 +54,14 @@ int main(int argc, char **argv)
   if (argc > 1) 
   {
     dsShowScreenMain(true);
-    etatEmu = STELLADS_PLAYINIT;
+    emuState = STELLADS_PLAYINIT;
     dsLoadGame(argv[1]);
   } 
   else 
   {
       chdir("/roms");    // Try to start in roms area... doesn't matter if it fails
       chdir("a2600");    // And try to start in the subdir /a2600... doesn't matter if it fails.
-      etatEmu = STELLADS_MENUINIT;
+      emuState = STELLADS_MENUINIT;
   }
 
   // Main loop of emulation

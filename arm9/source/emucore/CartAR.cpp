@@ -41,9 +41,9 @@ uInt8 myWritePending __attribute__((section(".dtcm")));
 uInt8 bPossibleLoad __attribute__((section(".dtcm")));    
 
 // The 6K of RAM and 2K of ROM contained in the Supercharger
-uInt8 *myImage __attribute__((section(".dtcm")));    
-uInt8 *myImage0 __attribute__((section(".dtcm")));    
-uInt8 *myImage1 __attribute__((section(".dtcm")));    
+uInt8 *myImageAR  __attribute__((section(".dtcm")));    
+uInt8 *myImageAR0 __attribute__((section(".dtcm")));    
+uInt8 *myImageAR1 __attribute__((section(".dtcm")));    
 CartridgeAR *myAR __attribute__((section(".dtcm")));    
 
 uInt8 LastConfigurationAR = 255;
@@ -57,8 +57,6 @@ uInt8* myLoadImages __attribute__((section(".dtcm")));
 // Indicates how many 8448 loads there are
 uInt8 myNumberOfLoadImages;
     
-#define DISTINCT_THRESHOLD  5
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 {
@@ -66,9 +64,9 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
   myLoadImages = (uInt8 *)image;
   myNumberOfLoadImages = size / 8448;
 
-  myImage = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point... Enough to handle 6k of Supercharger RAM
-  myImage0 = myImage;
-  myImage1 = myImage - 2048;
+  myImageAR = (uInt8*)fast_cart_buffer; // Set this to the fast internal RAM... that buffer is otherwise unused at this point... Enough to handle 6k of Supercharger RAM
+  myImageAR0 = myImageAR;
+  myImageAR1 = myImageAR - 2048;
   bPossibleLoad=1;
         
   // Initialize SC BIOS ROM
@@ -92,7 +90,7 @@ const char* CartridgeAR::name() const
 void CartridgeAR::reset()
 {
   // Initialize RAM to Zeros
-  memset(myImage, 0x00, 6*1024);
+  memset(myImageAR, 0x00, 6*1024);
 
   myWriteEnabled = false;
 
@@ -174,72 +172,72 @@ void SetConfigurationAR(uInt8 configuration)
     case 0:
     {
       bPossibleLoad = 1;
-      myImage0 = fast_cart_buffer + (2 * 2048);
-      myImage1 = fast_cart_buffer + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (2 * 2048);
+      myImageAR1 = fast_cart_buffer + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 1:
     {
       bPossibleLoad = 1;
-      myImage0 = fast_cart_buffer + (0 * 2048);
-      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (0 * 2048);
+      myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 2:
     {
       bPossibleLoad = 0;
-      myImage0 = fast_cart_buffer + (2 * 2048);
-      myImage1 = fast_cart_buffer + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (2 * 2048);
+      myImageAR1 = fast_cart_buffer + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 3:
     {
       bPossibleLoad = 0;
-      myImage0 = fast_cart_buffer + (0 * 2048);
-      myImage1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (0 * 2048);
+      myImageAR1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 4:
     {
       bPossibleLoad = 1;
-      myImage0 = fast_cart_buffer + (2 * 2048);
-      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (2 * 2048);
+      myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 5:
     {
       bPossibleLoad = 1;
-      myImage0 = fast_cart_buffer + (1 * 2048);
-      myImage1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (1 * 2048);
+      myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 6:
     {
       bPossibleLoad = 0;
-      myImage0 = fast_cart_buffer + (2 * 2048);
-      myImage1 = fast_cart_buffer + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (2 * 2048);
+      myImageAR1 = fast_cart_buffer + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
 
     case 7:
     {
       bPossibleLoad = 0;
-      myImage0 = fast_cart_buffer + (1 * 2048);
-      myImage1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
-      //myImage1 -= 2048;
+      myImageAR0 = fast_cart_buffer + (1 * 2048);
+      myImageAR1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
+      //myImageAR1 -= 2048;
       break;
     }
   }
@@ -302,20 +300,20 @@ void CartridgeAR::initializeROM(void)
   // Initialize ROM with illegal 6502 opcode that causes a real 6502 to jam
   for(uInt32 i = 0; i < 2048; ++i)
   {
-    myImage[3 * 2048 + i] = 0x02; 
+    myImageAR[3 * 2048 + i] = 0x02; 
   }
 
   // Copy the "dummy" Supercharger BIOS code into the ROM area
   for(uInt32 j = 0; j < size; ++j)
   {
-    myImage[3 * 2048 + j] = dummyROMCode[j];
+    myImageAR[3 * 2048 + j] = dummyROMCode[j];
   }
 
   // Finally set 6502 vectors to point to initial load code at 0xF80A of BIOS
-  myImage[3 * 2048 + 2044] = 0x0A;
-  myImage[3 * 2048 + 2045] = 0xF8;
-  myImage[3 * 2048 + 2046] = 0x0A;
-  myImage[3 * 2048 + 2047] = 0xF8;
+  myImageAR[3 * 2048 + 2044] = 0x0A;
+  myImageAR[3 * 2048 + 2045] = 0xF8;
+  myImageAR[3 * 2048 + 2046] = 0x0A;
+  myImageAR[3 * 2048 + 2047] = 0xF8;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -359,7 +357,7 @@ void CartridgeAR::loadIntoRAM(uInt8 load)
         // Copy page to Supercharger RAM (don't allow a copy into ROM area)
         if(bank < 3)
         {
-            uInt32 *dest = (uInt32 *) (myImage + (bank * 2048) + (page * 256));
+            uInt32 *dest = (uInt32 *) (myImageAR + (bank * 2048) + (page * 256));
             uInt32 *src2 = (uInt32 *) src;
             for (int i=0; i<64; i++)
             {

@@ -1062,12 +1062,12 @@ ITCM_CODE void Thumbulator::execute ( void )
 
                         bool handled = false;
                         // address to test for is + 4 due to pipelining
-                      #define CDF1_SetNote     (0x00000752 + 4)
-                      #define CDF1_ResetWave   (0x00000756 + 4)
-                      #define CDF1_GetWavePtr  (0x0000075a + 4)
-                      #define CDF1_SetWaveSize (0x0000075e + 4)
+                        #define CDF1_SetNote     (0x00000752 + 4)
+                        #define CDF1_ResetWave   (0x00000756 + 4)
+                        #define CDF1_GetWavePtr  (0x0000075a + 4)
+                        #define CDF1_SetWaveSize (0x0000075e + 4)
 
-                      extern uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2);
+                        extern uInt32 CDFCallback(uInt8 function, uInt32 value1, uInt32 value2);
 
                         if      (pc == CDF1_SetNote)
                         {

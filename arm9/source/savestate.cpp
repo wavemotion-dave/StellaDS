@@ -170,7 +170,7 @@ void SaveState(void)
     // StellaDS
     fwrite(fast_cart_buffer,            8*1024,                             1, fp);
     fwrite(sound_buffer,                SOUND_SIZE,                         1, fp);
-    fwrite(&etatEmu,                    sizeof(etatEmu),                    1, fp);
+    fwrite(&emuState,                   sizeof(emuState),                   1, fp);
     fwrite(&bHaltEmulation,             sizeof(bHaltEmulation),             1, fp);
     fwrite(&bScreenRefresh,             sizeof(bScreenRefresh),             1, fp);
     fwrite(&gAtariFrames,               sizeof(gAtariFrames),               1, fp);
@@ -397,7 +397,7 @@ void LoadState(void)
             // StellaDS
             fread(fast_cart_buffer,            8*1024,                             1, fp);
             fread(sound_buffer,                SOUND_SIZE,                         1, fp);
-            fread(&etatEmu,                    sizeof(etatEmu),                    1, fp);
+            fread(&emuState,                   sizeof(emuState),                   1, fp);
             fread(&bHaltEmulation,             sizeof(bHaltEmulation),             1, fp);
             fread(&bScreenRefresh,             sizeof(bScreenRefresh),             1, fp);
             fread(&gAtariFrames,               sizeof(gAtariFrames),               1, fp);
