@@ -64,12 +64,12 @@ uInt8*  myCurrentP0Mask             __attribute__((section(".dtcm")));
 uInt8*  myCurrentP1Mask             __attribute__((section(".dtcm")));
 uInt32* myCurrentPFMask             __attribute__((section(".dtcm")));
 uInt16  ourCollisionTable[256]      __attribute__((section(".dtcm")));
-uInt16  myCollision                 __attribute__((section(".dtcm")));    
-Int16   myPOSP0                     __attribute__((section(".dtcm")));         
-Int16   myPOSP1                     __attribute__((section(".dtcm")));         
-Int16   myPOSM0                     __attribute__((section(".dtcm")));         
-Int16   myPOSM1                     __attribute__((section(".dtcm")));         
-Int16   myPOSBL                     __attribute__((section(".dtcm")));       
+uInt16  myCollision                 __attribute__((section(".dtcm")));
+Int16   myPOSP0                     __attribute__((section(".dtcm")));
+Int16   myPOSP1                     __attribute__((section(".dtcm")));
+Int16   myPOSM0                     __attribute__((section(".dtcm")));
+Int16   myPOSM1                     __attribute__((section(".dtcm")));
+Int16   myPOSBL                     __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkCounter        __attribute__((section(".dtcm")));
 uInt8   myM1CosmicArkCounter        __attribute__((section(".dtcm")));
 uInt8   myCurrentFrame              __attribute__((section(".dtcm")));
@@ -164,15 +164,15 @@ Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 
+Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) =
 {
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
-        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
+        4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
-   
+
 uInt32  color_repeat_table[256]; // __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -210,45 +210,45 @@ Int8 ourCompleteMotionTable[76][16] = {
   { 4,  4,  4,  4,  4,  4,  4,  4,  8,  7,  6,  5,  4,  4,  4,  4}, // HBLANK
   { 5,  5,  5,  5,  5,  5,  5,  5,  8,  7,  6,  5,  5,  5,  5,  5}, // HBLANK
   { 6,  6,  6,  6,  6,  6,  6,  6,  8,  7,  6,  6,  6,  6,  6,  6}, // HBLANK
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0,  0, -1, -2,  0,  0,  0,  0,  0,  0,  0,  0},    
-  { 0,  0,  0,  0,  0, -1, -2, -3,  0,  0,  0,  0,  0,  0,  0,  0},    
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0,  0,  0, -1, -2,  0,  0,  0,  0,  0,  0,  0,  0},
   { 0,  0,  0,  0,  0, -1, -2, -3,  0,  0,  0,  0,  0,  0,  0,  0},
-  { 0,  0,  0,  0, -1, -2, -3, -4,  0,  0,  0,  0,  0,  0,  0,  0}, 
+  { 0,  0,  0,  0,  0, -1, -2, -3,  0,  0,  0,  0,  0,  0,  0,  0},
+  { 0,  0,  0,  0, -1, -2, -3, -4,  0,  0,  0,  0,  0,  0,  0,  0},
   { 0,  0,  0, -1, -2, -3, -4, -5,  0,  0,  0,  0,  0,  0,  0,  0},
   { 0,  0, -1, -2, -3, -4, -5, -6,  0,  0,  0,  0,  0,  0,  0,  0},
   { 0,  0, -1, -2, -3, -4, -5, -6,  0,  0,  0,  0,  0,  0,  0,  0},
@@ -256,7 +256,7 @@ Int8 ourCompleteMotionTable[76][16] = {
   {-1, -2, -3, -4, -5, -6, -7, -8,  0,  0,  0,  0,  0,  0,  0,  0},
   {-2, -3, -4, -5, -6, -7, -8, -9,  0,  0,  0,  0,  0,  0,  0, -1},
   {-2, -3, -4, -5, -6, -7, -8, -9,  0,  0,  0,  0,  0,  0,  0, -1},
-  {-3, -4, -5, -6, -7, -8, -9,-10,  0,  0,  0,  0,  0,  0, -1, -2}, 
+  {-3, -4, -5, -6, -7, -8, -9,-10,  0,  0,  0,  0,  0,  0, -1, -2},
   {-4, -5, -6, -7, -8, -9,-10,-11,  0,  0,  0,  0,  0, -1, -2, -3},
   {-5, -6, -7, -8, -9,-10,-11,-12,  0,  0,  0,  0, -1, -2, -3, -4},
   {-5, -6, -7, -8, -9,-10,-11,-12,  0,  0,  0,  0, -1, -2, -3, -4},
@@ -284,13 +284,13 @@ TIA::TIA()
   // --------------------------------------------------------------------------------------
   // Allocate buffers for two frame buffers - Turns out Video Memory is actually slower
   // since we do a lot of 8-bit reads and the video memory is 16-bits wide. So we handle
-  // our buffers in "slower" memory but it turns out to be a little faster to do it in 
+  // our buffers in "slower" memory but it turns out to be a little faster to do it in
   // main memory and then DMA copy into VRAM.
   // --------------------------------------------------------------------------------------
   memset(videoBuf0, 0x00, sizeof(videoBuf0));
   memset(videoBuf1, 0x00, sizeof(videoBuf1));
-  myCurrentFrameBuffer[0] = videoBuf0; 
-  myCurrentFrameBuffer[1] = videoBuf1; 
+  myCurrentFrameBuffer[0] = videoBuf0;
+  myCurrentFrameBuffer[1] = videoBuf1;
 
   for(uInt16 x = 0; x < 2; ++x)
   {
@@ -333,7 +333,7 @@ TIA::TIA()
   {
     ourDisabledMaskTable[i] = 0;
   }
-      
+
   for (uInt32 i=0; i<256; i += 2)
   {
       color_repeat_table[i]   = (uInt32)(i<<24) | (uInt32)(i<<16) | (uInt32)(i<<8) | (uInt32)i;
@@ -373,23 +373,23 @@ void TIA::reset()
   }
   myCurrentFrame = 0;
 
-  
+
   if (myCartInfo.special == SPEC_MELTDOWN)
   {
-      ourPokeDelayTable[NUSIZ0] = 11; 
-      ourPokeDelayTable[NUSIZ1] = 11; 
+      ourPokeDelayTable[NUSIZ0] = 11;
+      ourPokeDelayTable[NUSIZ1] = 11;
   }
   else if (myCartInfo.special == SPEC_BUMPBASH)
   {
-      ourPokeDelayTable[NUSIZ0] = 6; 
-      ourPokeDelayTable[NUSIZ1] = 6; 
+      ourPokeDelayTable[NUSIZ0] = 6;
+      ourPokeDelayTable[NUSIZ1] = 6;
   }
   else
   {
-      ourPokeDelayTable[NUSIZ0] = 8; 
-      ourPokeDelayTable[NUSIZ1] = 8; 
+      ourPokeDelayTable[NUSIZ0] = 8;
+      ourPokeDelayTable[NUSIZ1] = 8;
   }
-    
+
 
   // Reset pixel pointer and drawing flag
   myFramePointer = myCurrentFrameBuffer[0];
@@ -407,7 +407,7 @@ void TIA::reset()
   myClockAtLastUpdate = myClockWhenFrameStarted;
   myClocksToEndOfScanLine = 228;
   myVSYNCFinishClock = 0x7FFFFFFF;
-    
+
   // Currently no objects are enabled
   myEnabledObjects = 0;
 
@@ -417,10 +417,10 @@ void TIA::reset()
   myNUSIZ0 = 0;
   myNUSIZ1 = 0;
   myPlayfieldPriorityAndScore = 0;
-  myColor[MYCOLUP0] = 0;  
-  myColor[MYCOLUP1] = 0;  
-  myColor[MYCOLUPF] = 0;  
-  myColor[MYCOLUBK] = 0;  
+  myColor[MYCOLUP0] = 0;
+  myColor[MYCOLUP1] = 0;
+  myColor[MYCOLUPF] = 0;
+  myColor[MYCOLUBK] = 0;
   myCTRLPF = 0;
   myREFP0 = false;
   myREFP1 = false;
@@ -496,7 +496,7 @@ void TIA::systemCyclesReset()
   // This one just goes back to zero...
   lastTiaPokeCycles = 0;
 }
- 
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void TIA::install(System& system)
 {
@@ -528,7 +528,7 @@ ITCM_CODE void TIA::update()
   // We have processed another frame... used for true FPS indication
   gAtariFrames++;
   gTotalAtariFrames++;
-    
+
   // Remember the number of clocks which have passed on the current scanline
   // so that we can adjust the frame's starting clock by this amount.  This
   // is necessary since some games position objects during VSYNC and the
@@ -550,10 +550,10 @@ ITCM_CODE void TIA::update()
   myCurrentFrame = (myCurrentFrame + 1) % 2;
   myFramePointer = myCurrentFrameBuffer[myCurrentFrame];
   myDSFramePointer = BG_GFX;
-    
+
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
-  
+
   // If the cart requires frame skipping (mostly for Turbo Arcade and Draconian)
   // then we set the skip flag for every other pair of frames
   if (myCartInfo.thumbOptimize == 3)
@@ -563,7 +563,7 @@ ITCM_CODE void TIA::update()
         bFrameSkipCDFJ = ((gTotalAtariFrames & 0x02) ? 1:0);    // Heavy Frameskip (2 on, 2 off)
       else
         bFrameSkipCDFJ = ((gTotalAtariFrames & 0x03) ? 0:1);    // Moderate Frameskip (3 on, 1 off)
-  } 
+  }
   else bFrameSkipCDFJ = 0;
 
   // --------------------------------------------------------------------
@@ -609,15 +609,15 @@ const uInt32* TIA::palette() const
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 TIA::width() const 
+uInt32 TIA::width() const
 {
-  return 160; 
+  return 160;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt32 TIA::height() const 
+uInt32 TIA::height() const
 {
-  return 210; 
+  return 210;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -657,7 +657,7 @@ void TIA::computeBallMaskTable()
     {
       for(uInt32 x = 0; x < 320; ++x)
       {
-        ourBallMaskTable[align][size][x] = 
+        ourBallMaskTable[align][size][x] =
             ourBallMaskTable[0][size][(x + 320 - align) % 320];
       }
     }
@@ -668,7 +668,7 @@ void TIA::computeBallMaskTable()
 void TIA::computeCollisionTable()
 {
   for(uInt8 i = 0; i < 64; ++i)
-  { 
+  {
     ourCollisionTable[i] = 0;
 
     if((i & myM0Bit) && (i & myP1Bit))    // M0-P1
@@ -716,9 +716,9 @@ void TIA::computeCollisionTable()
     if((i & myM0Bit) && (i & myM1Bit))    // M0-M1
       ourCollisionTable[i] |= 0x4000;
   }
-    
+
   for(int i = 64; i < 256; i++)
-  { 
+  {
         ourCollisionTable[i] = ourCollisionTable[i%64];
   }
 }
@@ -795,7 +795,7 @@ void TIA::computeMissleMaskTable()
 
       // Copy data into wrap-around area
       for(x = 0; x < 160; ++x)
-        ourMissleMaskTable[0][number][size][x + 160] = 
+        ourMissleMaskTable[0][number][size][x + 160] =
           ourMissleMaskTable[0][number][size][x];
     }
   }
@@ -809,7 +809,7 @@ void TIA::computeMissleMaskTable()
       {
         for(x = 0; x < 320; ++x)
         {
-          ourMissleMaskTable[align][number][size][x] = 
+          ourMissleMaskTable[align][number][size][x] =
             ourMissleMaskTable[0][number][size][(x + 320 - align) % 320];
         }
       }
@@ -895,11 +895,11 @@ void TIA::computePlayerMaskTable()
             ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> ((x - 1)/4);
         }
       }
-  
+
       // Copy data into wrap-around area
       for(x = 0; x < 160; ++x)
       {
-        ourPlayerMaskTable[0][enable][mode][x + 160] = 
+        ourPlayerMaskTable[0][enable][mode][x + 160] =
             ourPlayerMaskTable[0][enable][mode][x];
       }
     }
@@ -1066,7 +1066,7 @@ void TIA::computePlayerReflectTable()
     }
 
     ourPlayerReflectTable[i] = r;
-  } 
+  }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1089,13 +1089,13 @@ void TIA::computePlayfieldMaskTable()
       ourPlayfieldTable[0][x] = tmp;
       ourPlayfieldTable[1][x] = tmp;
     }
-    else if(x < 80) 
+    else if(x < 80)
     {
       int tmp = 0x01000 << ((x - 48) / 4);
       ourPlayfieldTable[0][x] = tmp;
       ourPlayfieldTable[1][x] = tmp;
     }
-    else if(x < 96) 
+    else if(x < 96)
     {
       ourPlayfieldTable[0][x] = 0x00001 << ((x - 80) / 4);
     }
@@ -1103,7 +1103,7 @@ void TIA::computePlayfieldMaskTable()
     {
       ourPlayfieldTable[0][x] = 0x00800 >> ((x - 96) / 4);
     }
-    else if(x < 160) 
+    else if(x < 160)
     {
       ourPlayfieldTable[0][x] = 0x01000 << ((x - 128) / 4);
     }
@@ -1112,19 +1112,19 @@ void TIA::computePlayfieldMaskTable()
   // Compute playfield mask table for reflected mode
   for(x = 80; x < 160; ++x)
   {
-     if(x < 112) 
+     if(x < 112)
       ourPlayfieldTable[1][x] = 0x80000 >> ((x - 80) / 4);
-    else if(x < 144) 
+    else if(x < 144)
       ourPlayfieldTable[1][x] = 0x00010 << ((x - 112) / 4);
-    else if(x < 160) 
+    else if(x < 160)
       ourPlayfieldTable[1][x] = 0x00008 >> ((x - 144) / 4);
   }
 }
 
 // -----------------------------------------------------------------------
 // Magic! This helps speedup rendering as it assumes the last color
-// is likely to be the next color drawn - and corrects if that's 
-// not true. We keep track of the last enabled bits and if those 
+// is likely to be the next color drawn - and corrects if that's
+// not true. We keep track of the last enabled bits and if those
 // bits have not changed, there is no reason to update the myCollision
 // register and we can just blast out the last known color.
 // -----------------------------------------------------------------------
@@ -1148,14 +1148,14 @@ void TIA::computePlayfieldMaskTable()
                   }  \
                   *myFramePointer = last_color;  \
                   last_enabled = enabled;  \
-              } 
+              }
 
 // -----------------------------------------------------------------------
 // We spent a LOT of time in here... so we've done our best to keep this
 // as streamlined as possible. We could reduce this to about 10 lines of
 // code if source-code / memory was at a premium. But it's not - instead
-// we are after speed of execution and are willing to trade off these 
-// large if-then-else blocks to help with code execution to get as many 
+// we are after speed of execution and are willing to trade off these
+// large if-then-else blocks to help with code execution to get as many
 // games running at full frame rate as possible...
 // -----------------------------------------------------------------------
 void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
@@ -1163,47 +1163,47 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
     uInt8 last_color=0;
     uInt8 last_enabled=255;
     uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
-    
+
     switch (myEnabledObjects)
     {
     #include "TIA.inc"
     }
-    myFramePointer = ending;    
+    myFramePointer = ending;
 }
 
 // -----------------------------------------------------------------------
 // For some of the DPC+ and many of the CDF/CDFJ we don't need to handle
 // any special color or collisions so we can do this the fast way..
-// Note that we are purposely ignoring the ScoreBit handling here which 
+// Note that we are purposely ignoring the ScoreBit handling here which
 // provides a bit more speed and nobody is using that for the ARM-Assisted
 // games that also don't provide any collision usage. It's not a safe
 // way to do this... but nothing has broken it and we need the speed.
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
-#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = (enabled ? myColor[myPriorityEncoder[0][enabled]] : myColor[0]); 
+#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = (enabled ? myColor[myPriorityEncoder[0][enabled]] : myColor[0]);
 
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
     uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
     #define COLLISIONS_OFF
-    
+
     switch (myEnabledObjects)
     {
     #include "TIA.inc"
     }
-    myFramePointer = ending;    
+    myFramePointer = ending;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void TIA::updateFrame(Int32 clock)
 {
   // -------------------------------------------------------------------------------------
-  // Games like Elevator Agent are highly demanding and require us to skip frames 
+  // Games like Elevator Agent are highly demanding and require us to skip frames
   // to even have a chance of keeping up... Check that here and render 2 frames,
   // then skip 2 frames, etc. It causes minor flicker but we're desperate!
   // -------------------------------------------------------------------------------------
   if (bFrameSkipCDFJ) return;
-    
+
   // ---------------------------------------------------------------
   // See if we're in the nondisplayable portion of the screen or if
   // we've already updated this portion of the screen
@@ -1224,7 +1224,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
   {
     // Compute the number of clocks we're going to update
     Int32 clocksToUpdate = clock - myClockAtLastUpdate;
-      
+
     // Remember how many clocks we are from the left side of the screen
     Int32 clocksFromStartOfScanLine = 228 - myClocksToEndOfScanLine;
 
@@ -1256,7 +1256,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       clocksFromStartOfScanLine += tmp;
       clocksToUpdate -= tmp;
     }
-      
+
 
     // Remember frame pointer in case HMOVE blanks need to be handled
     uInt8* oldFramePointer = myFramePointer;
@@ -1268,7 +1268,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
     // ----------------------------------------------------------------
 
     if (clocksToUpdate)
-    {   
+    {
         // If we are updating, make sure the Enabled Objects register is up to date...
         if(myPF != 0)
           myEnabledObjects |= myPFBit;
@@ -1279,7 +1279,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         if(myVBLANK & 0x02)
         {
             // -------------------------------------------------------------------------------------------
-            // Some games present a fairly static screen from frame to frame and so there is really no 
+            // Some games present a fairly static screen from frame to frame and so there is really no
             // reason to blank the memory which can be time consuming... so check the flag for the cart
             // currently being emulated...
             // -------------------------------------------------------------------------------------------
@@ -1290,7 +1290,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
             myFramePointer += clocksToUpdate;
         }
         else if (myEnabledObjects == 0x00)  // Background handling...
-        {  
+        {
             memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
             myFramePointer += clocksToUpdate;
         }
@@ -1315,7 +1315,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                        }
                        myFramePointer = ending;
                 }
-                else 
+                else
                 {
                     handleObjectsNoCollisions(clocksToUpdate, hpos);
                 }
@@ -1341,29 +1341,29 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
             }
         }
     }
-      
+
     // ------------------------------------------------------------------------
     // If we are mid-scanline... we record the background color for blending
     // ------------------------------------------------------------------------
     if (myClocksToEndOfScanLine < 190)
     {
-        myBlendBk = myColor[MYCOLUBK];  
+        myBlendBk = myColor[MYCOLUBK];
     }
-    else  
+    else
     // See if we're at the end of a scanline
     if(myClocksToEndOfScanLine == 228)
     {
-      // Yes, so set PF mask based on current CTRLPF reflection state 
+      // Yes, so set PF mask based on current CTRLPF reflection state
       myCurrentPFMask = ourPlayfieldTable[myCTRLPF & 0x01];
 
       // TODO: These should be reset right after the first copy of the player
-      // has passed.  However, for now we'll just reset at the end of the 
+      // has passed.  However, for now we'll just reset at the end of the
       // scanline since the other way would be to slow (01/21/99).
       myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
           [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
           [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-        
+
       // Handle the "Cosmic Ark" TIA bug if it's enabled
       if(myM0CosmicArkMotionEnabled)
       {
@@ -1387,7 +1387,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         }
         else if(myM0CosmicArkCounter == 2)
         {
-          // Missle is disabled on this line 
+          // Missle is disabled on this line
           myCurrentM0Mask = &ourDisabledMaskTable[0];
         }
         else
@@ -1396,7 +1396,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
               [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
         }
       }
-        
+
       // Handle the "Cosmic Ark" TIA bug if it's enabled
       if(myM1CosmicArkMotionEnabled)
       {
@@ -1420,7 +1420,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         }
         else if(myM1CosmicArkCounter == 2)
         {
-          // Missle is disabled on this line 
+          // Missle is disabled on this line
           myCurrentM1Mask = &ourDisabledMaskTable[0];
         }
         else
@@ -1428,8 +1428,8 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
               [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
         }
-      }        
-        
+      }
+
       // --------------------------------------------------------------------------
       // And now we must render this onto the DS screen... but first we check
       // if the cart info says we are any sort of flicker-free or flicker-reduce
@@ -1448,12 +1448,12 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                   for (int i=0; i<40; i++)
                   {
                     if (*fp1 == myBlendBk) *fp_blend++ = *fp2;          // mid-screen background - use previous frame
-                    else *fp_blend++ = *fp1;                            // Use current frame 
+                    else *fp_blend++ = *fp1;                            // Use current frame
                     fp1++;fp2++;
                   }
               }
               break;
-                  
+
               case MODE_BLACK:
               {
                   int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
@@ -1462,12 +1462,12 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
                   for (int i=0; i<40; i++)
                   {
                     if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
-                    else *fp_blend++ = *fp1;                            // Use current frame 
+                    else *fp_blend++ = *fp1;                            // Use current frame
                     fp1++;fp2++;
                   }
               }
               break;
-                  
+
               default:                                                  // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
               {
                   // ----------------------------------------------------------------------
@@ -1495,11 +1495,11 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
           // By using slightly "stale" data, we ensure that we are outputting the right data and not something previously cached.
           // DMA and ARM9 is tricky stuff... I'll admit I don't fully understand it and there is some voodoo... but this works.
           // ------------------------------------------------------------------------------------------------------------------------
-          dmaCopyWordsAsynch(3, myFramePointer+160, myDSFramePointer, 160);   
+          dmaCopyWordsAsynch(3, myFramePointer+160, myDSFramePointer, 160);
       }
-      myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes      
+      myDSFramePointer += 128;  // 16-bit address... so this is 256 bytes
     }
-  } 
+  }
   while(myClockAtLastUpdate < clock);
 }
 
@@ -1510,7 +1510,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
 ITCM_CODE uInt8 TIA::peek_minimal(uInt8 addr)
 {
     addr &= 0x0F;
-    
+
     switch (addr)
     {
     case 0x08:    // INPT0
@@ -1518,7 +1518,7 @@ ITCM_CODE uInt8 TIA::peek_minimal(uInt8 addr)
 
     case 0x09:    // INPT1
       return (myConsole->controller(Controller::Left).read(Controller::Five) == Controller::minimumResistance) ? 0x80 : 0x00;
-            
+
     case 0x0C:    // INPT4
       return myConsole->controller(Controller::Left).read(Controller::Six) ? 0x80 : 0x00;
 
@@ -1534,16 +1534,16 @@ ITCM_CODE uInt8 TIA::peek_minimal(uInt8 addr)
 ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 {
     // ----------------------------------------------------------------
-    // The undriven bits of the TIA are usually what's last on the bus 
-    // so we do a poor-man's emulation of that by setting the noise to 
+    // The undriven bits of the TIA are usually what's last on the bus
+    // so we do a poor-man's emulation of that by setting the noise to
     // what we last read/wrote on the data bus. It's not perfect.
     // For Conquest of Mars, this will always be set to 0x02 to avoid
     // a collision detect "bug" in the game (works on real HW)
     // ----------------------------------------------------------------
     uInt8 noise = (myDataBusState & 0x3F);
-    
+
     addr &= 0x000F;
-    
+
     if (addr < 8)
     {
         // Update frame to current color clock before we look at anything!
@@ -1688,7 +1688,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
           return noise;
         }
       }
-    }          
+    }
 
     case 0x0C:    // INPT4
       return myConsole->controller(Controller::Left).read(Controller::Six) ? (0x80 | noise) : noise;
@@ -1722,16 +1722,16 @@ uInt8 player_reset_pos[] =
  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156,
-157, 158, 159,   0,   1,   2,   3,   4 
+157, 158, 159,   0,   1,   2,   3,   4
 };
 
 
 ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 {
-  Int32 clock; 
+  Int32 clock;
   Int32 delta_clock;
   addr = addr & 0x003f;
-    
+
   // Update frame to current CPU cycle before we make any changes!
   if (poke_needs_update_display[addr])
   {
@@ -1739,8 +1739,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           if (addr > 0x02) return;
       }
-      
-      clock = (3*gSystemCycles); 
+
+      clock = (3*gSystemCycles);
       delta_clock = (clock - myClockWhenFrameStarted);
       Int8 delay = ourPokeDelayTable[addr];
       // See if this is a poke to a PF register
@@ -1752,7 +1752,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
   }
   else
   {
-      clock = 0; 
+      clock = 0;
       delta_clock = 0;
   }
 
@@ -1764,7 +1764,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           Tia_process();
       }
   }
-    
+
   switch(addr)
   {
     case 0x00:    // Vertical sync set-clear
@@ -1773,8 +1773,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
       if(myVSYNC & 0x02)
       {
-        // Indicate when VSYNC should be finished.  This should really 
-        // be 3 * 228 according to Atari's documentation, however, some 
+        // Indicate when VSYNC should be finished.  This should really
+        // be 3 * 228 according to Atari's documentation, however, some
         // games don't supply the full 3 scanlines of VSYNC.
         myVSYNCFinishClock = clock + 228;
       }
@@ -1897,7 +1897,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           myCTRLPF = value;
 
           // The playfield priority and score bits from the control register
-          // are accessed when the frame is being drawn.  We precompute the 
+          // are accessed when the frame is being drawn.  We precompute the
           // necessary value here so we can save time while drawing.
           myPlayfieldPriorityAndScore = ((myCTRLPF & 0x06) << 5);
 
@@ -1905,7 +1905,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
               [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
         }
 
-        // Update the playfield mask based on reflection state if 
+        // Update the playfield mask based on reflection state if
         // we're still on the left hand side of the playfield
         if(((delta_clock) % 228) < (HBLANK + 79))
         {
@@ -1970,7 +1970,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           newx = 11;
       }
-        
+
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ0 & 7][myPOSP0][newx];
 
@@ -2014,7 +2014,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228;
       uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
-      
+
       if (hpos == 69)
       {
           // TODO: Remove the following special hack for Space Rocks
@@ -2022,7 +2022,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           {
               newx = 11;
           }
-          
+
           // TODO: Remove the following special hack for Rabbit Transit
           // and Dragon Stomper (Excalibur) by StarPath/Arcadia and Draconian
           else if ((clock - myLastHMOVEClock) == (20 * 3))
@@ -2076,20 +2076,20 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       myPOSM0 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
 
       // TODO: Remove the following special hack for Dolphin by
-      // figuring out what really happens when Reset Missle 
+      // figuring out what really happens when Reset Missle
       // occurs 20 cycles after an HMOVE (04/13/02).
       if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
       {
         myPOSM0 = 8;
       }
       // TODO: Remove the following special hack for Solaris by
-      // figuring out what really happens when Reset Missle 
+      // figuring out what really happens when Reset Missle
       // occurs 9 cycles after an HMOVE (04/11/08).
       else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
       {
         myPOSM0 = 8;
       }
- 
+
       myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
           [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
       break;
@@ -2101,13 +2101,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       myPOSM1 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
 
       // TODO: Remove the following special hack for Pitfall II by
-      // figuring out what really happens when Reset Missle 
+      // figuring out what really happens when Reset Missle
       // occurs 3 cycles after an HMOVE (04/13/02).
       if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
       {
         myPOSM1 = 3;
       }
- 
+
       myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
           [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
       break;
@@ -2117,7 +2117,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228 ;
       myPOSBL = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
-      
+
       // -----------------------------------------------------------------------------------------
       // If the reset comes "too soon" after the last HMove, the TIA does some strange things.
       // Modern versions of Stella are cycle accurate and handle this perfectly - but here
@@ -2137,49 +2137,49 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
               myPOSBL = 7;
           }
           // TODO: Remove the following special hack for Escape from the
-          // Mindmaster by figuring out what really happens when Reset Ball 
+          // Mindmaster by figuring out what really happens when Reset Ball
           // occurs 15 cycles after an HMOVE (04/11/08).
           else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
           {
             myPOSBL = 10;
-          } 
+          }
           // TODO: Remove the following special hack for Decathlon by
-          // figuring out what really happens when Reset Ball 
+          // figuring out what really happens when Reset Ball
           // occurs 3 cycles after an HMOVE (04/13/02).
           else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
           {
             myPOSBL = 3;
-          } 
+          }
           // TODO: Remove the following special hack for Robot Tank by
-          // figuring out what really happens when Reset Ball 
+          // figuring out what really happens when Reset Ball
           // occurs 7 cycles after an HMOVE (04/13/02).
           else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
           {
             myPOSBL = 6;
-          } 
+          }
           // TODO: Remove the following special hack for Hole Hunter by
-          // figuring out what really happens when Reset Ball 
+          // figuring out what really happens when Reset Ball
           // occurs 6 cycles after an HMOVE (04/13/02).
           else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
           {
             myPOSBL = 5;
           }
           // TODO: Remove the following special hack for Swoops! by
-          // figuring out what really happens when Reset Ball 
+          // figuring out what really happens when Reset Ball
           // occurs 9 cycles after an HMOVE (04/11/08).
           else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
           {
             myPOSBL = 7;
           }
           // TODO: Remove the following special hack for Solaris by
-          // figuring out what really happens when Reset Ball 
+          // figuring out what really happens when Reset Ball
           // occurs 12 cycles after an HMOVE (04/11/08).
           else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
           {
             myPOSBL = 8;
           }
       }
-       
+
       myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
           [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
       break;
@@ -2193,16 +2193,16 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           AUDC[1] = value & 0x0f;
           Update_tia_sound_1();
           break;
-          
+
     case 0x17:    // Audio frequency 0
           AUDF[0] = value & 0x1f;
           Update_tia_sound_0();
-          break;          
+          break;
     case 0x18:    // Audio frequency 1
           AUDF[1] = value & 0x1f;
           Update_tia_sound_1();
           break;
-          
+
     case 0x19:    // Audio volume 0
           AUDV[0] = (value & 0x0f) << 3;
           Update_tia_sound_0();
@@ -2212,7 +2212,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           AUDV[1] = (value & 0x0f) << 3;
           Update_tia_sound_1();
           break;
-  
+
     case 0x1B: // Graphics Player 0
     {
       // Set player 0 graphics
@@ -2223,11 +2223,11 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
       // Get the "current" data for GRP0 base on delay register and reflect
       uInt8 grp0 = myVDELP0 ? myDGRP0 : myGRP0;
-      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0; 
+      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0;
 
       // Get the "current" data for GRP1 base on delay register and reflect
       uInt8 grp1 = myVDELP1 ? myDGRP1 : myGRP1;
-      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1; 
+      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1;
 
       // Set enabled object bits
       if(myCurrentGRP0 != 0)
@@ -2255,11 +2255,11 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
       // Get the "current" data for GRP0 base on delay register
       uInt8 grp0 = myVDELP0 ? myDGRP0 : myGRP0;
-      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0; 
+      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0;
 
       // Get the "current" data for GRP1 base on delay register
       uInt8 grp1 = myVDELP1 ? myDGRP1 : myGRP1;
-      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1; 
+      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1;
 
       // Set enabled object bits
       if(myCurrentGRP0 != 0)
@@ -2277,7 +2277,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       else
         myEnabledObjects &= ~myBLBit;
       break;
-    }      
+    }
 
     case 0x1D:    // Enable Missle 0 graphics
     {
@@ -2328,7 +2328,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     case 0x22:    // Horizontal Motion Missle 0
     {
       Int8 tmp = value >> 4;
-       
+
       // Should we enabled TIA M0 "bug" used for stars in Cosmic Ark?
       if((clock == (myLastHMOVEClock + 21 * 3)) && (myHMM0 == 7) && (tmp == 6))
       {
@@ -2343,7 +2343,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     case 0x23:    // Horizontal Motion Missle 1
     {
       Int8 tmp = value >> 4;
-       
+
       // Should we enabled TIA M1 "bug" used for stars in Stay Frosty?
       if((clock == (myLastHMOVEClock + 21 * 3)) && (myHMM1 == 7) && (tmp == 6))
       {
@@ -2366,7 +2366,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       myVDELP0 = value & 0x01;
 
       uInt8 grp0 = myVDELP0 ? myDGRP0 : myGRP0;
-      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0; 
+      myCurrentGRP0 = myREFP0 ? ourPlayerReflectTable[grp0] : grp0;
 
       if(myCurrentGRP0 != 0)
         myEnabledObjects |= myP0Bit;
@@ -2380,7 +2380,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       myVDELP1 = value & 0x01;
 
       uInt8 grp1 = myVDELP1 ? myDGRP1 : myGRP1;
-      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1; 
+      myCurrentGRP1 = myREFP1 ? ourPlayerReflectTable[grp1] : grp1;
 
       if(myCurrentGRP1 != 0)
         myEnabledObjects |= myP1Bit;
@@ -2466,7 +2466,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           myHMOVEBlankEnabled = ourHMOVEBlankEnableCycles[x];
       }
-      
+
       Int8 motion = ourCompleteMotionTable[x][myHMP0];
       if (motion != 0)
       {
@@ -2486,7 +2486,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
               [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
-      
+
       motion = ourCompleteMotionTable[x][myHMM0];
       if (motion != 0)
       {
@@ -2498,7 +2498,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           // Disable TIA M0 "bug" used for stars in Cosmic ark
           myM0CosmicArkMotionEnabled = false;
       }
-        
+
       motion = ourCompleteMotionTable[x][myHMM1];
       if (motion != 0)
       {
@@ -2508,7 +2508,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
               [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
       }
-        
+
       motion = ourCompleteMotionTable[x][myHMBL];
       if (motion != 0)
       {
@@ -2570,7 +2570,7 @@ uInt8 TIA::ourPlayerMaskTable[4][2][8][320];
 Int8 TIA::ourPlayerPositionResetWhenTable[8][160][160];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-const uInt32 TIA::ourNTSCPalette[256] = 
+const uInt32 TIA::ourNTSCPalette[256] =
 {
   0x000000, 0, 0x4a4a4a, 0, 0x6f6f6f, 0, 0x8e8e8e, 0,
   0xaaaaaa, 0, 0xc0c0c0, 0, 0xd6d6d6, 0, 0xececec, 0,
@@ -2716,135 +2716,135 @@ const uInt32 TIA::ourPALPaletteZ26[256] = {
 
 const uInt32 TIA::ourNTSCPaletteDS[256] = {
   0x000000, 0x000000, 0x393939, 0x000000,           // 0x
-  0x797979, 0x000000, 0xababab, 0x000000, 
-  0xcdcdcd, 0x000000, 0xe6e6e6, 0x000000, 
-  0xf2f2f2, 0x000000, 0xffffff, 0x000000, 
+  0x797979, 0x000000, 0xababab, 0x000000,
+  0xcdcdcd, 0x000000, 0xe6e6e6, 0x000000,
+  0xf2f2f2, 0x000000, 0xffffff, 0x000000,
   0x391701, 0x000000, 0x833008, 0x000000,           // 1x
-  0xc85f24, 0x000000, 0xff911d, 0x000000, 
-  0xffc51d, 0x000000, 0xffd84c, 0x000000, 
-  0xfff456, 0x000000, 0xffff98, 0x000000, 
+  0xc85f24, 0x000000, 0xff911d, 0x000000,
+  0xffc51d, 0x000000, 0xffd84c, 0x000000,
+  0xfff456, 0x000000, 0xffff98, 0x000000,
   0x451904, 0x000000, 0x9f241e, 0x000000,           // 2x
-  0xc85122, 0x000000, 0xff811e, 0x000000, 
-  0xff982c, 0x000000, 0xffc545, 0x000000, 
-  0xffc66d, 0x000000, 0xffe4a1, 0x000000, 
+  0xc85122, 0x000000, 0xff811e, 0x000000,
+  0xff982c, 0x000000, 0xffc545, 0x000000,
+  0xffc66d, 0x000000, 0xffe4a1, 0x000000,
   0x4a1704, 0x000000, 0xb21d17, 0x000000,           // 3x
-  0xdf251c, 0x000000, 0xfa5255, 0x000000, 
-  0xff706e, 0x000000, 0xff8f8f, 0x000000, 
-  0xffabad, 0x000000, 0xffc7ce, 0x000000, 
+  0xdf251c, 0x000000, 0xfa5255, 0x000000,
+  0xff706e, 0x000000, 0xff8f8f, 0x000000,
+  0xffabad, 0x000000, 0xffc7ce, 0x000000,
   0x940000, 0x000000, 0xa71a1a, 0x000000,           // 4x
-  0xb83232, 0x000000, 0xc84848, 0x000000,           
-  0xd65c5c, 0x000000, 0xe46f6f, 0x000000, 
+  0xb83232, 0x000000, 0xc84848, 0x000000,
+  0xd65c5c, 0x000000, 0xe46f6f, 0x000000,
   0xf08080, 0x000000, 0xfc9090, 0x000000,
   0x280479, 0x000000, 0x590f90, 0x000000,           // 5x
-  0x8839aa, 0x000000, 0xc04adc, 0x000000, 
-  0xe05eff, 0x000000, 0xf27cff, 0x000000, 
-  0xff98ff, 0x000000, 0xfeabff, 0x000000, 
+  0x8839aa, 0x000000, 0xc04adc, 0x000000,
+  0xe05eff, 0x000000, 0xf27cff, 0x000000,
+  0xff98ff, 0x000000, 0xfeabff, 0x000000,
   0x35088a, 0x000000, 0x500cd0, 0x000000,           // 6x
-  0x7945d0, 0x000000, 0xa251d9, 0x000000, 
-  0xbe60ff, 0x000000, 0xcc77ff, 0x000000, 
-  0xd790ff, 0x000000, 0xdfaaff, 0x000000, 
+  0x7945d0, 0x000000, 0xa251d9, 0x000000,
+  0xbe60ff, 0x000000, 0xcc77ff, 0x000000,
+  0xd790ff, 0x000000, 0xdfaaff, 0x000000,
   0x051e81, 0x000000, 0x082fca, 0x000000,           // 7x
-  0x444cde, 0x000000, 0x5a68ff, 0x000000, 
-  0x7183ff, 0x000000, 0x90a0ff, 0x000000, 
-  0x9fb2ff, 0x000000, 0xc0cbff, 0x000000, 
+  0x444cde, 0x000000, 0x5a68ff, 0x000000,
+  0x7183ff, 0x000000, 0x90a0ff, 0x000000,
+  0x9fb2ff, 0x000000, 0xc0cbff, 0x000000,
   0x0c048b, 0x000000, 0x382db5, 0x000000,           // 8x
-  0x584fda, 0x000000, 0x6b64ff, 0x000000, 
-  0x8a84ff, 0x000000, 0x9998ff, 0x000000, 
-  0xb1aeff, 0x000000, 0xc0c2ff, 0x000000, 
+  0x584fda, 0x000000, 0x6b64ff, 0x000000,
+  0x8a84ff, 0x000000, 0x9998ff, 0x000000,
+  0xb1aeff, 0x000000, 0xc0c2ff, 0x000000,
   0x1d295a, 0x000000, 0x1d4892, 0x000000,           // 9x
-  0x1c71c6, 0x000000, 0x489bd9, 0x000000, 
-  0x55b6ff, 0x000000, 0x8cd8ff, 0x000000, 
-  0x9bdfff, 0x000000, 0xc3e9ff, 0x000000, 
+  0x1c71c6, 0x000000, 0x489bd9, 0x000000,
+  0x55b6ff, 0x000000, 0x8cd8ff, 0x000000,
+  0x9bdfff, 0x000000, 0xc3e9ff, 0x000000,
   0x2f4302, 0x000000, 0x446103, 0x000000,           // Ax
-  0x3e9421, 0x000000, 0x57ab3b, 0x000000, 
-  0x61d070, 0x000000, 0x72f584, 0x000000, 
-  0x87ff97, 0x000000, 0xadffb6, 0x000000, 
+  0x3e9421, 0x000000, 0x57ab3b, 0x000000,
+  0x61d070, 0x000000, 0x72f584, 0x000000,
+  0x87ff97, 0x000000, 0xadffb6, 0x000000,
   0x0a4108, 0x000000, 0x10680d, 0x000000,           // Bx
-  0x169212, 0x000000, 0x1cb917, 0x000000, 
-  0x21d91b, 0x000000, 0x6ef040, 0x000000, 
-  0x83ff5b, 0x000000, 0xb2ff9a, 0x000000, 
+  0x169212, 0x000000, 0x1cb917, 0x000000,
+  0x21d91b, 0x000000, 0x6ef040, 0x000000,
+  0x83ff5b, 0x000000, 0xb2ff9a, 0x000000,
   0x04410b, 0x000000, 0x066611, 0x000000,           // Cx
-  0x088817, 0x000000, 0x0baf1d, 0x000000, 
-  0x86d922, 0x000000, 0x99f927, 0x000000, 
-  0xb7ff5b, 0x000000, 0xdcff81, 0x000000, 
+  0x088817, 0x000000, 0x0baf1d, 0x000000,
+  0x86d922, 0x000000, 0x99f927, 0x000000,
+  0xb7ff5b, 0x000000, 0xdcff81, 0x000000,
   0x02350f, 0x000000, 0x0c4a1c, 0x000000,           // Dx
-  0x4f7420, 0x000000, 0x649228, 0x000000, 
-  0xa1b034, 0x000000, 0xb2d241, 0x000000, 
-  0xd6e149, 0x000000, 0xf2ff53, 0x000000, 
+  0x4f7420, 0x000000, 0x649228, 0x000000,
+  0xa1b034, 0x000000, 0xb2d241, 0x000000,
+  0xd6e149, 0x000000, 0xf2ff53, 0x000000,
   0x263001, 0x000000, 0x234005, 0x000000,           // Ex
-  0x806931, 0x000000, 0xaf993a, 0x000000, 
-  0xd5b543, 0x000000, 0xe1cb38, 0x000000, 
-  0xe3e534, 0x000000, 0xfbff7d, 0x000000, 
+  0x806931, 0x000000, 0xaf993a, 0x000000,
+  0xd5b543, 0x000000, 0xe1cb38, 0x000000,
+  0xe3e534, 0x000000, 0xfbff7d, 0x000000,
   0x401a02, 0x000000, 0x702408, 0x000000,           // Fx
-  0xab511f, 0x000000, 0xbf7730, 0x000000, 
-  0xe19344, 0x000000, 0xf9ad58, 0x000000, 
+  0xab511f, 0x000000, 0xbf7730, 0x000000,
+  0xe19344, 0x000000, 0xf9ad58, 0x000000,
   0xffc160, 0x000000, 0xffcb83, 0x000000
 };
-    
+
 const uInt32 TIA::ourPALPaletteDS[256] = {
-  0x000000, 0x000000, 0x242424, 0x000000, 
-  0x484848, 0x000000, 0x6d6d6d, 0x000000, 
-  0x919191, 0x000000, 0xb6b6b6, 0x000000, 
-  0xdadada, 0x000000, 0xffffff, 0x000000, 
-  0x000000, 0x000000, 0x242424, 0x000000, 
-  0x484848, 0x000000, 0x6d6d6d, 0x000000, 
-  0x919191, 0x000000, 0xb6b6b6, 0x000000, 
-  0xdadada, 0x000000, 0xffffff, 0x000000, 
-  0x4a3700, 0x000000, 0x705813, 0x000000, 
-  0x8c732a, 0x000000, 0xa68d46, 0x000000, 
-  0xbea767, 0x000000, 0xd4c18b, 0x000000, 
-  0xeadcb3, 0x000000, 0xfff6de, 0x000000, 
-  0x284a00, 0x000000, 0x44700f, 0x000000, 
-  0x5c8c21, 0x000000, 0x74a638, 0x000000, 
-  0x8cbe51, 0x000000, 0xa6d46e, 0x000000, 
-  0xc0ea8e, 0x000000, 0xdbffb0, 0x000000, 
-  0x4a1300, 0x000000, 0x70280f, 0x000000, 
-  0x8c3d21, 0x000000, 0xa65438, 0x000000, 
-  0xbe6d51, 0x000000, 0xd4886e, 0x000000, 
-  0xeaa58e, 0x000000, 0xffc4b0, 0x000000, 
-  0x004a22, 0x000000, 0x0f703b, 0x000000, 
-  0x218c52, 0x000000, 0x38a66a, 0x000000, 
-  0x51be83, 0x000000, 0x6ed49d, 0x000000, 
-  0x8eeab8, 0x000000, 0xb0ffd4, 0x000000, 
-  0x4a0028, 0x000000, 0x700f44, 0x000000, 
-  0x8c215c, 0x000000, 0xa63874, 0x000000, 
-  0xbe518c, 0x000000, 0xd46ea6, 0x000000, 
-  0xea8ec0, 0x000000, 0xffb0db, 0x000000, 
-  0x00404a, 0x000000, 0x0f6370, 0x000000, 
-  0x217e8c, 0x000000, 0x3897a6, 0x000000, 
-  0x51afbe, 0x000000, 0x6ec7d4, 0x000000, 
-  0x8edeea, 0x000000, 0xb0f4ff, 0x000000, 
-  0x43002c, 0x000000, 0x650f4b, 0x000000, 
-  0x7e2165, 0x000000, 0x953880, 0x000000, 
-  0xa6519a, 0x000000, 0xbf6eb7, 0x000000, 
-  0xd38ed3, 0x000000, 0xe5b0f1, 0x000000, 
-  0x001d4a, 0x000000, 0x0f3870, 0x000000, 
-  0x21538c, 0x000000, 0x386ea6, 0x000000, 
-  0x518dbe, 0x000000, 0x6ea8d4, 0x000000, 
-  0x8ec8ea, 0x000000, 0xb0e9ff, 0x000000, 
-  0x37004a, 0x000000, 0x570f70, 0x000000, 
-  0x70218c, 0x000000, 0x8938a6, 0x000000, 
-  0xa151be, 0x000000, 0xba6ed4, 0x000000, 
-  0xd28eea, 0x000000, 0xeab0ff, 0x000000, 
-  0x00184a, 0x000000, 0x0f2e70, 0x000000, 
-  0x21448c, 0x000000, 0x385ba6, 0x000000, 
-  0x5174be, 0x000000, 0x6e8fd4, 0x000000, 
-  0x8eabea, 0x000000, 0xb0c9ff, 0x000000, 
-  0x13004a, 0x000000, 0x280f70, 0x000000, 
-  0x3d218c, 0x000000, 0x5438a6, 0x000000, 
-  0x6d51be, 0x000000, 0x886ed4, 0x000000, 
-  0xa58eea, 0x000000, 0xc4b0ff, 0x000000, 
-  0x00014a, 0x000000, 0x0f1170, 0x000000, 
-  0x21248c, 0x000000, 0x383aa6, 0x000000, 
-  0x5153be, 0x000000, 0x6e70d4, 0x000000, 
-  0x8e8fea, 0x000000, 0xb0b2ff, 0x000000, 
-  0x000000, 0x000000, 0x242424, 0x000000, 
-  0x484848, 0x000000, 0x6d6d6d, 0x000000, 
-  0x919191, 0x000000, 0xb6b6b6, 0x000000, 
-  0xdadada, 0x000000, 0xffffff, 0x000000, 
-  0x000000, 0x000000, 0x242424, 0x000000, 
-  0x484848, 0x000000, 0x6d6d6d, 0x000000, 
-  0x919191, 0x000000, 0xb6b6b6, 0x000000, 
+  0x000000, 0x000000, 0x242424, 0x000000,
+  0x484848, 0x000000, 0x6d6d6d, 0x000000,
+  0x919191, 0x000000, 0xb6b6b6, 0x000000,
+  0xdadada, 0x000000, 0xffffff, 0x000000,
+  0x000000, 0x000000, 0x242424, 0x000000,
+  0x484848, 0x000000, 0x6d6d6d, 0x000000,
+  0x919191, 0x000000, 0xb6b6b6, 0x000000,
+  0xdadada, 0x000000, 0xffffff, 0x000000,
+  0x4a3700, 0x000000, 0x705813, 0x000000,
+  0x8c732a, 0x000000, 0xa68d46, 0x000000,
+  0xbea767, 0x000000, 0xd4c18b, 0x000000,
+  0xeadcb3, 0x000000, 0xfff6de, 0x000000,
+  0x284a00, 0x000000, 0x44700f, 0x000000,
+  0x5c8c21, 0x000000, 0x74a638, 0x000000,
+  0x8cbe51, 0x000000, 0xa6d46e, 0x000000,
+  0xc0ea8e, 0x000000, 0xdbffb0, 0x000000,
+  0x4a1300, 0x000000, 0x70280f, 0x000000,
+  0x8c3d21, 0x000000, 0xa65438, 0x000000,
+  0xbe6d51, 0x000000, 0xd4886e, 0x000000,
+  0xeaa58e, 0x000000, 0xffc4b0, 0x000000,
+  0x004a22, 0x000000, 0x0f703b, 0x000000,
+  0x218c52, 0x000000, 0x38a66a, 0x000000,
+  0x51be83, 0x000000, 0x6ed49d, 0x000000,
+  0x8eeab8, 0x000000, 0xb0ffd4, 0x000000,
+  0x4a0028, 0x000000, 0x700f44, 0x000000,
+  0x8c215c, 0x000000, 0xa63874, 0x000000,
+  0xbe518c, 0x000000, 0xd46ea6, 0x000000,
+  0xea8ec0, 0x000000, 0xffb0db, 0x000000,
+  0x00404a, 0x000000, 0x0f6370, 0x000000,
+  0x217e8c, 0x000000, 0x3897a6, 0x000000,
+  0x51afbe, 0x000000, 0x6ec7d4, 0x000000,
+  0x8edeea, 0x000000, 0xb0f4ff, 0x000000,
+  0x43002c, 0x000000, 0x650f4b, 0x000000,
+  0x7e2165, 0x000000, 0x953880, 0x000000,
+  0xa6519a, 0x000000, 0xbf6eb7, 0x000000,
+  0xd38ed3, 0x000000, 0xe5b0f1, 0x000000,
+  0x001d4a, 0x000000, 0x0f3870, 0x000000,
+  0x21538c, 0x000000, 0x386ea6, 0x000000,
+  0x518dbe, 0x000000, 0x6ea8d4, 0x000000,
+  0x8ec8ea, 0x000000, 0xb0e9ff, 0x000000,
+  0x37004a, 0x000000, 0x570f70, 0x000000,
+  0x70218c, 0x000000, 0x8938a6, 0x000000,
+  0xa151be, 0x000000, 0xba6ed4, 0x000000,
+  0xd28eea, 0x000000, 0xeab0ff, 0x000000,
+  0x00184a, 0x000000, 0x0f2e70, 0x000000,
+  0x21448c, 0x000000, 0x385ba6, 0x000000,
+  0x5174be, 0x000000, 0x6e8fd4, 0x000000,
+  0x8eabea, 0x000000, 0xb0c9ff, 0x000000,
+  0x13004a, 0x000000, 0x280f70, 0x000000,
+  0x3d218c, 0x000000, 0x5438a6, 0x000000,
+  0x6d51be, 0x000000, 0x886ed4, 0x000000,
+  0xa58eea, 0x000000, 0xc4b0ff, 0x000000,
+  0x00014a, 0x000000, 0x0f1170, 0x000000,
+  0x21248c, 0x000000, 0x383aa6, 0x000000,
+  0x5153be, 0x000000, 0x6e70d4, 0x000000,
+  0x8e8fea, 0x000000, 0xb0b2ff, 0x000000,
+  0x000000, 0x000000, 0x242424, 0x000000,
+  0x484848, 0x000000, 0x6d6d6d, 0x000000,
+  0x919191, 0x000000, 0xb6b6b6, 0x000000,
+  0xdadada, 0x000000, 0xffffff, 0x000000,
+  0x000000, 0x000000, 0x242424, 0x000000,
+  0x484848, 0x000000, 0x6d6d6d, 0x000000,
+  0x919191, 0x000000, 0xb6b6b6, 0x000000,
   0xdadada, 0x000000, 0xffffff, 0x000000
 };
 
