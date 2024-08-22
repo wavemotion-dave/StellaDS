@@ -36,7 +36,6 @@
 
 #include "Console.hxx"
 #include "SaveKey.hxx"
-#include "MediaSrc.hxx"
 #include "TIASound.hxx"
 #include "Event.hxx"
 #include "StellaEvent.hxx"
@@ -48,6 +47,7 @@
 #include "screenshot.h"
 #include "savestate.h"
 #include "Thumbulator.hxx"
+#include "TIA.hxx"
 
 #define VERSION "7.4"
 
@@ -252,7 +252,7 @@ void dsInitTimer(void)
 void dsInitPalette(void) 
 {
     // Init DS Specific palette
-    const uInt32* gamePalette = theConsole->myMediaSource->palette();
+    const uInt32* gamePalette = theTIA.palette();
     for(uInt32 i = 0; i < 256; i++)   
     {
         uInt8 r, g, b;

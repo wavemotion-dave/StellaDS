@@ -55,7 +55,7 @@ class M6532 : public Device
 
       @param console The console the 6532 is associated with
     */
-    M6532(const Console& console);
+    M6532();
  
     /**
       Destructor
@@ -91,6 +91,9 @@ class M6532 : public Device
     virtual void install(System& system);
 
    public:
+   
+     void setConsole(Console *console) {myConsole = console;}
+   
     /**
       Get the byte at the specified address
 
@@ -108,8 +111,7 @@ class M6532 : public Device
 
   private:
     // Reference to the console
-    const Console& myConsole;
-
+    Console *myConsole;
    
   private:
     // Copy constructor isn't supported by this class so make it private
@@ -120,5 +122,8 @@ class M6532 : public Device
     
     void setPinState(void);
 };
+
+extern M6532 theM6532;
+
 #endif
 

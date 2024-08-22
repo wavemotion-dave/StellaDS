@@ -28,9 +28,6 @@
 #include "M6532.hxx"
 
 
-extern TIA   *theTIA;
-extern M6532 *theM6532;
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeX07::CartridgeX07(const uInt8* image)
 {
@@ -90,11 +87,11 @@ uInt8 CartridgeX07::peek(uInt16 address)
   uInt16 lowAddress = address & 0x3ff;
   if(lowAddress & 0x80)
   {
-    value = theM6532->peek(address);      
+    value = theM6532.peek(address);      
   }
   else if(!(lowAddress & 0x200))
   {
-    value = theTIA->peek(address);
+    value = theTIA.peek(address);
   }
 
   // Switch banks if necessary
@@ -116,11 +113,11 @@ void CartridgeX07::poke(uInt16 address, uInt8 value)
   uInt16 lowAddress = address & 0x3ff;
   if(lowAddress & 0x80)
   {
-    theM6532->poke(address, value);
+    theM6532.poke(address, value);
   }
   else if(!(lowAddress & 0x200))
   {
-    theTIA->poke(address, value);
+    theTIA.poke(address, value);
   }
 
   // Switch banks if necessary

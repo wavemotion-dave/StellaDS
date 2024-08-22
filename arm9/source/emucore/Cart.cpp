@@ -3100,6 +3100,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strcmp(myCartInfo.gameID, "HUGOHU") == 0) cartDriver = 0;  // Hugo Hunt requires the normal driver
       if (strcmp(myCartInfo.gameID, "OYSTRO") == 0) cartDriver = 0;  // Oystron requires the normal driver
       if (strcmp(myCartInfo.gameID, "ALIEN0") == 0) cartDriver = 0;  // Alien requires the normal driver
+      if (strcmp(myCartInfo.gameID, "BERZRK") == 0) cartDriver = 0;  // Berzerk requires the normal driver
       
       if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }  
@@ -3181,7 +3182,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if ((strstr(my_filename, "lady") != 0) && (strstr(my_filename, "bug") != 0))
           {
               strcpy(myCartInfo.gameID, "LADBUG");
-              myCartInfo.frame_mode = MODE_BLACK;
+              myCartInfo.frame_mode = isDSiMode() ? MODE_BLACK : MODE_NO;
               myCartInfo.displayStartScanline = 34;
               myCartInfo.displayNumScalines = 210;
               myCartInfo.yOffset = 10;

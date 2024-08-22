@@ -130,9 +130,6 @@ class Console
 
   public:
 
-    // Pointer to the media source object 
-   MediaSource* myMediaSource;
-  
    Cartridge* myCartridge;
 
   private:

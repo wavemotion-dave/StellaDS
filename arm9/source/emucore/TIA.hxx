@@ -31,7 +31,6 @@ class System;
 
 #include "bspf.hxx"
 #include "Device.hxx"
-#include "MediaSrc.hxx"
 
 #define      myP0Bit       0x01         // Bit for Player 0
 #define      myM0Bit       0x02         // Bit for Missile 0
@@ -49,6 +48,8 @@ class System;
 // Used to set the collision register to the correct value
 extern uInt16 ourCollisionTable[256];
 extern uInt8 myPriorityEncoder[2][256];
+
+extern uInt32 gAtariFrames, gTotalAtariFrames;
 
 extern    uInt16 myCollision;    // Collision register
 
@@ -132,7 +133,7 @@ extern    uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
   @author  Bradford W. Mott
   @version $Id: TIA.hxx,v 1.14 2004/06/13 04:53:04 bwmott Exp $
 */
-class TIA : public Device , public MediaSource
+class TIA : public Device
 {
   public:
     /**
@@ -141,7 +142,7 @@ class TIA : public Device , public MediaSource
       @param console The console the TIA is associated with
       @param sound   The sound object the TIA is associated with
     */
-    TIA(const Console& console);
+    TIA();
  
     /**
       Destructor
@@ -149,13 +150,15 @@ class TIA : public Device , public MediaSource
     virtual ~TIA();
 
   public:
+    void setConsole(Console *console) {myConsole = console;}
+    
     /**
       Get a null terminated string which is the device's name (i.e. "M6532")
 
       @return The name of the device
     */
     virtual const char* name() const;
-
+    
     /**
       Reset device to its power-on state
     */
@@ -254,7 +257,7 @@ class TIA : public Device , public MediaSource
 
   private:
     // Console the TIA is associated with
-    const Console& myConsole;
+    Console *myConsole;
 
   private:
     // Indicates when the dump for paddles was last set
@@ -301,5 +304,6 @@ class TIA : public Device , public MediaSource
     TIA& operator = (const TIA&);
 };
 
+extern TIA theTIA; // The one and only!
     
 #endif

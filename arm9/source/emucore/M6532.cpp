@@ -58,9 +58,10 @@ uInt8 myDDRB __attribute__((section(".dtcm")));
 uInt8 myOutA __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-M6532::M6532(const Console& console)
-    : myConsole(console)
+M6532::M6532()
 {
+  myConsole = NULL;
+    
   // Randomize the 128 bytes of memory
   Random random;
 
@@ -203,22 +204,22 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
     {
       uInt8 value = 0x00;
 
-      if(myConsole.controller(Controller::Left).read(Controller::One))
+      if(myConsole->controller(Controller::Left).read(Controller::One))
         value |= 0x10;
-      if(myConsole.controller(Controller::Left).read(Controller::Two))
+      if(myConsole->controller(Controller::Left).read(Controller::Two))
         value |= 0x20;
-      if(myConsole.controller(Controller::Left).read(Controller::Three))
+      if(myConsole->controller(Controller::Left).read(Controller::Three))
         value |= 0x40;
-      if(myConsole.controller(Controller::Left).read(Controller::Four))
+      if(myConsole->controller(Controller::Left).read(Controller::Four))
         value |= 0x80;
 
-      if(myConsole.controller(Controller::Right).read(Controller::One))
+      if(myConsole->controller(Controller::Right).read(Controller::One))
         value |= 0x01;
-      if(myConsole.controller(Controller::Right).read(Controller::Two))
+      if(myConsole->controller(Controller::Right).read(Controller::Two))
         value |= 0x02;
-      if(myConsole.controller(Controller::Right).read(Controller::Three))
+      if(myConsole->controller(Controller::Right).read(Controller::Three))
         value |= 0x04;
-      if(myConsole.controller(Controller::Right).read(Controller::Four))
+      if(myConsole->controller(Controller::Right).read(Controller::Four))
         value |= 0x08;
       return value;
     }
@@ -230,7 +231,7 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
 
     case 0x02:    // Port B I/O Register (Console switches)
     {
-      return myConsole.switches().read();
+      return myConsole->switches().read();
     }
 
     case 0x03:    // Port B Data Direction Register
@@ -259,15 +260,15 @@ void M6532::setPinState()
   */
     uInt8 a = myOutA | ~myDDRA;
 
-    myConsole.controller(Controller::Left).write(Controller::One,   a & 0x10);
-    myConsole.controller(Controller::Left).write(Controller::Two,   a & 0x20);
-    myConsole.controller(Controller::Left).write(Controller::Three, a & 0x40);
-    myConsole.controller(Controller::Left).write(Controller::Four,  a & 0x80);
+    myConsole->controller(Controller::Left).write(Controller::One,   a & 0x10);
+    myConsole->controller(Controller::Left).write(Controller::Two,   a & 0x20);
+    myConsole->controller(Controller::Left).write(Controller::Three, a & 0x40);
+    myConsole->controller(Controller::Left).write(Controller::Four,  a & 0x80);
     
-    myConsole.controller(Controller::Right).write(Controller::One,   a & 0x01);
-    myConsole.controller(Controller::Right).write(Controller::Two,   a & 0x02);
-    myConsole.controller(Controller::Right).write(Controller::Three, a & 0x04);
-    myConsole.controller(Controller::Right).write(Controller::Four,  a & 0x08);
+    myConsole->controller(Controller::Right).write(Controller::One,   a & 0x01);
+    myConsole->controller(Controller::Right).write(Controller::Two,   a & 0x02);
+    myConsole->controller(Controller::Right).write(Controller::Three, a & 0x04);
+    myConsole->controller(Controller::Right).write(Controller::Four,  a & 0x08);
 
 }
 

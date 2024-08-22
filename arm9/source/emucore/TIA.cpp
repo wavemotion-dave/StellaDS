@@ -37,8 +37,6 @@
 
 #define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
-extern uInt32 gAtariFrames, gTotalAtariFrames;
-
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
@@ -280,9 +278,9 @@ uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
 #define MYCOLUP1  3
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-TIA::TIA(const Console& console)
-    : myConsole(console)
+TIA::TIA()
 {
+   myConsole = NULL;
   // --------------------------------------------------------------------------------------
   // Allocate buffers for two frame buffers - Turns out Video Memory is actually slower
   // since we do a lot of 8-bit reads and the video memory is 16-bits wide. So we handle
@@ -1516,16 +1514,16 @@ ITCM_CODE uInt8 TIA::peek_minimal(uInt8 addr)
     switch (addr)
     {
     case 0x08:    // INPT0
-      return (myConsole.controller(Controller::Left).read(Controller::Nine) == Controller::minimumResistance) ? 0x80 : 0x00;
+      return (myConsole->controller(Controller::Left).read(Controller::Nine) == Controller::minimumResistance) ? 0x80 : 0x00;
 
     case 0x09:    // INPT1
-      return (myConsole.controller(Controller::Left).read(Controller::Five) == Controller::minimumResistance) ? 0x80 : 0x00;
+      return (myConsole->controller(Controller::Left).read(Controller::Five) == Controller::minimumResistance) ? 0x80 : 0x00;
             
     case 0x0C:    // INPT4
-      return myConsole.controller(Controller::Left).read(Controller::Six) ? 0x80 : 0x00;
+      return myConsole->controller(Controller::Left).read(Controller::Six) ? 0x80 : 0x00;
 
     case 0x0D:    // INPT5
-      return myConsole.controller(Controller::Right).read(Controller::Six) ? 0x80 : 0x00;
+      return myConsole->controller(Controller::Right).read(Controller::Six) ? 0x80 : 0x00;
 
     default:
       return 0x00;
@@ -1594,7 +1592,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     {
     case 0x08:    // INPT0
     {
-      Int32 r = myConsole.controller(Controller::Left).read(Controller::Nine);
+      Int32 r = myConsole->controller(Controller::Left).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
         return 0x80 | noise;
@@ -1619,7 +1617,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 
     case 0x09:    // INPT1
     {
-      Int32 r = myConsole.controller(Controller::Left).read(Controller::Five);
+      Int32 r = myConsole->controller(Controller::Left).read(Controller::Five);
       if(r == Controller::minimumResistance)
       {
         return 0x80 | noise;
@@ -1644,7 +1642,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 
     case 0x0A:    // INPT2
     {
-      Int32 r = myConsole.controller(Controller::Right).read(Controller::Nine);
+      Int32 r = myConsole->controller(Controller::Right).read(Controller::Nine);
       if(r == Controller::minimumResistance)
       {
         return 0x80 | noise;
@@ -1669,7 +1667,7 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
 
     case 0x0B:    // INPT3
     {
-      Int32 r = myConsole.controller(Controller::Right).read(Controller::Five);
+      Int32 r = myConsole->controller(Controller::Right).read(Controller::Five);
       if(r == Controller::minimumResistance)
       {
         return 0x80 | noise;
@@ -1693,10 +1691,10 @@ ITCM_CODE uInt8 TIA::peek(uInt16 addr)
     }          
 
     case 0x0C:    // INPT4
-      return myConsole.controller(Controller::Left).read(Controller::Six) ? (0x80 | noise) : noise;
+      return myConsole->controller(Controller::Left).read(Controller::Six) ? (0x80 | noise) : noise;
 
     case 0x0D:    // INPT5
-      return myConsole.controller(Controller::Right).read(Controller::Six) ? (0x80 | noise) : noise;
+      return myConsole->controller(Controller::Right).read(Controller::Six) ? (0x80 | noise) : noise;
 
     default:
       return noise;

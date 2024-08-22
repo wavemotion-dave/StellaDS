@@ -106,14 +106,12 @@ void Cartridge3EPlus::install(System& system)
   segment(3, statingBank);
 }
 
-extern TIA* theTIA; // 3E+ games utilize hotspot bytes in the lower 80h so we need to chain to the real peek addresses...
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3EPlus::peek(uInt16 address)
 {
   if (address < 0x80)
   {
-     return theTIA->peek(address);   
+     return theTIA.peek(address);   
   }
   return 0x00;
 }
@@ -138,7 +136,7 @@ void Cartridge3EPlus::poke(uInt16 address, uInt8 value)
         segment(seg, (value & 0x3F) + 128); // Map RAM bank into desired segment
       }
       
-      theTIA->poke(address, value);         // Pass through to "real" TIA
+      theTIA.poke(address, value);         // Pass through to "real" TIA
   }
 }
 

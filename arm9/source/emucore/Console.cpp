@@ -40,17 +40,16 @@
 #include "M6502Low.hxx"
 #include "M6532.hxx"
 #include "MD5.hxx"
-#include "MediaSrc.hxx"
 #include "Paddles.hxx"
 #include "Switches.hxx"
 #include "System.hxx"
 #include "TIA.hxx"
 #include "TIASound.hxx"
 
-TIA *theTIA     __attribute__((section(".dtcm"))) = 0;
-M6532 *theM6532 __attribute__((section(".dtcm"))) = 0;
-
 extern void dsPrintCartType(char *, int);
+
+M6532 theM6532  __attribute__((section(".dtcm")));
+TIA theTIA      __attribute__((section(".dtcm")));
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Console::Console(const uInt8* image, uInt32 size, const char* filename)
@@ -58,24 +57,25 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   extern uInt16 mySoundFreq;
   myControllers[0] = 0;
   myControllers[1] = 0;
-  myMediaSource = 0;
   mySwitches = 0;
   mySystem = 0;
   myEvent = 0;
+
+  // Get the MD5 message-digest for the ROM image
+  string md5 = MD5(image, size);
 
   // Create an event handler which will collect and dispatch events
   myEventHandler = new EventHandler(this);
   myEvent = myEventHandler->event();
 
-  // Get the MD5 message-digest for the ROM image
-  string md5 = MD5(image, size);
-
   mySwitches = new Switches(*myEvent);
   mySystem = new System(MY_ADDR_SHIFT, MY_PAGE_SHIFT);
 
   M6502* m6502 = new M6502Low(1);
-  theM6532 = new M6532(*this);
-  myCartridge = Cartridge::create(image, size); // Do this before creating the TIA because we use some of the cart properties there...
+  theM6532.setConsole(this);
+  
+  // Do this before creating the TIA because we use some of the cart properties there...
+  myCartridge = Cartridge::create(image, size); 
   dsPrintCartType((char *)myCartridge->name(), size);
 
   // -------------------------------------------------------------------------
@@ -89,8 +89,7 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   if (myCartInfo.soundQuality == SOUND_30KHZ) mySoundFreq  = 31400;
   if (myCartInfo.soundQuality == SOUND_WAVE)  mySoundFreq  = 15700;
   
-  TIA* tia = new TIA(*this);
-  theTIA = tia;
+  theTIA.setConsole(this);
   Tia_sound_init(31400, mySoundFreq);
 
   // -------------------------------------------------------------------------------------------
@@ -143,11 +142,13 @@ Console::Console(const uInt8* image, uInt32 size, const char* filename)
   }
         
   mySystem->attach(m6502);
-  mySystem->attach(theM6532);
-  mySystem->attach(tia);
-  mySystem->attach(myCartridge);
+  
+  // Since we no longer attach these to the mySystem, we have to install them manually
+  theM6532.install(*mySystem);
+  theTIA.install(*mySystem);
 
-  myMediaSource = tia;
+  // Always do the Cartridge last as it may override some of the above...  
+  mySystem->attach(myCartridge);
 
   mySystem->reset();
 
@@ -173,8 +174,7 @@ Console::~Console()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Console::update()
 {
-// myFrameBuffer.update();
-	myMediaSource->update();
+	theTIA.update();
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

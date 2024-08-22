@@ -90,13 +90,12 @@ void Cartridge3F::install(System& system)
   bank(0);
 }
 
-extern TIA* theTIA; // 3F games are weird... they take over 40h bytes of the lower 80h so we need to chain to the real peek addresses...
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3F::peek(uInt16 address)
 {
   if ((address&0xFFF) < 0x80)
   {
-      return theTIA->peek(address);
+      return theTIA.peek(address);
   }
   
   if((address&0x0FFF) < 0x0800)
@@ -119,7 +118,7 @@ void Cartridge3F::poke(uInt16 address, uInt8 value)
   {
     bank(value);
   }
-  else theTIA->poke(address, value);
+  else theTIA.poke(address, value);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -129,10 +128,12 @@ void Cartridge3F::bank(uInt16 bank)
   uInt32 offset = myCurrentBank * 2048;
   uInt16 shift = mySystem->pageShift();
 
+  // Setup the page access methods for the current bank
+  uInt16 access_num = 0x1000 >> MY_PAGE_SHIFT;
+
   // Map ROM image into the system
   for(uInt32 address = 0x1000; address < 0x1800; address += (1 << shift))
   {
-    page_access.directPeekBase = &myImage[offset + (address & 0x07FF)];
-    mySystem->setPageAccess(address >> shift, page_access);
+      myPageAccessTable[access_num++].directPeekBase = &myImage[offset + (address & 0x07FF)];
   }
 }

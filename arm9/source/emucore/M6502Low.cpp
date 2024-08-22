@@ -33,29 +33,26 @@
 #include "Random.hxx"
 
 uInt16 gPC __attribute__ ((aligned (4))) __attribute__((section(".dtcm")));  // Program Counter
-uInt8 A                                 __attribute__((section(".dtcm")));   // Accumulator
-uInt8 X                                 __attribute__((section(".dtcm")));   // X index register
-uInt8 Y                                 __attribute__((section(".dtcm")));   // Y index register
-uInt8 SP                                __attribute__((section(".dtcm")));   // Stack Pointer
+uInt8 A                                  __attribute__((section(".dtcm")));   // Accumulator
+uInt8 X                                  __attribute__((section(".dtcm")));   // X index register
+uInt8 Y                                  __attribute__((section(".dtcm")));   // Y index register
+uInt8 SP                                 __attribute__((section(".dtcm")));   // Stack Pointer
                             
-uInt8 N                                 __attribute__((section(".dtcm")));   // N flag for processor status register
-uInt8 V                                 __attribute__((section(".dtcm")));   // V flag for processor status register
-uInt8 B                                 __attribute__((section(".dtcm")));   // B flag for processor status register
-uInt8 D                                 __attribute__((section(".dtcm")));   // D flag for processor status register
-uInt8 I                                 __attribute__((section(".dtcm")));   // I flag for processor status register
-uInt8 notZ                              __attribute__((section(".dtcm")));   // Z flag complement for processor status register
-uInt8 C                                 __attribute__((section(".dtcm")));   // C flag for processor status register
-uInt16 myExecutionStatus                __attribute__((section(".dtcm")));   // This is what's used to end a frame when the time comes
+uInt8 N                                  __attribute__((section(".dtcm")));   // N flag for processor status register
+uInt8 V                                  __attribute__((section(".dtcm")));   // V flag for processor status register
+uInt8 B                                  __attribute__((section(".dtcm")));   // B flag for processor status register
+uInt8 D                                  __attribute__((section(".dtcm")));   // D flag for processor status register
+uInt8 I                                  __attribute__((section(".dtcm")));   // I flag for processor status register
+uInt8 notZ                               __attribute__((section(".dtcm")));   // Z flag complement for processor status register
+uInt8 C                                  __attribute__((section(".dtcm")));   // C flag for processor status register
+uInt16 myExecutionStatus                 __attribute__((section(".dtcm")));   // This is what's used to end a frame when the time comes
         
-uInt32 NumberOfDistinctAccesses         __attribute__((section(".dtcm")));     // For AR cart use only - track the # of distinct PC accesses
-uInt8  cartDriver                       __attribute__((section(".dtcm"))) = 0; // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
-uInt16 f8_bankbit                       __attribute__((section(".dtcm"))) = 0x1FFF;
-uInt8  myDataBusState                   __attribute__((section(".dtcm"))) = 0x00; // Last state of the data bus
+uInt32 NumberOfDistinctAccesses          __attribute__((section(".dtcm")));         // For AR cart use only - track the # of distinct PC accesses
+uInt8  cartDriver                        __attribute__((section(".dtcm"))) = 0;     // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
+uInt16 f8_bankbit                        __attribute__((section(".dtcm"))) = 0x1FFF;// We use this as a bit of a speed-hack for 8K games so we can bank/mask quickly
+uInt8  myDataBusState                    __attribute__((section(".dtcm"))) = 0x00;  // Last state of the data bus (needed for maximum accuracy drivers)
 
 extern CartridgeAR  *myAR;
-extern TIA          *theTIA;
-extern M6532        *theM6532;
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
@@ -75,7 +72,12 @@ M6502Low::~M6502Low()
 }
 
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// -----------------------------------------------------------------------------------
+// These handle what are known as 'phantom reads and writes'. This is a side-effect
+// of some 6502 instructions where the bus contains an intermediate value. Generally
+// its not needed to emulate this perfectly so we skip the actual read which takes
+// time and just chew up the cycles that would be required. Speed over accuracy here.
+// -----------------------------------------------------------------------------------
 #define fake_peek()  gSystemCycles++;
 #define fake_poke()  gSystemCycles++;
 
@@ -121,6 +123,21 @@ inline void poke(uInt16 address, uInt8 value)
   myDataBusState = value;
 }
 
+
+inline uInt8 peek_zpg(uInt16 address)
+{
+  gSystemCycles++;
+  
+  if (address & 0x80) myDataBusState = myRAM[address & 0x7F];
+  else  
+  {
+     // Unfortunately we can't just blindly call TIA as some carts (3E, 3F, WD) have hotspots here... so call the device handler for the ZPG
+     myDataBusState = myPageAccessTable[0].device->peek(address);
+  }
+  
+  return myDataBusState;
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502Low::execute(void)
 {
@@ -129,7 +146,7 @@ void M6502Low::execute(void)
     // Clear all of the execution status bits
     myExecutionStatus = 0;
     
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -147,9 +164,7 @@ void M6502Low::execute(void)
       // 6502 instruction emulation is generated by an M4 macro file
       switch (operand)
       {
-        #define  peek_zpg  peek
         #include "M6502Low.ins"
-        #undef   peek_zpg
       }
       #undef operand
     }    
@@ -191,9 +206,9 @@ inline uInt8 peek_NB(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }
 }
 
@@ -202,9 +217,18 @@ inline void poke_NB(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
   
-  if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-  else if (address & 0x200) theM6532->poke(address, value);
-  else theTIA->poke(address, value);
+  if (address & 0x200) theM6532.poke(address, value);
+  else if (address & 0x80) myRAM[address & 0x7F] = value;
+  else theTIA.poke(address, value);
+}
+
+// When we know the peek is to the zero-page (0x00 to 0xFF) and it has to be RAM or TIA
+inline uInt8 peek_NB_zpg(uInt16 address)
+{
+  gSystemCycles++;
+  
+  if (address & 0x80) return myRAM[address & 0x7F];
+  else return theTIA.peek(address);
 }
 
 
@@ -212,7 +236,7 @@ void M6502Low::execute_NB(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -229,7 +253,7 @@ void M6502Low::execute_NB(void)
       {
         // A trick of the light... here we map peek/poke to the "NB" cart versions. This improves speed for non-bank-switched carts.
         #define peek     peek_NB
-        #define peek_zpg peek_NB
+        #define peek_zpg peek_NB_zpg
         #define peek_PC  peek_PCNB              
         #define poke     poke_NB
         #include "M6502Low.ins"        
@@ -261,16 +285,16 @@ inline uInt8 peek_F8(uInt16 address)
 
   if (address & 0x1000)
   {
-      if ((address & 0x0FFF) == 0x0FF8) f8_bankbit=0x0FFF;
-      else if ((address & 0x0FFF) == 0x0FF9) f8_bankbit=0x1FFF;
+      if ((address & 0xFFF) == 0x0FF8) f8_bankbit=0x0FFF;
+      else if ((address & 0xFFF) == 0x0FF9) f8_bankbit=0x1FFF;
       
       return fast_cart_buffer[address & f8_bankbit];
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }
 }
 
@@ -279,16 +303,16 @@ inline void poke_F8(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
   
-  if (address & 0x1000)
+  if (unlikely(address & 0x1000))
   {
       if ((address & 0x0FFF) == 0x0FF8) f8_bankbit=0x0FFF;
       else if ((address & 0x0FFF)) f8_bankbit=0x1FFF;
   }
   else
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }
 }
 
@@ -296,7 +320,7 @@ inline void poke_F8(uInt16 address, uInt8 value)
 void M6502Low::execute_F8(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -316,7 +340,7 @@ void M6502Low::execute_F8(void)
       {
         // A trick of the light... here we map peek/poke to the "F8" cart versions. This improves speed for non-bank-switched carts.
         #define peek     peek_F8
-        #define peek_zpg peek_F8
+        #define peek_zpg peek_NB_zpg
         #define peek_PC  peek_PCF8              
         #define poke     poke_F8
         #include "M6502Low.ins"        
@@ -340,7 +364,7 @@ inline uInt8 peek_PCF8SC(uInt16 address)
 void M6502Low::execute_F8SC(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -359,7 +383,7 @@ void M6502Low::execute_F8SC(void)
       switch (operand)
       {
         #define peek_PC    peek_PCF8SC
-        #define peek_zpg   peek
+        #define peek_zpg   peek_NB_zpg
         #include "M6502Low.ins"
         #undef  peek_zpg
         #undef peek_PC
@@ -398,9 +422,9 @@ inline uInt8 peek_F6(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }  
 }
 
@@ -419,9 +443,9 @@ inline void poke_F6(uInt16 address, uInt8 value)
   }
   else
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }
 }
 
@@ -430,7 +454,7 @@ void M6502Low::execute_F6(void)
 {
     uInt16 operandAddress;
     uInt8 operand;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -481,7 +505,7 @@ inline uInt8 peek_PCF6SC(uInt16 address)
 void M6502Low::execute_F6SC(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -541,9 +565,9 @@ inline uInt8 peek_F4(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }  
 }
 
@@ -569,9 +593,9 @@ inline void poke_F4(uInt16 address, uInt8 value)
   }
   else
   {
-    if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-    else if (address & 0x200) theM6532->poke(address, value);
-    else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }
 }
 
@@ -579,7 +603,7 @@ inline void poke_F4(uInt16 address, uInt8 value)
 void M6502Low::execute_F4(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -620,6 +644,17 @@ void M6502Low::execute_F4(void)
 // so we'll go the extra mile here...
 // ==============================================================================
 
+
+inline uInt8 peek_AR_zpg(uInt16 address)
+{
+  NumberOfDistinctAccesses++;
+  gSystemCycles++;
+
+  if (address & 0x80) myDataBusState = myRAM[address & 0x7F];
+  else myDataBusState = theTIA.peek(address);
+  
+  return myDataBusState;
+}
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt8 peek_AR(uInt16 address)
@@ -686,9 +721,9 @@ inline uInt8 peek_AR(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) myDataBusState = myRAM[address & 0x7F];
-      else if (address & 0x200) myDataBusState = theM6532->peek(address);
-      else myDataBusState = theTIA->peek(address);
+      if (address & 0x200) myDataBusState = theM6532.peek(address);
+      else if (address & 0x80) myDataBusState = myRAM[address & 0x7F];
+      else myDataBusState = theTIA.peek(address);
       return myDataBusState;      
   }
 }    
@@ -704,7 +739,7 @@ inline void poke_AR(uInt16 address, uInt8 value)
   // TIA access is common... filter that one out first...
   if (address < 0x80)
   {
-      theTIA->poke(address, value);
+      theTIA.poke(address, value);
   }
   else 
   // --------------------------------------------------------------------
@@ -743,9 +778,9 @@ inline void poke_AR(uInt16 address, uInt8 value)
   }
   else  // Otherwise let the system handle it...
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }
 }
 
@@ -753,7 +788,7 @@ inline void poke_AR(uInt16 address, uInt8 value)
 void M6502Low::execute_AR(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -771,7 +806,7 @@ void M6502Low::execute_AR(void)
       {
         // A trick of the light... here we map peek/poke to the "AR cart versions.
         #define peek     peek_AR
-        #define peek_zpg peek_AR
+        #define peek_zpg peek_AR_zpg
         #define peek_PC  peek_AR              
         #define poke     poke_AR
         #include "M6502Low.ins"        
@@ -977,9 +1012,9 @@ inline uInt8 peek_DPCP(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }
 }
 
@@ -1001,9 +1036,9 @@ inline void poke_DPCP(uInt16 address, uInt8 value)
   }
   else
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }    
 }
 
@@ -1012,7 +1047,7 @@ void M6502Low::execute_DPCP(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1029,7 +1064,7 @@ void M6502Low::execute_DPCP(void)
       {
         #define DPC_PLUS_FAST_FETCH              
         #define peek     peek_DPCP
-        #define peek_zpg peek_DPCP
+        #define peek_zpg peek_NB_zpg
         #define peek_PC  peek_DPCPPC
         #define poke     poke_DPCP
         #include "M6502Low.ins"    
@@ -1085,9 +1120,9 @@ inline uInt8 peek_CDFJ(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7f];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek_minimal(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7f];
+      else return theTIA.peek_minimal(address);
   }
 }
 
@@ -1096,7 +1131,7 @@ inline uInt8 peek_CDFJzpg(uInt8 address)
   ++gSystemCycles;
     
   if (address & 0x80) return myRAM[address & 0x7f];
-  else return theTIA->peek_minimal(address);
+  else return theTIA.peek_minimal(address);
 }
 
 
@@ -1118,9 +1153,9 @@ inline void poke_CDFJ(uInt16 address, uInt8 value)
   }
   else
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7f] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }    
 }
 
@@ -1128,7 +1163,7 @@ inline void poke_CDFJ(uInt16 address, uInt8 value)
 inline void poke_small(uInt8 address, uInt8 value)
 {
     if (address & 0x80) myRAM[address & 0x7f] = value;
-    else theTIA->poke(address, value);
+    else theTIA.poke(address, value);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1136,7 +1171,7 @@ void M6502Low::execute_CDFJ(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1197,7 +1232,7 @@ void M6502Low::execute_CDFJPlus(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1254,7 +1289,7 @@ void M6502Low::execute_CDFJPlusPlus(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1319,9 +1354,9 @@ inline uInt8 peek_DPC(uInt16 address)
   }
   else
   {
-      if ((address & 0x280) == 0x80) return myRAM[address & 0x7F];
-      else if (address & 0x200) return theM6532->peek(address);
-      else return theTIA->peek(address);
+      if (address & 0x200) return theM6532.peek(address);
+      else if (address & 0x80) return myRAM[address & 0x7F];
+      else return theTIA.peek(address);
   }
 }
 
@@ -1339,16 +1374,16 @@ inline void poke_DPC(uInt16 address, uInt8 value)
   }
   else
   {
-      if ((address & 0x280) == 0x80) myRAM[address & 0x7F] = value;
-      else if (address & 0x200) theM6532->poke(address, value);
-      else theTIA->poke(address, value);
+      if (address & 0x200) theM6532.poke(address, value);
+      else if (address & 0x80) myRAM[address & 0x7F] = value;
+      else theTIA.poke(address, value);
   }
 }
 
 
 void M6502Low::execute_DPC(void)
 {
-    uInt16 PC = gPC;  // Move PC local so compiler can optmize/registerize
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // Clear all of the execution status bits
     myExecutionStatus = 0;

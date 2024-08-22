@@ -262,7 +262,7 @@ class System
     const uInt16 myNumberOfPages;
 
     // Array of all the devices attached to the system
-    Device* myDevices[32];
+    Device* myDevices[16];
 
     // Number of devices attached to the system
     uInt16 myNumberOfDevices;

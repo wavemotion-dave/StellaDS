@@ -25,7 +25,9 @@
 
 #include "Device.hxx"
 #include "M6502.hxx"
+#include "M6532.hxx"
 #include "System.hxx"
+#include "TIA.hxx"
 
 // ---------------------------------------------------------------------------
 // Global speedup hack which gives 10% or better speedup in core emulation.
@@ -75,7 +77,7 @@ System::~System()
   // Free the devices attached to me, since I own them
   for(uInt32 i = 0; i < myNumberOfDevices; ++i)
   {
-    delete myDevices[i];
+      delete myDevices[i];
   }
 
   // Free the M6502 that I own
@@ -93,6 +95,10 @@ void System::reset()
   {
     myDevices[i]->reset();
   }
+
+  // Reset the global classes
+  theM6532.reset();
+  theTIA.reset();
 
   // Now we reset the processor if it exists
   if(myM6502 != 0)
@@ -129,6 +135,10 @@ void System::resetCycles()
   {
     myDevices[i]->systemCyclesReset();
   }
+  
+  // Reset the global classes
+  theM6532.systemCyclesReset();
+  theTIA.systemCyclesReset();  
   
   gTotalSystemCycles += gSystemCycles;
     

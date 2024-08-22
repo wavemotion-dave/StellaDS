@@ -97,14 +97,13 @@ void Cartridge3E::install(System& system)
   bank(0);
 }
 
-extern TIA* theTIA; // 3F/3E games are weird... they take over 40h bytes of the lower 80h so we need to chain to the real peek addresses...
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3E::peek(uInt16 address)
 {
   address = address & 0x0FFF;
   if (address < 0x80)
   {
-     return theTIA->peek(address);   
+     return theTIA.peek(address);   
   }
   else
   {
@@ -137,7 +136,7 @@ void Cartridge3E::poke(uInt16 address, uInt8 value)
   {
     bank(value + 256);
   }
-  else if (address < 0x80) theTIA->poke(address, value);    // Pass through to "real" TIA
+  else if (address < 0x80) theTIA.poke(address, value);    // Pass through to "real" TIA
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

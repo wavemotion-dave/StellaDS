@@ -84,7 +84,7 @@ uInt8 CartridgeEF::peek(uInt16 address)
     bank(address - 0x0FE0);
   }
 
-  return cart_buffer[myCurrentOffset + address];
+  return cart_buffer[myCurrentOffset32 + address];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -103,7 +103,7 @@ void CartridgeEF::poke(uInt16 address, uInt8)
 void CartridgeEF::bank(uInt16 bank)
 { 
   // Remember what bank we're in
-  myCurrentOffset = bank * 4096;
+  myCurrentOffset32 = bank * 4096;
 
   // Setup the page access methods for the current bank
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
@@ -111,7 +111,6 @@ void CartridgeEF::bank(uInt16 bank)
   // Map ROM image into the system
   for(uInt32 address = 0x0000; address < (0x0FE0U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      page_access.directPeekBase = &cart_buffer[myCurrentOffset + address];
-      mySystem->setPageAccess(access_num++, page_access);
+      myPageAccessTable[access_num++].directPeekBase = &cart_buffer[myCurrentOffset32 + address];
   }
 }

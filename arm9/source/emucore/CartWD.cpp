@@ -134,7 +134,6 @@ void CartridgeWD::install(System& system)
   myCurrentBank = 0;
 }
 
-extern TIA* theTIA;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeWD::peek(uInt16 address)
 {
@@ -155,7 +154,7 @@ uInt8 CartridgeWD::peek(uInt16 address)
       myCyclesAtBankswitchInit = gSystemCycles;
       myPendingBank = address & 0x000F;
     }
-    return theTIA->peek(address);  // Chain the call along to the real TIA
+    return theTIA.peek(address);  // Chain the call along to the real TIA
   }
   else  // We are doing a real peek() of our ROM image - take into account the unusual bank switching...
   {
@@ -197,7 +196,7 @@ void CartridgeWD::poke(uInt16 address, uInt8 value)
   {
       if ((address& 0x0FFF) < 0x0040)
       {
-        theTIA->poke(address, value);
+        theTIA.poke(address, value);
       }
   }
 }

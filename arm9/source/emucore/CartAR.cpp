@@ -44,7 +44,7 @@ uInt8 bPossibleLoad __attribute__((section(".dtcm")));
 uInt8 *myImageAR  __attribute__((section(".dtcm")));    
 uInt8 *myImageAR0 __attribute__((section(".dtcm")));    
 uInt8 *myImageAR1 __attribute__((section(".dtcm")));    
-CartridgeAR *myAR __attribute__((section(".dtcm")));    
+CartridgeAR *myAR;   
 
 uInt8 LastConfigurationAR = 255;
 
@@ -52,7 +52,7 @@ uInt8 LastConfigurationAR = 255;
 uInt8 *myHeader = &fast_cart_buffer[8196 - 256];
 
 // All of the 8448 byte loads associated with the game 
-uInt8* myLoadImages __attribute__((section(".dtcm"))); 
+uInt8* myLoadImages; 
 
 // Indicates how many 8448 loads there are
 uInt8 myNumberOfLoadImages;

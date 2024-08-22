@@ -23,7 +23,6 @@
 #include "bgTop.h"
 #include "Console.hxx"
 #include "SaveKey.hxx"
-#include "MediaSrc.hxx"
 #include "TIASound.hxx"
 #include "Event.hxx"
 #include "StellaEvent.hxx"
