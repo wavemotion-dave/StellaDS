@@ -26,6 +26,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Manuals included for more than 100 of the common games.
 * Keypad overlay for Star Raiders.
 * Frame Blending to help smooth out flicker and make the games shine.
+* Save/Restore state for all game carts
 
 Copyright :
 -----------------------
@@ -240,6 +241,11 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+V7.4 : 23-Aug-2024 by Dave Bernazzani (wavemotion)
+  * Overhaul and refactor of cart/device handling to gain a 3-4% speed boost across the board.
+  * Improved memory handling to use a bit less of the precious DS resources.
+  * Fixed multi-load Starpath Supercharger (AR) carts so they work again (broken for almost a year!)
+  * Cleanup as time permitted
 
 V7.4 : 19-Aug-2024 by Dave Bernazzani (wavemotion)
   * Adding save/restore state handling for all games. Use the new down-arrow icon in the lower left.
