@@ -241,7 +241,7 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-V7.4 : 23-Aug-2024 by Dave Bernazzani (wavemotion)
+V7.5 : 23-Aug-2024 by Dave Bernazzani (wavemotion)
   * Overhaul and refactor of cart/device handling to gain a 3-4% speed boost across the board.
   * Improved memory handling to use a bit less of the precious DS resources.
   * Fixed multi-load Starpath Supercharger (AR) carts so they work again (broken for almost a year!)
