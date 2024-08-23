@@ -748,18 +748,19 @@ inline void poke_AR(uInt16 address, uInt8 value)
     gSystemCycles++;
     myDataBusState = value;
     
-    if (address & 0x1000) debug[1]++; // in case we ever poke to ROM we want to know about it...
-    
-    // ----------------------------------------------------------------
-    // In theory, a write could trigger one of the AR hotspots but
-    // in practice, I've never seen this happen and since there are
-    // only a handful of AR Starpath Supercharger games, we will 
-    // assume they are 'well behaved' and save the effort of checking
-    // any write except to the lower memory...
-    // ----------------------------------------------------------------
-    if (address & 0x200) theM6532.poke(address, value);
-    else if (address & 0x80) myRAM[address & 0x7F] = value;
-    else theTIA.poke(address, value);
+    if ((address & 0x1000) == 0)
+    {
+        // ----------------------------------------------------------------
+        // In theory, a write could trigger one of the AR hotspots but
+        // in practice, I've never seen this happen and since there are
+        // only a handful of AR Starpath Supercharger games, we will 
+        // assume they are 'well behaved' and save the effort of checking
+        // any write except to the lower memory...
+        // ----------------------------------------------------------------
+        if (address & 0x200) theM6532.poke(address, value);
+        else if (address & 0x80) myRAM[address & 0x7F] = value;
+        else theTIA.poke(address, value);
+    }
 }
 
 
