@@ -2952,7 +2952,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "lady") != 0)
           {
-              myCartInfo.frame_mode = MODE_FF;
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
               myCartInfo.yOffset = 15;

@@ -32,18 +32,15 @@
 // We index purposely out of bounds (but correct it on the fetch) as a speed hack...
 #pragma GCC diagnostic ignored "-Warray-bounds"
 
-extern uInt32 NumberOfDistinctAccesses;
-extern uInt8 fast_cart_buffer[];
-
-uInt8 myWriteEnabled __attribute__((section(".dtcm")));
-uInt8 myDataHoldRegister __attribute__((section(".dtcm")));
-uInt8 myWritePending __attribute__((section(".dtcm")));
-uInt8 bPossibleLoad __attribute__((section(".dtcm")));    
+uInt8 myWriteEnabled        __attribute__((section(".dtcm")));
+uInt8 myDataHoldRegister    __attribute__((section(".dtcm")));
+uInt8 myWritePending        __attribute__((section(".dtcm")));
+uInt8 bPossibleLoad         __attribute__((section(".dtcm")));    
 
 // The 6K of RAM and 2K of ROM contained in the Supercharger
-uInt8 *myImageAR  __attribute__((section(".dtcm")));    
-uInt8 *myImageAR0 __attribute__((section(".dtcm")));    
-uInt8 *myImageAR1 __attribute__((section(".dtcm")));    
+uInt8 *myImageAR            __attribute__((section(".dtcm")));    
+uInt8 *myImageAR0           __attribute__((section(".dtcm")));    
+uInt8 *myImageAR1           __attribute__((section(".dtcm")));    
 CartridgeAR *myAR;   
 
 uInt8 LastConfigurationAR = 255;

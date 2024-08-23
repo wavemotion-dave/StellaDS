@@ -169,7 +169,6 @@ ITCM_CODE void CartridgeF8SC::poke(uInt16 address, uInt8)
 ITCM_CODE void CartridgeF8SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
-  //myCurrentOffset = bank * 4096;
   f8_bankbit = (bank ? 0x1FFF:0x0FFF);
     
   // Setup the page access methods for the current bank

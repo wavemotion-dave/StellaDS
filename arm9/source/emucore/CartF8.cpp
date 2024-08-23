@@ -91,39 +91,39 @@ void CartridgeF8::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE uInt8 CartridgeF8::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
+  address = address & 0x1FFF;
 
   // Switch banks if necessary
   switch(address)
   {
-    case 0x0FF8:
+    case 0x1FF8:
       // Set the current bank to the lower 4k bank
       bank(0);
       break;
 
-    case 0x0FF9:
+    case 0x1FF9:
       // Set the current bank to the upper 4k bank
       bank(1);
       break;
   }
 
-  return myImage[myCurrentOffset + address];
+  return myImage[address & f8_bankbit];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeF8::poke(uInt16 address, uInt8)
 {
-  address = address & 0x0FFF;
+  address = address & 0x1FFF;
 
   // Switch banks if necessary
   switch(address)
   {
-    case 0x0FF8:
+    case 0x1FF8:
       // Set the current bank to the lower 4k bank
       bank(0);
       break;
 
-    case 0x0FF9:
+    case 0x1FF9:
       // Set the current bank to the upper 4k bank
       bank(1);
       break;
@@ -132,19 +132,16 @@ ITCM_CODE void CartridgeF8::poke(uInt16 address, uInt8)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeF8::bank(uInt16 bank)
-{ 
-  // Remember what bank we're in
-  myCurrentOffset = bank * 4096;
-    
+{    
   f8_bankbit = (bank ? 0x1FFF:0x0FFF);
 
   // Setup the page access methods for the current bank
   uInt32 access_num = 0x1000 >> MY_PAGE_SHIFT;
 
   // Map ROM image into the system
-  for(uInt32 address = 0x0000; address < (0x0FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
+  for(uInt32 address = 0x1000; address < (0x1FF8U & ~MY_PAGE_MASK); address += (1 << MY_PAGE_SHIFT))
   {
-      myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[myCurrentOffset + address];
+      myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[address & f8_bankbit];
   }
 }
 
