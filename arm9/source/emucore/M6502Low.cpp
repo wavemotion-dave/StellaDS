@@ -206,6 +206,8 @@ inline uInt8 peek_NB(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -217,6 +219,8 @@ inline void poke_NB(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
+  // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+  // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
   if (address & 0x200) theM6532.poke(address, value);
   else if (address & 0x80) myRAM[address & 0x7F] = value;
   else theTIA.poke(address, value);
@@ -281,6 +285,8 @@ inline uInt8 peek_F8(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -299,6 +305,8 @@ inline void poke_F8(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
@@ -410,6 +418,8 @@ inline uInt8 peek_F6(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -431,6 +441,8 @@ inline void poke_F6(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
@@ -556,6 +568,8 @@ inline uInt8 peek_F4(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -584,6 +598,8 @@ inline void poke_F4(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
@@ -716,6 +732,8 @@ inline uInt8 peek_AR(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) myDataBusState = theM6532.peek(address);
       else if (address & 0x80) myDataBusState = myRAM[address & 0x7F];
       else myDataBusState = theTIA.peek(address);
@@ -972,6 +990,8 @@ inline uInt8 peek_DPCP(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -1006,6 +1026,8 @@ inline void poke_DPCP(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
@@ -1077,6 +1099,8 @@ inline uInt8 peek_DPC(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7F];
       else return theTIA.peek(address);
@@ -1097,6 +1121,8 @@ inline void poke_DPC(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
@@ -1181,6 +1207,8 @@ inline uInt8 peek_CDFJ(uInt16 address)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) return theM6532.peek(address);
       else if (address & 0x80) return myRAM[address & 0x7f];
       else return theTIA.peek_minimal(address);
@@ -1214,6 +1242,8 @@ inline void poke_CDFJ(uInt16 address, uInt8 value)
   }
   else
   {
+      // Note: this is not perfectly accurate to mimic the real Atari 2600 incomplete decoding address to
+      // provide a true representation of lower memory mirrors. But it's good enough for well-behaved carts.
       if (address & 0x200) theM6532.poke(address, value);
       else if (address & 0x80) myRAM[address & 0x7F] = value;
       else theTIA.poke(address, value);
