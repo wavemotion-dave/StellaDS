@@ -62,14 +62,6 @@ M6532::M6532()
 {
   myConsole = NULL;
     
-  // Randomize the 128 bytes of memory
-  Random random;
-
-  for(uInt32 t = 0; t < 128; ++t)
-  {
-      myRAM[t] = (myCartInfo.clearRAM ? 0x00:random.next());
-  }
-
   // Initialize other data members
   reset();
 }
@@ -119,6 +111,13 @@ void M6532::install(System& system)
 
   uInt16 shift = mySystem->pageShift();
   uInt16 mask = mySystem->pageMask();
+  
+  // Clear the Atari 2600 RAM - has to be done here as myCartInfo would not be ready at time of constructor...
+  Random random;
+  for(uInt8 t = 0; t < 128; ++t)
+  {
+      myRAM[t] = (myCartInfo.clearRAM ? 0x00:random.next());
+  }
 
   // Make sure the system we're being installed in has a page size that'll work
   assert((0x1080 & mask) == 0);

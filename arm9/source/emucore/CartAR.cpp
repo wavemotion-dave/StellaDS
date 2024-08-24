@@ -38,9 +38,9 @@ uInt8 myWritePending        __attribute__((section(".dtcm")));
 uInt8 bPossibleLoad         __attribute__((section(".dtcm")));    
 
 // The 6K of RAM and 2K of ROM contained in the Supercharger
-uInt8 *myImageAR            __attribute__((section(".dtcm")));    
-uInt8 *myImageAR0           __attribute__((section(".dtcm")));    
-uInt8 *myImageAR1           __attribute__((section(".dtcm")));    
+uInt8 *myImageAR            __attribute__((section(".dtcm")));      // Pointer to the start of the 8K buffer for RAM + ROM    
+uInt8 *myImageAR0           __attribute__((section(".dtcm")));      // Pointer to the lower bank of 2K
+uInt8 *myImageAR1           __attribute__((section(".dtcm")));      // Pointer to the upper bank of 2K
 CartridgeAR *myAR;   
 
 uInt8 LastConfigurationAR = 255;
@@ -163,6 +163,9 @@ void SetConfigurationAR(uInt8 configuration)
   LastConfigurationAR = configuration;
    
   myWriteEnabled = configuration & 0x02;
+  
+  debug[16]++;
+  debug[debug[16] % 16] = configuration;
     
   switch((configuration >> 2) & 0x07)
   {
@@ -288,8 +291,7 @@ void CartridgeAR::initializeROM(void)
     0x00, 0x9a, 0x4c, 0xfa, 0x00, 0xcd, 0xf8, 0xff, 0x4c
   };
 
-  // If fastbios is enabled, set the wait time between vertical bars
-  // to 0 (default is 8), which is stored at address 189 of the bios
+  // We set the loading bar speed to 3 (range 0=fastest to 8=slowest)
   dummyROMCode[189] = 0x03;
 
   uInt32 size = sizeof(dummyROMCode);
