@@ -93,32 +93,18 @@ void Cartridge3F::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3F::peek(uInt16 address)
 {
-  if ((address&0xFFF) < 0x80)
-  {
-      return theTIA.peek(address);
-  }
-  
-  if((address&0x0FFF) < 0x0800)
-  {
-    return myImage[(address & 0x07FF) + myCurrentBank * 2048];
-  }
-  else
-  {
-    return myImage[(address & 0x07FF) + mySize - 2048];
-  }
+    // We can only get here if we are address < 0x80 in zpg
+    return theTIA.peek(address);   
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3F::poke(uInt16 address, uInt8 value)
 {
-  address = address & 0x0FFF;
-
-  // Switch banks if necessary
-  if(address <= 0x003F)
-  {
-    bank(value);
-  }
-  else theTIA.poke(address, value);
+    if(address & 0x0FC0) // If we are above 3F... assume TIA access (as RAM is direct accessed)
+    {
+        theTIA.poke(address, value);
+    }
+    else bank(value); // Switch banks if necessary
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

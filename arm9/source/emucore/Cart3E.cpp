@@ -100,43 +100,23 @@ void Cartridge3E::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3E::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
-  if (address < 0x80)
-  {
-     return theTIA.peek(address);   
-  }
-  else
-  {
-      if(address < 0x0800)
-      {
-        if(myCurrentBank < 256)
-          return myImage[(address & 0x07FF) + (myCurrentBank * 2048)];
-        else
-          return xl_ram_buffer[(address & 0x03FF) + ((myCurrentBank - 256) * 1024)];
-      }
-      else
-      {
-        return myImage[(address & 0x07FF) + mySize - 2048];
-      }
-  }
+    // We can only get here if we are address < 0x80 in zpg
+    return theTIA.peek(address);   
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3E::poke(uInt16 address, uInt8 value)
 {
-  address = address & 0x0FFF;
-
-  // Switch banks if necessary. Armin (Kroko) says there are no mirrored
-  // hotspots.
-  if(address == 0x3F)
+    // We can only get here if we are address < 0x80 in zpg
+  if(address & 0x0FC0)
   {
-    bank(value);
+      theTIA.poke(address, value);    // Pass through to "real" TIA
   }
-  else if(address == 0x3E)
+  else // We are 3F or lower...
   {
-    bank(value + 256);
+      if (address == 0x3F) bank(value);
+      else if(address == 0x3E) bank(value + 256);
   }
-  else if (address < 0x80) theTIA.poke(address, value);    // Pass through to "real" TIA
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
