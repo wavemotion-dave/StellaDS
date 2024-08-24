@@ -46,7 +46,7 @@ CartridgeAR *myAR;
 uInt8 LastConfigurationAR = 255;
 
 // The 256 byte header for the current 8448 byte load
-uInt8 *myHeader = &fast_cart_buffer[8196 - 256];
+uInt8 myHeader[256];
 
 // All of the 8448 byte loads associated with the game 
 uInt8* myLoadImages; 
@@ -373,6 +373,3 @@ void CartridgeAR::loadIntoRAM(uInt8 load)
     }
   }
 }
-
-
-
