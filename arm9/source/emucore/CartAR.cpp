@@ -41,6 +41,9 @@ uInt8 bPossibleLoad         __attribute__((section(".dtcm")));
 uInt8 *myImageAR            __attribute__((section(".dtcm")));      // Pointer to the start of the 8K buffer for RAM + ROM    
 uInt8 *myImageAR0           __attribute__((section(".dtcm")));      // Pointer to the lower bank of 2K
 uInt8 *myImageAR1           __attribute__((section(".dtcm")));      // Pointer to the upper bank of 2K
+
+uInt8 bWriteOrLoadPossibleAR __attribute__((section(".dtcm"))) = 0;
+
 CartridgeAR *myAR;   
 
 uInt8 LastConfigurationAR = 255;
@@ -53,7 +56,9 @@ uInt8* myLoadImages;
 
 // Indicates how many 8448 loads there are
 uInt8 myNumberOfLoadImages;
-    
+  
+extern uInt8 bWriteOrLoadPossibleAR;
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
 {
@@ -65,6 +70,7 @@ CartridgeAR::CartridgeAR(const uInt8* image, uInt32 size)
   myImageAR0 = myImageAR;
   myImageAR1 = myImageAR - 2048;
   bPossibleLoad=1;
+  bWriteOrLoadPossibleAR = 1;
         
   // Initialize SC BIOS ROM
   initializeROM();
@@ -94,6 +100,7 @@ void CartridgeAR::reset()
   myDataHoldRegister = 0;
   myWritePending = false;
   bPossibleLoad = 1;
+  bWriteOrLoadPossibleAR=1;
   NumberOfDistinctAccesses=0;
 
   // Set bank configuration upon reset so ROM is selected and powered up
@@ -169,6 +176,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 0:
     {
       bPossibleLoad = 1;
+      bWriteOrLoadPossibleAR = 1;
       myImageAR0 = fast_cart_buffer + (2 * 2048);
       myImageAR1 = fast_cart_buffer + (2 * 2048);  // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -178,6 +186,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 1:
     {
       bPossibleLoad = 1;
+      bWriteOrLoadPossibleAR = 1;
       myImageAR0 = fast_cart_buffer + (0 * 2048);
       myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -187,6 +196,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 2:
     {
       bPossibleLoad = 0;
+      bWriteOrLoadPossibleAR = myWritePending;
       myImageAR0 = fast_cart_buffer + (2 * 2048);
       myImageAR1 = fast_cart_buffer + (-1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -196,6 +206,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 3:
     {
       bPossibleLoad = 0;
+      bWriteOrLoadPossibleAR = myWritePending;
       myImageAR0 = fast_cart_buffer + (0 * 2048);
       myImageAR1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -205,6 +216,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 4:
     {
       bPossibleLoad = 1;
+      bWriteOrLoadPossibleAR = 1;
       myImageAR0 = fast_cart_buffer + (2 * 2048);
       myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -214,6 +226,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 5:
     {
       bPossibleLoad = 1;
+      bWriteOrLoadPossibleAR = 1;
       myImageAR0 = fast_cart_buffer + (1 * 2048);
       myImageAR1 = fast_cart_buffer + (2 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -223,6 +236,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 6:
     {
       bPossibleLoad = 0;
+      bWriteOrLoadPossibleAR = myWritePending;
       myImageAR0 = fast_cart_buffer + (2 * 2048);
       myImageAR1 = fast_cart_buffer + (0 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;
@@ -232,6 +246,7 @@ void SetConfigurationAR(uInt8 configuration)
     case 7:
     {
       bPossibleLoad = 0;
+      bWriteOrLoadPossibleAR = myWritePending;
       myImageAR0 = fast_cart_buffer + (1 * 2048);
       myImageAR1 = fast_cart_buffer + (1 * 2048); // This is 2048 lower so we can index faster in M6502Low::peek_AR()
       //myImageAR1 -= 2048;

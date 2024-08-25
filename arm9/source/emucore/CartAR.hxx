@@ -37,6 +37,7 @@ extern uInt8 *myImageAR0;
 extern uInt8 *myImageAR1;
 extern uInt8 myNumberOfLoadImages;
 extern uInt8 LastConfigurationAR;
+extern uInt8 bWriteOrLoadPossibleAR;
 
 extern void SetConfigurationAR(uInt8 configuration);
 
