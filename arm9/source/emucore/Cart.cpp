@@ -2245,7 +2245,7 @@ const CartInfo table[] =
     {"7b0ebb6bc1d700927f6efe34bac2ecd2",  "??????", BANK_WF8,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, 10},   // Smurf - Rescue in Gargamel's Castle (1982).bin (write F8 banking)
     {"468dc062a58499d081c59cf5fd08f655",  "??????", BANK_JANE, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},   // Tarzan - 16K Prototype with unique banking
 
-//    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };

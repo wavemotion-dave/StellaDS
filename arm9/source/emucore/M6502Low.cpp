@@ -87,11 +87,10 @@ const char* M6502Low::name() const
 #define fake_poke()  gSystemCycles++;
 
 // -------------------------------------------------------------------------------
-// This is the normal driver - optmized as best we can. Note we are setting
-// the bus state here but do NOT do so in the main opcode handling loop. This
-// seems to be fine and buys us a little bit of speed - but is not perfectly
-// accurate. The myDataBusState is used in the TIA::peek() handler to drive
-// unused bits for a few "buggy" games that require this.
+// This is the normal driver - optmized as best we can. Note that this is the 
+// only drive in which we are setting the bus state to the last value that 
+// would be presented on the BUS. The myDataBusState is used in the TIA::peek()
+// handler to drive unused bits for a few "buggy" games that require this.
 // -------------------------------------------------------------------------------
 inline uInt8 peek(uInt16 address)
 {
@@ -690,7 +689,7 @@ inline uInt8 peek_AR_PC(uInt16 address)
       else // We are in the lower bank
       {
           // Is the data hold register being set?
-          if (addr < 0x100)
+          if (!(addr & 0xF00))
           {
               myDataHoldRegister = addr;
               NumberOfDistinctAccesses = 0;
@@ -757,7 +756,7 @@ inline uInt8 peek_AR(uInt16 address)
               }
           }
           // Is the data hold register being set?
-          else if (addr < 0x100)
+          else if (!(addr & 0xF00))
           {
               myDataHoldRegister = addr;
               NumberOfDistinctAccesses = 0;

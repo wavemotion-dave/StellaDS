@@ -109,35 +109,28 @@ void Cartridge3EPlus::install(System& system)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 Cartridge3EPlus::peek(uInt16 address)
 {
-  if (address < 0x80)
-  {
-     return theTIA.peek(address);   
-  }
-  return 0x00;
+    // We can only get here if the peek() is address in the lower 0x80 memory
+  return theTIA.peek(address);   
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void Cartridge3EPlus::poke(uInt16 address, uInt8 value)
 {
-  // If we are writing down into the TIA area...
-  if (address < 0x80)
+  // ----------------------------------------------------------------------------
+  // Switch banks if necessary. 3F is the ROM hotspot and 3E is the RAM hotspot
+  // ----------------------------------------------------------------------------
+  if (address == 0x3F)
   {
-      // ----------------------------------------------------------------------------
-      // Switch banks if necessary. 3F is the ROM hotspot and 3E is the RAM hotspot
-      // ----------------------------------------------------------------------------
-      if (address == 0x3F)
-      {
-        uInt8 seg = (value >> 6) & 0x03;
-        segment(seg, value & 0x3F);         // Map ROM bank into desired segment
-      }
-      else if (address == 0x3E)
-      {
-        uInt8 seg = (value >> 6) & 0x03;
-        segment(seg, (value & 0x3F) + 128); // Map RAM bank into desired segment
-      }
-      
-      theTIA.poke(address, value);         // Pass through to "real" TIA
+    uInt8 seg = (value >> 6) & 0x03;
+    segment(seg, value & 0x3F);         // Map ROM bank into desired segment
   }
+  else if (address == 0x3E)
+  {
+    uInt8 seg = (value >> 6) & 0x03;
+    segment(seg, (value & 0x3F) + 128); // Map RAM bank into desired segment
+  }
+  
+  theTIA.poke(address, value);         // Pass through to "real" TIA
 }
 
 // ---------------------------------------------------------------------------
