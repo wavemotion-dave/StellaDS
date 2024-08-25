@@ -80,7 +80,7 @@ uInt8 bSaveStateXL = false;
 
 uInt32 myCurrentOffset32    __attribute__((section(".dtcm")));
 uInt32 myCounters[8]        __attribute__((section(".dtcm")));
-CartInfo myCartInfo         __attribute__((section(".dtcm"))) __attribute__ ((aligned (32)));
+CartInfo myCartInfo         __attribute__((section(".dtcm")));
 PageAccess page_access      __attribute__((section(".dtcm")));
 uInt32 myCurrentOffset      __attribute__((section(".dtcm")));
 uInt16 myCurrentBank        __attribute__((section(".dtcm"))) = 0;
