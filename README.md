@@ -61,7 +61,7 @@ Copy StellaDS.nds to your flash cart or SD card of choice. Most launchers will a
 Game Autodetection:
 -----------------------
 The Atari 2600 utilizes a growing number of bankswitching scheme. StellaDS 
-currently supports 36 different bank switching schemes (see full list further below) - 
+currently supports 40 different bank switching schemes (see full list further below) - 
 and it usually will auto-detect the right one. If for some reason it does not, you 
 can go into the configuration (gear icon) and manually select a new scheme. Be 
 sure to hit START to save your config and then try re-loading the game (the bank
