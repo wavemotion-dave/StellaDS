@@ -106,12 +106,11 @@ uInt32  myVBLANK                    __attribute__((section(".dtcm")));
 uInt8   myHMOVEBlankEnabled         __attribute__((section(".dtcm")));
 uInt8   myM0CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
 uInt8   myM1CosmicArkMotionEnabled  __attribute__((section(".dtcm")));
-uInt8   ourPlayerReflectTable[256]  __attribute__((section(".dtcm")));
 uInt32  lastTiaPokeCycles           __attribute__((section(".dtcm"))) = 0;
-
 uInt8   bWaveDirectSound            __attribute__((section(".dtcm"))) = 0;
 uInt8   bFrameSkipCDFJ              __attribute__((section(".dtcm"))) = 0;
 uInt8   bNoCollisionDetection       __attribute__((section(".dtcm"))) = 0;
+uInt8   ourPlayerReflectTable[256];
 
 Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
@@ -173,7 +172,7 @@ Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm")))
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3
 };
 
-uInt32  color_repeat_table[256]; // __attribute__((section(".dtcm")));
+uInt32  color_repeat_table[256];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 ourHMOVEBlankEnableCycles[76] __attribute__((section(".dtcm"))) = {

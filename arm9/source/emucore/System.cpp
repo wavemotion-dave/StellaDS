@@ -35,7 +35,7 @@
 // deserves better than some global variable hack but the speedup is needed 
 // to bring even more games up to 60 FPS. Sometimes the ends justify the means.
 // ---------------------------------------------------------------------------
-Int32  gSystemCycles   __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = 0;
+Int32  gSystemCycles   __attribute__((section(".dtcm"))) = 0;
 
 uInt32 gTotalSystemCycles = 0;
 
@@ -44,7 +44,7 @@ uInt32 gTotalSystemCycles = 0;
 // to optiize access as the memory will be known at compile time. Again, not
 // overly proud of making these things global but speed is critical on the DS.
 // -----------------------------------------------------------------------------
-PageAccess myPageAccessTable[64] __attribute__ ((aligned (32))) __attribute__((section(".dtcm"))); 
+PageAccess myPageAccessTable[64] __attribute__((section(".dtcm"))); 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 System::System(uInt16 n, uInt16 m)

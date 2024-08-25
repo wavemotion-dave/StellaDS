@@ -164,9 +164,6 @@ void SetConfigurationAR(uInt8 configuration)
    
   myWriteEnabled = configuration & 0x02;
   
-  debug[16]++;
-  debug[debug[16] % 16] = configuration;
-    
   switch((configuration >> 2) & 0x07)
   {
     case 0:
@@ -331,7 +328,7 @@ uInt8 CartridgeAR::checksum(uInt8* s, uInt16 length)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeAR::loadIntoRAM(uInt8 load)
 {
-  uInt16 image;
+  uInt8 image;
 
   // Scan through all of the loads to see if we find the one we're looking for
   for(image = 0; image < myNumberOfLoadImages; ++image)
