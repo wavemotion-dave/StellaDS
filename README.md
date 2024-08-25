@@ -245,7 +245,7 @@ Version History:
 V7.6 : 25-Aug-2024 by Dave Bernazzani (wavemotion)
   * Fixed config setting of RAM randomized vs clear.
   * Fixed AR (Starpath/Supercharger) games to prevent memory overwrite.
-  * Big improvement to Starpath Supercharger (AR) cart rendering for 3-6 frames of improvement.
+  * Big improvement to Starpath Supercharger (AR) cart rendering for 3-7 frames of improvement.
   * Numerous comment cleanups and other minor refactors to improve the codebase.
 
 V7.5 : 23-Aug-2024 by Dave Bernazzani (wavemotion)
