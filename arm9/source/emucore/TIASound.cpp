@@ -39,15 +39,6 @@
 #include "System.hxx"
 #include "TIASound.hxx"
 
-
-/* define some data types to keep it platform independent */
-#define int8   char
-#define int16  short
-#define int32  long
-#define uint8  uInt8
-#define uint16 uInt16
-#define uint32 uInt32
-
 /* CONSTANT DEFINITIONS */
 
 /* definitions for AUDCx (15, 16) */
@@ -87,13 +78,13 @@
 /* LOCAL GLOBAL VARIABLE DEFINITIONS */
 
 /* structures to hold the 6 tia sound control bytes */
-uint8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
-uint8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
-uint8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
+uInt8 AUDC[2] __attribute__((section(".dtcm")));    /* AUDCx (15, 16) */
+uInt8 AUDF[2] __attribute__((section(".dtcm")));    /* AUDFx (17, 18) */
+uInt8 AUDV[2] __attribute__((section(".dtcm")));    /* AUDVx (19, 1A) */
 
 uInt8 bProcessingSample __attribute__((section(".dtcm"))) = 0;
 
-uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
+uInt32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for each channel */
 
 /* Initialze the bit patterns for the polynomials. */
 
@@ -102,13 +93,13 @@ uint32 Outvol[2] __attribute__((section(".dtcm")));  /* last output volume for e
 /* single bit per byte keeps the math simple, which is important for */
 /* efficient processing. */
 
-static uint8 Bit4[POLY4_SIZE] __attribute__((section(".dtcm"))) =
+static uInt8 Bit4[POLY4_SIZE] __attribute__((section(".dtcm"))) =
       { 0xff,0xff,0,0xff,0xff,0xff,0,0,0,0,0xff,0,0xff,0,0 };
 
-static uint8 Bit5[POLY5_SIZE] __attribute__((section(".dtcm"))) =
+static uInt8 Bit5[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,0,1,0,1,1,0,0,1,1,1,1,1,0,0,0,1,1,0,1,1,1,0,1,0,1,0,0,0,0,1 };
 
-static uint8 Bit5a[POLY5_SIZE] __attribute__((section(".dtcm"))) =
+static uInt8 Bit5a[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,0,0xff,0,0xff,0xff,0,0,0xff,0xff,0xff,0xff,0xff,0,0,0,0xff,0xff,0,0xff,0xff,0xff,0,0xff,0,0xff,0,0,0,0,0xff };
 
 /* I've treated the 'Div by 31' counter as another polynomial because of */
@@ -116,35 +107,35 @@ static uint8 Bit5a[POLY5_SIZE] __attribute__((section(".dtcm"))) =
 /* has a 13:18 ratio (of course, 13+18 = 31).  This could also be */
 /* implemented by using counters. */
 
-static uint8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
+static uInt8 Div31[POLY5_SIZE] __attribute__((section(".dtcm"))) =
       { 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 };
 
 /* Rather than have a table with 511 entries, I use a random number generator. */
-uint8 Bit9[POLY9_SIZE];
+uInt8 Bit9[POLY9_SIZE];
     
-uint8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
-uint8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
-uint16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
+uInt8  P4[2] __attribute__((section(".dtcm"))); /* Position pointer for the 4-bit POLY array */
+uInt8  P5[2] __attribute__((section(".dtcm"))); /* Position pointer for the 5-bit POLY array */
+uInt16 P9[2] __attribute__((section(".dtcm"))); /* Position pointer for the 9-bit POLY array */
 
-uint32 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
-uint32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
+uInt32 Div_n_cnt[2] __attribute__((section(".dtcm")));  /* Divide by n counter. one for each channel */
+uInt32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, one for each channel */
 
 /* In my routines, I treat the sample output as another divide by N counter. */
 /* For better accuracy, the Samp_n_cnt has a fixed binary decimal point */
 /* which has 8 binary digits to the right of the decimal point. */
 
-uint32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-uint32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+uInt32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
+uInt32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
 uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
 uInt16 tia_out_idx  __attribute__((section(".dtcm"))) = 0;
 
-//uint16 tia_buf[SOUND_SIZE];
-uint16 *tia_buf = (uInt16*) 0x06890000; // Use VRAM 
-extern uint16 *aptr;
-extern uint16 *bptr;
+//uInt16 tia_buf[SOUND_SIZE];
+uInt16 *tia_buf = (uInt16*) 0x06890000; // Use VRAM 
+extern uInt16 *aptr;
+extern uInt16 *bptr;
 
 /*****************************************************************************/
 /* Module:  Tia_sound_init()                                                 */
@@ -161,9 +152,9 @@ extern uint16 *bptr;
 /*                                                                           */
 /*****************************************************************************/
 
-void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
+void Tia_sound_init (uInt16 sample_freq, uInt16 playback_freq)
 {
-   uint8 chan;
+   uInt8 chan;
    int16 n;
     
    /* fill the 9bit polynomial with random bits */
@@ -173,7 +164,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
    }
 
    /* calculate the sample 'divide by N' value based on the playback freq. */
-   Samp_n_max = (uint16)(((uint32)sample_freq<<8)/playback_freq);
+   Samp_n_max = (uInt16)(((uInt32)sample_freq<<8)/playback_freq);
    Samp_n_cnt = 256;  /* initialize all bits of the sample counter */
 
    /* initialize the local globals */
@@ -222,7 +213,7 @@ void Tia_sound_init (uint16 sample_freq, uint16 playback_freq)
 /*****************************************************************************/
 ITCM_CODE void Update_tia_sound_0 (void)
 {
-    uint16 new_val;
+    uInt16 new_val;
     
    /* an AUDC value of 0 is a special case */
    if (AUDC[0] == VOL_ONLY)
@@ -261,7 +252,7 @@ ITCM_CODE void Update_tia_sound_0 (void)
 
 ITCM_CODE void Update_tia_sound_1 (void)
 {
-    uint16 new_val;
+    uInt16 new_val;
     
    /* an AUDC value of 0 is a special case */
    if (AUDC[1] == VOL_ONLY)
@@ -416,12 +407,12 @@ ITCM_CODE void Tia_process(void)
          when using unsigned 8-bit samples in SDL */
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {
-            ((uInt16*)0x06890000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+            ((uInt16*)0x06890000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uInt16)Outvol[0] + (uInt16)Outvol[1]];
             tia_buf_idx = (tia_buf_idx + 1) & (SOUND_SIZE-1);
         }
         else
         {
-            *aptr = *bptr = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uint16)Outvol[0] + (uint16)Outvol[1]];
+            *aptr = *bptr = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uInt16)Outvol[0] + (uInt16)Outvol[1]];
         }
         
       bProcessingSample = false;

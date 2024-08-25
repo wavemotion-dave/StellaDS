@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -87,10 +87,15 @@ const char* M6502Low::name() const
 #define fake_poke()  gSystemCycles++;
 
 // -------------------------------------------------------------------------------
-// This is the normal driver - optmized as best we can. Note that this is the 
+// This is the normal driver - optimized as best we can. Note that this is the 
 // only drive in which we are setting the bus state to the last value that 
 // would be presented on the BUS. The myDataBusState is used in the TIA::peek()
-// handler to drive unused bits for a few "buggy" games that require this.
+// handler to drive unused bits for a few "buggy" games that require this for
+// proper operation [note: the games themselves are not really buggy but they 
+// rely on the undriven TIA bus pins to reflect the most recent data that was
+// written to the bus... in general, games shouldn't rely on this behavior and
+// some later 2600 cost-reduced units will not reflect the last bits on the bus
+// in this way and those few carts that rely on it may not work...]
 // -------------------------------------------------------------------------------
 inline uInt8 peek(uInt16 address)
 {
@@ -186,16 +191,16 @@ void M6502Low::execute(void)
 // on the older/slower DS-LITE/PHAT hardware. Be warned - since we do very
 // little checking here, badly behaved games which try to write to ROM or do
 // other strange things like rely on the state of undriven TIA pins will fail
-// using this optmized driver. Those will need to use the normal peek() poke().
+// using this optimized driver. Those will need to use the normal cart driver.
 // ==============================================================================
-inline uInt8 peek_PCNB(uInt16 address)
+inline uInt8 peek_4K_PC(uInt16 address)
 {
   gSystemCycles++;
   return fast_cart_buffer[address & 0xFFF];
 }
 
 
-inline uInt8 peek_NB(uInt16 address)
+inline uInt8 peek_4K(uInt16 address)
 {
   gSystemCycles++;
 
@@ -214,7 +219,7 @@ inline uInt8 peek_NB(uInt16 address)
 }
 
 
-inline void poke_NB(uInt16 address, uInt8 value)
+inline void poke_4K(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
@@ -225,7 +230,7 @@ inline void poke_NB(uInt16 address, uInt8 value)
   else theTIA.poke(address, value);
 }
 
-void M6502Low::execute_NB(void)
+void M6502Low::execute_4K(void)
 {
     // Clear all of the execution status bits
     myExecutionStatus = 0;
@@ -245,10 +250,10 @@ void M6502Low::execute_NB(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "NB" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_NB
-        #define peek_zpg peek_NB
-        #define peek_PC  peek_PCNB
-        #define poke     poke_NB
+        #define peek     peek_4K
+        #define peek_zpg peek_4K
+        #define peek_PC  peek_4K_PC
+        #define poke     poke_4K
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
@@ -794,7 +799,7 @@ inline void poke_AR(uInt16 address, uInt8 value)
         if (address & 0x200) theM6532.poke(address, value);
         else if (address & 0x80) myRAM[address & 0x7F] = value;
         else theTIA.poke(address, value);
-    } else debug[15]++;
+    } else debug[16]++; // Just keep track for now... should never happen
 }
 
 

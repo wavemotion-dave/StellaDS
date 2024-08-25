@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -25,7 +25,7 @@
 #include "System.hxx"
 #include "TIA.hxx"
 
-uInt16 myCurrentBanks[4] __attribute__((section(".dtcm"))) = {0,0,0};
+uInt16 myCurrentBanks[4] = {0,0,0};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Cartridge3EPlus::Cartridge3EPlus(const uInt8* image, uInt32 size)

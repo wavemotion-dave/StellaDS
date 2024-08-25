@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -95,7 +95,7 @@ void M6532::reset()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-void M6532::systemCyclesReset()
+ITCM_CODE void M6532::systemCyclesReset()
 {
   // System cycles are being reset to zero so we need to adjust
   // the cycle count we remembered when the timer was last set

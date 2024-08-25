@@ -49,7 +49,7 @@
 #include "Thumbulator.hxx"
 #include "TIA.hxx"
 
-#define VERSION "7.5"
+#define VERSION "7.6"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000
@@ -86,7 +86,7 @@ uint8 sound_buffer[SOUND_SIZE]  __attribute__ ((aligned (4)))  = {0};  // Can't 
 uint16 *aptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
 uint16 *bptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
 uint8  bHaltEmulation           __attribute__((section(".dtcm"))) = 0; 
-uint8 bScreenRefresh            __attribute__((section(".dtcm"))) = 0;
+uint8  bScreenRefresh           __attribute__((section(".dtcm"))) = 0;
 uInt32 gAtariFrames             __attribute__((section(".dtcm"))) = 0;
 uInt32 gTotalAtariFrames = 0;
 
@@ -149,7 +149,7 @@ void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr,
   unsigned short ucFade;
   unsigned char ucBcl;
 
-  // Fade-out vers le noir
+  // Fade-out the main screen
   if (ucScr & 0x01) REG_BLDCNT=ucBG;
   if (ucScr & 0x02) REG_BLDCNT_SUB=ucBG;
   if (ucSens == 1) {
@@ -216,7 +216,7 @@ ITCM_CODE void vblankIntr()
     
     // -----------------------------------------------------------------------------------
     // This is a nice speedup so we don't have to check for too many cycles as part of
-    // the main M6502 exectue() loop. We can just check periodically once per DS frame.
+    // the main M6502 execute() loop. We can just check periodically once per DS frame.
     // -----------------------------------------------------------------------------------
     if (gSystemCycles & 0x8000) // 32K cycles is enough... force break
     {
@@ -228,7 +228,7 @@ ITCM_CODE void vblankIntr()
 // --------------------------------------------------------------------------------------
 void dsInitScreenMain(void)
 {
-    // Init vbl and hbl func
+    // Init the VSYNC and enable VBLANK interrupts.
     SetYtrigger(190); //trigger 2 lines before vsync
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
@@ -688,7 +688,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
 unsigned int dsWaitForRom(void)
 {
   u8 bDone=false, bRet=false;
-  u16 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00,romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
+  u16 ucHaut=0x00, ucBas=0x00,ucSHaut=0x00, ucSBas=0x00, romSelected= 0, firstRomDisplay=0,nbRomPerPage, uNbRSPage;
   u8 uLenFic=0, ucFlip=0, ucFlop=0;
 
   decompress(bgFileSelTiles, bgGetGfxPtr(bg0b), LZ77Vram);
@@ -946,43 +946,42 @@ unsigned int dsWaitOnMenu(unsigned int actState)
 
 void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
-  u16 *pusEcran,*pusMap;
+  static u16 *ptrScreen,*ptrMap;
   u16 usCharac;
   char *pTrTxt=pchStr;
   char ch;
 
-  pusEcran=(u16*) (bgGetMapPtr(bg1b))+x+(y<<5);
-  pusMap=(u16*) (bgGetMapPtr(bg0b)+(2*isSelect+24)*32);
+  ptrScreen=(u16*) (bgGetMapPtr(bg1b))+x+(y<<5);
+  ptrMap=(u16*) (bgGetMapPtr(bg0b)+(2*isSelect+24)*32);
 
   while((*pTrTxt)!='\0' )
   {
     ch = *pTrTxt;
     if (ch >= 'a' && ch <= 'z') ch -= 32; // Faster than strcpy/strtoupper
-    usCharac=0x0000;
     if ((ch) == '|')
-      usCharac=*(pusMap);
+      usCharac=*(ptrMap);
     else if (((ch)<' ') || ((ch)>'_'))
-      usCharac=*(pusMap);
+      usCharac=*(ptrMap);
     else if((ch)<'@')
-      usCharac=*(pusMap+(ch)-' ');
+      usCharac=*(ptrMap+(ch)-' ');
     else
-      usCharac=*(pusMap+32+(ch)-'@');
-    *pusEcran++=usCharac;
+      usCharac=*(ptrMap+32+(ch)-'@');
+    *ptrScreen++=usCharac;
     pTrTxt++;
   }
 }
 
 ITCM_CODE void dsPrintFPS(char *pchStr)
 {
-  u16 *pusEcran,*pusMap;
+  u16 *ptrScreen,*ptrMap;
   char *pTrTxt=pchStr;
 
-  pusEcran=(u16*) (bgGetMapPtr(bg1b))+0+(0<<5);
-  pusMap=(u16*) (bgGetMapPtr(bg0b)+(2*0+24)*32);
+  ptrScreen=(u16*) (bgGetMapPtr(bg1b))+0+(0<<5);
+  ptrMap=(u16*) (bgGetMapPtr(bg0b)+(2*0+24)*32);
 
   while((*pTrTxt)!='\0')
   {
-    *pusEcran++ = *(pusMap+(*pTrTxt++)-' ');
+    *ptrScreen++ = *(ptrMap+(*pTrTxt++)-' ');
   }
 }
 

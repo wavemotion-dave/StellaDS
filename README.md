@@ -48,7 +48,7 @@ Known Issues :
 * Cherity music fetchers are incomplete and the background music will not play (game is otherwise fine to play).
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
-* No more than 1200 files can be shown in a directory. You can break up your games into multiple directories if needed.
+* No more than 1500 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
 Strongest Recommendation:
 -----------------------
@@ -88,16 +88,16 @@ press the START button to save out your configuration after making changes:
 * Bankswitch:      The system tries to auto-detect the correct bankswitching scheme but you can override that here if needed.
 * Frame Blend:     Normal is fastest. Flicker free combines even/odd frames and it's pretty fast (10% hit to emulation speed which is no problem on most games) and effective at eliminating flicker. Background/Black mode is the slowest and will help with games that show background/black on one frame and sprites on the other (a simple blending will cause the sprites to disappear - Missile Command is one such game).
 * TV Type:         NTSC vs PAL. Reload your game after saving this setting.
-* Palette:         Three different palette types are supported. One optmized for the DS (default), the mainline Stella palette and the Z26 palette. You can also set the global palette for loading up all future games (page 2 of options).
+* Palette:         Three different palette types are supported. One optimized for the DS (default), the mainline Stella palette and the Z26 palette. You can also set the global palette for loading up all future games (page 2 of options).
 * Sound:           Four different levels including the new WAVE DIRECT if you're using a game that does direct sound output (such as Quadrun, Stay Frosty 2, Mappy or Draconian). Most games should auto-detect this correctly. You can also set the global sound for loading up all future games (page 2 of options).
 * ABXY Button:     Default to FIRE button but you can change this. You can now set to Screen Pan UP or Screen Pan DN to scroll the screen for more complex games. See Screen Settings below.
 * HBLANK Zero:     Whether system clears pixels on horizontal blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
 * VBLANK Zero:     Whether system clears pixels on vertical blanks. Turn off at your own risk (it will speed up emulation which helps with older DS-LITE)
-* Analog Sens:     Default is 10 (1.0x speed). You can ajust how the paddle emulation responds.
-* Start Scanline:  Starting Scanline setting. When the TV first starts output of scanlines.
+* Analog Sens:     Default is 10 (1.0x speed). You can adjust how the paddle emulation responds.
+* Start Scanline:  Starting scanline setting. When the TV first starts output of scanlines.
 * Num Scanlines:   Number of scanlines to display. Don't touch if you don't understand this.
 * Offset/Scale:    You can ajust the screen scaling and offset positions for the game. If you scale down, be aware that some pixel lines will not render - such is life with a very small 256x192 pixel DS screen.
-* ARM THUMB:       SAFE and Optimized are roughly the same - Optmized is preferred as is slightly faster and recommended for ARM-assisted games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision detection. One final experimental setting is to enable some level of frameskip for the really hard-hitting newest ARM games (e.g. Elevator Agent).
+* ARM THUMB:       SAFE and Optimized are roughly the same - Optimized is preferred as is slightly faster and recommended for ARM-assisted games. Optimized-No-Collisions is generally fine for most of the new CDF/CDFJ/CDFJ+ games that don't need TIA hardware collision detection. One final experimental setting is to enable some level of frameskip for the really hard-hitting newest ARM games (e.g. Elevator Agent).
 * BUS Mode:        For the DSi and above, this will default to 'Accurate' and for the older DS hardware (or running in DS compatibility mode on an R4 cart) it will be set to 'Optimized' to gain speed. If you encounter a glitch with a game, try setting this to 'Accurate'.
 * RAM Clear:       Normally set to 'Random' but you can force the Atari VCS RAM to all zeros. A few games might care - but most won't.
 
@@ -180,6 +180,7 @@ In the /data directory of your SD card you will see some files auto-created by S
 * StellaDS.DAT - this contains the per-game settings (basically when you press START on the Configuration screen and it saves out your settings for the current game). The easiest way to set all your games back to default settings is to remove this file.
 * StellaDS.HI - this is the high-score file on a per-game basis. Up to 10 scores are saved per game by pressing the little Golden Chalice icon on the main screen.
 * StellaDS.EE - this is the SaveKey 32K EEPROM file for games that utilize a SaveKey. If you remove it, a new clean blank copy will be created.
+* Various .sav files - these are the Save State / Restore files (one per game).
  
 Champ Games Support :
 -----------------------
@@ -241,9 +242,11 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-V7.5a : 24-Aug-2024 by Dave Bernazzani (wavemotion)
+V7.6 : 25-Aug-2024 by Dave Bernazzani (wavemotion)
   * Fixed config setting of RAM randomized vs clear.
   * Fixed AR (Starpath/Supercharger) games to prevent memory overwrite.
+  * Big improvement to Starpath Supercharger (AR) cart rendering for 3-6 frames of improvement.
+  * Numerous comment cleanups and other minor refactors to improve the codebase.
 
 V7.5 : 23-Aug-2024 by Dave Bernazzani (wavemotion)
   * Overhaul and refactor of cart/device handling to gain a 3-4% speed boost across the board.
@@ -363,7 +366,7 @@ V5.7 : 18-Oct-2022 by Dave Bernazzani (wavemotion)
 V5.6 : 14-Oct-2022 by Dave Bernazzani (wavemotion)
   * Massive speedup improvement for DPC+ games. Most play full speed on the DSi.
   * Fixed graphical glitches on Space Rocks homebrew.
-  * Other cleanups and optmizations across the board to shine things up.
+  * Other cleanups and optimizations across the board to shine things up.
   
 V5.5 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
   * Added DPC+ with ARM Thumbulator to provide some preliminary support for ARM-assisted games.
@@ -372,7 +375,7 @@ V5.5 : 12-Oct-2022 by Dave Bernazzani (wavemotion)
 V5.4 : 07-Oct-2022 by Dave Bernazzani (wavemotion)
   * Added DF bankswitching scheme (missed when DFSC was added).
   * New core execution loop that gives us another 2 frames of performance.
-  * Optmized F4 driver to make some of the 32K games playable on DS-Lite.
+  * Optimized F4 driver to make some of the 32K games playable on DS-Lite.
   * Cleanup across the board.
   
 V5.3 : 03-Oct-2022 by Dave Bernazzani (wavemotion)
@@ -393,7 +396,7 @@ V5.1 : 29-Sep-2022 by Dave Bernazzani (wavemotion)
 
 V5.0 : 27-Sep-2022 by Dave Bernazzani (wavemotion)
   * Added new bankswitching scheme:  X07 (Stella's Stocking).
-  * Improved 4K/2K driver to squeese out a couple more frames of performance.
+  * Improved 4K/2K driver to squeeze out a couple more frames of performance.
   * New special F8 driver to support more 8K games on the DS-Lite.
   * Lots of cleanup across the board in the database to make more games playable.
 

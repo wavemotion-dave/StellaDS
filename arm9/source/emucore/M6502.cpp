@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -84,20 +84,13 @@ ITCM_CODE uInt8 M6502::PS() const
 {
   uInt8 ps = 0x20;
 
-  if(N & 0x80) 
-    ps |= 0x80;
-  if(V) 
-    ps |= 0x40;
-  if(B) 
-    ps |= 0x10;
-  if(D) 
-    ps |= 0x08;
-  if(I) 
-    ps |= 0x04;
-  if(!notZ) 
-    ps |= 0x02;
-  if(C) 
-    ps |= 0x01;
+  if(N & 0x80)  ps |= 0x80;
+  if(V)         ps |= 0x40;
+  if(B)         ps |= 0x10;
+  if(D)         ps |= 0x08;
+  if(I)         ps |= 0x04;
+  if(!notZ)     ps |= 0x02;
+  if(C)         ps |= 0x01;
 
   return ps;
 }

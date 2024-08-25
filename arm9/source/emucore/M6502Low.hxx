@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -71,7 +71,7 @@ class M6502Low : public M6502
       @return true iff execution stops normally
     */
     virtual void execute(void);
-    virtual void execute_NB(void);
+    virtual void execute_4K(void);
     virtual void execute_F8(void);
     virtual void execute_F6(void);
     virtual void execute_F4(void);

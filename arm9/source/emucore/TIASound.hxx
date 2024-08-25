@@ -52,12 +52,12 @@ void Tia_process_wave(void);
 extern unsigned char AUDC[2];
 extern unsigned char AUDF[2];
 extern unsigned char AUDV[2];
-extern uInt8 bProcessingSample;
+extern uInt8  bProcessingSample;
 extern uInt32 Outvol[2];
 extern uInt16 tia_buf_idx;
 extern uInt16 tia_out_idx;
 
-extern uInt8 Bit9[POLY9_SIZE];
+extern uInt8  Bit9[POLY9_SIZE];
 extern uInt8  P4[2];
 extern uInt8  P5[2];
 extern uInt16 P9[2];

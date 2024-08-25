@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -2492,6 +2492,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strcmp(myCartInfo.gameID, "CARNIV") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "HAUNTH") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "GLAPAT") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "FROGGR") == 0) myCartInfo.frame_mode = MODE_BLACK;
       }
   }
 

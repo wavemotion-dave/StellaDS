@@ -87,6 +87,7 @@ void MakeSaveName(void)
     szName2[strlen(szName2)-1] = 'v';
 }
 
+uInt16 save_version = 0;
 void SaveState(void)
 {
     dsPrintValue(13,0,0, (char*)"SAVING");
@@ -102,7 +103,7 @@ void SaveState(void)
     // future-proof save state files when upgrading software as the memory locations of those buffers might change and a direct
     // store of the pointers would generally lead to corruption on a save from one version and a load on another...
     // --------------------------------------------------------------------------------------------------------------------------
-    for (int i=0; i<64; i++)
+    for (uInt8 i=0; i<64; i++)
     {
         // Direct PEEKs
         if ((myPageAccessTable[i].directPeekBase >= &myRAM[0]) && (myPageAccessTable[i].directPeekBase <= &myRAM[255]))
@@ -163,7 +164,7 @@ void SaveState(void)
     savedTimerData = TIMER0_DATA;
     
     // Version
-    uInt16 save_version = SAVE_VERSION;
+    save_version = SAVE_VERSION;
     fwrite(&save_version,               sizeof(save_version),               1, fp);
     
     // StellaDS
@@ -389,7 +390,7 @@ void LoadState(void)
     if (fp)
     {
         // Version
-        uInt16 save_version = 0xFFFF;
+        save_version = 0xFFFF;
         fread(&save_version,               sizeof(save_version),               1, fp);
         if (save_version == SAVE_VERSION) 
         {

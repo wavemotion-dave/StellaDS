@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -112,7 +112,7 @@ uInt8   bFrameSkipCDFJ              __attribute__((section(".dtcm"))) = 0;
 uInt8   bNoCollisionDetection       __attribute__((section(".dtcm"))) = 0;
 uInt8   ourPlayerReflectTable[256];
 
-Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
+uInt8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) = {
   0,  // VSYNC
   1,  // VBLANK (0) / 1
   0,  // WSYNC
@@ -126,9 +126,9 @@ Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(
   0,  // CTRLPF
   1,  // REFP0
   1,  // REFP1
- -1,  // PF0    (4) / -1
- -1,  // PF1    (4) / -1
- -1,  // PF2    (4) / -1
+ 0x80,  // PF0    (4) / Use delay_tab[]
+ 0x80,  // PF1    (4) / Use delay_tab[]
+ 0x80,  // PF2    (4) / Use delay_tab[]
   0,  // RESP0
   0,  // RESP1
   8,  // RESM0  (0) / 8
@@ -163,7 +163,7 @@ Int8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section(
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Int8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) =
+uInt8 delay_tab[] __attribute__ ((aligned (4))) __attribute__((section(".dtcm"))) =
 {
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
         4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 2, 2, 2, 3, 3, 3,
@@ -572,7 +572,7 @@ ITCM_CODE void TIA::update()
   // --------------------------------------------------------------------
   switch (cartDriver)
   {
-      case 1: mySystem->m6502().execute_NB();            break;   // If we are 2K or 4K (non-banked), we can run faster here...
+      case 1: mySystem->m6502().execute_4K();            break;   // If we are 2K or 4K (non-banked), we can run faster here...
       case 2: mySystem->m6502().execute_F8();            break;   // If we are F8, we can run faster here...
       case 3: mySystem->m6502().execute_F6();            break;   // If we are F6, we can run faster here...
       case 4: mySystem->m6502().execute_F4();            break;   // If we are F4, we can run faster here...
@@ -1741,9 +1741,9 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
       clock = (3*gSystemCycles);
       delta_clock = (clock - myClockWhenFrameStarted);
-      Int8 delay = ourPokeDelayTable[addr];
+      uInt8 delay = ourPokeDelayTable[addr];
       // See if this is a poke to a PF register
-      if(delay == -1)
+      if (delay & 0x80)
       {
         delay = delay_tab[delta_clock % 228];
       }

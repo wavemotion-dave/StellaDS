@@ -8,7 +8,7 @@
 //  SS  SS   tt   ee      ll   ll  aa  aa
 //   SSSS     ttt  eeeee llll llll  aaaaa
 //
-// Copyright (c) 1995-2022 by Bradford W. Mott, Stephen Anthony
+// Copyright (c) 1995-2024 by Bradford W. Mott, Stephen Anthony
 // and the Stella Team
 //
 // This file has been modified by Dave Bernazzani (wavemotion-dave)
@@ -28,23 +28,23 @@ class M6502;
 #include "bspf.hxx"
 #include "System.hxx"
 
-extern uInt8 A; 
-extern uInt8 X; 
-extern uInt8 Y; 
-extern uInt8 SP;
-extern uInt16 gPC;
-extern uInt8 N; 
-extern uInt8 V; 
-extern uInt8 B; 
-extern uInt8 D; 
-extern uInt8 I; 
-extern uInt8 C;
-extern uInt8 notZ;
-extern uInt16 myExecutionStatus;
-extern uInt8 myDataBusState;
-extern uInt32 NumberOfDistinctAccesses;
-extern uInt8  cartDriver;
-extern uInt16 f8_bankbit;
+extern uInt8    A; 
+extern uInt8    X; 
+extern uInt8    Y; 
+extern uInt8    SP;
+extern uInt16   gPC;
+extern uInt8    N; 
+extern uInt8    V; 
+extern uInt8    B; 
+extern uInt8    D; 
+extern uInt8    I; 
+extern uInt8    C;
+extern uInt8    notZ;
+extern uInt16   myExecutionStatus;
+extern uInt8    myDataBusState;
+extern uInt32   NumberOfDistinctAccesses;
+extern uInt8    cartDriver;
+extern uInt16   f8_bankbit;
 
 /**
   This is an abstract base class for classes that emulate the
@@ -105,7 +105,7 @@ class M6502
       @return true iff execution stops normally
     */
     virtual void execute(void)              = 0;
-    virtual void execute_NB(void)           = 0;
+    virtual void execute_4K(void)           = 0;
     virtual void execute_F8(void)           = 0;
     virtual void execute_F6(void)           = 0;
     virtual void execute_F4(void)           = 0;
