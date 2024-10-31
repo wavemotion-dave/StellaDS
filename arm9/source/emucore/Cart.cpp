@@ -2918,6 +2918,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (strstr(my_filename, "elevator") != 0) {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
       if (strstr(my_filename, "gorf") != 0)      cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "tutankham") != 0) cartDriver = 11;  //CDFJ++
+      if (strstr(my_filename, "spiders") != 0)   cartDriver = 11;  //CDFJ++
 
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
       if (!bFoundInDAT)
@@ -3046,6 +3047,15 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.displayStartScanline = 33;
               myCartInfo.displayNumScalines = 208;
               myCartInfo.yOffset = 14;
+              myCartInfo.xButton = BUTTON_SHIFT_UP;
+          }
+          else
+          if (strstr(my_filename, "spiders") != 0)
+          {
+              myCartInfo.vblankZero = 0;
+              myCartInfo.displayStartScanline = 33;
+              myCartInfo.displayNumScalines = 210;
+              myCartInfo.yOffset = 15;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
           }
           else
