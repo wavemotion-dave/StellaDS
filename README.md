@@ -243,6 +243,10 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+V7.7 : 24-Nov-2024 by Dave Bernazzani (wavemotion)
+  * Improved 'Wave Direct' sound to help with digitized speech effects of Quadrun, Berzerk VE and Open Sesame.
+  * Tweaked handling of the new Champ Games - Tuthankham.
+
 V7.6 : 25-Aug-2024 by Dave Bernazzani (wavemotion)
   * Fixed config setting of RAM randomized vs clear.
   * Fixed AR (Starpath/Supercharger) games to prevent memory overwrite.

@@ -551,7 +551,14 @@ ITCM_CODE void TIA::update()
   myDSFramePointer = BG_GFX;
 
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
+  if (bWaveDirectSound) 
+  {
+      // If we are a DSi or above running faster, we can support the WAVESLOW hack to improve WAVE DIRECT sounds      
+      if ((myCartInfo.special == SPEC_WAVESLOW) && isDSiMode()) bWaveDirectSound = 2;
+  }
+  
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
+  
 
   // If the cart requires frame skipping (mostly for Turbo Arcade and Draconian)
   // then we set the skip flag for every other pair of frames

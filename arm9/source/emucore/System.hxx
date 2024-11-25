@@ -31,7 +31,7 @@ class NullDevice;
 #include "Device.hxx"
 #include "NullDev.hxx"
 
-#define SOUND_SIZE (2048)
+#define SOUND_SIZE (1024)
 
 
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset

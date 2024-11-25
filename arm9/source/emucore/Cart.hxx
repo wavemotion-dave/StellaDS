@@ -155,6 +155,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SPEC_DPCPOPT    12     // Optmized ARM Thumb DPC+ handling
 #define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
 #define SPEC_RSYNC      14     // Game requires emulation of RSYNC
+#define SPEC_WAVESLOW   15     // Slow down the Wave Direct (for games like Quadrun or Berzerk VE)
 
 // Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode - fastest no blend mode
