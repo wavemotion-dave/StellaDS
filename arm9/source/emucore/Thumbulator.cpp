@@ -1778,7 +1778,7 @@ ITCM_CODE void Thumbulator::execute ( void )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void Thumbulator::reset ( void )
+void Thumbulator::reset ( void )
 {
     reg_sys[13]=cStack;   //sp
     reg_sys[14]=cBase;    //lr (duz this use odd addrs)

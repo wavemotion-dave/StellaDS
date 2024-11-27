@@ -1119,6 +1119,7 @@ ITCM_CODE void dsMainLoop(void)
     uInt8 button_down  = false;
     uInt8 button_left  = false;
     uInt8 button_right = false;
+    uInt8 temp_full_speed = 0;
 
     last_keys_pressed = -1;
     full_speed = 0;
@@ -1150,16 +1151,18 @@ ITCM_CODE void dsMainLoop(void)
             break;
 
         case STELLADS_PLAYGAME:
+            if (TIMER0_DATA > 50000) // If we get above 50K, that means we've fallen way behind - so just unthrottle
+            {   
+                temp_full_speed = 1; 
+            }
+        
             // 32,728.5 ticks = 1 second
             // 1 frame = 1/50 or 1/60 (0.02 or 0.016)
             // 655 -> 50 fps and 546 -> 60 fps
-            if (TIMER0_DATA < 40000) // If we get above 40K, that means we've fallen way behind - so just unthrottle
-            {    
-                if (!full_speed)
-                {
-                    while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
-                        ;
-                }
+            if ((full_speed || temp_full_speed) == 0)
+            {
+                while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
+                    ;
             }
 
             // Have we processed 60 frames... start over...
@@ -1169,6 +1172,7 @@ ITCM_CODE void dsMainLoop(void)
                 TIMER0_DATA=0;
                 TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
                 atari_frames=0;
+                temp_full_speed = 0;
             }
                 
             // Wait for keys
