@@ -1153,10 +1153,13 @@ ITCM_CODE void dsMainLoop(void)
             // 32,728.5 ticks = 1 second
             // 1 frame = 1/50 or 1/60 (0.02 or 0.016)
             // 655 -> 50 fps and 546 -> 60 fps
-            if (!full_speed)
-            {
-                while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
-                    ;
+            if (TIMER0_DATA < 40000) // If we get above 40K, that means we've fallen way behind - so just unthrottle
+            {    
+                if (!full_speed)
+                {
+                    while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
+                        ;
+                }
             }
 
             // Have we processed 60 frames... start over...

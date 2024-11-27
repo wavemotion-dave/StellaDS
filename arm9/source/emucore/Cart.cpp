@@ -280,6 +280,7 @@ const CartInfo table[] =
     {"490e3cc59d82f85fae817cdf767ea7a0",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
     {"4b205ef73a5779acc5759bde3f6d33ed",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
     {"be41463cd918daef107d249f8cde3409",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk-VE.bin
+    {"3264674dd39b20abb3eb508973ea2d9b",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Doctor Who vs Daleks (Berzerk Hack)
     {"1badbf0d3cb5abf7cf29233120dc14cc",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // BiFrost (RC).bin
     {"1802cc46b879b229272501998c5de04f",  "??????", BANK_F8,   CTR_LJOY,      SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin (patched for joystick)
     {"d22a401f0b20808196f538cc43786459",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (joystick).bin
