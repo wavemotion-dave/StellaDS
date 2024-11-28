@@ -1151,7 +1151,13 @@ ITCM_CODE void dsMainLoop(void)
             break;
 
         case STELLADS_PLAYGAME:
-            if (TIMER0_DATA > 50000) // If we get above 50K, that means we've fallen way behind - so just unthrottle
+        
+            // ------------------------------------------------------------------------------------
+            // If we get above 50K, that means we've fallen way behind - so just unthrottle until
+            // the next 50/60 frame mark. If we don't do this and we do wrap the timer at at 64K,
+            // we will end up with a pause/gap in play as we catch back up to the frame counter.
+            // ------------------------------------------------------------------------------------
+            if (TIMER0_DATA > 50000)
             {   
                 temp_full_speed = 1; 
             }
@@ -1165,7 +1171,7 @@ ITCM_CODE void dsMainLoop(void)
                     ;
             }
 
-            // Have we processed 60 frames... start over...
+            // Have we processed 50/60 frames... start over...
             if (++atari_frames == (myCartInfo.tv_type ? 50:60))
             {
                 TIMER0_CR=0;

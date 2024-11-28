@@ -554,7 +554,7 @@ ITCM_CODE void TIA::update()
   if (bWaveDirectSound) 
   {
       // If we are a DSi or above running faster, we can support the WAVESLOW hack to improve WAVE DIRECT sounds      
-      if ((myCartInfo.special == SPEC_WAVESLOW) && isDSiMode()) bWaveDirectSound = 2;
+      if (myCartInfo.special == SPEC_WAVESLOW) bWaveDirectSound = 2;
   }
   
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;

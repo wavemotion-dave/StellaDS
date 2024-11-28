@@ -2376,6 +2376,15 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "SSTOCK") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (strcmp(myCartInfo.gameID, "MSPACM") == 0) myCartInfo.soundQuality = SOUND_WAVE;
   if (myCartInfo.special == SPEC_WAVESLOW)      myCartInfo.soundQuality = SOUND_WAVE;
+  
+  // If we are the older DS/DS-Lite, we can only support WAVESLOW on a few games
+  if ((myCartInfo.special == SPEC_WAVESLOW) && !isDSiMode())
+  {
+      myCartInfo.special = 0;
+      if (strcmp(myCartInfo.gameID, "BERZRK") == 0) myCartInfo.special = SPEC_WAVESLOW;
+      if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.special = SPEC_WAVESLOW;
+      if (strcmp(myCartInfo.gameID, "OPENSE") == 0) myCartInfo.special = SPEC_WAVESLOW;
+  }
 
   myCartInfo.thumbOptimize = 0;
   if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
@@ -2495,6 +2504,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strcmp(myCartInfo.gameID, "CARNIV") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "HAUNTH") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "GLAPAT") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "FROGGR") == 0) myCartInfo.frame_mode = MODE_BLACK;
       }
   }
@@ -2806,7 +2816,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
     }
     else if(size == 28672) // 28K
     {
-        myCartInfo.banking = BANK_FA2;  // 28K is probably FA2 (Star CAstle)
+        myCartInfo.banking = BANK_FA2;  // 28K is probably FA2 (Star Castle)
     }
     else if(size == 32*1024)  // 32K
     {

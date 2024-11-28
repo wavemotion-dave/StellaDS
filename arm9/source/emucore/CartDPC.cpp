@@ -146,12 +146,12 @@ inline void CartridgeDPC::bank(uInt16 bank)
     f8_bankbit = (bank ? 0x1FFF : 0x0FFF);
 }
 
-#define DPC_MUSIC_PITCH 60
+#define DPC_MUSIC_PITCH 5966
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeDPC::updateMusicModeDataFetchers(uInt32 delta)
 {
-  Int32 wholeClocks = delta / DPC_MUSIC_PITCH;
+  Int32 wholeClocks = (delta*100) / DPC_MUSIC_PITCH;
 
   // Let's update counters and flags of the music mode data fetchers
   for(int x = 5; x <= 7; ++x)
@@ -227,11 +227,11 @@ uInt8 CartridgeDPC::peek_fetch(uInt16 address)
           if (myCartInfo.soundQuality == SOUND_WAVE)
           {
               uInt32 delta = gSystemCycles - myMusicCycles;
-              if (delta >= DPC_MUSIC_PITCH)
+              if ((delta*100) >= DPC_MUSIC_PITCH)
               {              
                   // Update the music data fetchers (counter & flag)
                   updateMusicModeDataFetchers(delta);
-                  myMusicCycles = gSystemCycles - (delta % DPC_MUSIC_PITCH);
+                  myMusicCycles = gSystemCycles - ((((delta*100) % DPC_MUSIC_PITCH)+99) / 100);
               }
 
               uInt8 i = 0;
