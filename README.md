@@ -243,6 +243,12 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+V7.8 : ??-Nov-2024 by Dave Bernazzani (wavemotion)
+  * Further tweaks to the improved 'Wave Direct' to prevent audio gaps.
+  * First pass at allowing 'Wave Direct' for DS-Phat/Lite (only for simple games like Quadrun, Berzerk VE and Open Sesame).
+  * Tweaks to improve the DPC audio driver for improved Pitfall II music.
+  * Added support for some of the Voice Enhanced Berzerk hacks such as DrVsDaleks.
+  
 V7.7 : 24-Nov-2024 by Dave Bernazzani (wavemotion)
   * Improved 'Wave Direct' sound to help with digitized speech effects of Quadrun, Berzerk VE and Open Sesame.
   * Tweaked handling of the new Champ Games - Tuthankham.

@@ -372,23 +372,26 @@ void TIA::reset()
   }
   myCurrentFrame = 0;
 
-
-  if (myCartInfo.special == SPEC_MELTDOWN)
-  {
-      ourPokeDelayTable[NUSIZ0] = 11;
-      ourPokeDelayTable[NUSIZ1] = 11;
-  }
-  else if (myCartInfo.special == SPEC_BUMPBASH)
+  // Bumper Bash requires shorter NUSIZx delay
+  if (myCartInfo.special == SPEC_BUMPBASH)
   {
       ourPokeDelayTable[NUSIZ0] = 6;
       ourPokeDelayTable[NUSIZ1] = 6;
+  }
+  // Pole Position requires shorter NUSIZx delay
+  else if (myCartInfo.special == SPEC_POLEPOS)
+  {
+      ourPokeDelayTable[NUSIZ0] = 1;
+      ourPokeDelayTable[NUSIZ1] = 1;
   }
   else
   {
       ourPokeDelayTable[NUSIZ0] = 8;
       ourPokeDelayTable[NUSIZ1] = 8;
   }
-
+  
+  // Due to the hack to make MELTDOWN playable, we need to recompute this table on TIA reset...
+  computePlayerMaskTable();
 
   // Reset pixel pointer and drawing flag
   myFramePointer = myCurrentFrameBuffer[0];
@@ -872,17 +875,37 @@ void TIA::computePlayerMaskTable()
         }
         else if(mode == 0x04)
         {
-          if((enable == 0) && (x >= 0) && (x < 8))
-            ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x;
-          else if(((x - 64) >= 0) && ((x - 64) < 8))
-            ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> (x - 64);
+          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw
+          {
+              if((enable == 0) && (x >= 0) && (x <= 16))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x / 2;
+              else if(((x - 64) >= 0) && ((x - 64) <= 16))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> (x - 64) / 2;
+          }
+          else
+          {
+              if((enable == 0) && (x >= 0) && (x < 8))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x;
+              else if(((x - 64) >= 0) && ((x - 64) < 8))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> (x - 64);
+          }
         }
         else if(mode == 0x05)
         {
-          // For some reason in double size mode the player's output
-          // is delayed by one pixel thus we use > instead of >=
-          if((enable == 0) && (x > 0) && (x <= 16))
-            ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> ((x - 1)/2);
+          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw
+          {
+              if((enable == 0) && (x >= 0) && (x <= 16))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x / 2;
+              else if(((x - 64) >= 0) && ((x - 64) <= 16))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> (x - 64) / 2;
+          }
+          else
+          {
+              // For some reason in double size mode the player's output
+              // is delayed by one pixel thus we use > instead of >=
+              if((enable == 0) && (x > 0) && (x <= 16))
+                ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> ((x - 1)/2);
+          }
         }
         else if(mode == 0x06)
         {
@@ -1837,37 +1860,24 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
         break;
     }
 
-    case 0x04:    // Number-size of player-missle 0
+    case 0x04:    // Number-size of player-missile 0 (NUSIZ0)
     {
         if (value != myNUSIZ0)
         {
-          myNUSIZ0 = value;
-
-          // TODO: Technically the "enable" part, [0], should depend on the current
-          // enabled or disabled state.  This mean we probably need a data member
-          // to maintain that state (01/21/99).
-          myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-              [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
-
-          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-              [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+            myNUSIZ0 = value;
+            myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+            myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
         }
       break;
     }
 
-    case 0x05:    // Number-size of player-missle 1
+    case 0x05:    // Number-size of player-missile 1 (NUSIZ1)
     {
         if (value != myNUSIZ1)
         {
             myNUSIZ1 = value;
-          // TODO: Technically the "enable" part, [0], should depend on the current
-          // enabled or disabled state.  This mean we probably need a data member
-          // to maintain that state (01/21/99).
-          myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-              [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-
-          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+            myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+            myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
         }
       break;
     }

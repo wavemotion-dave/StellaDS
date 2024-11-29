@@ -268,19 +268,19 @@ const CartInfo table[] =
     {"ee6665683ebdb539e89ba620981cb0f6",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berenstain Bears (1983).bin
     {"b8ed78afdb1e6cfe44ef6e3428789d5f",  "BERMUD", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bermuda Triangle (1982).bin
     {"36c993dc328933e4dd6374a8ffe224f4",  "BERMUD", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   47,    245,    51,   0,  0},    // Bermuda Triangle (1982) (PAL).bin
-    {"136f75c4dd02c29283752b7e5799f978",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0, -1},    // Berzerk (1982).bin
-    {"fac28963307b6e85082ccd77c88325e7",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (1982).bin
-    {"1bd6e676ba7a066d433f7179014acf11",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Arcade Enhanced Hack).bin
-    {"91750d2ce72f22ae70c8826d67c6aecb",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -1},    // Berzerk (Dungeon Of The Mad Mages Hack).bin
-    {"68597f3efc332bc141e21077b68cad34",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Frosty 2019 Hack).bin
-    {"c887d31fd62c32f20ce74c8dc6db6be3",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Arcade Enhanced VE Hack).bin
-    {"cd51012a994540075e24809a4f1d259e",  "BERZRK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Diagonal Shots).bin
-    {"8b80a6c398724ba0ca6321e15b27c7c0",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk Enhanded - World.bin
-    {"0805366f1b165a64b6d4df20d2c39d25",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
-    {"490e3cc59d82f85fae817cdf767ea7a0",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
-    {"4b205ef73a5779acc5759bde3f6d33ed",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
-    {"be41463cd918daef107d249f8cde3409",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk-VE.bin
-    {"3264674dd39b20abb3eb508973ea2d9b",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Doctor Who vs Daleks (Berzerk Hack)
+    {"136f75c4dd02c29283752b7e5799f978",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0, -1},    // Berzerk (1982).bin
+    {"fac28963307b6e85082ccd77c88325e7",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (1982).bin
+    {"1bd6e676ba7a066d433f7179014acf11",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Arcade Enhanced Hack).bin
+    {"91750d2ce72f22ae70c8826d67c6aecb",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, -1},    // Berzerk (Dungeon Of The Mad Mages Hack).bin
+    {"68597f3efc332bc141e21077b68cad34",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Frosty 2019 Hack).bin
+    {"c887d31fd62c32f20ce74c8dc6db6be3",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Arcade Enhanced VE Hack).bin
+    {"cd51012a994540075e24809a4f1d259e",  "BERZRK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk (Diagonal Shots).bin
+    {"8b80a6c398724ba0ca6321e15b27c7c0",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk Enhanded - World.bin
+    {"0805366f1b165a64b6d4df20d2c39d25",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
+    {"490e3cc59d82f85fae817cdf767ea7a0",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   57,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
+    {"4b205ef73a5779acc5759bde3f6d33ed",  "BERZRK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  6},    // Berzerk (1982) (PAL).bin
+    {"be41463cd918daef107d249f8cde3409",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk-VE.bin
+    {"3264674dd39b20abb3eb508973ea2d9b",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Doctor Who vs Daleks (Berzerk Hack)
     {"1badbf0d3cb5abf7cf29233120dc14cc",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // BiFrost (RC).bin
     {"1802cc46b879b229272501998c5de04f",  "??????", BANK_F8,   CTR_LJOY,      SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin (patched for joystick)
     {"d22a401f0b20808196f538cc43786459",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (joystick).bin
@@ -1182,7 +1182,7 @@ const CartInfo table[] =
     {"345769d085113d57937198262af52298",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   48,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"6604f72a966ca6b2df6a94ee4a68eb82",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
     {"049626cbfb1a5f7a5dc885a0c4bb758e",  "MEGAMA", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   56,    245,   100,   3,  4},    // MegaMania (1982) (PAL).bin
-    {"96e798995af6ed9d8601166d4350f276",  "MELTDN", BANK_4K,   CTR_LJOY,      SPEC_MELTDOWN,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0,  0},    // Meltdown (Prototype) (1983).bin
+    {"96e798995af6ed9d8601166d4350f276",  "MELTDN", BANK_4K,   CTR_LJOY,      SPEC_MELTDOWN,  MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  33,    210,    91,   0, -1},    // Meltdown (Prototype) (1983).bin
     {"712924a2c7b692f6e7b009285c2169a7",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Meteoroids (1982).bin
     {"909d01739a22579556b740e933915fd8",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  35,    210,    90,   0,  0},    // Mid Space (v43).bin
     {"f1554569321dc933c87981cf5c239c43",  "MIDMAG", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,   !VB,   HB,  ANA1_0,  NTSC,  38,    200,   100,   0,  0},    // Midnight Magic (1984).bin
@@ -1468,11 +1468,11 @@ const CartInfo table[] =
     {"44f71e70b89dcc7cf39dfd622cfb9a27",  "POLARI", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polaris (1983).bin
     {"87bea777a34278d29b3b6029833c5422",  "POLARI", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  38,    210,   100,   0,  0},    // Polaris (1983) (TJ).bin
     {"203049f4d8290bb4521cc4402415e737",  "POLARI", BANK_3F,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  5},    // Polaris (1983) (PAL).bin
-    {"a4ff39d513b993159911efe01ac12eba",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
-    {"5f39353f7c6925779b0169a87ff86f1e",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (1983)[alt].bin
-    {"650df778c6ce22d3fd1a7c33c565bcc3",  "POLEPO", BANK_F8,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (2 Button Hack).bin
-    {"3225676f5c0c577aeccfaa7e6bedd765",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
-    {"5da8fd0b5ed33a360bff37f8b5d0cd58",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
+    {"a4ff39d513b993159911efe01ac12eba",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_POLEPOS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
+    {"5f39353f7c6925779b0169a87ff86f1e",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_POLEPOS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (1983)[alt].bin
+    {"650df778c6ce22d3fd1a7c33c565bcc3",  "POLEPO", BANK_F8,   CTR_GENESIS,   SPEC_POLEPOS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  1},    // Pole Position (2 Button Hack).bin
+    {"3225676f5c0c577aeccfaa7e6bedd765",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_POLEPOS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
+    {"5da8fd0b5ed33a360bff37f8b5d0cd58",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_POLEPOS,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Pole Position (1983).bin
     {"b56264f738b2eb2c8f7cf5a2a75e5fdc",  "POLEPO", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   3,  0},    // Pole Position (1983) (PAL).bin
     {"ee28424af389a7f3672182009472500c",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Polo (1978).bin
     {"a83b070b485cf1fb4d5a48da153fdf1a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  42,    210,   100,   0,  2},    // Pompeii (1983).bin
@@ -2248,6 +2248,8 @@ const CartInfo table[] =
     {"468dc062a58499d081c59cf5fd08f655",  "??????", BANK_JANE, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},   // Tarzan - 16K Prototype with unique banking
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2505,8 +2507,15 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           if (strcmp(myCartInfo.gameID, "HAUNTH") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "GLAPAT") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "QUARUN") == 0) myCartInfo.frame_mode = MODE_FF;
+          if (strcmp(myCartInfo.gameID, "MELTDN") == 0) myCartInfo.frame_mode = MODE_FF;
           if (strcmp(myCartInfo.gameID, "FROGGR") == 0) myCartInfo.frame_mode = MODE_BLACK;
       }
+  }
+  
+  // Meltdown won't look right in anything but Flicker-Free due to the hacked Player/Missile table in use
+  if (myCartInfo.special == SPEC_MELTDOWN)
+  {
+      myCartInfo.frame_mode = MODE_FF;
   }
 
   // Patch Haunted House to avoid original bug

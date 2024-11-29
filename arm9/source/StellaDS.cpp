@@ -971,7 +971,7 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
   }
 }
 
-ITCM_CODE void dsPrintFPS(char *pchStr)
+void dsPrintFPS(char *pchStr)
 {
   u16 *ptrScreen,*ptrMap;
   char *pTrTxt=pchStr;
