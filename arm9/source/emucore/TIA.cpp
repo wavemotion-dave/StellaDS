@@ -117,8 +117,8 @@ uInt8 ourPokeDelayTable[64] __attribute__ ((aligned (4))) __attribute__((section
   1,  // VBLANK (0) / 1
   0,  // WSYNC
   0,  // RSYNC
-  8,  // NUSIZ0 (0) / 8    TODO - calculate this instead of hardcoding
-  8,  // NUSIZ1 (0) / 8    TODO - calculate this instead of hardcoding
+  8,  // NUSIZ0 (0) / 8 - a few games will alter this value at runtime
+  8,  // NUSIZ1 (0) / 8 - a few games will alter this value at runtime
   0,  // COLUP0
   0,  // COLUP1
   0,  // COLUPF
@@ -384,7 +384,7 @@ void TIA::reset()
       ourPokeDelayTable[NUSIZ0] = 1;
       ourPokeDelayTable[NUSIZ1] = 1;
   }
-  else
+  else // The default delay... this is enough to render the sprite output before a change in NUSIZ takes place. Not perfect emulation - the new Stella TIA core handles it better.
   {
       ourPokeDelayTable[NUSIZ0] = 8;
       ourPokeDelayTable[NUSIZ1] = 8;
@@ -875,7 +875,7 @@ void TIA::computePlayerMaskTable()
         }
         else if(mode == 0x04)
         {
-          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw
+          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw - the effect will show 2 player sprites at double-size 
           {
               if((enable == 0) && (x >= 0) && (x <= 16))
                 ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x / 2;
@@ -892,7 +892,7 @@ void TIA::computePlayerMaskTable()
         }
         else if(mode == 0x05)
         {
-          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw
+          if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw - the effect will show 2 player sprites at double-size 
           {
               if((enable == 0) && (x >= 0) && (x <= 16))
                 ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x / 2;
@@ -1740,18 +1740,18 @@ uInt8 poke_needs_update_display[] __attribute__((section(".dtcm"))) =
 
 uInt8 player_reset_pos[] =
 {
-  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
-  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
-  3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
-  3,   3,   3,   3,   3,   3,   3,   3,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,  16,
- 17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,
- 37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,
- 57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,
- 77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,
- 97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
-117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
-137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156,
-157, 158, 159,   0,   1,   2,   3,   4
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,   3,
+    3,   3,   3,   3,   3,   3,   3,   3,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,  16,
+   17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,
+   37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,
+   57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,
+   77,  78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,
+   97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
+  117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
+  137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156,
+  157, 158, 159,   0,   1,   2,   3,   4
 };
 
 
@@ -1851,12 +1851,8 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x03:    // Reset horizontal sync counter (RSYNC)
     {
-        if (myCartInfo.special == SPEC_RSYNC)
-        {
-            uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
-
-            gSystemCycles += (cyclesToEndOfLine-1);
-        }
+        uInt32 cyclesToEndOfLine = 76 - ((gSystemCycles - myCyclesWhenFrameStarted) % 76);
+        gSystemCycles += (cyclesToEndOfLine-1);
         break;
     }
 
@@ -1975,13 +1971,19 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       uInt8 hpos = (delta_clock) % 228;
       uInt8 newx = player_reset_pos[hpos];  //hpos < HBLANK ? 3 : (((hpos - HBLANK) + 5) % 160);
 
-      // TODO: Remove the following special hack for Space Rocks
+      // This is a special hack for Grand Prix
+      if ((clock - myLastHMOVEClock) == (21 * 3) && (hpos==72))
+      {
+          newx = 11;
+      }
+      else
+      // This is a special hack for Space Rocks
       if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
       {
           newx = 11;
       }
-
-      // TODO: Remove the following special hack for Draconian
+      else
+      // This is a special hack for Draconian
       if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
       {
           newx = 11;
@@ -2033,14 +2035,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
 
       if (hpos == 69)
       {
-          // TODO: Remove the following special hack for Space Rocks
+          // This is a special hack for Space Rocks
           if ((clock - myLastHMOVEClock) == (23 * 3))
           {
               newx = 11;
           }
 
-          // TODO: Remove the following special hack for Rabbit Transit
-          // and Dragon Stomper (Excalibur) by StarPath/Arcadia and Draconian
+          // This is a special hack for Draconian, Rabbit Transit, and Dragon Stomper (Excalibur) by StarPath/Arcadia
           else if ((clock - myLastHMOVEClock) == (20 * 3))
           {
               newx = 11;
@@ -2090,17 +2091,18 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
     {
       uInt8 hpos = (delta_clock) % 228;
       myPOSM0 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
-
-      // TODO: Remove the following special hack for Dolphin by
-      // figuring out what really happens when Reset Missle
-      // occurs 20 cycles after an HMOVE (04/13/02).
-      if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
+      
+      // This is a special hack for Pole Position
+      if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
+      {
+          myPOSM0 = 9;
+      }
+      // This is a special hack for Dolphin
+      else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
       {
         myPOSM0 = 8;
       }
-      // TODO: Remove the following special hack for Solaris by
-      // figuring out what really happens when Reset Missle
-      // occurs 9 cycles after an HMOVE (04/11/08).
+      // This is a special hack for Solaris 
       else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
       {
         myPOSM0 = 8;
@@ -2116,12 +2118,16 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       uInt8 hpos = (delta_clock) % 228;
       myPOSM1 = hpos < HBLANK ? 2 : (((hpos - HBLANK) + 4) % 160);
 
-      // TODO: Remove the following special hack for Pitfall II by
-      // figuring out what really happens when Reset Missle
-      // occurs 3 cycles after an HMOVE (04/13/02).
+      // This is a special hack for Pole Position
+      if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 54))
+      {
+          myPOSM1 = 9;
+      }
+      else
+      // This is a special hack for Pitfall II 
       if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
       {
-        myPOSM1 = 3;
+          myPOSM1 = 3;
       }
 
       myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
@@ -2141,8 +2147,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       // -----------------------------------------------------------------------------------------
       if ((clock - myLastHMOVEClock) < (19*3))
       {
-          // TODO: Remove the following special hack by figuring out what
-          // really happens when Reset Ball occurs 18 cycles after an HMOVE.
+          // This is a special hack for Escape from the Mindmaster and Mission Survive (both Starpath games)
           if((clock - myLastHMOVEClock) == (18 * 3))
           {
             // Escape from the Mindmaster (01/09/99)
@@ -2152,44 +2157,32 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
             else if(hpos == 63)
               myPOSBL = 7;
           }
-          // TODO: Remove the following special hack for Escape from the
-          // Mindmaster by figuring out what really happens when Reset Ball
-          // occurs 15 cycles after an HMOVE (04/11/08).
+          // This is a special hack for Escape from the Mindmaster 
           else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
           {
             myPOSBL = 10;
           }
-          // TODO: Remove the following special hack for Decathlon by
-          // figuring out what really happens when Reset Ball
-          // occurs 3 cycles after an HMOVE (04/13/02).
+          // This is a special hack for Decathlon 
           else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
           {
             myPOSBL = 3;
           }
-          // TODO: Remove the following special hack for Robot Tank by
-          // figuring out what really happens when Reset Ball
-          // occurs 7 cycles after an HMOVE (04/13/02).
+          // This is a special hack for Robot Tank 
           else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
           {
             myPOSBL = 6;
           }
-          // TODO: Remove the following special hack for Hole Hunter by
-          // figuring out what really happens when Reset Ball
-          // occurs 6 cycles after an HMOVE (04/13/02).
+          // This is a special hack for Hole Hunter
           else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
           {
             myPOSBL = 5;
           }
-          // TODO: Remove the following special hack for Swoops! by
-          // figuring out what really happens when Reset Ball
-          // occurs 9 cycles after an HMOVE (04/11/08).
+          // This is a special hack for Swoops! 
           else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
           {
             myPOSBL = 7;
           }
-          // TODO: Remove the following special hack for Solaris by
-          // figuring out what really happens when Reset Ball
-          // occurs 12 cycles after an HMOVE (04/11/08).
+          // This is a special hack for Solaris 
           else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
           {
             myPOSBL = 8;

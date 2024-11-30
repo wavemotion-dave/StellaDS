@@ -243,11 +243,15 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-V7.8 : ??-Nov-2024 by Dave Bernazzani (wavemotion)
+V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)
   * Further tweaks to the improved 'Wave Direct' to prevent audio gaps.
   * First pass at allowing 'Wave Direct' for DS-Phat/Lite (only for simple games like Quadrun, Berzerk VE and Open Sesame).
-  * Tweaks to improve the DPC audio driver for improved Pitfall II music.
+  * Tweaks to the DPC audio driver for improved Pitfall II music.
   * Added support for some of the Voice Enhanced Berzerk hacks such as DrVsDaleks.
+  * Improved Meltdown emulation - added hack for NUSIZ0/1 to improve screen rendering. Not perfect but closer...
+  * Fixed Pole Position lap counter so it shows correctly.
+  * Fixed Grand Prix graphical glitch on rocks/scenery (Player Reset timing).
+  * Apply RSYNC improved TIA handling across the board (was only being applied to select games).
   
 V7.7 : 24-Nov-2024 by Dave Bernazzani (wavemotion)
   * Improved 'Wave Direct' sound to help with digitized speech effects of Quadrun, Berzerk VE and Open Sesame.

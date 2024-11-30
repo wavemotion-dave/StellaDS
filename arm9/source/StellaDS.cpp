@@ -49,7 +49,7 @@
 #include "Thumbulator.hxx"
 #include "TIA.hxx"
 
-#define VERSION "7.7"
+#define VERSION "7.8"
 
 #define MAX_RESISTANCE  1000000
 #define MIN_RESISTANCE  70000

@@ -721,7 +721,7 @@ const CartInfo table[] =
     {"6362396c8344eec3e86731a700b13abf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
     {"74f623833429d35341b7a84bc09793c0",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Exocet (1983).bin
     {"7ac4f4fb425db38288fa07fb8ff4b21d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   35,    245,    63,   0,  0},    // Exocet (1983) (PAL).bin
-    {"ebd2488dcace40474c1a78fa53ebfadf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_RSYNC,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Extra Terrestrials.bin
+    {"ebd2488dcace40474c1a78fa53ebfadf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Extra Terrestrials.bin
     {"8f459512fa21f8af59c3df8020be5b9d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // F-4 Supercharger (2006) (David Weavil).bin
     {"76181e047c0507b2779b4bcbf032c9d5",  "FALLDN", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Fall Down.bin
     {"78f788e8d0288069b97a887990e2123f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  29,    210,   100,   0,  0},    // Fallout (Chain Reaction) (2005) (Colman Bryant, Jill Donnely, April Headen).bin
