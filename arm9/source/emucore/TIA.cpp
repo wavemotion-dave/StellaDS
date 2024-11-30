@@ -37,6 +37,8 @@
 
 #define HBLANK 68       // Standard HBLANK for both NTSC and PAL TVs
 
+//#define TIA_HMOVE_DEBUG
+
 // ---------------------------------------------------------------------------------------------------------
 // All of this used to be in the TIA class but for maximum speed, this is moved it out into fast memory...
 // ---------------------------------------------------------------------------------------------------------
@@ -1755,7 +1757,10 @@ uInt8 player_reset_pos[] =
 };
 
 
-ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
+#ifndef TIA_HMOVE_DEBUG
+ITCM_CODE 
+#endif
+void TIA::poke(uInt16 addr, uInt8 value)
 {
   Int32 clock;
   Int32 delta_clock;
@@ -1988,6 +1993,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           newx = 11;
       }
+#ifdef TIA_HMOVE_DEBUG
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          debug[0] = (clock - myLastHMOVEClock)/3;
+          debug[1] = hpos;
+      }
+#endif      
 
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ0 & 7][myPOSP0][newx];
@@ -2047,7 +2059,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
               newx = 11;
           }
       }
-
+#ifdef TIA_HMOVE_DEBUG      
+      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          debug[2] = (clock - myLastHMOVEClock)/3;
+          debug[3] = hpos;
+      }
+#endif
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ1 & 7][myPOSP1][newx];
 
@@ -2107,6 +2125,13 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
         myPOSM0 = 8;
       }
+#ifdef TIA_HMOVE_DEBUG      
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          debug[4] = (clock - myLastHMOVEClock)/3;
+          debug[5] = hpos;
+      }
+#endif
 
       myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
           [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
@@ -2123,12 +2148,23 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       {
           myPOSM1 = 9;
       }
-      else
       // This is a special hack for Pitfall II 
-      if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
+      else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
       {
           myPOSM1 = 3;
       }
+      // This is a special hack for Moon Patrol
+      else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
+      {
+          myPOSM1 = 9;
+      }
+#ifdef TIA_HMOVE_DEBUG      
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          debug[6] = (clock - myLastHMOVEClock)/3;
+          debug[7] = hpos;
+      }
+#endif
 
       myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
           [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
@@ -2145,7 +2181,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       // Modern versions of Stella are cycle accurate and handle this perfectly - but here
       // we have the old Stella core and need to adjust a few special cases...
       // -----------------------------------------------------------------------------------------
-      if ((clock - myLastHMOVEClock) < (19*3))
+      if ((clock - myLastHMOVEClock) <= (23*3))
       {
           // This is a special hack for Escape from the Mindmaster and Mission Survive (both Starpath games)
           if((clock - myLastHMOVEClock) == (18 * 3))
@@ -2187,7 +2223,25 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
           {
             myPOSBL = 8;
           }
+          // This is a special hack for Pole Position
+          else if(((clock - myLastHMOVEClock) == (21 * 3)) && (hpos == 72))
+          {
+            myPOSBL = 8;
+          }
+          // This is a special hack for Moon Patrol
+          else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
+          {
+              myPOSBL = 8;
+          }          
+#ifdef TIA_HMOVE_DEBUG
+          else if ((clock - myLastHMOVEClock) <= (23 * 3))
+          {
+              debug[8] = (clock - myLastHMOVEClock)/3;
+              debug[9] = hpos;
+          }
+#endif      
       }
+      
 
       myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
           [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
@@ -2464,7 +2518,7 @@ ITCM_CODE void TIA::poke(uInt16 addr, uInt8 value)
       break;
     }
 
-    case 0x2A:    // Apply horizontal motion
+    case 0x2A:    // Apply horizontal motion (HMOVE)
     {
       // Figure out what cycle we're at
       //Int32 x = ((clock - myClockWhenFrameStarted) % 228) / 3;

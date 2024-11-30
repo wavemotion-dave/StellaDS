@@ -249,8 +249,9 @@ V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)
   * Tweaks to the DPC audio driver for improved Pitfall II music.
   * Added support for some of the Voice Enhanced Berzerk hacks such as DrVsDaleks.
   * Improved Meltdown emulation - added hack for NUSIZ0/1 to improve screen rendering. Not perfect but closer...
-  * Fixed Pole Position lap counter so it shows correctly.
-  * Fixed Grand Prix graphical glitch on rocks/scenery (Player Reset timing).
+  * Fixed Pole Position lap counter so it shows correctly and other minor graphical fixes (HMOVE timing)
+  * Fixed Grand Prix graphical glitch on rocks/scenery (HMOVE timing).
+  * Fixed Moon Patrol graphical glitch on right side of screen (HMOVE timing)
   * Apply RSYNC improved TIA handling across the board (was only being applied to select games).
   
 V7.7 : 24-Nov-2024 by Dave Bernazzani (wavemotion)
