@@ -1390,10 +1390,8 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       // TODO: These should be reset right after the first copy of the player
       // has passed.  However, for now we'll just reset at the end of the
       // scanline since the other way would be to slow (01/21/99).
-      myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-          [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
-      myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-          [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+      myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+      myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
 
       // Handle the "Cosmic Ark" TIA bug if it's enabled
       if(myM0CosmicArkMotionEnabled)
@@ -1863,24 +1861,18 @@ void TIA::poke(uInt16 addr, uInt8 value)
 
     case 0x04:    // Number-size of player-missile 0 (NUSIZ0)
     {
-        if (value != myNUSIZ0)
-        {
-            myNUSIZ0 = value;
-            myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
-            myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
-        }
-      break;
+        myNUSIZ0 = value;
+        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+        myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+        break;
     }
 
     case 0x05:    // Number-size of player-missile 1 (NUSIZ1)
     {
-        if (value != myNUSIZ1)
-        {
-            myNUSIZ1 = value;
-            myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
-            myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
-        }
-      break;
+        myNUSIZ1 = value;
+        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+        myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+        break;
     }
 
     case 0x06:    // Color-Luminance Player 0
@@ -1981,15 +1973,18 @@ void TIA::poke(uInt16 addr, uInt8 value)
       {
           newx = 11;
       }
-      else
       // This is a special hack for Space Rocks
-      if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
+      else if ((clock - myLastHMOVEClock) == (23 * 3) && (hpos==69))
       {
           newx = 11;
       }
-      else
       // This is a special hack for Draconian
-      if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
+      else if ((clock - myLastHMOVEClock) == (20 * 3) && (hpos==69))
+      {
+          newx = 11;
+      }
+      // This is a special hack for Double Dragon (Activision)
+      else if ((clock - myLastHMOVEClock) == (19 * 3) && (hpos==66))
       {
           newx = 11;
       }
@@ -2010,8 +2005,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP0 = newx;
 
         // So we setup the mask to skip the first copy of the player
-        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-            [1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       }
       // Player is being reset during the display of one of its copies
       else if (when == 1)
@@ -2025,8 +2019,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP0 = newx;
 
         // Setup the mask to skip the first copy of the player
-        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-            [1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][1][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       }
       // Player is being reset during the delay section of one of its copies
       else
@@ -2034,8 +2027,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP0 = newx;
 
         // So we setup the mask to display all copies of the player
-        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-            [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+        myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       }
       break;
     }
@@ -2052,15 +2044,21 @@ void TIA::poke(uInt16 addr, uInt8 value)
           {
               newx = 11;
           }
-
-          // This is a special hack for Draconian, Rabbit Transit, and Dragon Stomper (Excalibur) by StarPath/Arcadia
+          // This is a special hack for Draconian, Masters of the Universe, Rabbit Transit, Jungle Hunt, and Dragon Stomper (Excalibur) by StarPath/Arcadia
           else if ((clock - myLastHMOVEClock) == (20 * 3))
           {
               newx = 11;
           }
+#ifdef TIA_HMOVE_DEBUG      
+          else if ((clock - myLastHMOVEClock) <= (23 * 3))
+          {
+              debug[2] = (clock - myLastHMOVEClock)/3;
+              debug[3] = hpos;
+          }
+#endif
       }
 #ifdef TIA_HMOVE_DEBUG      
-      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           debug[2] = (clock - myLastHMOVEClock)/3;
           debug[3] = hpos;
@@ -2075,8 +2073,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP1 = newx;
 
         // So we setup the mask to skip the first copy of the player
-        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-            [1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
       // Player is being reset during the display of one of its copies
       else if (when == 1)
@@ -2090,8 +2087,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP1 = newx;
 
         // Setup the mask to skip the first copy of the player
-        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-            [1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][1][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
       // Player is being reset during the delay section of one of its copies
       else
@@ -2099,8 +2095,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myPOSP1 = newx;
 
         // So we setup the mask to display all copies of the player
-        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-            [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+        myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
       break;
     }
@@ -2133,8 +2128,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
       }
 #endif
 
-      myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-          [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+      myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
       break;
     }
 
@@ -2158,6 +2152,11 @@ void TIA::poke(uInt16 addr, uInt8 value)
       {
           myPOSM1 = 9;
       }
+      // This is a special hack for Ski Hunt
+      else if(((clock - myLastHMOVEClock) == (21 * 3)) && (hpos == 72))
+      {
+          myPOSM1 = 9;
+      }
 #ifdef TIA_HMOVE_DEBUG      
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
@@ -2166,8 +2165,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
       }
 #endif
 
-      myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-          [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+      myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
       break;
     }
 
@@ -2241,10 +2239,8 @@ void TIA::poke(uInt16 addr, uInt8 value)
           }
 #endif      
       }
-      
 
-      myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
-          [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
+      myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03][(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
       break;
     }
 
@@ -2467,18 +2463,15 @@ void TIA::poke(uInt16 addr, uInt8 value)
     {
       if(myRESMP0 && !(value & 0x02))
       {
-        uInt16 middle;
+        uInt16 middle = 4;
 
         if((myNUSIZ0 & 0x07) == 0x05)
           middle = 8;
         else if((myNUSIZ0 & 0x07) == 0x07)
           middle = 16;
-        else
-          middle = 4;
 
         myPOSM0 = (myPOSP0 + middle) % 160;
-        myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-            [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+        myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
       }
 
       myRESMP0 = value & 0x02;
@@ -2495,18 +2488,15 @@ void TIA::poke(uInt16 addr, uInt8 value)
     {
       if(myRESMP1 && !(value & 0x02))
       {
-        uInt16 middle;
+        uInt16 middle = 4;
 
         if((myNUSIZ1 & 0x07) == 0x05)
           middle = 8;
         else if((myNUSIZ1 & 0x07) == 0x07)
           middle = 16;
-        else
-          middle = 4;
 
         myPOSM1 = (myPOSP1 + middle) % 160;
-        myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-            [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+        myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
       }
 
       myRESMP1 = value & 0x02;

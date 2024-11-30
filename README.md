@@ -255,7 +255,8 @@ V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)
   * Improved Meltdown emulation - added hack for NUSIZ0/1 to improve screen rendering. Not perfect but closer...
   * Fixed Pole Position speedometer zero so it shows correctly and other minor graphical fixes (HMOVE timing)
   * Fixed Grand Prix graphical glitch on rocks/scenery (HMOVE timing).
-  * Fixed Moon Patrol graphical glitch on right side of screen (HMOVE timing)
+  * Fixed Moon Patrol graphical glitch on right side of screen (HMOVE timing).
+  * Fixed Double Dragon graphical glitch on strength meter (HMOVE timing).
   * Apply RSYNC improved TIA handling across the board (was only being applied to select games).
   
 V7.7 : 24-Nov-2024 by Dave Bernazzani (wavemotion)
