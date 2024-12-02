@@ -154,8 +154,9 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SPEC_OLDDPCP    11     // For special "older" DPC+ handling
 #define SPEC_DPCPOPT    12     // Optmized ARM Thumb DPC+ handling
 #define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
-#define SPEC_POLEPOS    16     // Pole Position requires NUSIZ0/1 changes
+#define SPEC_POLEPOS    14     // Pole Position requires NUSIZ0/1 changes
 #define SPEC_WAVESLOW   15     // Slow down the Wave Direct (for games like Quadrun or Berzerk VE)
+#define SPEC_GIJOE      16     // GI Joe needs graphical tweaks to make it look right
 
 // Various output modes for the LCD
 #define MODE_NO          0     // Normal Mode - fastest no blend mode

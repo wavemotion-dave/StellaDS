@@ -35,7 +35,7 @@ Switches::Switches(const Event& event)
 Switches::~Switches()
 {
 }
-
+extern uInt32 debug[];
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 ITCM_CODE uInt8 Switches::read()
 {
@@ -47,6 +47,7 @@ ITCM_CODE uInt8 Switches::read()
 	{
 	 	mySwitches &= ~0x08;
 	}
+    
 	if(myEvent.get(Event::ConsoleRightDifficultyA) != 0)
 	{
 		mySwitches |= 0x80;

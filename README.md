@@ -42,7 +42,7 @@ Where does this fit in with the mainline Stella? :
 -----------------------
 In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many
 areas that closely mimic the real hardware. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS baseline is probably closest to mainline 
-Stella 3.7.5 with an even older TIA Core from Stella 2.8.5 and some fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). 
+Stella 3.7.5 with an even older TIA Core from Stella 2.8.4 and some fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). 
 In addition, some optimizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totally on me - be happy you didn't pay anything for it!
 
 Known Issues :
@@ -51,7 +51,7 @@ Known Issues :
 * Cherity music fetchers are incomplete and the background music will not play (game is otherwise fine to play).
 * KC Munchkin Monster Maze does not run correctly with the optimized 'AR' cart handler in StellaDS.
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
-* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (heavy glitching), Pole Position (minor road glitch), Bumper Bash (minor bumper glitch), Meltdown (left two columns not perfectly round)
+* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round)
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1500 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
@@ -247,6 +247,14 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
+  * Fix so holding shoulder buttons on Bumper Bash does NOT invoke the screen snapshot.
+  * Fix for bumper bash right bumper position so it now shows correctly.
+  * Improved GI Joe Cobra Strike snake graphics so it's much closer to the way a real TIA chip would draw it.
+  * Fix for Labyrinth (AR) graphical glitches at top/bottom of walls.
+  * Fix initial difficulty switch settings so startup for games like Asteroids works correctly.
+  * TBD
+
 V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)
   * Further tweaks to the improved 'Wave Direct' to prevent audio gaps.
   * First pass at allowing 'Wave Direct' for DS-Phat/Lite (only for simple games like Quadrun, Berzerk VE and Open Sesame).

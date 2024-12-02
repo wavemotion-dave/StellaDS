@@ -558,7 +558,7 @@ ITCM_CODE void TIA::update()
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
   if (bWaveDirectSound) 
   {
-      // If we are a DSi or above running faster, we can support the WAVESLOW hack to improve WAVE DIRECT sounds      
+      // We support the WAVESLOW hack to improve WAVE DIRECT sounds      
       if (myCartInfo.special == SPEC_WAVESLOW) bWaveDirectSound = 2;
   }
   
@@ -1410,9 +1410,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         if(myM0CosmicArkCounter == 1)
         {
           // Stretch this missle so it's at least 2 pixels wide
-          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-              [myNUSIZ0 & 0x07][((myNUSIZ0 & 0x30) >> 4) | 0x01]
-              [160 - (myPOSM0 & 0xFC)];
+          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][((myNUSIZ0 & 0x30) >> 4) | 0x01][160 - (myPOSM0 & 0xFC)];
         }
         else if(myM0CosmicArkCounter == 2)
         {
@@ -1421,8 +1419,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         }
         else
         {
-          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-              [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
         }
       }
 
@@ -1454,8 +1451,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         }
         else
         {
-          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
         }
       }
 
@@ -1754,6 +1750,79 @@ uInt8 player_reset_pos[] =
   157, 158, 159,   0,   1,   2,   3,   4
 };
 
+void __attribute__ ((noinline))  ResetBallEarlyHack(Int32 clock, uInt8 hpos)
+{
+  // This is a special hack for Escape from the Mindmaster (AR) and Mission Survive (4K)
+  if((clock - myLastHMOVEClock) == (18 * 3))
+  {
+    if ((hpos == 60) || (hpos == 69))  myPOSBL = 10; // Escape from the Mindmaster (01/09/99)
+    else if (hpos == 63)
+    {
+          if (myCartInfo.special == SPEC_AR) myPOSBL = 9; // Labyrinth AR (prototype)
+          else  myPOSBL = 7; // Mission Survive (04/11/08)
+    }
+  }
+  // This is a special hack for Escape from the Mindmaster 
+  else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
+  {
+    myPOSBL = 10;
+  }
+  // This is a special hack for Decathlon 
+  else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
+  {
+    myPOSBL = 3;
+  }
+  // This is a special hack for Robot Tank 
+  else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
+  {
+    myPOSBL = 6;
+  }
+  // This is a special hack for Hole Hunter
+  else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
+  {
+    myPOSBL = 5;
+  }
+  // This is a special hack for Swoops! 
+  else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
+  {
+    myPOSBL = 7;
+  }
+  // This is a special hack for Solaris 
+  else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
+  {
+    myPOSBL = 8;
+  }
+  // This is a special hack for Pole Position
+  else if(((clock - myLastHMOVEClock) == (21 * 3)) && (hpos == 72))
+  {
+    myPOSBL = 8;
+  }
+  // This is a special hack for Moon Patrol
+  else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
+  {
+      myPOSBL = 8;
+  }          
+#ifdef TIA_HMOVE_DEBUG
+  else if ((clock - myLastHMOVEClock) <= (23 * 3))
+  {
+      debug[8] = (clock - myLastHMOVEClock)/3;
+      debug[9] = hpos;
+  }
+#endif      
+}
+
+// Hack to GI Joe for early hits of Missile Position during HMOVE... this helps to fix the massive graphical glitches though it's not perfect
+void HackGIJoe(Int32 clock)
+{
+    if ((clock - myLastHMOVEClock) == (8 * 3))
+    {
+      myHMP1 = (myHMP1 + 1) % 160;
+    }
+    else if ((clock - myLastHMOVEClock) == (21 * 3))
+    {
+      myHMP1 = (myHMP1 + 2) % 160;
+    }
+}
 
 #ifndef TIA_HMOVE_DEBUG
 ITCM_CODE 
@@ -2064,6 +2133,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           debug[3] = hpos;
       }
 #endif
+
       // Find out under what condition the player is being reset
       Int8 when = ourPlayerPositionResetWhenTable[myNUSIZ1 & 7][myPOSP1][newx];
 
@@ -2113,12 +2183,12 @@ void TIA::poke(uInt16 addr, uInt8 value)
       // This is a special hack for Dolphin
       else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
       {
-        myPOSM0 = 8;
+          myPOSM0 = 8;
       }
       // This is a special hack for Solaris 
       else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
       {
-        myPOSM0 = 8;
+          myPOSM0 = 8;
       }
 #ifdef TIA_HMOVE_DEBUG      
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
@@ -2127,7 +2197,6 @@ void TIA::poke(uInt16 addr, uInt8 value)
           debug[5] = hpos;
       }
 #endif
-
       myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
       break;
     }
@@ -2157,7 +2226,12 @@ void TIA::poke(uInt16 addr, uInt8 value)
       {
           myPOSM1 = 9;
       }
-#ifdef TIA_HMOVE_DEBUG      
+      // This is a special hack for Bumper Bash
+      else if (((clock - myLastHMOVEClock) == (130 * 3)) && (hpos == 171))
+      {
+          if (myCartInfo.special == SPEC_BUMPBASH) myPOSM1 += 4;    // Fixes right bumper position
+      }
+#ifdef TIA_HMOVE_DEBUG
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           debug[6] = (clock - myLastHMOVEClock)/3;
@@ -2181,65 +2255,9 @@ void TIA::poke(uInt16 addr, uInt8 value)
       // -----------------------------------------------------------------------------------------
       if ((clock - myLastHMOVEClock) <= (23*3))
       {
-          // This is a special hack for Escape from the Mindmaster and Mission Survive (both Starpath games)
-          if((clock - myLastHMOVEClock) == (18 * 3))
-          {
-            // Escape from the Mindmaster (01/09/99)
-            if((hpos == 60) || (hpos == 69))
-              myPOSBL = 10;
-            // Mission Survive (04/11/08)
-            else if(hpos == 63)
-              myPOSBL = 7;
-          }
-          // This is a special hack for Escape from the Mindmaster 
-          else if(((clock - myLastHMOVEClock) == (15 * 3)) && (hpos == 60))
-          {
-            myPOSBL = 10;
-          }
-          // This is a special hack for Decathlon 
-          else if(((clock - myLastHMOVEClock) == (3 * 3)) && (hpos == 18))
-          {
-            myPOSBL = 3;
-          }
-          // This is a special hack for Robot Tank 
-          else if(((clock - myLastHMOVEClock) == (7 * 3)) && (hpos == 30))
-          {
-            myPOSBL = 6;
-          }
-          // This is a special hack for Hole Hunter
-          else if(((clock - myLastHMOVEClock) == (6 * 3)) && (hpos == 27))
-          {
-            myPOSBL = 5;
-          }
-          // This is a special hack for Swoops! 
-          else if(((clock - myLastHMOVEClock) == (9 * 3)) && (hpos == 36))
-          {
-            myPOSBL = 7;
-          }
-          // This is a special hack for Solaris 
-          else if(((clock - myLastHMOVEClock) == (12 * 3)) && (hpos == 45))
-          {
-            myPOSBL = 8;
-          }
-          // This is a special hack for Pole Position
-          else if(((clock - myLastHMOVEClock) == (21 * 3)) && (hpos == 72))
-          {
-            myPOSBL = 8;
-          }
-          // This is a special hack for Moon Patrol
-          else if(((clock - myLastHMOVEClock) == (20 * 3)) && (hpos == 69))
-          {
-              myPOSBL = 8;
-          }          
-#ifdef TIA_HMOVE_DEBUG
-          else if ((clock - myLastHMOVEClock) <= (23 * 3))
-          {
-              debug[8] = (clock - myLastHMOVEClock)/3;
-              debug[9] = hpos;
-          }
-#endif      
+          ResetBallEarlyHack(clock, hpos);
       }
-
+      
       myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03][(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
       break;
     }
@@ -2375,12 +2393,32 @@ void TIA::poke(uInt16 addr, uInt8 value)
     case 0x20:    // Horizontal Motion Player 0
     {
       myHMP0 = value >> 4;
+#ifdef TIA_HMOVE_DEBUG
+      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          uInt8 hpos = (delta_clock) % 228;
+          debug[10] = (clock - myLastHMOVEClock)/3;
+          debug[11] = hpos;
+      }
+#endif
       break;
     }
 
     case 0x21:    // Horizontal Motion Player 1
     {
       myHMP1 = value >> 4;
+      if (myCartInfo.special == SPEC_GIJOE)
+      {
+          HackGIJoe(clock);
+      }
+#ifdef TIA_HMOVE_DEBUG
+      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          uInt8 hpos = (delta_clock) % 228;
+          debug[12] = (clock - myLastHMOVEClock)/3;
+          debug[13] = hpos;
+      }
+#endif
       break;
     }
 
@@ -2394,7 +2432,14 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myM0CosmicArkMotionEnabled = true;
         myM0CosmicArkCounter = 0;
       }
-
+#ifdef TIA_HMOVE_DEBUG
+      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          uInt8 hpos = (delta_clock) % 228;
+          debug[14] = (clock - myLastHMOVEClock)/3;
+          debug[15] = hpos;
+      }
+#endif
       myHMM0 = tmp;
       break;
     }
@@ -2409,7 +2454,14 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myM1CosmicArkMotionEnabled = true;
         myM1CosmicArkCounter = 0;
       }
-
+#ifdef TIA_HMOVE_DEBUG
+      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      {
+          uInt8 hpos = (delta_clock) % 228;
+          debug[16] = (clock - myLastHMOVEClock)/3;
+          debug[20] = hpos;
+      }
+#endif
       myHMM1 = tmp;
       break;
     }
@@ -2526,8 +2578,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           myPOSP0 += motion;
           if(myPOSP0 >= 160) myPOSP0 -= 160;
           else if(myPOSP0 < 0) myPOSP0 += 160;
-          myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03]
-              [0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
+          myCurrentP0Mask = &ourPlayerMaskTable[myPOSP0 & 0x03][0][myNUSIZ0 & 0x07][160 - (myPOSP0 & 0xFC)];
       }
 
       motion = ourCompleteMotionTable[x][myHMP1];
@@ -2536,8 +2587,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           myPOSP1 += motion;
           if(myPOSP1 >= 160) myPOSP1 -= 160;
           else if(myPOSP1 < 0) myPOSP1 += 160;
-          myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03]
-              [0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
+          myCurrentP1Mask = &ourPlayerMaskTable[myPOSP1 & 0x03][0][myNUSIZ1 & 0x07][160 - (myPOSP1 & 0xFC)];
       }
 
       motion = ourCompleteMotionTable[x][myHMM0];
@@ -2546,8 +2596,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           myPOSM0 += motion;
           if(myPOSM0 >= 160) myPOSM0 -= 160;
           else if(myPOSM0 < 0) myPOSM0 += 160;
-          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03]
-              [myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
+          myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
           // Disable TIA M0 "bug" used for stars in Cosmic ark
           myM0CosmicArkMotionEnabled = false;
       }
@@ -2558,8 +2607,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           myPOSM1 += motion;
           if(myPOSM1 >= 160) myPOSM1 -= 160;
           else if(myPOSM1 < 0) myPOSM1 += 160;
-          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03]
-              [myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
+          myCurrentM1Mask = &ourMissleMaskTable[myPOSM1 & 0x03][myNUSIZ1 & 0x07][(myNUSIZ1 & 0x30) >> 4][160 - (myPOSM1 & 0xFC)];
       }
 
       motion = ourCompleteMotionTable[x][myHMBL];
@@ -2568,8 +2616,7 @@ void TIA::poke(uInt16 addr, uInt8 value)
           myPOSBL += motion;
           if(myPOSBL >= 160) myPOSBL -= 160;
           else if(myPOSBL < 0) myPOSBL += 160;
-          myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03]
-              [(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
+          myCurrentBLMask = &ourBallMaskTable[myPOSBL & 0x03][(myCTRLPF & 0x30) >> 4][160 - (myPOSBL & 0xFC)];
       }
 
       // Remember what clock HMOVE occured at

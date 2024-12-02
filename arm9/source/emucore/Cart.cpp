@@ -127,8 +127,8 @@ const CartInfo table[] =
     {"988c6401afc0a2cd27a6809cfcb30c2c",  "ADVENT", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Adventure - MisAdventure (Hack).bin
     {"5357037076d437e4016ff842a019918f",  "ADVENT", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Adventure - MisAdventure Flip (Hack).bin
     {"4b27f5397c442d25f0c418ccdacf1926",  "ADVENT", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   59,    245,   100,   0,  1},    // Adventure (1980) (PAL).bin
-    {"ca4f8c5b4d6fb9d608bb96bc7ebd26c7",  "ADTRON", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  5},    // Adventures of TRON (1982).bin
-    {"06cfd57f0559f38b9293adae9128ff88",  "ADTRON", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   2,  0},    // Adventures of TRON (1982) (PAL).bin
+    {"ca4f8c5b4d6fb9d608bb96bc7ebd26c7",  "ADTRON", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    200,   100,   0,  5},    // Adventures of TRON (1982).bin
+    {"06cfd57f0559f38b9293adae9128ff88",  "ADTRON", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  PAL,   63,    245,   100,   2,  0},    // Adventures of TRON (1982) (PAL).bin
     {"35be55426c1fec32dfb503b4f0651572",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   42,    245,    70,   0,  1},    // Air Raid (PAL).bin
     {"a9cb638cd2cb2e8e0643d7a67db4281c",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Air Raiders (1982).bin
     {"4dbd7e8b30e715efc8d71d215aec7fe7",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  5},    // Air Raiders (1982).bin
@@ -355,9 +355,9 @@ const CartInfo table[] =
     {"ab2cfcaad3daaf673b2b14fdbb8dac33",  "??????", BANK_E7,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bump 'n' Jump (1983).bin
     {"d6d7e829221a452792937acd9fda8b81",  "??????", BANK_E7,   CTR_GENESIS,   SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  4},    // Bump 'n' Jump (2 Button Hack).bin
     {"9295570a141cdec18074c55dc7229d08",  "??????", BANK_E7,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  4},    // Bump 'n' Jump (1983) (PAL).bin
-    {"aa1c41f86ec44c0a44eb64c332ce08af",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_BUMPBASH,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Bumper Bash (1983).bin
-    {"16ee443c990215f61f7dd1e55a0d2256",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   81,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
-    {"1bf503c724001b09be79c515ecfcbd03",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   79,    245,   100,   0,  0},    // Bumper Bash (1983) (PAL).bin
+    {"aa1c41f86ec44c0a44eb64c332ce08af",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_BUMPBASH,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   1,  0},    // Bumper Bash (1983).bin
+    {"16ee443c990215f61f7dd1e55a0d2256",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_BUMPBASH,  MODE_NO,    VB,   HB,  ANA1_0,  PAL,   81,    245,   100,   1,  0},    // Bumper Bash (1983) (PAL).bin
+    {"1bf503c724001b09be79c515ecfcbd03",  "??????", BANK_4K,   CTR_BUMPBASH,  SPEC_BUMPBASH,  MODE_NO,    VB,   HB,  ANA1_0,  PAL,   79,    245,   100,   1,  0},    // Bumper Bash (1983) (PAL).bin
     {"0443cfa9872cdb49069186413275fa21",  "??????", BANK_E7,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  31,    210,   100,   0,  0},    // BurgerTime (1983).bin
     {"19d6956ff17a959c48fcd8f4706a848d",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  25,    210,    95,   0,  1},    // Burning Desire (1982).bin
     {"b42df8d92e3118dc594cecd575f515d7",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,    95,   0,  5},    // Burning Desire (1982) (PAL).bin
@@ -818,8 +818,8 @@ const CartInfo table[] =
     {"819aeeb9a2e11deb54e6de334f843894",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Fun with Numbers (1980) (PAL).bin
     {"5f46d1ff6d7cdeb4b09c39d04dfd50a1",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Fun with Numbers (1980) (PAL).bin
     {"d3bb42228a6cd452c111c1932503cc03",  "??????", BANK_UA,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Funky Fish (1983).bin
-    {"c1fdd44efda916414be3527a47752c75",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // G.I. Joe - Cobra Strike.bin
-    {"b9f6fa399b8cd386c235983ec45e4355",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    94,   0,  0},    // G.I. Joe - Cobra Strike (PAL).bin
+    {"c1fdd44efda916414be3527a47752c75",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_GIJOE,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  0},    // G.I. Joe - Cobra Strike.bin
+    {"b9f6fa399b8cd386c235983ec45e4355",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_GIJOE,     MODE_NO,    VB,   HB,  ANA1_0,  PAL,   50,    245,    94,   0,  0},    // G.I. Joe - Cobra Strike (PAL).bin
     {"f38210ca3955a098c06a1e1c0004ef39",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Galactopus20141115.bin
     {"476d8d236085f8b1a6892dad3a898a62",  "??????", BANK_CDFJ, CTR_LJOY,      SPEC_DPCPOPT,   MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  34,    205,    88,   0,  0},    // Galaga V2 (demo).bin
     {"211774f4c5739042618be8ff67351177",  "GALAXY", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Galaxian (1983).bin

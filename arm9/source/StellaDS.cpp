@@ -573,6 +573,10 @@ bool dsLoadGame(char *filename)
         // Make sure the difficulty switches are set right on loding
         bInitialDiffSet = true;
         
+        // Always color TV to start...
+        myStellaEvent.set(Event::ConsoleColor, 1);
+        myStellaEvent.set(Event::ConsoleBlackWhite, 0);
+        
         TIMER0_CR=0;
         TIMER0_DATA=0;
         TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
@@ -944,7 +948,7 @@ unsigned int dsWaitOnMenu(unsigned int actState)
   return uState;
 }
 
-void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
+ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
   static u16 *ptrScreen,*ptrMap;
   u16 usCharac;
@@ -971,7 +975,7 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
   }
 }
 
-void dsPrintFPS(char *pchStr)
+ITCM_CODE void dsPrintFPS(char *pchStr)
 {
   u16 *ptrScreen,*ptrMap;
   char *pTrTxt=pchStr;
@@ -1106,11 +1110,11 @@ __attribute__((noinline)) void ClearAtariKeypad(void)
 
 char fpsbuf[12];
 short int iTx,iTy;
-static u16 dampen=0;
+static u16 dampen=10;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
 
-ITCM_CODE void dsMainLoop(void)
+void dsMainLoop(void)
 {
     uInt16 keys_pressed;
     uInt8 rapid_fire   = 0;
@@ -1148,6 +1152,7 @@ ITCM_CODE void dsMainLoop(void)
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
             emuState = STELLADS_PLAYGAME;
+            dampen=10;
             break;
 
         case STELLADS_PLAYGAME:
@@ -1534,21 +1539,35 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::ConsoleSelect,  keys_pressed & (KEY_SELECT));
                 }
                 myStellaEvent.set(Event::ConsoleReset,              keys_pressed & (KEY_START));
-                myStellaEvent.set(Event::ConsoleColor,              0);
-                myStellaEvent.set(Event::ConsoleBlackWhite,         0);
-                myStellaEvent.set(Event::ConsoleLeftDifficultyA,    0);
-                myStellaEvent.set(Event::ConsoleLeftDifficultyB,    0);
-                myStellaEvent.set(Event::ConsoleRightDifficultyA,   0);
-                myStellaEvent.set(Event::ConsoleRightDifficultyB,   0);
                 
                 if (bInitialDiffSet)
                 {
                     bInitialDiffSet = false;
                     // Make sure the difficulty switches are correct...
-                    myStellaEvent.set(myCartInfo.left_difficulty ? Event::ConsoleLeftDifficultyA : Event::ConsoleLeftDifficultyB, 1);
+                    if (myCartInfo.left_difficulty)
+                    {
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyA, 1);
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyB, 0);
+                    }
+                    else
+                    {
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyA, 0);
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyB, 1);
+                    }
                     dsDisplayButton(10+myCartInfo.left_difficulty);
-                    myStellaEvent.set(myCartInfo.right_difficulty ? Event::ConsoleRightDifficultyA : Event::ConsoleRightDifficultyB, 1);
-                    dsDisplayButton(12+myCartInfo.right_difficulty);        
+                    
+                    if (myCartInfo.right_difficulty)
+                    {
+                        myStellaEvent.set(Event::ConsoleRightDifficultyA, 1);
+                        myStellaEvent.set(Event::ConsoleRightDifficultyB, 0);
+                    }
+                    else
+                    {
+                        myStellaEvent.set(Event::ConsoleRightDifficultyA, 0);
+                        myStellaEvent.set(Event::ConsoleRightDifficultyB, 1);
+                    }
+                    dsDisplayButton(12+myCartInfo.right_difficulty);
+                    
                     dsDisplayButton(3-console_color);
                 }                    
 
@@ -1574,7 +1593,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
                     }
                     
-                    if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L))
+                    if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L) && (myCartInfo.controllerType != CTR_BUMPBASH))
                     {
                         if (++ss_dampen == 5) 
                         {
@@ -1700,7 +1719,16 @@ ITCM_CODE void dsMainLoop(void)
                 { // tv type
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     console_color=1-console_color;
-                    myStellaEvent.set(console_color ? Event::ConsoleColor : Event::ConsoleBlackWhite, 1);                    
+                    if (console_color)
+                    {
+                        myStellaEvent.set(Event::ConsoleColor, 1);
+                        myStellaEvent.set(Event::ConsoleBlackWhite, 0);
+                    }
+                    else
+                    {
+                        myStellaEvent.set(Event::ConsoleColor, 0);
+                        myStellaEvent.set(Event::ConsoleBlackWhite, 1);
+                    }
                     dampen=5;
                     dsDisplayButton(3-console_color);
                 }
@@ -1708,7 +1736,16 @@ ITCM_CODE void dsMainLoop(void)
                 { // Left Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.left_difficulty=1-myCartInfo.left_difficulty;
-                    myStellaEvent.set(myCartInfo.left_difficulty ? Event::ConsoleLeftDifficultyA : Event::ConsoleLeftDifficultyB, 1);                    
+                    if (myCartInfo.left_difficulty)
+                    {
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyA, 1);
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyB, 0);
+                    }
+                    else
+                    {
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyA, 0);
+                        myStellaEvent.set(Event::ConsoleLeftDifficultyB, 1);
+                    }
                     dampen=5;
                     dsDisplayButton(10+myCartInfo.left_difficulty);
                 }
@@ -1716,7 +1753,16 @@ ITCM_CODE void dsMainLoop(void)
                 { // Right Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.right_difficulty=1-myCartInfo.right_difficulty;
-                    myStellaEvent.set(myCartInfo.right_difficulty ? Event::ConsoleRightDifficultyA : Event::ConsoleRightDifficultyB, 1);                    
+                    if (myCartInfo.right_difficulty)
+                    {
+                        myStellaEvent.set(Event::ConsoleRightDifficultyA, 1);
+                        myStellaEvent.set(Event::ConsoleRightDifficultyB, 0);
+                    }
+                    else
+                    {
+                        myStellaEvent.set(Event::ConsoleRightDifficultyA, 0);
+                        myStellaEvent.set(Event::ConsoleRightDifficultyB, 1);
+                    }
                     dampen=5;
                     dsDisplayButton(12+myCartInfo.right_difficulty);
                 }
