@@ -85,8 +85,8 @@ void M6532::reset()
 
   // The timer absolutely cannot be initialized to zero; some games will
   // loop or hang (notably Solaris and H.E.R.O.)
-  myTimer = (0xff - (random.next() % 0xfe)) << 10;
-  myIntervalShift = 10;
+  myTimer = (0xff - (random.next() % 0xfe)) << 6;
+  myIntervalShift = 6;
   myCyclesWhenTimerSet = 0;
   myInterruptEnabled = false;
   myInterruptTriggered = false;  
