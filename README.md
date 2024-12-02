@@ -34,16 +34,16 @@ StellaDS Phoenix-Edition is Copyright (c) 2020-2024 Dave Bernazzani (wavemotion-
 
 As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
-Most of this code is based on the Stella project - please see their github page for details on the original codebase: https://github.com/stella-emu/stella 
+Most of this code is based on the Stella project - please see their github page for details on the original (and vastly improved) codebase: https://github.com/stella-emu/stella 
 
 The StellaDS emulator is offered as-is, without any warranty.
 
 Where does this fit in with the mainline Stella? :
 -----------------------
 In general, it doesn't. StellaDS is based on an amalgamation of different Stella releases. Modern Stella is a work of art - and is generally cycle accurate and robust in so many
-areas that closely mimic the real hardware. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS baseline is probably closest to mainline 
-Stella 3.7.5 with an even older TIA Core from Stella 2.8.4 and some fixes and enhancements taken liberally from Stella 4, 5 and 6 (up to 6.7 as of the time of this writing). 
-In addition, some optimizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get as close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totally on me - be happy you didn't pay anything for it!
+areas that closely mimic the real hardware honed over decades of hard work. That level of accuracy will not run fast enough on the venerable DS handheld. So StellaDS baseline is probably closest to mainline 
+Stella 2.8.4 with some healthy fixes and enhancements taken liberally from Stella 3, 4, 5 and 6 to ensure as many games as possible will run correctly. The biggest difference here is that StellaDS is not cycle accurate and doesn't have the vastly improved TIA core of the later mainline Stella builds.
+In addition, some optimizations had to be performed that will place this emulator a solid grade below the mainline Stella in terms of accuracy. The goal is to get reasonably close to accurate as possible while providing enough speed to make the games playable on the little handheld. Do not expect perfection - you have been warned! Any bugs, error and omissions found in StellaDS are completely and totally on me - be happy you didn't pay anything for it!
 
 Known Issues :
 -----------------------
@@ -51,7 +51,7 @@ Known Issues :
 * Cherity music fetchers are incomplete and the background music will not play (game is otherwise fine to play).
 * KC Munchkin Monster Maze does not run correctly with the optimized 'AR' cart handler in StellaDS.
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
-* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round)
+* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round), Tapper (counters extended slightly)
 * Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
 * No more than 1500 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
@@ -252,7 +252,8 @@ V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
   * Fix for bumper bash right bumper position so it now shows correctly.
   * Improved GI Joe Cobra Strike snake graphics so it's much closer to the way a real TIA chip would draw it.
   * Fix for Labyrinth (AR) graphical glitches at top/bottom of walls.
-  * Fix initial difficulty switch settings so startup for games like Asteroids works correctly.
+  * Improved difficulty switch handling so startup values for games like Asteroids works correctly.
+  * Improved RIOT timer emulation - Acid Drop, Panda Chase, Zoo Fun and a few other PAL roms now work.
   * TBD
 
 V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)

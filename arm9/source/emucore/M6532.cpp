@@ -42,11 +42,12 @@ uInt8 myIntervalShift __attribute__((section(".dtcm")));
 // Indicates the number of cycles when the timer was last set
 Int32 myCyclesWhenTimerSet __attribute__((section(".dtcm")));
 
-// Indicates when the timer was read after timer interrupt occured
-Int32 myCyclesWhenInterruptReset __attribute__((section(".dtcm")));
+// Indicates if the interrupt is enabled and/or triggered
+uInt8  myInterruptEnabled   __attribute__((section(".dtcm")));
+uInt8  myInterruptTriggered __attribute__((section(".dtcm")));
 
-// Indicates if a read from timer has taken place after interrupt occured
-uInt8 myTimerReadAfterInterrupt __attribute__((section(".dtcm")));
+// Last value written to the timer registers
+uInt8 myOutTimer[4] __attribute__((section(".dtcm")));
 
 // Data Direction Register for Port A
 uInt8 myDDRA __attribute__((section(".dtcm")));
@@ -82,16 +83,21 @@ void M6532::reset()
 {
   Random random;
 
-  myTimer = 25 + (random.next() % 75);
-  myIntervalShift = 6;
+  // The timer absolutely cannot be initialized to zero; some games will
+  // loop or hang (notably Solaris and H.E.R.O.)
+  myTimer = (0xff - (random.next() % 0xfe)) << 10;
+  myIntervalShift = 10;
   myCyclesWhenTimerSet = 0;
-  myCyclesWhenInterruptReset = 0;
-  myTimerReadAfterInterrupt = false;
+  myInterruptEnabled = false;
+  myInterruptTriggered = false;  
 
   // Zero the I/O registers
   myDDRA = 0x00;
   myDDRB = 0x00;
   myOutA = 0x00;
+  
+  // Zero the timer registers
+  myOutTimer[0] = myOutTimer[1] = myOutTimer[2] = myOutTimer[3] = 0x00;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -100,7 +106,6 @@ ITCM_CODE void M6532::systemCyclesReset()
   // System cycles are being reset to zero so we need to adjust
   // the cycle count we remembered when the timer was last set
   myCyclesWhenTimerSet -= gSystemCycles;
-  myCyclesWhenInterruptReset -= gSystemCycles;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -155,45 +160,35 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
     case 0x04:    // Timer Read
     case 0x06:
     {
-      uInt32 delta = (gSystemCycles-1) - myCyclesWhenTimerSet;
-      uInt32 delta_shift = delta >> myIntervalShift;        
-      Int32 timer = (Int32)myTimer - (Int32)delta_shift - 1;
+      myInterruptTriggered = false;
+      Int32 timer = timerClocks();
 
       // See if the timer has expired yet?
-      if(timer >= 0)
+      // Note that this constant comes from z26, and corresponds to
+      // 256 intervals of T1024T (ie, the maximum that the timer should hold)
+      // I'm not sure why this is required, but quite a few PAL ROMs fail
+      // if we just check >= 0.
+      if(!(timer & 0x40000))
       {
-        return (uInt8)timer; 
+        return (timer >> myIntervalShift) & 0xff;
       }
       else
       {
-        timer = (Int32)(myTimer << myIntervalShift) - (Int32)delta - 1;
+        if(timer != -1)
+          myInterruptTriggered = true;
 
-        if((timer <= -2) && !myTimerReadAfterInterrupt)
-        {
-          // Indicate that timer has been read after interrupt occured
-          myTimerReadAfterInterrupt = true;
-          myCyclesWhenInterruptReset = gSystemCycles;
-        }
-
-        if(myTimerReadAfterInterrupt)
-        {
-          Int32 offset = myCyclesWhenInterruptReset - 
-              (myCyclesWhenTimerSet + (myTimer << myIntervalShift));
-
-          timer = (Int32)myTimer - (Int32)(delta_shift) - offset;
-        }
+        // According to the M6532 documentation, the timer continues to count
+        // down to -255 timer clocks after wraparound.  However, it isn't
+        // entirely clear what happens *after* if reaches -255.
+        // For now, we'll let it continuously wrap around.
+        return timer & 0xff;
       }
-      return (uInt8)timer;    
     }
 
     case 0x05:    // Interrupt Flag
     case 0x07:
     {
-      uInt32 cycles = gSystemCycles - 1;
-      uInt32 delta = cycles - myCyclesWhenTimerSet;
-      Int32 timer = (Int32)myTimer - (Int32)(delta >> myIntervalShift) - 1;
-
-      if((timer >= 0) || myTimerReadAfterInterrupt)
+      if((timerClocks() >= 0) || (myInterruptEnabled && myInterruptTriggered))
         return 0x00;
       else
         return 0x80;
@@ -245,6 +240,18 @@ ITCM_CODE uInt8 M6532::peek(uInt16 addr)
   }
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+void M6532::setTimerRegister(uInt8 value, uInt8 interval)
+{
+  static const uInt8 shift[] = { 0, 3, 6, 10 };
+
+  myInterruptTriggered = false;
+  myIntervalShift = shift[interval];
+  myOutTimer[interval] = value;
+  myTimer = (uInt32)value << (uInt32)myIntervalShift;
+  myCyclesWhenTimerSet = gSystemCycles;
+}
+
 void M6532::setPinState()
 {
   /*
@@ -274,52 +281,36 @@ void M6532::setPinState()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void M6532::poke(uInt16 addr, uInt8 value)
 {
-  if((addr & 0x07) == 0x00)         // Port A I/O Register (Joystick)
+  // A2 distinguishes I/O registers from the timer
+  if((addr & 0x04) != 0)
   {
-    myOutA = value;
-    setPinState();
+    if((addr & 0x10) != 0)
+    {
+      myInterruptEnabled = (addr & 0x08);
+      setTimerRegister(value, addr & 0x03);
+    }
   }
-  else if((addr & 0x07) == 0x01)    // Port A Data Direction Register 
+  else
   {
-    myDDRA = value;
-    setPinState();
-  }
-  else if((addr & 0x07) == 0x02)    // Port B I/O Register (Console switches)
-  {
-    return;
-  }
-  else if((addr & 0x07) == 0x03)    // Port B Data Direction Register
-  {
-    // Fixed Input - can't change it...
-    return;
-  }
-  else if((addr & 0x17) == 0x14)    // Write timer divide by 1 
-  {
-    myTimer = value;
-    myIntervalShift = 0;
-    myCyclesWhenTimerSet = gSystemCycles;
-    myTimerReadAfterInterrupt = false;
-  }
-  else if((addr & 0x17) == 0x15)    // Write timer divide by 8
-  {
-    myTimer = value;
-    myIntervalShift = 3;
-    myCyclesWhenTimerSet = gSystemCycles;
-    myTimerReadAfterInterrupt = false;
-  }
-  else if((addr & 0x17) == 0x16)    // Write timer divide by 64
-  {
-    myTimer = value;
-    myIntervalShift = 6;
-    myCyclesWhenTimerSet = gSystemCycles;
-    myTimerReadAfterInterrupt = false;
-  }
-  else if((addr & 0x17) == 0x17)    // Write timer divide by 1024
-  {
-    myTimer = value;
-    myIntervalShift = 10;
-    myCyclesWhenTimerSet = gSystemCycles;
-    myTimerReadAfterInterrupt = false;
+      if((addr & 0x07) == 0x00)         // Port A I/O Register (Joystick)
+      {
+        myOutA = value;
+        setPinState();
+      }
+      else if((addr & 0x07) == 0x01)    // Port A Data Direction Register 
+      {
+        myDDRA = value;
+        setPinState();
+      }
+      else if((addr & 0x07) == 0x02)    // Port B I/O Register (Console switches)
+      {
+        return;
+      }
+      else if((addr & 0x07) == 0x03)    // Port B Data Direction Register
+      {
+        // Fixed Input - can't change it...
+        return;
+      }
   }
 }
 

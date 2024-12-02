@@ -45,7 +45,7 @@
 #include "Thumbulator.hxx"
 #include "bgFileSel.h"
 
-#define SAVE_VERSION 0x0003
+#define SAVE_VERSION 0x0004
 
 char tmp_buf[SOUND_SIZE];
 
@@ -189,12 +189,12 @@ void SaveState(void)
     fwrite(&myTimer,                    sizeof(myTimer),                    1, fp);
     fwrite(&myIntervalShift,            sizeof(myIntervalShift),            1, fp);
     fwrite(&myCyclesWhenTimerSet,       sizeof(myCyclesWhenTimerSet),       1, fp);
-    fwrite(&myCyclesWhenInterruptReset, sizeof(myCyclesWhenInterruptReset), 1, fp);
-    fwrite(&myTimerReadAfterInterrupt,  sizeof(myTimerReadAfterInterrupt),  1, fp);
-
+    fwrite(&myInterruptEnabled,         sizeof(myInterruptEnabled),         1, fp);
+    fwrite(&myInterruptTriggered,       sizeof(myInterruptTriggered),       1, fp);
     fwrite(&myDDRA,                     sizeof(myDDRA),                     1, fp);
     fwrite(&myDDRA,                     sizeof(myDDRA),                     1, fp);
     fwrite(&myOutA,                     sizeof(myOutA),                     1, fp);
+    fwrite(myOutTimer,                  sizeof(myOutTimer),                 1, fp);    
 
     // 6502
     fwrite(&A,                          sizeof(A),                          1, fp);
@@ -418,12 +418,12 @@ void LoadState(void)
             fread(&myTimer,                    sizeof(myTimer),                    1, fp);
             fread(&myIntervalShift,            sizeof(myIntervalShift),            1, fp);
             fread(&myCyclesWhenTimerSet,       sizeof(myCyclesWhenTimerSet),       1, fp);
-            fread(&myCyclesWhenInterruptReset, sizeof(myCyclesWhenInterruptReset), 1, fp);
-            fread(&myTimerReadAfterInterrupt,  sizeof(myTimerReadAfterInterrupt),  1, fp);
-
+            fread(&myInterruptEnabled,         sizeof(myInterruptEnabled),         1, fp);
+            fread(&myInterruptTriggered,       sizeof(myInterruptTriggered),       1, fp);
             fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
             fread(&myDDRA,                     sizeof(myDDRA),                     1, fp);
             fread(&myOutA,                     sizeof(myOutA),                     1, fp);
+            fread(myOutTimer,                  sizeof(myOutTimer),                 1, fp);
 
             // 6502
             fread(&A,                          sizeof(A),                          1, fp);

@@ -33,13 +33,15 @@ class System;
 extern uInt8 myRAM[256];
 
 extern uInt32 myTimer;
-extern uInt8 myIntervalShift;
-extern Int32 myCyclesWhenTimerSet;
-extern Int32 myCyclesWhenInterruptReset;
-extern uInt8 myTimerReadAfterInterrupt;
-extern uInt8 myDDRA;
-extern uInt8 myDDRB; 
-extern uInt8 myOutA;
+extern uInt8  myIntervalShift;
+extern Int32  myCyclesWhenTimerSet;
+extern uInt8  myInterruptEnabled;
+extern uInt8  myInterruptTriggered;
+extern uInt8  myDDRA;
+extern uInt8  myDDRB; 
+extern uInt8  myOutA;
+extern uInt8  myOutTimer[4];
+
 
 /**
   RIOT
@@ -120,6 +122,10 @@ class M6532 : public Device
     // Assignment operator isn't supported by this class so make it private
     M6532& operator = (const M6532&);
     
+    inline Int32 timerClocks()
+      { return myTimer - (gSystemCycles - myCyclesWhenTimerSet); }
+
+    void setTimerRegister(uInt8 data, uInt8 interval);
     void setPinState(void);
 };
 

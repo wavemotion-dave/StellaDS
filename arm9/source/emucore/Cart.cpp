@@ -115,7 +115,7 @@ const CartInfo table[] =
     {"82ee056af81203af58092ff2e6cf079d",  "AARDVK", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    89,   0,  1},    // Aardvark (32k).bin
     {"b6d13da9e641b95352f090090e440ce4",  "AARDVK", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Aardvark.bin
     {"09274c3fc1c43bf1e362fda436651fd8",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  22,    225,    71,   0,  0},    // Acid Drop (1992) (NTSC by TJ).bin
-    {"17ee23e5da931be82f733917adcb6386",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Acid Drop (1992) (PAL).bin
+    {"17ee23e5da931be82f733917adcb6386",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    51,   0, 16},    // Acid Drop (1992) (PAL).bin
     {"a1bcbe0bfe6570da2661fc4de2f74e8a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Actionauts (1984).bin
     {"525f2dfc8b21b0186cff2568e0509bfc",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Activision Decathlon (1983) [fixed].bin
     {"ac7c2260378975614192ca2bc3d20e0b",  "??????", BANK_FE,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Activision Decathlon (1983).bin
@@ -2518,7 +2518,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       myCartInfo.frame_mode = MODE_FF;
   }
 
-  // Patch Haunted House to avoid original bug
+  // Patch Haunted House to avoid original bug (technically isn't needed anymore with improved emulation... but whatevs...)
   if (myCartInfo.special == SPEC_HAUNTED)
   {
       uInt8* imageOffset = (uInt8*)(image+1103);
