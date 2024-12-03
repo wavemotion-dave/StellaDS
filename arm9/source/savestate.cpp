@@ -361,13 +361,13 @@ void SaveState(void)
     fwrite(&myFastFetcherOffset,        sizeof(myFastFetcherOffset),       1, fp);   
     fwrite(myMusicWaveformSize,         sizeof(myMusicWaveformSize),       1, fp);
     
+    fwrite(&bWriteOrLoadPossibleAR,     sizeof(bWriteOrLoadPossibleAR),    1, fp);
+    
     // And finally the 32K RAM buffer but only for the largest of RAM-based carts...
     if (bSaveStateXL)
     {
         fwrite(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
     }
-    
-    fwrite(&bWriteOrLoadPossibleAR,     sizeof(bWriteOrLoadPossibleAR),    1, fp);
     
     // Write out some spare bytes we can eat into for the future...
     memset(spare_bytes, 0x00, sizeof(spare_bytes));

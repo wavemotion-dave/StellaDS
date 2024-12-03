@@ -257,6 +257,8 @@ V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
   * Improved keyboard/keypad emulation so games like Alpha Beam with Ernie, Oscar's Trash Can Race and Magicard now work.
   * Improved emulation of Starpath Supercharger (AR) games (Dragonstomper is random) and support smaller game loads (Cubis now runs).
   * Fixed Casino paddles (correct paddle emulation so you can select all card positions in game variation 4).
+  * Internal cart database updated to Romhunter v19 (NTSC with select PAL titles)
+  * Fix for save/load states on CDFJ+ carts.
   * TBD
 
 V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)

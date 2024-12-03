@@ -20,7 +20,7 @@ typedef enum {
 } FifoMesType;
 
 #define MAX_ROMS_PER_DIRECTORY  1500
-#define MAX_FILE_NAME_LEN       167
+#define MAX_FILE_NAME_LEN       205
 
 typedef struct FICtoLoad {
   char  filename[MAX_FILE_NAME_LEN];

@@ -948,7 +948,7 @@ unsigned int dsWaitOnMenu(unsigned int actState)
   return uState;
 }
 
-ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
+void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
   static u16 *ptrScreen,*ptrMap;
   u16 usCharac;
@@ -975,7 +975,7 @@ ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
   }
 }
 
-ITCM_CODE void dsPrintFPS(char *pchStr)
+void dsPrintFPS(char *pchStr)
 {
   u16 *ptrScreen,*ptrMap;
   char *pTrTxt=pchStr;
@@ -1452,14 +1452,20 @@ void dsMainLoop(void)
                 case CTR_PADDLE1:
                     if(keys_pressed & (KEY_LEFT))
                     {
-                        theConsole->fakePaddleResistance += (10000 * myCartInfo.analogSensitivity) / 10;
+                        uInt8 sens = myCartInfo.analogSensitivity;
+                        if (keys_pressed & KEY_X) sens += 4; 
+                        if (keys_pressed & KEY_Y) sens -= 4;
+                        theConsole->fakePaddleResistance += (10000 * sens) / 10;
                         if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
                         myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroResistance : Event::PaddleOneResistance, theConsole->fakePaddleResistance);
                     }
                     else
                     if(keys_pressed & (KEY_RIGHT))
                     {
-                        theConsole->fakePaddleResistance -= (10000 * myCartInfo.analogSensitivity) / 10;
+                        uInt8 sens = myCartInfo.analogSensitivity;
+                        if (keys_pressed & KEY_X) sens += 4; 
+                        if (keys_pressed & KEY_Y) sens -= 4;
+                        theConsole->fakePaddleResistance -= (10000 * sens) / 10;
                         if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
                         myStellaEvent.set(myCartInfo.controllerType == CTR_PADDLE0 ?  Event::PaddleZeroResistance : Event::PaddleOneResistance, theConsole->fakePaddleResistance);
                     }

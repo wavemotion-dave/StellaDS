@@ -98,7 +98,7 @@ ITCM_CODE uInt8 CartridgeWF8::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeWF8::poke(uInt16 address, uInt8 data)
+void CartridgeWF8::poke(uInt16 address, uInt8 data)
 {
   address = address & 0x0FFF;
 
@@ -114,7 +114,7 @@ ITCM_CODE void CartridgeWF8::poke(uInt16 address, uInt8 data)
 
 extern uInt16 f8_bankbit;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeWF8::bank(uInt16 bank)
+void CartridgeWF8::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;
