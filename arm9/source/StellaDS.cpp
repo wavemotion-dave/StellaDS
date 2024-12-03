@@ -51,7 +51,7 @@
 
 #define VERSION "7.8"
 
-#define MAX_RESISTANCE  1000000
+#define MAX_RESISTANCE  1030000
 #define MIN_RESISTANCE  70000
 
 uInt16 atari_frames=0;
@@ -1105,8 +1105,38 @@ __attribute__((noinline)) void ClearAtariKeypad(void)
     myStellaEvent.set(Event::KeyboardOneStar,  0);
     myStellaEvent.set(Event::KeyboardOne0,     0);
     myStellaEvent.set(Event::KeyboardOnePound, 0);
-    
 }
+
+__attribute__((noinline)) void CheckSpecialKeypadHandling(unsigned short keys_pressed)
+{
+    // Allow directional arrows instead of keypad for convenience - most of the "edutainment"
+    // games use the kids controller but really for nothing more than direction/fire.
+    if ((myCartInfo.special == SPEC_ALPHABM) || (myCartInfo.special == SPEC_COOKIEM))
+    {
+        if (keys_pressed & (KEY_UP))    myStellaEvent.set(Event::KeyboardZero2,     1);
+        if (keys_pressed & (KEY_DOWN))  myStellaEvent.set(Event::KeyboardZero8,     1);
+        if (keys_pressed & (KEY_LEFT))  myStellaEvent.set(Event::KeyboardZero4,     1);
+        if (keys_pressed & (KEY_RIGHT)) myStellaEvent.set(Event::KeyboardZero6,     1);
+        if (keys_pressed & (KEY_A | KEY_B)) myStellaEvent.set(Event::KeyboardZero5, 1);
+    }
+    else if (myCartInfo.special == SPEC_OSCAR)
+    {
+        if (keys_pressed & (KEY_UP))    myStellaEvent.set(Event::KeyboardZero5,     1);
+        if (keys_pressed & (KEY_DOWN))  myStellaEvent.set(Event::KeyboardZero0,     1);
+        if (keys_pressed & (KEY_LEFT))  myStellaEvent.set(Event::KeyboardZero7,     1);
+        if (keys_pressed & (KEY_RIGHT)) myStellaEvent.set(Event::KeyboardZero9,     1);
+        if (keys_pressed & (KEY_Y))     myStellaEvent.set(Event::KeyboardZero1,     1);
+        if (keys_pressed & (KEY_X))     myStellaEvent.set(Event::KeyboardZero2,     1);
+        if (keys_pressed & (KEY_A))     myStellaEvent.set(Event::KeyboardZero3,     1);
+        if (keys_pressed & (KEY_B))     myStellaEvent.set(Event::KeyboardZero8,     1);
+    }
+    else if (myCartInfo.special == SPEC_BIGBIRD)
+    {
+        if (keys_pressed & (KEY_LEFT))  myStellaEvent.set(Event::KeyboardZero5,     1);
+        if (keys_pressed & (KEY_RIGHT)) myStellaEvent.set(Event::KeyboardZero6,     1);
+    }
+}
+
 
 char fpsbuf[12];
 short int iTx,iTy;
@@ -1502,6 +1532,7 @@ void dsMainLoop(void)
                     {
                         ClearAtariKeypad();
                     }
+                    if (myCartInfo.special) CheckSpecialKeypadHandling(keys_pressed);
                     break;                    
 
                 // Both keyboards shown...
@@ -1515,6 +1546,7 @@ void dsMainLoop(void)
                     {
                         ClearAtariKeypad();
                     }
+                    if (myCartInfo.special) CheckSpecialKeypadHandling(keys_pressed);
                     break;
             } // End Controller Switch
 

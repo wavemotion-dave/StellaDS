@@ -254,6 +254,9 @@ V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
   * Fix for Labyrinth (AR) graphical glitches at top/bottom of walls.
   * Improved difficulty switch handling so startup values for games like Asteroids works correctly.
   * Improved RIOT timer emulation - Acid Drop, Panda Chase, Zoo Fun and a few other PAL roms now work.
+  * Improved keyboard/keypad emulation so games like Alpha Beam with Ernie, Oscar's Trash Can Race and Magicard now work.
+  * Improved emulation of Starpath Supercharger (AR) games (Dragonstomper is random) and support smaller game loads (Cubis now runs).
+  * Fixed Casino paddles (correct paddle emulation so you can select all card positions in game variation 4).
   * TBD
 
 V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)

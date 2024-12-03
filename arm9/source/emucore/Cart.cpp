@@ -142,8 +142,8 @@ const CartInfo table[] =
     {"8aad33da907bed78b76b87fceaa838c1",  "??????", BANK_2K,   CTR_RJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   41,    245,    51,   0,  0},    // Air-Sea Battle (pal).bin
     {"4d77f291dca1518d7d8e47838695f54b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Airlock (1982).bin
     {"62899430338e0538ee93397867d85957",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    75,   0,  9},    // Airlock (1982) (PAL).bin
-    {"f1a0a23e6464d954e3a9579c4ccd01c8",  "ALIEN0", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alien (1982).bin
-    {"956496f81775de0b69a116a0d1ad41cc",  "ALIEN0", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alien (1982).bin
+    {"f1a0a23e6464d954e3a9579c4ccd01c8",  "ALIEN0", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alien (1982).bin
+    {"956496f81775de0b69a116a0d1ad41cc",  "ALIEN0", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BACKG, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alien (1982).bin
     {"7c98626ca4502747b6f95e38d687106a",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alien Greed.bin
     {"4ca94fcd35a70cf1ee573d5a26be56a2",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  4},    // Alien Greed 2.bin
     {"f82e1558c956a9e7037531dd81103111",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  3},    // Alien Greed 3.bin
@@ -152,10 +152,11 @@ const CartInfo table[] =
     {"a4f741910a8dade004e61be5d5ef5d8b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // AlienAttack4-8-20.bin
     {"e1a51690792838c5c687da80cd764d78",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator People (1983).bin
     {"3aa47765f6184e64c41d1fa2b0b16ddc",  "??????", BANK_F4,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Alligator32.bin
-    {"9e01f7f95cb8596765e03b9a36e8e33c",  "??????", BANK_F8,   CTR_LJOY,      SPEC_ALPHABM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam with Ernie (1983).bin (patched joystick use)
+    {"9e01f7f95cb8596765e03b9a36e8e33c",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_ALPHABM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam with Ernie (1983).bin
+    {"8f5ac5139419c5d49bacc296e342a247",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_ALPHABM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam with Ernie (1983).bin
     {"a5d82e469a499a41cfb6e459eba89ad0",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Alpha Beam With Ernie (joystick).bin
-    {"df95e4af466c809619299f49ece92365",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
-    {"f2d40c70cf3e1d03bc112796315888d9",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
+    {"df95e4af466c809619299f49ece92365",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_ALPHABM,   MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
+    {"f2d40c70cf3e1d03bc112796315888d9",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_ALPHABM,   MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Alpha Beam with Ernie (1983) (PAL).bin
     {"acb7750b4d0c4bd34969802a7deb2990",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Amidar (1982).bin
     {"80dcbe1b55f12be731a224a53ee4ad5f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Amidar (1982).bin
     {"93b9229fc0ea4fb959d604f83f8f603c",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Amidar (DS Fast Hack 1).bin
@@ -282,9 +283,11 @@ const CartInfo table[] =
     {"be41463cd918daef107d249f8cde3409",  "BERZRK", BANK_F6,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Berzerk-VE.bin
     {"3264674dd39b20abb3eb508973ea2d9b",  "BERZRK", BANK_F4,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Doctor Who vs Daleks (Berzerk Hack)
     {"1badbf0d3cb5abf7cf29233120dc14cc",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // BiFrost (RC).bin
-    {"1802cc46b879b229272501998c5de04f",  "??????", BANK_F8,   CTR_LJOY,      SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin (patched for joystick)
+    {"1802cc46b879b229272501998c5de04f",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin
+    {"0b17ed42984000da8b727ca46143f87a",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin
+    {"151fa3218d8d7600114eb5bcd79c85cb",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (1983).bin
     {"d22a401f0b20808196f538cc43786459",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Big Bird's Egg Catch (joystick).bin
-    {"f283cc294ece520c2badf9da20cfc025",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Big Bird's Egg Catch (1983) (PAL).bin
+    {"f283cc294ece520c2badf9da20cfc025",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_BIGBIRD,   MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Big Bird's Egg Catch (1983) (PAL).bin
     {"ffcb629e39e0455b37626ca1cf360db2",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // BirdandbeansV2.1.bin
     {"a6239810564638de7e4c54e66b3014e4",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Birthday Mania.bin
     {"0a981c03204ac2b278ba392674682560",  "??????", BANK_2K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Blackjack (1977).bin
@@ -383,8 +386,8 @@ const CartInfo table[] =
     {"2516f4f4b811ede4ecf6fbeb5d54a299",  "CARNIV", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   48,    245,    74,   0,  0},    // Carnival (1982) (PAL).bin
     {"8ed5a746c59571feb255eaa7d6d0cf98",  "CARNIV", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   50,    245,    79,   0,  0},    // Carnival (1982) (PAL).bin
     {"e3dccd660e5715bab3ca6c647f20e993",  "??????", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Carrot Kingdom (8a fix).bin
-    {"b816296311019ab69a21cb9e9e235d12",  "??????", BANK_4K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Casino (1979).bin
-    {"2bc26619e31710a9884c110d8430c1da",  "??????", BANK_4K,   CTR_PADDLE1,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  7},    // Casino (1979) (PAL).bin
+    {"b816296311019ab69a21cb9e9e235d12",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA0_7,  NTSC,  34,    210,   100,   0,  4},    // Casino (1979).bin
+    {"2bc26619e31710a9884c110d8430c1da",  "??????", BANK_4K,   CTR_PADDLE0,   SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  7},    // Casino (1979) (PAL).bin
     {"1d88b15eb93fdb9f3c3c4b77f30d5241",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  26,    210,    87,   0,  5},    // Castle54.bin
     {"76f66ce3b83d7a104a899b4b3354a2f2",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  33,    210,    92,   0,  0},    // Cat Trax (1983).bin
     {"d071d2ec86b9d52b585cc0382480b351",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  33,    210,    92,   0,  0},    // Cat Trax (1983).bin
@@ -490,10 +493,10 @@ const CartInfo table[] =
     {"50dd164c77c4df579843baf838327469",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v1).bin
     {"0f604cd4c9d2795cf5746e8af7948064",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest of Mars (v2).bin
     {"b9f64a784b0e271526887ecfb67d36ae",  "CONMAR", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  7},    // Conquest-of-Mars_demo_final_NTSC.bin
-    {"57c5b351d4de021785cf8ed8191a195c",  "??????", BANK_F8,   CTR_LJOY,      SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin (patched for joystick)
+    {"57c5b351d4de021785cf8ed8191a195c",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (1983).bin
     {"ba403a44966fd8307aac08214ac73bdd",  "??????", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cookie Monster Munch (joystick).bin
-    {"798b8921276eec9e332dfcb47a2dbb17",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
-    {"a0297c4788f9e91d43e522f4c561b4ad",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
+    {"798b8921276eec9e332dfcb47a2dbb17",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
+    {"a0297c4788f9e91d43e522f4c561b4ad",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_COOKIEM,   MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Cookie Monster Munch (1983) (PAL).bin
     {"7d903411807704e725cf3fafbeb97255",  "COSARK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Cosmic Ark (1982) [selectable starfield].bin
     {"ab5bf1ef5e463ad1cbb11b6a33797228",  "COSARK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Cosmic Ark (1982).bin
     {"69df0411d4d176e558017f961f5c5849",  "COSARK", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Cosmic Ark (1982).bin
@@ -548,6 +551,7 @@ const CartInfo table[] =
     {"ca7abc774a2fa95014688bc0849eee47",  "??????", BANK_F6SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Crystal Castles (1984) (PAL).bin
     {"6fa0ac6943e33637d8e77df14962fbfc",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    220,   100,   0,  2},    // Cubicolor (1982) (Imagic, Rob Fulop) (Prototype) ~.bin
     {"64ca518905311d2d9aeb56273f6caa04",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Cubicolor (1982).bin
+    {"d2c957dd7746521b51bb09fde25c5774",  "??????", BANK_AR,   CTR_LJOY,      SPEC_AR,        MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Cubis (6K) (1997) (Eckhard Stolberg).bin
     {"58513bae774360b96866a07ca0e8fd8e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Custer's Revenge (1982).bin
     {"50200f697aeef38a3ce31c4f49739551",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   39,    245,   100,   0, -2},    // Custer's Revenge (1982) (PAL).bin
     {"7e464186ba384069582d9f0c141f7491",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   62,    245,   100,   0,  0},    // Custer's Revenge (1982) (PAL).bin
@@ -1134,7 +1138,7 @@ const CartInfo table[] =
     {"43c6cfffeddab6b3787357fed9d44529",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   45,    245,    54,   4,  1},    // M.A.S.H (1983) (PAL).bin
     {"e97eafd0635651d3999cece953c06bd5",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   60,    245,    97,   4,  1},    // M.A.S.H (1983) (PAL).bin
     {"65ba1a4c643d1ab44481bdddeb403827",  "MASH00", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,    95,   4, 10},    // M.A.S.H (1983) (PAL).bin
-    {"cddabfd68363a76cd30bee4e8094c646",  "??????", BANK_CV,   CTR_KEYBOARD1, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,   100,   0,  0},    // MagiCard (1981).bin
+    {"cddabfd68363a76cd30bee4e8094c646",  "??????", BANK_CV,   CTR_KEYBOARD1, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    90,   0,  0},    // MagiCard (1981).bin
     {"ccb5fa954fb76f09caae9a8c66462190",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Malagai (1983).bin
     {"402d876ec4a73f9e3133f8f7f7992a1e",  "MANGOS", BANK_F6,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  6},    // Man Goes Down.bin
     {"54a1c1255ed45eb8f71414dadb1cf669",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Mangia' (1983).bin
@@ -1350,8 +1354,10 @@ const CartInfo table[] =
     {"90578a63441de4520be5324e8f015352",  "OPENSE", BANK_4K,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,    96,   0,  3},    // Open, Sesame! (1983) (PAL).bin
     {"28d5df3ed036ed63d33a31d0d8b85c47",  "OPENSE", BANK_4K,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,    96,   0,  3},    // Open, Sesame! (1983) (PAL).bin
     {"8c2fa33048f055f38358d51eefe417db",  "OPENSE", BANK_4K,   CTR_LJOY,      SPEC_WAVESLOW,  MODE_FF,    VB,   HB,  ANA1_0,  PAL,   52,    245,    96,   0,  3},    // Open, Sesame! (1983) (PAL).bin
-    {"fa1b060fd8e0bca0c2a097dcffce93d3",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Oscar's Trash Race (1983).bin
-    {"47911752bf113a2496dbb66c70c9e70c",  "??????", BANK_F8,   CTR_KEYBOARD0, SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Oscar's Trash Race (1983) (PAL).bin
+    {"fa1b060fd8e0bca0c2a097dcffce93d3",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_OSCAR,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Oscar's Trash Race (1983).bin
+    {"cc7138202cd8f6776212ebfc3a820ecc",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_OSCAR,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Oscar's Trash Race (1983).bin
+    {"4b94fd272785d7ec6c95fb7279d0f522",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_OSCAR,     MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Oscar's Trash Race (1983).bin   
+    {"47911752bf113a2496dbb66c70c9e70c",  "??????", BANK_F8,   CTR_KEYBOARD1, SPEC_OSCAR,     MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   0,  0},    // Oscar's Trash Race (1983) (PAL).bin
     {"113cd09c9771ac278544b7e90efe7df2",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  2},    // Othello (1981) [no grid markers].bin
     {"55949cb7884f9db0f8dfcf8707c7e5cb",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  2},    // Othello (1981).bin
     {"2c3b9c171e214e9e46bbaa12bdf8977e",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,    93,   0,  2},    // Othello (1981).bin
@@ -2526,7 +2532,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       if (*imageOffset == 0xE5) *imageOffset = 0xE9;
   }
 
-  // Patch Kool-Aid to avoid collision problems
+  // Patch Kool-Aid to avoid collision problems (this is easier than hacking the HMOVE timing)
   if (myCartInfo.special == SPEC_KOOLAID)
   {
       uInt8* imagePatch = (uInt8*)(image);
@@ -2546,220 +2552,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       imagePatch[0x68] = 0x85;
       imagePatch[0x69] = 0x21;
   }
-
-  // Patch Big Bird Egg Catch so we can just use the joysticks which are easier to control
-  if (myCartInfo.special == SPEC_BIGBIRD)
-  {
-      uInt8* imagePatch = (uInt8*)(image);
-      imagePatch[0x140A] = 0xEA;
-      imagePatch[0x140B] = 0xEA;
-      imagePatch[0x140C] = 0xEA;
-      imagePatch[0x17A9] = 0xAD;
-      imagePatch[0x17AA] = 0x80;
-      imagePatch[0x17AB] = 0x02;
-      imagePatch[0x17AC] = 0x10;
-      imagePatch[0x17AD] = 0x22;
-      imagePatch[0x17AE] = 0x0A;
-      imagePatch[0x17AF] = 0x30;
-  }
-
-
-  // Patch Alpha Beam with Ernie  so we can just use the joysticks which are easier to control
-  if (myCartInfo.special == SPEC_ALPHABM)
-  {
-      uInt8* imagePatch = (uInt8*)(image);
-      imagePatch[0x16A1] = 0xEA;
-      imagePatch[0x16A2] = 0xEA;
-      imagePatch[0x16A3] = 0xEA;
-      imagePatch[0x16A4] = 0xEA;
-      imagePatch[0x16A5] = 0xEA;
-      imagePatch[0x16A6] = 0xEA;
-      imagePatch[0x16A7] = 0xEA;
-      imagePatch[0x16A8] = 0xEA;
-      imagePatch[0x16A9] = 0xEA;
-      imagePatch[0x16AA] = 0xEA;
-      imagePatch[0x16AB] = 0xEA;
-      imagePatch[0x16AC] = 0xEA;
-      imagePatch[0x16AD] = 0xEA;
-      imagePatch[0x16AE] = 0xEA;
-      imagePatch[0x16AF] = 0xEA;
-      imagePatch[0x16B0] = 0xEA;
-      imagePatch[0x16B1] = 0xEA;
-      imagePatch[0x16B2] = 0xEA;
-      imagePatch[0x16B3] = 0xEA;
-      imagePatch[0x16B4] = 0xEA;
-      imagePatch[0x1710] = 0xEA;
-      imagePatch[0x1711] = 0xEA;
-      imagePatch[0x1712] = 0xEA;
-      imagePatch[0x1C08] = 0xAD;
-      imagePatch[0x1C09] = 0x80;
-      imagePatch[0x1C0A] = 0x02;
-      imagePatch[0x1C0B] = 0xA4;
-      imagePatch[0x1C0C] = 0xF8;
-      imagePatch[0x1C0D] = 0xD0;
-      imagePatch[0x1C0E] = 0x22;
-      imagePatch[0x1C0F] = 0x0A;
-      imagePatch[0x1C10] = 0xA0;
-      imagePatch[0x1C11] = 0x04;
-      imagePatch[0x1C12] = 0x90;
-      imagePatch[0x1C13] = 0x10;
-      imagePatch[0x1C14] = 0x0A;
-      imagePatch[0x1C15] = 0xA0;
-      imagePatch[0x1C16] = 0x08;
-      imagePatch[0x1C17] = 0x90;
-      imagePatch[0x1C18] = 0x0B;
-      imagePatch[0x1C19] = 0x0A;
-      imagePatch[0x1C1A] = 0xA0;
-      imagePatch[0x1C1B] = 0x02;
-      imagePatch[0x1C1C] = 0x90;
-      imagePatch[0x1C1D] = 0x06;
-      imagePatch[0x1C1E] = 0x0A;
-      imagePatch[0x1C1F] = 0x88;
-      imagePatch[0x1C20] = 0x90;
-      imagePatch[0x1C21] = 0x02;
-      imagePatch[0x1C22] = 0xB0;
-      imagePatch[0x1C23] = 0x4F;
-      imagePatch[0x1C24] = 0xA5;
-      imagePatch[0x1C25] = 0xD6;
-      imagePatch[0x1C26] = 0x29;
-      imagePatch[0x1C27] = 0xF0;
-      imagePatch[0x1C28] = 0x85;
-      imagePatch[0x1C29] = 0xD6;
-      imagePatch[0x1C2A] = 0x98;
-      imagePatch[0x1C2B] = 0x05;
-      imagePatch[0x1C2C] = 0xD6;
-      imagePatch[0x1C2D] = 0x85;
-      imagePatch[0x1C2E] = 0xD6;
-      imagePatch[0x1C2F] = 0xD0;
-      imagePatch[0x1C30] = 0x42;
-      imagePatch[0x1C31] = 0x24;
-      imagePatch[0x1C32] = 0xA3;
-      imagePatch[0x1C33] = 0x10;
-      imagePatch[0x1C34] = 0x3E;
-      imagePatch[0x1C35] = 0x0A;
-      imagePatch[0x1C36] = 0x0A;
-      imagePatch[0x1C37] = 0x0A;
-      imagePatch[0x1C38] = 0xA0;
-      imagePatch[0x1C39] = 0x04;
-      imagePatch[0x1C3A] = 0x0A;
-      imagePatch[0x1C3B] = 0x10;
-      imagePatch[0x1C3C] = 0x2B;
-      imagePatch[0x1C3D] = 0xA0;
-      imagePatch[0x1C3E] = 0x08;
-      imagePatch[0x1C3F] = 0x0A;
-      imagePatch[0x1C40] = 0x10;
-      imagePatch[0x1C41] = 0x26;
-      imagePatch[0x1C42] = 0xA0;
-      imagePatch[0x1C43] = 0x01;
-      imagePatch[0x1C44] = 0x0A;
-      imagePatch[0x1C45] = 0x10;
-      imagePatch[0x1C46] = 0x21;
-      imagePatch[0x1C47] = 0xC8;
-      imagePatch[0x1C48] = 0x0A;
-      imagePatch[0x1C49] = 0x10;
-      imagePatch[0x1C4A] = 0x1D;
-      imagePatch[0x1C4B] = 0x30;
-      imagePatch[0x1C4C] = 0x26;
-      imagePatch[0x1C4D] = 0xEA;
-      imagePatch[0x1C4E] = 0xEA;
-      imagePatch[0x1C4F] = 0xEA;
-      imagePatch[0x1C50] = 0xEA;
-      imagePatch[0x1C51] = 0xEA;
-      imagePatch[0x1C52] = 0xEA;
-      imagePatch[0x1C53] = 0xEA;
-      imagePatch[0x1C54] = 0xEA;
-      imagePatch[0x1C55] = 0xEA;
-      imagePatch[0x1C56] = 0xEA;
-      imagePatch[0x1C57] = 0xEA;
-      imagePatch[0x1C58] = 0xEA;
-      imagePatch[0x1C59] = 0xEA;
-      imagePatch[0x1C5A] = 0xEA;
-      imagePatch[0x1C5B] = 0xEA;
-      imagePatch[0x1C5C] = 0xEA;
-      imagePatch[0x1C5D] = 0xEA;
-      imagePatch[0x1C5E] = 0xEA;
-      imagePatch[0x1C5F] = 0xEA;
-      imagePatch[0x1C60] = 0xEA;
-      imagePatch[0x1C61] = 0xEA;
-      imagePatch[0x1C62] = 0xEA;
-      imagePatch[0x1C63] = 0xEA;
-      imagePatch[0x1C64] = 0xEA;
-      imagePatch[0x1C65] = 0xEA;
-      imagePatch[0x1C66] = 0xEA;
-      imagePatch[0x1C67] = 0xEA;
-      imagePatch[0x1C68] = 0xA5;
-      imagePatch[0x1C69] = 0xD7;
-      imagePatch[0x1C6A] = 0x29;
-      imagePatch[0x1C6B] = 0xF0;
-      imagePatch[0x1C6C] = 0x85;
-      imagePatch[0x1C6D] = 0xD7;
-      imagePatch[0x1C6E] = 0x98;
-      imagePatch[0x1C6F] = 0x05;
-      imagePatch[0x1C70] = 0xD7;
-  }
-
-
-  // Patch Cookie Monster Munch so we can just use the joysticks which are easier to control
-  if (myCartInfo.special == SPEC_COOKIEM)
-  {
-      uInt8* imagePatch = (uInt8*)(image);
-      imagePatch[0x100D] = 0xEA;
-      imagePatch[0x100E] = 0xEA;
-      imagePatch[0x100F] = 0xEA;
-      imagePatch[0x19B9] = 0xA0;
-      imagePatch[0x19BA] = 0x05;
-      imagePatch[0x19BB] = 0x24;
-      imagePatch[0x19BC] = 0x3C;
-      imagePatch[0x19BD] = 0x10;
-      imagePatch[0x19BE] = 0x16;
-      imagePatch[0x19BF] = 0xC8;
-      imagePatch[0x19C0] = 0xAD;
-      imagePatch[0x19C1] = 0x80;
-      imagePatch[0x19C2] = 0x02;
-      imagePatch[0x19C4] = 0x10;
-      imagePatch[0x19C5] = 0xA0;
-      imagePatch[0x19C6] = 0x04;
-      imagePatch[0x19C7] = 0x0A;
-      imagePatch[0x19C8] = 0x10;
-      imagePatch[0x19C9] = 0x0B;
-      imagePatch[0x19CA] = 0xA0;
-      imagePatch[0x19CB] = 0x08;
-      imagePatch[0x19CC] = 0x0A;
-      imagePatch[0x19CD] = 0x10;
-      imagePatch[0x19CE] = 0x06;
-      imagePatch[0x19CF] = 0xA0;
-      imagePatch[0x19D0] = 0x02;
-      imagePatch[0x19D1] = 0x0A;
-      imagePatch[0x19D2] = 0x10;
-      imagePatch[0x19D3] = 0x01;
-      imagePatch[0x19D4] = 0x0C;
-      imagePatch[0x19D5] = 0x84;
-      imagePatch[0x19D6] = 0xBD;
-      imagePatch[0x19D7] = 0xEA;
-      imagePatch[0x19D8] = 0xEA;
-      imagePatch[0x19D9] = 0xEA;
-      imagePatch[0x19DA] = 0xA5;
-      imagePatch[0x19DB] = 0xBD;
-      imagePatch[0x19DC] = 0xF0;
-      imagePatch[0x19DD] = 0x08;
-      imagePatch[0x19DE] = 0xC9;
-      imagePatch[0x19DF] = 0x05;
-      imagePatch[0x19E0] = 0xF0;
-      imagePatch[0x19E1] = 0x04;
-      imagePatch[0x19E2] = 0xA9;
-      imagePatch[0x19E3] = 0x00;
-      imagePatch[0x19E4] = 0x85;
-      imagePatch[0x19E5] = 0xBE;
-      imagePatch[0x19E6] = 0xA9;
-      imagePatch[0x19E7] = 0x82;
-      imagePatch[0x19E8] = 0x85;
-      imagePatch[0x19E9] = 0x01;
-      imagePatch[0x19EA] = 0xA9;
-      imagePatch[0x19EB] = 0x02;
-      imagePatch[0x19EC] = 0x85;
-      imagePatch[0x19ED] = 0x01;
-  }
-
 
   // If we didn't find the type in the table then guess it based on size
   if(!bFound)

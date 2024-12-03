@@ -75,118 +75,108 @@ bool Keyboard::read(DigitalPin pin)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Int32 Keyboard::read(AnalogPin pin)
 {
+  // NOTE: maximumResistance = GND, while minimumResistance = +5V
+
   if(pin == Nine)
   {
-    if((myPinState & 0x01) == 0)
+    if(myJack == Left)
     {
-      if(myJack == Left)
+      if(!(myPinState & 0x01) && (myEvent.get(Event::KeyboardZero1) != 0))
       {
-        return (myEvent.get(Event::KeyboardZero1) != 0) ? 
-            maximumResistance : minimumResistance;
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x02) && (myEvent.get(Event::KeyboardZero4) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x04) && (myEvent.get(Event::KeyboardZero7) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x08) && (myEvent.get(Event::KeyboardZeroStar) != 0))
+      {
+        return maximumResistance;
       }
       else
       {
-        return (myEvent.get(Event::KeyboardOne1) != 0) ? 
-            maximumResistance : minimumResistance;
+        return minimumResistance;
       }
     }
-    else if((myPinState & 0x02) == 0)
+    else
     {
-      if(myJack == Left)
+      if(!(myPinState & 0x01) && (myEvent.get(Event::KeyboardOne1) != 0))
       {
-        return (myEvent.get(Event::KeyboardZero4) != 0) ? 
-            maximumResistance : minimumResistance;
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x02) && (myEvent.get(Event::KeyboardOne4) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x04) && (myEvent.get(Event::KeyboardOne7) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x08) && (myEvent.get(Event::KeyboardOneStar) != 0))
+      {
+        return maximumResistance;
       }
       else
       {
-        return (myEvent.get(Event::KeyboardOne4) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-    }
-    else if((myPinState & 0x04) == 0)
-    {
-      if(myJack == Left)
-      {
-        return (myEvent.get(Event::KeyboardZero7) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-      else
-      {
-        return (myEvent.get(Event::KeyboardOne7) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-    }
-    else if((myPinState & 0x08) == 0)
-    {
-      if(myJack == Left)
-      {
-        return (myEvent.get(Event::KeyboardZeroStar) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-      else
-      {
-        return (myEvent.get(Event::KeyboardOneStar) != 0) ? 
-            maximumResistance : minimumResistance;
+        return minimumResistance;
       }
     }
   }
   else
   {
-    if((myPinState & 0x01) == 0)
+    if(myJack == Left)
     {
-      if(myJack == Left)
+      if(!(myPinState & 0x01) && (myEvent.get(Event::KeyboardZero2) != 0))
       {
-        return (myEvent.get(Event::KeyboardZero2) != 0) ? 
-            maximumResistance : minimumResistance;
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x02) && (myEvent.get(Event::KeyboardZero5) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x04) && (myEvent.get(Event::KeyboardZero8) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x08) && (myEvent.get(Event::KeyboardZero0) != 0))
+      {
+        return maximumResistance;
       }
       else
       {
-        return (myEvent.get(Event::KeyboardOne2) != 0) ? 
-            maximumResistance : minimumResistance;
+        return minimumResistance;
       }
     }
-    else if((myPinState & 0x02) == 0)
+    else
     {
-      if(myJack == Left)
+      if(!(myPinState & 0x01) && (myEvent.get(Event::KeyboardOne2) != 0))
       {
-        return (myEvent.get(Event::KeyboardZero5) != 0) ? 
-            maximumResistance : minimumResistance;
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x02) && (myEvent.get(Event::KeyboardOne5) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x04) && (myEvent.get(Event::KeyboardOne8) != 0))
+      {
+        return maximumResistance; 
+      }
+      else if(!(myPinState & 0x08) && (myEvent.get(Event::KeyboardOne0) != 0))
+      {
+        return maximumResistance;
       }
       else
       {
-        return (myEvent.get(Event::KeyboardOne5) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-    }
-    else if((myPinState & 0x04) == 0)
-    {
-      if(myJack == Left)
-      {
-        return (myEvent.get(Event::KeyboardZero8) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-      else
-      {
-        return (myEvent.get(Event::KeyboardOne8) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-    }
-    else if((myPinState & 0x08) == 0)
-    {
-      if(myJack == Left)
-      {
-        return (myEvent.get(Event::KeyboardZero0) != 0) ? 
-            maximumResistance : minimumResistance;
-      }
-      else
-      {
-        return (myEvent.get(Event::KeyboardOne0) != 0) ? 
-            maximumResistance : minimumResistance;
+        return minimumResistance;
       }
     }
   }
 
-  return maximumResistance;
+  return minimumResistance;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
