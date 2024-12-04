@@ -34,7 +34,7 @@ StellaDS Phoenix-Edition is Copyright (c) 2020-2024 Dave Bernazzani (wavemotion-
 
 As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
-Most of this code is based on the Stella project - please see their github page for details on the original (and vastly improved) codebase: https://github.com/stella-emu/stella 
+Most of this code is based on the Stella project which has a GPL 2.0 license - please see their github page for details on the original (and vastly improved) codebase: https://github.com/stella-emu/stella 
 
 The StellaDS emulator is offered as-is, without any warranty.
 
@@ -247,7 +247,7 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
+V7.9 : 04-Dec-2024 by Dave Bernazzani (wavemotion)
   * Fix so holding shoulder buttons on Bumper Bash does NOT invoke the screen snapshot.
   * Fix for bumper bash right bumper position so it now shows correctly.
   * Improved GI Joe Cobra Strike snake graphics so it's much closer to the way a real TIA chip would draw it.
@@ -257,9 +257,12 @@ V7.9 : ??-????-2024 by Dave Bernazzani (wavemotion)
   * Improved keyboard/keypad emulation so games like Alpha Beam with Ernie, Oscar's Trash Can Race and Magicard now work.
   * Improved emulation of Starpath Supercharger (AR) games (Dragonstomper is random) and support smaller game loads (Cubis now runs).
   * Fixed Casino paddles (correct paddle emulation so you can select all card positions in game variation 4).
-  * Internal cart database updated to Romhunter v19 (NTSC with select PAL titles)
-  * Fix for save/load states on CDFJ+ carts.
-  * TBD
+  * Internal cart database updated to Romhunter v19 (full NTSC with select PAL titles).
+  * Fix for save/load states on CDFJ+ carts (Gorf and Turbo Arcade will now save/load correctly).
+  * Wave Direct improvements - applying the same logic for all games that utilize digital speech and improving sounds.
+  * Added new Stretch-X config option to stretch the screen horizontally (you can use offset/stretch to fill the screen for
+    some Activision games which purposely hide the HMOVE blanks on the left side of the screen).
+  * Pressing and holding the Game Select and Game Reset buttons now keeps them depressed until you let up your finger.
 
 V7.8 : 30-Nov-2024 by Dave Bernazzani (wavemotion)
   * Further tweaks to the improved 'Wave Direct' to prevent audio gaps.

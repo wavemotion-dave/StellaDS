@@ -49,7 +49,7 @@
 #include "Thumbulator.hxx"
 #include "TIA.hxx"
 
-#define VERSION "7.8"
+#define VERSION "7.9"
 
 #define MAX_RESISTANCE  1030000
 #define MIN_RESISTANCE  70000
@@ -184,19 +184,16 @@ inline void ShowStatusLine(void)
     }
 }
 
-
-u16 stretch_x = 0;
 Int16 temp_shift __attribute__((section(".dtcm"))) = 0;
 uInt8 shiftTime;
 ITCM_CODE void vblankIntr() 
 {
     if (bScreenRefresh || temp_shift)
     {
-        REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale);
+        REG_BG3PD = ((100 / myCartInfo.yScale)  << 8) | (100 % myCartInfo.yScale);
         REG_BG3Y = (myCartInfo.yOffset + temp_shift) << 8;
         REG_BG3X = (myCartInfo.xOffset)<<8;
-        REG_BG3PA = stretch_x;
-        
+        REG_BG3PA = (((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256)) - myCartInfo.xStretch;
         bScreenRefresh = 0;
     }
     
@@ -289,10 +286,9 @@ void dsShowScreenEmu(void)
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
   memset((void*)0x06000000, 0x00, 128*1024);
 
-  stretch_x = ((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256);
-  REG_BG3PA = stretch_x;
+  REG_BG3PA = (((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256)) - myCartInfo.xStretch;
   REG_BG3PB = 0; REG_BG3PC = 0;
-  REG_BG3PD = ((100 / myCartInfo.screenScale)  << 8) | (100 % myCartInfo.screenScale) ;
+  REG_BG3PD = ((100 / myCartInfo.yScale)  << 8) | (100 % myCartInfo.yScale) ;
   REG_BG3X = (myCartInfo.xOffset)<<8;
   REG_BG3Y = (myCartInfo.yOffset)<<8;
 
@@ -1143,6 +1139,7 @@ short int iTx,iTy;
 static u16 dampen=10;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
+static uInt8 bSelectOrResetWasPressed = 0;
 
 void dsMainLoop(void)
 {
@@ -1158,6 +1155,7 @@ void dsMainLoop(void)
     last_keys_pressed = -1;
     full_speed = 0;
     fpsDisplay = 0;
+    bSelectOrResetWasPressed = 0;
 
     // Timers are fed with 33.513982 MHz clock.
     // With DIV_1024 the clock is 32,728.5 ticks per sec...
@@ -1444,8 +1442,8 @@ void dsMainLoop(void)
                     break;
                 
                 case CTR_BUMPBASH:
-                    myStellaEvent.set(Event::PaddleZeroFire,     (keys_pressed & (KEY_B)) || (keys_pressed & (KEY_L)));
-                    myStellaEvent.set(Event::PaddleOneFire,      (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_R)));                    
+                    myStellaEvent.set(Event::PaddleZeroFire,     (keys_pressed & (KEY_B | KEY_Y | KEY_L)));
+                    myStellaEvent.set(Event::PaddleOneFire,      (keys_pressed & (KEY_A | KEY_X | KEY_R)));                    
                     break;
                     
                 case CTR_PADDLE0:
@@ -1574,9 +1572,9 @@ void dsMainLoop(void)
                 }
                 else
                 {
-                    myStellaEvent.set(Event::ConsoleSelect,  keys_pressed & (KEY_SELECT));
+                    if (!(keys_pressed & KEY_TOUCH)) myStellaEvent.set(Event::ConsoleSelect,  keys_pressed & (KEY_SELECT));
                 }
-                myStellaEvent.set(Event::ConsoleReset,              keys_pressed & (KEY_START));
+                if (!(keys_pressed & KEY_TOUCH)) myStellaEvent.set(Event::ConsoleReset, keys_pressed & (KEY_START));
                 
                 if (bInitialDiffSet)
                 {
@@ -1623,12 +1621,12 @@ void dsMainLoop(void)
                         if ((keys_pressed & KEY_R) && (keys_pressed & KEY_RIGHT)) myCartInfo.xOffset--;
 
                         // Allow vertical scaling from 51% to 100%
-                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.screenScale < 100) myCartInfo.screenScale++;
-                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.screenScale > 51) myCartInfo.screenScale--;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_UP))   if (myCartInfo.yScale < 100) myCartInfo.yScale++;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_DOWN)) if (myCartInfo.yScale > 51) myCartInfo.yScale--;
 
                         // Allow horizontal scaling ... not hugely needed but for some games that don't utilize the entire horizontal width this can be used to zoom in a bit
-                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  stretch_x++;
-                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) stretch_x--;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  if (myCartInfo.xStretch > 0)  myCartInfo.xStretch--;
+                        if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.xStretch < 32) myCartInfo.xStretch++;
                     }
                     
                     if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L) && (myCartInfo.controllerType != CTR_BUMPBASH))
@@ -1807,18 +1805,20 @@ void dsMainLoop(void)
                 else if ((iTx>170) && (iTx<203) && (iTy>26) && (iTy<70)) 
                 { // game select
                     dsDisplayButton(5);
+                    bSelectOrResetWasPressed = 1;
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myStellaEvent.set(Event::ConsoleSelect, 1);
                     dampen=10;
-                    WAITVBL; dsDisplayButton(4);
+                    WAITVBL; 
                 }
                 else if ((iTx>215) && (iTx<253) && (iTy>26) && (iTy<70)) 
                 { // game reset
                     dsDisplayButton(7);
+                    bSelectOrResetWasPressed = 1;
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myStellaEvent.set(Event::ConsoleReset, 1);
                     dampen=10;
-                    WAITVBL; WAITVBL; dsDisplayButton(6);
+                    WAITVBL;
                 }
                 else if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133)) 
                 {     // 48,100 -> 208,132 cartridge slot
@@ -1940,6 +1940,11 @@ void dsMainLoop(void)
         }
         else
         {
+            if (bSelectOrResetWasPressed)
+            {
+                dsDisplayButton(4); dsDisplayButton(6); // Select and Reset back to normal
+                bSelectOrResetWasPressed = 0;
+            }
             keys_touch=0;
         }
 

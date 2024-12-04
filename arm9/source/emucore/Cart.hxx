@@ -68,7 +68,7 @@ struct CartInfo
   uInt8 tv_type;                // NTSC or PAL
   uInt8 displayStartScanline;   
   uInt8 displayNumScalines;  
-  uInt8 screenScale;            // 100 = 100% (smaller numbers squish screen to fit)
+  uInt8 yScale;                // 100 = 100% (smaller numbers squish screen to fit)
   Int8  xOffset;
   Int8  yOffset;
   uInt8 aButton;
@@ -82,7 +82,7 @@ struct CartInfo
   uInt8 palette_type;
   uInt8 bus_driver;
   uInt8 clearRAM;
-  uInt8 spare4_0;
+  uInt8 xStretch;
   uInt8 spare5_0;
   uInt8 spare6_0;
   uInt8 spare7_0;
@@ -155,7 +155,7 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SPEC_DPCPOPT    12     // Optmized ARM Thumb DPC+ handling
 #define SPEC_DPCPNOC    13     // Optmized ARM Thumb DPC+ handling with No Collision Handling (Space Rocks, Scramble)
 #define SPEC_POLEPOS    14     // Pole Position requires NUSIZ0/1 changes
-#define SPEC_WAVESLOW   15     // Slow down the Wave Direct (for games like Quadrun or Berzerk VE)
+#define SPEC_WAVEDIRC   15     // Slow down the Wave Direct (for games like Quadrun or Berzerk VE)
 #define SPEC_GIJOE      16     // GI Joe needs graphical tweaks to make it look right
 #define SPEC_OSCAR      17     // Patched for joystick use
 

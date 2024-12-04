@@ -556,11 +556,6 @@ ITCM_CODE void TIA::update()
   myDSFramePointer = BG_GFX;
 
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
-  if (bWaveDirectSound) 
-  {
-      // We support the WAVESLOW hack to improve WAVE DIRECT sounds      
-      if (myCartInfo.special == SPEC_WAVESLOW) bWaveDirectSound = 2;
-  }
   
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
   
