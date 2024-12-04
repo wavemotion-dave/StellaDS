@@ -409,28 +409,25 @@ ITCM_CODE void Tia_process(void)
          when using unsigned 8-bit samples in SDL */
         if (myCartInfo.soundQuality == SOUND_WAVE)
         {
-            // ----------------------------------------------------------------------------------
-            // If we are the special Wave-Direct with delay... add an artificial delay here to
-            // help games like Quadrun and Berzerk Voice Enhanced sound better... We basically
-            // wait for half the audio buffer to 'drain' before moving on. Yes, it's a hack.
-            // ----------------------------------------------------------------------------------
-            extern uInt8 bWaveDirectSound;
-            if (bWaveDirectSound == 2)
+            // ---------------------------------------------------------------------------------
+            // If we find ourselves with the buffer maxed out, we will wait  for half the audio 
+            // buffer to 'drain' before moving on. This allows the sound buffer to essentially 
+            // drive the system at close to 60 fps. It's not perfect but good enough.
+            // ---------------------------------------------------------------------------------
+            uInt16 new_idx = ((tia_buf_idx+1) & (SOUND_SIZE-1));
+            if (new_idx == tia_out_idx)
             {
-                if (((tia_buf_idx+1) & (SOUND_SIZE-1)) == tia_out_idx)
+                bProcessingSample = false;
+                wave_direct_samples=0;
+                volatile int temp=0;
+                while (wave_direct_samples < (SOUND_SIZE/2))
                 {
-                    bProcessingSample = false;
-                    wave_direct_samples=0;
-                    volatile int temp=0;
-                    while (wave_direct_samples < (SOUND_SIZE/2))
-                    {
-                        if (++temp > 500000) break; // In case we are muted and the ISR isn't running...
-                    }
+                    if (++temp > 500000) break; // In case we are muted and the ISR isn't running...
                 }
             }
             
             ((uInt16*)0x06890000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uInt16)Outvol[0] + (uInt16)Outvol[1]];
-            tia_buf_idx = (tia_buf_idx + 1) & (SOUND_SIZE-1);
+            tia_buf_idx = new_idx;
         }
         else
         {
@@ -443,6 +440,7 @@ ITCM_CODE void Tia_process(void)
     }
 }
 
+// Called via TIMER2 interrupt... 
 ITCM_CODE void Tia_process_wave (void)
 {
     wave_direct_samples++;

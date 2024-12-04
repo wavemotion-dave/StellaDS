@@ -213,14 +213,15 @@ const struct options_t Game_Option_Table[2][20] =
         {"ANALOG SENS", 1, {"5",   "25"},                                                                                                                                                 &myCartInfo.analogSensitivity,   1},
         {"START SCANL", 1, {"25",  "75"},                                                                                                                                                 &myCartInfo.displayStartScanline,1},
         {"NUM   SCANL", 1, {"190", "255"},                                                                                                                                                &myCartInfo.displayNumScalines,  1},
-        {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                &myCartInfo.screenScale,         1},
+        {"Y SCALE",     1, {"50",  "100"},                                                                                                                                                &myCartInfo.yScale,              1},
         {"X OFFSET",    2, {"-50", "50"},                                                                                                                                         (uInt8*)&myCartInfo.xOffset,             1},
         {"Y OFFSET",    2, {"-50", "50"},                                                                                                                                         (uInt8*)&myCartInfo.yOffset,             1},
-        {"ARM THUMB",   0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                         &myCartInfo.thumbOptimize,       4},
+        {"X STRETCH",   2, {"0",   "32"},                                                                                                                                         (uInt8*)&myCartInfo.xStretch,            1},
 
         {NULL,          0, {"",      ""},                                                                                                                                                 NULL,                            1},
     },
     {
+        {"ARM THUMB",  0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                          &myCartInfo.thumbOptimize,       4},
         {"BUS MODE",   0, {"OPTIMIZED", "ACCURATE"},                                                                                                                                      &myCartInfo.bus_driver,          2},
         {"6532 RAM",   0, {"RANDOM", "CLEAR (ZEROS)"},                                                                                                                                    &myCartInfo.clearRAM,            2},
         

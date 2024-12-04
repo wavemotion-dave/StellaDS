@@ -33,7 +33,6 @@ class NullDevice;
 
 #define SOUND_SIZE (1024)
 
-
 extern Int32 gSystemCycles;    // Number of system cycles executed since the last reset
 extern uInt32 gTotalSystemCycles;
 extern Int32 debug[];          // Array that can be output on screen in ds_main_menu.cpp if the DEBUG_ENABLE switch is defined
