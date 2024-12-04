@@ -51,8 +51,8 @@ Known Issues :
 * Cherity music fetchers are incomplete and the background music will not play (game is otherwise fine to play).
 * KC Munchkin Monster Maze does not run correctly with the optimized 'AR' cart handler in StellaDS.
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
-* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round), Tapper (counters extended slightly)
-* Game filenames can be no longer than 168 characters including the extension. Rename to shorter if needed.
+* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round), Tapper (counters extended slightly). Likely there are other games that will have minor artifacts.
+* Game filenames can be no longer than 200 characters including the extension. Rename to shorter if needed.
 * No more than 1500 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
 Strongest Recommendation:
