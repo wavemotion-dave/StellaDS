@@ -246,8 +246,9 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-7.9a : 08-Dec-2024 by Dave Bernazzani (wavemotion)
+7.9b : 08-Dec-2024 by Dave Bernazzani (wavemotion)
   * Added music fetchers for more complete  Chetiry (CTY) emulation. Save state works with CTY. Use the 60K Chetiry rom for music.
+  * Fixed holding RESET (DS Start button) and SELECT (DS Select Button) when loading a game. This allows you to do things like the Double-Shot trick in Space Invaders.
 
 V7.9 : 04-Dec-2024 by Dave Bernazzani (wavemotion)
   * Fix so holding shoulder buttons on Bumper Bash does NOT invoke the screen snapshot.

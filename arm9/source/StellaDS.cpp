@@ -820,18 +820,13 @@ unsigned int dsWaitForRom(void)
       while (keysCurrent() & KEY_B);
     }
 
-    if (keysCurrent() & KEY_A || keysCurrent() & KEY_Y || keysCurrent() & KEY_SELECT)
+    if (keysCurrent() & KEY_A || keysCurrent() & KEY_Y)
     {
       if (!vcsromlist[ucFicAct].directory)
       {
         bRet=true;
         bDone=true;
         bHaltEmulation = 0;
-        if (keysCurrent() & KEY_SELECT)
-        {
-            full_speed = 1;
-            fpsDisplay = 1;
-        }
         if (keysCurrent() & KEY_Y) 
         {
            bHaltEmulation = 1;
@@ -1142,7 +1137,7 @@ __attribute__((noinline)) void CheckSpecialKeypadHandling(unsigned short keys_pr
 }
 
 short int iTx,iTy;
-static u16 dampen=10;
+static u16 dampen=0;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
 static uInt8 bSelectOrResetWasPressed = 0;
@@ -1186,7 +1181,7 @@ ITCM_CODE void dsMainLoop(void)
         case STELLADS_PLAYINIT:
             dsShowScreenEmu();
             emuState = STELLADS_PLAYGAME;
-            dampen=10;
+            dampen=0; // Process things like holding RESET at power-up immediately
             break;
 
         case STELLADS_PLAYGAME:
