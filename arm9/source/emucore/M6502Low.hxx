@@ -83,6 +83,7 @@ class M6502Low : public M6502
     virtual void execute_CDFJPlus(void);
     virtual void execute_CDFJPlusPlus(void);
     virtual void execute_DPC(void);
+    virtual void execute_CTY(void);
     
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")

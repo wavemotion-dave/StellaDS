@@ -90,11 +90,9 @@ void CartridgeWF8::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeWF8::peek(uInt16 address)
+uInt8 CartridgeWF8::peek(uInt16 address)
 {
-  address = address & 0x0FFF;
-
-  return myImage[myCurrentOffset + address];
+  return fast_cart_buffer[myCurrentOffset + (address & 0xFFF)];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

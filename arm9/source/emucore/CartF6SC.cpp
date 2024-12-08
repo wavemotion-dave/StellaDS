@@ -148,7 +148,7 @@ ITCM_CODE uInt8 CartridgeF6SC::peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeF6SC::poke(uInt16 address, uInt8)
+void CartridgeF6SC::poke(uInt16 address, uInt8)
 {
   address = address & 0x0FFF;
 

@@ -117,6 +117,7 @@ class M6502
     virtual void execute_CDFJPlus(void)     = 0;
     virtual void execute_CDFJPlusPlus(void) = 0;
     virtual void execute_DPC(void)          = 0;
+    virtual void execute_CTY(void)          = 0;
 
     /**
       Tell the processor to stop executing instructions.  Invoking this 

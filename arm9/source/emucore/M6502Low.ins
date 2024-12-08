@@ -1951,6 +1951,10 @@ case 0xa9:
   A = peek_PC(PC++);
 #endif
 
+#ifdef CTY_LDA_F2
+    if (A == 0xF2) A = CTY_updateMusicModeDataFetchers();
+#endif
+
 #ifdef DPC_PLUS_FAST_FETCH
   extern bool myFastFetch;
   if (myFastFetch && (A < 0x0028)) 

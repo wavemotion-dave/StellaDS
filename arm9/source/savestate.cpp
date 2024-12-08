@@ -29,6 +29,7 @@
 #include "EventHandler.hxx"
 #include "Cart.hxx"
 #include "CartAR.hxx"
+#include "CartCTY.hxx"
 #include "CartDPCPlus.hxx"
 #include "CartCDF.hxx"
 #include "Cart3EPlus.hxx"
@@ -72,7 +73,7 @@ typedef struct
 
 Offsets_t myPageOffsets[64];
 
-char spare_bytes[127];
+char spare_bytes[116];
 
 void MakeSaveName(void)
 {
@@ -368,6 +369,12 @@ void SaveState(void)
     {
         fwrite(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
     }
+
+    // CTY Parameters
+    fwrite(&myTunePosition,             sizeof(myTunePosition),            1, fp);
+    fwrite(&myAudioCycles,              sizeof(myAudioCycles),             1, fp);
+    fwrite(&deltaCyclesX10,             sizeof(deltaCyclesX10),            1, fp);
+    fwrite(&myOperationType,            sizeof(myOperationType),           1, fp);
     
     // Write out some spare bytes we can eat into for the future...
     memset(spare_bytes, 0x00, sizeof(spare_bytes));
@@ -600,6 +607,12 @@ void LoadState(void)
                 fread(xl_ram_buffer,           sizeof(xl_ram_buffer),             1, fp);   
             }
 
+            // CTY Parameters
+            fread(&myTunePosition,             sizeof(myTunePosition),            1, fp);
+            fread(&myAudioCycles,              sizeof(myAudioCycles),             1, fp);
+            fread(&deltaCyclesX10,             sizeof(deltaCyclesX10),            1, fp);
+            fread(&myOperationType,            sizeof(myOperationType),           1, fp);            
+            
             fclose(fp);
 
             // ----------------------------------------------------------------------------------------------

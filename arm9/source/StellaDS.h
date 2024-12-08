@@ -20,7 +20,7 @@ typedef enum {
 } FifoMesType;
 
 #define MAX_ROMS_PER_DIRECTORY  1500
-#define MAX_FILE_NAME_LEN       205
+#define MAX_FILE_NAME_LEN       199
 
 typedef struct FICtoLoad {
   char  filename[MAX_FILE_NAME_LEN];
@@ -65,7 +65,7 @@ extern unsigned int dsWaitOnMenu(unsigned int actState);
 
 extern void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr);
 
-extern ITCM_CODE void dsMainLoop(void);
+extern void dsMainLoop(void);
 
 extern void dsInstallSoundEmuFIFO(void);
 

@@ -944,7 +944,7 @@ unsigned int dsWaitOnMenu(unsigned int actState)
   return uState;
 }
 
-void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
+ITCM_CODE void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
 {
   static u16 *ptrScreen,*ptrMap;
   u16 usCharac;
@@ -971,10 +971,18 @@ void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr)
   }
 }
 
-void dsPrintFPS(char *pchStr)
+__attribute__((noinline)) void dsPrintFPS(void)
 {
+  char fpsbuf[4];
+  if ((!full_speed) && (gAtariFrames>60)) gAtariFrames--;
+  fpsbuf[0] = '0' + (gAtariFrames/100);
+  fpsbuf[1] = '0' + (gAtariFrames%100)/10;
+  fpsbuf[2] = '0' + (gAtariFrames%10);
+  fpsbuf[3] = 0;
+  gAtariFrames=0;
+
   u16 *ptrScreen,*ptrMap;
-  char *pTrTxt=pchStr;
+  char *pTrTxt=fpsbuf;
 
   ptrScreen=(u16*) (bgGetMapPtr(bg1b))+0+(0<<5);
   ptrMap=(u16*) (bgGetMapPtr(bg0b)+(2*0+24)*32);
@@ -1133,15 +1141,13 @@ __attribute__((noinline)) void CheckSpecialKeypadHandling(unsigned short keys_pr
     }
 }
 
-
-char fpsbuf[12];
 short int iTx,iTy;
 static u16 dampen=10;
 static u16 info_dampen=0;
 static u16 driving_dampen = 0;
 static uInt8 bSelectOrResetWasPressed = 0;
 
-void dsMainLoop(void)
+ITCM_CODE void dsMainLoop(void)
 {
     uInt16 keys_pressed;
     uInt8 rapid_fire   = 0;
@@ -1669,13 +1675,7 @@ void dsMainLoop(void)
 
             if (fpsDisplay)
             {
-                if ((!full_speed) && (gAtariFrames>60)) gAtariFrames--;
-                fpsbuf[0] = '0' + (gAtariFrames/100);
-                fpsbuf[1] = '0' + (gAtariFrames%100)/10;
-                fpsbuf[2] = '0' + (gAtariFrames%10);
-                fpsbuf[3] = 0;
-                gAtariFrames=0;
-                dsPrintFPS(fpsbuf);
+                dsPrintFPS();
             }
             if (gSaveKeyIsDirty)
             {
@@ -1745,8 +1745,7 @@ void dsMainLoop(void)
                     fpsDisplay = 1-fpsDisplay;
                     if (!fpsDisplay)
                     {
-                        strcpy(fpsbuf, "          ");
-                        dsPrintValue(0,0,0, fpsbuf);
+                        dsPrintValue(0,0,0, (char *)"          ");
                     }
                     else gAtariFrames=0;                    
                     ShowStatusLine();

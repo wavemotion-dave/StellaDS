@@ -28,6 +28,13 @@ class CartridgeCTY;
 #include "bspf.hxx"
 #include "Cart.hxx"
 
+extern uInt16 myTunePosition;
+extern uInt32 myAudioCycles;
+extern uInt32 deltaCyclesX10;
+extern uInt8 myOperationType;
+
+extern uInt8 CTY_updateMusicModeDataFetchers(void);
+
 /**
   Cartridge class used for Chetiry - has extra RAM and an EE Chip
 */
@@ -67,6 +74,8 @@ class CartridgeCTY : public Cartridge
     */
     virtual void install(System& system);
 
+    virtual void systemCyclesReset();
+    
   public:
     /**
       Get the byte at the specified address.
@@ -91,6 +100,8 @@ class CartridgeCTY : public Cartridge
     */
     void bank(uInt16 bank);
     void handle_cty_flash_backing(void);
+    void updateTune(void);
+    uInt8 ramReadWrite(void);
 
   private:
 
