@@ -50,7 +50,7 @@ Known Issues :
 * Any ARM-Assisted games (DPC+ or any flavor of CDF/CDFJ/+) are generally complex enough that you will need a DSi running at the 2X CPU speed (via Unlaunch or Twilight Menu++) to get a good experience from it. If you are running from an R4 or similar flashcart, you will be running in DS compatibility mode (67MHz) and the ARM games will not run anywhere near full speed.
 * KC Munchkin Monster Maze does not run correctly with the optimized 'AR' cart handler in StellaDS.
 * Games utilizing the TIA direct audio (games like Quadrun, the opening tune of Ms. Pac-Man, etc) and Fast Fetcher Music (Pitfall II, Stay Frosty 2, Mappy, Draconian, BOOM, etc) are handled with the new WAVE DIRECT audio driver but it's not perfect. Expect the sound to be passable but not great. The scratchiness you hear is a result of emulation and is not a reflection of the amazing music in these games that needs better emulation to make it shine (or real hardware).
-* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round), Tapper (counters extended slightly). Likely there are other games that will have minor artifacts.
+* Graphical glitches on the following games due to imperfect TIA / timing emulation:  GI Joe Cobra Strike (minor graphical glitches), Pole Position (minor road glitch), Meltdown (left two columns not perfectly round), Tapper (counters extended slightly), Treasure Island (PAL game - sprites jump). Likely there are other games that will have minor artifacts.
 * Game filenames can be no longer than 200 characters including the extension. Rename to shorter if needed.
 * No more than 1500 files can be shown in a directory. You can break up your games into multiple directories if needed.
 
@@ -246,7 +246,7 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-7.9b : 08-Dec-2024 by Dave Bernazzani (wavemotion)
+8.0 : 09-Dec-2024 by Dave Bernazzani (wavemotion)
   * Added music fetchers for more complete  Chetiry (CTY) emulation. Save state works with CTY. Use the 60K Chetiry rom for music.
   * Fixed holding RESET (DS Start button) and SELECT (DS Select Button) when loading a game. This allows you to do things like the Double-Shot trick in Space Invaders.
 

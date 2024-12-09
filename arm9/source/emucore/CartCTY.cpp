@@ -33,7 +33,7 @@
 
 extern char my_filename[MAX_FILE_NAME_LEN+1];
 extern char flash_filename[MAX_FILE_NAME_LEN+5];
-uInt32 myRandomNumber2 = 0x2B435044;
+uInt32 myRandomNumberCTY = 0x2B435044;
 uInt16 myTunePosition   __attribute__((section(".dtcm")));
 uInt32 myAudioCycles    __attribute__((section(".dtcm"))) = 0;
 uInt32 deltaCyclesX10   __attribute__((section(".dtcm"))) = 0;
@@ -163,7 +163,7 @@ void CartridgeCTY::reset()
 {
   ctyRAM[0] = ctyRAM[1] = ctyRAM[2] = ctyRAM[3] = 0xFF;
 
-  myRandomNumber2 = 0x2B435044;
+  myRandomNumberCTY = 0x2B435044;
   myAudioCycles = gSystemCycles;
   deltaCyclesX10 = 0;
   
@@ -281,7 +281,6 @@ void CartridgeCTY::handle_cty_flash_backing(void)
         case 4: // Wipe Score Table
         {
             memset(ctyEE, 0x00, CTY_EE_SIZE);
-            memset(ctyRAM, 0x00, CTY_RAM_SIZE);
             FILE *fp = fopen(flash_filename, "wb+");
             fwrite(ctyEE, CTY_EE_SIZE, 1, fp);
             fclose(fp);
@@ -317,8 +316,8 @@ uInt8 CartridgeCTY::peek(uInt16 address)
       case 0x00:  // Error code after operation
         return ctyRAM[0];
       case 0x01:  // Get next Random Number (8-bit LFSR)
-        myRandomNumber2 = ((myRandomNumber2 & (1<<10)) ? 0x10adab1e: 0x00) ^ ((myRandomNumber2 >> 11) | (myRandomNumber2 << 21));
-        return myRandomNumber2 & 0xFF;
+        myRandomNumberCTY = ((myRandomNumberCTY & (1<<10)) ? 0x10adab1e: 0x00) ^ ((myRandomNumberCTY >> 11) | (myRandomNumberCTY << 21));
+        return myRandomNumberCTY & 0xFF;
       case 0x02:  // Get Tune position (low byte)
         return myTunePosition & 0xFF;
       case 0x03:  // Get Tune position (high byte)
@@ -339,7 +338,7 @@ void CartridgeCTY::poke(uInt16 address, uInt8 value)
         myOperationType = value;
         break;
       case 0x01:  // Set Random seed value (reset)
-        myRandomNumber2 = 0x2B435044;
+        myRandomNumberCTY = 0x2B435044;
         break;
       case 0x02:  // Reset fetcher to beginning of tune
         myTunePosition = 0;
