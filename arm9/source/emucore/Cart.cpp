@@ -404,9 +404,9 @@ const CartInfo table[] =
     {"1cedebe83d781cc22e396383e028241a",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  5},    // Cave In.bin
     {"049b33b03e7928af596c9d683f587475",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  2},    // Caverns.bin
     {"4bd38b84e9f46f39367dae0af849b13d",  "??????", BANK_F4SC, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  32,    210,    94,   0,  5},    // Caverun_update2.bin
-    {"91c2098e88a6b13f977af8c003e0bca5",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Centipede (1982).bin
-    {"126f7f64b7b00e25dcf5e3710b4cf8b8",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Centipede (1982).bin
-    {"17d000a2882f9fdaa8b4a391ad367f00",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_FF,    VB,   HB,  ANA1_0,  PAL,   61,    245,   100,   0,  5},    // Centipede (1982) (PAL).bin
+    {"91c2098e88a6b13f977af8c003e0bca5",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Centipede (1982).bin
+    {"126f7f64b7b00e25dcf5e3710b4cf8b8",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  1},    // Centipede (1982).bin
+    {"17d000a2882f9fdaa8b4a391ad367f00",  "CENTIP", BANK_F8,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    245,   100,   0,  5},    // Centipede (1982) (PAL).bin
     {"ce09df4f125e49a8239c954e22fe8adb",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Chakdust - NTSC Cart.bin
     {"73158ea51d77bf521e1369311d26c27b",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  3},    // Challenge (Zellers).bin
     {"4311a4115fb7bc68477c96cf44cebacf",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_BLACK, VB,   HB,  ANA1_0,  NTSC,  34,    210,    95,   0,  3},    // Challenge (Zellers).bin
