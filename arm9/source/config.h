@@ -29,5 +29,6 @@ extern struct AllConfig_t allConfigs;
 void LoadConfig(void);
 void ShowConfig(void);
 void SaveConfig(bool bShow);
+void LoadFavorites(void);
 
 #endif

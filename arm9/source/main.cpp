@@ -37,6 +37,9 @@ int main(int argc, char **argv)
 
   // Load the configuration database (or create it)
   LoadConfig();    
+  
+  // Load the favorites 
+  LoadFavorites();
     
   // Init Timer
   dsInitTimer();
