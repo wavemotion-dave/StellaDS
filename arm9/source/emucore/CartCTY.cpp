@@ -200,7 +200,7 @@ void CartridgeCTY::systemCyclesReset()
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CTY_updateMusicModeDataFetchers(void)
+uInt8 CTY_updateMusicModeDataFetchers(void)
 {
   // Calculate the number of cycles since the last update
   uInt32 cycles = gSystemCycles - myAudioCycles;

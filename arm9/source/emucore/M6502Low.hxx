@@ -85,6 +85,8 @@ class M6502Low : public M6502
     virtual void execute_DPC(void);
     virtual void execute_CTY(void);
     
+    virtual void illegal_op(uint8_t operand);
+    
     /**
       Get a null terminated string which is the processors's name (i.e. "M6532")
 

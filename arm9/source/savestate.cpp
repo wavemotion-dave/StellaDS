@@ -75,6 +75,8 @@ Offsets_t myPageOffsets[64];
 
 char spare_bytes[116];
 
+uInt16 myExecutionStatus = 0x0000; // Not used but kept for save-state compatibility
+
 void MakeSaveName(void)
 {
     DIR* dir = opendir("sav");    // See if directory exists

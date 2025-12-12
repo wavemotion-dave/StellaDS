@@ -46,7 +46,7 @@ uInt8 D                                  __attribute__((section(".dtcm")));   //
 uInt8 I                                  __attribute__((section(".dtcm")));   // I flag for processor status register
 uInt8 notZ                               __attribute__((section(".dtcm")));   // Z flag complement for processor status register
 uInt8 C                                  __attribute__((section(".dtcm")));   // C flag for processor status register
-uInt16 myExecutionStatus                 __attribute__((section(".dtcm")));   // This is what's used to end a frame when the time comes
+uInt32 *pLocalExecutionStatus            __attribute__((section(".dtcm")));   // This is what's used to end a frame when the time comes
 
 uInt32 NumberOfDistinctAccesses          __attribute__((section(".dtcm")));         // For AR cart use only - track the # of distinct PC accesses
 uInt8  cartDriver                        __attribute__((section(".dtcm"))) = 0;     // Set to 1 for carts that are non-banking to invoke faster peek/poke handling
@@ -54,6 +54,8 @@ uInt16 f8_bankbit                        __attribute__((section(".dtcm"))) = 0x1
 uInt8  myDataBusState                    __attribute__((section(".dtcm"))) = 0x00;  // Last state of the data bus (needed for maximum accuracy drivers)
 
 extern CartridgeAR  *myAR;
+
+int *stack_executionStatus              __attribute__((section(".dtcm"))) = &debug[0];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
@@ -153,15 +155,15 @@ void M6502Low::execute(void)
 {
     uInt16 operandAddress;
 
-    // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       #define operand myDataBusState
       // Get the next 6502 instruction - do this the fast way!
@@ -179,6 +181,16 @@ void M6502Low::execute(void)
       #undef operand
     }
     gPC = PC;
+}
+
+
+void M6502Low::illegal_op(uint8_t operand)
+{
+    extern void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr);
+    char tmp[34];
+    
+    sprintf(tmp, "ILLEGAL OP %02X", operand);
+    dsPrintValue(5,0,0, (char*)tmp);
 }
 
 
@@ -232,13 +244,14 @@ inline void poke_4K(uInt16 address, uInt8 value)
 void M6502Low::execute_4K(void)
 {
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
@@ -323,12 +336,13 @@ void M6502Low::execute_F8(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       // Get the next 6502 instruction - do this the fast way!
       ++gSystemCycles;
@@ -360,12 +374,13 @@ void M6502Low::execute_F8SC(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       // Get the next 6502 instruction - do this the fast way!
       ++gSystemCycles;
@@ -460,12 +475,13 @@ void M6502Low::execute_F6(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       // Get the next 6502 instruction - do this the fast way unless we're in a possible hotspot situation
       if (PC & 0x800)
@@ -505,12 +521,13 @@ void M6502Low::execute_F6SC(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt8 operand;
       // Get the next 6502 instruction - do this the fast way unless we're in a possible hotspot situation
@@ -616,12 +633,13 @@ void M6502Low::execute_F4(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt8 operand;
       // Get the next 6502 instruction - do this the fast way unless we're in a possible hotspot situation
@@ -816,12 +834,13 @@ void M6502Low::execute_AR(void)
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       // Get the next 6502 instruction
       uInt8 operand;
@@ -1088,13 +1107,14 @@ inline void poke_DPCP(uInt16 address, uInt8 value)
 void M6502Low::execute_DPCP(void)
 {
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
@@ -1182,15 +1202,14 @@ inline void poke_DPC(uInt16 address, uInt8 value)
 
 void M6502Low::execute_DPC(void)
 {
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
-
-    // Clear all of the execution status bits
-    myExecutionStatus = 0;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
@@ -1308,17 +1327,18 @@ inline void poke_small(uInt8 address, uInt8 value)
     else theTIA.poke(address, value);
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
 void M6502Low::execute_CDFJ(void)
 {
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
@@ -1372,14 +1392,15 @@ inline uInt16 peek_JumpStreamPlus(uInt8 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502Low::execute_CDFJPlus(void)
 {
-    // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
+    
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // Get the next 6502 instruction - do this the fast way!
@@ -1429,14 +1450,15 @@ inline uInt8 peek_CDFJPCPlusPlus(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502Low::execute_CDFJPlusPlus(void)
 {
-    // Clear all of the execution status bits
-    myExecutionStatus = 0;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
+    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       uInt16 operandAddress;
       // ----------------------------------------------------------------------------------
@@ -1505,14 +1527,15 @@ void M6502Low::execute_CTY(void)
     uInt16 operandAddress;
 
     // Clear all of the execution status bits
-    myExecutionStatus = 0;
+    int executionStatus=0;
+    stack_executionStatus = &executionStatus;
 
     uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
-    while (!myExecutionStatus)
+    while (!executionStatus)
     {
       // Get the next 6502 instruction - do this the fast way!
       uInt8 operand = peek_CTY_PC(PC++);

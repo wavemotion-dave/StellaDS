@@ -40,11 +40,12 @@ extern uInt8    D;
 extern uInt8    I; 
 extern uInt8    C;
 extern uInt8    notZ;
-extern uInt16   myExecutionStatus;
 extern uInt8    myDataBusState;
 extern uInt32   NumberOfDistinctAccesses;
 extern uInt8    cartDriver;
 extern uInt16   f8_bankbit;
+
+extern int *stack_executionStatus;
 
 /**
   This is an abstract base class for classes that emulate the
@@ -126,17 +127,6 @@ class M6502
     */
     void stop();
 
-    /**
-      Answer true iff a fatal error has occured from which the processor
-      cannot recover (i.e. illegal instruction, etc.)
-
-      @return true iff a fatal error has occured
-    */
-    bool fatalError() const
-    {
-      return myExecutionStatus & FatalErrorBit;
-    }
-  
   protected:
     /**
       Get the 8-bit value of the Processor Status register.

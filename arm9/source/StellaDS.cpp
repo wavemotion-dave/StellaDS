@@ -806,7 +806,7 @@ void dsDisplayFiles(unsigned int NoDebGame,u32 ucSel)
   dsPrintValue(16-strlen(szName)/2,3,0,szName);
   dsPrintValue(31,5,0,(char *) (NoDebGame>0 ? "<" : " "));
   dsPrintValue(31,22,0,(char *) (NoDebGame+14<countvcs ? ">" : " "));
-  sprintf(szName,"%s %s","A=RUN Y=HALT B=BACK SELECT=FAV");
+  sprintf(szName,"%s","A=RUN Y=HALT B=BACK SELECT=FAV");
   dsPrintValue(16-strlen(szName)/2,23,0,szName);
   for (ucBcl=0;ucBcl<17; ucBcl++) {
     ucGame= ucBcl+NoDebGame;

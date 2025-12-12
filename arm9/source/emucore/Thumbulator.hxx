@@ -108,12 +108,13 @@ class Thumbulator
       b2_neg,       bic,        bkpt,       blx1,       blx2,       bx,         cmn,        cmp1_r0,    cmp1_r1,    cmp1_r2,        //40
       cmp1_r3,      cmp1_r4,    cmp1_r5,    cmp1_r6,    cmp1_r7,    cmp2,       cmp2_r2,    cmp2_r3,    cmp3,       cps,            //50
       cpy,          eor,        ldmia,      ldr1_r0,    ldr1_r1,    ldr1_r2,    ldr1_r3,    ldr1_r4,    ldr1_r5,    ldr1_r6,        //60
-      ldr1_r7,      ldr2,       ldr3,       ldr4_r0,    ldr4_r1,    ldr4_r2,    ldr4_r3,    ldr4_r4,    ldr4_r5,    ldr4_r6,        //70
+      ldr1_r7,      ldr2,       mov1z,      ldr4_r0,    ldr4_r1,    ldr4_r2,    ldr4_r3,    ldr4_r4,    ldr4_r5,    ldr4_r6,        //70
       ldr4_r7,      ldrb1,      ldrb2,      ldrh1,      ldrh2,      ldrsb,      ldrsh,      lsl1,       lsl1_rb,    lsl2,           //80
       lsr1,         lsr2,       mov1,       mov2,       mov3,       mov3_r15,   mul,        mvn,        neg,        orr,            //90
       pop,          push,       rev,        rev16,      revsh,      ror,        sbc,        setend,     stmia,      str1,           //100
       str2,         str3,       str3_r2,    str3_r3,    strb1,      strb2,      strh1,      strh2,      sub1,       sub2,           //110
-      sub3,         sub4,       swi,        sxtb,       sxth,       tst,        uxtb,       uxth,       mov1z                       //120      
+      sub3,         sub4,       swi,        sxtb,       sxth,       tst,        uxtb,       uxth,       ldr3_r0,    ldr3_r1,        //120
+      ldr3_r2,      ldr3_r3,    ldr3_r4,    ldr3_r5,    ldr3_r6,    ldr3_r7,                                                        //130
     };
     
     inline uInt16 read16 ( uInt32 addr );

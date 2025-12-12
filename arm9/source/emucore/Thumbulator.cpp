@@ -334,7 +334,21 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   if((inst & 0xFE00) == 0x5800) return Op::ldr2;
 
   //LDR(3)
-  if((inst & 0xF800) == 0x4800) return Op::ldr3;
+  if((inst & 0xF800) == 0x4800) 
+  {
+      switch (inst & 0x0700)
+      {
+          case 0x0000:  return Op::ldr3_r0;
+          case 0x0100:  return Op::ldr3_r1;
+          case 0x0200:  return Op::ldr3_r2;
+          case 0x0300:  return Op::ldr3_r3;
+          case 0x0400:  return Op::ldr3_r4;
+          case 0x0500:  return Op::ldr3_r5;
+          case 0x0600:  return Op::ldr3_r6;
+          case 0x0700:  return Op::ldr3_r7;
+      }
+      return Op::ldr3_r0;
+  }
 
   //LDR(4)
   if((inst & 0xF800) == 0x9800) 
@@ -980,12 +994,38 @@ ITCM_CODE void Thumbulator::execute ( void )
                 write16(rb,rc&0xFFFF);
               break;
 
-              
-          case Op::ldr3:
-                rn = ((inst>>8)&0x07);
-                reg_sys[rn] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+          case Op::ldr3_r0:
+                reg_sys[0] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
               break;
 
+          case Op::ldr3_r1:
+                reg_sys[1] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+
+          case Op::ldr3_r2:
+                reg_sys[2] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+
+          case Op::ldr3_r3:
+                reg_sys[3] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+
+          case Op::ldr3_r4:
+                reg_sys[4] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+
+          case Op::ldr3_r5:
+                reg_sys[5] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+
+          case Op::ldr3_r6:
+                reg_sys[6] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+              
+          case Op::ldr3_r7:
+                reg_sys[7] = (u32) *(u32*)((((u32)thumb_ptr + ((inst<<2)&0x3FF) + 2) & ~3));
+              break;
+              
           case Op::and_:
                 rd=(inst>>0)&0x7;
                 reg_sys[rd] &= reg_sys[(inst>>3)&0x7];
