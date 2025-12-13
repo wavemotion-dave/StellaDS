@@ -6,20 +6,20 @@
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mBL = &myCurrentBLMask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-                 if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
+                 if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL)
                  {
-                     *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                     mPF += 4; mBL += 4; myFramePointer += 4;
+                     *(uInt32*)mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                     mPF += 4; mBL += 4; mfp += 4;
                  }
                  else
                  {
-                     *myFramePointer = ((myPF & *mPF) || *mBL) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                     *mfp = ((myPF & *mPF) || *mBL) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
 #ifndef COLLISIONS_OFF
                      if((myPF & *mPF) && *mBL) myCollision |= ourCollisionTable[myPFBit | myBLBit];
 #endif                     
-                     ++mPF; ++mBL; ++myFramePointer;
+                     ++mPF; ++mBL; ++mfp;
                  }
             }
         }
@@ -27,7 +27,7 @@
         {
              uInt32*mPF = &myCurrentPFMask[hpos];
              uInt8* mBL = &myCurrentBLMask[hpos];
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(*mBL++)                enabled |= myBLBit;
@@ -43,7 +43,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -59,7 +59,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -74,7 +74,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -89,7 +89,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -105,7 +105,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -122,7 +122,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -140,7 +140,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -159,7 +159,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -178,7 +178,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -196,7 +196,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -212,7 +212,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -228,7 +228,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -245,7 +245,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -264,7 +264,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -282,23 +282,23 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0 && !*(uInt32*)mP1)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP0 && !*(uInt32*)mP1)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mP0 += 4; mP1 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mP0 += 4; mP1 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = (myCurrentGRP0 & *mP0) ? 
+             *mfp = (myCurrentGRP0 & *mP0) ? 
                  myColor[MYCOLUP0] : ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 
 #ifndef COLLISIONS_OFF
              if((myCurrentGRP0 & *mP0) && (myCurrentGRP1 & *mP1))
                myCollision |= ourCollisionTable[myP0Bit | myP1Bit];
 #endif
-             ++mP0; ++mP1; ++myFramePointer;
+             ++mP0; ++mP1; ++mfp;
            }
          }
     }
@@ -309,7 +309,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -325,7 +325,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -342,7 +342,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];              
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -359,7 +359,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -376,7 +376,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -394,7 +394,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -412,7 +412,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -430,7 +430,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM0++)                        enabled |= myM0Bit;
@@ -447,7 +447,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];            
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -464,43 +464,43 @@
            if (myPlayfieldPriorityAndScore & PriorityBit)   // Priority bit overrides the Score bit
            {
              // Update a uInt8 at a time until reaching a uInt32 boundary
-             for(; ((uintptr_t)myFramePointer & 0x03); ++myFramePointer, ++mask)
+             for(; ((uintptr_t)mfp & 0x03); ++mfp, ++mask)
              {
-               *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+               *mfp = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
              }
 
              // Now, update a uInt32 at a time
-             for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
+             for(; mfp < ending; mfp += 4, mask += 4)
              {
-               *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+               *((uInt32*)mfp) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
              }
            }
            else if (myPlayfieldPriorityAndScore & ScoreBit)   // Playfield is enabled and the score bit is set 
            {
              // Update a uInt8 at a time until reaching a uInt32 boundary
-             for(; ((uintptr_t)myFramePointer & 0x03); ++myFramePointer, ++mask, ++hpos)
+             for(; ((uintptr_t)mfp & 0x03); ++mfp, ++mask, ++hpos)
              {
-               *myFramePointer = (myPF & *mask) ? (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
+               *mfp = (myPF & *mask) ? (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
              }
 
              // Now, update a uInt32 at a time
-             for(; myFramePointer < ending;  myFramePointer += 4, mask += 4, hpos += 4)
+             for(; mfp < ending;  mfp += 4, mask += 4, hpos += 4)
              {
-               *((uInt32*)myFramePointer) = (myPF & *mask) ? (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
+               *((uInt32*)mfp) = (myPF & *mask) ? (hpos < 80 ? myColor[MYCOLUP0] : myColor[MYCOLUP1]) : myColor[MYCOLUBK];
              }
            }          
            else  // Playfield is enabled and the score bit is not set and priority clear...
            {
              // Update a uInt8 at a time until reaching a uInt32 boundary
-             for(; ((uintptr_t)myFramePointer & 0x03); ++myFramePointer, ++mask)
+             for(; ((uintptr_t)mfp & 0x03); ++mfp, ++mask)
              {
-               *myFramePointer = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+               *mfp = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
              }
 
              // Now, update a uInt32 at a time
-             for(; myFramePointer < ending; myFramePointer += 4, mask += 4)
+             for(; mfp < ending; mfp += 4, mask += 4)
              {
-               *((uInt32*)myFramePointer) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+               *((uInt32*)mfp) = (myPF & *mask) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
              }
            }
     }
@@ -511,7 +511,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8 meo3 = (myEnabledObjects & myM0Bit) ? 0xFF:0x00;
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(meo3 & *mM0++)                enabled |= myM0Bit;
@@ -527,22 +527,22 @@
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP0 = &myCurrentP0Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP0)
                {
-                 *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                 mPF += 4; mP0 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                 mPF += 4; mP0 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : 
+                 *mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : 
                      ((myCurrentGRP0 & *mP0) ? myColor[MYCOLUP0] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if((myPF & *mPF) && (myCurrentGRP0 & *mP0))
                    myCollision |= ourCollisionTable[myPFBit | myP0Bit];
 #endif
-                 ++mPF; ++mP0; ++myFramePointer;
+                 ++mPF; ++mP0; ++mfp;
                }
              }
            }
@@ -551,22 +551,22 @@
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP0 = &myCurrentP0Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP0)
                {
-                 *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                 mPF += 4; mP0 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                 mPF += 4; mP0 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (myCurrentGRP0 & *mP0) ? 
+                 *mfp = (myCurrentGRP0 & *mP0) ? 
                        myColor[MYCOLUP0] : ((myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if((myPF & *mPF) && (myCurrentGRP0 & *mP0))
                    myCollision |= ourCollisionTable[myPFBit | myP0Bit];
 #endif
-                 ++mPF; ++mP0; ++myFramePointer;
+                 ++mPF; ++mP0; ++mfp;
                }
              }
            }
@@ -574,7 +574,7 @@
            {             
              uInt32*mPF = &myCurrentPFMask[hpos];
              uInt8* mP0 = &myCurrentP0Mask[hpos];
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -591,22 +591,22 @@
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP1)
                {
-                 *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                 mPF += 4; mP1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                 mPF += 4; mP1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : 
+                 *mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : 
                      ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if((myPF & *mPF) && (myCurrentGRP1 & *mP1))
                    myCollision |= ourCollisionTable[myPFBit | myP1Bit];
 #endif
-                 ++mPF; ++mP1; ++myFramePointer;
+                 ++mPF; ++mP1; ++mfp;
                }
              }
            }
@@ -615,22 +615,22 @@
              uInt32* mPF = &myCurrentPFMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP1)
                {
-                 *(uInt32*)myFramePointer = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-                 mPF += 4; mP1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = (myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+                 mPF += 4; mP1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (myCurrentGRP1 & *mP1) ? 
+                 *mfp = (myCurrentGRP1 & *mP1) ? 
                        myColor[MYCOLUP1] : ((myPF & *mPF) ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if((myPF & *mPF) && (myCurrentGRP1 & *mP1))
                    myCollision |= ourCollisionTable[myPFBit | myP1Bit];
 #endif
-                 ++mPF; ++mP1; ++myFramePointer;
+                 ++mPF; ++mP1; ++mfp;
                }
              }
            }
@@ -638,7 +638,7 @@
            {
              uInt32*mPF = &myCurrentPFMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -653,7 +653,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -668,7 +668,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -683,7 +683,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -697,7 +697,7 @@
     {
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -711,7 +711,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -726,7 +726,7 @@
          uInt32*mPF = &myCurrentPFMask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -742,7 +742,7 @@
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -759,7 +759,7 @@
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -776,7 +776,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mP1 = &myCurrentP1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mM1++)                        enabled |= myM1Bit;
@@ -792,17 +792,17 @@
     {
          uInt8* mBL = &myCurrentBLMask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mBL += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mBL += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = *mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
-             ++mBL; ++myFramePointer;
+             *mfp = *mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK];
+             ++mBL; ++mfp;
            }
          }
     }
@@ -812,7 +812,7 @@
     {
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -827,7 +827,7 @@
          uInt8* mBL = &myCurrentBLMask[hpos];
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -845,21 +845,21 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM0 = &myCurrentM0Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mM0 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mM0 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (*mBL ? myColor[MYCOLUPF] : (*mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK]));
+                 *mfp = (*mBL ? myColor[MYCOLUPF] : (*mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK]));
 #ifndef COLLISIONS_OFF
                  if(*mBL && *mM0)
                    myCollision |= ourCollisionTable[myBLBit | myM0Bit];
 #endif
-                 ++mBL; ++mM0; ++myFramePointer;
+                 ++mBL; ++mM0; ++mfp;
                }
              }
            }
@@ -868,21 +868,21 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM0 = &myCurrentM0Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM0)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mM0 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mM0 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (*mM0 ? myColor[MYCOLUP0] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
+                 *mfp = (*mM0 ? myColor[MYCOLUP0] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
 #ifndef COLLISIONS_OFF
                  if(*mBL && *mM0)
                    myCollision |= ourCollisionTable[myBLBit | myM0Bit];
 #endif
-                 ++mBL; ++mM0; ++myFramePointer;
+                 ++mBL; ++mM0; ++mfp;
                }
              }
            }
@@ -893,7 +893,7 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8 meo1 = (myEnabledObjects & myBLBit) ? 0xFF:0x00;
              uInt8 meo2 = (myEnabledObjects & myM0Bit) ? 0xFF:0x00;
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(meo1 & *mBL++)                enabled |= myBLBit;
@@ -911,21 +911,21 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM1 = &myCurrentM1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mM1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mM1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (*mBL ? myColor[MYCOLUPF] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]));
+                 *mfp = (*mBL ? myColor[MYCOLUPF] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]));
 #ifndef COLLISIONS_OFF
                  if(*mBL && *mM1)
                    myCollision |= ourCollisionTable[myBLBit | myM1Bit];
 #endif
-                 ++mBL; ++mM1; ++myFramePointer;
+                 ++mBL; ++mM1; ++mfp;
                }
              }
            }
@@ -934,21 +934,21 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mM1 = &myCurrentM1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mBL && !*(uInt32*)mM1)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mM1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mM1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (*mM1 ? myColor[MYCOLUP1] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
+                 *mfp = (*mM1 ? myColor[MYCOLUP1] : (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]));
 #ifndef COLLISIONS_OFF
                  if(*mBL && *mM1)
                    myCollision |= ourCollisionTable[myBLBit | myM1Bit];
 #endif
-                 ++mBL; ++mM1; ++myFramePointer;
+                 ++mBL; ++mM1; ++mfp;
                }
              }
            }
@@ -959,7 +959,7 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8 meo1 = (myEnabledObjects & myBLBit) ? 0xFF:0x00;
              uInt8 meo2 = (myEnabledObjects & myM1Bit) ? 0xFF:0x00;
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(meo1 & *mBL++)                enabled |= myBLBit;
@@ -977,22 +977,22 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mP1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mP1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = *mBL ? myColor[MYCOLUPF] : 
+                 *mfp = *mBL ? myColor[MYCOLUPF] : 
                      ((myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if(*mBL && (myCurrentGRP1 & *mP1))
                    myCollision |= ourCollisionTable[myBLBit | myP1Bit];
 #endif
-                 ++mBL; ++mP1; ++myFramePointer;
+                 ++mBL; ++mP1; ++mfp;
                }
              }
            }
@@ -1001,22 +1001,22 @@
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-             while(myFramePointer < ending)
+             while(mfp < ending)
              {
-               if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
+               if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP1 && !*(uInt32*)mBL)
                {
-                 *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-                 mBL += 4; mP1 += 4; myFramePointer += 4;
+                 *(uInt32*)mfp = myColor[MYCOLUBK];
+                 mBL += 4; mP1 += 4; mfp += 4;
                }
                else
                {
-                 *myFramePointer = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : 
+                 *mfp = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : 
                      (*mBL ? myColor[MYCOLUPF] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
                  if(*mBL && (myCurrentGRP1 & *mP1))
                    myCollision |= ourCollisionTable[myBLBit | myP1Bit];
 #endif
-                 ++mBL; ++mP1; ++myFramePointer;
+                 ++mBL; ++mP1; ++mfp;
                }
              }
            }
@@ -1026,7 +1026,7 @@
              uInt8* mP1 = &myCurrentP1Mask[hpos];
              uInt8* mBL = &myCurrentBLMask[hpos];
              uInt8 meo1 = (myEnabledObjects & myBLBit) ? 0xFF:0x00;
-             for(; myFramePointer < ending; ++myFramePointer)
+             for(; mfp < ending; ++mfp)
              {
                uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
                if(meo1 & *mBL++)                enabled |= myBLBit;
@@ -1042,7 +1042,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1057,7 +1057,7 @@
     {
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -1072,7 +1072,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1088,7 +1088,7 @@
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -1104,7 +1104,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1120,7 +1120,7 @@
     {
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -1136,7 +1136,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1154,7 +1154,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1171,7 +1171,7 @@
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                        enabled |= myBLBit;
@@ -1187,7 +1187,7 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
          uInt8* mBL = &myCurrentBLMask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(*mBL++)                enabled |= myBLBit;
@@ -1202,17 +1202,17 @@
     {
          uInt8* mP0 = &myCurrentP0Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP0)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP0)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mP0 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mP0 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = (myCurrentGRP0 & *mP0) ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
-             ++mP0; ++myFramePointer;
+             *mfp = (myCurrentGRP0 & *mP0) ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
+             ++mP0; ++mfp;
            }
          }
     }
@@ -1222,17 +1222,17 @@
     {
          uInt8* mP1 = &myCurrentP1Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mP1)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mP1)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mP1 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mP1 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
-             ++mP1; ++myFramePointer;
+             *mfp = (myCurrentGRP1 & *mP1) ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
+             ++mP1; ++mfp;
            }
          }
     }
@@ -1242,17 +1242,17 @@
     {
          uInt8* mM0 = &myCurrentM0Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM0)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mM0)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mM0 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mM0 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = *mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
-             ++mM0; ++myFramePointer;
+             *mfp = *mM0 ? myColor[MYCOLUP0] : myColor[MYCOLUBK];
+             ++mM0; ++mfp;
            }
          }
     }
@@ -1262,17 +1262,17 @@
     {
          uInt8* mM1 = &myCurrentM1Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM1)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mM1)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mM1 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mM1 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = *mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
-             ++mM1; ++myFramePointer;
+             *mfp = *mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK];
+             ++mM1; ++mfp;
            }
          }
     }
@@ -1282,7 +1282,7 @@
     {
          uInt8* mP0 = &myCurrentP0Mask[hpos];
          uInt8* mM0 = &myCurrentM0Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP0 & *mP0++)        enabled |= myP0Bit;
@@ -1297,21 +1297,21 @@
          uInt8* mM0 = &myCurrentM0Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
 
-         while(myFramePointer < ending)
+         while(mfp < ending)
          {
-           if(!((uintptr_t)myFramePointer & 0x03) && !*(uInt32*)mM0 && !*(uInt32*)mM1)
+           if(!((uintptr_t)mfp & 0x03) && !*(uInt32*)mM0 && !*(uInt32*)mM1)
            {
-             *(uInt32*)myFramePointer = myColor[MYCOLUBK];
-             mM0 += 4; mM1 += 4; myFramePointer += 4;
+             *(uInt32*)mfp = myColor[MYCOLUBK];
+             mM0 += 4; mM1 += 4; mfp += 4;
            }
            else
            {
-             *myFramePointer = *mM0 ? myColor[MYCOLUP0] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
+             *mfp = *mM0 ? myColor[MYCOLUP0] : (*mM1 ? myColor[MYCOLUP1] : myColor[MYCOLUBK]);
 #ifndef COLLISIONS_OFF
              if(*mM0 && *mM1)
                myCollision |= ourCollisionTable[myM0Bit | myM1Bit];
 #endif
-             ++mM0; ++mM1; ++myFramePointer;
+             ++mM0; ++mM1; ++mfp;
            }
          }
     }
@@ -1321,7 +1321,7 @@
     {
          uInt8* mP1 = &myCurrentP1Mask[hpos];
          uInt8* mM1 = &myCurrentM1Mask[hpos];
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = myPlayfieldPriorityAndScore;
            if(myCurrentGRP1 & *mP1++)        enabled |= myP1Bit;
@@ -1342,7 +1342,7 @@
          uInt8 meo1 = (myEnabledObjects & myBLBit) ? 0xFF:0x00;
          uInt8 meo2 = (myEnabledObjects & myM1Bit) ? 0xFF:0x00;
          uInt8 meo3 = (myEnabledObjects & myM0Bit) ? 0xFF:0x00;
-         for(; myFramePointer < ending; ++myFramePointer)
+         for(; mfp < ending; ++mfp)
          {
            uInt8 enabled = (myPF & *mPF++) ? (myPFBit| myPlayfieldPriorityAndScore) : myPlayfieldPriorityAndScore;
            if(meo1 & *mBL++)                enabled |= myBLBit;

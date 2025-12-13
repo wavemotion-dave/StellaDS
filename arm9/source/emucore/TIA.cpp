@@ -594,6 +594,7 @@ ITCM_CODE void TIA::update()
       case 13: mySystem->m6502().execute_CTY();          break;   // If we are CTY (Cherity), we can run faster here...
       default: mySystem->m6502().execute();              break;   // Otherwise the normal execute driver
   }
+  stack_executionStatus = &debug[15];
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1158,8 +1159,8 @@ void TIA::computePlayfieldMaskTable()
 #define HANDLE_COLOR_AND_COLLISIONS  \
               if (enabled == last_enabled)  \
               {  \
-                  *myFramePointer = last_color;  \
-                  if (++hpos == 80) last_enabled=255;  \
+                  *mfp = last_color;  \
+                  if (hpos < 80) {if (++hpos == 80) last_enabled=255;}  \
               }  \
               else  \
               {  \
@@ -1173,7 +1174,7 @@ void TIA::computePlayfieldMaskTable()
                   {  \
                       last_color = myColor[myPriorityEncoder[1][enabled]];  \
                   }  \
-                  *myFramePointer = last_color;  \
+                  *mfp = last_color;  \
                   last_enabled = enabled;  \
               }
 
@@ -1190,6 +1191,8 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
     uInt8 last_color=0;
     uInt8 last_enabled=255;
     uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
+    
+    uint8* mfp = myFramePointer;
 
     switch (myEnabledObjects)
     {
@@ -1207,11 +1210,13 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // way to do this... but nothing has broken it and we need the speed.
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
-#define HANDLE_COLOR_AND_COLLISIONS  *myFramePointer = (enabled ? myColor[myPriorityEncoder[0][enabled]] : myColor[0]);
+#define HANDLE_COLOR_AND_COLLISIONS  *mfp = myColor[myPriorityEncoder[0][enabled]];
 
 void TIA::handleObjectsNoCollisions(Int32 clocksToUpdate, Int32 hpos)
 {
     uInt8* ending = myFramePointer + clocksToUpdate;  // Calculate the ending frame pointer value
+    uint8* mfp = myFramePointer;
+    
     #define COLLISIONS_OFF
 
     switch (myEnabledObjects)

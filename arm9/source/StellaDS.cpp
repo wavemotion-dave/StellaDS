@@ -217,8 +217,8 @@ ITCM_CODE void vblankIntr()
     // -----------------------------------------------------------------------------------
     if (gSystemCycles & 0x8000) // 32K cycles is enough... force break
     {
-        extern uInt16 myExecutionStatus;
-        myExecutionStatus = 0x01;   // STOP bit
+        extern int *stack_executionStatus;
+        *stack_executionStatus |= 0x01; // Stop Bit
     }
 }
 

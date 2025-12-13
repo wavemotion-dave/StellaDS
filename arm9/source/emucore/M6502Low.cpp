@@ -189,7 +189,12 @@ void M6502Low::illegal_op(uint8_t operand)
     extern void dsPrintValue(int x, int y, unsigned int isSelect, char *pchStr);
     char tmp[34];
     
+#if 0
     sprintf(tmp, "ILLEGAL OP %02X", operand);
+#else
+    (void)operand;
+    sprintf(tmp, "               ");
+#endif    
     dsPrintValue(5,0,0, (char*)tmp);
 }
 

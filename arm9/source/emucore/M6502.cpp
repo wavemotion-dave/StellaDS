@@ -54,8 +54,6 @@ void M6502::install(System& system)
 void M6502::reset()
 {
   Random random;
-  // Clear the execution status flags
-//  myExecutionStatus = 0;
 
   // Set registers to default values
   A = random.next() & 0xFF;
@@ -77,7 +75,6 @@ void M6502::reset()
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502::stop()
 {
-  //myExecutionStatus |= StopExecutionBit;
   *stack_executionStatus |= StopExecutionBit;
 }
 
