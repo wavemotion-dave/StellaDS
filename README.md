@@ -30,7 +30,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 
 Copyright :
 -----------------------
-StellaDS Phoenix-Edition is Copyright (c) 2020-2024 Dave Bernazzani (wavemotion-dave)
+StellaDS Phoenix-Edition is Copyright (c) 2020-2025 Dave Bernazzani (wavemotion-dave)
 
 As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
@@ -247,6 +247,14 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.1 : 14-Dec-2025 by Dave Bernazzani (wavemotion)
+  * Added new Favorites system so you can LIKE/LOVE any game - press SELECT on the Game ROM loading screen.
+  * TIA optimizations for another frame of improved performance.
+  * CPU optimizations for another frame of improved performance.
+  * Thumbulator optimizations for the LDR3 instruction to help some CDFJ games.
+  * Most VBLANK and HBLANK optimizations now removed in favor of improved accuracy (improved performance allows us to ditch most of this).
+  * Refactor memory to buy back almost 250K of DS RAM for future expansion.
+
 8.0 : 09-Dec-2024 by Dave Bernazzani (wavemotion)
   * Added music fetchers for more complete  Chetiry (CTY) emulation. Save state works with CTY. Use the 60K Chetiry rom for music.
   * Fixed holding RESET (DS Start button) and SELECT (DS Select Button) when loading a game. This allows you to do things like the Double-Shot trick in Space Invaders.
