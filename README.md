@@ -26,6 +26,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Manuals included for more than 100 of the common games.
 * Keypad overlay for Star Raiders.
 * Frame Blending to help smooth out flicker and make the games shine.
+* Ability to set Favorites on your game collection - press SELECT to mark a game as 'LIKE' or 'LOVE'
 * Save/Restore state for all game carts
 
 Copyright :
