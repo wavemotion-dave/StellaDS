@@ -15,7 +15,7 @@ A solid level of compatibility to make games playable. Most games you remember f
  
 Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these are the good ones!). 
 
-* Full console emulation including Reset, Select, Difficulty Switches, TV Type. 
+* Full console emulation including Reset, Select, Difficulty Switches, TV Type as touch-screen switches.
 * Virtually all popular bankswitching is supported up to 512K of ROM and 32K of RAM (similar to the Harmony Encore specifications).
 * Wide range of controllers including joystick, paddles, driving controller, booster grip, keypad, Genesis 2-button and more.
 * Savekey Support with backing 32K EEPROM.
@@ -26,7 +26,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 * Manuals included for more than 100 of the common games.
 * Keypad overlay for Star Raiders.
 * Frame Blending to help smooth out flicker and make the games shine.
-* Ability to set Favorites on your game collection - press SELECT to mark a game as 'LIKE' or 'LOVE'
+* Ability to set Favorites on your game collection - press SELECT to mark a game as 'LIKE' or 'LOVE'.
 * Save/Restore state for all game carts
 
 Copyright :
