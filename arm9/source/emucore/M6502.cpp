@@ -67,7 +67,7 @@ void M6502::reset()
   gPC = (uInt16)mySystem->peek(0xfffc) | ((uInt16)mySystem->peek(0xfffd) << 8);
   gPC &= MY_ADDR_MASK;
     
-  // Set the data bus back to zero
+  // Set the data bus back to a known value
   myDataBusState = 0x02;    
 }
 

@@ -10,7 +10,6 @@
 #include "screenshot.h"
 #include "printf.h"
 
-
 void write16(void *address, u16 value) {
 
     u8* first = (u8*)address;
@@ -42,14 +41,10 @@ bool screenshotbmp(const char* filename) {
     REG_DISPCAPCNT = DCAP_BANK(DCAP_BANK_VRAM_D) | DCAP_SIZE(DCAP_SIZE_256x192) | DCAP_ENABLE;
     while(REG_DISPCAPCNT & DCAP_ENABLE);
 
-    u8 *temp;
-    // On the DSi there is ample memory to just allocate the buffer and free it below...
-    temp = (u8*) malloc(256 * 192 * 2 + sizeof(INFOHEADER) + sizeof(HEADER));
-
-    if(!temp) {
-        fclose(file);
-        return false;
-    }
+    // Steal 112K from the back end of the Cart Buffer - we will save and restore it
+    extern u8 cart_buffer[];
+    memcpy((u16*)0x06880000,&cart_buffer[400*1024], 112*1024);
+    u8 *temp = &cart_buffer[400*1024];
 
     HEADER *header= (HEADER*)temp;
     INFOHEADER *infoheader = (INFOHEADER*)(temp + sizeof(HEADER));
@@ -87,7 +82,10 @@ bool screenshotbmp(const char* filename) {
     DC_FlushAll();
     fwrite(temp, 1, 256 * 192 * 2 + sizeof(INFOHEADER) + sizeof(HEADER), file);
     fclose(file);
-    free(temp);
+    
+    // Restore the Cart Buffer
+    memcpy(&cart_buffer[400*1024], (u16*)0x06880000, 112*1024);
+    
     return true;
 }
 

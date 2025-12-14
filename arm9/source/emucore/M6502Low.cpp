@@ -55,7 +55,7 @@ uInt8  myDataBusState                    __attribute__((section(".dtcm"))) = 0x0
 
 extern CartridgeAR  *myAR;
 
-int *stack_executionStatus              __attribute__((section(".dtcm"))) = &debug[0];
+int *stack_executionStatus              __attribute__((section(".dtcm"))) = &debug[19];
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 M6502Low::M6502Low(uInt32 systemCyclesPerProcessorCycle)
@@ -112,7 +112,7 @@ inline uInt8 peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 peek_PC(uInt16 address)
+inline uInt8 peek_PC(uInt32 address)
 {
   gSystemCycles++;
 
@@ -158,7 +158,7 @@ void M6502Low::execute(void)
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
 
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -209,7 +209,7 @@ void M6502Low::illegal_op(uint8_t operand)
 // other strange things like rely on the state of undriven TIA pins will fail
 // using this optimized driver. Those will need to use the normal cart driver.
 // ==============================================================================
-inline uInt8 peek_4K_PC(uInt16 address)
+inline uInt8 peek_4K_PC(uInt32 address)
 {
   gSystemCycles++;
   return fast_cart_buffer[address & 0xFFF];
@@ -251,7 +251,7 @@ void M6502Low::execute_4K(void)
     // Clear all of the execution status bits
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -338,7 +338,7 @@ inline void poke_F8(uInt16 address, uInt8 value)
 void M6502Low::execute_F8(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -376,7 +376,7 @@ void M6502Low::execute_F8(void)
 void M6502Low::execute_F8SC(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -477,7 +477,7 @@ void M6502Low::execute_F6(void)
 {
     uInt16 operandAddress;
     uInt8 operand;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -523,7 +523,7 @@ void M6502Low::execute_F6(void)
 void M6502Low::execute_F6SC(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -635,7 +635,7 @@ inline void poke_F4(uInt16 address, uInt8 value)
 void M6502Low::execute_F4(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -700,7 +700,7 @@ inline uInt8 peek_AR_zpg(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 peek_AR_PC(uInt16 address)
+inline uInt8 peek_AR_PC(uInt32 address)
 {
   NumberOfDistinctAccesses++;
   gSystemCycles++;
@@ -829,14 +829,14 @@ inline void poke_AR(uInt16 address, uInt8 value)
         if (address & 0x200) theM6532.poke(address, value);
         else if (address & 0x80) myRAM[address & 0x7F] = value;
         else theTIA.poke(address, value);
-    } else debug[16]++; // Just keep track for now... should never happen
+    }
 }
 
 
 void M6502Low::execute_AR(void)
 {
     uInt16 operandAddress;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // Clear all of the execution status bits
     int executionStatus=0;
@@ -1083,7 +1083,7 @@ inline uInt8 peek_DPCP_zpg(uInt16 address)
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 peek_DPCPPC(uInt16 address)
+inline uInt8 peek_DPCPPC(uInt32 address)
 {
   ++gSystemCycles;
   return myDPCptr[(address & 0xFFF)];
@@ -1114,7 +1114,7 @@ void M6502Low::execute_DPCP(void)
     // Clear all of the execution status bits
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1152,7 +1152,7 @@ void M6502Low::execute_DPCP(void)
 // -------------------------------------------------------------------------------
 extern CartridgeDPC *myCartDPC;
 
-inline uInt8 peek_PCDPC(uInt16 address)
+inline uInt8 peek_PCDPC(uInt32 address)
 {
   gSystemCycles++;
   return fast_cart_buffer[address & f8_bankbit];
@@ -1209,7 +1209,7 @@ void M6502Low::execute_DPC(void)
 {
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1300,7 +1300,7 @@ inline uInt8 peek_CDFJzpg(uInt8 address)
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 peek_CDFJPC(uInt16 address)
+inline uInt8 peek_CDFJPC(uInt32 address)
 {
   ++gSystemCycles;
   return myDPCptr[address & 0xFFF];
@@ -1338,7 +1338,7 @@ void M6502Low::execute_CDFJ(void)
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
     // Clear all of the execution status bits
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1400,7 +1400,7 @@ void M6502Low::execute_CDFJPlus(void)
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
     
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1458,7 +1458,7 @@ void M6502Low::execute_CDFJPlusPlus(void)
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
 
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
     
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1517,7 +1517,7 @@ inline void poke_CTY(uInt16 address, uInt8 value)
   else access.device->poke(address, value);
 }
 
-inline uInt8 peek_CTY_PC(uInt16 address)
+inline uInt8 peek_CTY_PC(uInt32 address)
 {
   gSystemCycles++;
 
@@ -1535,7 +1535,7 @@ void M6502Low::execute_CTY(void)
     int executionStatus=0;
     stack_executionStatus = &executionStatus;
 
-    uInt16 PC = gPC;  // Move PC local so compiler can optimize/registerize
+    uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus

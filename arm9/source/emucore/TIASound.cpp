@@ -127,15 +127,14 @@ uInt32 Div_n_max[2] __attribute__((section(".dtcm")));  /* Divide by n maximum, 
 /* which has 8 binary digits to the right of the decimal point. */
 
 uInt32 Samp_n_max __attribute__((section(".dtcm"))); /* Sample max, multiplied by 256 */
-uInt32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample cnt. */
+uInt32 Samp_n_cnt __attribute__((section(".dtcm"))); /* Sample count */
 
 uInt16 *sampleExtender = (uInt16*)0x068A0000;   // Use some of the unused VRAM to speed things up sightly. We use 1K here (512 x 2 bytes)
 
 uInt16 tia_buf_idx  __attribute__((section(".dtcm"))) = 0;
 uInt16 tia_out_idx  __attribute__((section(".dtcm"))) = 0;
 
-//uInt16 tia_buf[SOUND_SIZE];
-uInt16 *tia_buf = (uInt16*) 0x06890000; // Use VRAM 
+uInt16 *tia_buf = (uInt16*) 0x068A1000; // Use 2K of VRAM for the tia buffer (SOUND_SIZE x 2 bytes)
 extern uInt16 *aptr;
 extern uInt16 *bptr;
 
@@ -426,7 +425,7 @@ ITCM_CODE void Tia_process(void)
                 }
             }
             
-            ((uInt16*)0x06890000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uInt16)Outvol[0] + (uInt16)Outvol[1]];
+            ((uInt16*)0x068A1000)[tia_buf_idx] = *((uInt16 *)0x068A0000 + (Outvol[0] + Outvol[1])); //sampleExtender[(uInt16)Outvol[0] + (uInt16)Outvol[1]];
             tia_buf_idx = new_idx;
         }
         else
@@ -451,6 +450,6 @@ ITCM_CODE void Tia_process_wave (void)
     {
         if (!bProcessingSample) Tia_process(); else return;
     }
-    *aptr = *bptr = ((uInt16*)0x06890000)[tia_out_idx++];
+    *aptr = *bptr = ((uInt16*)0x068A1000)[tia_out_idx++];
     tia_out_idx &= (SOUND_SIZE-1);
 }

@@ -230,12 +230,12 @@ void dsInitScreenMain(void)
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
     
-    vramSetBankD(VRAM_D_LCD );    // Not using this for video but 128K of faster RAM always useful! Mapped at 0x06860000
-    vramSetBankE(VRAM_E_LCD );    // Not using this for video but 64K of faster RAM always useful!  Mapped at 0x06880000
+    vramSetBankD(VRAM_D_LCD );    // Not using this for video but 128K of faster RAM always useful! Mapped at 0x06860000 - Unused
+    vramSetBankE(VRAM_E_LCD );    // Not using this for video but 64K of faster RAM always useful!  Mapped at 0x06880000 - We use 112K of this as a buffer for Screenshots
     vramSetBankF(VRAM_F_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06890000
     vramSetBankG(VRAM_G_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06894000
     vramSetBankH(VRAM_H_LCD );    // Not using this for video but 32K of faster RAM always useful!  Mapped at 0x06898000
-    vramSetBankI(VRAM_I_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x068A0000
+    vramSetBankI(VRAM_I_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x068A0000 - 1K used for the TIA Sample Extender, 2K for TIA sound buffer
     
     WAITVBL;
 }
@@ -1798,7 +1798,7 @@ ITCM_CODE void dsMainLoop(void)
                         if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.xStretch < 32) myCartInfo.xStretch++;
                     }
                     
-                    if ((keys_pressed & (KEY_R | KEY_L)) == (KEY_R | KEY_L) && (myCartInfo.controllerType != CTR_BUMPBASH))
+                    if ((keys_pressed & (KEY_R | KEY_L | KEY_Y)) == (KEY_R | KEY_L | KEY_Y) && (myCartInfo.controllerType != CTR_BUMPBASH))
                     {
                         if (++ss_dampen == 5) 
                         {

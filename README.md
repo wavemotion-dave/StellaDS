@@ -184,7 +184,8 @@ In the /data directory of your SD card you will see some files auto-created by S
 * StellaDS.DAT - this contains the per-game settings (basically when you press START on the Configuration screen and it saves out your settings for the current game). The easiest way to set all your games back to default settings is to remove this file.
 * StellaDS.HI - this is the high-score file on a per-game basis. Up to 10 scores are saved per game by pressing the little Golden Chalice icon on the main screen.
 * StellaDS.EE - this is the SaveKey 32K EEPROM file for games that utilize a SaveKey. If you remove it, a new clean blank copy will be created.
-* Various .sav files - these are the Save State / Restore files (one per game).
+* StellaDS.FAV - this is the 4K favorites file where up to 1024 favorites (like/love - using the SELECT key on the file menu) are stored.
+* Various .SAV files - these are the Save State / Restore files (one per game with the same base name as the game ROM).
  
 Champ Games Support :
 -----------------------
@@ -207,7 +208,7 @@ Put the a26/bin files where you want on your SD or flashcard.
 
 Place StellaDS.NDS on your SD or flashcard.
 
-That's all, StellaDS can be use now :) !
+That's all, StellaDS can be used now :) !
 
 When the emulator starts, click on the cartridge slot to choose a file. you are use Up/Down 
 to select a file, then use A to load it.
@@ -220,7 +221,7 @@ Controls :
  * R-Trig + D-Pad  : Shift display offset in the D-PAD direction
  * L-Trig + D-Pad  : Change Scaling of the Y-Screen (UP/DOWN scaling only)
  * L-Trig + R-Trig + A:  Swap LCD top/bottom. 
- * Hold L+R shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card as a .BMP file)
+ * Hold L+R+Y shoulder buttons for ~1 second to take a snapshot of the screen (written to SD card as a .BMP file)
  * Use stylus on buttons for other icon-based actions on bottom screen.
  
 Compile Instructions :

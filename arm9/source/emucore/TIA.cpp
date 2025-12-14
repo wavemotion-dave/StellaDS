@@ -594,7 +594,7 @@ ITCM_CODE void TIA::update()
       case 13: mySystem->m6502().execute_CTY();          break;   // If we are CTY (Cherity), we can run faster here...
       default: mySystem->m6502().execute();              break;   // Otherwise the normal execute driver
   }
-  stack_executionStatus = &debug[15];
+  stack_executionStatus = &debug[19];   // In theory not needed but in case someone tries to access this outside of the emulation driver
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1731,8 +1731,9 @@ uInt8 poke_needs_update_display[] __attribute__((section(".dtcm"))) =
 {
     1,1,0,1,1,1,1,1,   1,1,1,1,1,1,1,1,
     1,1,1,1,1,0,0,0,   0,0,0,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,   1,1,1,1,1,1,1,1
+    
+    1,1,1,1,1,1,1,1,   1,1,1,1,0,0,0,0,
+    0,0,0,0,0,0,0,0,   0,0,0,0,0,0,0,0
 };
 
 uInt8 player_reset_pos[] =
