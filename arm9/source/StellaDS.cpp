@@ -184,6 +184,13 @@ inline void ShowStatusLine(void)
     }
 }
 
+volatile uInt16 ds_vblank_count __attribute__((section(".dtcm"))) = 0;
+ITCM_CODE void irqVCount(void)
+{
+    ds_vblank_count++; // This is our key to DS 'True Sync' at 60Hz.
+}
+
+
 Int16 temp_shift __attribute__((section(".dtcm"))) = 0;
 uInt8 shiftTime;
 ITCM_CODE void vblankIntr() 
@@ -226,7 +233,9 @@ ITCM_CODE void vblankIntr()
 void dsInitScreenMain(void)
 {
     // Init the VSYNC and enable VBLANK interrupts.
-    SetYtrigger(190); //trigger 2 lines before vsync
+    SetYtrigger(160); //trigger a bit before the actual Vertical Blank so we can start drawing a new frame
+    irqSet(IRQ_VCOUNT, irqVCount);
+    irqEnable(IRQ_VCOUNT);  
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
     
@@ -1350,6 +1359,8 @@ ITCM_CODE void dsMainLoop(void)
             dsShowScreenEmu();
             emuState = STELLADS_PLAYGAME;
             dampen=0; // Process things like holding RESET at power-up immediately
+            ds_vblank_count = 0;
+            atari_frames = 0;
             break;
 
         case STELLADS_PLAYGAME:
@@ -1369,8 +1380,16 @@ ITCM_CODE void dsMainLoop(void)
             // 655 -> 50 fps and 546 -> 60 fps
             if ((full_speed || temp_full_speed) == 0)
             {
-                while(TIMER0_DATA < ((myCartInfo.tv_type ? 655:546)*atari_frames))
-                    ;
+                if (myCartInfo.tv_type) // For PAL, we use the TIMER
+                {
+                    while (TIMER0_DATA < 655*atari_frames)
+                        ;
+                }
+                else // For NTSC, we do a 'true-sync' to the DS VBlank
+                {
+                    while (ds_vblank_count < atari_frames)
+                        ;
+                }
             }
 
             // Have we processed 50/60 frames... start over...
@@ -1380,6 +1399,7 @@ ITCM_CODE void dsMainLoop(void)
                 TIMER0_DATA=0;
                 TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
                 atari_frames=0;
+                ds_vblank_count = 0;
                 temp_full_speed = 0;
             }
                 

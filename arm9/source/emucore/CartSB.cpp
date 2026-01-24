@@ -80,10 +80,13 @@ void CartridgeSB::install(System& system)
 bool CartridgeSB::checkSwitchBank(uInt16 address)
 {
   // Switch banks if necessary
-  if((address & 0x1800) == 0x0800)
+  if((address & 0x18E0) == 0x0800)
   {
-    bank(address & (myRomBankCount-1));
-    return true;
+    if ((address & 0xFF) < myRomBankCount)
+    {
+      bank(address & (myRomBankCount-1));
+      return true;
+    }
   }
   return false;
 }

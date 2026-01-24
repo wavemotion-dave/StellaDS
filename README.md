@@ -31,7 +31,7 @@ Generally the internal database uses the NTSC No-Intro or ROMHUNTER roms (these 
 
 Copyright :
 -----------------------
-StellaDS Phoenix-Edition is Copyright (c) 2020-2025 Dave Bernazzani (wavemotion-dave)
+StellaDS Phoenix-Edition is Copyright (c) 2020-2026 Dave Bernazzani (wavemotion-dave)
 
 As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
@@ -169,7 +169,7 @@ F0/MB       64K         --
 X07         64K         --
 DF          128K        --
 DFSC        128K        128B
-SB          128K-256K   --
+SB          128K-512K   --
 BF          256K        --
 BFSC        256K        128B
 TV Boy      256K        --
@@ -248,6 +248,9 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.1a : 24-Jan-2026 by Dave Bernazzani (wavemotion)
+  * New NTSC 'True-Sync' to reduce tearing and other video artifacts from screen rendering on the DS/DSi.
+
 8.1 : 14-Dec-2025 by Dave Bernazzani (wavemotion)
   * Added new Favorites system so you can LIKE/LOVE any game - press SELECT on the Game ROM loading screen.
   * TIA optimizations for another frame of improved performance.
