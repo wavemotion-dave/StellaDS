@@ -1,7 +1,7 @@
 // =====================================================================================================
 // Stella DS/DSi Pheonix Edition - Improved Version by Dave Bernazzani (wavemotion)
 //
-// Copyright (c) 2020-2024 by Dave Bernazzani
+// Copyright (c) 2020-2026 by Dave Bernazzani
 //
 // Copying and distribution of this emulator, it's source code and associated 
 // readme files, with or without modification, are permitted in any medium without 
@@ -185,9 +185,15 @@ inline void ShowStatusLine(void)
 }
 
 volatile uInt16 ds_vblank_count __attribute__((section(".dtcm"))) = 0;
+#define VCOUNT *((u16*)(0x4000006))
 ITCM_CODE void irqVCount(void)
 {
     ds_vblank_count++; // This is our key to DS 'True Sync' at 60Hz.
+    
+    if (myCartInfo.tv_type) // For PAL, we fake the DS into thinking the refresh is every 50Hz by delaying the VCOUNT
+    {
+        VCOUNT -= 50;
+    }
 }
 
 
@@ -1361,10 +1367,10 @@ ITCM_CODE void dsMainLoop(void)
             dampen=0; // Process things like holding RESET at power-up immediately
             ds_vblank_count = 0;
             atari_frames = 0;
+            TIMER0_DATA=0;
             break;
 
         case STELLADS_PLAYGAME:
-        
             // ------------------------------------------------------------------------------------
             // If we get above 50K, that means we've fallen way behind - so just unthrottle until
             // the next 50/60 frame mark. If we don't do this and we do wrap the timer at at 64K,
@@ -1375,21 +1381,13 @@ ITCM_CODE void dsMainLoop(void)
                 temp_full_speed = 1; 
             }
         
-            // 32,728.5 ticks = 1 second
-            // 1 frame = 1/50 or 1/60 (0.02 or 0.016)
-            // 655 -> 50 fps and 546 -> 60 fps
+            // -----------------------------------------------------------------------------
+            // Use the DS VCount interrupt to time the frames to help reduce visual tearing.
+            // -----------------------------------------------------------------------------
             if ((full_speed || temp_full_speed) == 0)
             {
-                if (myCartInfo.tv_type) // For PAL, we use the TIMER
-                {
-                    while (TIMER0_DATA < 655*atari_frames)
-                        ;
-                }
-                else // For NTSC, we do a 'true-sync' to the DS VBlank
-                {
-                    while (ds_vblank_count < atari_frames)
-                        ;
-                }
+                while (ds_vblank_count < atari_frames)
+                    ;
             }
 
             // Have we processed 50/60 frames... start over...
