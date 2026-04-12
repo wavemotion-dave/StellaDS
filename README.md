@@ -248,8 +248,9 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-8.1b : 25-Jan-2026 by Dave Bernazzani (wavemotion)
+8.2 : 12-Apr-2026 by Dave Bernazzani (wavemotion)
   * New NTSC (60Hz) and PAL (50Hz) 'True-Sync' to reduce tearing and other video artifacts from screen rendering on the DS/DSi.
+  * Improved accuracy on SB (SuperBanking) carts.
 
 8.1 : 14-Dec-2025 by Dave Bernazzani (wavemotion)
   * Added new Favorites system so you can LIKE/LOVE any game - press SELECT on the Game ROM loading screen.
