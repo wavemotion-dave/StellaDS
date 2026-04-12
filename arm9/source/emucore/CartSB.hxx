@@ -102,7 +102,7 @@ class CartridgeSB : public Cartridge
     uInt8 *myImage;
     
     // Previous Device's page access
-    PageAccess myHotSpotPageAccess;
+    PageAccess myHotSpotPageAccess[8];
 };
 #endif
 

@@ -32,7 +32,7 @@ CartridgeSB::CartridgeSB(const uInt8* image, uInt32 size)
   // Copy the ROM image into my buffer - just reuse the existing buffer
   myImage = (uInt8 *)image;
     
-  myRomBankCount = (size / 4096);
+  myRomBankCount = (size / 4096) + ((size % 4096) ? 1:0);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -62,15 +62,25 @@ void CartridgeSB::install(System& system)
     
   // Get the page accessing methods for the hot spots since they overlap
   // areas within the TIA we'll need to forward requests to the TIA
-  myHotSpotPageAccess = mySystem->getPageAccess(0x0800 >> shift);
+  myHotSpotPageAccess[0] = mySystem->getPageAccess(0x0800 >> shift);
+  myHotSpotPageAccess[1] = mySystem->getPageAccess(0x0900 >> shift);
+  myHotSpotPageAccess[2] = mySystem->getPageAccess(0x0A00 >> shift);
+  myHotSpotPageAccess[3] = mySystem->getPageAccess(0x0B00 >> shift);
+  myHotSpotPageAccess[4] = mySystem->getPageAccess(0x0C00 >> shift);
+  myHotSpotPageAccess[5] = mySystem->getPageAccess(0x0D00 >> shift);
+  myHotSpotPageAccess[6] = mySystem->getPageAccess(0x0E00 >> shift);
+  myHotSpotPageAccess[7] = mySystem->getPageAccess(0x0F00 >> shift);
 
+  page_access.device = this;
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
-  page_access.device = this;
   
   // Set the page accessing methods for the hot spots
-  mySystem->setPageAccess(0x0800 >> shift, page_access);
-    
+  for(uInt32 j = 0x800; j < 0x1000; j += (1 << shift))
+  {
+    mySystem->setPageAccess(j >> shift, page_access);
+  }
+  
   sbLastBank = 999;
   // Install pages for the last bank
   bank(myRomBankCount-1);
@@ -80,13 +90,10 @@ void CartridgeSB::install(System& system)
 bool CartridgeSB::checkSwitchBank(uInt16 address)
 {
   // Switch banks if necessary
-  if((address & 0x18E0) == 0x0800)
+  if((address & 0x1800) == 0x0800)
   {
-    if ((address & 0xFF) < myRomBankCount)
-    {
       bank(address & (myRomBankCount-1));
       return true;
-    }
   }
   return false;
 }
@@ -101,8 +108,9 @@ uInt8 CartridgeSB::peek(uInt16 address)
   if(!(address & 0x1000))
   {
     // Because of the way we've set up accessing above, we can only
-    // get here when the addresses are from 0x800 - 0x87F
-    return myHotSpotPageAccess.device->peek(address);
+    // get here when the addresses are from 0x800 - 0xFFF
+    const int hotspot = ((address & 0x0F00) >> 8) - 8;
+    return myHotSpotPageAccess[hotspot].device->peek(address);    
   }
 
   return 0;
@@ -118,8 +126,9 @@ void CartridgeSB::poke(uInt16 address, uInt8 value)
   if(!(address & 0x1000))
   {
     // Because of the way we've set up accessing above, we can only
-    // get here when the addresses are from 0x800 - 0x87F
-    myHotSpotPageAccess.device->poke(address, value);
+    // get here when the addresses are from 0x800 - 0xFFF
+    const int hotspot = ((address & 0x0F00) >> 8) - 8;
+    myHotSpotPageAccess[hotspot].device->poke(address, value);
   }
 }
 
