@@ -1,6 +1,9 @@
 # StellaDS - PHOENIX EDITION
 StellaDS - An Atari 2600 VCS Emulator for the DS/DSi
 
+StellaDS is free to download and use... but if you have found anything I've done to
+be useful, buy me a virtual coffee here:  https://ko-fi.com/wavemotiondave
+
 To use this emulator, you must use compatible roms with a26/bin format.
 
 If you want to launch the games directly via Twilight Menu++, you will need the file extension to be .a26 (you can just rename .bin). If you are just launching the StellaDS.nds emulator directly, you can load either .bin or .a26 extensions fine.
