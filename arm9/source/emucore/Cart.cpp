@@ -2279,8 +2279,6 @@ const CartInfo table[] =
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2783,6 +2781,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
               myCartInfo.yOffset = 15;
+              myCartInfo.frame_mode = MODE_FF;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
           }
           else
@@ -2812,9 +2811,10 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
               myCartInfo.displayStartScanline = 32;
-              myCartInfo.displayNumScalines = 211;
-              myCartInfo.yOffset = 15;
+              myCartInfo.displayNumScalines = 210;
+              myCartInfo.yOffset = 12;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
+              myCartInfo.yButton = BUTTON_SHIFT_DN;
           }
           else
           if (strstr(my_filename, "cobra") != 0)

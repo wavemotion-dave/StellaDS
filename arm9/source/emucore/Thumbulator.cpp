@@ -37,7 +37,7 @@ uInt8 *myARMRAM      __attribute__((section(".dtcm"))) = 0;
 
 #define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
 
-uInt32 cStack, cBase, cStart;           // The DPC+ and CDF/J/+ drivers need to set these before usign the Thumbulator
+uInt32 cStack, cBase, cStart;           // The DPC+ and CDF/J/+ drivers need to set these before using the Thumbulator
 
 #ifdef CPU_PROFILER
 u32 profiler[256];

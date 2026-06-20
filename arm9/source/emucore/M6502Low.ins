@@ -1986,7 +1986,7 @@ case 0xa9:
 #endif
 
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch; extern uInt8* myFetcherOffsetPtr;
+  extern u8 myDataStreamFetch;
 #ifdef DATA_STREAMS_PLUS_PLUS  
   u8 *next6502Inst = &fast_cart_buffer[PC & f8_bankbit];
 #else  
@@ -1994,10 +1994,10 @@ case 0xa9:
 #endif  
   A = *next6502Inst++;  
   
-  unsigned int offset_A = A-(*myFetcherOffsetPtr); 
+  unsigned int offset_A = A - cdfjFetcherOffset; 
   if (offset_A < myDataStreamFetch)  
   {
-#ifdef DATA_STREAMS_PLUS_PLUS  
+#ifdef DATA_STREAMS_PLUS_PLUS
      A = peek_DataStreamPlusPlus(offset_A);
 #else     
      A = peek_DataStreamPlus(offset_A);
@@ -2008,15 +2008,18 @@ case 0xa9:
   // More often than not, what follows LDA is STA...
   // This gives us a nice look-ahead-speed-up
   // --------------------------------------------------
+#ifndef DATA_STREAMS_PLUS_PLUS  // Can't be STA in the super optimized driver ... would have turned into instruction 0x62
   if (*next6502Inst == 0x85)
   {
      gSystemCycles += 4;
      PC += 3; next6502Inst++;
      poke_small(*next6502Inst, A);
      break; // Actung! This is dangerous... we are not setting Z nor N here for CDFJ+ with fast Data Fetchers to save some cycles
-  } else {PC++; gSystemCycles++;}
+  } 
+  else 
+#endif  
+  {PC++; gSystemCycles++;}
 #endif
-
 }
 {
   notZ = N = A;
@@ -2125,10 +2128,10 @@ case 0xa2:
 {
   X = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDXenabled; extern uInt8 *myFetcherOffsetPtr;
+  extern u8 myDataStreamFetch, myLDXenabled;
   if (myLDXenabled)
   {
-     unsigned int offset_X = X-(*myFetcherOffsetPtr); 
+     unsigned int offset_X = X - cdfjFetcherOffset; 
      if (offset_X < myDataStreamFetch) 
 #ifdef DATA_STREAMS_PLUS_PLUS     
         X = peek_DataStreamPlusPlus(offset_X);
@@ -2200,10 +2203,10 @@ case 0xa0:
 {
   Y = peek_PC(PC++);
 #ifdef DATA_STREAMS_PLUS
-  extern u8 myDataStreamFetch, myLDYenabled; extern uInt8 *myFetcherOffsetPtr;
+  extern u8 myDataStreamFetch, myLDYenabled;
   if (myLDYenabled)
   {
-    unsigned int offset_Y = Y-(*myFetcherOffsetPtr); 
+    unsigned int offset_Y = Y - cdfjFetcherOffset; 
     if (offset_Y < myDataStreamFetch) 
 #ifdef DATA_STREAMS_PLUS_PLUS    
         Y = peek_DataStreamPlusPlus(offset_Y);
@@ -4320,6 +4323,27 @@ case 0x98:
   N = A;
 }
 break;
+
+#ifdef DATA_STREAMS_PLUS_PLUS
+// Normally KIL instruction but we have repurposed for LDA/STA for the CDFJ++ driver
+case 0x62:
+{
+  extern u8 myDataStreamFetch;
+  u8 *next6502Inst = &fast_cart_buffer[PC & f8_bankbit];
+  A = *next6502Inst;
+  
+  unsigned int offset_A = A - cdfjFetcherOffset; 
+  if (offset_A < myDataStreamFetch)
+  {
+     A = peek_DataStreamPlusPlus(offset_A);
+  }
+  gSystemCycles += 4;
+  PC += 3;
+  poke_small(next6502Inst[2], A);
+  // Actung! This is dangerous... we are not setting Z nor N here for CDFJ+ with fast Data Fetchers to save some cycles
+}
+break;
+#endif
 
 default:
 {

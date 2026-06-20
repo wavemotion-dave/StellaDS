@@ -54,6 +54,7 @@ uInt16 f8_bankbit                        __attribute__((section(".dtcm"))) = 0x1
 uInt8  myDataBusState                    __attribute__((section(".dtcm"))) = 0x00;  // Last state of the data bus (needed for maximum accuracy drivers)
 
 extern CartridgeAR  *myAR;
+extern uInt8* myFetcherOffsetPtr;
 
 int *stack_executionStatus              __attribute__((section(".dtcm"))) = &debug[19];
 
@@ -1402,6 +1403,13 @@ void M6502Low::execute_CDFJPlus(void)
     
     uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
 
+    // ----------------------------------------------------------------------------------------
+    // The fetcher offset is built into the CDFJ+ driver and so should never change. We use
+    // that to our advantage - moving the fetcher offset into a local variable for fast
+    // access in the low level 6502 handling for LDX, etc. This buys us a frame of performance.
+    // ----------------------------------------------------------------------------------------
+    uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
+
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
     // -------------------------------------------------------------------------------------------------------------
@@ -1459,6 +1467,13 @@ void M6502Low::execute_CDFJPlusPlus(void)
     stack_executionStatus = &executionStatus;
 
     uInt32 PC = gPC;  // Move PC local so compiler can optimize/registerize
+
+    // ----------------------------------------------------------------------------------------
+    // The fetcher offset is built into the CDFJ+ driver and so should never change. We use
+    // that to our advantage - moving the fetcher offset into a local variable for fast
+    // access in the low level 6502 handling for LDX, etc. This buys us a frame of performance.
+    // ----------------------------------------------------------------------------------------
+    uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
     
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus

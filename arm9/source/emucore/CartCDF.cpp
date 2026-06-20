@@ -228,11 +228,27 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   memcpy(myARM6502, myDPCptr, MEM_28KB); // For the 6502, we only need to copy 28K max
  
   // Repurpose the fast cart buffer memory for 6502 code. This is potentially
-  // unsafe as it only supports 2 banks... but there are only a couple of 
-  // games in this stratosphere and none use more than 2 banks of 6502 code.
+  // unsafe as it only supports 2 banks... but there are only a few Champ Games
+  // in this stratosphere and none use more than 2 banks of 6502 code.
   if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
   {
       memcpy(fast_cart_buffer, myARM6502, MEM_8KB);
+      
+      // ----------------------------------------------------------------
+      // If we are the super-optmized CDFJ++, we look for 0xA9 followed 
+      // by 0x85 (LDA, STA) and turn that into one of the illegal KIL 
+      // opcodes so we can super charge the throughput.
+      // ----------------------------------------------------------------
+      if (cartDriver == 11)
+      {
+          for (int i=0; i<(MEM_8KB-2); i++)
+          {
+              if ((fast_cart_buffer[i] == 0xA9) && (fast_cart_buffer[i+2] == 0x85))
+              {
+                  fast_cart_buffer[i] = 0x62;
+              }
+          }
+      }
   }
     
   // Copy intial driver into the CDF Harmony RAM
