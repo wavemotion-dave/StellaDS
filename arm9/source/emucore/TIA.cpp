@@ -557,18 +557,22 @@ ITCM_CODE void TIA::update()
 
   bWaveDirectSound = (myCartInfo.soundQuality == SOUND_WAVE);
   
+  // -------------------------------------------------------------------------
+  // Many of the CDFJ and later games do not need the TIA collision detection.
+  // -------------------------------------------------------------------------
   bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
   
-
-  // If the cart requires frame skipping (mostly for Turbo Arcade and Draconian)
-  // then we set the skip flag for every other pair of frames
+  // -------------------------------------------------------------------------------
+  // If the cart requires frame skipping (mostly for Elevator Agent and Draconian)
+  // then we set the skip flag for some frames depending on how much speed we need.
+  // -------------------------------------------------------------------------------
   if (myCartInfo.thumbOptimize == 3)
   {
       extern uInt8 bElevatorAgent;
       if (bElevatorAgent)
         bFrameSkipCDFJ = ((gTotalAtariFrames & 0x02) ? 1:0);    // Heavy Frameskip (2 on, 2 off)
       else
-        bFrameSkipCDFJ = ((gTotalAtariFrames & 0x03) ? 0:1);    // Moderate Frameskip (3 on, 1 off)
+        bFrameSkipCDFJ = ((gTotalAtariFrames & 0x07) ? 0:1);    // Light Frameskip (7 on, 1 off)
   }
   else bFrameSkipCDFJ = 0;
 
@@ -589,7 +593,7 @@ ITCM_CODE void TIA::update()
       case 8: mySystem->m6502().execute_DPCP();          break;   // If we are DPC+, we can run faster here...
       case 9: mySystem->m6502().execute_CDFJ();          break;   // If we are CDF/CDFJ, we can run faster here...
       case 10: mySystem->m6502().execute_CDFJPlus();     break;   // If we are CDFJ+, we can run faster here...
-      case 11: mySystem->m6502().execute_CDFJPlusPlus(); break;   // If we are CDFJ+ PLUS!!, we can run faster here... This is non-standard but highly optmized for games like Elevator Agent
+      case 11: mySystem->m6502().execute_CDFJPlusPlus(); break;   // If we are CDFJ+ PLUS!!, we can run faster here... This is non-standard but highly optimized for games like Elevator Agent
       case 12: mySystem->m6502().execute_DPC();          break;   // If we are DPC (Pitfall II), we can run faster here...
       case 13: mySystem->m6502().execute_CTY();          break;   // If we are CTY (Cherity), we can run faster here...
       default: mySystem->m6502().execute();              break;   // Otherwise the normal execute driver

@@ -1408,7 +1408,7 @@ void M6502Low::execute_CDFJPlus(void)
     // that to our advantage - moving the fetcher offset into a local variable for fast
     // access in the low level 6502 handling for LDX, etc. This buys us a frame of performance.
     // ----------------------------------------------------------------------------------------
-    uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
+    const uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
 
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
@@ -1473,7 +1473,7 @@ void M6502Low::execute_CDFJPlusPlus(void)
     // that to our advantage - moving the fetcher offset into a local variable for fast
     // access in the low level 6502 handling for LDX, etc. This buys us a frame of performance.
     // ----------------------------------------------------------------------------------------
-    uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
+    const uInt8 cdfjFetcherOffset = *myFetcherOffsetPtr;
     
     // -------------------------------------------------------------------------------------------------------------
     // vBlankIntr() will check for more than 32K instructions in a frame and issue the STOP bit in ExecutionStatus
