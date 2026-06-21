@@ -251,6 +251,10 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.3 : 21-June-2026 by wavemotion-dave
+  * Improved CDFJ+ driver to eek out another frame or two.
+  * Optimized for the new Zaxxon Arcade from Champ Games so it runs full speed on DSi or above.
+
 8.2 : 12-Apr-2026 by Dave Bernazzani (wavemotion)
   * New NTSC (60Hz) and PAL (50Hz) 'True-Sync' to reduce tearing and other video artifacts from screen rendering on the DS/DSi.
   * Improved accuracy on SB (SuperBanking) carts.

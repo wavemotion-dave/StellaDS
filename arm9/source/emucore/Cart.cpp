@@ -2277,8 +2277,6 @@ const CartInfo table[] =
     {"468dc062a58499d081c59cf5fd08f655",  "??????", BANK_JANE, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},   // Tarzan - 16K Prototype with unique banking
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
-    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2740,22 +2738,26 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // driver that requires the Atari 6502 native code to be no more than 2 banks (8K).
       // ----------------------------------------------------------------------------------
       if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "elevator") != 0) {cartDriver = 11; bElevatorAgent = true;} //CDFJ++
+      if (strstr(my_filename, "elevator") != 0)  cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "gorf") != 0)      cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "tutankham") != 0) cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "spiders") != 0)   cartDriver = 11;  //CDFJ++
       if (strstr(my_filename, "zaxxon") != 0)    cartDriver = 11;  //CDFJ++
 
-      // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optmization and minimal sound
+      // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optimization and minimal sound
       if (!bFoundInDAT)
       {
-          if (myCartInfo.thumbOptimize < 2) myCartInfo.thumbOptimize = 2;
+          if (myCartInfo.thumbOptimize < 2)           myCartInfo.thumbOptimize = 2;
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
 
           // -----------------------------------------------------------------------
           // The special CHAMP GAMES handler ... Since these ROMs are unique to
           // a buyer, we will just handle them based on filename. This allows us
-          // to set some sensible defaults for these cutting-edge games...
+          // to set some sensible defaults for these cutting-edge games... The
+          // normal StellaDS driver struggles to keep up with these games as they
+          // push ungodly amounts of data through the ARM pipe to the TIA. So we
+          // cut and trim out anything we can to help these drivers cope and make 
+          // the games playable. Many Bothans died to bring us this level of speed.
           // -----------------------------------------------------------------------
           if (strstr(my_filename, "mappy") != 0)
           {
@@ -2876,6 +2878,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.displayNumScalines = 208;
               myCartInfo.yOffset = 14;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
+              bElevatorAgent = true; // Extra frame skip (50% frames!!)
           }
           else
           if (strstr(my_filename, "tutankham") != 0)
