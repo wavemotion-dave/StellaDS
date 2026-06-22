@@ -116,21 +116,21 @@ class Thumbulator
       uxth,         ldr3_r0,    ldr3_r1,    ldr3_r2,    ldr3_r3,    ldr3_r4,    ldr3_r5,    ldr3_r6,    ldr3_r7,                // 120
     };
 
-    inline uInt16 read16 ( uInt32 addr );
-    inline uInt32 read32 ( uInt32 addr );
-    inline uInt8  read8 ( uInt32 addr );
-    inline void   write16 ( uInt32 addr, uInt32 data );
-    inline void   write32 ( uInt32 addr, uInt32 data );
+    inline uInt16 read16(uInt32 addr);
+    inline uInt32 read32(uInt32 addr);
+    inline uInt8  read8(uInt32 addr);
+    inline void   write16(uInt32 addr, uInt32 data);
+    inline void   write32(uInt32 addr, uInt32 data);
 
-    inline void do_cflag ( uInt32 a, uInt32 b, uInt32 c );
-    inline void do_cflag_fast ( uInt32 a, uInt32 b );
-    inline void do_cflag_nocar ( uInt32 a, uInt32 b );
-    inline uInt32 do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c );
-    inline uInt32 do_add_vflag ( uInt32 a, uInt32 b, uInt32 c );
+    inline void do_cflag(uInt32 a, uInt32 b, uInt32 c);
+    inline void do_cflag_carry(uInt32 a, uInt32 b);
+    inline void do_cflag_nocar(uInt32 a, uInt32 b);
+    inline uInt32 do_sub_vflag(uInt32 a, uInt32 b, uInt32 res);
+    inline uInt32 do_add_vflag(uInt32 a, uInt32 b, uInt32 res);
 
 
-    void execute ( void );
-    void reset ( void );
+    void execute(void);
+    void reset(void);
 
     static Op decodeInstructionWord(uint16_t inst);
 };
