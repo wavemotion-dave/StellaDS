@@ -143,8 +143,6 @@ inline void Thumbulator::do_cflag_fast ( uInt32 a, uInt32 b )  // For when you k
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c )
 {
-  //if the sign bits are different and result matches b
-  //return ((((a^b)&0x80000000)) & ((b&c&0x80000000)));
   // Overflow if: (sign of a != sign of b) AND (sign of a != sign of c)
   return ((a ^ b) & (a ^ c)) & 0x80000000;
 }
@@ -152,8 +150,6 @@ inline uInt32 Thumbulator::do_sub_vflag ( uInt32 a, uInt32 b, uInt32 c )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline uInt32 Thumbulator::do_add_vflag ( uInt32 a, uInt32 b, uInt32 c )
 {
-  //if sign bits are the same and the result is different
-  //return (((a&b&0x80000000)) & (((b^c)&0x80000000)));
   // Overflow if: (sign of a == sign of b) AND (sign of a != sign of c)
   return (~(a ^ b) & (a ^ c)) & 0x80000000;
 }
@@ -587,30 +583,27 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_200:  //B(1) conditional branch
                 if (cFlag)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
           case Op::b1_300:  //B(1) conditional branch
                 if(!(cFlag))
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
           case Op::b1_400:  //B(1) conditional branch
                 if((ZNflags&0x80000000))
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
@@ -635,40 +628,36 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_600:                       //B(1) conditional branch
                 if(vFlag)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
           case Op::b1_700:                       //B(1) conditional branch
                 if(!(vFlag))
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
 
           case Op::b1_800:                       //B(1) conditional branch
                 if((cFlag)&&(ZNflags))
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
           case Op::b1_900:                       //B(1) conditional branch
                 if((!ZNflags)||(!(cFlag)))
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
 
@@ -678,10 +667,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
                 if(ra)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
@@ -691,10 +679,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
                 if(ra)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
@@ -705,10 +692,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 if(!ZNflags) ra=0;
                 if(ra)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
@@ -719,10 +705,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else if(!ZNflags) ra++;
                 if(ra)
                 {
-                    rb=(inst>>0)&0xFF;
-                    if(rb&0x80) rb|=0xFFFFFF00; // Sign extend
-                    thumb_ptr += (int)rb+1;
-                    thumb_decode_ptr += (int)rb+1;
+                    rb=(int8_t)(inst&0xFF);
+                    thumb_ptr += rb+1;
+                    thumb_decode_ptr += rb+1;
                 }
               break;
               
@@ -946,9 +931,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rn=(inst>>3)&0x7;
                 rm=(inst>>6)&0x7;
                 rb=read_register(rn)+read_register(rm);
-                rc=read16(rb);
-                rc&=0xFFFF;
-                if(rc&0x8000) rc|=((~0)<<16);
+                rc=(int16_t)read16(rb);
                 write_register(rd,rc);
               break;
               
@@ -966,8 +949,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rn=(inst>>3)&0x7;
                 rm=(inst>>6)&0x7;
                 rb=read_register(rn)+read_register(rm);
-                rc=read8(rb);
-                if(rc&0x80) rc|=((~0)<<8);
+                rc=(int8_t)read8(rb);
                 write_register(rd,rc);
               break;
               
@@ -1184,12 +1166,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else if(rb<32)
                 {
                   do_cflag_bit(ZNflags&(1<<(rb-1)));
-                  ra=ZNflags&0x80000000;
-                  ZNflags>>=rb;
-                  if(ra) //asr, sign is shifted in
-                  {
-                    ZNflags|=(~0)<<(32-rb);
-                  }
+                  ZNflags=(int32_t)ZNflags >> rb;
                 }
                 else
                 {
@@ -1512,8 +1489,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rm=(inst>>6)&0x7;
                 reg_sys[rd] = reg_sys[rn] + reg_sys[rm];
                 do_znflags(reg_sys[rd]);
-#ifdef SAFE_THUMB              
                 do_cflag(reg_sys[rn],reg_sys[rm],0);
+#ifdef SAFE_THUMB              
                 vFlag = do_add_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
 #endif              
               break;
@@ -1524,9 +1501,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::mov1z:
-#ifdef SAFE_THUMB              
                 ZNflags=0;
-#endif              
                 write_register((inst>>8)&0x07,0);
               break;
               
@@ -1552,7 +1527,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                   if(ZNflags&0x80000000)
                   {
                     do_cflag_bit(1);
-                    ZNflags=~0;
+                    ZNflags=(int32_t)0x80000000; // All bits set via arithmetic shift
                   }
                   else
                   {
@@ -1563,12 +1538,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 else
                 {
                   do_cflag_bit(ZNflags&(1<<(rb-1)));
-                  ra=ZNflags&0x80000000;
-                  ZNflags>>=rb;
-                  if(ra) //asr, sign is shifted in
-                  {
-                    ZNflags|=(~0)<<(32-rb);
-                  }
+                  ZNflags=(int32_t)ZNflags >> rb;
                 }
                 write_register(rd,ZNflags);
               break;
@@ -1641,8 +1611,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                   ra=read_register(rn);
                   ZNflags=ra+rb;
                   write_register(rd,ZNflags);
-#ifdef SAFE_THUMB                    
                   do_cflag(ra,rb,0);
+#ifdef SAFE_THUMB                    
                   vFlag = do_add_vflag(ra,rb,ZNflags);
 #endif                    
                 }
@@ -1767,8 +1737,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ra=read_register(rn);
                 rc =((ra>> 0)&0xFF)<< 8;
                 rc|=((ra>> 8)&0xFF)<< 0;
-                if(rc&0x8000) rc|=0xFFFF0000;
-                else          rc&=0x0000FFFF;
+                rc=(int16_t)rc;
                 write_register(rd,rc);
               break;
               
@@ -1780,8 +1749,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
-                rc=ra&0xFF;
-                if(rc&0x80) rc|=(~0)<<8;
+                rc=(int8_t)ra;
                 write_register(rd,rc);
               break;
               
@@ -1789,8 +1757,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x7;
                 rm=(inst>>3)&0x7;
                 ra=read_register(rm);
-                rc=ra&0xFFFF;
-                if(rc&0x8000) rc|=(~0)<<16;
+                rc=(int16_t)ra;
                 write_register(rd,rc);
               break;
               
