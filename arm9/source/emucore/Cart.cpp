@@ -2785,6 +2785,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 15;
               myCartInfo.frame_mode = MODE_FF;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
+              myCartInfo.thumbOptimize = 3; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "zoo") != 0)
@@ -2817,6 +2818,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 12;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
               myCartInfo.yButton = BUTTON_SHIFT_DN;
+              myCartInfo.thumbOptimize = 3; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "cobra") != 0)

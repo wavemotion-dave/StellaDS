@@ -110,7 +110,7 @@ void CartridgeF6SC::install(System& system)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE uInt8 CartridgeF6SC::peek(uInt16 address)
+uInt8 CartridgeF6SC::peek(uInt16 address)
 {
   address = address & 0x0FFF;
 
@@ -185,7 +185,7 @@ void CartridgeF6SC::poke(uInt16 address, uInt8)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE void CartridgeF6SC::bank(uInt16 bank)
+void CartridgeF6SC::bank(uInt16 bank)
 { 
   // Remember what bank we're in
   myCurrentOffset = bank * 4096;
