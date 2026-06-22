@@ -251,6 +251,12 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.3a : 22-June-2026 by wavemotion-dave
+  * After another round of ARM Thumbulator optimizations, I've decided to peel back on some of the 'unsafe'
+    code that I've been using to gain speed. In the end, the speed optimizations and the improved accuracy
+    have balanced themselves out - so 8.3a is roughly equivalent to 8.3 in terms of raw speed but has a 
+    improved ARM Thumb emulation for a nice gain of accuracy. Just hoping there are no bugs :)
+
 8.3 : 21-June-2026 by wavemotion-dave
   * Improved CDFJ+ driver to eek out another frame or two.
   * Optimized for the new Zaxxon Arcade from Champ Games so it runs full speed on DSi or above.

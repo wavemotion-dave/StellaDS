@@ -66,10 +66,10 @@ ITCM_CODE void Thumbulator::run( void )
   return;
 }
 
-#define write8(addr, data)  (*(uInt8*)(myARMRAM + (addr & RAMADDMASK)) = data)
-#define write16(addr, data) (*(uInt16*)(myARMRAM + (addr & RAMADDMASK)) = data)
-#define write32(addr, data) (*(uInt32*)(myARMRAM + (addr & RAMADDMASK)) = data)
-#define readRAM32(addr)     (*((uInt32*) (myARMRAM + (addr & RAMADDMASK))))
+#define write8(addr, data)  (*(uInt8*)   (cacheRAMPtr + (addr & RAMADDMASK)) = data)
+#define write16(addr, data) (*(uInt16*)  (cacheRAMPtr + (addr & RAMADDMASK)) = data)
+#define write32(addr, data) (*(uInt32*)  (cacheRAMPtr + (addr & RAMADDMASK)) = data)
+#define readRAM32(addr)     (*((uInt32*) (cacheRAMPtr + (addr & RAMADDMASK))))
 
 #define read_register(reg)       reg_sys[reg]
 #define write_register(reg,data) reg_sys[reg]=(data)
@@ -79,65 +79,36 @@ ITCM_CODE void Thumbulator::run( void )
 #define do_znflags(x)   ZNflags=(x)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt16 Thumbulator::read16 ( uInt32 addr )
-{
-  if (addr & 0x40000000)
-  {
-      return *((uInt16*) (myARMRAM + (addr & RAMADDMASK)));
-  }
-  else
-  {
-      return *((uInt16*)&cart_buffer[addr]);
-  }
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt32 Thumbulator::read32 ( uInt32 addr )
-{
-  if (addr & 0x40000000)
-  {
-      return *((uInt32*) (myARMRAM + (addr & RAMADDMASK)));
-  }
-  else
-  {
-      return *((uInt32*)&cart_buffer[addr]);
-  }
-}
-
-inline uInt8 Thumbulator::read8 ( uInt32 addr )
-{
-  if (addr & 0x40000000)
-  {
-      return *((uInt8*) (myARMRAM + (addr & RAMADDMASK)));
-  }
-  else
-  {
-      return *((uInt8*)&cart_buffer[addr]);
-  }
-}
-
+#define read16(addr) (((addr) & 0x40000000) ? *((uInt16*) (cacheRAMPtr + ((addr) & RAMADDMASK))) : *((uInt16*)&cart_buffer[(addr)]))
+#define read32(addr) (((addr) & 0x40000000) ? *((uInt32*) (cacheRAMPtr + ((addr) & RAMADDMASK))) : *((uInt32*)&cart_buffer[(addr)]))
+#define read8(addr)  (((addr) & 0x40000000) ? cacheRAMPtr[addr & RAMADDMASK] : cart_buffer[(addr)])
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_cflag ( uInt32 a, uInt32 b, uInt32 c )
 {
-  if (((a|b) & 0x80000000) == 0) cFlag=0;
-  else if ((a&b) & 0x80000000) cFlag=1;
-  else
-  {
-      uInt32 rc=(a&0x7FFFFFFF)+(b&0x7FFFFFFF)+c; //carry in
-      cFlag = (rc & 0x80000000) ? 1:0;
-  }
+    uInt32 res = a + b + c;
+    // A carry occurs if the result wrapped around past the maximum possible value
+    cFlag = (res < a) || (c && (res == a));
+}
+
+//For when you know there is no carry in...
+inline void Thumbulator::do_cflag_nocar ( uInt32 a, uInt32 b )
+{
+    uInt32 res = a + b ;
+    // A carry occurs if the result wrapped around past the maximum possible value
+    cFlag = (res < a);
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 inline void Thumbulator::do_cflag_fast ( uInt32 a, uInt32 b )  // For when you know the high bit of b is set (i.e. on CMP). Assumes carry in.
 {
-  if (a & 0x80000000) cFlag=1;
-  else
-  {
-      uInt32 rc=a+(b&0x7FFFFFFF)+1;
-      cFlag = (rc & 0x80000000) ? 1:0;
-  }
+    // Compute the sum directly
+    uInt32 res = a + b + 1;
+    
+    // Carry out happens if:
+    // (a has MSB set AND b has MSB set) OR (either has MSB set AND result MSB is 0)
+    // Since we KNOW b has MSB set, this simplifies to:
+    cFlag = (a | ~res) & 0x80000000;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -172,18 +143,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
       }
       else
       {
-          switch (inst & 0x0700)
-          {
-              case 0x0000:  return Op::add2_r0;
-              case 0x0100:  return Op::add2_r1;
-              case 0x0200:  return Op::add2_r2;
-              case 0x0300:  return Op::add2_r3;
-              case 0x0400:  return Op::add2_r4;
-              case 0x0500:  return Op::add2_r5;
-              case 0x0600:  return Op::add2_r6;
-              case 0x0700:  return Op::add2_r7;
-          }
-          return Op::add2_r0;
+          return Op::add2;
       }
   }
 
@@ -535,6 +495,7 @@ ITCM_CODE void Thumbulator::execute ( void )
   uInt32 vFlag = 0;
   uInt16 *thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)];
   uInt8  *thumb_decode_ptr = &cart_buffer[MEM_256KB+((reg_sys[15]-2) >> 1)];
+  const uInt8 *cacheRAMPtr = myARMRAM; // Very slight speedup moving this locally...
 
   for (;;)
   {
@@ -1023,9 +984,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 rd=(inst>>0)&0x07;
                 ra=read_register(rd);
                 rb=read_register((inst>>3)&0x07);
-                reg_sys[rd]=ra+rb+cFlag;
+                reg_sys[rd]=ra+rb+(cFlag ? 1:0);
                 do_znflags(reg_sys[rd]);
-                do_cflag(ra,rb,cFlag);
+                do_cflag(ra,rb,(cFlag ? 1:0));
 #ifdef SAFE_THUMB                            
                 vFlag = do_add_vflag(ra,rb,reg_sys[rd]);
 #endif              
@@ -1148,7 +1109,6 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
               
           case Op::tst:
-
                 ra=read_register((inst>>0)&0x7);
                 rb=read_register((inst>>3)&0x7);
                 ZNflags=ra&rb;
@@ -1335,43 +1295,16 @@ ITCM_CODE void Thumbulator::execute ( void )
                 do_znflags(++reg_sys[(inst & 0x0700) >> 8]);
               break;
               
-          case Op::add2_r0:
-                reg_sys[0] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[0]);
-                // ------------------------------------------------------------------------------------------------------
-                // TBD: This is incorrect (but faster) emulation on an instruction that is very common... we're adding 
-                // a small number to a 32-bit register and we're going to assume that there is no vflag nor cFlag needed.
-                // ------------------------------------------------------------------------------------------------------
-                //{vFlag = do_add_vflag(ra,-rb,rc); do_cflag(ra,rb,0);}
-              break;
-          case Op::add2_r1:
-                reg_sys[1] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[1]);
-              break;
-          case Op::add2_r2:
-                reg_sys[2] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[2]);
-              break;
-          case Op::add2_r3:
-                reg_sys[3] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[3]);
-              break;
-          case Op::add2_r4:
-                reg_sys[4] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[4]);
-              break;
-          case Op::add2_r5:
-                reg_sys[5] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[5]);
-              break;
-          case Op::add2_r6:
-                reg_sys[6] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[6]);
-              break;
-          case Op::add2_r7:
-                reg_sys[7] += (inst>>0)&0xFF;
-                do_znflags(reg_sys[7]);
-              break;
+          case Op::add2:
+                rb = (inst >> 0) & 0xFF;
+                rd = (inst >> 8) & 0x7;
+                ra = read_register(rd);
+                rc = ra + rb;
+                write_register(rd, rc);
+                do_znflags(rc);
+                do_cflag_nocar(ra, rb);
+                do_add_vflag(ra, rb, 0);
+                break;
               
           case Op::cmp1_r0:
                 rb=(inst>>0)&0xFF;
