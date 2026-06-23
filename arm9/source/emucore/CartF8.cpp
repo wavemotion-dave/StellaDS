@@ -30,12 +30,15 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 CartridgeF8::CartridgeF8(const uInt8* image)
 {
-  myImage = fast_cart_buffer;    
+  // Reuse the 8K fast RAM - the entire cart will fit.
+  myImage = fast_cart_buffer;
+
   // Copy the ROM image into my buffer
   for(uInt32 addr = 0; addr < 8192; ++addr)
   {
     myImage[addr] = image[addr];
   }
+
   f8_bankbit = 0x1FFF;
 }
 
@@ -71,15 +74,9 @@ void CartridgeF8::install(System& system)
   page_access.directPeekBase = 0;
   page_access.directPokeBase = 0;
   page_access.device = this;
-    
-  // Set the page accessing methods for the hot spots
-  for(uInt32 i = (0x1FF8 & ~mask); i < 0x2000; i += (1 << shift))
-  {
-    mySystem->setPageAccess(i >> shift, page_access);
-  }
-  
+
   // And setup for this system without any direct peek/poke until we switch banks
-  for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))    
+  for(uInt32 address = 0x1000; address < 0x2000; address += (1 << MY_PAGE_SHIFT))
   {
       mySystem->setPageAccess(address >> shift, page_access);
   }
@@ -132,7 +129,7 @@ ITCM_CODE void CartridgeF8::poke(uInt16 address, uInt8)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ITCM_CODE void CartridgeF8::bank(uInt16 bank)
-{    
+{
   f8_bankbit = (bank ? 0x1FFF:0x0FFF);
 
   // Setup the page access methods for the current bank
@@ -144,4 +141,3 @@ ITCM_CODE void CartridgeF8::bank(uInt16 bank)
       myPageAccessTable[access_num++].directPeekBase = &fast_cart_buffer[address & f8_bankbit];
   }
 }
-

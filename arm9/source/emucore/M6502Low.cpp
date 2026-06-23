@@ -92,7 +92,7 @@ const char* M6502Low::name() const
 
 // -------------------------------------------------------------------------------
 // This is the normal driver - optimized as best we can. Note that this is the 
-// only drive in which we are setting the bus state to the last value that 
+// only driver in which we are setting the bus state to the last value that 
 // would be presented on the BUS. The myDataBusState is used in the TIA::peek()
 // handler to drive unused bits for a few "buggy" games that require this for
 // proper operation [note: the games themselves are not really buggy but they 
