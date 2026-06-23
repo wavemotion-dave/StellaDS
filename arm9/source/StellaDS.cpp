@@ -3,8 +3,8 @@
 //
 // Copyright (c) 2020-2026 by Dave Bernazzani
 //
-// Copying and distribution of this emulator, it's source code and associated 
-// readme files, with or without modification, are permitted in any medium without 
+// Copying and distribution of this emulator, it's source code and associated
+// readme files, with or without modification, are permitted in any medium without
 // royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition),
 // Alekmaul (original port) are thanked profusely along with the entire Stella Team.
 //
@@ -83,9 +83,9 @@ int bg0, bg0b, bg1b;
 uInt16 emuState;
 
 uint8 sound_buffer[SOUND_SIZE]  __attribute__ ((aligned (4)))  = {0};  // Can't be placed in fast memory as ARM7 needs to access it...
-uint16 *aptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
-uint16 *bptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
-uint8  bHaltEmulation           __attribute__((section(".dtcm"))) = 0; 
+uint16 *aptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[0] + 0xA000000);
+uint16 *bptr                    __attribute__((section(".dtcm"))) = (uint16*)((uint32)&sound_buffer[2] + 0xA000000);
+uint8  bHaltEmulation           __attribute__((section(".dtcm"))) = 0;
 uint8  bScreenRefresh           __attribute__((section(".dtcm"))) = 0;
 uInt32 gAtariFrames             __attribute__((section(".dtcm"))) = 0;
 uInt32 gTotalAtariFrames = 0;
@@ -109,7 +109,7 @@ static void DumpDebugData(void)
 {
     extern uInt32 gTotalSystemCycles;
     extern uInt16 gPC;
-    
+
 #ifdef CPU_PROFILER
     int j=0;
     for (int i=0; i<256; i++)
@@ -131,10 +131,10 @@ static void DumpDebugData(void)
     uInt8 idx = 19;
     sprintf(dbgbuf, "Build Date:    %-11s V%s",    __DATE__, VERSION);
     dsPrintValue(0, idx++, 0, dbgbuf);
-    sprintf(dbgbuf, "CPU Mode:      %-18s",        isDSiMode() ? "DSI 134MHz 16MB":"DS 67MHz 4 MB");  
+    sprintf(dbgbuf, "CPU Mode:      %-18s",        isDSiMode() ? "DSI 134MHz 16MB":"DS 67MHz 4 MB");
     dsPrintValue(0, idx++, 0, dbgbuf);
-    sprintf(dbgbuf, "Memory Used:   %-9d BYTES  ", getMemUsed());                       
-    dsPrintValue(0, idx++, 0, dbgbuf);        
+    sprintf(dbgbuf, "Memory Used:   %-9d BYTES  ", getMemUsed());
+    dsPrintValue(0, idx++, 0, dbgbuf);
     sprintf(dbgbuf, "CY:%-11u FR:%-7uPC:%04X", gTotalSystemCycles, gTotalAtariFrames, gPC);
     dsPrintValue(0,idx++,0, dbgbuf);
     sprintf(dbgbuf, "%32s", myCartInfo.md5);
@@ -144,7 +144,7 @@ static void DumpDebugData(void)
 
 // --------------------------------------------------------------------------------------
 // Color fading effect
-void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr, unsigned char valEnd, unsigned char uWait) 
+void FadeToColor(unsigned char ucSens, unsigned short ucBG, unsigned char ucScr, unsigned char valEnd, unsigned char uWait)
 {
   unsigned short ucFade;
   unsigned char ucBcl;
@@ -189,17 +189,12 @@ volatile uInt16 ds_vblank_count __attribute__((section(".dtcm"))) = 0;
 ITCM_CODE void irqVCount(void)
 {
     ds_vblank_count++; // This is our key to DS 'True Sync' at 60Hz.
-    
-    if (myCartInfo.tv_type) // For PAL, we fake the DS into thinking the refresh is every 50Hz by delaying the VCOUNT
-    {
-        VCOUNT -= 50;
-    }
 }
 
 
 Int16 temp_shift __attribute__((section(".dtcm"))) = 0;
 uInt8 shiftTime;
-ITCM_CODE void vblankIntr() 
+ITCM_CODE void vblankIntr()
 {
     if (bScreenRefresh || temp_shift)
     {
@@ -209,11 +204,11 @@ ITCM_CODE void vblankIntr()
         REG_BG3PA = (((A26_VID_WIDTH / 256) << 8) | (A26_VID_WIDTH % 256)) - myCartInfo.xStretch;
         bScreenRefresh = 0;
     }
-    
+
     if (temp_shift)
     {
         ++shiftTime;
-        if (shiftTime > 40) 
+        if (shiftTime > 40)
         {
             if (temp_shift < 0) temp_shift++; else temp_shift--;
             if (temp_shift == 0)
@@ -223,7 +218,7 @@ ITCM_CODE void vblankIntr()
             }
         }
     }
-    
+
     // -----------------------------------------------------------------------------------
     // This is a nice speedup so we don't have to check for too many cycles as part of
     // the main M6502 execute() loop. We can just check periodically once per DS frame.
@@ -241,17 +236,17 @@ void dsInitScreenMain(void)
     // Init the VSYNC and enable VBLANK interrupts.
     SetYtrigger(160); //trigger a bit before the actual Vertical Blank so we can start drawing a new frame
     irqSet(IRQ_VCOUNT, irqVCount);
-    irqEnable(IRQ_VCOUNT);  
+    irqEnable(IRQ_VCOUNT);
     irqSet(IRQ_VBLANK, vblankIntr);
     irqEnable(IRQ_VBLANK);
-    
+
     vramSetBankD(VRAM_D_LCD );    // Not using this for video but 128K of faster RAM always useful! Mapped at 0x06860000 - Unused
     vramSetBankE(VRAM_E_LCD );    // Not using this for video but 64K of faster RAM always useful!  Mapped at 0x06880000 - We use 112K of this as a buffer for Screenshots
     vramSetBankF(VRAM_F_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06890000
     vramSetBankG(VRAM_G_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x06894000
     vramSetBankH(VRAM_H_LCD );    // Not using this for video but 32K of faster RAM always useful!  Mapped at 0x06898000
     vramSetBankI(VRAM_I_LCD );    // Not using this for video but 16K of faster RAM always useful!  Mapped at 0x068A0000 - 1K used for the TIA Sample Extender, 2K for TIA sound buffer
-    
+
     WAITVBL;
 }
 
@@ -261,11 +256,11 @@ void dsInitTimer(void)
     TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
 }
 
-void dsInitPalette(void) 
+void dsInitPalette(void)
 {
     // Init DS Specific palette
     const uInt32* gamePalette = theTIA.palette();
-    for(uInt32 i = 0; i < 256; i++)   
+    for(uInt32 i = 0; i < 256; i++)
     {
         uInt8 r, g, b;
 
@@ -280,7 +275,7 @@ void dsInitPalette(void)
 void dsWarnIncompatibileCart(void)
 {
     dsPrintValue(5,0,0, (char*)"CART TYPE NOT SUPPORTED");
-    bHaltEmulation = 1; // And force the game to not run 
+    bHaltEmulation = 1; // And force the game to not run
 }
 
 void dsPrintCartType(char *type, int size)
@@ -297,7 +292,7 @@ void dsShowScreenEmu(void)
   videoSetMode(MODE_5_2D);
   vramSetBankA(VRAM_A_MAIN_BG_0x06000000);  // The main emulated (top screen) display.
   vramSetBankB(VRAM_B_MAIN_BG_0x06060000);  // This is where we will put our frame buffers to aid DMA Copy routines...
-    
+
   bg0 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0,0);
   memset((void*)0x06000000, 0x00, 128*1024);
 
@@ -307,13 +302,13 @@ void dsShowScreenEmu(void)
   REG_BG3X = (myCartInfo.xOffset)<<8;
   REG_BG3Y = (myCartInfo.yOffset)<<8;
 
-  ShowStatusLine(); 
-    
+  ShowStatusLine();
+
   bScreenRefresh = 1;
   swiWaitForVBlank();
 }
 
-void dsShowScreenPaddles(void) 
+void dsShowScreenPaddles(void)
 {
   decompress(bgPaddlesTiles, bgGetGfxPtr(bg0b), LZ77Vram);
   decompress(bgPaddlesMap, (void*) bgGetMapPtr(bg0b), LZ77Vram);
@@ -323,7 +318,7 @@ void dsShowScreenPaddles(void)
   swiWaitForVBlank();
 }
 
-void dsShowScreenKeypad(void) 
+void dsShowScreenKeypad(void)
 {
   if (myCartInfo.controllerType == CTR_STARRAID)
   {
@@ -449,7 +444,7 @@ void dsDisplayButton(unsigned char button)
         *(ptrBg0+(23)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
       }
       break;
-          
+
     case 16: // Sound - ON
       for (i=0;i<4;i++) {
         *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(2)*32+(16+i));
@@ -461,12 +456,12 @@ void dsDisplayButton(unsigned char button)
         *(ptrBg0+(19)*32+(27+i)) = *(ptrBg1+(0)*32+(16+i));
         *(ptrBg0+(20)*32+(27+i)) = *(ptrBg1+(1)*32+(16+i));
       }
-      break;          
+      break;
   }
   swiWaitForVBlank();
 }
 
-void dsShowScreenMain(bool bFull) 
+void dsShowScreenMain(bool bFull)
 {
   // Init BG mode for 16 bits colors
   if (bFull)
@@ -491,17 +486,17 @@ void dsShowScreenMain(bool bFull)
   dmaFillWords(dmaVal | (dmaVal<<16),(void*) bgGetMapPtr(bg1b),32*24*2);
 
   REG_BLDCNT=0; REG_BLDCNT_SUB=0; REG_BLDY=0; REG_BLDY_SUB=0;
-    
+
   dsDisplayButton(3-console_color);
   dsDisplayButton(10+myCartInfo.left_difficulty);
   dsDisplayButton(12+myCartInfo.right_difficulty);
-  ShowStatusLine();    
+  ShowStatusLine();
 
   swiWaitForVBlank();
 }
 
 
-void dsFreeEmu(void) 
+void dsFreeEmu(void)
 {
   // Stop timer of sound
   TIMER2_CR=0; irqDisable(IRQ_TIMER2);
@@ -510,7 +505,7 @@ void dsFreeEmu(void)
     delete theConsole;
 }
 
-bool dsLoadGame(char *filename) 
+bool dsLoadGame(char *filename)
 {
   unsigned int buffer_size=0;
   for (u16 i=0; i<(u16)strlen(filename)+1; i++)
@@ -518,17 +513,17 @@ bool dsLoadGame(char *filename)
       my_filename[i] = tolower(filename[i]);
   }
   my_filename[MAX_FILE_NAME_LEN] = 0;
-    
+
   // Load the file
   FILE *romfile = fopen(filename, "rb");
   if (romfile != NULL)
   {
     // Free buffer if needed
     TIMER2_CR=0; irqDisable(IRQ_TIMER2);
-    
+
     // Clear out debug information for new game
-    memset(debug, 0x00, sizeof(debug));      
-      
+    memset(debug, 0x00, sizeof(debug));
+
     extern uInt8 OptionPage;
     OptionPage = 0;
 
@@ -551,7 +546,7 @@ bool dsLoadGame(char *filename)
         dsInitPalette();
 
         memset(sound_buffer, 0x00, SOUND_SIZE);
-        
+
         TIMER2_DATA = TIMER_FREQ((myCartInfo.soundQuality == SOUND_WAVE) ? (mySoundFreq+75) : mySoundFreq); // For Wave Direct we run a little faster so as always to keep sampling ahead of TIA output
         TIMER2_CR = TIMER_DIV_1 | TIMER_IRQ_REQ | TIMER_ENABLE;
         if (myCartInfo.soundQuality == SOUND_WAVE)
@@ -562,7 +557,7 @@ bool dsLoadGame(char *filename)
         {
             irqSet(IRQ_TIMER2, Tia_process);
         }
-        
+
         if (myCartInfo.soundQuality)
         {
             irqEnable(IRQ_TIMER2);
@@ -580,21 +575,21 @@ bool dsLoadGame(char *filename)
         myStellaEvent.set(Event::PaddleOneResistance,   theConsole->fakePaddleResistance);
         myStellaEvent.set(Event::PaddleTwoResistance,   theConsole->fakePaddleResistance);
         myStellaEvent.set(Event::PaddleThreeResistance, theConsole->fakePaddleResistance);
-            
+
         // Make sure the difficulty switches are set right on loding
         bInitialDiffSet = true;
-        
+
         // Always color TV to start...
         myStellaEvent.set(Event::ConsoleColor, 1);
         myStellaEvent.set(Event::ConsoleBlackWhite, 0);
-        
+
         TIMER0_CR=0;
         TIMER0_DATA=0;
         TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
         atari_frames=0;
         gAtariFrames = 0;
         gTotalAtariFrames = 0;
-        
+
         return true;
     }
     else return false;
@@ -659,7 +654,7 @@ bool dsWaitOnQuit(void)
       bDone = true;
     }
   }
-    
+
   dsShowScreenMain(false);
 
   return bRet;
@@ -904,7 +899,7 @@ unsigned int dsWaitForRom(void)
         ucHaut++;
         if (ucHaut>10) ucHaut=0;
       }
-      uLenFic=0; ucFlip=0; ucFlop=0;     
+      uLenFic=0; ucFlip=0; ucFlop=0;
     }
     else
     {
@@ -933,7 +928,7 @@ unsigned int dsWaitForRom(void)
         ucBas++;
         if (ucBas>10) ucBas=0;
       }
-      uLenFic=0; ucFlip=0; ucFlop=0;     
+      uLenFic=0; ucFlip=0; ucFlop=0;
     }
     else {
       ucBas = 0;
@@ -954,7 +949,7 @@ unsigned int dsWaitForRom(void)
         ucSBas++;
         if (ucSBas>10) ucSBas=0;
       }
-      uLenFic=0; ucFlip=0; ucFlop=0;     
+      uLenFic=0; ucFlip=0; ucFlop=0;
     }
     else {
       ucSBas = 0;
@@ -967,7 +962,7 @@ unsigned int dsWaitForRom(void)
         if (firstRomDisplay>nbRomPerPage) { firstRomDisplay -= nbRomPerPage; }
         else { firstRomDisplay = 0; }
         if (ucFicAct == 0) romSelected = 0;
-        if (romSelected > ucFicAct) romSelected = ucFicAct;          
+        if (romSelected > ucFicAct) romSelected = ucFicAct;
         ucSHaut=0x01;
         dsDisplayFiles(firstRomDisplay,romSelected);
       }
@@ -976,12 +971,12 @@ unsigned int dsWaitForRom(void)
         ucSHaut++;
         if (ucSHaut>10) ucSHaut=0;
       }
-      uLenFic=0; ucFlip=0; ucFlop=0;     
+      uLenFic=0; ucFlip=0; ucFlop=0;
     }
     else {
       ucSHaut = 0;
     }
-    
+
     // The SELECT key will toggle favorites
     if (keysCurrent() & KEY_SELECT)
     {
@@ -1010,7 +1005,7 @@ unsigned int dsWaitForRom(void)
         bRet=true;
         bDone=true;
         bHaltEmulation = 0;
-        if (keysCurrent() & KEY_Y) 
+        if (keysCurrent() & KEY_Y)
         {
            bHaltEmulation = 1;
         }
@@ -1019,14 +1014,14 @@ unsigned int dsWaitForRom(void)
             tv_type_requested = NTSC;
             myCartInfo.tv_type = NTSC;
         }
-       
+
         if (keysCurrent() & KEY_X)
         {
             DEBUG_DUMP = 1;
         }
         else
         {
-            DEBUG_DUMP = 0;   
+            DEBUG_DUMP = 0;
         }
       }
       else
@@ -1048,19 +1043,19 @@ unsigned int dsWaitForRom(void)
         while (keysCurrent() & KEY_A);
       }
     }
-      
+
     // If the filename is too long... scroll it.
-    if (strlen(vcsromlist[ucFicAct].filename) > 29) 
+    if (strlen(vcsromlist[ucFicAct].filename) > 29)
     {
       ucFlip++;
-      if (ucFlip >= 15) 
+      if (ucFlip >= 15)
       {
         ucFlip = 0;
         uLenFic++;
-        if ((uLenFic+29)>(u16)strlen(vcsromlist[ucFicAct].filename)) 
+        if ((uLenFic+29)>(u16)strlen(vcsromlist[ucFicAct].filename))
         {
           ucFlop++;
-          if (ucFlop >= 15) 
+          if (ucFlop >= 15)
           {
             uLenFic=0;
             ucFlop = 0;
@@ -1073,7 +1068,7 @@ unsigned int dsWaitForRom(void)
         dsPrintValue(1,5+romSelected,1,szName);
       }
     }
-      
+
     swiWaitForVBlank();
   }
 
@@ -1177,15 +1172,15 @@ void dsInstallSoundEmuFIFO(void)
 {
     if (isDSiMode())
     {
-        aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000); 
-        bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000); 
+        aptr = (uint16*)((uint32)&sound_buffer[0] + 0xA000000);
+        bptr = (uint16*)((uint32)&sound_buffer[2] + 0xA000000);
     }
     else
     {
-        aptr = (uint16*)((uint32)&sound_buffer[0] + 0x00400000); 
-        bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000); 
+        aptr = (uint16*)((uint32)&sound_buffer[0] + 0x00400000);
+        bptr = (uint16*)((uint32)&sound_buffer[2] + 0x00400000);
     }
-    
+
     FifoMessage msg;
     msg.SoundPlay.data = &sound_buffer;
     msg.SoundPlay.freq = 44100;
@@ -1203,7 +1198,7 @@ __attribute__((noinline)) void ProcessAtariKeypad(void)
 {
     touchPosition touch;
     touchRead(&touch);
-    
+
     if (myCartInfo.controllerType == CTR_KEYBOARD0)
     {
         if (touch.px > 60  && touch.px < 105 && touch.py > 5 && touch.py < 50) myStellaEvent.set(Event::KeyboardZero1,     1);
@@ -1257,7 +1252,7 @@ __attribute__((noinline)) void ProcessAtariKeypad(void)
         if (touch.px >138  && touch.px < 174 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOneStar,  1);
         if (touch.px >=174 && touch.px < 211 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOne0,     1);
         if (touch.px >=211 && touch.px < 249 && touch.py > 150 && touch.py < 200) myStellaEvent.set(Event::KeyboardOnePound, 1);
-    }   
+    }
 }
 
 __attribute__((noinline)) void ClearAtariKeypad(void)
@@ -1347,7 +1342,7 @@ ITCM_CODE void dsMainLoop(void)
     TIMER0_CR=TIMER_ENABLE|TIMER_DIV_1024;
     TIMER1_DATA=0;
     TIMER1_CR=TIMER_ENABLE | TIMER_DIV_1024;
-    
+
     while(emuState != STELLADS_QUITSTDS)
     {
         switch (emuState)
@@ -1377,17 +1372,25 @@ ITCM_CODE void dsMainLoop(void)
             // we will end up with a pause/gap in play as we catch back up to the frame counter.
             // ------------------------------------------------------------------------------------
             if (TIMER0_DATA > 50000)
-            {   
-                temp_full_speed = 1; 
+            {
+                temp_full_speed = 1;
             }
-        
+
             // -----------------------------------------------------------------------------
             // Use the DS VCount interrupt to time the frames to help reduce visual tearing.
             // -----------------------------------------------------------------------------
             if ((full_speed || temp_full_speed) == 0)
             {
-                while (ds_vblank_count < atari_frames)
-                    ;
+                if (myCartInfo.tv_type) // For PAL, we use the TIMER
+                {
+                    while (TIMER0_DATA < 655*atari_frames)
+                        ;
+                }
+                else // For NTSC, we do a 'true-sync' to the DS VBlank
+                {
+                    while (ds_vblank_count < atari_frames)
+                        ;
+                }
             }
 
             // Have we processed 50/60 frames... start over...
@@ -1400,7 +1403,7 @@ ITCM_CODE void dsMainLoop(void)
                 ds_vblank_count = 0;
                 temp_full_speed = 0;
             }
-                
+
             // Wait for keys
             scanKeys();
             keys_pressed = keysCurrent();
@@ -1408,13 +1411,13 @@ ITCM_CODE void dsMainLoop(void)
             switch (myCartInfo.controllerType)
             {
                 case CTR_LJOY:
-                case CTR_RJOY:                    
+                case CTR_RJOY:
                     button_fire  = false;
                     button_up    = false;
                     button_down  = false;
                     button_left  = false;
                     button_right = false;
-                    
+
                     if (keys_pressed & (KEY_A))
                     {
                         if ((myCartInfo.aButton == BUTTON_FIRE))           button_fire  = true;
@@ -1459,12 +1462,12 @@ ITCM_CODE void dsMainLoop(void)
                         else if ((myCartInfo.yButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
                         else if ((myCartInfo.yButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
-                    
+
                     if (keys_pressed & (KEY_UP))                      button_up    = true;
                     else if (keys_pressed & (KEY_DOWN))               button_down  = true;
                     if (keys_pressed & (KEY_LEFT))                    button_left  = true;
                     else if (keys_pressed & (KEY_RIGHT))              button_right = true;
-                    
+
                     if (myCartInfo.controllerType == CTR_LJOY)
                     {
                         myStellaEvent.set(Event::JoystickZeroFire,  button_fire);
@@ -1482,12 +1485,12 @@ ITCM_CODE void dsMainLoop(void)
                         myStellaEvent.set(Event::JoystickOneRight, button_right);
                     }
                     break;
-                    
+
                 case CTR_MCA:
                     myStellaEvent.set(Event::JoystickOneLeft,       (keys_pressed & (KEY_Y)));
                     myStellaEvent.set(Event::JoystickOneDown,       (keys_pressed & (KEY_B)));
                     myStellaEvent.set(Event::JoystickOneRight,      (keys_pressed & (KEY_A)));
-                    
+
                     myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
                     myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
@@ -1500,13 +1503,13 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
                     myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_A));
-                    
+
                     myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_X));
                     myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_Y));
                     myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_B));
-                    
+
                     break;
-                    
+
                 case CTR_SOLARIS:
                     myStellaEvent.set(Event::JoystickZeroUp,        keys_pressed & (KEY_UP));
                     myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
@@ -1515,14 +1518,14 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroFire,      ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
                     myStellaEvent.set(Event::JoystickOneFire,       ((keys_pressed & (KEY_X)) | (keys_pressed & (KEY_Y))));
                     break;
-                    
+
                 case CTR_RAIDERS:
                     myStellaEvent.set(Event::JoystickOneUp,         keys_pressed & (KEY_UP));
                     myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_RIGHT));
                     myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_A));
-                    
+
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_X));
                     myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_Y));
                     myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_B));
@@ -1538,7 +1541,7 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_B));
                     myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_Y));
                     myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_A));
-                    
+
                     myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_L));
                     myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_R));
                     break;
@@ -1553,11 +1556,11 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickOneDown,       keys_pressed & (KEY_B));
                     myStellaEvent.set(Event::JoystickOneLeft,       keys_pressed & (KEY_Y));
                     myStellaEvent.set(Event::JoystickOneRight,      keys_pressed & (KEY_A));
-                    
+
                     myStellaEvent.set(Event::JoystickZeroFire,      keys_pressed & (KEY_L));
                     myStellaEvent.set(Event::JoystickOneFire,       keys_pressed & (KEY_R));
                     break;
-                    
+
                 case CTR_BOOSTER:
                     myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));
                     myStellaEvent.set(Event::JoystickZeroDown,       keys_pressed & (KEY_DOWN));
@@ -1566,7 +1569,7 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::BoosterGripZeroTrigger, keys_pressed & (KEY_A));
                     myStellaEvent.set(Event::BoosterGripZeroBooster, keys_pressed & (KEY_B));
                     break;
-                    
+
                 case CTR_GENESIS:
                     myStellaEvent.set(Event::JoystickZeroFire,      (keys_pressed & (KEY_A)) | (keys_pressed & (KEY_Y))); // Normal fire button
                     myStellaEvent.set(Event::BoosterGripZeroBooster,(keys_pressed & (KEY_B)));    // Second Genesis button "C" is mapped here
@@ -1574,21 +1577,21 @@ ITCM_CODE void dsMainLoop(void)
                     myStellaEvent.set(Event::JoystickZeroDown,      keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickZeroLeft,      keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickZeroRight,     keys_pressed & (KEY_RIGHT));
-                    
+
                     if (keys_pressed & (KEY_X))
                     {
                              if ((myCartInfo.xButton == BUTTON_SHIFT_UP))  {temp_shift = -16; shiftTime=0;}
                         else if ((myCartInfo.xButton == BUTTON_SHIFT_DN))  {temp_shift = +16; shiftTime=0;}
                     }
                     break;
-                    
+
                 case CTR_STARRAID:
                     myStellaEvent.set(Event::JoystickZeroUp,         keys_pressed & (KEY_UP));
                     myStellaEvent.set(Event::JoystickZeroDown,       keys_pressed & (KEY_DOWN));
                     myStellaEvent.set(Event::JoystickZeroLeft,       keys_pressed & (KEY_LEFT));
                     myStellaEvent.set(Event::JoystickZeroRight,      keys_pressed & (KEY_RIGHT));
                     myStellaEvent.set(Event::JoystickZeroFire,       ((keys_pressed & (KEY_A)) | (keys_pressed & (KEY_B))));
-                    
+
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
                     {
                         touchPosition touch;
@@ -1625,20 +1628,20 @@ ITCM_CODE void dsMainLoop(void)
                         myStellaEvent.set(Event::KeyboardOneStar,  0);
                         myStellaEvent.set(Event::KeyboardOne0,     0);
                         myStellaEvent.set(Event::KeyboardOnePound, 0);
-                    }   
+                    }
                     break;
-                
+
                 case CTR_BUMPBASH:
                     myStellaEvent.set(Event::PaddleZeroFire,     (keys_pressed & (KEY_B | KEY_Y | KEY_L)));
-                    myStellaEvent.set(Event::PaddleOneFire,      (keys_pressed & (KEY_A | KEY_X | KEY_R)));                    
+                    myStellaEvent.set(Event::PaddleOneFire,      (keys_pressed & (KEY_A | KEY_X | KEY_R)));
                     break;
-                    
+
                 case CTR_PADDLE0:
                 case CTR_PADDLE1:
                     if(keys_pressed & (KEY_LEFT))
                     {
                         uInt8 sens = myCartInfo.analogSensitivity;
-                        if (keys_pressed & KEY_X) sens += 4; 
+                        if (keys_pressed & KEY_X) sens += 4;
                         if (keys_pressed & KEY_Y) sens -= 4;
                         theConsole->fakePaddleResistance += (10000 * sens) / 10;
                         if (theConsole->fakePaddleResistance > MAX_RESISTANCE) theConsole->fakePaddleResistance = MAX_RESISTANCE;
@@ -1648,7 +1651,7 @@ ITCM_CODE void dsMainLoop(void)
                     if(keys_pressed & (KEY_RIGHT))
                     {
                         uInt8 sens = myCartInfo.analogSensitivity;
-                        if (keys_pressed & KEY_X) sens += 4; 
+                        if (keys_pressed & KEY_X) sens += 4;
                         if (keys_pressed & KEY_Y) sens -= 4;
                         theConsole->fakePaddleResistance -= (10000 * sens) / 10;
                         if (theConsole->fakePaddleResistance < MIN_RESISTANCE) theConsole->fakePaddleResistance = MIN_RESISTANCE;
@@ -1670,7 +1673,7 @@ ITCM_CODE void dsMainLoop(void)
                         keys_pressed = 0;   // If these were pressed... don't handle them below...
                     }
                     break;
-                    
+
                 case CTR_PADDLE2:
                 case CTR_PADDLE3:
                     if(keys_pressed & (KEY_LEFT))
@@ -1702,7 +1705,7 @@ ITCM_CODE void dsMainLoop(void)
                         keys_pressed = 0;   // If these were pressed... don't handle them below...
                     }
                     break;
-                    
+
                 case CTR_DRIVING:
                     if (++driving_dampen % 2)
                     {
@@ -1711,7 +1714,7 @@ ITCM_CODE void dsMainLoop(void)
                         myStellaEvent.set(Event::DrivingZeroFire, (keys_pressed & (KEY_A)) || (keys_pressed & (KEY_B)));
                     }
                     break;
-                    
+
                 // Just the left/P1 keyboard shown
                 case CTR_KEYBOARD0:
                     if (bShowKeyboard  && (keys_pressed & KEY_TOUCH))
@@ -1724,7 +1727,7 @@ ITCM_CODE void dsMainLoop(void)
                         ClearAtariKeypad();
                     }
                     if (myCartInfo.special) CheckSpecialKeypadHandling(keys_pressed);
-                    break;                    
+                    break;
 
                 // Both keyboards shown...
                 case CTR_KEYBOARD1:
@@ -1744,7 +1747,7 @@ ITCM_CODE void dsMainLoop(void)
             // --------------------------------------------------------------------------------------
             // For things like showing paddles or console switches, we can do this much slower...
             // --------------------------------------------------------------------------------------
-            if (dampen==0) 
+            if (dampen==0)
             {
                 dampen=10;      // Every 10 frames is good enough...
                 if (bShowPaddles || bShowKeyboard || bShowInfo)
@@ -1762,7 +1765,7 @@ ITCM_CODE void dsMainLoop(void)
                     if (!(keys_pressed & KEY_TOUCH)) myStellaEvent.set(Event::ConsoleSelect,  keys_pressed & (KEY_SELECT));
                 }
                 if (!(keys_pressed & KEY_TOUCH)) myStellaEvent.set(Event::ConsoleReset, keys_pressed & (KEY_START));
-                
+
                 if (bInitialDiffSet)
                 {
                     bInitialDiffSet = false;
@@ -1778,7 +1781,7 @@ ITCM_CODE void dsMainLoop(void)
                         myStellaEvent.set(Event::ConsoleLeftDifficultyB, 1);
                     }
                     dsDisplayButton(10+myCartInfo.left_difficulty);
-                    
+
                     if (myCartInfo.right_difficulty)
                     {
                         myStellaEvent.set(Event::ConsoleRightDifficultyA, 1);
@@ -1790,9 +1793,9 @@ ITCM_CODE void dsMainLoop(void)
                         myStellaEvent.set(Event::ConsoleRightDifficultyB, 1);
                     }
                     dsDisplayButton(12+myCartInfo.right_difficulty);
-                    
+
                     dsDisplayButton(3-console_color);
-                }                    
+                }
 
                 // -----------------------------------------------------------------------
                 // Check the UI keys... this is for offset/scale shift of the display.
@@ -1815,10 +1818,10 @@ ITCM_CODE void dsMainLoop(void)
                         if ((keys_pressed & KEY_L) && (keys_pressed & KEY_LEFT))  if (myCartInfo.xStretch > 0)  myCartInfo.xStretch--;
                         if ((keys_pressed & KEY_L) && (keys_pressed & KEY_RIGHT)) if (myCartInfo.xStretch < 32) myCartInfo.xStretch++;
                     }
-                    
+
                     if ((keys_pressed & (KEY_R | KEY_L | KEY_Y)) == (KEY_R | KEY_L | KEY_Y) && (myCartInfo.controllerType != CTR_BUMPBASH))
                     {
-                        if (++ss_dampen == 5) 
+                        if (++ss_dampen == 5)
                         {
                             dsPrintValue(12,0,0, (char*)"SNAPSHOT");
                             (void)screenshot();
@@ -1826,16 +1829,16 @@ ITCM_CODE void dsMainLoop(void)
                             dsPrintValue(12,0,0, (char*)"        ");
                         }
                     }
-                    
+
                     bScreenRefresh = 1;
                 } else ss_dampen = 0;
 
-                
+
                 if (keys_pressed != last_keys_pressed)
                 {
                     if ((keys_pressed & KEY_R) && (keys_pressed & KEY_L))
                     {
-                        if (keys_pressed & KEY_A)   {lcdSwap();}                        
+                        if (keys_pressed & KEY_A)   {lcdSwap();}
                     }
                     last_keys_pressed = keys_pressed;
                 }
@@ -1874,9 +1877,9 @@ ITCM_CODE void dsMainLoop(void)
             }
             if (DEBUG_DUMP) DumpDebugData();
         }
-                
+
         // ----------------------------------------
-        // If the information screen is shown... 
+        // If the information screen is shown...
         // any press of the touch dismisses it...
         // ----------------------------------------
         if (bShowInfo && (info_dampen == 0))
@@ -1888,7 +1891,7 @@ ITCM_CODE void dsMainLoop(void)
             }
             keys_touch = 1;
         } else info_dampen--;
-        
+
         // -----------------------------------------------------------------------------------------
         // If the touch screen was pressed and we are not showing one of the special sub-screens...
         // -----------------------------------------------------------------------------------------
@@ -1902,7 +1905,7 @@ ITCM_CODE void dsMainLoop(void)
                 iTx = touch.px;
                 iTy = touch.py;
 
-                if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65)) 
+                if ((iTx>10) && (iTx<40) && (iTy>26) && (iTy<65))
                 { // quit
                     irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     dsDisplayButton(1);
@@ -1916,22 +1919,22 @@ ITCM_CODE void dsMainLoop(void)
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                 }
-                else if ((iTx>240) && (iTx<256) && (iTy>0) && (iTy<20))  
+                else if ((iTx>240) && (iTx<256) && (iTy>0) && (iTy<20))
                 { // Full Speed Toggle ... upper corner...
-                    full_speed = 1-full_speed; 
+                    full_speed = 1-full_speed;
                     ShowStatusLine();
-                }                
-                else if ((iTx>0) && (iTx<20) && (iTy>0) && (iTy<20))  
+                }
+                else if ((iTx>0) && (iTx<20) && (iTy>0) && (iTy<20))
                 { // FPS Toggle ... upper corner...
                     fpsDisplay = 1-fpsDisplay;
                     if (!fpsDisplay)
                     {
                         dsPrintValue(0,0,0, (char *)"          ");
                     }
-                    else gAtariFrames=0;                    
+                    else gAtariFrames=0;
                     ShowStatusLine();
-                }                
-                else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65)) 
+                }
+                else if ((iTx>54) && (iTx<85) && (iTy>26) && (iTy<65))
                 { // tv type
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     console_color=1-console_color;
@@ -1948,7 +1951,7 @@ ITCM_CODE void dsMainLoop(void)
                     dampen=5;
                     dsDisplayButton(3-console_color);
                 }
-                else if ((iTx>100) && (iTx<125) && (iTy>26) && (iTy<65)) 
+                else if ((iTx>100) && (iTx<125) && (iTy>26) && (iTy<65))
                 { // Left Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.left_difficulty=1-myCartInfo.left_difficulty;
@@ -1965,7 +1968,7 @@ ITCM_CODE void dsMainLoop(void)
                     dampen=5;
                     dsDisplayButton(10+myCartInfo.left_difficulty);
                 }
-                else if ((iTx>135) && (iTx<160) && (iTy>26) && (iTy<65)) 
+                else if ((iTx>135) && (iTx<160) && (iTy>26) && (iTy<65))
                 { // Right Difficulty Switch
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myCartInfo.right_difficulty=1-myCartInfo.right_difficulty;
@@ -1982,16 +1985,16 @@ ITCM_CODE void dsMainLoop(void)
                     dampen=5;
                     dsDisplayButton(12+myCartInfo.right_difficulty);
                 }
-                else if ((iTx>170) && (iTx<203) && (iTy>26) && (iTy<70)) 
+                else if ((iTx>170) && (iTx<203) && (iTy>26) && (iTy<70))
                 { // game select
                     dsDisplayButton(5);
                     bSelectOrResetWasPressed = 1;
                     soundPlaySample(clickNoQuit_wav, SoundFormat_16Bit, clickNoQuit_wav_size, 22050, 127, 64, false, 0);
                     myStellaEvent.set(Event::ConsoleSelect, 1);
                     dampen=10;
-                    WAITVBL; 
+                    WAITVBL;
                 }
-                else if ((iTx>215) && (iTx<253) && (iTy>26) && (iTy<70)) 
+                else if ((iTx>215) && (iTx<253) && (iTy>26) && (iTy<70))
                 { // game reset
                     dsDisplayButton(7);
                     bSelectOrResetWasPressed = 1;
@@ -2000,13 +2003,13 @@ ITCM_CODE void dsMainLoop(void)
                     dampen=10;
                     WAITVBL;
                 }
-                else if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133)) 
+                else if ((iTx>47) && (iTx<209) && (iTy>99) && (iTy<133))
                 {     // 48,100 -> 208,132 cartridge slot
                     // Find files in current directory and show it
                     irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
                     vcsFindFiles();
                     romSel=dsWaitForRom();
-                    if (romSel) 
+                    if (romSel)
                     {
                         emuState=STELLADS_PLAYINIT;
                         dsLoadGame(vcsromlist[ucFicAct].filename);
@@ -2018,8 +2021,8 @@ ITCM_CODE void dsMainLoop(void)
                         dampen=0;
                         continue;
                     }
-                    else 
-                    { 
+                    else
+                    {
                         if (myCartInfo.soundQuality)
                         {
                             irqEnable(IRQ_TIMER2);
@@ -2041,7 +2044,7 @@ ITCM_CODE void dsMainLoop(void)
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                 }
-                else if ((iTx>5) && (iTx<45) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>5) && (iTx<45) && (iTy>150) && (iTy<200))
                 { // Save/Restore State
                     u8 bSaveRestoreAllowed = true;
                     if (gSaveKeyEEprom)
@@ -2060,7 +2063,7 @@ ITCM_CODE void dsMainLoop(void)
                         }
                     }
                 }
-                else if ((iTx>=45) && (iTx<90) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>=45) && (iTx<90) && (iTy>150) && (iTy<200))
                 { // Paddle Mode!
                     if (bShowPaddles == false)
                     {
@@ -2073,7 +2076,7 @@ ITCM_CODE void dsMainLoop(void)
                         dsShowScreenMain(false);
                     }
                 }
-                else if ((iTx>100) && (iTx<130) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>100) && (iTx<130) && (iTy>150) && (iTy<200))
                 { // Keyboard Mode!
                     if (bShowKeyboard == false)
                     {
@@ -2086,23 +2089,23 @@ ITCM_CODE void dsMainLoop(void)
                         dsShowScreenMain(false);
                     }
                 }
-                else if ((iTx>140) && (iTx<160) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>140) && (iTx<160) && (iTy>150) && (iTy<200))
                 { // High Score!
                     irqDisable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (0) | SOUND_SET_VOLUME);
-                    
+
                     highscore_display();
                     dsShowScreenMain(false);
                     for (int i=0; i<12; i++)
                     {
                         WAITVBL;
                     }
-                    
+
                     if (myCartInfo.soundQuality)
                     {
                         irqEnable(IRQ_TIMER2); fifoSendValue32(FIFO_USER_01,(1<<16) | (127) | SOUND_SET_VOLUME);
                     }
                 }
-                else if ((iTx>170) && (iTx<200) && (iTy>150) && (iTy<200)) 
+                else if ((iTx>170) && (iTx<200) && (iTy>150) && (iTy<200))
                 { // Instruction Manual!
                     if (bShowInfo == false)
                     {
@@ -2129,7 +2132,7 @@ ITCM_CODE void dsMainLoop(void)
         }
 
         // -------------------------------------------------------------
-        // Now, here, at the bottom of the world - update the frame! 
+        // Now, here, at the bottom of the world - update the frame!
         // -------------------------------------------------------------
         if (!bHaltEmulation) theConsole->update();
         break;
@@ -2139,7 +2142,7 @@ ITCM_CODE void dsMainLoop(void)
 
 //----------------------------------------------------------------------------------
 // Find files (a26 / bin) available
-int a26Filescmp (const void *c1, const void *c2) 
+int a26Filescmp (const void *c1, const void *c2)
 {
   FICA2600 *p1 = (FICA2600 *) c1;
   FICA2600 *p2 = (FICA2600 *) c2;
@@ -2152,11 +2155,11 @@ int a26Filescmp (const void *c1, const void *c2)
       return -1;
   if (p2->directory && !(p1->directory))
       return 1;
-  return strcasecmp (p1->filename, p2->filename);    
+  return strcasecmp (p1->filename, p2->filename);
 }
 
 static char filenametmp[MAX_FILE_NAME_LEN+1];
-void vcsFindFiles(void) 
+void vcsFindFiles(void)
 {
   DIR *pdir;
   struct dirent *pent;
@@ -2167,7 +2170,7 @@ void vcsFindFiles(void)
 
   if (pdir) {
 
-    while (((pent=readdir(pdir))!=NULL)) 
+    while (((pent=readdir(pdir))!=NULL))
     {
       if (countvcs >= MAX_ROMS_PER_DIRECTORY)
       {

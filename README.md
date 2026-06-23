@@ -251,7 +251,8 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-8.3a : 22-June-2026 by wavemotion-dave
+8.3b : 23-June-2026 by wavemotion-dave
+  * Hotfix for PAL rendering which was causing the LCD to misbehave.
   * After another round of ARM Thumbulator optimizations, I've decided to peel back on some of the 'unsafe'
     code that I've been using to gain speed. In the end, the speed optimizations and the improved accuracy
     have balanced themselves out - so 8.3a is roughly equivalent to 8.3 in terms of raw speed but has a 
