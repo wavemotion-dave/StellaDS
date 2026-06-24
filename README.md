@@ -251,6 +251,10 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.3c : 24-June-2026 by wavemotion-dave
+  * Fix for banking on Squish-Em-Deluxe (F8) so dummy read on RTI properly hits the hotspot.
+  * Another round of optimizations for the ARM Thumbulator to gain a bit more speed.
+
 8.3b : 23-June-2026 by wavemotion-dave
   * Hotfix for PAL rendering which was causing the LCD to misbehave.
   * After another round of ARM Thumbulator optimizations, I've decided to peel back on some of the 'unsafe'
