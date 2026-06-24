@@ -32,33 +32,115 @@
   #define NOTSAMEPAGE(_addr1, _addr2) (((_addr1) ^ (_addr2)) & 0xff00)
 #endif
 
+#define likely(x)       __builtin_expect(!!(x), 1)
+#define unlikely(x)     __builtin_expect(!!(x), 0)
+
+#ifndef ADC_MACRO
+#define ADC_MACRO() {                                                               \
+    uint32_t a = (uint8_t)A;                                                        \
+    uint32_t b = (uint8_t)operand;                                                  \
+                                                                                    \
+    /* 1. Calculate the raw 32-bit sum (handles the 6502 Carry natively)*/          \
+    uint32_t sum = a + b + C;                                                       \
+                                                                                    \
+    /* 2. Fast Overflow (V) flag: Checks if the signs of A and Operand*/            \
+    /* were the same, but the sign of the Sum changed.*/                            \
+    V = ((a ^ sum) & (b ^ sum)) & 0x80;                                             \
+                                                                                    \
+    /* 3. Fast Carry (C) flag: If the 32-bit sum exceeds 255, bit 8 is set.*/       \
+    C = (sum >> 8) & 1;                                                             \
+                                                                                    \
+    /* 4. Update the Accumulator (masked cleanly to 8-bit) */                       \
+    A = (uint8_t)sum;                                                               \
+                                                                                    \
+    /* 5. Update Zero and Negative flags using the new A */                         \
+    notZ = A; /* Keeping notZ = A means Z is true when notZ == 0 */                 \
+    N = A;    /* Bit 7 naturally acts as the negative flag */                       \
+    }
+#endif
+
+#ifndef ADC_BCD_MACRO
+#define ADC_BCD_MACRO() {                                                           \
+    /* 1. Calculate binary sum for the Z, N, and V flags */                         \
+    uint32_t nonBCDSum = A + operand + C;                                           \
+    notZ = nonBCDSum & 0xFF; /* Z flag ignores D flag */                            \
+                                                                                    \
+    /* 2. Fast Lookups (Keep them as flat array accesses if possible) */            \
+    uint32_t bcd_A = ourBCDTable[0][A];                                             \
+    uint32_t bcd_op = ourBCDTable[0][operand];                                      \
+    uint32_t sum = bcd_A + bcd_op + C;                                              \
+                                                                                    \
+    /* 3. Fast Carry Flag (Replaces branchy 'sum > 99') */                          \
+    C = (sum >> 7) & 1;                                                             \
+                                                                                    \
+    /* 4. Update A and N */                                                         \
+    A = ourBCDTable[1][sum & 0xFF];                                                 \
+    N = A;                                                                          \
+                                                                                    \
+    /* 5. FIXED BRANCHLESS OVERFLOW: Bitwise math replaces the logical '&&' */      \
+    V = ((A ^ operand) & (A ^ nonBCDSum)) & 0x80;                                   \
+    }
+#endif
+
+#ifndef SBC_MACRO
+#define SBC_MACRO() {                                                               \
+    /* 1. Invert the 8-bit operand exactly like the 6502 hardware does */           \
+    uint32_t inv_operand = (uint8_t)(~operand);                                     \
+    uint32_t a = (uint8_t)A;                                                        \
+                                                                                    \
+    /* 2. Compute the 32-bit sum (handles the 6502 Carry natively) */               \
+    uint32_t sum = a + inv_operand + C;                                             \
+                                                                                    \
+    /* 3. Extract the 8-bit result for the Accumulator */                           \
+    A = (uint8_t)sum;                                                               \
+                                                                                    \
+    /* 4. Fast, branchless Overflow (V) flag calculation */                         \
+    /* (Uses the sign bit of A, the inverted operand, and the final sum) */         \
+    V = ((a ^ sum) & (inv_operand ^ sum)) & 0x80;                                   \
+                                                                                    \
+    /* 5. Fast Carry (C) flag for 6502 */                                           \
+    /* If the 32-bit sum exceeds 255, bit 8 is set, meaning a carry occurred. */    \
+    C = (sum >> 8) & 1;                                                             \
+                                                                                    \
+    notZ = A; /* Keeping notZ = A means Z is true when notZ == 0 */                 \
+    N = A;    /* Bit 7 naturally acts as the negative flag */                       \
+    }
+#endif
+
+#ifndef SBC_BCD_MACRO
+#define SBC_BCD_MACRO() {                                                           \
+    uint32_t a = A;                                                                 \
+    uint32_t b = operand;                                                           \
+    uint32_t borrow = C ^ 1; /* 0 if C was 1, 1 if C was 0 */                       \
+                                                                                    \
+    /* 1. Core Binary Subtraction: Calculates Z, N, C, and V flags natively */      \
+    uint32_t binaryDiff = a - b - borrow;                                           \
+                                                                                    \
+    /* 2. Fast BCD Lookup using the biased (+100) offset trick */                   \
+    uint32_t diff = 100 + ourBCDTable[0][a] - ourBCDTable[0][b] - borrow;           \
+    A = ourBCDTable[1][diff]; /* Safely indexed 100 + 0-199 with [2][300] table! */ \
+                                                                                    \
+    /* 3. Update Flags (100% Branchless) */                                         \
+    notZ = binaryDiff & 0xFF;                /* Z ignores D flag */                 \
+    N = A;                                   /* N uses the BCD result sign (b7) */  \
+    C = (binaryDiff >> 8) ^ 1;               /* Extracted natively from binary */   \
+    V = ((a ^ b) & (a ^ binaryDiff)) & 0x80; /* V uses binary result logic */       \
+    }
+#endif
+
+
 case 0x69:
 {
   operand = peek_PC(PC++);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -68,28 +150,13 @@ case 0x65:
   operand = peek_zpg(peek_PC(PC++));
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -102,28 +169,13 @@ case 0x75:
   operand = peek(address); 
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -135,28 +187,13 @@ case 0x6d:
   operand = peek(address);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -170,28 +207,13 @@ case 0x7d:
     operand = peek((high | low) + X);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -205,28 +227,13 @@ case 0x79:
     operand = peek((high | low) + Y);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -241,28 +248,13 @@ case 0x61:
   operand = peek(address);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -277,28 +269,13 @@ case 0x71:
     operand = peek((high | low) + Y);
 }
 {
-  Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);
-
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    A = nonBCDSum;
-    C = (nonBCDSum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    notZ = nonBCDSum & 0xff;  // Z flag calculation ignores D flag
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -1491,32 +1468,13 @@ case 0xef:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A; 
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1535,33 +1493,13 @@ case 0xff:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] 
-        - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1580,32 +1518,13 @@ case 0xfb:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1621,32 +1540,13 @@ case 0xe7:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand]  - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1664,32 +1564,13 @@ case 0xf7:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1709,32 +1590,13 @@ case 0xe3:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1754,32 +1616,13 @@ case 0xf3:
   operand = operand + 1;
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    A = ourBCDTable[1][difference];
-    notZ = A;
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -1943,7 +1786,7 @@ break;
 
 //---------------------------------------------------------------------------------------------------------
 //LDA - This one is special as the DPC+/CDF/J+ ARM assisted code uses this to pass data from ARM ram into
-//      the A register. Significant emulation CPU time is consumed here so we do our best to optmize it.
+//      the A register. Significant emulation CPU time is consumed here so we do our best to optimize it.
 //---------------------------------------------------------------------------------------------------------
 case 0xa9:
 {
@@ -3001,27 +2844,13 @@ case 0x6f:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3045,27 +2874,13 @@ case 0x7f:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3089,27 +2904,13 @@ case 0x7b:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3130,27 +2931,13 @@ case 0x67:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3173,27 +2960,13 @@ case 0x77:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3218,27 +2991,13 @@ case 0x63:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3263,27 +3022,13 @@ case 0x73:
   operand = ((operand >> 1) & 0x7f) | (oldC ? 0x80 : 0x00);
   poke(operandAddress, operand);
 
-  if(!D)
+  if (likely(!D))
   {
-    Int32 sum = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((sum > 127) || (sum < -128));
-
-    sum = (Int16)A + (Int16)operand + (C);
-    A = sum;
-    C = (sum > 0xff);
-    notZ = A;
-    N = A;
+    ADC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);
-
-    C = (sum > 99);
-    A = ourBCDTable[1][sum & 0xff];
-    notZ = A;
-    N = A;
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    ADC_BCD_MACRO()
   }
 }
 break;
@@ -3362,33 +3107,13 @@ case 0xeb:
   operand = peek_PC(PC++);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -3398,33 +3123,13 @@ case 0xe5:
   operand = peek_zpg(peek_PC(PC++));
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -3437,33 +3142,13 @@ case 0xf5:
   operand = peek(address); 
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -3475,33 +3160,13 @@ case 0xed:
   operand = peek(address);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
 }
 break;
@@ -3515,34 +3180,15 @@ case 0xfd:
     operand = peek((high | low) + X);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
+
 }
 break;
 
@@ -3555,34 +3201,15 @@ case 0xf9:
     operand = peek((high | low) + Y);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
+
 }
 break;
 
@@ -3596,34 +3223,15 @@ case 0xe1:
   operand = peek(address);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
+
 }
 break;
 
@@ -3637,34 +3245,15 @@ case 0xf1:
     operand = peek((high | low) + Y);
 }
 {
-  if(!D)
+  if (likely(!D))
   {
-    operand = ~operand;
-    Int16 difference = (Int16)((Int8)A) + (Int16)((Int8)operand) + (C);
-    V = ((difference > 127) || (difference < -128));
-
-    difference = ((Int16)A) + ((Int16)operand) + (C);
-    A = difference;
-    C = (difference > 0xff);
-    notZ = A;
-    N = A;
+    SBC_MACRO()
   }
   else
   {
-    uInt8 oldA = A;
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);
-
-    if(difference < 0)
-      difference += 100;
-
-    // Z flag calculation ignores D flag
-    notZ = (((Int16)A) + ((Int16)~operand) + (C)) & 0xff;
-    A = ourBCDTable[1][difference];
-    N = A;
-
-    C = (oldA >= (operand + (C ? 0 : 1)));
-    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);
+    SBC_BCD_MACRO()
   }
+
 }
 break;
 
