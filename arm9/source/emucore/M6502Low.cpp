@@ -141,7 +141,10 @@ inline uInt8 peek_zpg(uInt16 address)
 {
   gSystemCycles++;
 
-  if (address & 0x80) myDataBusState = myRAM[address & 0x7F];
+  if (address & 0x80) 
+  {
+      myDataBusState = myRAM[address & 0x7F];
+  }
   else
   {
      // Unfortunately we can't just blindly call TIA as some carts (3E, 3F, WD) have hotspots here... so call the device handler for the ZPG
