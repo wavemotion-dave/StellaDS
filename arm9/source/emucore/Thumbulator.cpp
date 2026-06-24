@@ -33,7 +33,7 @@ uInt32 reg_sys[16]   __attribute__((section(".dtcm"))) = {0};
 uInt32 cFlag         __attribute__((section(".dtcm"))) = 0;
 uInt8 *myARMRAM      __attribute__((section(".dtcm"))) = 0;
 
-//#define SAFE_THUMB  1     // This enables the Safe Thumb check... otherwise we are ALWAYS UNSAFE (needed for speed)
+//#define SAFE_THUMB  1     // This enables the Safe Thumb check... commenting this out means the common small CMP instruction will skip the overflow check which _should_ be okay.
 
 #define MEM_256KB   (1024 * 256)        // We decode the ROM out here in the cart_buffer[] which limits us to 256K of ARM code (that's huge)
 
@@ -173,6 +173,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   {
       switch(inst & 0x0F00)
       {
+          // These are common instructions so we break them out for speed
           case 0x000:
               {
                  if (inst & 0x80) return Op::b1_000_neg;
@@ -233,6 +234,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   //CMP(1) compare immediate
   if((inst & 0xF800) == 0x2800)
   {
+      // These are common instructions so we break them out for speed
       switch (inst & 0x0700)
       {
           case 0x0000:  return Op::cmp1_r0;
@@ -250,9 +252,17 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   //CMP(2) compare register
   if((inst & 0xFFC0) == 0x4280)
   {
+      // These are common instructions so we break them out for speed
+      if (((inst>>3)&0x7) == 0) return Op::cmp2_r0;
+      if (((inst>>3)&0x7) == 1) return Op::cmp2_r1;
       if (((inst>>3)&0x7) == 2) return Op::cmp2_r2;
       if (((inst>>3)&0x7) == 3) return Op::cmp2_r3;
-      return Op::cmp2;
+      if (((inst>>3)&0x7) == 4) return Op::cmp2_r4;
+      if (((inst>>3)&0x7) == 5) return Op::cmp2_r5;
+      if (((inst>>3)&0x7) == 6) return Op::cmp2_r6;
+      if (((inst>>3)&0x7) == 7) return Op::cmp2_r7;
+     
+      return Op::cmp2_r0;
   }
 
   //CMP(3) compare high register
@@ -273,6 +283,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
   //LDR(1) two register immediate
   if((inst & 0xF800) == 0x6800)
   {
+      // These are common instructions so we break them out for speed
       switch (inst & 0x0007)
       {
           case 0x0000:  return Op::ldr1_r0;
@@ -482,7 +493,7 @@ Thumbulator::Op Thumbulator::decodeInstructionWord(uint16_t inst)
 // ------------------------------------------------------------------------
 #define FIX_R15_PC reg_sys[15] = ((u32) ((uInt8*)thumb_ptr - (uInt8*)cart_buffer)) + 2;
 
-#define FIX_THUMB_PTRS  thumb_ptr = (uInt16*)&cart_buffer[(reg_sys[15]-2)]; thumb_decode_ptr = &cart_buffer[MEM_256KB + ((reg_sys[15]-2) >> 1)];
+#define FIX_THUMB_PTRS  {uint32_t offset = (reg_sys[15]-2); thumb_ptr = (uInt16*)&cart_buffer[offset]; thumb_decode_ptr = &cart_buffer[MEM_256KB + (offset >> 1)];}
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -506,22 +517,24 @@ ITCM_CODE void Thumbulator::execute ( void )
 
       switch (decoded)
       {
+          //b eq  z set
           case Op::b1_000_pos:  //B(1) conditional branch
                 if (!ZNflags)
                 {
-                    thumb_ptr += (int)(inst & 0xFF)+1;
-                    thumb_decode_ptr += (int)(inst & 0xFF)+1;
+                    thumb_ptr += (inst & 0xFF) + 1;
+                    thumb_decode_ptr += (inst & 0xFF) + 1;
                 }
               break;
 
           case Op::b1_000_neg:  //B(1) conditional branch
                 if (!ZNflags)
                 {
-                    thumb_ptr += (int)(inst | 0xFFFFFF00)+1;
-                    thumb_decode_ptr += (int)(inst | 0xFFFFFF00)+1;
+                    int32_t offset = (int8_t)(inst & 0xFF); // Done via native sign extension
+                    thumb_ptr += offset + 1;
+                    thumb_decode_ptr += offset + 1;
                 }
               break;
-
+          //b ne  z clear
           case Op::b1_100_pos:  //B(1) conditional branch
                 if (ZNflags)
                 {
@@ -533,11 +546,13 @@ ITCM_CODE void Thumbulator::execute ( void )
           case Op::b1_100_neg:  //B(1) conditional branch
                 if (ZNflags)
                 {
-                    thumb_ptr += (int)(inst | 0xFFFFFF00)+1;
-                    thumb_decode_ptr += (int)(inst | 0xFFFFFF00)+1;
+                    int32_t offset = (int8_t)(inst & 0xFF); // Done via native sign extension
+                    thumb_ptr += offset + 1;
+                    thumb_decode_ptr += offset + 1;
                 }
               break;
 
+          //b cs c set
           case Op::b1_200:  //B(1) conditional branch
                 if (cFlag)
                 {
@@ -547,8 +562,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b cc c clear
           case Op::b1_300:  //B(1) conditional branch
-                if(!(cFlag))
+                if (!cFlag)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -556,8 +572,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b mi n set
           case Op::b1_400:  //B(1) conditional branch
-                if((ZNflags&0x80000000))
+                if (ZNflags&0x80000000)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -565,8 +582,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b pl n clear
           case Op::b1_500_pos:  //B(1) conditional branch
-                if(!((ZNflags&0x80000000)))
+                if (!(ZNflags&0x80000000))
                 {
                     rb=(inst&0xFF)+1;
                     thumb_ptr += (int)rb;
@@ -575,7 +593,7 @@ ITCM_CODE void Thumbulator::execute ( void )
               break;
 
           case Op::b1_500_neg:  //B(1) conditional branch
-                if(!((ZNflags&0x80000000)))
+                if (!(ZNflags&0x80000000))
                 {
                     rb=(inst | 0xFFFFFF00)+1;
                     thumb_ptr += (int)rb;
@@ -583,8 +601,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b vs v set
           case Op::b1_600:                       //B(1) conditional branch
-                if(vFlag)
+                if (vFlag)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -592,8 +611,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b vc v clear
           case Op::b1_700:                       //B(1) conditional branch
-                if(!(vFlag))
+                if (!vFlag)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -601,8 +621,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b hi c set z clear
           case Op::b1_800:                       //B(1) conditional branch
-                if((cFlag)&&(ZNflags))
+                if ((cFlag)&&(ZNflags))
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -610,8 +631,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b ls c clear or z set
           case Op::b1_900:                       //B(1) conditional branch
-                if((!ZNflags)||(!(cFlag)))
+                if ((!ZNflags)||(!cFlag))
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -619,11 +641,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b ge N == V
           case Op::b1_a00:                       //B(1) conditional branch
-                ra=0;
-                if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
-                if(ra)
+                if (!((ZNflags ^ vFlag) & 0x80000000))
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -631,11 +651,9 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b lt N != V
           case Op::b1_b00:                       //B(1) conditional branch
-                ra=0;
-                if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
-                if(ra)
+                if ((ZNflags ^ vFlag) & 0x80000000)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -643,25 +661,21 @@ ITCM_CODE void Thumbulator::execute ( void )
                 }
               break;
 
+          //b gt Z==0 and N == V
           case Op::b1_c00:                       //B(1) conditional branch
-                ra=0;
-                if(  ((ZNflags&0x80000000)) &&  (vFlag) ) ra++;
-                else if((!((ZNflags&0x80000000)))&&(!(vFlag))) ra++;
-                if(!ZNflags) ra=0;
-                if(ra)
-                {
+                // Check that ZNflags is non-zero AND that the sign bits match
+                if (ZNflags && !((ZNflags ^ vFlag) & 0x80000000))
+                {                
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
                     thumb_decode_ptr += rb+1;
                 }
               break;
 
+          //b le Z==1 or N != V
           case Op::b1_d00:                       //B(1) conditional branch
-                ra=0;
-                if((!((ZNflags&0x80000000)))&&(vFlag)) ra++;
-                else if((!(vFlag))&&((ZNflags&0x80000000))) ra++;
-                else if(!ZNflags) ra++;
-                if(ra)
+                // Check if sign bits mismatch OR if ZNflags is zero
+                if (((ZNflags ^ vFlag) & 0x80000000) || !ZNflags)
                 {
                     rb=(int8_t)(inst&0xFF);
                     thumb_ptr += rb+1;
@@ -984,9 +998,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 reg_sys[rd]=ra+rb+(cFlag ? 1:0);
                 do_znflags(reg_sys[rd]);
                 do_cflag(ra,rb,(cFlag ? 1:0));
-#ifdef SAFE_THUMB
                 vFlag = do_add_vflag(ra,rb,reg_sys[rd]);
-#endif
               break;
 
           case Op::add4:
@@ -1100,9 +1112,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 if(!(cFlag)) ZNflags--;
                 write_register(rd,ZNflags);
                 do_cflag(ra,~rb,(cFlag ? 1:0));
-#ifdef SAFE_THUMB
                 vFlag = do_sub_vflag(ra,rb,ZNflags);
-#endif
               break;
 
           case Op::tst:
@@ -1177,9 +1187,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=0-ra;
                 write_register(rd,ZNflags);
                 do_cflag_carry(0,~ra);
-#ifdef SAFE_THUMB
                 vFlag = do_sub_vflag(0,ra,ZNflags);
-#endif
               break;
 
           case Op::orr:
@@ -1390,6 +1398,20 @@ ITCM_CODE void Thumbulator::execute ( void )
 #endif
               break;
 
+          case Op::cmp2_r0:
+                rn=(inst>>0)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[0];
+                do_cflag_carry(reg_sys[rn],~reg_sys[0]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[0],ZNflags);
+              break;
+
+          case Op::cmp2_r1:
+                rn=(inst>>0)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[1];
+                do_cflag_carry(reg_sys[rn],~reg_sys[1]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[1],ZNflags);
+              break;
+
           case Op::cmp2_r2:
                 rn=(inst>>0)&0x7;
                 ZNflags=reg_sys[rn]-reg_sys[2];
@@ -1404,12 +1426,32 @@ ITCM_CODE void Thumbulator::execute ( void )
                 vFlag = do_sub_vflag(reg_sys[rn],reg_sys[3],ZNflags);
               break;
 
-          case Op::cmp2:
+          case Op::cmp2_r4:
                 rn=(inst>>0)&0x7;
-                rm=(inst>>3)&0x7;
-                ZNflags=reg_sys[rn]-reg_sys[rm];
-                do_cflag_carry(reg_sys[rn],~reg_sys[rm]);
-                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],ZNflags);
+                ZNflags=reg_sys[rn]-reg_sys[4];
+                do_cflag_carry(reg_sys[rn],~reg_sys[4]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[4],ZNflags);
+              break;
+
+          case Op::cmp2_r5:
+                rn=(inst>>0)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[5];
+                do_cflag_carry(reg_sys[rn],~reg_sys[5]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[5],ZNflags);
+              break;
+
+          case Op::cmp2_r6:
+                rn=(inst>>0)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[6];
+                do_cflag_carry(reg_sys[rn],~reg_sys[6]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[6],ZNflags);
+              break;
+
+          case Op::cmp2_r7:
+                rn=(inst>>0)&0x7;
+                ZNflags=reg_sys[rn]-reg_sys[7];
+                do_cflag_carry(reg_sys[rn],~reg_sys[7]);
+                vFlag = do_sub_vflag(reg_sys[rn],reg_sys[7],ZNflags);
               break;
 
           case Op::add3:
@@ -1419,9 +1461,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 reg_sys[rd] = reg_sys[rn] + reg_sys[rm];
                 do_znflags(reg_sys[rd]);
                 do_cflag_nocar(reg_sys[rn],reg_sys[rm]);
-#ifdef SAFE_THUMB
                 vFlag = do_add_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
-#endif
               break;
 
           case Op::mov1:
@@ -1441,9 +1481,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 reg_sys[rd]=reg_sys[rn]-reg_sys[rm];
                 do_znflags(reg_sys[rd]);
                 do_cflag_carry(reg_sys[rn],~reg_sys[rm]);
-#ifdef SAFE_THUMB
                 vFlag = do_sub_vflag(reg_sys[rn],reg_sys[rm],reg_sys[rd]);
-#endif
               break;
 
           case Op::asr1:
@@ -1512,11 +1550,8 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=ra-rb;
                 write_register(rd,ZNflags);
                 do_cflag_carry(ra,~rb);
-#ifdef SAFE_THUMB
                 vFlag = do_sub_vflag(ra,rb,ZNflags);
-#endif
               break;
-
 
           case Op::sub1:
                 rd=(inst>>0)&7;
@@ -1526,9 +1561,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=ra-rb;
                 write_register(rd,ZNflags);
                 do_cflag_carry(ra,~rb);
-#ifdef SAFE_THUMB
                 vFlag = do_sub_vflag(ra,rb,ZNflags);
-#endif
               break;
 
           case Op::add1:
@@ -1539,9 +1572,7 @@ ITCM_CODE void Thumbulator::execute ( void )
                 ZNflags=ra+rb;
                 write_register(rd,ZNflags);
                 do_cflag_nocar(ra,rb);
-#ifdef SAFE_THUMB
                 vFlag = do_add_vflag(ra,rb,ZNflags);
-#endif
               break;
 
           case Op::cpy:
