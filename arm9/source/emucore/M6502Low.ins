@@ -3291,7 +3291,7 @@ break;
 
 case 0x40:
 {
-  fake_peek();
+  (void)peek(PC);   // Can't use fake_peek() as this could be a bank switch (Squish-Em-Deluxe)
 }
 {
   peek(0x0100 + SP++);
