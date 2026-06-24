@@ -160,7 +160,7 @@ class M6502
 
   protected:
     /// Lookup table used for binary-code-decimal math
-    static uInt8 ourBCDTable[2][256];
+    static uInt8 ourBCDTable[2][300];
 };
 #endif
 
