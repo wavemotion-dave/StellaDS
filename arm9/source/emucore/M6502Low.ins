@@ -61,12 +61,13 @@
 
 #ifndef ADC_BCD_MACRO
 #define ADC_BCD_MACRO() {                                                           \
-    Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);                              \
     uInt8 oldA = A;                                                                 \
-    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);                  \
-    notZ = nonBCDSum & 0xff;                                                        \
+    uInt8 bcdA = ourBCDTable[0][A];                                                 \
+    uInt8 bcdOp = ourBCDTable[0][operand];                                          \
+    Int32 sum = (Int32)bcdA + bcdOp + C;                                            \
+    notZ = (A + operand + C) & 0xff;                                                \
     C = (sum > 99);                                                                 \
-    A = ourBCDTable[1][sum & 0xff];                                                 \
+    A = ourBCDTable[1][sum];                                                        \
     N = A;                                                                          \
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);                              \
     }
@@ -100,12 +101,14 @@
 #ifndef SBC_BCD_MACRO
 #define SBC_BCD_MACRO() {                                                           \
     uInt8 oldA = A;                                                                 \
-    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);   \
-    if(difference < 0) difference += 100;                                           \
-    A = ourBCDTable[1][difference];                                                 \
+    uInt8 borrow = (C ^ 1);                                                         \
+    uInt8 bcdA = ourBCDTable[0][A];                                                 \
+    uInt8 bcdOp = ourBCDTable[0][operand];                                          \
+    Int16 diff = 100 + (bcdA - bcdOp - borrow);                                     \
+    A = ourBCDTable[1][diff];                                                       \
     notZ = A;                                                                       \
     N = A;                                                                          \
-    C = (oldA >= (operand + (C ? 0 : 1)));                                          \
+    C = (oldA >= (operand + borrow));                                               \
     V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);                              \
     }
 #endif
@@ -113,7 +116,7 @@
 
 case 0x69:
 {
-  operand = peek_PC(PC++);
+  operand =peek_PC_inline(PC++);
 }
 {
   if (likely(!D))
@@ -658,7 +661,7 @@ break;
 
 case 0xD0:
 {
-  operand = peek_PC(PC++);
+  operand = peek_PC_inline(PC++);
 }
 {
   if(notZ)
@@ -780,14 +783,14 @@ break;
 
 case 0xc9:
 {
-  operand = peek_PC(PC++);
+  operand = peek_PC_inline(PC++);
 }
 {
   uInt16 value = (uInt16)A - (uInt16)operand;
 
   notZ = value;
   N = value & 0x0080;
-  C = ((value & 0x0100) ? 0:1);
+  C = ((value >> 8) & 1) ^ 1;
 }
 break;
 
@@ -1773,7 +1776,7 @@ break;
 case 0xa9:
 {
 #ifndef DATA_STREAMS_PLUS
-  A = peek_PC(PC++);
+  A = peek_PC_inline(PC++);
 #endif
 
 #ifdef CTY_LDA_F2
@@ -3681,9 +3684,9 @@ case 0x85:
 {
 #ifdef DATA_STREAMS_PLUS
   gSystemCycles++;
-  poke_small(peek_PC(PC++), A);
+  poke_small(peek_PC_inline(PC++), A);
 #else
-  poke(peek_PC(PC++), A);
+  poke(peek_PC_inline(PC++), A);
 #endif
 }
 break;

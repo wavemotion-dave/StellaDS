@@ -101,7 +101,7 @@ const char* M6502Low::name() const
 // some later 2600 cost-reduced units will not reflect the last bits on the bus
 // in this way and those few carts that rely on it may not work...]
 // -------------------------------------------------------------------------------
-inline uInt8 __attribute__((always_inline)) peek(uInt16 address)
+inline uInt8 peek(uInt16 address)
 {
   gSystemCycles++;
 
@@ -113,7 +113,18 @@ inline uInt8 __attribute__((always_inline)) peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline __attribute__((always_inline)) uInt8 peek_PC(uInt32 address)
+uInt8 peek_PC(uInt32 address)
+{
+  gSystemCycles++;
+
+  PageAccess& access = myPageAccessTable[(address & MY_ADDR_MASK) >> MY_PAGE_SHIFT];
+  if(access.directPeekBase != 0) myDataBusState = *(access.directPeekBase + (address & MY_PAGE_MASK));
+  else myDataBusState = access.device->peek(address);
+
+  return myDataBusState;
+}
+
+inline __attribute__((always_inline)) uInt8 peek_PC_inline(uInt32 address)
 {
   gSystemCycles++;
 
@@ -125,7 +136,7 @@ inline __attribute__((always_inline)) uInt8 peek_PC(uInt32 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void __attribute__((always_inline)) poke(uInt16 address, uInt8 value)
+inline void poke(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
@@ -137,7 +148,7 @@ inline void __attribute__((always_inline)) poke(uInt16 address, uInt8 value)
 }
 
 
-inline __attribute__((always_inline)) uInt8 peek_zpg(uInt16 address)
+inline uInt8 peek_zpg(uInt16 address)
 {
   gSystemCycles++;
 
@@ -153,6 +164,14 @@ inline __attribute__((always_inline)) uInt8 peek_zpg(uInt16 address)
 
   return myDataBusState;
 }
+
+// For when you know the address is 8-bits... it can only be TIA or RAM and gSystemCycles is handled by the caller
+inline __attribute__((always_inline)) void poke_small(uInt8 address, uInt8 value)
+{
+    if (address & 0x80) myRAM[address & 0x7f] = value;
+    else theTIA.poke(address, value);
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void M6502Low::execute(void)
@@ -213,7 +232,7 @@ void M6502Low::illegal_op(uint8_t operand)
 // other strange things like rely on the state of undriven TIA pins will fail
 // using this optimized driver. Those will need to use the normal cart driver.
 // ==============================================================================
-inline uInt8 peek_4K_PC(uInt32 address)
+inline __attribute__((always_inline)) uInt8 peek_4K_PC(uInt32 address)
 {
   gSystemCycles++;
   return fast_cart_buffer[address & 0xFFF];
@@ -271,14 +290,16 @@ void M6502Low::execute_4K(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "NB" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_4K
-        #define peek_zpg peek_4K
-        #define peek_PC  peek_4K_PC
-        #define poke     poke_4K
+        #define peek            peek_4K
+        #define peek_zpg        peek_4K
+        #define peek_PC         peek_4K_PC
+        #define peek_PC_inline  peek_4K_PC
+        #define poke            poke_4K
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -298,7 +319,7 @@ inline __attribute__((always_inline)) uInt8 peek_PCF8(uInt16 address)
 }
 
 
-inline __attribute__((always_inline)) uInt8 peek_F8(uInt16 address)
+inline uInt8 peek_F8(uInt16 address)
 {
   gSystemCycles++;
 
@@ -319,7 +340,7 @@ inline __attribute__((always_inline)) uInt8 peek_F8(uInt16 address)
 }
 
 
-inline __attribute__((always_inline)) void poke_F8(uInt16 address, uInt8 value)
+inline void poke_F8(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
@@ -362,14 +383,16 @@ void M6502Low::execute_F8(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "F8" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_F8
-        #define peek_zpg peek_F8
-        #define peek_PC  peek_PCF8
-        #define poke     poke_F8
+        #define peek            peek_F8
+        #define peek_zpg        peek_F8
+        #define peek_PC         peek_PCF8
+        #define peek_PC_inline  peek_PCF8
+        #define poke            poke_F8
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -399,11 +422,13 @@ void M6502Low::execute_F8SC(void)
       // 6502 instruction emulation contained in M6502Low.ins included file
       switch (operand)
       {
-        #define peek_PC    peek_PCF8
-        #define peek_zpg   peek_F8
+        #define peek_PC         peek_PCF8
+        #define peek_PC_inline  peek_PCF8
+        #define peek_zpg        peek_F8
         #include "M6502Low.ins"
         #undef  peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
       }
     }
     gPC = PC;
@@ -507,14 +532,16 @@ void M6502Low::execute_F6(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "F6" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_F6
-        #define peek_zpg peek_F6
-        #define peek_PC  peek_PCF6
-        #define poke     poke_F6
+        #define peek            peek_F6
+        #define peek_zpg        peek_F6
+        #define peek_PC         peek_PCF6
+        #define peek_PC_inline  peek_PCF6
+        #define poke            poke_F6
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -553,11 +580,13 @@ void M6502Low::execute_F6SC(void)
       // 6502 instruction emulation contained in M6502Low.ins included file
       switch (operand)
       {
-        #define peek_PC    peek_PCF6SC
-        #define peek_zpg   peek_F6
+        #define peek_PC         peek_PCF6SC
+        #define peek_PC_inline  peek_PCF6SC
+        #define peek_zpg        peek_F6
         #include "M6502Low.ins"
         #undef  peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
       }
     }
     gPC = PC;
@@ -666,14 +695,16 @@ void M6502Low::execute_F4(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "F4" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_F4
-        #define peek_zpg peek_F4
-        #define peek_PC  peek_PCF4
-        #define poke     poke_F4
+        #define peek            peek_F4
+        #define peek_zpg        peek_F4
+        #define peek_PC         peek_PCF4
+        #define peek_PC_inline  peek_PCF4
+        #define poke            poke_F4
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -861,14 +892,16 @@ void M6502Low::execute_AR(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "AR" cart versions.
-        #define peek     peek_AR
-        #define peek_zpg peek_AR_zpg
-        #define peek_PC  peek_AR
-        #define poke     poke_AR
+        #define peek            peek_AR
+        #define peek_zpg        peek_AR_zpg
+        #define peek_PC         peek_AR
+        #define peek_PC_inline  peek_AR
+        #define poke            poke_AR
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -885,7 +918,7 @@ extern CartridgeDPCPlus *myCartDPCP;
 extern uInt8 *myDisplayImageDPCP;
 extern uInt8 *myDPCptr;
 
-ITCM_CODE uInt8 peek_Fetch(uInt8 address)
+uInt8 peek_Fetch(uInt8 address)
 {
   uInt8 result;
 
@@ -1134,14 +1167,16 @@ void M6502Low::execute_DPCP(void)
       switch (operand)
       {
         #define DPC_PLUS_FAST_FETCH
-        #define peek     peek_DPCP
-        #define peek_zpg peek_DPCP_zpg
-        #define peek_PC  peek_DPCPPC
-        #define poke     poke_DPCP
+        #define peek            peek_DPCP
+        #define peek_zpg        peek_DPCP_zpg
+        #define peek_PC         peek_DPCPPC
+        #define peek_PC_inline  peek_DPCPPC
+        #define poke            poke_DPCP
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
         #undef DPC_PLUS_FAST_FETCH
       }
@@ -1229,14 +1264,16 @@ void M6502Low::execute_DPC(void)
       switch (operand)
       {
         // A trick of the light... here we map peek/poke to the "F8" cart versions. This improves speed for non-bank-switched carts.
-        #define peek     peek_DPC
-        #define peek_zpg peek_DPC
-        #define peek_PC  peek_PCDPC
-        #define poke     poke_DPC
+        #define peek            peek_DPC
+        #define peek_zpg        peek_DPC
+        #define peek_PC         peek_PCDPC
+        #define peek_PC_inline  peek_PCDPC
+        #define poke            poke_DPC
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
       }
     }
@@ -1329,13 +1366,6 @@ inline void poke_CDFJ(uInt16 address, uInt8 value)
   }
 }
 
-// For when you know the address is 8-bits... it can only be TIA or RAM and gSystemCycles is handled by the caller
-inline void poke_small(uInt8 address, uInt8 value)
-{
-    if (address & 0x80) myRAM[address & 0x7f] = value;
-    else theTIA.poke(address, value);
-}
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
 void M6502Low::execute_CDFJ(void)
 {
@@ -1358,14 +1388,16 @@ void M6502Low::execute_CDFJ(void)
       switch (operand)
       {
         #define DATA_STREAMS
-        #define peek      peek_CDFJ
-        #define peek_zpg  peek_CDFJzpg
-        #define peek_PC   peek_CDFJPC
-        #define poke      poke_CDFJ
+        #define peek            peek_CDFJ
+        #define peek_zpg        peek_CDFJzpg
+        #define peek_PC         peek_CDFJPC
+        #define peek_PC_inline  peek_CDFJPC
+        #define poke            poke_CDFJ
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
         #undef DATA_STREAMS
       }
@@ -1427,14 +1459,16 @@ void M6502Low::execute_CDFJPlus(void)
       switch (operand)
       {
         #define DATA_STREAMS_PLUS
-        #define peek      peek_CDFJ
-        #define peek_zpg  peek_CDFJzpg
-        #define peek_PC   peek_CDFJPC
-        #define poke      poke_CDFJ
+        #define peek            peek_CDFJ
+        #define peek_zpg        peek_CDFJzpg
+        #define peek_PC         peek_CDFJPC
+        #define peek_PC_inline  peek_CDFJPC
+        #define poke            poke_CDFJ
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
         #undef DATA_STREAMS_PLUS
       }
@@ -1497,14 +1531,16 @@ void M6502Low::execute_CDFJPlusPlus(void)
       {
         #define DATA_STREAMS_PLUS
         #define DATA_STREAMS_PLUS_PLUS
-        #define peek      peek_CDFJ
-        #define peek_zpg  peek_CDFJzpg
-        #define peek_PC   peek_CDFJPCPlusPlus
-        #define poke      poke_CDFJ
+        #define peek            peek_CDFJ
+        #define peek_zpg        peek_CDFJzpg
+        #define peek_PC         peek_CDFJPCPlusPlus
+        #define peek_PC_inline  peek_CDFJPCPlusPlus
+        #define poke            poke_CDFJ
         #include "M6502Low.ins"
         #undef peek
         #undef peek_zpg
         #undef peek_PC
+        #undef peek_PC_inline
         #undef poke
         #undef DATA_STREAMS_PLUS
         #undef DATA_STREAMS_PLUS_PLUS
@@ -1566,15 +1602,17 @@ void M6502Low::execute_CTY(void)
       // 6502 instruction emulation contained in M6502Low.ins included file
       switch (operand)
       {
-        #define peek      peek_CTY
-        #define poke      poke_CTY
-        #define peek_PC   peek_CTY_PC
+        #define peek            peek_CTY
+        #define poke            poke_CTY
+        #define peek_PC         peek_CTY_PC
+        #define peek_PC_inline  peek_CTY_PC
         #define CTY_LDA_F2
         #include "M6502Low.ins"
         #undef CTY_LDA_F2
         #undef peek
         #undef poke
         #undef peek_PC
+        #undef peek_PC_inline
       }
     }
     gPC = PC;

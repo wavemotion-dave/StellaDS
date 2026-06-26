@@ -31,7 +31,7 @@ M6502::M6502(uInt32 systemCyclesPerProcessorCycle)
   uInt16 t;
 
   // Compute the BCD lookup table
-  for(t = 0; t < 300; ++t)
+  for(t = 0; t < 512; ++t)
   {
     ourBCDTable[0][t] = ((t >> 4) * 10) + (t & 0x0f);
     ourBCDTable[1][t] = (((t % 100) / 10) << 4) | (t % 10);
@@ -107,5 +107,5 @@ ITCM_CODE void M6502::PS(uInt8 ps)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-uInt8 M6502::ourBCDTable[2][300];
+uInt8 M6502::ourBCDTable[2][512];
 
