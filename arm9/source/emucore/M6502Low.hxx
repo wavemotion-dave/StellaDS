@@ -102,10 +102,6 @@ class M6502Low : public M6502
 // Possibly because of the virtual/abstract nature of the parent class
 // the code got about 3K smaller and the density really helped performance.
 // -------------------------------------------------------------------------
-inline uInt8 peek(uInt16 address);
-inline uInt8 peek_PC(uInt16 address);
-inline void  poke(uInt16 address, uInt8 value);
-
 inline uInt8 peek_NB(uInt16 address);
 inline uInt8 peek_PCNB(uInt16 address);
 inline void  poke_NB(uInt16 address, uInt8 value);

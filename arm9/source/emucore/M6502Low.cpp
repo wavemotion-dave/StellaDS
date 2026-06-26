@@ -101,7 +101,7 @@ const char* M6502Low::name() const
 // some later 2600 cost-reduced units will not reflect the last bits on the bus
 // in this way and those few carts that rely on it may not work...]
 // -------------------------------------------------------------------------------
-inline uInt8 peek(uInt16 address)
+inline uInt8 __attribute__((always_inline)) peek(uInt16 address)
 {
   gSystemCycles++;
 
@@ -113,7 +113,7 @@ inline uInt8 peek(uInt16 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline uInt8 peek_PC(uInt32 address)
+inline __attribute__((always_inline)) uInt8 peek_PC(uInt32 address)
 {
   gSystemCycles++;
 
@@ -125,7 +125,7 @@ inline uInt8 peek_PC(uInt32 address)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-inline void poke(uInt16 address, uInt8 value)
+inline void __attribute__((always_inline)) poke(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
@@ -137,7 +137,7 @@ inline void poke(uInt16 address, uInt8 value)
 }
 
 
-inline uInt8 peek_zpg(uInt16 address)
+inline __attribute__((always_inline)) uInt8 peek_zpg(uInt16 address)
 {
   gSystemCycles++;
 
@@ -291,14 +291,14 @@ void M6502Low::execute_4K(void)
 // well-behaved carts that can support it...
 // -------------------------------------------------------------------------------
 
-inline uInt8 peek_PCF8(uInt16 address)
+inline __attribute__((always_inline)) uInt8 peek_PCF8(uInt16 address)
 {
   gSystemCycles++;
   return fast_cart_buffer[address & f8_bankbit];
 }
 
 
-inline uInt8 peek_F8(uInt16 address)
+inline __attribute__((always_inline)) uInt8 peek_F8(uInt16 address)
 {
   gSystemCycles++;
 
@@ -319,7 +319,7 @@ inline uInt8 peek_F8(uInt16 address)
 }
 
 
-inline void poke_F8(uInt16 address, uInt8 value)
+inline __attribute__((always_inline)) void poke_F8(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 

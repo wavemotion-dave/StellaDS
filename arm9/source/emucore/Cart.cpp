@@ -3133,12 +3133,6 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       cartDriver = 0;
   }
 
-  // --------------------------------------------------------------------------------------------------------
-  // And a few games that struggle to keep up 60FPS even on the DSi so we use the optimized drivers always
-  // --------------------------------------------------------------------------------------------------------
-  if (strcmp(myCartInfo.gameID, "REALTE") == 0) cartDriver = 2;     // Real Sports Tennis is F8
-  if (strcmp(myCartInfo.gameID, "MIDMAG") == 0) cartDriver = 3;     // Midnight Magic is F6
-
   // Conquest of Mars has a glitch unless the unused TIA pins are driven exactly so...
   if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = 3; myDataBusState = 0x02;}
 
