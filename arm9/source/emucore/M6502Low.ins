@@ -61,24 +61,14 @@
 
 #ifndef ADC_BCD_MACRO
 #define ADC_BCD_MACRO() {                                                           \
-    /* 1. Calculate binary sum for the Z, N, and V flags */                         \
-    uint32_t nonBCDSum = A + operand + C;                                           \
-    notZ = nonBCDSum & 0xFF; /* Z flag ignores D flag */                            \
-                                                                                    \
-    /* 2. Fast Lookups (Keep them as flat array accesses if possible) */            \
-    uint32_t bcd_A = ourBCDTable[0][A];                                             \
-    uint32_t bcd_op = ourBCDTable[0][operand];                                      \
-    uint32_t sum = bcd_A + bcd_op + C;                                              \
-                                                                                    \
-    /* 3. Fast Carry Flag (Replaces branchy 'sum > 99') */                          \
-    C = (sum >> 7) & 1;                                                             \
-                                                                                    \
-    /* 4. Update A and N */                                                         \
-    A = ourBCDTable[1][sum & 0xFF];                                                 \
+    Int32 nonBCDSum = (Int16)A + (Int16)operand + (C);                              \
+    uInt8 oldA = A;                                                                 \
+    Int32 sum = ourBCDTable[0][A] + ourBCDTable[0][operand] + (C);                  \
+    notZ = nonBCDSum & 0xff;                                                        \
+    C = (sum > 99);                                                                 \
+    A = ourBCDTable[1][sum & 0xff];                                                 \
     N = A;                                                                          \
-                                                                                    \
-    /* 5. FIXED BRANCHLESS OVERFLOW: Bitwise math replaces the logical '&&' */      \
-    V = ((A ^ operand) & (A ^ nonBCDSum)) & 0x80;                                   \
+    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);                              \
     }
 #endif
 
@@ -109,22 +99,14 @@
 
 #ifndef SBC_BCD_MACRO
 #define SBC_BCD_MACRO() {                                                           \
-    uint32_t a = A;                                                                 \
-    uint32_t b = operand;                                                           \
-    uint32_t borrow = C ^ 1; /* 0 if C was 1, 1 if C was 0 */                       \
-                                                                                    \
-    /* 1. Core Binary Subtraction: Calculates Z, N, C, and V flags natively */      \
-    uint32_t binaryDiff = a - b - borrow;                                           \
-                                                                                    \
-    /* 2. Fast BCD Lookup using the biased (+100) offset trick */                   \
-    uint32_t diff = 100 + ourBCDTable[0][a] - ourBCDTable[0][b] - borrow;           \
-    A = ourBCDTable[1][diff]; /* Safely indexed 100 + 0-199 with [2][300] table! */ \
-                                                                                    \
-    /* 3. Update Flags (100% Branchless) */                                         \
-    notZ = binaryDiff & 0xFF;                /* Z ignores D flag */                 \
-    N = A;                                   /* N uses the BCD result sign (b7) */  \
-    C = (binaryDiff >> 8) ^ 1;               /* Extracted natively from binary */   \
-    V = ((a ^ b) & (a ^ binaryDiff)) & 0x80; /* V uses binary result logic */       \
+    uInt8 oldA = A;                                                                 \
+    Int16 difference = ourBCDTable[0][A] - ourBCDTable[0][operand] - (C ? 0 : 1);   \
+    if(difference < 0) difference += 100;                                           \
+    A = ourBCDTable[1][difference];                                                 \
+    notZ = A;                                                                       \
+    N = A;                                                                          \
+    C = (oldA >= (operand + (C ? 0 : 1)));                                          \
+    V = ((oldA ^ A) & 0x80) && ((A ^ operand) & 0x80);                              \
     }
 #endif
 
