@@ -101,7 +101,7 @@ bool CartridgeSB::checkSwitchBank(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 uInt8 CartridgeSB::peek(uInt16 address)
 {
-  address &= 0x1FFF;
+  address &= (0x17FF + myRomBankCount);
 
   checkSwitchBank(address);
 
@@ -119,7 +119,7 @@ uInt8 CartridgeSB::peek(uInt16 address)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 void CartridgeSB::poke(uInt16 address, uInt8 value)
 {
-  address &= 0x1FFF;
+  address &= (0x17FF + myRomBankCount);
 
   checkSwitchBank(address);
 
