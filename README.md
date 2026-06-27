@@ -1,8 +1,7 @@
 # StellaDS - PHOENIX EDITION
 StellaDS - An Atari 2600 VCS Emulator for the DS/DSi
 
-StellaDS is free to download and use... but if you have found anything I've done to
-be useful, buy me a virtual coffee here:  https://ko-fi.com/wavemotiondave
+StellaDS is free to download and use... but if you have found anything I've done to be useful, buy me a virtual coffee here:  https://ko-fi.com/wavemotiondave
 
 To use this emulator, you must use compatible roms with a26/bin format.
 
@@ -251,16 +250,14 @@ Thanks and Credits :
 
 Version History:
 -----------------------
-8.3c : 24-June-2026 by wavemotion-dave
+8.4 : 27-June-2026 by wavemotion-dave
+  * Fix for TIA rendering that fixes Aardvark and probably others.
   * Fix for banking on Squish-Em-Deluxe (F8) so dummy read on RTI properly hits the hotspot.
-  * Another round of optimizations for the ARM Thumbulator to gain a bit more speed.
-
-8.3b : 23-June-2026 by wavemotion-dave
-  * Hotfix for PAL rendering which was causing the LCD to misbehave.
-  * After another round of ARM Thumbulator optimizations, I've decided to peel back on some of the 'unsafe'
-    code that I've been using to gain speed. In the end, the speed optimizations and the improved accuracy
-    have balanced themselves out - so 8.3a is roughly equivalent to 8.3 in terms of raw speed but has a 
-    improved ARM Thumb emulation for a nice gain of accuracy. Just hoping there are no bugs :)
+  * Hotfix for PAL rendering which was causing the LCD to misbehave. True-sync is NTSC only for now.
+  * Full cleanup of ARM Thumbulator. I've decided to peel back on some of the 'unsafe' code that I've been using to gain speed.
+    In the end, the speed optimizations and the improved accuracy have balanced themselves out - so 8.4 is still a bit faster
+    than 8.3 in terms of raw speed but has a improved ARM Thumb emulation for a nice gain of accuracy.
+  * Lots of cleanup and both ARM and 6502 optimizations as time permitted. Better accuracy and improved speed all-around.
 
 8.3 : 21-June-2026 by wavemotion-dave
   * Improved CDFJ+ driver to eek out another frame or two.
