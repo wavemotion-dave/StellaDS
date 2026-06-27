@@ -918,7 +918,7 @@ extern CartridgeDPCPlus *myCartDPCP;
 extern uInt8 *myDisplayImageDPCP;
 extern uInt8 *myDPCptr;
 
-uInt8 peek_Fetch(uInt8 address)
+ITCM_CODE uInt8 peek_Fetch(uInt8 address)
 {
   uInt8 result;
 
@@ -1081,23 +1081,19 @@ inline uInt8 peek_DPCP(uInt16 address)
   if (address & 0x1000)
   {
       address &= 0xFFF;
+      
       if (address < 0x28)
       {
           return peek_Fetch(address);
       }
-      else if (address >= 0xFF6)
+      
+      uInt32 idx = address - 0xFF6;
+      if (idx < 6)
       {
-        switch (address)
-        {
-            case 0x0FF6:  myDPCptr = &myARM6502[0x0000];return myDPCptr[address];
-            case 0x0FF7:  myDPCptr = &myARM6502[0x1000];return myDPCptr[address];
-            case 0x0FF8:  myDPCptr = &myARM6502[0x2000];return myDPCptr[address];
-            case 0x0FF9:  myDPCptr = &myARM6502[0x3000];return myDPCptr[address];
-            case 0x0FFA:  myDPCptr = &myARM6502[0x4000];return myDPCptr[address];
-            case 0x0FFB:  myDPCptr = &myARM6502[0x5000];return myDPCptr[address];
-        }
+          myDPCptr = myARM6502 + (idx << 12);
       }
-      return myDPCptr[(address)];
+      
+      return myDPCptr[address];
   }
   else
   {
@@ -1222,7 +1218,7 @@ inline uInt8 peek_DPC(uInt16 address)
 }
 
 
-inline void poke_DPC(uInt16 address, uInt8 value)
+static ITCM_CODE void poke_DPC(uInt16 address, uInt8 value)
 {
   gSystemCycles++;
 
