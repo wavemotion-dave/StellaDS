@@ -221,7 +221,7 @@ const struct options_t Game_Option_Table[2][20] =
         {NULL,          0, {"",      ""},                                                                                                                                                 NULL,                            1},
     },
     {
-        {"ARM THUMB",  0, {"SAFE", "OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                          &myCartInfo.thumbOptimize,       4},
+        {"ARM THUMB",  0, {"OPTIMIZED", "OPT-NO-COLL", "MAX-FRAMESKIP"},                                                                                                                  &myCartInfo.thumbOptimize,       3},
         {"BUS MODE",   0, {"OPTIMIZED", "ACCURATE"},                                                                                                                                      &myCartInfo.bus_driver,          2},
         {"6532 RAM",   0, {"RANDOM", "CLEAR (ZEROS)"},                                                                                                                                    &myCartInfo.clearRAM,            2},
         

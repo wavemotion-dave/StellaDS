@@ -2276,7 +2276,7 @@ const CartInfo table[] =
     {"7b0ebb6bc1d700927f6efe34bac2ecd2",  "??????", BANK_WF8,  CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0, 10},    // Smurf - Rescue in Gargamel's Castle (1982).bin (write F8 banking)
     {"468dc062a58499d081c59cf5fd08f655",  "??????", BANK_JANE, CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  33,    210,   100,   0,  0},    // Tarzan - 16K Prototype with unique banking
 
-   // {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
+    {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0},    // Snake Oil
 
     {"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",  "??????", BANK_2K,   CTR_LJOY,      99,             MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  0}     // End of list...
 };
@@ -2399,9 +2399,9 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "FROST2") == 0)   myCartInfo.soundQuality = SOUND_WAVE; // Because this game already has SPEC_DPCPOPT we can't also set SPEC_WAVEDIRC
   if (myCartInfo.special == SPEC_WAVEDIRC)        myCartInfo.soundQuality = SOUND_WAVE;
   
-  myCartInfo.thumbOptimize = 0;
-  if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 1;
-  if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 2;
+  myCartInfo.thumbOptimize = 0;                                             // Standard Optimization by default
+  if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 0;     // Standard Optimization
+  if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 1;     // Standard Optimization with No Collision
 
   myCartInfo.aButton = BUTTON_FIRE;
   myCartInfo.bButton = BUTTON_FIRE;
@@ -2747,7 +2747,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optimization and minimal sound
       if (!bFoundInDAT)
       {
-          if (myCartInfo.thumbOptimize < 2)           myCartInfo.thumbOptimize = 2;
+          if (myCartInfo.thumbOptimize < 1)           myCartInfo.thumbOptimize = 1;
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
 
           // -----------------------------------------------------------------------
@@ -2785,7 +2785,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 15;
               myCartInfo.frame_mode = MODE_FF;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
-              myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.thumbOptimize = 2; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "zoo") != 0)
@@ -2818,7 +2818,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 12;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
               myCartInfo.yButton = BUTTON_SHIFT_DN;
-              myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.thumbOptimize = 2; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "cobra") != 0)
@@ -2872,7 +2872,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "elevator") != 0)
           {
-              myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.thumbOptimize = 2; // This one needs frame skip
               myCartInfo.controllerType = CTR_GENESIS;
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
@@ -2933,7 +2933,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "draconian") != 0)
           {
-              myCartInfo.thumbOptimize = 3; // This one needs frame skip
+              myCartInfo.thumbOptimize = 2; // This one needs frame skip
               myCartInfo.soundQuality = SOUND_WAVE;
               myCartInfo.hBlankZero = 1;
               myCartInfo.vblankZero = 0;

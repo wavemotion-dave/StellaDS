@@ -347,7 +347,7 @@ inline void poke_F8(uInt16 address, uInt8 value)
   if (unlikely(address & 0x1000))
   {
       if ((address & 0x0FFF) == 0x0FF8) f8_bankbit=0x0FFF;
-      else if ((address & 0x0FFF)) f8_bankbit=0x1FFF;
+      else if ((address & 0x0FFF) == 0x0FF9) f8_bankbit=0x1FFF;
   }
   else
   {

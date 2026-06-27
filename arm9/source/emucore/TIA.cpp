@@ -560,13 +560,13 @@ ITCM_CODE void TIA::update()
   // -------------------------------------------------------------------------
   // Many of the CDFJ and later games do not need the TIA collision detection.
   // -------------------------------------------------------------------------
-  bNoCollisionDetection = (myCartInfo.thumbOptimize & 2) ? 1:0;
+  bNoCollisionDetection = (myCartInfo.thumbOptimize) ? 1:0;
   
   // -------------------------------------------------------------------------------
   // If the cart requires frame skipping (mostly for Elevator Agent and Draconian)
   // then we set the skip flag for some frames depending on how much speed we need.
   // -------------------------------------------------------------------------------
-  if (myCartInfo.thumbOptimize == 3)
+  if (myCartInfo.thumbOptimize == 2)
   {
       extern uInt8 bElevatorAgent;
       if (bElevatorAgent)
