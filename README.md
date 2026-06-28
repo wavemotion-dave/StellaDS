@@ -35,9 +35,11 @@ Copyright :
 -----------------------
 StellaDS Phoenix-Edition is Copyright (c) 2020-2026 Dave Bernazzani (wavemotion-dave)
 
-As long as there is no commercial use (i.e. no profit is made), copying and distribution of this emulator, its source code and associated readme files, with or without modification, are permitted in any medium without royalty provided this copyright notice is used and wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
+Most of this code is based on the Stella project which has a GPL 2.0 license - please see their github page for details on
+the original (and vastly improved) codebase: https://github.com/stella-emu/stella 
 
-Most of this code is based on the Stella project which has a GPL 2.0 license - please see their github page for details on the original (and vastly improved) codebase: https://github.com/stella-emu/stella 
+As such, StellaDS must also be released under the GPL 2.0. See Copyright.txt and LICENSE for details. However, if you use 
+this code in some way, please be sure that wavemotion-dave (Phoenix-Edition), Alekmaul (original port) and the Stella Team are thanked profusely.
 
 The StellaDS emulator is offered as-is, without any warranty.
 
