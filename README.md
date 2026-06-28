@@ -196,7 +196,7 @@ Champ Games Support :
 -----------------------
 ![Champ Games](https://github.com/wavemotion-dave/StellaDS/blob/master/png/champ.png)
 
-StellaDS supports all current Champ Games offerings through Turbo Arcade and Elevator Agent. These games represent the cutting edge of what is possible on the Atari 2600 using an ARM co-processor to help move data through the system. These games push the limits of the emulator. To run these advanced arm-assisted games, you will need a DSi or greater running either Twilight Menu++ or Unlaunch to unlock the 2X CPU (134MHz). The original DS (or the DSi/2DS/3DS running with an R4 cart) will only run in DS compatibility mode (67MHz) which is too slow to render these games full speed.
+StellaDS supports all current Champ Games offerings through June 2026 (Zaxxon Demo is the latest release). These games represent the cutting edge of what is possible on the Atari 2600 using an ARM co-processor to help move data through the system. These games push the limits of the emulator. To run these advanced arm-assisted games, you will need a DSi or greater running either Twilight Menu++ or Unlaunch to unlock the 2X CPU (134MHz). The original DS (or the DSi/2DS/3DS running with an R4 cart) will only run in DS compatibility mode (67MHz) which is too slow to render these games full speed.
 
 It is also recommended that you use an XL/LL model - these larger screens have a slower LCD fade resulting in a picture that more closely resembles an old TV. This means less flicker overall.
 
@@ -205,7 +205,7 @@ Be aware that most of these games utilize a significant amount of overscan. The 
 ![Gorf](https://github.com/wavemotion-dave/StellaDS/blob/master/png/gorf.bmp)
 ![Gorf](https://github.com/wavemotion-dave/StellaDS/blob/master/png/gorf-shift.bmp)
 
-All Champ Games should run at or near full speed with the exception of the two most complex games: Turbo Arcade (which dips framerate slightly for some complex rendering scenes but is generally not noticeable for gameplay) and Elevator Agent which runs at 55+ (often up to full speed) but is variable enough that you will hear some slight wavering in the music output (but still quite playable and enjoyable). Try the DEMO roms first to be sure you're happy with the emulation quality here. Be aware that any performance issues related to these cutting-edge games is a reflection of my emulation and not the superior craftsmanship of the games themselves. You can see a full set of Champ Games offerings at https://champ.games
+All Champ Games should run at or near full speed with the exception of the two most complex games: Turbo Arcade (which dips framerate slightly for some complex rendering scenes but is generally not noticeable for gameplay) and Elevator Agent which runs at 57+ (often up to full speed) but is variable enough that you will hear some slight wavering in the music output (but still quite playable and enjoyable). Try the DEMO roms first to be sure you're happy with the emulation quality here. Be aware that any performance issues related to these cutting-edge games is a reflection of my emulation and not the superior craftsmanship of the games themselves. You can see a full set of Champ Games offerings at https://champ.games
 
 How to use StellaDS :
 ---------------------
