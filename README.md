@@ -250,6 +250,9 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.4a : 28-June-2026 by wavemotion-dave
+  * Fix for cart detection so SB carts don't detect as CDFJ. Fixes Rescue from Poseidon's Gate.
+
 8.4 : 27-June-2026 by wavemotion-dave
   * Fix for TIA rendering that fixes Aardvark and probably others.
   * Fix for banking on Squish-Em-Deluxe (F8) so dummy read on RTI properly hits the hotspot.

@@ -2399,9 +2399,9 @@ void SetOtherDatabaseFieldDefaults(void)
   if (strcmp(myCartInfo.gameID, "FROST2") == 0)   myCartInfo.soundQuality = SOUND_WAVE; // Because this game already has SPEC_DPCPOPT we can't also set SPEC_WAVEDIRC
   if (myCartInfo.special == SPEC_WAVEDIRC)        myCartInfo.soundQuality = SOUND_WAVE;
   
-  myCartInfo.thumbOptimize = 0;                                             // Standard Optimization by default
-  if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = 0;     // Standard Optimization
-  if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = 1;     // Standard Optimization with No Collision
+  myCartInfo.thumbOptimize = THUMB_NORMAL;                                                // Standard Optimization by default
+  if (myCartInfo.special == SPEC_DPCPOPT) myCartInfo.thumbOptimize = THUMB_NORMAL;        // Standard Optimization
+  if (myCartInfo.special == SPEC_DPCPNOC) myCartInfo.thumbOptimize = THUMB_NO_COLLISION;  // Standard Optimization with No Collision
 
   myCartInfo.aButton = BUTTON_FIRE;
   myCartInfo.bButton = BUTTON_FIRE;
@@ -2693,7 +2693,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   // ----------------------------------------------------------------
   if (myCartInfo.special == SPEC_AR)
   {
-      cartDriver = 5;   // AR carts must use the special driver
+      cartDriver = CART_DRIVER_AR;   // AR carts must use the special driver
 
       if ((strcmp(myCartInfo.gameID, "MINDMA") == 0))
       {
@@ -2702,16 +2702,16 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if (myCartInfo.banking == BANK_DPC)
   {
-      cartDriver = 12;  // DPC carts must use the special driver
+      cartDriver = CART_DRIVER_DPC;  // DPC carts must use the special driver
   }
   else if (myCartInfo.banking == BANK_CTY)
   {
-      cartDriver = 13;  // CTY carts can use the special driver
+      cartDriver = CART_DRIVER_CTY;  // CTY carts can use the special driver
   }
   else if (myCartInfo.banking == BANK_DPCP)
   {
       isCDFJPlus = false;
-      cartDriver = 8;   // DPC+ carts must use the special driver
+      cartDriver = CART_DRIVER_DPCP;   // DPC+ carts must use the special driver
 
       if (!bFoundInDAT)
       {
@@ -2731,23 +2731,23 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   {
       isCDFJPlus = (searchForBytes5(image, size, 'P', 'L', 'U', 'S', 'C') ? true:false);
 
-      cartDriver = (isCDFJPlus ? 10:9); // The isCDFJPlus flag is set in isProbablyCDF()
+      cartDriver = (isCDFJPlus ? CART_DRIVER_CDFJP : CART_DRIVER_CDFJ); // The isCDFJPlus flag is set in isProbablyCDF()
 
       // ----------------------------------------------------------------------------------
       // These carts need a little extra oomph from the CPU so we have a special optmized
       // driver that requires the Atari 6502 native code to be no more than 2 banks (8K).
       // ----------------------------------------------------------------------------------
-      if (strstr(my_filename, "turbo") != 0)     cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "elevator") != 0)  cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "gorf") != 0)      cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "tutankham") != 0) cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "spiders") != 0)   cartDriver = 11;  //CDFJ++
-      if (strstr(my_filename, "zaxxon") != 0)    cartDriver = 11;  //CDFJ++
+      if (strstr(my_filename, "turbo") != 0)     cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
+      if (strstr(my_filename, "elevator") != 0)  cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
+      if (strstr(my_filename, "gorf") != 0)      cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
+      if (strstr(my_filename, "tutankham") != 0) cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
+      if (strstr(my_filename, "spiders") != 0)   cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
+      if (strstr(my_filename, "zaxxon") != 0)    cartDriver = CART_DRIVER_CDFJPP;  //CDFJ++
 
       // For the CDF/CDFJ banking we need all the power we can get... turn on a reasonable level of optimization and minimal sound
       if (!bFoundInDAT)
       {
-          if (myCartInfo.thumbOptimize < 1)           myCartInfo.thumbOptimize = 1;
+          if (myCartInfo.thumbOptimize < THUMB_NO_COLLISION) myCartInfo.thumbOptimize = THUMB_NO_COLLISION;
           if (myCartInfo.soundQuality != SOUND_WAVE)  myCartInfo.soundQuality = SOUND_10KHZ;
 
           // -----------------------------------------------------------------------
@@ -2785,7 +2785,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 15;
               myCartInfo.frame_mode = MODE_FF;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
-              myCartInfo.thumbOptimize = 2; // This one needs frame skip
+              myCartInfo.thumbOptimize = THUMB_NC_FRAMESKIP; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "zoo") != 0)
@@ -2818,7 +2818,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
               myCartInfo.yOffset = 12;
               myCartInfo.xButton = BUTTON_SHIFT_UP;
               myCartInfo.yButton = BUTTON_SHIFT_DN;
-              myCartInfo.thumbOptimize = 2; // This one needs frame skip
+              myCartInfo.thumbOptimize = THUMB_NC_FRAMESKIP; // This one needs frame skip
           }
           else
           if (strstr(my_filename, "cobra") != 0)
@@ -2872,7 +2872,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "elevator") != 0)
           {
-              myCartInfo.thumbOptimize = 2; // This one needs frame skip
+              myCartInfo.thumbOptimize = THUMB_NC_FRAMESKIP; // This one needs frame skip
               myCartInfo.controllerType = CTR_GENESIS;
               myCartInfo.hBlankZero = 0;
               myCartInfo.vblankZero = 0;
@@ -2933,7 +2933,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
           else
           if (strstr(my_filename, "draconian") != 0)
           {
-              myCartInfo.thumbOptimize = 2; // This one needs frame skip
+              myCartInfo.thumbOptimize = THUMB_NC_FRAMESKIP; // This one needs frame skip
               myCartInfo.soundQuality = SOUND_WAVE;
               myCartInfo.hBlankZero = 1;
               myCartInfo.vblankZero = 0;
@@ -2945,7 +2945,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if (((myCartInfo.banking == BANK_4K) || (myCartInfo.banking == BANK_2K)))
   {
-      cartDriver = 1;   // Assume we can use the optmized driver until proven otherwise
+      cartDriver = CART_DRIVER_4K;   // Assume we can use the optmized driver until proven otherwise
 
       if (strcmp(myCartInfo.gameID, "SPACX7") == 0) cartDriver = 0;  // Spacemaster X-7 tries to write ROM... can't use the faster driver
       if (strcmp(myCartInfo.gameID, "SPPLUS") == 0) cartDriver = 0;  // SP+ requires the normal driver
@@ -2969,44 +2969,44 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // ---------------------------------------------------------------------------------
       // For a handful of F8 games, we can turn on special speed-hack banking handling...
       // ---------------------------------------------------------------------------------
-      if (strcmp(myCartInfo.gameID, "AQUAVE") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "ASTERD") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "ASTRIX") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "BAZONE") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "BEAMRI") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "BLUEPR") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "BUCKRO") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "CABAGE") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "CENTIP") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "CHUCKN") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "COLONY") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "FALLDN") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "FATHOM") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "FRONTL") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "GALAXY") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "GHOSTB") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "GOFISH") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "GRAVIT") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "GYVOLV") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "HEROAV") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "ROTAN8") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "IXION_") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "JOUST_") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "LEAD01") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "MARIOB") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "MOONPA") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "MOONSW") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "MSPACM") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "PHOENX") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "PIGSIN") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "POLEPO") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "PRCOOK") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "STARTR") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "VANGRD") == 0) cartDriver = 2;
-      if (strcmp(myCartInfo.gameID, "ZAXXON") == 0) cartDriver = 2;
+      if (strcmp(myCartInfo.gameID, "AQUAVE") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "ASTERD") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "ASTRIX") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "BAZONE") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "BEAMRI") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "BLUEPR") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "BUCKRO") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "CABAGE") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "CENTIP") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "CHUCKN") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "CIRCAT") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "COLONY") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "FALLDN") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "FATHOM") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "FRONTL") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "GALAXY") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "GHOSTB") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "GOFISH") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "GRAVIT") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "GYVOLV") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "HEROAV") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "ROTAN8") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "IXION_") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "JOUST_") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "JUNGLE") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "LEAD01") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "MARIOB") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "MOONPA") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "MOONSW") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "MSPACM") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "PACM8K") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "PHOENX") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "PIGSIN") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "POLEPO") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "PRCOOK") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "STARTR") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "VANGRD") == 0) cartDriver = CART_DRIVER_F8;
+      if (strcmp(myCartInfo.gameID, "ZAXXON") == 0) cartDriver = CART_DRIVER_F8;
 
       if ((strcmp(myCartInfo.gameID, "JUNGLE") == 0) || (strcmp(myCartInfo.gameID, "GALAXY") == 0) || (strcmp(myCartInfo.gameID, "BAZONE") == 0) || (strcmp(myCartInfo.gameID, "HEROAV") == 0))
       {
@@ -3025,7 +3025,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // ------------------------------------------------------------------------------------
       // For F6 games we will utilize a special optmized F6 driver directly in M6502Low.cpp
       // ------------------------------------------------------------------------------------
-      cartDriver = 3;
+      cartDriver = CART_DRIVER_F6;
 
       if (!bFoundInDAT)
       {
@@ -3068,17 +3068,17 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
       // ------------------------------------------------------------------------------------
       cartDriver = 0;
 
-      if (strcmp(myCartInfo.gameID, "JUNOST") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "SLIDEB") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "NINJAG") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "SPGAME") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "DUNGEN") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "KOCRUZ") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "MAYHAM") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "PINATA") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "UPPLUS") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "PRIRES") == 0) cartDriver = 4;
-      if (strcmp(myCartInfo.gameID, "CELERY") == 0) cartDriver = 4;
+      if (strcmp(myCartInfo.gameID, "JUNOST") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "SLIDEB") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "NINJAG") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "SPGAME") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "DUNGEN") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "KOCRUZ") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "MAYHAM") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "PINATA") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "UPPLUS") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "PRIRES") == 0) cartDriver = CART_DRIVER_F4;
+      if (strcmp(myCartInfo.gameID, "CELERY") == 0) cartDriver = CART_DRIVER_F4;
 
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "JUNOST") == 0) || (strcmp(myCartInfo.gameID, "SLIDEB") == 0) || (strcmp(myCartInfo.gameID, "NINJAG") == 0) ||
@@ -3097,23 +3097,23 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
   else if ((myCartInfo.banking == BANK_F8SC))
   {
-      cartDriver = 6;
+      cartDriver = CART_DRIVER_F8SC;
       if (myCartInfo.bus_driver) cartDriver = 0;    // If the user has chosen the 'accurate' driver force it to be used...
   }
   else if ((myCartInfo.banking == BANK_F6SC))
   {
       cartDriver = 0;
 
-      if (strcmp(myCartInfo.gameID, "DESFAL") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "DIGDUG") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "JRPACM") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "KLAX90") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "RADARL") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "SAVMAR") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "SQUEST") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "SPRINT") == 0) cartDriver = 7;
-      if (strcmp(myCartInfo.gameID, "SUPFBL") == 0) cartDriver = 7;
+      if (strcmp(myCartInfo.gameID, "DESFAL") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "DIGDUG") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "JRPACM") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "KLAX90") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "MIPEDE") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "RADARL") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "SAVMAR") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "SQUEST") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "SPRINT") == 0) cartDriver = CART_DRIVER_F6SC;
+      if (strcmp(myCartInfo.gameID, "SUPFBL") == 0) cartDriver = CART_DRIVER_F6SC;
 
       // A few games just need a tiny bit more... ooomff!
       if ((strcmp(myCartInfo.gameID, "DIGDUG") == 0) || (strcmp(myCartInfo.gameID, "JRPACM") == 0) || (strcmp(myCartInfo.gameID, "MIPEDE") == 0) ||
@@ -3134,7 +3134,7 @@ uInt8 Cartridge::autodetectType(const uInt8* image, uInt32 size)
   }
 
   // Conquest of Mars has a glitch unless the unused TIA pins are driven exactly so...
-  if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = 3; myDataBusState = 0x02;}
+  if (strcmp(myCartInfo.gameID, "CONMAR") == 0) {cartDriver = CART_DRIVER_F6; myDataBusState = 0x02;}
 
   original_banking_detect = myCartInfo.banking;     // In case the user wants to restore defaults - this brings back the original "guessed" banking scheme
   return myCartInfo.banking;
@@ -3272,7 +3272,7 @@ bool Cartridge::isProbably3F(const uInt8* image, uInt32 size)
     }
   }
 
-  return (count > 2);
+  return (count > 2); 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3430,9 +3430,10 @@ bool Cartridge::isProbablyDPCplus(const uInt8* image, uInt32 size)
 bool Cartridge::isProbablyCDF(const uInt8* image, uInt32 size)
 {
   isCDFJPlus = (searchForBytes5(image, size, 'P', 'L', 'U', 'S', 'C') ? true:false);
+  int cdfCount = searchForBytes3(image, size, 'C', 'D', 'F');
 
-  // DPC+ ARM code has occurrences of the string CDF (or CDFJ)
-  return searchForBytes3(image, size, 'C', 'D', 'F');
+  // DPC+ ARM code has multiple occurrences of the string CDF (or CDFJ)
+  return ((cdfCount + isCDFJPlus) >= 2); // Need to see at least two instances of the pattern
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -3496,7 +3497,8 @@ void CartSetDefaultFromInternalDatabase(void)
     bool bFound = false;
     char md5[33];
     strcpy(md5, myCartInfo.md5);
-    myCartInfo = table[(tv_type_requested == PAL) ? 1:0];   // Default
+    myCartInfo = table[(tv_type_requested == PAL) ? 1:0];   // Default (generic) cart
+    
     // First we'll see if its type is listed in the table above
     for(const CartInfo* entry = table; (entry->special != 99); ++entry)
     {

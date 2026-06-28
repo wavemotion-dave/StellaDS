@@ -243,6 +243,26 @@ extern uInt8  cart_buffer[MAX_CART_FILE_SIZE];
 #define SOUND_30KHZ         4
 #define SOUND_WAVE          5
 
+// Cart Drivers
+#define CART_DRIVER_NORMAL  0
+#define CART_DRIVER_4K      1
+#define CART_DRIVER_F8      2
+#define CART_DRIVER_F6      3
+#define CART_DRIVER_F4      4
+#define CART_DRIVER_AR      5
+#define CART_DRIVER_F8SC    6
+#define CART_DRIVER_F6SC    7
+#define CART_DRIVER_DPCP    8
+#define CART_DRIVER_CDFJ    9
+#define CART_DRIVER_CDFJP   10
+#define CART_DRIVER_CDFJPP  11
+#define CART_DRIVER_DPC     12
+#define CART_DRIVER_CTY     13
+
+// ARM Thumb Drivers
+#define THUMB_NORMAL        0
+#define THUMB_NO_COLLISION  1
+#define THUMB_NC_FRAMESKIP  2
 
 /**
   A cartridge is a device which contains the machine code for a 

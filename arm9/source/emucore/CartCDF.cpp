@@ -198,7 +198,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // but we will repurpose the fast_cart_buffer[] as 6502 Assembly code 
   // assuming that those games won't need more than 2 banks of 6502 assembly.
   // ------------------------------------------------------------------------
-  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
+  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == CART_DRIVER_CDFJPP))
   {
       bSaveStateXL = true;
       myARMRAM = xl_ram_buffer;                   // Set to the slow but larger 32K RAM buffer
@@ -230,7 +230,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
   // Repurpose the fast cart buffer memory for 6502 code. This is potentially
   // unsafe as it only supports 2 banks... but there are only a few Champ Games
   // in this stratosphere and none use more than 2 banks of 6502 code.
-  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == 11))
+  if ((isCDFJPlus && (size > MEM_32KB)) || (cartDriver == CART_DRIVER_CDFJPP))
   {
       memcpy(fast_cart_buffer, myARM6502, MEM_8KB);
       
@@ -239,7 +239,7 @@ CartridgeCDF::CartridgeCDF(const uInt8* image, uInt32 size)
       // by 0x85 (LDA, STA) and turn that into one of the illegal KIL 
       // opcodes so we can super charge the throughput.
       // ----------------------------------------------------------------
-      if (cartDriver == 11)
+      if (cartDriver == CART_DRIVER_CDFJPP)
       {
           for (int i=0; i<(MEM_8KB-2); i++)
           {
