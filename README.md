@@ -252,6 +252,9 @@ Thanks and Credits :
 
 Version History:
 -----------------------
+8.4b : 04-July-2026 by wavemotion-dave
+  * Improved Meltdown graphics rendering so the two right-most columns are more round.
+
 8.4a : 28-June-2026 by wavemotion-dave
   * Fix for cart detection so SB carts don't detect as CDFJ. Fixes Rescue from Poseidon's Gate.
 

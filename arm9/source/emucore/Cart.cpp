@@ -1459,9 +1459,9 @@ const CartInfo table[] =
     {"de61a0b171e909a5a4cfcf81d146dbcb",  "PITFAL", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   52,    245,   100,   4, 12},    // Pitfall! (1982) (PAL).bin
     {"55ef6ab2321ca0c3d369e63d59c059c8",  "PITFAL", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  PAL,   34,    210,   100,   4, 30},    // Pitfall! (1982) (PAL).bin
     {"90369a64007a375bac633d85f1e02fcc",  "PITFAL", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   4,  6},    // Pitfall 256 v1.20 (2017) (Thomas Jentzsch) (NTSC).bin
-    {"6d842c96d5a01967be9680080dd5be54",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
-    {"490eed07d4691b27f473953fbea6541a",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,   !VB,   HB,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
-    {"e34c236630c945089fcdef088c4b6e06",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,   !VB,   HB,  ANA1_0,  PAL,   61,    240,   100,   5,  0},    // Pitfall II - Lost Caverns (1983) (PAL).bin
+    {"6d842c96d5a01967be9680080dd5be54",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
+    {"490eed07d4691b27f473953fbea6541a",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    197,   100,   5,  2},    // Pitfall II - Lost Caverns (1983).bin
+    {"e34c236630c945089fcdef088c4b6e06",  "PITFA2", BANK_DPC,  CTR_LJOY,      SPEC_WAVEDIRC,  MODE_NO,    VB,   HB,  ANA1_0,  PAL,   61,    240,   100,   5,  0},    // Pitfall II - Lost Caverns (1983) (PAL).bin
     {"17e5bddc16d520b62ea465b5c1057755",  "??????", BANK_E7,   CTR_LJOY,      SPEC_NONE,      MODE_NO,   !VB,  !HB,  ANA1_0,  NTSC,  31,    202,   100,   0,  0},    // PITKATNTS.bin
     {"d9fbf1113114fb3a3c97550a0689f10f",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  39,    210,    97,   0,  3},    // Pizza Chef (1983).bin
     {"82efe7984783e23a7c55266a5125c68e",  "??????", BANK_4K,   CTR_LJOY,      SPEC_NONE,      MODE_NO,    VB,   HB,  ANA1_0,  NTSC,  34,    210,   100,   0,  3},    // Pizza Chef (1983).bin

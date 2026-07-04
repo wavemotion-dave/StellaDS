@@ -1259,7 +1259,7 @@ void M6502Low::execute_DPC(void)
       // 6502 instruction emulation contained in M6502Low.ins included file
       switch (operand)
       {
-        // A trick of the light... here we map peek/poke to the "F8" cart versions. This improves speed for non-bank-switched carts.
+        // A trick of the light... here we map peek/poke to the "DPC" cart versions. This improves speed for non-bank-switched carts.
         #define peek            peek_DPC
         #define peek_zpg        peek_DPC
         #define peek_PC         peek_PCDPC

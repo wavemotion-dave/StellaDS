@@ -887,9 +887,9 @@ void TIA::computePlayerMaskTable()
         {
           if (myCartInfo.special == SPEC_MELTDOWN) // Hack for Meltdown to compensate for NUSIZ hit during Player Draw - the effect will show 2 player sprites at double-size 
           {
-              if((enable == 0) && (x >= 0) && (x <= 16))
+              if((enable == 0) && (x >= 0) && (x <= 32))
                 ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> x / 2;
-              else if(((x - 64) >= 0) && ((x - 64) <= 16))
+              else if(((x - 64) >= 0) && ((x - 64) <= 32))
                 ourPlayerMaskTable[0][enable][mode][x % 160] = 0x80 >> (x - 64) / 2;
           }
           else
@@ -1171,20 +1171,16 @@ void TIA::computePlayfieldMaskTable()
               if (enabled == last_enabled)  \
               {  \
                   *mfp = last_color;  \
-                  if (hpos < 80) {if (++hpos == 80) last_enabled=255;}  \
+                  if (hpos < 80)  \
+                  {  \
+                      if (++hpos == 80) last_enabled = 255;  \
+                  }  \
               }  \
               else  \
               {  \
                   myCollision |= ourCollisionTable[enabled];  \
-                  if (hpos < 80)  \
-                  {  \
-                      last_color = myColor[myPriorityEncoder[0][enabled]];  \
-                      hpos++;  \
-                  }  \
-                  else  \
-                  {  \
-                      last_color = myColor[myPriorityEncoder[1][enabled]];  \
-                  }  \
+                  last_color = myColor[myPriorityEncoder[hpos >= 80][enabled]];  \
+                  if (hpos < 80) hpos++;  \
                   *mfp = last_color;  \
                   last_enabled = enabled;  \
               }
@@ -1218,7 +1214,7 @@ void TIA::handleObjectsAndCollisions(Int32 clocksToUpdate, Int32 hpos)
 // Note that we are purposely ignoring the ScoreBit handling here which
 // provides a bit more speed and nobody is using that for the ARM-Assisted
 // games that also don't provide any collision usage. It's not a safe
-// way to do this... but nothing has broken it and we need the speed.
+// way to do this... but nothing has broken from it and we need the speed.
 // -----------------------------------------------------------------------
 #undef HANDLE_COLOR_AND_COLLISIONS
 #define HANDLE_COLOR_AND_COLLISIONS  *mfp = myColor[myPriorityEncoder[0][enabled]];
@@ -1474,52 +1470,113 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
       // --------------------------------------------------------------------------
       if (myCartInfo.frame_mode != MODE_NO)
       {
-          uInt32 *fp_blend = (uInt32 *)myDSFramePointer;            // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
+          uInt32 *fp_blend = (uInt32 *)myDSFramePointer; // Since we're doing a manual blend anyway, may as well copy directly to the DS screen
+          
           switch (myCartInfo.frame_mode)
           {
               case MODE_BACKG:
               {
-                  int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
-                  uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
-                  uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
-                  for (int i=0; i<40; i++)
-                  {
-                    if (*fp1 == myBlendBk) *fp_blend++ = *fp2;          // mid-screen background - use previous frame
-                    else *fp_blend++ = *fp1;                            // Use current frame
-                    fp1++;fp2++;
-                  }
+                int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+                uInt32 *fp_blend = (uInt32 *)myDSFramePointer;
+
+                // Macro to handle one pixel without branching via ternary compiler optimization
+                #define BLEND_STEP(idx) \
+                    uInt32 val1_##idx = fp1[idx]; \
+                    fp_blend[idx] = (val1_##idx == myBlendBk) ? fp2[idx] : val1_##idx;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    BLEND_STEP(0);
+                    BLEND_STEP(1);
+                    BLEND_STEP(2);
+                    BLEND_STEP(3);
+                    BLEND_STEP(4);
+                    BLEND_STEP(5);
+                    BLEND_STEP(6);
+                    BLEND_STEP(7);
+
+                    fp1 += 8;
+                    fp2 += 8;
+                    fp_blend += 8;
+                }
+                #undef BLEND_STEP
               }
               break;
 
               case MODE_BLACK:
               {
-                  int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
-                  uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
-                  uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
-                  for (int i=0; i<40; i++)
-                  {
-                    if (*fp1 == 0x000000) *fp_blend++ = *fp2;           // Black background - use previous frame
-                    else *fp_blend++ = *fp1;                            // Use current frame
-                    fp1++;fp2++;
-                  }
+                int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+                uInt32 *fp_blend = (uInt32 *)myDSFramePointer;
+
+                // Macro to handle one pixel without branching via ternary compiler optimization
+                #define BLEND_STEP(idx) \
+                    uInt32 val1_##idx = fp1[idx]; \
+                    fp_blend[idx] = (val1_##idx == 0x00000000) ? fp2[idx] : val1_##idx;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    BLEND_STEP(0);
+                    BLEND_STEP(1);
+                    BLEND_STEP(2);
+                    BLEND_STEP(3);
+                    BLEND_STEP(4);
+                    BLEND_STEP(5);
+                    BLEND_STEP(6);
+                    BLEND_STEP(7);
+
+                    fp1 += 8;
+                    fp2 += 8;
+                    fp_blend += 8;
+                }
+                #undef BLEND_STEP
               }
               break;
 
-              default:                                                  // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
+              default:  // Simple MODE_FF blending of 2 frames... we do this on alternate frames so it's as fast as possible
               {
                   // ----------------------------------------------------------------------
-                  // This is the normal blending... it looks nice but takes a 10% CPU hit
+                  // This is the normal blending... it looks nice but takes a ~7% CPU hit
                   // Every other frame we combine the last 2 frames together (even+odd).
                   // ----------------------------------------------------------------------
                   if (gAtariFrames & 1)
                   {
-                      int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
-                      uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
-                      uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
-                      for (int i=0; i<40; i++)
-                      {
-                        *fp_blend++ = *fp1++ | *fp2++;
-                      }
+                    int addr = (myFramePointer - myCurrentFrameBuffer[myCurrentFrame]) + 160;
+                    uInt32 *fp1 = (uInt32 *)(&myCurrentFrameBuffer[myCurrentFrame][addr]);
+                    uInt32 *fp2 = (uInt32 *)(&myCurrentFrameBuffer[1-myCurrentFrame][addr]);
+
+                    // --------------------------------------------------------------------
+                    // Unroll to process 8 words (32 bytes) per iteration. 40 total words
+                    // requires 5 iterations. This is as fast as I've been able to make it
+                    // as it seems to keep the ARM9 pipeline optimized for burst transfer.
+                    // --------------------------------------------------------------------
+                    for (int i = 0; i < 5; i++)
+                    {
+                        uInt32 b0 = fp1[0] | fp2[0];
+                        uInt32 b1 = fp1[1] | fp2[1];
+                        uInt32 b2 = fp1[2] | fp2[2];
+                        uInt32 b3 = fp1[3] | fp2[3];
+                        uInt32 b4 = fp1[4] | fp2[4];
+                        uInt32 b5 = fp1[5] | fp2[5];
+                        uInt32 b6 = fp1[6] | fp2[6];
+                        uInt32 b7 = fp1[7] | fp2[7];
+
+                        fp_blend[0] = b0;
+                        fp_blend[1] = b1;
+                        fp_blend[2] = b2;
+                        fp_blend[3] = b3;
+                        fp_blend[4] = b4;
+                        fp_blend[5] = b5;
+                        fp_blend[6] = b6;
+                        fp_blend[7] = b7;
+
+                        fp1 += 8;
+                        fp2 += 8;
+                        fp_blend += 8;
+                    }
                   }
               }
               break;
