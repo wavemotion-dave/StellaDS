@@ -112,11 +112,11 @@ extern    uInt8* myCurrentM0Mask;               // Pointer to the currently acti
 extern    uInt8* myCurrentM1Mask;               // Pointer to the currently active mask array for missle 1
 extern    uInt8* myCurrentP0Mask;               // Pointer to the currently active mask array for player 0
 extern    uInt8* myCurrentP1Mask;               // Pointer to the currently active mask array for player 1
-extern    uInt32* myCurrentPFMask;                // Pointer to the currently active mask array for the playfield
-extern    uInt8 ourPlayerReflectTable[256];        // Used to reflect a players graphics
-extern    uInt32 ourPlayfieldTable[2][160];        // Playfield mask table for reflected and non-reflected playfields
-extern    uInt8 myNUSIZ0;       // Number and size of player 0 and missle 0
-extern    uInt8 myNUSIZ1;       // Number and size of player 1 and missle 1
+extern    uInt32* myCurrentPFMask;              // Pointer to the currently active mask array for the playfield
+extern    uInt8 ourPlayerReflectTable[256];     // Used to reflect a players graphics
+extern    uInt32 ourPlayfieldTable[2][160];     // Playfield mask table for reflected and non-reflected playfields
+extern    uInt8 myNUSIZ0;                       // Number and size of player 0 and missile 0
+extern    uInt8 myNUSIZ1;                       // Number and size of player 1 and missile 1
 
 
 /**

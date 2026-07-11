@@ -273,6 +273,10 @@ Int8 ourCompleteMotionTable[76][16] = {
 // -----------------------------------------------------------
 uInt8 __attribute__ ((aligned (4))) videoBuf0[160 * 300];
 uInt8 __attribute__ ((aligned (4))) videoBuf1[160 * 300];
+
+// ----------------------------------
+// Indexes into the myColor[] array
+// ----------------------------------
 #define MYCOLUBK  0
 #define MYCOLUPF  1
 #define MYCOLUP0  2
@@ -1875,8 +1879,9 @@ void __attribute__ ((noinline))  ResetBallEarlyHack(Int32 clock, uInt8 hpos)
 #ifdef TIA_HMOVE_DEBUG
   else if ((clock - myLastHMOVEClock) <= (23 * 3))
   {
-      debug[8] = (clock - myLastHMOVEClock)/3;
-      debug[9] = hpos;
+      debug[0]++;
+      debug[1] = (clock - myLastHMOVEClock)/3;
+      debug[21] = hpos;
   }
 #endif      
 }
@@ -2130,8 +2135,9 @@ void TIA::poke(uInt16 addr, uInt8 value)
 #ifdef TIA_HMOVE_DEBUG
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
-          debug[0] = (clock - myLastHMOVEClock)/3;
-          debug[1] = hpos;
+          debug[0]++;
+          debug[2] = (clock - myLastHMOVEClock)/3;
+          debug[22] = hpos;
       }
 #endif      
 
@@ -2191,16 +2197,18 @@ void TIA::poke(uInt16 addr, uInt8 value)
 #ifdef TIA_HMOVE_DEBUG      
           else if ((clock - myLastHMOVEClock) <= (23 * 3))
           {
-              debug[2] = (clock - myLastHMOVEClock)/3;
-              debug[3] = hpos;
+              debug[0]++;
+              debug[3] = (clock - myLastHMOVEClock)/3;
+              debug[23] = hpos;
           }
 #endif
       }
 #ifdef TIA_HMOVE_DEBUG      
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
-          debug[2] = (clock - myLastHMOVEClock)/3;
-          debug[3] = hpos;
+          debug[0]++;
+          debug[4] = (clock - myLastHMOVEClock)/3;
+          debug[24] = hpos;
       }
 #endif
 
@@ -2263,8 +2271,9 @@ void TIA::poke(uInt16 addr, uInt8 value)
 #ifdef TIA_HMOVE_DEBUG      
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
-          debug[4] = (clock - myLastHMOVEClock)/3;
-          debug[5] = hpos;
+          debug[0]++;
+          debug[5] = (clock - myLastHMOVEClock)/3;
+          debug[25] = hpos;
       }
 #endif
       myCurrentM0Mask = &ourMissleMaskTable[myPOSM0 & 0x03][myNUSIZ0 & 0x07][(myNUSIZ0 & 0x30) >> 4][160 - (myPOSM0 & 0xFC)];
@@ -2304,8 +2313,9 @@ void TIA::poke(uInt16 addr, uInt8 value)
 #ifdef TIA_HMOVE_DEBUG
       else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
+          debug[0]++;
           debug[6] = (clock - myLastHMOVEClock)/3;
-          debug[7] = hpos;
+          debug[26] = hpos;
       }
 #endif
 
@@ -2467,8 +2477,9 @@ void TIA::poke(uInt16 addr, uInt8 value)
       if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           uInt8 hpos = (delta_clock) % 228;
-          debug[10] = (clock - myLastHMOVEClock)/3;
-          debug[11] = hpos;
+          debug[0]++;
+          debug[7] = (clock - myLastHMOVEClock)/3;
+          debug[27] = hpos;
       }
 #endif
       break;
@@ -2482,11 +2493,12 @@ void TIA::poke(uInt16 addr, uInt8 value)
           HackGIJoe(clock);
       }
 #ifdef TIA_HMOVE_DEBUG
-      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           uInt8 hpos = (delta_clock) % 228;
-          debug[12] = (clock - myLastHMOVEClock)/3;
-          debug[13] = hpos;
+          debug[0]++;
+          debug[8] = (clock - myLastHMOVEClock)/3;
+          debug[28] = hpos;
       }
 #endif
       break;
@@ -2503,11 +2515,12 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myM0CosmicArkCounter = 0;
       }
 #ifdef TIA_HMOVE_DEBUG
-      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           uInt8 hpos = (delta_clock) % 228;
-          debug[14] = (clock - myLastHMOVEClock)/3;
-          debug[15] = hpos;
+          debug[0]++;
+          debug[9] = (clock - myLastHMOVEClock)/3;
+          debug[29] = hpos;
       }
 #endif
       myHMM0 = tmp;
@@ -2525,11 +2538,12 @@ void TIA::poke(uInt16 addr, uInt8 value)
         myM1CosmicArkCounter = 0;
       }
 #ifdef TIA_HMOVE_DEBUG
-      if ((clock - myLastHMOVEClock) <= (23 * 3))
+      else if ((clock - myLastHMOVEClock) <= (23 * 3))
       {
           uInt8 hpos = (delta_clock) % 228;
-          debug[16] = (clock - myLastHMOVEClock)/3;
-          debug[20] = hpos;
+          debug[0]++;
+          debug[10] = (clock - myLastHMOVEClock)/3;
+          debug[30] = hpos;
       }
 #endif
       myHMM1 = tmp;
