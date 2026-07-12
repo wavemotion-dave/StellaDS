@@ -36,7 +36,7 @@ Genesis::~Genesis()
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-ITCM_CODE bool Genesis::read(DigitalPin pin)
+bool Genesis::read(DigitalPin pin)
 {
   switch(pin)
   {

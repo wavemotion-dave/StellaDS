@@ -1189,6 +1189,34 @@ void TIA::computePlayfieldMaskTable()
                   last_enabled = enabled;  \
               }
 
+static inline void fastFillByte(uInt8* dst, uInt8 value, Int32 count)
+{
+    if (count <= 0) return;
+
+    const uInt32 pattern = (uInt32(value) << 24) |
+                           (uInt32(value) << 16) |
+                           (uInt32(value) << 8) |
+                            uInt32(value);
+
+    while (((uInt32)dst & 3) && count)
+    {
+        *dst++ = value;
+        --count;
+    }
+
+    while (count >= 4)
+    {
+        *((uInt32*)dst) = pattern;
+        dst += 4;
+        count -= 4;
+    }
+
+    while (count--)
+    {
+        *dst++ = value;
+    }
+}
+
 // -----------------------------------------------------------------------
 // We spent a LOT of time in here... so we've done our best to keep this
 // as streamlined as possible. We could reduce this to about 10 lines of
@@ -1328,13 +1356,13 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
             // -------------------------------------------------------------------------------------------
             if (myCartInfo.vblankZero || !(gAtariFrames & 0x0E))    // Every 16 frames we will do two frames proper vBlank despite the cartInfo (two is needed as some games display different data on alternating frames)
             {
-                memset(myFramePointer, 0x00, clocksToUpdate);
+                fastFillByte(myFramePointer, 0x00, clocksToUpdate);
             }
             myFramePointer += clocksToUpdate;
         }
         else if (myEnabledObjects == 0x00)  // Background handling...
         {
-            memset(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
+            fastFillByte(myFramePointer, myColor[MYCOLUBK], clocksToUpdate);
             myFramePointer += clocksToUpdate;
         }
         else  // All other possibilities... this is expensive CPU-wise
@@ -1376,7 +1404,7 @@ ITCM_CODE void TIA::updateFrame(Int32 clock)
         Int32 blanks = (HBLANK + 8) - clocksFromStartOfScanLine;
         if (blanks > 0)
         {
-            memset(oldFramePointer, 0, blanks);
+            fastFillByte(oldFramePointer, 0, blanks);
 
             if((clocksToUpdate + clocksFromStartOfScanLine) >= (HBLANK + 8))
             {
